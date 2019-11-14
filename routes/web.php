@@ -11,6 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-	return view('welcome');
-});
+use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
+// Authentication Routes
+Auth::routes();
+
+Route::get('/', [HomeController::class, 'index'])->middleware('auth');
