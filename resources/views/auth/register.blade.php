@@ -9,7 +9,7 @@
                     <div class="p-5">
                         <div class="row">
                             <div class="col-3">
-                                <img src="{{asset("img/logo.png")}}" height="40px"/>
+                                <img src="{{asset("public/img/logo.png")}}" height="40px"/>
                             </div>
                             <div class="col-9">
                                 <div class="text-center">

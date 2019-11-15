@@ -18,7 +18,4 @@ use Illuminate\Support\Facades\Route;
 
 // Authentication Routes
 Auth::routes();
-
-Route::prefix('dashboard')->group(function () {
-	Route::get('/', [DashboardController::class, 'index']);
-});
+Route::get('/', [DashboardController::class, 'index']);
