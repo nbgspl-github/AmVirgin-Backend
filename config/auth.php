@@ -45,13 +45,14 @@ return [
 		],
 
 		'api' => [
-			'driver' => 'token',
+			'driver' => 'passport',
 			'provider' => 'users',
 			'hash' => false,
 		],
 		'admin' => [
-			'driver' => 'session',
+			'driver' => 'passport',
 			'provider' => 'admins',
+			'hash' => false,
 		],
 	],
 

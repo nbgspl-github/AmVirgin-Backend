@@ -1,113 +1,72 @@
-@extends('layouts.app')
+@extends('layouts.appNoBody')
 
 @section('content')
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">{{ __('Register') }}</h4>
-                        <h6 class="card-subtitle"> All with bootstrap element classies </h6>
-                        <form class="mt-4" action="{{ route('register') }}" method="POST">
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Name</label>
-                                <input type="email" class="form-control" id="name" aria-describedby="emailHelp"
-                                       placeholder="Enter email">
-                                <small id="emailHelp" class="form-text text-muted">We'll never share your email with
-                                    anyone else.</small>
+    <div class="card o-hidden border-0 shadow-none my-lg-3 bg-white">
+        <div class="card-body p-0 shadow-none bg-transparent">
+            <!-- Nested Row within Card Body -->
+            <div class="row bg-transparent shadow-none py-4">
+                <div class="col-lg-8 mx-auto bg-white rounded-lg shadow-sm">
+                    <div class="p-5">
+                        <div class="row">
+                            <div class="col-3">
+                                <img src="{{asset("img/logo.png")}}" height="40px"/>
+                            </div>
+                            <div class="col-9">
+                                <div class="text-center">
+                                    <h1 class="h4 text-gray-900 mb-5 text-right">Admin Sign Up</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <form class="user">
+                            <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <input type="text" class="form-control form-control-user" id="exampleFirstName"
+                                           placeholder="First Name">
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control form-control-user" id="exampleLastName"
+                                           placeholder="Last Name">
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Email address</label>
-                                <input type="email" class="form-control" id="name" aria-describedby="emailHelp"
-                                       placeholder="Enter email">
-                                <small id="emailHelp" class="form-text text-muted">We'll never share your email with
-                                    anyone else.</small>
+                                <input type="email" class="form-control form-control-user" id="exampleInputEmail"
+                                       placeholder="Email Address">
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Password</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1"
-                                       placeholder="Password">
+                            <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <input type="password" class="form-control form-control-user"
+                                           id="exampleInputPassword" placeholder="Password">
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="password" class="form-control form-control-user"
+                                           id="exampleRepeatPassword" placeholder="Repeat Password">
+                                </div>
                             </div>
-                            <div class="custom-control custom-checkbox mr-sm-2 mb-3">
-                                <input type="checkbox" class="custom-control-input" id="checkbox0" value="check">
-                                <label class="custom-control-label" for="checkbox0">Check Me Out !</label>
+                            <a href="login.html" class="btn btn-primary btn-user btn-block">
+                                Register Account
+                            </a>
+                            <hr>
+                            <div class="row">
+                                <div class="col-6">
+                                    <a href="index.html" class="btn btn-google btn-user btn-block">Register with
+                                        Google</a>
+                                </div>
+                                <div class="col-6">
+                                    <a href="index.html" class="btn btn-facebook btn-user btn-block">Register with
+                                        Facebook</a>
+                                </div>
                             </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
+                        <hr>
+                        <div class="text-center">
+                            <a class="small" href="forgot-password.html">Forgot Password?</a>
+                        </div>
+                        <div class="text-center">
+                            <a class="small" href="login.html">Already have an account? Login!</a>
+                        </div>
                     </div>
                 </div>
             </div>
-
-
-            {{--        <div class="col-md-8">--}}
-            {{--            <div class="card">--}}
-            {{--                <div class="card-header"></div>--}}
-
-            {{--                <div class="card-body">--}}
-            {{--                    <form method="POST" action="">--}}
-            {{--                        @csrf--}}
-
-            {{--                        <div class="form-group row">--}}
-            {{--                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>--}}
-
-            {{--                            <div class="col-md-6">--}}
-            {{--                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>--}}
-
-            {{--                                @error('name')--}}
-            {{--                                    <span class="invalid-feedback" role="alert">--}}
-            {{--                                        <strong>{{ $message }}</strong>--}}
-            {{--                                    </span>--}}
-            {{--                                @enderror--}}
-            {{--                            </div>--}}
-            {{--                        </div>--}}
-
-            {{--                        <div class="form-group row">--}}
-            {{--                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>--}}
-
-            {{--                            <div class="col-md-6">--}}
-            {{--                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">--}}
-
-            {{--                                @error('email')--}}
-            {{--                                    <span class="invalid-feedback" role="alert">--}}
-            {{--                                        <strong>{{ $message }}</strong>--}}
-            {{--                                    </span>--}}
-            {{--                                @enderror--}}
-            {{--                            </div>--}}
-            {{--                        </div>--}}
-
-            {{--                        <div class="form-group row">--}}
-            {{--                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>--}}
-
-            {{--                            <div class="col-md-6">--}}
-            {{--                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">--}}
-
-            {{--                                @error('password')--}}
-            {{--                                    <span class="invalid-feedback" role="alert">--}}
-            {{--                                        <strong>{{ $message }}</strong>--}}
-            {{--                                    </span>--}}
-            {{--                                @enderror--}}
-            {{--                            </div>--}}
-            {{--                        </div>--}}
-
-            {{--                        <div class="form-group row">--}}
-            {{--                            <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>--}}
-
-            {{--                            <div class="col-md-6">--}}
-            {{--                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">--}}
-            {{--                            </div>--}}
-            {{--                        </div>--}}
-
-            {{--                        <div class="form-group row mb-0">--}}
-            {{--                            <div class="col-md-6 offset-md-4">--}}
-            {{--                                <button type="submit" class="btn btn-primary">--}}
-            {{--                                    {{ __('Register') }}--}}
-            {{--                                </button>--}}
-            {{--                            </div>--}}
-            {{--                        </div>--}}
-            {{--                    </form>--}}
-            {{--                </div>--}}
-            {{--            </div>--}}
-            {{--        </div>--}}
         </div>
     </div>
 @endsection

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Base\WebController;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
-class LoginController extends Controller {
+class LoginController extends WebController {
 	/*
 	|--------------------------------------------------------------------------
 	| Login Controller

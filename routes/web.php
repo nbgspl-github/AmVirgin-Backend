@@ -12,10 +12,13 @@
 */
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Web\DashboardController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 // Authentication Routes
 Auth::routes();
 
-Route::get('/', [HomeController::class, 'index']);
+Route::prefix('dashboard')->group(function () {
+	Route::get('/', [DashboardController::class, 'index']);
+});
