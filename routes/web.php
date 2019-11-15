@@ -18,4 +18,4 @@ use Illuminate\Support\Facades\Route;
 // Authentication Routes
 Auth::routes();
 
-Route::get('/', [HomeController::class, 'index'])->middleware('auth');
+Route::get('/', [HomeController::class, 'index']);
