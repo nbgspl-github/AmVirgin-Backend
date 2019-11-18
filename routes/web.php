@@ -11,12 +11,15 @@
 |
 */
 
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Web\DashboardController;
+use App\Interfaces\Methods;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 // Authentication Routes
 Auth::routes();
 Auth::routes(['register' => false]);
-Route::get('/', [DashboardController::class, 'index'])->name('home');
+Route::get('/', [DashboardController::class, Methods::Index])->name('home');
+Route::get('/users', [UserController::class, Methods::Index])->name('users.all');
+Route::get('/users/{id}', [UserController::class, Methods::Index])->name('user.single');

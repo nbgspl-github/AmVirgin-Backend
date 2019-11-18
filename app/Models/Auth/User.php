@@ -42,4 +42,60 @@ class User extends Authenticatable {
 		'email' => 'string',
 		'email_verified_at' => 'datetime',
 	];
+
+	/**
+	 * @return int
+	 */
+	public function getId(): int {
+		return $this->id;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getName(): string {
+		return $this->name;
+	}
+
+	/**
+	 * @param string $name
+	 * @return User
+	 */
+	public function setName(string $name): User {
+		$this->name = $name;
+		return $this;
+	}
+
+	/**
+	 * @return string|null
+	 */
+	public function getEmail(): ?string {
+		return $this->email;
+	}
+
+	/**
+	 * @param string|null $email
+	 * @return User
+	 */
+	public function setEmail(?string $email): User {
+		$this->email = $email;
+		return $this;
+	}
+
+	/**
+	 * @return string|null
+	 */
+	public function getMobile(): ?string {
+		return $this->mobile;
+	}
+
+	/**
+	 * @param string|null $mobile
+	 * @return User
+	 */
+	public function setMobile(?string $mobile): User {
+		$this->mobile = $mobile;
+		return $this;
+	}
+
 }

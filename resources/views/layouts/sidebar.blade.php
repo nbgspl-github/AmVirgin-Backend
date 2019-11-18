@@ -24,8 +24,8 @@
                     </a>
                 </li>
 
-                <li class="has_sub">
-                    <a href="javascript:void(0);" class="waves-effect"><i class="dripicons-briefcase"></i> <span> User Management </span></a>
+                <li>
+                    <a href="{{route("users.all")}}" class="waves-effect"><i class="dripicons-briefcase"></i> <span> User Management </span></a>
                 </li>
 
             </ul>
