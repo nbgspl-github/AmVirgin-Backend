@@ -1,6 +1,6 @@
 <div class="topbar bg-secondary">
 
-	<div class="topbar-left d-none d-lg-block">
+	<div class="topbar-left d-none d-lg-block" style="background-color: #2a2a2a">
 		<div class="text-center">
 
 			<a href="http://avelo.in" class="logo"><img src="{{asset("images/logo.png")}}" height="50" alt="logo"></a>
