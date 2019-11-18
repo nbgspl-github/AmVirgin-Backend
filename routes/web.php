@@ -19,4 +19,4 @@ use Illuminate\Support\Facades\Route;
 // Authentication Routes
 Auth::routes();
 Auth::routes(['register' => false]);
-Route::get('/', [DashboardController::class, 'index'])->name('home')->middleware('auth');
+Route::get('/', [DashboardController::class, 'index'])->name('home');
