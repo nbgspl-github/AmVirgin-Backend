@@ -11,6 +11,6 @@ class DashboardController extends WebController {
 	 * @return \Illuminate\Contracts\Support\Renderable
 	 */
 	public function index() {
-		return view('dashboard');
+		return view('home.dashboard');
 	}
 }
