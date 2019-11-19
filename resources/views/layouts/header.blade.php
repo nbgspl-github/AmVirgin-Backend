@@ -32,7 +32,6 @@
 
 <!-- Begin page -->
 <div id="wrapper">
-
     <!-- ========== Left Sidebar Start ========== -->
 @include('layouts.sidebar')
 <!-- Left Sidebar End -->

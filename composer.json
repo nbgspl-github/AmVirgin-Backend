@@ -10,6 +10,7 @@
 	"require": {
 		"php": "^7.2",
 		"fideloper/proxy": "^4.0",
+		"laracasts/flash": "^3.0",
 		"laravel/framework": "^6.2",
 		"laravel/passport": "^8.0",
 		"laravel/tinker": "^1.0"
@@ -39,6 +40,9 @@
 		"classmap": [
 			"database/seeds",
 			"database/factories"
+		],
+		"files": [
+			"bootstrap/helpers.php"
 		]
 	},
 	"autoload-dev": {

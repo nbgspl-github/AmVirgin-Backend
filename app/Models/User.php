@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Contracts\FluentConstructor;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
 
-class User extends Authenticatable {
+class User extends Authenticatable implements FluentConstructor {
 	use Notifiable, HasApiTokens;
 
 	/**
@@ -42,6 +44,54 @@ class User extends Authenticatable {
 		'email' => 'string',
 		'email_verified_at' => 'datetime',
 	];
+
+	/**
+	 * @return string|null
+	 */
+	public function getPassword(): ?string {
+		return $this->password;
+	}
+
+	/**
+	 * @param string|null $password
+	 * @return User
+	 */
+	public function setPassword(?string $password): User {
+		$this->password = Hash::make($password);
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getRole(): int {
+		return $this->role;
+	}
+
+	/**
+	 * @param int $role
+	 * @return User
+	 */
+	public function setRole(int $role): User {
+		$this->role = $role;
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getStatus(): int {
+		return $this->status;
+	}
+
+	/**
+	 * @param int $status
+	 * @return User
+	 */
+	public function setStatus(int $status): User {
+		$this->status = $status;
+		return $this;
+	}
 
 	/**
 	 * @return int
@@ -98,4 +148,7 @@ class User extends Authenticatable {
 		return $this;
 	}
 
+	public static function makeNew() {
+		return new self();
+	}
 }

@@ -49,7 +49,7 @@
 										@csrf
 										<div class="form-group row">
 											<div class="col-md-12">
-												<input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="dev.aviralx@gmail.com" required autocomplete="email" autofocus placeholder="Email" spellcheck="false">
+												<input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="super.admin@amvirgin.com" required autocomplete="email" autofocus placeholder="Email" spellcheck="false">
 												@error('email')
 												<span class="invalid-feedback"
 												      role="alert"><strong>{{ $message }}</strong></span>

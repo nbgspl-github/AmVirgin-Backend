@@ -10,5 +10,8 @@
 <script src="{{asset("js/jquery.nicescroll.js")}}"></script>
 <script src="{{asset("js/jquery.scrollTo.min.js")}}"></script>
 
+<!-- Parsley js -->
+<script src="{{asset("plugins/parsleyjs/parsley.min.js")}}"></script>
+
 <!-- App js -->
 <script src="{{asset("js/app.js")}}"></script>

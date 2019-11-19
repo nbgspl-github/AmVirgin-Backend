@@ -1,4 +1,4 @@
-<div class="topbar bg-secondary">
+<div class="topbar bg-secondary" style="box-shadow: 0 4px 7px #c9c9c9">
 
 	<div class="topbar-left d-none d-lg-block bg-dark">
 		<div class="text-center">

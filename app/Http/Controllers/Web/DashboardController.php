@@ -5,6 +5,14 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Base\WebController;
 
 class DashboardController extends WebController {
+
+	/**
+	 * DashboardController constructor.
+	 */
+	public function __construct() {
+
+	}
+
 	/**
 	 * Show the application dashboard.
 	 *
@@ -13,4 +21,5 @@ class DashboardController extends WebController {
 	public function index() {
 		return view('home.dashboard');
 	}
+
 }

@@ -7,10 +7,11 @@
 					<div class="row px-2 mb-3">
 						<div class="col-sm-6"><h4 class="mt-0 header-title pt-1">All Users</h4></div>
 						<div class="col-sm-6">
-							<button type="button" class="float-right btn btn-outline-primary waves-effect waves-light" onclick="window.location.href='http'">
+							<button type="button" class="float-right btn btn-outline-primary waves-effect waves-light" onclick="window.location.href='{{route('users.forms.add')}}'">
 								Add User
 							</button>
 						</div>
+						@include('flash::message')
 					</div>
 					<div class="table-responsive">
 						<table class="table table-hover mb-0">
@@ -20,16 +21,18 @@
 								<th>Name</th>
 								<th>Mobile</th>
 								<th>Email</th>
+								<th>Status</th>
 								<th>Action(s)</th>
 							</tr>
 							</thead>
 							<tbody>
 							@foreach ($users as $user)
 								<tr>
-									<td>{{$user->getId()}}</td>
+									<td>{{$loop->index+1}}</td>
 									<td>{{$user->getName()}}</td>
 									<td>{{$user->getMobile()}}</td>
 									<td>{{$user->getEmail()}}</td>
+									<td>{{__status($user->getStatus())}}</td>
 									<td><a style="text-decoration: underline" class="text-primary" href="{{route('user.single',$user->getId())}}">View Details</a></td>
 								</tr>
 							@endforeach

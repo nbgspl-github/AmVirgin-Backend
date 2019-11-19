@@ -37,12 +37,8 @@ class TestRun extends Command {
 	 * @return mixed
 	 */
 	public function handle() {
-		$admin = new User();
-		$admin->name = "Aviral Singh";
-		$admin->email = "avx@gmail.com";
-		$admin->password = Hash::make("123456789");
-		$admin->save();
-//		echo "Token is => " . $admin->createToken(env('APP_NAME'))->accessToken;
+		$data = [1. . .100];
+		echo $data[0];
 		return;
 	}
 }
