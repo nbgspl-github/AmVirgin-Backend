@@ -66,11 +66,11 @@
 				</div>
 				<div class="form-group">
 					<label>First Image</label>
-					<input type="file" placeholder="Pick an image" name="image_1" class="form-control" style="height: unset">
+					<input type="file" placeholder="Pick an image" name="image_1" class="form-control" style="height: unset; padding-left: 6px">
 				</div>
 				<div class="form-group">
 					<label>Second Image</label>
-					<input type="file" placeholder="Pick an image" name="image_2" class="form-control" style="height: unset">
+					<input type="file" placeholder="Pick an image" name="image_2" class="form-control" style="height: unset; padding-left: 6px">
 				</div>
 				<div class="form-group">
 					<div>
