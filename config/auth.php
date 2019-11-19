@@ -1,7 +1,6 @@
 <?php
 
-use App\Models\Auth\Admin;
-use App\Models\Auth\User;
+use App\Models\User;
 
 return [
 
@@ -49,11 +48,6 @@ return [
 			'provider' => 'users',
 			'hash' => false,
 		],
-		'admin' => [
-			'driver' => 'passport',
-			'provider' => 'admins',
-			'hash' => false,
-		],
 	],
 
 	/*
@@ -77,10 +71,6 @@ return [
 		'users' => [
 			'driver' => 'eloquent',
 			'model' => User::class,
-		],
-		'admins' => [
-			'driver' => 'eloquent',
-			'model' => Admin::class,
 		],
 	],
 

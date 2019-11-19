@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Base\WebController;
-use App\Models\Auth\User;
+use App\Models\User;
 
 class UserController extends WebController {
 	public function index($id = null) {

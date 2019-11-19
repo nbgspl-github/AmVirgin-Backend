@@ -39,8 +39,7 @@
 							<div class="card-body">
 
 								<h3 class="text-center m-b-15">
-									<a href="#" class="logo logo-admin"><img src="{{asset("images/logo.png")}}"
-									                                         height="50" alt="logo"></a>
+									<a href="#" class="logo logo-admin"><img src="{{asset("images/logo.png")}}" height="50" alt="logo"></a>
 								</h3>
 
 								<h4 class="text-muted text-center font-18"><b>{{ __('Login') }}</b></h4>
@@ -86,16 +85,14 @@
 
 										<div class="form-group text-center row m-t-20">
 											<div class="col-12">
-												<button class="btn btn-primary btn-block waves-effect waves-light"
-												        type="button" onclick="window.location.href='/'">
+												<button class="btn btn-primary btn-block waves-effect waves-light" type="submit">
 													Log In
 												</button>
 											</div>
 										</div>
 
 										<div class="form-group m-t-15 mb-0 row">
-											<a href="{{ route('password.request') }}" class="text-muted mx-auto"><i
-														class="mdi mdi-lock"></i>Forgot your password?</a>
+											<a href="{{ route('password.request') }}" class="text-muted mx-auto"><i class="mdi mdi-lock"></i>Forgot your password?</a>
 										</div>
 									</form>
 								</div>

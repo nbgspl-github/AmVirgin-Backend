@@ -20,6 +20,6 @@ use Illuminate\Support\Facades\Route;
 // Authentication Routes
 Auth::routes();
 Auth::routes(['register' => false]);
-Route::get('/', [DashboardController::class, Methods::Index])->name('home');
-Route::get('/users', [UserController::class, Methods::Index])->name('users.all');
-Route::get('/users/{id}', [UserController::class, Methods::Index])->name('user.single');
+Route::get('/', [DashboardController::class, Methods::Index])->name('home')->middleware('auth');
+Route::get('/users', [UserController::class, Methods::Index])->name('users.all')->middleware('auth');
+Route::get('/users/{id}', [UserController::class, Methods::Index])->name('user.single')->middleware('auth');

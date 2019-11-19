@@ -4,7 +4,7 @@ namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\Base\AppController;
 use App\Http\Resources\UserResource;
-use App\Models\Auth\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends AppController {
