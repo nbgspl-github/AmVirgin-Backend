@@ -3,7 +3,7 @@
 	<div class="topbar-left d-none d-lg-block bg-dark">
 		<div class="text-center">
 
-			<a href="http://avelo.in" class="logo"><img src="{{asset("images/logo.png")}}" height="50" alt="logo"></a>
+			<a href="{{route('home')}}" class="logo"><img src="{{asset("images/logo.png")}}" height="50" alt="logo"></a>
 		</div>
 	</div>
 
