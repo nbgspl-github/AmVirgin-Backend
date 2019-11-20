@@ -11,7 +11,7 @@ class UserController extends AppController {
 	public function index(int $id = null) {
 		$users = User::all();
 		$index = 1;
-		$users->transform(function (User $user) use ($index) {
+		$users->transform(function (User $user) use (&$index) {
 			return [
 				'id' => $user->getId(),
 				'name' => $user->getName(),
