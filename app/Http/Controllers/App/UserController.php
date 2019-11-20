@@ -17,6 +17,7 @@ class UserController extends AppController {
 				'name' => $user->getName(),
 				'mobile' => $user->getMobile(),
 				'email' => $user->getEmail(),
+				'status' => __status($user->getStatus()),
 				'index' => $index++,
 			];
 		});
