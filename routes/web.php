@@ -16,7 +16,7 @@ use App\Http\Controllers\Web\DashboardController;
 use App\Interfaces\Methods;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\App\CategoriesController;
+use App\Http\Controllers\Web\CategoriesController;
 
 // Authentication Routes
 Auth::routes();

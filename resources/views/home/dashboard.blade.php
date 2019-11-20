@@ -69,7 +69,7 @@
 	</div>
 	<div class="row mx-1">
 		<div class="card card-body mt-4 mb-4">
-			<h5>Today's Statistics</h5>
+			<h5>Todays Statistics</h5>
 			<div class="row pt-4 pb-1">
 				<div class="col-lg-3">
 					<div class="card bg-secondary  text-white shadow-sm">
@@ -124,7 +124,7 @@
 									<i class="ti-bell" style="font-size: 35px"></i>
 								</div>
 								<div>
-									<h4 class="mt-4">Today's Events</h4>
+									<h4 class="mt-4">Todays Events</h4>
 									<h5 class="">2</h5>
 								</div>
 							</div>

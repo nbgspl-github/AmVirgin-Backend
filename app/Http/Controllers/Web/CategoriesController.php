@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\App;
+namespace App\Http\Controllers\Web;
 
 use App\Category;
-use App\Http\Controllers\Base\AppController;
+use App\Http\Controllers\Base\WebController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class CategoriesController extends AppController {
+class CategoriesController extends WebController {
 	public function index($id = null) {
 		if ($id == null) {
 			$categories = Category::all();
