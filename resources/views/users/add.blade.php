@@ -1,11 +1,12 @@
 @extends('layouts.header')
 @section('content')
-	<div class="row py-4 px-2">
+	@include('layouts.breadcrumbs', ['data' => ['Users'=>route('users.all'),'Add'=>route('users.new')],'active'=>2])
+	<div class="row px-2">
 		<div class="card card-body">
 			<h4 class="mt-0 header-title">Add a User</h4>
 			<p class="text-muted m-b-30 font-14">Fill user details and hit Save</p>
 			@include('flash::message')
-			<form action="{{route('users.add')}}" method="POST" data-parsley-validate="true">
+			<form action="{{route('users.save')}}" method="POST" data-parsley-validate="true">
 				@csrf
 				<div class="form-group">
 					<label>Name</label>

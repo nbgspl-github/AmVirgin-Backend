@@ -1,7 +1,8 @@
 @extends('layouts.header')
 @section('content')
+	@include('layouts.breadcrumbs', ['data' => ['Dashboard'=>route('home')],'active'=>1])
 	<div class="row mx-1">
-		<div class="card card-body mt-4">
+		<div class="card card-body">
 			<div class="row">
 				<div class="col-lg-4">
 					<div class="card bg-primary text-white" style="box-shadow: 0 2px 6px #fd6e77;">

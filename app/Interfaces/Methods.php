@@ -7,4 +7,5 @@ interface Methods {
 	const Store = "store";
 	const Update = "update";
 	const Create = "create";
+	const Delete = "delete";
 }

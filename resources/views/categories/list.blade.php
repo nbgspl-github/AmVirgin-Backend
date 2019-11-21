@@ -7,7 +7,7 @@
 					<div class="row px-2 mb-3">
 						<div class="col-sm-6"><h4 class="mt-0 header-title pt-1">All Categories</h4></div>
 						<div class="col-sm-6">
-							<button type="button" class="float-right btn btn-outline-primary waves-effect waves-light" onclick="window.location.href='{{route('categories.forms.add')}}'">
+							<button type="button" class="float-right btn btn-outline-primary waves-effect waves-light" onclick="window.location.href='{{route('categories.new')}}'">
 								Create Category
 							</button>
 						</div>
@@ -37,7 +37,7 @@
 									<td>{{$category->getKeywords()}}</td>
 									<td>{{$category->getOrder()}}</td>
 									<td>{{__visibility($category->getVisibility())}}</td>
-									<td><a style="text-decoration: underline" class="text-primary" href="{{route('user.single',$category->getId())}}">View Details</a></td>
+									<td><a style="text-decoration: underline" class="text-primary" href="{{route('users.single',$category->getId())}}">View Details</a></td>
 								</tr>
 							@endforeach
 							</tbody>
