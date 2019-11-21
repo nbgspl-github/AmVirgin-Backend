@@ -1,4 +1,4 @@
-<div class="topbar bg-secondary" style="box-shadow: 0 4px 7px #c9c9c9">
+<div class="topbar bg-primary" style="box-shadow: 0 4px 7px rgba(253,110,119,0.49);">
 
 	<div class="topbar-left d-none d-lg-block bg-dark">
 		<div class="text-center">
@@ -7,10 +7,8 @@
 		</div>
 	</div>
 
-	<nav class="navbar-custom">
-
+	<nav class="navbar-custom bg-transparent">
 		<ul class="list-inline float-right mb-0">
-
 			<li class="list-inline-item dropdown notification-list">
 				<a class="nav-link dropdown-toggle arrow-none waves-effect nav-user" data-toggle="dropdown" href="#" role="button"
 				   aria-haspopup="false" aria-expanded="false">

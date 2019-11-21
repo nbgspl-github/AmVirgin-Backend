@@ -10,4 +10,16 @@ use Illuminate\Routing\Controller as BaseController;
 
 class AppController extends WebController {
 	use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+	protected function responseOkay($data = []) {
+		return response()->json($data, 200);
+	}
+
+	protected function responseNoContent($data = []) {
+		return response()->json($data, 204);
+	}
+
+	protected function responseNotFound($data = []) {
+		return response()->json($data, 404);
+	}
 }

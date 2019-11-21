@@ -16,3 +16,4 @@ use App\Http\Controllers\App\UserController;
 */
 
 Route::get('/users', [UserController::class, Methods::Index]);
+Route::get('/users/{id}', [UserController::class, Methods::Index]);

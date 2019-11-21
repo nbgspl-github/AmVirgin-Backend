@@ -16,17 +16,48 @@
 		<div id="sidebar-menu">
 			<ul>
 				<li class="menu-title"></li>
+
 				<li>
 					<a href="{{route("home")}}" class="waves-effect">
-						<i class="dripicons-meter"></i>
+						<i class="mdi mdi-view-dashboard"></i>
 						<span>Dashboard</span>
 					</a>
 				</li>
+
 				<li>
-					<a href="{{route("users.all")}}" class="waves-effect"><i class="dripicons-briefcase"></i> <span> User Management </span></a>
+					<a href="{{route("users.all")}}" class="waves-effect"><i class="mdi mdi-account-circle"></i> <span> User Management </span></a>
 				</li>
+
 				<li>
-					<a href="{{route("categories.all")}}" class="waves-effect"><i class="dripicons-briefcase"></i> <span> Categories </span></a>
+					<a href="{{route("categories.all")}}" class="waves-effect"><i class="mdi mdi-cards"></i> <span> Categories </span></a>
+				</li>
+
+				<li>
+					<a href="{{route("categories.all")}}" class="waves-effect"><i class="mdi mdi-movie"></i> <span> Movies </span></a>
+				</li>
+
+				<li>
+					<a href="{{route("categories.all")}}" class="waves-effect"><i class="mdi mdi-step-forward"></i> <span> Series </span></a>
+				</li>
+
+				<li>
+					<a href="{{route("categories.all")}}" class="waves-effect"><i class="mdi mdi-television"></i> <span> Live TV </span></a>
+				</li>
+
+				<li>
+					<a href="{{route("categories.all")}}" class="waves-effect"><i class="mdi mdi-server"></i> <span> Servers </span></a>
+				</li>
+
+				<li>
+					<a href="{{route("categories.all")}}" class="waves-effect"><i class="mdi mdi-view-headline"></i> <span> Genres </span></a>
+				</li>
+
+				<li>
+					<a href="{{route("categories.all")}}" class="waves-effect"><i class="mdi mdi-near-me"></i> <span> Notifications </span></a>
+				</li>
+
+				<li>
+					<a href="{{route("categories.all")}}" class="waves-effect"><i class="mdi mdi-settings"></i> <span> Settings </span></a>
 				</li>
 			</ul>
 		</div>
