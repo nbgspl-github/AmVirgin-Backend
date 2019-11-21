@@ -4,7 +4,7 @@
 		<div class="card card-body mt-4">
 			<div class="row">
 				<div class="col-lg-4">
-					<div class="card bg-primary text-white" style="box-shadow: 0 2px 10px #fd6e77;">
+					<div class="card bg-primary text-white" style="box-shadow: 0 2px 6px #fd6e77;">
 						<a href="/" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
 						<div class="card-body">
 							<div class="text-center">
@@ -20,7 +20,7 @@
 					</div>
 				</div>
 				<div class="col-lg-4">
-					<div class="card bg-primary text-white" style="box-shadow: 0 2px 10px #fd6e77;">
+					<div class="card bg-primary text-white" style="box-shadow: 0 2px 6px #fd6e77;">
 						<a href="/" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
 						<div class="card-body">
 							<div class="text-center">
@@ -36,7 +36,7 @@
 					</div>
 				</div>
 				<div class="col-lg-4">
-					<div class="card bg-primary text-white" style="box-shadow: 0 2px 10px #fd6e77;">
+					<div class="card bg-primary text-white" style="box-shadow: 0 2px 6px #fd6e77;">
 						<a href="/" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
 						<div class="card-body">
 							<div class="text-center">
@@ -54,7 +54,7 @@
 			</div>
 			<div class="row mt-4">
 				<div class="col-lg-4">
-					<div class="card bg-primary text-white" style="box-shadow: 0 2px 10px #fd6e77;">
+					<div class="card bg-primary text-white" style="box-shadow: 0 2px 6px #fd6e77;">
 						<a href="/" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
 						<div class="card-body">
 							<div class="text-center">
@@ -70,7 +70,7 @@
 					</div>
 				</div>
 				<div class="col-lg-4">
-					<div class="card bg-primary text-white" style="box-shadow: 0 2px 10px #fd6e77;">
+					<div class="card bg-primary text-white" style="box-shadow: 0 2px 6px #fd6e77;">
 						<a href="/" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
 						<div class="card-body">
 							<div class="text-center">
@@ -86,7 +86,7 @@
 					</div>
 				</div>
 				<div class="col-lg-4">
-					<div class="card bg-primary text-white" style="box-shadow: 0 2px 10px #fd6e77;">
+					<div class="card bg-primary text-white" style="box-shadow: 0 2px 6px #fd6e77;">
 						<a href="/" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
 						<div class="card-body">
 							<div class="text-center">

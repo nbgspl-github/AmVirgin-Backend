@@ -1,5 +1,5 @@
 <!-- ========== Left Sidebar Start ========== -->
-<div class="left side-menu">
+<div class="left side-menu" style="box-shadow: 3px 0 10px rgba(0,0,0,0.31)">
 	<button type="button" class="button-menu-mobile button-menu-mobile-topbar open-left waves-effect">
 		<i class="ion-close"></i>
 	</button>
@@ -24,8 +24,8 @@
 					</a>
 				</li>
 
-				<li>
-					<a href="{{route("users.all")}}" class="waves-effect"><i class="mdi mdi-account-circle"></i> <span> User Management </span></a>
+				<li class="bg-light">
+					<a href="{{route("users.all")}}" class="waves-effect"><i class="mdi mdi-account-circle"></i> <span> Users </span></a>
 				</li>
 
 				<li>

@@ -1,9 +1,9 @@
-<div class="topbar bg-primary" style="box-shadow: 0 4px 7px rgba(253,110,119,0.49);">
+<div class="topbar bg-primary" style="box-shadow: 3px 0 10px rgba(0,0,0,0.31)">
 
 	<div class="topbar-left d-none d-lg-block bg-dark">
 		<div class="text-center">
 
-			<a href="{{route('home')}}" class="logo"><img src="{{asset("images/logo.png")}}" height="50" alt="logo"></a>
+			<a href="{{route('home')}}" class="logo"><img src="{{asset("images/logo.png")}}" height="50" alt="logo" class="customLogo"></a>
 		</div>
 	</div>
 
