@@ -47,4 +47,4 @@ Route::get('genres', [GenresController::class, Methods::Index])->name('genres.al
 Route::get('genres/{id}', [GenresController::class, Methods::Index])->name('genres.single')->middleware('auth');
 Route::get('genre/create', [GenresController::class, Methods::Create])->name('genres.new')->middleware('auth');
 Route::post('genre', [GenresController::class, Methods::Store])->name('genres.save')->middleware('auth');
-Route::put('genre/status', [GenresController::class, Methods::Update])->name('genres.update.status')->middleware('auth');
+Route::put('genre/status', [GenresController::class, Methods::UpdateStatus])->name('genres.update.status')->middleware('auth');
