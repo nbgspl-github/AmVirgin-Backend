@@ -88,6 +88,8 @@
 				axios.put('{{route('genres.update.status')}}').then(response => {
 					hideLoader();
 					console.log(response);
+				}).catch(reason => {
+
 				});
 			} catch (error) {
 				console.log(error);
