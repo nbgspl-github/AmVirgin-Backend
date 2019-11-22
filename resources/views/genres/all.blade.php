@@ -87,6 +87,7 @@
 			try {
 				$.ajax({
 					type: "PUT",
+					async: false,
 					url: '{{route('genres.update.status')}}',
 					data: {id: id, status: state},
 					dataType: "json",
