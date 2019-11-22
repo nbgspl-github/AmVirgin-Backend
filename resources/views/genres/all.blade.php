@@ -77,14 +77,6 @@
 
 @section('javascript')
 	<script type="application/javascript">
-		//
-		// $.ajaxSetup({
-		// 	headers: {
-		// 		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-		// 	}
-		// });
-		// Axios.defaults.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').attr('content');
-
 		$(document).ready(function () {
 			$('#datatable').DataTable();
 		});
@@ -92,27 +84,16 @@
 		toggleStatus = (id, state) => {
 			console.log('Called');
 			showLoader();
-			{{--$.ajax({--}}
-			{{--	type: "PUT",--}}
-			{{--	url: '{{route('genres.update.status')}}',--}}
-			{{--	data: {id: id, status: state},--}}
-			{{--	dataType: "json",--}}
-			{{--	success: function (data) {--}}
-			{{--		hideLoader();--}}
-			{{--		console.log(data);--}}
-			{{--	},--}}
-			{{--	failed: function (d) {--}}
-			{{--		hideLoader();--}}
-			{{--		console.log(d);--}}
-			{{--	}--}}
-			{{--});--}}
-			axios.put('{{route('genres.update.status')}}').then(response => {
-				hideLoader();
-				console.log(response);
-			}).catch(reason => {
-				hideLoader();
-				console.log(reason);
-			});
+			try {
+				axios.put('{{route('genres.update.status')}}').then(response => {
+					hideLoader();
+					console.log(response);
+				});
+			} catch (error) {
+				console.log(error);
+			} finally {
+
+			}
 		}
 	</script>
 @stop
