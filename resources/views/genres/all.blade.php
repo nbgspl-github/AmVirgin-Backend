@@ -81,21 +81,30 @@
 			$('#datatable').DataTable();
 		});
 
-		async function toggleStatus(id, state) {
-			// console.log('Called');
+		toggleStatus = (id, state) => {
+			console.log('Called');
 			showLoader();
-			try {
-				await axios.put('{{route('genres.update.status')}}').then(response => {
+			$.ajax({
+				type: "PUT",
+				url: '{{route('genres.update.status')}}',
+				data: {id: id, status: state},
+				dataType: "json",
+				success: function (data) {
 					hideLoader();
-					// console.log(response);
-				}).catch(reason => {
-
-				});
-			} catch (error) {
-				// console.log(error);
-			} finally {
-
-			}
+					console.log(data);
+				},
+				failed: function (d) {
+					hideLoader();
+					console.log(d);
+				}
+			});
+			{{--axios.put('{{route('genres.update.status')}}').then(response => {--}}
+			{{--	hideLoader();--}}
+			{{--	console.log(response);--}}
+			{{--}).catch(reason => {--}}
+			{{--	hideLoader();--}}
+			{{--	console.log(reason);--}}
+			{{--});--}}
 		}
 	</script>
 @stop

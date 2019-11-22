@@ -17,6 +17,5 @@ if (token) {
 }
 
 window.axios.defaults.validateStatus = (status) => {
-
 	return true;
 };
