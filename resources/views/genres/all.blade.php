@@ -84,20 +84,24 @@
 		toggleStatus = (id, state) => {
 			console.log('Called');
 			showLoader();
-			$.ajax({
-				type: "PUT",
-				url: '{{route('genres.update.status')}}',
-				data: {id: id, status: state},
-				dataType: "json",
-				success: function (data) {
-					hideLoader();
-					console.log(data);
-				},
-				failed: function (d) {
-					hideLoader();
-					console.log(d);
-				}
-			});
+			try {
+				$.ajax({
+					type: "PUT",
+					url: '{{route('genres.update.status')}}',
+					data: {id: id, status: state},
+					dataType: "json",
+					success: function (data) {
+						hideLoader();
+						console.log(data);
+					},
+					error: function (d) {
+						hideLoader();
+						console.log(d);
+					}
+				});
+			} catch (e) {
+				console.log('error');
+			}
 			{{--axios.put('{{route('genres.update.status')}}').then(response => {--}}
 			{{--	hideLoader();--}}
 			{{--	console.log(response);--}}
