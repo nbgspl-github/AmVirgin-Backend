@@ -59,9 +59,9 @@ class GenresController extends WebController {
 			'status' => ['bail', 'required', Rule::in([0, 1])],
 		]);
 		if ($validator->fails()) {
-			return response()->json(['message' => $validator->errors()->first()], 400);
+			return response()->json(['code' => 400, 'message' => $validator->errors()->first()]);
 		} else {
-			return response()->json(['message' => 'Status updated successfully.'], 200);
+			return response()->json(['code' => 200, 'message' => 'Status updated successfully.']);
 		}
 	}
 }

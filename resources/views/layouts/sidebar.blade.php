@@ -15,7 +15,7 @@
 
 		<div id="sidebar-menu">
 			<ul>
-				<li class="menu-title"></li>
+				<li class="menu-title">Main</li>
 
 				<li>
 					<a href="{{route("home")}}" class="waves-effect"><i class="mdi mdi-view-dashboard"></i><span>Dashboard</span></a>
@@ -25,9 +25,13 @@
 					<a href="{{route("users.all")}}" class="waves-effect"><i class="mdi mdi-account-circle mt-1"></i> <span> Users </span></a>
 				</li>
 
+				<li class="menu-title">Shopping</li>
+
 				<li>
 					<a href="{{route("categories.all")}}" class="waves-effect"><i class="mdi mdi-cards mt-1"></i> <span> Categories </span></a>
 				</li>
+
+				<li class="menu-title">Entertainment</li>
 
 				<li>
 					<a href="{{route("movies.all")}}" class="waves-effect"><i class="mdi mdi-movie" style="margin-top: 2px"></i> <span> Movies </span></a>
