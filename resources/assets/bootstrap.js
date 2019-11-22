@@ -16,7 +16,7 @@ if (token) {
 	console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
-window.axios.defaults.validateStatus = () => {
+window.axios.defaults.validateStatus = (status) => {
 
-	return status > 0 && status < 600;
+	return true;
 };
