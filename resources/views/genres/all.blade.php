@@ -88,18 +88,19 @@
 		});
 
 		toggleStatus = (id, state) => {
-			showLoader();
+			console.log('Called');
+			// showLoader();
 			$.ajax({
 				type: "PUT",
 				url: '{{route('genres.update.status')}}',
 				data: {id: id, status: state},
 				dataType: "json",
 				success: function (data) {
-					hideLoader();
+					// hideLoader();
 					console.log(data);
 				},
 				failed: function (d) {
-					hideLoader();
+					// hideLoader();
 					console.log(d);
 				}
 			});
