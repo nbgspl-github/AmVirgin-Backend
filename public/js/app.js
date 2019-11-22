@@ -130,5 +130,6 @@ function showLoader() {
 }
 
 function hideLoader() {
+	console.log('Hideloader called');
 	jQuery('#loader-modal').modal('hide');
 }
