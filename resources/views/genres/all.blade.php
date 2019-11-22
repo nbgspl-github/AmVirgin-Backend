@@ -95,9 +95,11 @@
 				data: {id: id, status: state},
 				dataType: "json",
 				success: function (data) {
+					hideLoader();
 					console.log(data);
 				},
 				failed: function (d) {
+					hideLoader();
 					console.log(d);
 				}
 			});
