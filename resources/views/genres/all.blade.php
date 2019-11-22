@@ -81,18 +81,18 @@
 			$('#datatable').DataTable();
 		});
 
-		toggleStatus = (id, state) => {
-			console.log('Called');
+		async function toggleStatus(id, state) {
+			// console.log('Called');
 			showLoader();
 			try {
-				axios.put('{{route('genres.update.status')}}').then(response => {
+				await axios.put('{{route('genres.update.status')}}').then(response => {
 					hideLoader();
-					console.log(response);
+					// console.log(response);
 				}).catch(reason => {
 
 				});
 			} catch (error) {
-				console.log(error);
+				// console.log(error);
 			} finally {
 
 			}
