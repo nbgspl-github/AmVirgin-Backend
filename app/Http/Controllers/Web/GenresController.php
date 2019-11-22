@@ -6,6 +6,7 @@ use App\Http\Controllers\Base\WebController;
 use App\Http\Resources\MovieResource;
 use App\Http\Resources\MoviesCollection;
 use App\Interfaces\Directories;
+use App\Interfaces\Tables;
 use App\Models\Genre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -54,7 +55,13 @@ class GenresController extends WebController {
 
 	public function updateStatus(Request $request) {
 		$validator = Validator::make($request->all(), [
-			'id' => ['bail', 'required', ''],
+			'id' => ['bail', 'required', Rule::exists(Tables::Genres, 'id')],
+			'status' => ['bail', 'required', Rule::in([0, 1])],
 		]);
+		if ($validator->fails()) {
+			return response()->json(['message' => $validator->errors()->first()], 400);
+		} else {
+			return response()->json(['message' => 'Status updated successfully.'], 200);
+		}
 	}
 }
