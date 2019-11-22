@@ -1,0 +1,1 @@
+data-toggle="tooltip" data-placement="top" title="" data-original-title="{{$title}}"

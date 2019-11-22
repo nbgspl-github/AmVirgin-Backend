@@ -22,15 +22,16 @@
 <script src="{{asset("plugins/datatables/jszip.min.js")}}"></script>
 <script src="{{asset("plugins/datatables/pdfmake.min.js")}}"></script>
 <script src="{{asset("plugins/datatables/vfs_fonts.js")}}"></script>
-<script src="{{asset("plugins/datatables/buttons.html5.min.js")}}"></script>
+<script src="{{asset("plugins/datatables/buttons.html5.min.js")}}"></script>j
 <script src="{{asset("plugins/datatables/buttons.print.min.js")}}"></script>
 <script src="{{asset("plugins/datatables/buttons.colVis.min.js")}}"></script>
 <!-- Responsive examples -->
 <script src="{{asset("plugins/datatables/dataTables.responsive.min.js")}}"></script>
 <script src="{{asset("plugins/datatables/responsive.bootstrap4.min.js")}}"></script>
 
-<!-- Datatable init js -->
-<script src="{{asset("pages/datatables.init.js")}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
-<!-- App js -->
+<script src="{{asset("js/axios.js")}}"></script>
+
+{{--<!-- App js -->--}}
 <script src="{{asset("js/app.js")}}"></script>

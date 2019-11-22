@@ -2,31 +2,16 @@
 
 namespace App\Models;
 
+use App\Contracts\FluentConstructor;
 use Illuminate\Database\Eloquent\Model;
 
-class Genre extends Model {
+class Genre extends Model implements FluentConstructor {
 
 	protected $table = "genres";
 
-	/**
-	 * @var integer
-	 */
-	private $id;
-
-	/**
-	 * @var string
-	 */
-	private $name;
-
-	/**
-	 * @var string|null
-	 */
-	private $description;
-
-	/**
-	 * @var string|null
-	 */
-	private $poster;
+	protected $casts = [
+		'status' => 'boolean',
+	];
 
 	/**
 	 * @return int
@@ -83,4 +68,27 @@ class Genre extends Model {
 		return $this;
 	}
 
+	/**
+	 * @return bool
+	 */
+	public function getStatus(): bool {
+		return $this->status;
+	}
+
+	/**
+	 * @param bool $status
+	 * @return Genre
+	 */
+	public function setStatus(bool $status): Genre {
+		$this->status = $status;
+		return $this;
+	}
+
+	/**
+	 *  Makes a new instance and returns it.
+	 * @return Genre
+	 */
+	public static function makeNew() {
+		return new self();
+	}
 }

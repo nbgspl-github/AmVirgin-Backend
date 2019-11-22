@@ -8,10 +8,17 @@
 	<meta content="{{config("app.name","AmVirgin Dashboard")}}" name="AmVirgin Admin Dashboard"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 	<link rel="shortcut icon" href="{{asset("images/logo.png")}}">
+	<!-- DataTables -->
+	<link href="{{asset("plugins/datatables/dataTables.bootstrap4.min.css")}}" rel="stylesheet" type="text/css"/>
+	<link href="{{asset("plugins/datatables/buttons.bootstrap4.min.css")}}" rel="stylesheet" type="text/css"/>
+	<!-- Responsive datatable examples -->
+	<link href="{{asset("plugins/datatables/responsive.bootstrap4.min.css")}}" rel="stylesheet" type="text/css"/>
 	<link href="{{asset("css/bootstrap.min.css")}}" rel="stylesheet" type="text/css">
 	<link href="{{asset("css/icons.css")}}" rel="stylesheet" type="text/css">
 	<link href="{{asset("css/style.css")}}" rel="stylesheet" type="text/css">
 	<link href="{{asset("css/custom.css")}}" rel="stylesheet" type="text/css">
+	@notify_css
+	@yield('style')
 </head>
 
 <body class="fixed-left">
@@ -21,7 +28,18 @@
 		<div class="spinner"></div>
 	</div>
 </div>
-
+<div class="modal shadow-sm fade" tabindex="-1" role="dialog" id="loader-modal" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-dialog-centered modal-sm mx-auto" role="document">
+		<div class="modal-content mx-auto" style="max-width: 150px">
+			<div class="modal-body text-center" style="box-shadow: 0 2px 30px rgba(0,13,28,0.46)">
+				<div class="row">
+					<div class="loader mx-auto mb-4"></div>
+				</div>
+				<span class="mt-4">Please wait!</span>
+			</div>
+		</div>
+	</div>
+</div>
 <div id="wrapper">
 	@include('layouts.sidebar')
 	<div class="content-page">
@@ -36,6 +54,9 @@
 	</footer>
 </div>
 @include('layouts.scripts')
-
+@yield('javascript')
+@yield('scripts')
 </body>
+{{--@notify_js--}}
+@notify_render
 </html>

@@ -30,7 +30,7 @@ Route::get('/', [DashboardController::class, Methods::Index])->name('home')->mid
 // User's Routes
 Route::get('users', [UserController::class, Methods::Index])->name('users.all')->middleware('auth');
 Route::get('users/{id}', [UserController::class, Methods::Index])->name('users.single')->middleware('auth');
-Route::get('users/create', [UserController::class, Methods::Create])->name('users.new')->middleware('auth');
+Route::get('user/create', [UserController::class, Methods::Create])->name('users.new')->middleware('auth');
 Route::post('user', [UserController::class, Methods::Store])->name('users.save')->middleware('auth');
 Route::put('user/{id}', [UserController::class, Methods::Update])->name('users.update')->middleware('auth');
 
@@ -44,3 +44,7 @@ Route::get('movies', [MoviesController::class, Methods::Index])->name('movies.al
 
 // Genres Routes
 Route::get('genres', [GenresController::class, Methods::Index])->name('genres.all')->middleware('auth');
+Route::get('genres/{id}', [GenresController::class, Methods::Index])->name('genres.single')->middleware('auth');
+Route::get('genre/create', [GenresController::class, Methods::Create])->name('genres.new')->middleware('auth');
+Route::post('genre', [GenresController::class, Methods::Store])->name('genres.save')->middleware('auth');
+Route::put('genre/status', [GenresController::class, Methods::Update])->name('genres.update.status')->middleware('auth');

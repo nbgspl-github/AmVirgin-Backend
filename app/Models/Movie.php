@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use App\Contracts\FluentConstructor;
 use Illuminate\Database\Eloquent\Model;
 
-class Movie extends Model {
+class Movie extends Model implements FluentConstructor {
 
 	protected $table = "movies";
 
@@ -207,4 +208,11 @@ class Movie extends Model {
 		return $this;
 	}
 
+	/**
+	 *  Makes a new instance and returns it.
+	 * @return Movie
+	 */
+	public static function makeNew() {
+		return new self();
+	}
 }

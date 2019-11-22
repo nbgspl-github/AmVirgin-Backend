@@ -328,3 +328,56 @@ li {
     transform: scale(1.1, 1.1);
     transition: 0.3s;
 }
+
+.sidebar-item {
+    margin-left: -8px;
+}
+
+.sidebar-item:hover {
+    margin-left: +8px;
+}
+
+.shadow-primary {
+    box-shadow: 0 .125rem .25rem #fd6e77;
+}
+
+.shadow-danger {
+    box-shadow: 0 .125rem .25rem #397be8;
+}
+
+#overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: block; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+    z-index: 9998; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: progress; /* Add a pointer on hover */
+}
+
+.loader {
+    border: 4px solid #f3f3f3; /* Light grey */
+    border-top: 4px solid #397be8; /* Blue */
+    border-radius: 50%;
+    width: 55px;
+    height: 55px;
+    display: inline;
+    animation: spin .6s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.modal-open {
+    overflow-y: hidden !important;
+}
