@@ -100,6 +100,7 @@
 					}
 				});
 			} catch (e) {
+				hideLoader();
 				console.log('error');
 			}
 			{{--axios.put('{{route('genres.update.status')}}').then(response => {--}}
