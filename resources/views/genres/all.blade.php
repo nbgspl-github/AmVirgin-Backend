@@ -87,7 +87,7 @@
 			$('#datatable').DataTable();
 		});
 
-		toggleStatus = (id, state) => {
+		function toggleStatus(id, state) {
 			console.log('Called');
 			showLoader();
 			try {
