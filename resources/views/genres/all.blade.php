@@ -77,6 +77,12 @@
 
 @section('javascript')
 	<script type="application/javascript">
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			}
+		});
+
 		$(document).ready(function () {
 			$('#datatable').DataTable();
 		});
