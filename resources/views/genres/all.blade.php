@@ -77,7 +77,6 @@
 
 @section('javascript')
 	<script type="application/javascript">
-		import * as Axios from "../../../public/js/waves";
 		//
 		// $.ajaxSetup({
 		// 	headers: {
