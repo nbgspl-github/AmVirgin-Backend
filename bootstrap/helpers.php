@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Storage;
+
 function __status($status) {
 	if ($status == 1)
 		return 'Active';
@@ -24,4 +26,11 @@ function __blank($value) {
 		return '-';
 	else
 		return $value;
+}
+
+function image($path = null) {
+	if ($path == null)
+		return null;
+	else
+		return Storage::download($path);
 }

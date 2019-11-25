@@ -33,5 +33,9 @@
 
 <script src="{{asset("js/axios.js")}}"></script>
 
+<!-- Alertify js -->
+<script src="{{asset('plugins/alertify/js/alertify.js')}}"></script>
+<script src="{{asset('pages/alertify-init.js')}}"></script>
+
 {{--<!-- App js -->--}}
 <script src="{{asset("js/app.js")}}"></script>

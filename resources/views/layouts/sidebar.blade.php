@@ -50,7 +50,7 @@
 				</li>
 
 				<li>
-					<a href="{{route("genres.all")}}" class="waves-effect"><i class="mdi mdi-view-headline mt-1"></i> <span> Genres </span></a>
+					<a href="{{route("genres.index")}}" class="waves-effect"><i class="mdi mdi-view-headline mt-1"></i> <span> Genres </span></a>
 				</li>
 
 				<li>

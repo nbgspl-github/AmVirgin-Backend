@@ -1,33 +1,33 @@
 @extends('layouts.header')
 @section('content')
 	@include('modals.lightbox')
-	@include('layouts.breadcrumbs', ['data' => ['Genres'=>route('genres.all'),'Add'=>route('genres.new')]])
+	@include('layouts.breadcrumbs', ['data' => ['Genres'=>route('genres.index'),'Add'=>'#']])
 	<div class="row px-2">
 		<div class="card card-body">
 			<h4 class="mt-0 header-title">Add a Genre</h4>
 			<p class="text-muted m-b-30 font-14">Add genre details and hit Save</p>
-			<form action="{{route('genres.save')}}" data-parsley-validate="true" method="POST">
+			<form action="{{route('genres.store')}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
 				@csrf
 				<div class="form-group">
 					<label>Name<span class="text-primary">*</span></label>
-					<input type="text" name="name" class="form-control" required placeholder="Type here the genre's name or title" minlength="1" maxlength="100"/>
+					<input type="text" name="name" class="form-control" required placeholder="Type here the genre's name or title" minlength="1" maxlength="100" value="{{old('name')}}"/>
 				</div>
 				<div class="form-group">
 					<label>Description</label>
-					<input type="text" name="email" class="form-control" placeholder="Type here the genre's description"/>
+					<input type="text" name="description" class="form-control" placeholder="Type here the genre's description" value="{{old('description')}}"/>
 				</div>
 				<div class="form-group">
 					<label>Poster</label>
-					<input type="file" name="poster" onclick="this.value=null;" onchange="previewImage(event);" class="form-control" data-parsley-type="file" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp"/>
+					<input type="file" name="poster" onclick="this.value=null;" onchange="previewImage(event);" class="form-control" data-parsley-type="file" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('poster')}}"/>
 				</div>
 				<div class="form-group">
 					<label>Status</label>
 					<div class="btn-group btn-group-toggle d-block" data-toggle="buttons">
-						<label class="btn btn-outline-danger active">
-							<input type="radio" name="status" id="option2" value="1"/>Active
+						<label class="btn btn-outline-danger">
+							<input type="radio" name="status" value="1"/>Active
 						</label>
 						<label class="btn btn-outline-primary">
-							<input type="radio" name="status" id="option3" value="0"/>Inactive
+							<input type="radio" name="status" value="0"/>Inactive
 						</label>
 					</div>
 				</div>
@@ -36,7 +36,7 @@
 						<button type="submit" class="btn btn-primary waves-effect waves-light">
 							Save
 						</button>
-						<a href="{{route("genres.all")}}" class="btn btn-secondary waves-effect m-l-5">
+						<a href="{{route("genres.index")}}" class="btn btn-secondary waves-effect m-l-5">
 							Cancel
 						</a>
 					</div>

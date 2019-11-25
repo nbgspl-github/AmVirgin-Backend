@@ -133,3 +133,9 @@ function hideLoader() {
 	console.log('Hideloader called');
 	jQuery('#loader-modal').modal('hide');
 }
+
+$(document).ready(() => {
+	axios.defaults.validateStatus = (status) => {
+		return status < 500;
+	};
+});

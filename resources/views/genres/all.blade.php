@@ -1,13 +1,13 @@
 @extends('layouts.header')
 @section('content')
-	@include('layouts.breadcrumbs', ['data' => ['Genres'=>route('genres.all')]])
+	@include('layouts.breadcrumbs', ['data' => ['Genres'=>'#']])
 	<div class="row">
 		<div class="col-12">
 			<div class="card m-b-30">
 				<div class="card-body px-0 pb-3">
 					<div class="row pr-3">
 						<div class="col-6"><h4 class="mt-0 header-title ml-3 mb-4">All Genres</h4></div>
-						<div class="col-6"><a class="float-right btn btn-outline-primary waves-effect waves-light shadow-sm fadeInRightBig" href="{{route('genres.new')}}">Add Genre</a></div>
+						<div class="col-6"><a class="float-right btn btn-outline-primary waves-effect waves-light shadow-sm fadeInRightBig" href="{{route('genres.create')}}">Add Genre</a></div>
 					</div>
 					<table id="datatable" class="table table-bordered dt-responsive nowrap pr-0 pl-0" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 						<thead>
@@ -23,11 +23,11 @@
 
 						<tbody>
 						@foreach($genres as $genre)
-							<tr>
+							<tr id="genre_row_{{$genre->getId()}}">
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">
 									@if($genre->getPoster()!=null)
-										<img src="{{$genre->getPoster()}}" style="width: 100px; height: 100px" alt="{{$genre->getName()}}" @include('extras.tooltip.right', ['title' => $genre->getName()])/>
+										<img src="{{route('images.genre.poster',$genre->getId())}}" style="width: 100px; height: 100px" alt="{{$genre->getName()}}" @include('extras.tooltip.right', ['title' => $genre->getName()])/>
 									@else
 										<i class="mdi mdi-close-box-outline text-muted" style="font-size: 90px"></i>
 									@endif
@@ -56,10 +56,10 @@
 								<td class="text-center">
 									<div class="row">
 										<div class="col-6">
-											<a class="btn btn-outline-danger shadow-sm shadow-danger" href="" @include('extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
+											<a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('genres.edit',$genre->getId())}}" @include('extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
 										</div>
 										<div class="col-6">
-											<a class="btn btn-outline-primary shadow-sm shadow-primary" href="" @include('extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>
+											<a class="btn btn-outline-primary shadow-sm shadow-primary" href="javascript:void(0);" onclick="deleteGenre('{{$genre->getId()}}');" @include('extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>
 										</div>
 									</div>
 								</td>
@@ -77,12 +77,35 @@
 
 @section('javascript')
 	<script type="application/javascript">
-		$(document).ready(function () {
+		$(document).ready(() => {
 			$('#datatable').DataTable();
 		});
 
+		/**
+		 * Returns route for Genre/Update/Status route.
+		 * @param id
+		 * @returns {string}
+		 */
+		updateStatusRoute = (id) => {
+			return 'genres/' + id + '/status';
+		};
+
+		/**
+		 * Returns route for Genre/Delete route.
+		 * @param id
+		 * @returns {string}
+		 */
+		deleteGenreRoute = (id) => {
+			return 'genres/' + id;
+		};
+
+		/**
+		 * Callback for active status changes.
+		 * @param id
+		 * @param state
+		 */
 		toggleStatus = (id, state) => {
-			axios.put('{{route('genres.update.status')}}',
+			axios.put(updateStatusRoute(id),
 				{id: id, status: state})
 				.then(response => {
 					if (response.status === 200) {
@@ -94,6 +117,33 @@
 				.catch(reason => {
 					console.log(reason);
 					toastr.error('Failed to update status.');
+				});
+		};
+
+		/**
+		 * Callback for delete genre trigger.
+		 * @param genreId
+		 */
+		deleteGenre = (genreId) => {
+			window.genreId = genreId;
+			alertify.confirm("Are you sure you want to delete this genre? ",
+				(ev) => {
+					ev.preventDefault();
+					axios.delete(deleteGenreRoute(genreId))
+						.then(response => {
+							if (response.data.code === 200) {
+								$('#genre_row_' + genreId).remove();
+								toastr.success(response.data.message);
+							} else {
+								toastr.error(response.data.message);
+							}
+						})
+						.catch(error => {
+							toastr.error('Something went wrong. Please try again in a while.');
+						});
+				},
+				(ev) => {
+					ev.preventDefault();
 				});
 		}
 	</script>

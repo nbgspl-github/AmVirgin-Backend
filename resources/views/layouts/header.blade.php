@@ -14,6 +14,8 @@
 	<link href="{{asset("plugins/datatables/buttons.bootstrap4.min.css")}}" rel="stylesheet" type="text/css"/>
 	<!-- Responsive datatable examples -->
 	<link href="{{asset("plugins/datatables/responsive.bootstrap4.min.css")}}" rel="stylesheet" type="text/css"/>
+	<!-- Alertify css -->
+	<link href="{{asset('plugins/alertify/css/alertify.css')}}" rel="stylesheet" type="text/css">
 	<link href="{{asset("css/bootstrap.min.css")}}" rel="stylesheet" type="text/css">
 	<link href="{{asset("css/icons.css")}}" rel="stylesheet" type="text/css">
 	<link href="{{asset("css/style.css")}}" rel="stylesheet" type="text/css">
