@@ -61,6 +61,9 @@ class GenresController extends WebController {
 		if ($validator->fails()) {
 			return response()->json(['code' => 400, 'message' => $validator->errors()->first()]);
 		} else {
+			Genre::find($request->id)->
+			setStatus($request->status)->
+			save();
 			return response()->json(['code' => 200, 'message' => 'Status updated successfully.']);
 		}
 	}

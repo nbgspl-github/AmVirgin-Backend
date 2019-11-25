@@ -38,17 +38,17 @@
 									<div class="btn-group btn-group-toggle shadow-sm" data-toggle="buttons">
 										@if($genre->getStatus()==true)
 											<label class="btn btn-outline-danger active">
-												<input type="radio" name="options" id="option2" onchange="toggleStatus('{{$genre->getId()}}',true);"/> On
+												<input type="radio" name="options" id="optionOn_{{$genre->getId()}}" onchange="toggleStatus('{{$genre->getId()}}',1);"/> On
 											</label>
 											<label class="btn btn-outline-primary">
-												<input type="radio" name="options" id="option3" onchange="toggleStatus('{{$genre->getId()}}',false);"/> Off
+												<input type="radio" name="options" id="optionOff_{{$genre->getId()}}" onchange="toggleStatus('{{$genre->getId()}}',0);"/> Off
 											</label>
 										@else
 											<label class="btn btn-outline-danger">
-												<input type="radio" name="options" id="option2" onchange="toggleStatus('{{$genre->getId()}}',true);"/> On
+												<input type="radio" name="options" id="optionOn_{{$genre->getId()}}" onchange="toggleStatus('{{$genre->getId()}}',1);"/> On
 											</label>
 											<label class="btn btn-outline-primary active">
-												<input type="radio" name="options" id="option3" onchange="toggleStatus('{{$genre->getId()}}',false);"/> Off
+												<input type="radio" name="options" id="optionOff_{{$genre->getId()}}" onchange="toggleStatus('{{$genre->getId()}}',0);"/> Off
 											</label>
 										@endif
 									</div>
@@ -77,47 +77,24 @@
 
 @section('javascript')
 	<script type="application/javascript">
-		$.ajaxSetup({
-			headers: {
-				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			}
-		});
-
 		$(document).ready(function () {
 			$('#datatable').DataTable();
 		});
 
-		function toggleStatus(id, state) {
-			console.log('Called');
-			showLoader();
-			try {
-				$.ajax({
-					type: "PUT",
-					async: false,
-					url: '{{route('genres.update.status')}}',
-					data: {id: id, status: state},
-					dataType: "json",
-					context: this,
-					success: function (data) {
-						this.hideLoader();
-						console.log(data);
-					},
-					error: function (d) {
-						this.hideLoader();
-						console.log(d);
+		toggleStatus = (id, state) => {
+			axios.put('{{route('genres.update.status')}}',
+				{id: id, status: state})
+				.then(response => {
+					if (response.status === 200) {
+						toastr.success(response.data.message);
+					} else {
+						toastr.error(response.data.message);
 					}
+				})
+				.catch(reason => {
+					console.log(reason);
+					toastr.error('Failed to update status.');
 				});
-			} catch (e) {
-				hideLoader();
-				console.log('error');
-			}
-			{{--axios.put('{{route('genres.update.status')}}').then(response => {--}}
-			{{--	hideLoader();--}}
-			{{--	console.log(response);--}}
-			{{--}).catch(reason => {--}}
-			{{--	hideLoader();--}}
-			{{--	console.log(reason);--}}
-			{{--});--}}
 		}
 	</script>
 @stop

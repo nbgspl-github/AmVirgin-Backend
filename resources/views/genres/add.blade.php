@@ -24,10 +24,10 @@
 					<label>Status</label>
 					<div class="btn-group btn-group-toggle d-block" data-toggle="buttons">
 						<label class="btn btn-outline-danger active">
-							<input type="radio" name="status" id="option2" value="1"/> On
+							<input type="radio" name="status" id="option2" value="1"/>Active
 						</label>
 						<label class="btn btn-outline-primary">
-							<input type="radio" name="status" id="option3" value="0"/> Off
+							<input type="radio" name="status" id="option3" value="0"/>Inactive
 						</label>
 					</div>
 				</div>

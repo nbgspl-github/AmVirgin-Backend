@@ -19,6 +19,8 @@
 	<link href="{{asset("css/style.css")}}" rel="stylesheet" type="text/css">
 	<link href="{{asset("css/custom.css")}}" rel="stylesheet" type="text/css">
 	@notify_css
+	<style>
+	</style>
 	@yield('style')
 </head>
 
@@ -58,6 +60,5 @@
 @yield('javascript')
 @yield('scripts')
 </body>
-{{--@notify_js--}}
 @notify_render
 </html>
