@@ -4,7 +4,6 @@
 		<div class="card card-body">
 			<h4 class="mt-0 header-title">Update user details</h4>
 			<p class="text-muted m-b-30 font-14">Modify user details and hit Update</p>
-			@include('flash::message')
 			<form action="{{route('users.update',$user->getId())}}" data-parsley-validate="true">
 				@method('PUT')
 				@csrf

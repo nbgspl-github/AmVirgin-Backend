@@ -5,7 +5,6 @@
 		<div class="card card-body">
 			<h4 class="mt-0 header-title">Add a User</h4>
 			<p class="text-muted m-b-30 font-14">Fill user details and hit Save</p>
-			@include('flash::message')
 			<form action="{{route('users.save')}}" method="POST" data-parsley-validate="true">
 				@csrf
 				<div class="form-group">

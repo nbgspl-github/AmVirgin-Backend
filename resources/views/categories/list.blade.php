@@ -11,7 +11,6 @@
 								Create Category
 							</button>
 						</div>
-						@include('flash::message')
 					</div>
 					<div class="table-responsive">
 						<table class="table table-hover mb-0">

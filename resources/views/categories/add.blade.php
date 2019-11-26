@@ -4,7 +4,6 @@
 		<div class="card card-body">
 			<h4 class="mt-0 header-title">Create a Category</h4>
 			<p class="text-muted m-b-30 font-14">Fill category details and hit Create</p>
-			@include('flash::message')
 			<form action="{{route('categories.save')}}" method="POST" data-parsley-validate="true">
 				@csrf
 				<div class="form-group">
