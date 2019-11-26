@@ -18,18 +18,49 @@
 				</div>
 				<div class="form-group">
 					<label>Poster</label>
-					<input type="file" name="poster" onclick="this.value=null;" onchange="previewImage(event);" class="form-control" data-parsley-type="file" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('poster')}}"/>
+					<div class="card m-b-30" style="border: 1px solid #ced4da; max-width: 400px">
+						<div class="card-header">
+							<div class="row">
+								<div class="d-none">
+									@if(old('poster',null)!=null)
+										<h1>If executed</h1>
+										<input id="pickImage" type="file" name="poster" onclick="this.value=null;" onchange="previewImage(event);" class="form-control" data-parsley-type="file" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('poster')}}">
+									@else
+										<h1>Else executed</h1>
+										<input id="pickImage" type="file" name="poster" onclick="this.value=null;" onchange="previewImage(event);" class="form-control" data-parsley-type="file" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp">
+									@endif
+								</div>
+								<div class="col-md-6"><h3 class="my-0 header-title">Preview</h3></div>
+								<div class="col-md-6">
+									<button type="button" class="btn btn-outline-primary rounded shadow-sm float-right" onclick="openImagePicker();">Choose Image</button>
+								</div>
+							</div>
+						</div>
+						<div class="card-body p-0 rounded">
+							<div class="row">
+								<div class="col-md-12 text-center"><img class="" id="preview" width="398px" height="399px" alt=""></div>
+							</div>
+						</div>
+					</div>
 				</div>
 				<div class="form-group">
 					<label>Status</label>
-					<div class="btn-group btn-group-toggle d-block" data-toggle="buttons">
-						<label class="btn btn-outline-danger">
-							<input type="radio" name="status" value="1"/>Active
-						</label>
-						<label class="btn btn-outline-primary">
-							<input type="radio" name="status" value="0"/>Inactive
-						</label>
-					</div>
+					@if (old('status',-1)==1)
+						<select class="form-control" name="status">
+							<option value="1" selected>Active</option>
+							<option value="0">Inactive</option>
+						</select>
+					@elseif(old('status',-1)==0)
+						<select class="form-control" name="status">
+							<option value="1">Active</option>
+							<option value="0" selected>Inactive</option>
+						</select>
+					@else
+						<select class="form-control" name="status">
+							<option value="1">Active</option>
+							<option value="0">Inactive</option>
+						</select>
+					@endif
 				</div>
 				<div class="form-group">
 					<div>
@@ -55,15 +86,12 @@
 				const output = document.getElementById('preview');
 				output.src = reader.result;
 			};
-			reader.onloadend = () => {
-				$('#lightbox').modal('show');
-			};
 			lastFile = event.target.files[0];
 			reader.readAsDataURL(lastFile);
 		};
 
-		displayLightBox = () => {
-			$('#lightbox').modal('show');
-		};
+		openImagePicker = () => {
+			$('#pickImage').trigger('click');
+		}
 	</script>
 @stop

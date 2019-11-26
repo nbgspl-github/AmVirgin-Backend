@@ -1,6 +1,5 @@
 @extends('layouts.header')
 @section('content')
-	@include('modals.lightbox')
 	@include('layouts.breadcrumbs', ['data' => ['Genres'=>route('genres.index'),'Edit'=>'#']])
 	<div class="row px-2">
 		<div class="card card-body">
@@ -18,27 +17,44 @@
 				</div>
 				<div class="form-group">
 					<label>Poster</label>
-					<input type="file" name="poster" onclick="this.value=null;" onchange="previewImage(event);" class="form-control" data-parsley-type="file" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{$genre->poster}}"/>
+					<div class="card m-b-30" style="border: 1px solid #ced4da; max-width: 400px">
+						<div class="card-header">
+							<div class="row">
+								<div class="d-none">
+									<input id="pickImage" type="file" name="poster" onclick="this.value=null;" onchange="previewImage(event);" class="form-control" accept=".jpg, .png, .jpeg, .bmp" value="{{old('poster',$genre->getPoster())}}">
+								</div>
+								<div class="col-md-6"><h3 class="my-0 header-title">Preview</h3></div>
+								<div class="col-md-6">
+									<button type="button" class="btn btn-outline-primary rounded shadow-sm float-right" onclick="openImagePicker();">Choose Image</button>
+								</div>
+							</div>
+						</div>
+						<div class="card-body p-0 rounded">
+							<div class="row">
+								<div class="col-md-12 text-center">
+									@if(old('poster',$genre->getPoster())!=null)
+										<img class="rounded" id="preview" src="{{route('images.genre.poster',$genre->getId())}}" width="398px" height="399px" alt="">
+									@else
+										<img class="rounded" id="preview" width="398px" height="399px" alt="No poster available">
+									@endif
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 				<div class="form-group">
 					<label>Status</label>
-					<div class="btn-group btn-group-toggle d-block" data-toggle="buttons">
-						@if ($genre->getStatus()==1)
-							<label class="btn btn-outline-danger active">
-								<input type="radio" name="status" value="1" onchange="switchActive();"/>Active
-							</label>
-							<label class="btn btn-outline-primary">
-								<input type="radio" name="status" value="0"/>Inactive
-							</label>
-						@else
-							<label class="btn btn-outline-danger">
-								<input type="radio" name="status" value="1"/>Active
-							</label>
-							<label class="btn btn-outline-primary active">
-								<input type="radio" name="status" value="0"/>Inactive
-							</label>
-						@endif
-					</div>
+					@if ($genre->getStatus()==1)
+						<select class="form-control" name="status">
+							<option value="1" selected>Active</option>
+							<option value="0">Inactive</option>
+						</select>
+					@else
+						<select class="form-control" name="status">
+							<option value="1">Active</option>
+							<option value="0" selected>Inactive</option>
+						</select>
+					@endif
 				</div>
 				<div class="form-group">
 					<div>
@@ -64,19 +80,16 @@
 				const output = document.getElementById('preview');
 				output.src = reader.result;
 			};
-			reader.onloadend = () => {
-				$('#lightbox').modal('show');
-			};
 			lastFile = event.target.files[0];
 			reader.readAsDataURL(lastFile);
-		};
-
-		displayLightBox = () => {
-			$('#lightbox').modal('show');
 		};
 
 		switchActive = () => {
 
 		};
+
+		openImagePicker = () => {
+			$('#pickImage').trigger('click');
+		}
 	</script>
 @stop
