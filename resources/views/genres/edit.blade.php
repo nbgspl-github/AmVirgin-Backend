@@ -33,9 +33,9 @@
 							<div class="row">
 								<div class="col-md-12 text-center">
 									@if(old('poster',$genre->getPoster())!=null)
-										<img class="rounded" id="preview" src="{{route('images.genre.poster',$genre->getId())}}" width="398px" height="399px" alt="">
+										<img class="rounded" id="posterPreview" src="{{route('images.genre.poster',$genre->getId())}}" width="398px" height="399px" alt="">
 									@else
-										<img class="rounded" id="preview" width="398px" height="399px" alt="No poster available">
+										<img class="rounded" id="posterPreview" src="" width="398px" height="399px" alt="No poster available">
 									@endif
 								</div>
 							</div>
@@ -75,9 +75,10 @@
 	<script>
 		var lastFile = null;
 		previewImage = (event) => {
+			document.getElementById('pickImage').files[0] = null;
 			const reader = new FileReader();
 			reader.onload = function () {
-				const output = document.getElementById('preview');
+				const output = document.getElementById('posterPreview');
 				output.src = reader.result;
 			};
 			lastFile = event.target.files[0];

@@ -1,6 +1,5 @@
 @extends('layouts.header')
 @section('content')
-	@include('modals.lightbox')
 	@include('layouts.breadcrumbs', ['data' => ['Genres'=>route('genres.index'),'Add'=>'#']])
 	<div class="row px-2">
 		<div class="card card-body">
@@ -22,13 +21,7 @@
 						<div class="card-header">
 							<div class="row">
 								<div class="d-none">
-									@if(old('poster',null)!=null)
-										<h1>If executed</h1>
-										<input id="pickImage" type="file" name="poster" onclick="this.value=null;" onchange="previewImage(event);" class="form-control" data-parsley-type="file" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('poster')}}">
-									@else
-										<h1>Else executed</h1>
-										<input id="pickImage" type="file" name="poster" onclick="this.value=null;" onchange="previewImage(event);" class="form-control" data-parsley-type="file" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp">
-									@endif
+									<input id="pickImage" type="file" name="poster" onclick="this.value=null;" onchange="previewImage(event);" class="form-control" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('poster')}}">
 								</div>
 								<div class="col-md-6"><h3 class="my-0 header-title">Preview</h3></div>
 								<div class="col-md-6">
@@ -38,7 +31,9 @@
 						</div>
 						<div class="card-body p-0 rounded">
 							<div class="row">
-								<div class="col-md-12 text-center"><img class="" id="preview" width="398px" height="399px" alt=""></div>
+								<div class="col-md-12 text-center">
+									<img id="posterPreview" width="398px" height="399px"/>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -83,7 +78,7 @@
 		previewImage = (event) => {
 			const reader = new FileReader();
 			reader.onload = function () {
-				const output = document.getElementById('preview');
+				const output = document.getElementById('posterPreview');
 				output.src = reader.result;
 			};
 			lastFile = event.target.files[0];
