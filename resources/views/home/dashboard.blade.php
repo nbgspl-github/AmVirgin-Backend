@@ -2,7 +2,7 @@
 @section('content')
 	<div class="row">
 		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0 pr-md-0">
-			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #fd6e77;">
+			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
 				<a href="javascript:void(0);" onclick="callTestAPI();" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
 				<div class="card-body">
 					<div class="text-center">
@@ -18,7 +18,7 @@
 			</div>
 		</div>
 		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0 pr-md-0">
-			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #fd6e77;">
+			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
 				<a href="/" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
 				<div class="card-body">
 					<div class="text-center">
@@ -34,7 +34,7 @@
 			</div>
 		</div>
 		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0">
-			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #fd6e77;">
+			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
 				<a href="/" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
 				<div class="card-body">
 					<div class="text-center">
@@ -50,9 +50,9 @@
 			</div>
 		</div>
 	</div>
-	<div class="row mt-0 mt-md-4">
+	<div class="row mt-0 mt-md-3">
 		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0 pr-md-0">
-			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #fd6e77;">
+			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
 				<a href="/" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
 				<div class="card-body">
 					<div class="text-center">
@@ -68,7 +68,7 @@
 			</div>
 		</div>
 		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0 pr-md-0">
-			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #fd6e77;">
+			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
 				<a href="/" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
 				<div class="card-body">
 					<div class="text-center">
@@ -84,7 +84,7 @@
 			</div>
 		</div>
 		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0">
-			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #fd6e77;">
+			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
 				<a href="/" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
 				<div class="card-body">
 					<div class="text-center">
@@ -105,7 +105,7 @@
 		<div class="col-lg-12">
 			<div class="card custom-card shadow-sm animatable">
 				<div class="card-header">
-					<h3 class="mt-0 header-title">More Views</h3>
+					<h3 class="mt-0 page-title mb-0">More Views</h3>
 				</div>
 				<div class="card-body rounded-lg">
 					<div class="row">
