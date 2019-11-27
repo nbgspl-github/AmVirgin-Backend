@@ -54,11 +54,6 @@
 				easing: "easeOutExpo",
 				duration: 2000,
 				delay: (el, i) => 100 * i
-			}).add({
-				targets: ['.card-header'],
-				opacity: [0, 1],
-				easing: 'easeOutExpo',
-				duration: 2000
 			});
 		});
 
