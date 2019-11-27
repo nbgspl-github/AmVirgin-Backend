@@ -4,7 +4,7 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('layouts.pageHeader', ['breadcrumbs' =>['Dashboard'=>route('home'),'Genres'=>route('genres.index'),'Add'=>'#'],'title'=>'Add'])
+					@include('layouts.pageHeader', ['breadcrumbs' =>['Dashboard'=>route('home'),'Genres'=>route('genres.index'),'Add'=>'#'],'title'=>'Add a Genre'])
 				</div>
 				<div class="card-body">
 					<div class="row">
