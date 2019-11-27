@@ -39,7 +39,7 @@
 		<div class="content">
 			@include('layouts.navbar')
 			<div class="page-content-wrapper">
-				<div class="container-fluid">
+				<div class="container-fluid" style="padding-top: 16px;">
 					@yield('content')
 				</div>
 			</div>

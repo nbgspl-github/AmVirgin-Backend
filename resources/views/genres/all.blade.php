@@ -1,9 +1,11 @@
 @extends('layouts.header')
 @section('content')
-	@include('layouts.pageHeader', ['breadcrumbs' =>['Dashboard'=>route('home'),'Genres'=>'#'],'title'=>'Genres'])
 	<div class="row">
 		<div class="col-12">
-			<div class="card shadow-sm">
+			<div class="card shadow-sm custom-card">
+				<div class="card-header py-0">
+					@include('layouts.pageHeader', ['breadcrumbs' =>['Dashboard'=>route('home'),'Genres'=>'#'],'title'=>'Genres'])
+				</div>
 				<div class="card-body animatable">
 					<div class="row pr-3">
 						<div class="col-6"><h4 class="mt-0 header-title ml-3 mb-4">All Genres</h4></div>

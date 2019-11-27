@@ -1179,7 +1179,8 @@ body.fixed-left .side-menu.left {
 
 .page-title {
     font-size: 18px;
-    margin-top: 22px
+    margin-top: 22px;
+    margin-bottom: 20px;
 }
 
 .btn {
@@ -2869,4 +2870,9 @@ table.focus-on tbody tr.focused td {
         height: auto;
         padding-top: 45px
     }
+}
+
+.custom-card {
+    border-radius: 8px;
+    border: 1px solid lightgrey;
 }
