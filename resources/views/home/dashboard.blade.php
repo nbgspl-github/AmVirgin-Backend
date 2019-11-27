@@ -1,7 +1,7 @@
 @extends('layouts.header')
 @section('content')
 	<div class="row">
-		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0 pr-0">
+		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0 pr-md-0">
 			<div class="card bg-primary text-white" style="box-shadow: 0 2px 6px #fd6e77;">
 				<a href="javascript:void(0);" onclick="callTestAPI();" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
 				<div class="card-body">
@@ -17,7 +17,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0 pr-0">
+		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0 pr-md-0">
 			<div class="card bg-primary text-white" style="box-shadow: 0 2px 6px #fd6e77;">
 				<a href="/" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
 				<div class="card-body">
@@ -50,8 +50,8 @@
 			</div>
 		</div>
 	</div>
-	<div class="row mt-3">
-		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0 pr-0">
+	<div class="row mt-0 mt-md-4">
+		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0 pr-md-0">
 			<div class="card bg-primary text-white" style="box-shadow: 0 2px 6px #fd6e77;">
 				<a href="/" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
 				<div class="card-body">
@@ -67,7 +67,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0 pr-0">
+		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0 pr-md-0">
 			<div class="card bg-primary text-white" style="box-shadow: 0 2px 6px #fd6e77;">
 				<a href="/" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
 				<div class="card-body">
