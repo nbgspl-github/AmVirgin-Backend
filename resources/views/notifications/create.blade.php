@@ -63,6 +63,7 @@
 				'content': $('#content').val(),
 				'url': $('#url').val(),
 			};
+			toastr.success('Notification delivered successfully.');
 		};
 	</script>
 @stop
