@@ -1016,7 +1016,7 @@ body.fixed-left .side-menu.left {
 .content-page > .content {
     margin-top: 70px;
     margin-bottom: 63px;
-    padding: 0 25px;
+    padding: 0 13px;
     -webkit-transition: all .4s ease-in-out;
     transition: all .4s ease-in-out
 }
