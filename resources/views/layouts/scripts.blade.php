@@ -37,5 +37,8 @@
 <script src="{{asset('plugins/alertify/js/alertify.js')}}"></script>
 <script src="{{asset('pages/alertify-init.js')}}"></script>
 
+{{--Anime JS--}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+
 {{--<!-- App js -->--}}
 <script src="{{asset("js/app.js")}}"></script>

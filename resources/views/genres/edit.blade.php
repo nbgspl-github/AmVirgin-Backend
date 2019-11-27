@@ -59,7 +59,7 @@
 				<div class="form-group">
 					<div>
 						<button type="submit" class="btn btn-primary waves-effect waves-light">
-							Save
+							Update
 						</button>
 						<a href="{{route("genres.index")}}" class="btn btn-secondary waves-effect m-l-5">
 							Cancel

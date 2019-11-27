@@ -1,5 +1,5 @@
 <!-- ========== Left Sidebar Start ========== -->
-<div class="left side-menu" style="box-shadow: 3px 0 10px rgba(0,0,0,0.31)">
+<div class="left side-menu" style="box-shadow: 3px 0 10px rgba(0,0,0,0.25)">
 	<button type="button" class="button-menu-mobile button-menu-mobile-topbar open-left waves-effect">
 		<i class="ion-close"></i>
 	</button>
@@ -54,7 +54,7 @@
 				</li>
 
 				<li>
-					<a href="{{route("categories.all")}}" class="waves-effect"><i class="mdi mdi-near-me mt-1"></i> <span> Notifications </span></a>
+					<a href="{{route("notifications.create")}}" class="waves-effect"><i class="mdi mdi-near-me mt-1"></i> <span> Notifications </span></a>
 				</li>
 
 				<li>

@@ -11,6 +11,7 @@
 |
 */
 
+use App\Http\Controllers\Web\NotificationsController;
 use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Interfaces\Methods;
@@ -41,22 +42,22 @@ Route::get('temp/{id}', function ($id) {
 // Assign auth middleware to resource routes
 Route::middleware('auth')->group(function () {
 
-	// Dashboard Routes
+	// Dashboard Route(s)
 	Route::get('/', [DashboardController::class, Methods::Index])->name('home');
 
-	// User's Routes
+	// User's Route(s)
 	Route::get('users', [UserController::class, Methods::Index])->name('users.all');
 	Route::get('users/{id}', [UserController::class, Methods::Index])->name('users.single');
 	Route::get('user/create', [UserController::class, Methods::Create])->name('users.new');
 	Route::post('user', [UserController::class, Methods::Store])->name('users.save');
 	Route::put('user/{id}', [UserController::class, Methods::Update])->name('users.update');
 
-	// Categories Routes
+	// Categories Route(s)
 	Route::get('categories', [CategoriesController::class, Methods::Index])->name('categories.all');
 	Route::get('category/create', [CategoriesController::class, Methods::Create])->name('categories.new');
 	Route::post('category/store', [CategoriesController::class, Methods::Store])->name('categories.save');
 
-	// Movies Routes
+	// Movies Route(s)
 	Route::get('movies', [MoviesController::class, Methods::Index])->name('movies.all');
 
 	// Genres Routes
@@ -68,6 +69,9 @@ Route::middleware('auth')->group(function () {
 	Route::post('genres/{id}', [GenresController::class, Methods::Update])->name('genres.update');
 	Route::put('genres/{id}/status', [GenresController::class, Methods::UpdateStatus])->name('genres.update.status');
 	Route::delete('genres/{id}', [GenresController::class, Methods::Delete])->name('genres.delete');
+
+	// Notifications Route(s)
+	Route::get('notifications/create', [NotificationsController::class, Methods::Create])->name('notifications.create');
 
 	// Images Routes
 	Route::prefix('images')->group(function () {

@@ -11,4 +11,5 @@ interface Methods {
 	const UpdateStatus = "updateStatus";
 	const Edit = "edit";
 	const Show = "show";
+	const Send = "send";
 }

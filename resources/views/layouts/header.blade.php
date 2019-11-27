@@ -33,24 +33,16 @@
 		<div class="spinner"></div>
 	</div>
 </div>
-<div class="modal shadow-sm fade" tabindex="-1" role="dialog" id="loader-modal" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog modal-dialog-centered modal-sm mx-auto" role="document">
-		<div class="modal-content mx-auto" style="max-width: 150px">
-			<div class="modal-body text-center" style="box-shadow: 0 2px 30px rgba(0,13,28,0.46)">
-				<div class="row">
-					<div class="loader mx-auto mb-4"></div>
-				</div>
-				<span class="mt-4">Please wait!</span>
-			</div>
-		</div>
-	</div>
-</div>
 <div id="wrapper">
 	@include('layouts.sidebar')
 	<div class="content-page">
 		<div class="content">
 			@include('layouts.navbar')
-			@yield('content')
+			<div class="page-content-wrapper">
+				<div class="container-fluid">
+					@yield('content')
+				</div>
+			</div>
 		</div>
 	</div>
 
