@@ -28,9 +28,13 @@
 
 <body class="fixed-left">
 
+
 <div id="preloader">
 	<div id="status">
-		<div class="spinner"></div>
+		<div class="lds-ripple">
+			<div></div>
+			<div></div>
+		</div>
 	</div>
 </div>
 <div id="wrapper">
