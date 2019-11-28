@@ -107,7 +107,7 @@
 	</div>
 </div>
 
-@include('layouts.scripts')
+@include('admin.layouts.scripts')
 
 </body>
 </html>

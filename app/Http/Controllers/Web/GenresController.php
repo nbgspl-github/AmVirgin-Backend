@@ -17,20 +17,20 @@ use Illuminate\Validation\Rule;
 class GenresController extends WebController {
 	public function index() {
 		$genres = Genre::all();
-		return view('genres.all')->with('genres', $genres);
+		return view('admin.genres.all')->with('genres', $genres);
 	}
 
 	public function create() {
-		return view('genres.add');
+		return view('admin.genres.add');
 	}
 
 	public function edit($id) {
 		$genre = Genre::find($id);
 		if ($genre != null) {
-			return view('genres.edit')->with('genre', $genre);
+			return view('admin.genres.edit')->with('genre', $genre);
 		} else {
 			notify()->error('Could not find any genre with that Id.');
-			return redirect(route('genres.index'));
+			return redirect(route('admin.genres.index'));
 		}
 	}
 
@@ -48,7 +48,7 @@ class GenresController extends WebController {
 			if ($request->hasFile('poster'))
 				$poster = Storage::putFile(Directories::Genre, $request->file('poster'), 'public');
 
-			Genre::makeNew()->
+			Genre::instance()->
 			setName($request->name)->
 			setDescription($request->description)->
 			setPoster($poster)->

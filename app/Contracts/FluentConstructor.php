@@ -5,7 +5,7 @@ namespace App\Contracts;
 interface FluentConstructor {
 	/**
 	 *  Makes a new instance and returns it.
-	 * @return mixed
+	 * @return self
 	 */
-	public static function makeNew();
+	public static function instance();
 }

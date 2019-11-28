@@ -212,7 +212,7 @@ class Movie extends Model implements FluentConstructor {
 	 *  Makes a new instance and returns it.
 	 * @return Movie
 	 */
-	public static function makeNew() {
+	public static function instance() {
 		return new self();
 	}
 }

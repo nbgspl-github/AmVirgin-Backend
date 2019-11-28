@@ -12,20 +12,20 @@ use Illuminate\Validation\Rule;
 class UserController extends WebController {
 	public function index($id = null) {
 		if ($id == null) {
-			$users = User::where('role', Roles::User)->get();
-			return view('users.list')->with('users', $users);
+			$users = User::where('role', Roles::Customer)->get();
+			return view('admin.users.list')->with('users', $users);
 		} else {
 			$user = User::find($id);
 			if ($user == null) {
 				return redirect(route('users.all'))->with('error', 'Could not find user by that Id.');
 			} else {
-				return view('users.edit')->with('user', $user);
+				return view('admin.users.edit')->with('user', $user);
 			}
 		}
 	}
 
 	public function create(Request $request) {
-		return view('users.add');
+		return view('admin.users.add');
 	}
 
 	public function store(Request $request) {
@@ -40,7 +40,7 @@ class UserController extends WebController {
 			flash($validator->errors()->first())->error()->important();
 			return redirect(route('users.forms.add'));
 		} else {
-			User::makeNew()->
+			User::instance()->
 			setName($request->name)->
 			setMobile($request->mobile)->
 			setEmail($request->email)->
@@ -63,7 +63,7 @@ class UserController extends WebController {
 			flash($validator->errors()->first())->error()->important();
 			return redirect(route('users.forms.add'));
 		} else {
-			User::makeNew()->
+			User::instance()->
 			setName($request->name)->
 			setMobile($request->mobile)->
 			setEmail($request->email)->

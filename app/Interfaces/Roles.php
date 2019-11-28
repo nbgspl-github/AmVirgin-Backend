@@ -7,5 +7,7 @@ interface Roles {
 
 	const Admin = 2;
 
-	const User = 3;
+	const Seller = 3;
+
+	const Customer = 4;
 }

@@ -149,7 +149,7 @@ class ValidatorPromise implements FluentConstructor {
 	 *  Makes a new instance and returns it.
 	 * @return ValidatorPromise
 	 */
-	public static function makeNew() {
+	public static function instance() {
 		return new self();
 	}
 }

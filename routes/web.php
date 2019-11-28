@@ -11,6 +11,7 @@
 |
 */
 
+use App\Category;
 use App\Http\Controllers\Web\NotificationsController;
 use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Web\DashboardController;
@@ -22,24 +23,23 @@ use App\Http\Controllers\Web\CategoriesController;
 use App\Http\Controllers\Web\MoviesController;
 use App\Http\Controllers\Web\GenresController;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Auth\SellerLoginController;
 
-// Authentication Routes
+// Admin Authentication Route(s)
 Auth::routes();
 Auth::routes(['register' => false]);
 
-Route::get('temp/{id}', function ($id) {
-	if ($id == 369) {
-		return response()->json([
-			'code' => 'BINGO',
-		], 200);
-	} else {
-		return response()->json([
-			'code' => null,
-		], 404);
-	}
-});
+// Seller Authentication Route(s)
+Route::get('seller/login', [SellerLoginController::class, Methods::ShowLoginForm])->name('seller.loginform');
+Route::post('seller/login', [SellerLoginController::class, Methods::Login])->name('seller.login');
+Route::post('seller/logout', [SellerLoginController::class, Methods::Logout])->name('seller.logout');
+Route::get('seller', [DashboardController::class, Methods::Seller])->middleware('auth');
 
-// Assign auth middleware to resource routes
+/**
+ * |---------------------------------------------------------------
+ * | Assign auth middleware to resource routes
+ * |---------------------------------------------------------------
+ */
 Route::middleware('auth')->group(function () {
 
 	// Dashboard Route(s)
@@ -53,31 +53,38 @@ Route::middleware('auth')->group(function () {
 	Route::put('user/{id}', [UserController::class, Methods::Update])->name('users.update');
 
 	// Categories Route(s)
-	Route::get('categories', [CategoriesController::class, Methods::Index])->name('categories.all');
-	Route::get('category/create', [CategoriesController::class, Methods::Create])->name('categories.new');
-	Route::post('category/store', [CategoriesController::class, Methods::Store])->name('categories.save');
+	Route::prefix('categories')->group(function () {
+		Route::get('', [CategoriesController::class, Methods::Index])->name('categories.index');
+		Route::get('create', [CategoriesController::class, Methods::Create])->name('categories.create');
+		Route::get('{id}/edit', [CategoriesController::class, Methods::Edit])->name('categories.edit');
+		Route::post('store', [CategoriesController::class, Methods::Store])->name('categories.store');
+		Route::post('{id}', [CategoriesController::class, Methods::Update])->name('categories.update');
+	});
 
 	// Movies Route(s)
 	Route::get('movies', [MoviesController::class, Methods::Index])->name('movies.all');
 
 	// Genres Routes
-	Route::get('genres', [GenresController::class, Methods::Index])->name('genres.index');
-	Route::get('genres/create', [GenresController::class, Methods::Create])->name('genres.create');
-	Route::get('genres/{id}', [GenresController::class, Methods::Edit])->name('genres.edit');
-	Route::get('genre/{id}', [GenresController::class, Methods::Show])->name('genres.show');
-	Route::post('genres', [GenresController::class, Methods::Store])->name('genres.store');
-	Route::post('genres/{id}', [GenresController::class, Methods::Update])->name('genres.update');
-	Route::put('genres/{id}/status', [GenresController::class, Methods::UpdateStatus])->name('genres.update.status');
-	Route::delete('genres/{id}', [GenresController::class, Methods::Delete])->name('genres.delete');
+	Route::prefix('genres')->group(function () {
+		Route::get('', [GenresController::class, Methods::Index])->name('genres.index');
+		Route::get('create', [GenresController::class, Methods::Create])->name('genres.create');
+		Route::get('{id}/edit', [GenresController::class, Methods::Edit])->name('genres.edit');
+		Route::get('{id}', [GenresController::class, Methods::Show])->name('genres.show');
+		Route::post('', [GenresController::class, Methods::Store])->name('genres.store');
+		Route::post('{id}', [GenresController::class, Methods::Update])->name('genres.update');
+		Route::put('{id}/status', [GenresController::class, Methods::UpdateStatus])->name('genres.update.status');
+		Route::delete('{id}', [GenresController::class, Methods::Delete])->name('genres.delete');
+	});
 
 	// Notifications Route(s)
 	Route::get('notifications/create', [NotificationsController::class, Methods::Create])->name('notifications.create');
+	Route::post('notifications/send', [NotificationsController::class, Methods::Send])->name('notifications.send');
 
 	// Images Routes
 	Route::prefix('images')->group(function () {
 
 		// Genre Poster
-		Route::get('genres/poster/{id}', function ($id) {
+		Route::get('genre/poster/{id}', function ($id) {
 			$genre = Genre::find($id);
 			if ($genre != null) {
 				return Storage::download($genre->getPoster());
@@ -85,6 +92,16 @@ Route::middleware('auth')->group(function () {
 				return null;
 			}
 		})->name('images.genre.poster');
+
+		// Category Poster
+		Route::get('category/poster/{id}', function ($id) {
+			$category = Category::find($id);
+			if ($category != null) {
+				return Storage::download($category->getPoster());
+			} else {
+				return null;
+			}
+		})->name('images.category.poster');
 	});
 });
 

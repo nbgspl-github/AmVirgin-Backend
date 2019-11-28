@@ -88,7 +88,7 @@ class Genre extends Model implements FluentConstructor {
 	 *  Makes a new instance and returns it.
 	 * @return Genre
 	 */
-	public static function makeNew() {
+	public static function instance() {
 		return new self();
 	}
 }

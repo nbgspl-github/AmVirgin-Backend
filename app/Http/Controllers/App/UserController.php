@@ -11,7 +11,7 @@ class UserController extends AppController {
 
 	public function index(int $id = null) {
 		if ($id == null) {
-			$users = User::where('role', Roles::User)->get();
+			$users = User::where('role', Roles::Customer)->get();
 			$index = 1;
 			$users->transform(function (User $user) use (&$index) {
 				return [

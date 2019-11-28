@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\FluentConstructor;
+use App\Traits\BroadcastPushNotifications;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -11,6 +12,7 @@ use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable implements FluentConstructor {
 	use Notifiable, HasApiTokens;
+	use BroadcastPushNotifications;
 
 	/**
 	 * The attributes that are mass assignable.
@@ -148,7 +150,12 @@ class User extends Authenticatable implements FluentConstructor {
 		return $this;
 	}
 
-	public static function makeNew() {
+	/**
+	 * Gets a new instance of User.
+	 * @return User
+	 */
+	public static function instance() {
 		return new self();
 	}
+
 }

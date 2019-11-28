@@ -2,7 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Genre;
+use App\Classes\Builders\Notifications\PushNotification;
+use App\Http\Controllers\Web\CategoriesController;
 use Illuminate\Console\Command;
 
 class CodeTester extends Command {
@@ -35,9 +36,6 @@ class CodeTester extends Command {
 	 * @return mixed
 	 */
 	public function handle() {
-		$name = Genre::class;
-		$lastIndex = strrpos($name, "\\") + 1;
-		$name = substr($name, $lastIndex);
-		echo $name;
+		return;
 	}
 }

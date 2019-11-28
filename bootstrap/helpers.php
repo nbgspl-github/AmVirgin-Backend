@@ -34,3 +34,30 @@ function image($path = null) {
 	else
 		return Storage::download($path);
 }
+
+/**
+ * @param $payload
+ * @return false|string
+ */
+function jsonEncode($payload) {
+	$encoded = json_encode($payload);
+	return $encoded == false ? '' : $encoded;
+}
+
+/**
+ * @param $payload
+ * @return mixed
+ */
+function jsonDecode($payload) {
+	$decoded = json_decode($payload);
+	return $decoded;
+}
+
+/**
+ * @param $payload
+ * @return array
+ */
+function jsonDecodeArray($payload) {
+	$decoded = json_decode($payload, true);
+	return $decoded == null ? [] : $decoded;
+}
