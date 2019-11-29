@@ -61,3 +61,11 @@ function jsonDecodeArray($payload) {
 	$decoded = json_decode($payload, true);
 	return $decoded == null ? [] : $decoded;
 }
+
+/**
+ * @param string $route
+ * @return \App\Classes\WebResponse
+ */
+function responseWeb() {
+	return \App\Classes\WebResponse::instance();
+}

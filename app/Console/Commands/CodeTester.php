@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Classes\Builders\Notifications\PushNotification;
 use App\Http\Controllers\Web\CategoriesController;
+use App\Models\Auth\Admin;
 use Illuminate\Console\Command;
 
 class CodeTester extends Command {

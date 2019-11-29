@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Interfaces\Roles;
-use App\Models\User;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -23,8 +23,8 @@ class NotificationsController {
 				'message' => $validator->errors()->first(),
 			], 400);
 		} else {
-			$customers = User::where('role', Roles::Customer)->chunk(100, function (User $chunk) {
-				$chunk->each(function (User $customer) {
+			$customers = Customer::where('role', Roles::Customer)->chunk(100, function (Customer $chunk) {
+				$chunk->each(function (Customer $customer) {
 
 				});
 			});

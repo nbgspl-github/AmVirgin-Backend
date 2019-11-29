@@ -1,18 +1,18 @@
-@extends('admin.layouts.header')
+@extends('admin.app.app')
 @section('content')
 	<div class="row">
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.layouts.pageHeader', ['breadcrumbs' =>['Dashboard'=>route('home'),'Categories'=>'#'],'title'=>'Categories'])
+					@include('admin.extras.header', ['title'=>trans('admin.categories.index')])
 				</div>
 				<div class="card-body animatable">
 					<div class="row px-2 mb-3">
 						<div class="col-sm-6"><h4 class="mt-0 header-title pt-1">All Categories</h4></div>
 						<div class="col-sm-6">
-							<button type="button" class="float-right btn btn-outline-primary waves-effect waves-light" onclick="window.location.href='{{route('categories.create')}}'">
+							<a class="float-right btn btn-outline-primary waves-effect waves-light" href="{{route('admin.categories.create')}}">
 								Create Category
-							</button>
+							</a>
 						</div>
 					</div>
 					<div class="table-responsive">
@@ -46,7 +46,7 @@
 									<td class="text-center">
 										<div class="btn-group">
 											<div class="col-sm-6 px-0">
-												<a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('categories.edit',$category->getId())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
+												<a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('admin.categories.edit',$category->getId())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
 											</div>
 											<div class="col-sm-6 px-0">
 												<a class="btn btn-outline-primary shadow-sm shadow-primary" href="javascript:void(0);" onclick="deleteCategory('{{$category->getId()}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>

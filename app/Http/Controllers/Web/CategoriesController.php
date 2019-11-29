@@ -21,12 +21,14 @@ class CategoriesController extends WebController {
 	}
 
 	public function edit($id) {
-		$category = Category::find($id);
+		$category = Category::retrieve($id);
+		$relations = $this->relations();
 		if ($category != null) {
-			return view('admin.categories.edit')->with('category', $category)->with('categories', Category::all());
-		} else {
+			return view('admin.categories.edit')->with('category', $category)->with('all', $relations);
+		}
+		else {
 			notify()->error('Could not find a category with that Id.');
-			return redirect(route('categories.index'));
+			return redirect(route('admin.categories.index'));
 		}
 	}
 
@@ -35,7 +37,22 @@ class CategoriesController extends WebController {
 	}
 
 	public function update(Request $request, $id = null) {
-
+		$validator = Validator::make($request->all(), [
+			'name' => ['bail', 'required', 'string', 'min:1', 'max:100'],
+			'parentId' => ['bail', 'required', 'numeric'],
+			'description' => ['bail', 'nullable', 'string', 'min:1', 'max:1000'],
+			'visibility' => ['bail', 'required', Rule::in([0, 1])],
+			'poster' => ['bail', 'nullable', 'mime:jpeg,jpg,bmp,png,webp'],
+		]);
+		if ($validator->fails()) {
+			notify()->error($validator->errors()->first());
+			return back()->withInput($request->all());
+		}
+		else {
+			Category::create($request->all());
+			notify()->success('Category created successfully.');
+			return redirect(route('admin.categories.index'));
+		}
 	}
 
 	public function store(Request $request) {
@@ -49,10 +66,11 @@ class CategoriesController extends WebController {
 		if ($validator->fails()) {
 			notify()->error($validator->errors()->first());
 			return back()->withInput($request->all());
-		} else {
+		}
+		else {
 			Category::create($request->all());
 			notify()->success('Category created successfully.');
-			return redirect(route('categories.index'));
+			return redirect(route('admin.categories.index'));
 		}
 	}
 

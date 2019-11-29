@@ -1,10 +1,10 @@
-@extends('admin.layouts.header')
+@extends('admin.app.app')
 @section('content')
 	<div class="row">
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.layouts.pageHeader', ['breadcrumbs' =>['Dashboard'=>route('home'),'Genres'=>'#'],'title'=>'Genres'])
+					@include('admin.extras.header', ['breadcrumbs' =>['Dashboard'=>route('admin.home'),'Genres'=>'#'],'title'=>'Genres'])
 				</div>
 				<div class="card-body animatable">
 					<div class="row pr-3">

@@ -1,6 +1,8 @@
 <?php
 
-use App\Models\User;
+use App\Models\Auth\Admin;
+use App\Models\Customer;
+use App\Models\Seller;
 
 return [
 
@@ -17,7 +19,7 @@ return [
 
 	'defaults' => [
 		'guard' => 'web',
-		'passwords' => 'users',
+		'passwords' => 'customers',
 	],
 
 	/*
@@ -40,13 +42,43 @@ return [
 	'guards' => [
 		'web' => [
 			'driver' => 'session',
-			'provider' => 'users',
+			'provider' => 'customers',
 		],
 
 		'api' => [
-			'driver' => 'passport',
-			'provider' => 'users',
+			'driver' => 'token',
+			'provider' => 'customers',
 			'hash' => false,
+		],
+
+		'admin' => [
+			'driver' => 'session',
+			'provider' => 'admins',
+		],
+
+		'admin-api' => [
+			'driver' => 'token',
+			'provider' => 'admins',
+		],
+
+		'customer' => [
+			'driver' => 'session',
+			'provider' => 'customers',
+		],
+
+		'customer-api' => [
+			'driver' => 'session',
+			'provider' => 'customers',
+		],
+
+		'seller' => [
+			'driver' => 'session',
+			'provider' => 'sellers',
+		],
+
+		'seller-api' => [
+			'driver' => 'token',
+			'provider' => 'sellers',
 		],
 	],
 
@@ -68,9 +100,17 @@ return [
 	*/
 
 	'providers' => [
-		'users' => [
+		'customers' => [
 			'driver' => 'eloquent',
-			'model' => User::class,
+			'model' => Customer::class,
+		],
+		'admins' => [
+			'driver' => 'eloquent',
+			'model' => Admin::class,
+		],
+		'sellers' => [
+			'driver' => 'eloquent',
+			'model' => Seller::class,
 		],
 	],
 
@@ -91,10 +131,22 @@ return [
 
 	'passwords' => [
 		'users' => [
-			'provider' => 'users',
-			'table' => 'password_resets',
+			'provider' => 'customers',
+			'table' => 'password_resets_customers',
 			'expire' => 60,
 			'throttle' => 60,
+		],
+		'admins' => [
+			'provider' => 'admins',
+			'table' => 'password_resets_admins',
+			'expire' => 15,
+			'throttle' => 10,
+		],
+		'sellers' => [
+			'provider' => 'sellers',
+			'table' => 'password_resets_sellers',
+			'expire' => 25,
+			'throttle' => 10,
 		],
 	],
 

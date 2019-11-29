@@ -2,10 +2,13 @@
 
 namespace App;
 
+use App\Traits\FindModelById;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 
 class Category extends Model {
+	use FindModelById;
+
 	protected $table = 'categories';
 
 	protected $fillable = [
