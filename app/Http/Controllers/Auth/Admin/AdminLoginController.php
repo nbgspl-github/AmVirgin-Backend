@@ -65,9 +65,6 @@ class AdminLoginController extends WebController {
 
 	public function logout(Request $request) {
 		Auth::guard('admin')->logout();
-	}
-
-	protected function loggedOut(Request $request) {
 		redirect(route('admin.login'));
 	}
 }
