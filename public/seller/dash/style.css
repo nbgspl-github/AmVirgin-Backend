@@ -7,36 +7,29 @@
     font-family: 'poppins', sans-serif;
     outline: none;
 }
-
 ::-webkit-scrollbar {
     background: transparent;
     width: 5px;
     height: 5px;
 }
-
 ::-webkit-scrollbar-thumb {
     background-color: #888;
 }
-
 ::-webkit-scrollbar-thumb:hover {
     background-color: rgba(0, 0, 0, 0.3);
 }
-
 body {
     font-family: 'Poppins';
 }
-
 #contents {
     position: relative;
     transition: .3s;
     margin-left: 290px;
     background-color: #f9f9fc;
 }
-
 .margin {
     margin-left: 0 !important;
 }
-
 /* Start side navigation bar  */
 
 .side-nav {
@@ -59,7 +52,6 @@ body {
     margin: 50px 0px;
     box-shadow: 1px 1px 12px .6px #dfdfdf;
 }
-
 .side-nav .close-aside {
     position: absolute;
     top: 7px;
@@ -67,14 +59,12 @@ body {
     cursor: pointer;
     color: #EEE;
 }
-
 .side-nav .heading {
     background-color: #fff;
     padding: 15px 15px 15px 30px;
     overflow: hidden;
     border-bottom: 1px solid #2a2b3c
 }
-
 .side-nav .heading > img {
     border-radius: 50%;
     float: left;
@@ -99,16 +89,13 @@ body {
     text-decoration: none;
     font-size: 18px;
 }
-
 .side-nav .heading .info > h3 > a:hover {
     color: #FFF;
 }
-
 .side-nav .heading .info > p {
     color: #BBB;
     font-size: 13px;
 }
-
 /* End heading */
 /* Start search */
 .side-nav .search {
@@ -117,7 +104,6 @@ body {
     margin: 15px 0;
     position: relative;
 }
-
 .side-nav .search > input {
     width: 100%;
     background-color: transparent;
@@ -126,7 +112,6 @@ body {
     padding: 7px 0 7px;
     color: #DDD
 }
-
 .side-nav .search > input ~ i {
     position: absolute;
     top: 22px;
@@ -135,7 +120,6 @@ body {
     color: #2b2f3a;
     font-size: 19px;
 }
-
 /* End search */
 
 .side-nav .categories > li {
@@ -153,20 +137,16 @@ body {
     font-size: 15px;
 
 }
-
 .side-nav .categories > li > a {
     color: #eee;
     text-decoration: none;
 }
-
 .side-nav .categories > li:hover > a {
     color: #eee;
 }
-
 .side-nav .categories > li:hover > a:hover {
     color: #eee;
 }
-
 .side-nav .categories > li:hover {
     background: linear-gradient(rgb(204, 0, 0) 0%, rgb(153, 0, 0) 100%);
     color: #fff;
@@ -211,14 +191,12 @@ body {
     list-style: none;
     display: none;
 }
-
 .side-nav .categories .side-nav-dropdown > li > a {
     color: #000;
     text-decoration: none;
     padding: 7px 0;
     display: block;
 }
-
 .side-nav .categories p {
     margin-left: 30px;
     color: #535465;
@@ -252,7 +230,6 @@ body {
 .welcome {
     color: #CCC;
 }
-
 .welcome .content {
     background-color: #fff;
     padding: 15px;
@@ -260,13 +237,11 @@ body {
     color: #000;
     box-shadow: 1px 1px 12px .6px #dfdfdf;
 }
-
 .welcome h2 {
     font-family: Calibri;
     font-weight: 100;
     margin-top: 0
 }
-
 .welcome p {
     color: #999;
 }
@@ -277,7 +252,6 @@ body {
     margin-top: 25px;
     color: #CCC;
 }
-
 .statistics .box {
     background-color: #fff;
     padding: 15px;
@@ -285,7 +259,6 @@ body {
     color: #000;
     box-shadow: 1px 1px 12px .6px #dfdfdf;
 }
-
 .statistics .box > i {
     float: left;
     color: #FFF;
@@ -295,7 +268,6 @@ body {
     line-height: 60px;
     font-size: 22px;
 }
-
 .statistics .box .info {
     float: left;
     width: auto;
@@ -317,14 +289,12 @@ body {
     margin-top: 25px;
     color: #BBB
 }
-
 .charts .chart-container {
     background-color: #fff;
     padding: 15px;
     color: #000;
     box-shadow: 1px 1px 12px .6px #dfdfdf;
 }
-
 .charts .chart-container h3 {
     margin: 0 0 10px;
     font-size: 17px;
@@ -335,11 +305,9 @@ body {
 .admins {
     margin-top: 25px;
 }
-
 .admins .box {
 
 }
-
 .admins .box > h3 {
     color: #5d78ff !important;
     font-family: Calibri;
@@ -349,7 +317,6 @@ body {
     font-weight: 700;
     background-color:
 }
-
 .admins .box .admin {
     margin-bottom: 20px;
     overflow: hidden;
@@ -358,13 +325,11 @@ body {
     color: #000;
     box-shadow: 1px 1px 12px .6px #dfdfdf;
 }
-
 .admins .box .admin .img {
     width: 20%;
     margin-right: 5%;
     float: left;
 }
-
 .admins .box .admin .img img {
     border-radius: 50%;
 }
@@ -401,7 +366,6 @@ body {
     border-radius: 3px;
     margin-bottom: 25px;
 }
-
 .statis .box h3:after {
     content: "";
     height: 2px;
@@ -411,7 +375,6 @@ body {
     display: block;
     margin-top: 10px;
 }
-
 .statis .box i {
     position: absolute;
     height: 70px;
@@ -430,7 +393,6 @@ body {
 .chrt3 {
     padding-bottom: 50px;
 }
-
 .chrt3 .chart-container {
     height: 350px;
     padding: 15px;
@@ -699,7 +661,7 @@ body {
     color: #5d78ff !important;
     font-weight: 700;
 }
-
+ 
 /* Start media query */
 
 @media (max-width: 767px) {

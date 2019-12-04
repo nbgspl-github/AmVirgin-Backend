@@ -67,7 +67,7 @@ return [
 		],
 
 		'customer-api' => [
-			'driver' => 'session',
+			'driver' => 'jwt',
 			'provider' => 'customers',
 		],
 
@@ -77,7 +77,7 @@ return [
 		],
 
 		'seller-api' => [
-			'driver' => 'token',
+			'driver' => 'jwt',
 			'provider' => 'sellers',
 		],
 	],

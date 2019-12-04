@@ -2,16 +2,17 @@
 
 namespace App\Models;
 
-use App\Contracts\FluentConstructor;
 use App\Traits\BroadcastPushNotifications;
+use App\Traits\FluentConstructor;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 
-class Seller extends Authenticatable implements FluentConstructor {
+class Seller extends Authenticatable {
 	use Notifiable;
 	use BroadcastPushNotifications;
+	use FluentConstructor;
 
 	/**
 	 * The attributes that are mass assignable.

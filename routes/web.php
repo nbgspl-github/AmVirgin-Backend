@@ -12,18 +12,16 @@
 */
 
 use App\Category;
-use App\Http\Controllers\Web\CategoriesController;
-use App\Http\Controllers\Web\DashboardController;
-use App\Http\Controllers\Web\GenresController;
-use App\Http\Controllers\Web\MoviesController;
-use App\Http\Controllers\Web\NotificationsController;
-use App\Http\Controllers\Web\CustomerController;
+use App\Http\Controllers\Web\Admin\CategoriesController;
+use App\Http\Controllers\Web\Admin\CustomerController;
+use App\Http\Controllers\Web\Admin\GenresController;
+use App\Http\Controllers\Web\Admin\MoviesController;
+use App\Http\Controllers\Web\Admin\NotificationsController;
 use App\Models\Genre;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\Auth\CustomerLoginController;
-use App\Http\Controllers\Auth\CustomerRegisterController;
 use App\Http\Controllers\Auth\SellerLoginController;
 use App\Http\Controllers\Web\Admin\HomeController as AdminHome;
 use App\Http\Controllers\Web\Customer\HomeController as CustomerHome;
@@ -39,7 +37,7 @@ use Illuminate\Support\Facades\Storage;
 Route::prefix('admin')->group(function () {
 	Route::get('/', [AdminHome::class, Methods::Index])->middleware('auth:admin')->name('admin.home');
 	Route::get('/login', [AdminLoginController::class, Methods::auth()::LoginForm])->name('admin.login');
-	Route::post('/login', [AdminLoginController::class, Methods::auth()::AttemptLogin])->name('admin.login.submit');
+	Route::post('/login', [AdminLoginController::class, Methods::auth()::Login])->name('admin.login.submit');
 	Route::post('/logout', [AdminLoginController::class, Methods::auth()::Logout])->name('admin.logout');
 	Route::middleware('auth:admin')->group(function () {
 
@@ -126,7 +124,7 @@ Route::prefix('admin')->group(function () {
 Route::prefix('')->group(function () {
 	Route::get('/', [CustomerHome::class, Methods::Index])->name('customer.home');
 	Route::get('/login', [CustomerLoginController::class, Methods::auth()::LoginForm])->name('customer.login');
-	Route::post('/login', [CustomerLoginController::class, Methods::auth()::AttemptLogin])->name('customer.login.submit');
+	Route::post('/login', [CustomerLoginController::class, Methods::auth()::Login])->name('customer.login.submit');
 });
 
 /**
@@ -137,7 +135,7 @@ Route::prefix('')->group(function () {
 Route::prefix('seller')->group(function () {
 	Route::get('/', [SellerHome::class, Methods::Index])->middleware('auth:seller')->name('seller.home');
 	Route::get('/login', [SellerLoginController::class, Methods::auth()::LoginForm])->name('seller.login');
-	Route::post('/login', [SellerLoginController::class, Methods::auth()::AttemptLogin])->name('seller.login.submit');
+	Route::post('/login', [SellerLoginController::class, Methods::auth()::Login])->name('seller.login.submit');
 	Route::post('/logout', [SellerLoginController::class, Methods::auth()::Logout])->name('seller.logout');
 });
 

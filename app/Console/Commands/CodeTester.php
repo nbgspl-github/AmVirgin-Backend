@@ -5,9 +5,15 @@ namespace App\Console\Commands;
 use App\Classes\Builders\Notifications\PushNotification;
 use App\Http\Controllers\Web\CategoriesController;
 use App\Models\Auth\Admin;
+use App\Models\Customer;
+use App\Traits\GenerateUrls;
 use Illuminate\Console\Command;
 
 class CodeTester extends Command {
+	use GenerateUrls;
+
+	protected $urlMethodPrefix = 'myUrl';
+
 	/**
 	 * The name and signature of the console command.
 	 *
@@ -37,6 +43,7 @@ class CodeTester extends Command {
 	 * @return mixed
 	 */
 	public function handle() {
+		echo $this->urlMethodPrefix;
 		return;
 	}
 }

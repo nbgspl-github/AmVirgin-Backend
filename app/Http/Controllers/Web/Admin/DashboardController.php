@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Base\WebController;
+use Illuminate\Contracts\Support\Renderable;
 
 class DashboardController extends WebController {
 
@@ -16,13 +17,9 @@ class DashboardController extends WebController {
 	/**
 	 * Show the application dashboard.
 	 *
-	 * @return \Illuminate\Contracts\Support\Renderable
+	 * @return Renderable
 	 */
 	public function index() {
 		return view('admin.home.dashboard');
-	}
-
-	public function seller() {
-		return view('thirdParty.seller.home');
 	}
 }

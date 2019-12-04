@@ -230,7 +230,6 @@
 
 
 </footer> -->
-</div>
 <script type="text/javascript" src="{{asset('seller/slider/slick.js')}}"></script>
 <!-- jQuery CDN -->
 <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>

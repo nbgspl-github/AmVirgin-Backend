@@ -12,9 +12,6 @@ class Methods {
 	const Edit = "edit";
 	const Show = "show";
 	const Send = "send";
-	const ShowLoginForm = "showLoginForm";
-	const Login = "login";
-	const Logout = "logout";
 	const Seller = "seller";
 
 	public static function auth() {

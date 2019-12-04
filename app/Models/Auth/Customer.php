@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
-use App\Contracts\FluentConstructor;
+use App\Traits\FluentConstructor;
 use App\Traits\BroadcastPushNotifications;
-use App\Traits\FindModelById;
+use App\Traits\RetrieveResource;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 
-class Customer extends Authenticatable implements FluentConstructor {
+class Customer extends Authenticatable {
 	use Notifiable;
 	use BroadcastPushNotifications;
-	use FindModelById;
+	use RetrieveResource;
+	use FluentConstructor;
 
 	/**
 	 * The attributes that are mass assignable.
@@ -151,13 +152,4 @@ class Customer extends Authenticatable implements FluentConstructor {
 		$this->mobile = $mobile;
 		return $this;
 	}
-
-	/**
-	 * Gets a new instance of User.
-	 * @return Customer
-	 */
-	public static function instance() {
-		return new self();
-	}
-
 }

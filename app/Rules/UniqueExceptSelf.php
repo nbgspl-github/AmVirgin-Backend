@@ -2,7 +2,6 @@
 
 namespace App\Rules;
 
-use App\Contracts\FluentConstructor;
 use App\Models\Genre;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Database\Eloquent\Model;

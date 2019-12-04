@@ -2,12 +2,14 @@
 
 namespace App;
 
-use App\Traits\FindModelById;
+use App\Traits\GenerateUrls;
+use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 
 class Category extends Model {
-	use FindModelById;
+	use RetrieveResource;
+	use GenerateUrls;
 
 	protected $table = 'categories';
 
@@ -115,8 +117,10 @@ class Category extends Model {
 		return $this;
 	}
 
-	public function ensureHasSuper() {
-
+	protected function resourceSchema() {
+		return [
+			'Poster' => $this->getPoster(),
+		];
 	}
 
 }
