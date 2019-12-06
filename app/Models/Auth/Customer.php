@@ -8,8 +8,9 @@ use App\Traits\RetrieveResource;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Customer extends Authenticatable {
+class Customer extends Authenticatable implements JWTSubject {
 	use Notifiable;
 	use BroadcastPushNotifications;
 	use RetrieveResource;
@@ -51,13 +52,6 @@ class Customer extends Authenticatable {
 	];
 
 	/**
-	 * @return string|null
-	 */
-	public function getPassword(): ?string {
-		return $this->password;
-	}
-
-	/**
 	 * @param string|null $password
 	 * @return Customer
 	 */
@@ -69,23 +63,7 @@ class Customer extends Authenticatable {
 	/**
 	 * @return int
 	 */
-	public function getRole(): int {
-		return $this->role;
-	}
-
-	/**
-	 * @param int $role
-	 * @return Customer
-	 */
-	public function setRole(int $role): Customer {
-		$this->role = $role;
-		return $this;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getActive(): int {
+	public function isActive(): int {
 		return $this->active;
 	}
 
@@ -96,13 +74,6 @@ class Customer extends Authenticatable {
 	public function setActive(int $active): Customer {
 		$this->active = $active;
 		return $this;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getId(): int {
-		return $this->id;
 	}
 
 	/**
@@ -151,5 +122,19 @@ class Customer extends Authenticatable {
 	public function setMobile(?string $mobile): Customer {
 		$this->mobile = $mobile;
 		return $this;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getJWTIdentifier() {
+		return $this->getKey();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getJWTCustomClaims() {
+		return [];
 	}
 }

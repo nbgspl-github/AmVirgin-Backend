@@ -14,11 +14,17 @@ class AuthController extends BaseAuth {
 	}
 
 	protected function exists(Request $request) {
-		return Seller::where(['email' => $request->email])->first() != null;
+		return $this->authTarget()::where(['email' => $request->email])->first() != null;
 	}
 
-	protected function loginPayload(Model $user, string $token) {
+	protected function loginPayload($seller, string $token) {
+		/**
+		 * @var $seller Seller
+		 */
+		return [
+			'sellerId' => $seller->get,
 
+		];
 	}
 
 	protected function login(Request $request) {

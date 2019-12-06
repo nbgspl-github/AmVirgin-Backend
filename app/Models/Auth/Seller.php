@@ -48,11 +48,66 @@ class Seller extends Authenticatable {
 	];
 
 	/**
-	 * Gets a new instance of Seller.
-	 * @return self
+	 * @return string
 	 */
-	public static function instance() {
-		return new self();
+	public function getName(): string {
+		return $this->name;
 	}
 
+	/**
+	 * @param string $name
+	 * @return Seller
+	 */
+	public function setName(string $name): Seller {
+		$this->name = $name;
+		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getEmail(): string {
+		return $this->email;
+	}
+
+	/**
+	 * @param string $email
+	 * @return Seller
+	 */
+	public function setEmail(string $email): Seller {
+		$this->email = $email;
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isActive(): bool {
+		return $this->active;
+	}
+
+	/**
+	 * @param bool $active
+	 * @return Seller
+	 */
+	public function setActive(bool $active): Seller {
+		$this->active = $active;
+		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getMobile(): string {
+		return $this->mobile;
+	}
+
+	/**
+	 * @param string $mobile
+	 * @return Seller
+	 */
+	public function setMobile(string $mobile): Seller {
+		$this->mobile = $mobile;
+		return $this;
+	}
 }
