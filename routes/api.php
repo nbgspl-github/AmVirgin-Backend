@@ -4,6 +4,7 @@ use App\Classes\Methods;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\App\UserController;
 use App\Http\Controllers\app\Seller\SellerController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
