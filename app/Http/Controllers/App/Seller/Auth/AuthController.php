@@ -15,6 +15,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends BaseAuth {
 	use ValidatesRequest;
@@ -54,7 +55,7 @@ class AuthController extends BaseAuth {
 		try {
 			$this->requestValid($request, $this->rules['login']);
 			$seller = $this->throwIfNotFound(['email' => $request->email]);
-			$token = $this->generateToken($seller);
+			$token = auth()->attempt($this->credentials($request));
 			if (!$token)
 				return $this->failed()->message(__('strings.seller.auth.login.failed'))->send();
 			else
@@ -102,5 +103,16 @@ class AuthController extends BaseAuth {
 		catch (Exception $exception) {
 			return $this->error()->message($exception->getMessage())->send();
 		}
+	}
+
+	protected function guard() {
+		return Auth::guard('seller-api');
+	}
+
+	protected function credentials(Request $request) {
+		return [
+			'email' => $request->email,
+			'password' => $request->password,
+		];
 	}
 }

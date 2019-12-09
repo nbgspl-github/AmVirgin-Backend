@@ -19,7 +19,7 @@ return [
 				'',
 			],
 			'login' => [
-				'email' => ['bail', 'nullable', 'email', 'exists:sellers,email', 'required_without:mobile', new \App\Rules\UniqueExceptSelf(Customer::class, 'email', $r->email, '12', "Email address")],
+				'email' => ['bail', 'nullable', 'email', 'exists:sellers,email', 'required_without:mobile'],
 				'mobile' => ['bail', 'nullable', 'digits:10', 'required_without:email'],
 				'password' => ['bail', 'required', 'string', 'min:4', 'max:64'],
 			],
