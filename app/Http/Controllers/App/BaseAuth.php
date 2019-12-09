@@ -5,16 +5,16 @@
 
 namespace App\Http\Controllers\App\Auth;
 
+use App\Exceptions\ResourceConflictException;
 use App\Http\Controllers\Base\AppController;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 abstract class BaseAuth extends AppController {
 	use AuthenticatesUsers;
-
-	protected $authTarget;
 
 	public function __construct() {
 
@@ -23,7 +23,23 @@ abstract class BaseAuth extends AppController {
 	protected abstract function authTarget();
 
 	protected function check($conditions) {
-		return $this->authTarget::where($conditions)->first();
+		return $this->authTarget()::where($conditions)->first();
+	}
+
+	protected function throwIfNotFound($conditions) {
+		$model = $this->authTarget()::where($conditions)->first();
+		if ($model == null)
+			throw new ModelNotFoundException();
+		else
+			return $model;
+	}
+
+	protected function throwIfFound($conditions) {
+		$model = $this->authTarget()::where($conditions)->first();
+		if ($model != null)
+			throw new ResourceConflictException();
+		else
+			return $model;
 	}
 
 	protected function verified(Model $user) {

@@ -52,11 +52,6 @@ Route::prefix('admin')->group(function () {
 			Route::put('{id}/status', [CustomerController::class, Methods::UpdateStatus])->name('admin.customers.update.status');
 			Route::delete('{id}', [CustomerController::class, Methods::Delete])->name('admin.customers.delete');
 		});
-//		Route::get('customers', [CustomerController::class, Methods::Index])->name('admin.customers.index')->middleware('auth:admin');
-//		Route::get('customers/{id}', [CustomerController::class, Methods::Index])->name('admin.customers.edit');
-//		Route::get('customer/create', [CustomerController::class, Methods::Create])->name('admin.customers.create');
-//		Route::post('customer', [CustomerController::class, Methods::Store])->name('admin.customers.store');
-//		Route::put('customers/{id}', [CustomerController::class, Methods::Update])->name('admin.customers.update');
 
 		// Categories Route(s)
 		Route::prefix('categories')->middleware('auth:admin')->group(function () {

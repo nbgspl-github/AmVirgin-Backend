@@ -34,8 +34,8 @@
 									<td>{{$user->getName()}}</td>
 									<td>{{$user->getMobile()}}</td>
 									<td>{{$user->getEmail()}}</td>
-									<td>{{__status($user->getActive())}}</td>
-									<td><a style="text-decoration: underline" class="text-primary" href="{{route('admin.customers.edit',$user->getId())}}">View Details</a></td>
+									<td>{{__status($user->isActive())}}</td>
+									<td><a style="text-decoration: underline" class="text-primary" href="{{route('admin.customers.edit',$user->getKey())}}">View Details</a></td>
 								</tr>
 							@endforeach
 							</tbody>

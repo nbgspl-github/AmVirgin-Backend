@@ -28,7 +28,8 @@ class GenresController extends WebController {
 		$genre = Genre::find($id);
 		if ($genre != null) {
 			return view('admin.genres.edit')->with('genre', $genre);
-		} else {
+		}
+		else {
 			notify()->error('Could not find any genre with that Id.');
 			return redirect(route('admin.genres.index'));
 		}
@@ -43,7 +44,8 @@ class GenresController extends WebController {
 		if ($validator->fails()) {
 			notify()->error($validator->errors()->first());
 			return back()->withInput($request->all());
-		} else {
+		}
+		else {
 			$poster = null;
 			if ($request->hasFile('poster'))
 				$poster = Storage::putFile(Directories::Genre, $request->file('poster'), 'public');
@@ -64,7 +66,8 @@ class GenresController extends WebController {
 		if ($genre == null) {
 			notify()->error('Unable to find genre for that Id.');
 			return redirect(route('genres.index'));
-		} else {
+		}
+		else {
 			$validator = Validator::make($request->all(), [
 				'name' => ['bail', 'required', 'string', 'min:1', 'max:100', new UniqueExceptSelf(Genre::class, 'name', $request->name, $request->id)],
 				'poster' => ['bail', 'nullable', 'mimes:jpg,jpeg,png,bmp'],
@@ -73,7 +76,8 @@ class GenresController extends WebController {
 			if ($validator->fails()) {
 				notify()->error($validator->errors()->first());
 				return back()->withInput($request->all());
-			} else {
+			}
+			else {
 				$poster = null;
 				if ($request->hasFile('poster'))
 					$poster = Storage::putFile(Directories::Genre, $request->file('poster'), 'public');
@@ -103,7 +107,8 @@ class GenresController extends WebController {
 		]);
 		if ($validator->fails()) {
 			return response()->json(['code' => 400, 'message' => $validator->errors()->first()]);
-		} else {
+		}
+		else {
 			Genre::find($request->id)->
 			setStatus($request->status)->
 			save();
@@ -117,7 +122,8 @@ class GenresController extends WebController {
 		]);
 		if ($validator->fails()) {
 			return response()->json(['code' => 400, 'message' => sprintf("Got id = %d", $id)]);
-		} else {
+		}
+		else {
 			Genre::find($id)->delete();
 			return response()->json(['code' => 200, 'message' => 'Successfully deleted genre.']);
 		}
