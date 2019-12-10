@@ -8,7 +8,6 @@ use App\Http\Controllers\App\Auth\BaseAuth;
 use App\Http\Resources\Auth\Seller\AuthProfileResource;
 use App\Interfaces\StatusCodes;
 use App\Models\Customer;
-use App\Models\Seller;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Exception;
