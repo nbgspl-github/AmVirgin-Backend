@@ -5,24 +5,18 @@ use App\Http\Controllers\app\Seller\SellerController;
 use App\Http\Controllers\App\Seller\Auth\AuthController as SellerAuthController;
 use App\Http\Controllers\App\Customer\Auth\AuthController as CustomerAuthController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-Route::prefix('seller')->group(function () {
+Route::prefix('sellers')->group(function () {
+	Route::get('/', [SellerAuthController::class, 'exists'])->name('seller.check');
+	Route::get('/profile', [SellerAuthController::class, 'profile'])->name('seller.profile');
 	Route::post('/login', [SellerAuthController::class, 'login'])->name('seller.login');
+	Route::post('/register', [SellerAuthController::class, 'register'])->name('seller.register');
 	Route::post('/logout', [SellerAuthController::class, 'logout'])->name('seller.logout');
 });
 
-Route::prefix('customer')->group(function () {
+Route::prefix('customers')->group(function () {
+	Route::get('/', [CustomerAuthController::class, 'exists'])->name('customer.check');
 	Route::post('/login', [CustomerAuthController::class, 'login'])->name('customer.login');
+	Route::post('/register', [CustomerAuthController::class, 'register'])->name('customer.register');
 	Route::post('/logout', [CustomerAuthController::class, 'logout'])->name('customer.logout');
 });
 

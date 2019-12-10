@@ -13,7 +13,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-abstract class BaseAuth extends AppController {
+abstract class BaseAuth extends AppController{
 	use AuthenticatesUsers;
 
 	public function __construct() {
@@ -60,11 +60,11 @@ abstract class BaseAuth extends AppController {
 
 	protected abstract function logout(Request $request);
 
-	protected abstract function refreshToken(Request $request);
-
 	protected abstract function loginPayload(Model $user, string $token);
 
 	protected abstract function registerPayload(Model $user, string $token);
 
 	protected abstract function register(Request $request);
+
+	protected abstract function profile(Request $request);
 }

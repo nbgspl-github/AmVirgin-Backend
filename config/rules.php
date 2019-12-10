@@ -15,16 +15,23 @@ return [
 	'auth' => [
 		/* Seller Auth Rules*/
 		'seller' => [
-			'check' => [
-				'',
+			'exists' => [
+				'email' => ['bail', 'required_without:mobile', 'email'],
+				'mobile' => ['bail', 'required_without:email', 'digits:10'],
 			],
 			'login' => [
 				'email' => ['bail', 'nullable', 'email', 'exists:sellers,email', 'required_without:mobile'],
-				'mobile' => ['bail', 'nullable', 'digits:10', 'required_without:email'],
+				'mobile' => ['bail', 'nullable', 'digits:10', 'exists:sellers,mobile', 'required_without:email'],
 				'password' => ['bail', 'required', 'string', 'min:4', 'max:64'],
 			],
 			'logout' => [
 
+			],
+			'register' => [
+				'email' => ['bail', 'nullable', 'email', 'unique:sellers,email'],
+				'name' => ['bail', 'required', 'string', 'min:2', 'max:100'],
+				'mobile' => ['bail', 'nullable', 'digits:10', 'unique:sellers,mobile'],
+				'password' => ['bail', 'required', 'string', 'min:4', 'max:64'],
 			],
 		],
 

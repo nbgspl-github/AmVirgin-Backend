@@ -2,7 +2,9 @@
 
 namespace App\Classes;
 
-class Methods {
+use stdClass;
+
+class Methods extends stdClass{
 	const Index = "index";
 	const Store = "store";
 	const Update = "update";

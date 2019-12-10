@@ -5,8 +5,7 @@ namespace App\Http\Controllers\App\Seller\Auth;
 use App\Exceptions\ResourceConflictException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\App\Auth\BaseAuth;
-use App\Http\Resources\Auth\Seller\LoginResource;
-use App\Interfaces\Roles;
+use App\Http\Resources\Auth\Seller\AuthProfileResource;
 use App\Interfaces\StatusCodes;
 use App\Models\Seller;
 use App\Traits\FluentResponse;
@@ -15,9 +14,13 @@ use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
-class AuthController extends BaseAuth {
+/**
+ * Auth functionality for Seller.
+ * @package App\Http\Controllers\App\Seller\Auth
+ */
+class AuthController extends BaseAuth{
 	use ValidatesRequest;
 	use FluentResponse;
 
@@ -39,14 +42,30 @@ class AuthController extends BaseAuth {
 	}
 
 	protected function exists(Request $request) {
-		return $this->authTarget()::where(['email' => $request->email])->first() != null;
+		try {
+			$this->requestValid($request, $this->rules['exists']);
+			$conditions = ($request->has('mobile') && !empty($request->mobile)) ? $conditions = ['mobile' => $request->mobile] : $conditions = ['email' => $request->email];
+			$seller = $this->check($conditions);
+			if ($seller != null) {
+				return $this->success()->status(StatusCodes::Okay)->message(__('strings.seller.auth.login.check'))->send();
+			}
+			else {
+				return $this->success()->status(StatusCodes::ResourceNotFound)->message(__('strings.seller.auth.login.check-failed'))->send();
+			}
+		}
+		catch (ValidationException $exception) {
+			return $this->failed()->status(StatusCodes::InvalidRequestFormat)->message($exception->getError())->send();
+		}
+		catch (Exception $exception) {
+			return $this->error()->message($exception->getMessage())->send();
+		}
 	}
 
 	protected function loginPayload($seller, string $token) {
 		return [
-			'sellerId' => $seller->getKey(),
 			'name' => $seller->getName(),
-			'type' => Roles::Seller,
+			'email' => $seller->getEmail(),
+			'mobile' => $seller->getMobile(),
 			'token' => $token,
 		];
 	}
@@ -54,12 +73,13 @@ class AuthController extends BaseAuth {
 	protected function login(Request $request) {
 		try {
 			$this->requestValid($request, $this->rules['login']);
-			$seller = $this->throwIfNotFound(['email' => $request->email]);
-			$token = auth()->attempt($this->credentials($request));
+			$conditions = ($request->has('mobile') && !empty($request->mobile)) ? $conditions = ['mobile' => $request->mobile] : $conditions = ['email' => $request->email];
+			$seller = $this->throwIfNotFound($conditions);
+			$token = auth()->guard('seller-api')->attempt($this->credentials($request));
 			if (!$token)
-				return $this->failed()->message(__('strings.seller.auth.login.failed'))->send();
+				return $this->failed()->message(__('strings.seller.auth.login.failed'))->status(StatusCodes::Unauthorized)->send();
 			else
-				return $this->success()->message(__('strings.seller.auth.login.success'))->setResource(new LoginResource($seller))->send();
+				return $this->success()->message(__('strings.seller.auth.login.success'))->setValue('data', $this->loginPayload($seller, $token))->send();
 		}
 		catch (ModelNotFoundException $exception) {
 			return $this->failed()->status(StatusCodes::ResourceNotFound)->send();
@@ -73,26 +93,39 @@ class AuthController extends BaseAuth {
 	}
 
 	protected function logout(Request $request) {
-
+		try {
+			auth()->logout();
+			return $this->success()->message(__('strings.seller.auth.logout.success'))->send();
+		}
+		catch (Exception $exception) {
+			return $this->error()->message($exception->getMessage())->send();
+		}
 	}
 
-	protected function refreshToken(Request $request) {
-
-	}
-
-	protected function registerPayload(Model $user, string $token) {
-
+	protected function registerPayload(Model $seller, string $token) {
+		return [
+			'name' => $seller->getName(),
+			'email' => $seller->getEmail(),
+			'mobile' => $seller->getMobile(),
+			'token' => $token,
+		];
 	}
 
 	protected function register(Request $request) {
 		try {
 			$this->requestValid($request, $this->rules['register']);
-			$seller = $this->throwIfFound(['email' => $request->email]);
+			$this->throwIfFound(['email' => $request->email]);
+			$seller = Seller::create([
+				'name' => $request->name,
+				'email' => $request->email,
+				'mobile' => $request->mobile,
+				'password' => Hash::make($request->password),
+			]);
 			$token = $this->generateToken($seller);
 			if (!$token)
-				return $this->failed()->message(__('strings.seller.auth.login.failed'))->send();
+				return $this->failed()->message(__('strings.seller.auth.register.failed'))->send();
 			else
-				return $this->success()->message(__('strings.seller.auth.login.success'))->setResource(new LoginResource($seller))->send();
+				return $this->success()->message(__('strings.seller.auth.register.success'))->setValue('data', $this->registerPayload($seller, $token))->send();
 		}
 		catch (ResourceConflictException $exception) {
 			return $this->failed()->status(StatusCodes::ResourceAlreadyExists)->send();
@@ -105,14 +138,26 @@ class AuthController extends BaseAuth {
 		}
 	}
 
-	protected function guard() {
-		return Auth::guard('seller-api');
+	protected function credentials(Request $request) {
+		if ($request->exists('mobile')) {
+			return [
+				'mobile' => $request->mobile,
+				'password' => $request->password,
+			];
+		}
+		else {
+			return [
+				'email' => $request->email,
+				'password' => $request->password,
+			];
+		}
 	}
 
-	protected function credentials(Request $request) {
-		return [
-			'email' => $request->email,
-			'password' => $request->password,
-		];
+	protected function profile(Request $request) {
+		$seller = auth()->guard('seller-api')->user();
+		if ($seller != null)
+			return new AuthProfileResource($seller);
+		else
+			return $this->failed()->status(StatusCodes::Unauthorized)->send();
 	}
 }

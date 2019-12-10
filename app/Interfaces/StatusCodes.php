@@ -2,7 +2,7 @@
 
 namespace App\Interfaces;
 
-interface StatusCodes {
+interface StatusCodes{
 	const Okay = 200;
 
 	const Created = 201;
@@ -16,4 +16,6 @@ interface StatusCodes {
 	const ServerError = 500;
 
 	const ResourceAlreadyExists = 409;
+
+	const Unauthorized = 401;
 }

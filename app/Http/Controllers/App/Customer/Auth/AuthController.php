@@ -30,15 +30,15 @@ class AuthController extends BaseAuth {
 
 	}
 
-	protected function refreshToken(Request $request) {
-
-	}
-
 	protected function registerPayload(Model $user, string $token) {
 
 	}
 
 	protected function register(Request $request) {
 
+	}
+
+	protected function profile(Request $request) {
+		// TODO: Implement profile() method.
 	}
 }
