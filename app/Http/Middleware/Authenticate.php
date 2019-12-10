@@ -2,11 +2,12 @@
 
 namespace App\Http\Middleware;
 
+use App\Interfaces\StatusCodes;
 use Closure;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Http\Request;
 
-class Authenticate extends Middleware {
+class Authenticate extends Middleware{
 
 	private $redirectTo;
 
@@ -19,18 +20,29 @@ class Authenticate extends Middleware {
 		if (!$this->auth->guard($guard)->user()) {
 			switch ($guard) {
 				case 'admin':
-					$this->redirectTo = route('admin.login');
+					return redirect(route('admin.login'));
 					break;
 
 				case 'seller':
-					$this->redirectTo = route('seller.login');
+					return redirect(route('seller.login'));
 					break;
 
 				case 'customer':
-					$this->redirectTo = route('customer.login');
+					return redirect(route('customer.login'));
+					break;
+
+				case 'seller-api':
+					return response()->json(['message' => 'Unauthorized'], StatusCodes::Unauthorized);
+					break;
+
+				case 'customer-api':
+					return response()->json(['message' => 'Unauthorized'], StatusCodes::Unauthorized);
+					break;
+
+				case 'admin-api':
+					return response()->json(['message' => 'Unauthorized'], StatusCodes::Unauthorized);
 					break;
 			}
-			return redirect($this->redirectTo);
 		}
 		return $next($request);
 	}
