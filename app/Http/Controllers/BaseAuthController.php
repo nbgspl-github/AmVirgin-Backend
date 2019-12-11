@@ -8,28 +8,22 @@ namespace App\Http\Controllers\App;
 use App\Exceptions\ResourceConflictException;
 use App\Exceptions\ResourceNotFoundException;
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\Base\BaseController;
+use App\Http\Controllers\BaseController;
 use App\Http\Resources\Auth\Seller\AuthProfileResource;
 use App\Interfaces\StatusCodes;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
-use Illuminate\Http\ResponseTrait;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 abstract class BaseAuthController extends BaseController{
-	use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 	use AuthenticatesUsers;
 	use ValidatesRequest;
 	use FluentResponse;
-	use ResponseTrait;
 
 	public function __construct(){
 

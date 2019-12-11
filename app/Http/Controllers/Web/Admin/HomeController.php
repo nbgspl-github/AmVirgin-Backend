@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
-use App\Http\Controllers\Base\BaseController;
+use App\Http\Controllers\BaseController;
 
 class HomeController extends BaseController{
 	/**

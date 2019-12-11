@@ -15,7 +15,6 @@ class CreateAttributesTable extends Migration{
 			$table->bigIncrements('id');
 			$table->integer('categoryId');
 			$table->string('name');
-			$table->string('value', 500);
 			$table->timestamps();
 		});
 	}

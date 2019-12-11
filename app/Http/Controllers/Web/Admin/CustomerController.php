@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
-use App\Http\Controllers\Base\BaseController;
+use App\Http\Controllers\BaseController;
 use App\Interfaces\Roles;
 use App\Models\Customer;
 use App\Models\Genre;

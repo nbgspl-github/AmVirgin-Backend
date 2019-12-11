@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\App\Seller\AuthController as SellerAuthController;
 use App\Http\Controllers\App\Customer\AuthController as CustomerAuthController;
+use App\Http\Controllers\App\Seller\AuthController as SellerAuthController;
+use App\Http\Controllers\App\Seller\ProductController as SellerProductsController;
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('seller')->group(function (){
 	Route::get('/', [SellerAuthController::class, 'exists'])->name('seller.check');
@@ -10,6 +11,11 @@ Route::prefix('seller')->group(function (){
 	Route::post('/login', [SellerAuthController::class, 'login'])->name('seller.login');
 	Route::post('/register', [SellerAuthController::class, 'register'])->name('seller.register');
 	Route::post('/logout', [SellerAuthController::class, 'logout'])->name('seller.logout')->middleware('auth:seller-api');
+
+//	Route::middleware('auth:seller-api')->prefix('products')->group(function (){
+//		Route::get('', [SellerProductsController::class, 'index'])->name('seller.products.index');
+//	});
+	Route::get('/products', [SellerProductsController::class, 'index']);
 });
 
 Route::prefix('customer')->group(function (){
