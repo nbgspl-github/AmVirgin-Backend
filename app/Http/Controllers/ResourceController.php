@@ -4,8 +4,13 @@ namespace App\Http\Controllers\Base;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 
-abstract class AppController extends BaseController{
+abstract class ResourceController extends BaseController{
+	use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
 	protected function index(){
 		return $this->resource()::with($this->provider()::paginate());
 	}
@@ -26,6 +31,10 @@ abstract class AppController extends BaseController{
 
 	}
 
+	/**
+	 * Provide a slug of class with which this controller will be bound.
+	 * @return Model|Authenticatable
+	 */
 	protected abstract function provider();
 
 	protected abstract function resource();

@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
-use App\Http\Controllers\Base\WebController;
+use App\Http\Controllers\Base\BaseController;
 use Illuminate\Contracts\Support\Renderable;
 
-class DashboardController extends WebController {
+class DashboardController extends BaseController{
 
 	/**
 	 * DashboardController constructor.
 	 */
-	public function __construct() {
+	public function __construct(){
 
 	}
 

@@ -6,10 +6,11 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\ResponseTrait;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Routing\Controller;
 
-class WebController extends BaseController {
-	use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+class BaseController extends Controller{
+	use AuthorizesRequests;
+	use DispatchesJobs;
+	use ValidatesRequests;
 	use ResponseTrait;
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
-use App\Http\Controllers\Base\WebController;
+use App\Http\Controllers\Base\BaseController;
 use App\Interfaces\Roles;
 use App\Models\Customer;
 use App\Models\Genre;
@@ -11,17 +11,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class CustomerController extends WebController {
-	public function index() {
+class CustomerController extends BaseController{
+	public function index(){
 		$users = Customer::all();
 		return view('admin.customers.index')->with('users', $users);
 	}
 
-	public function create(Request $request) {
+	public function create(Request $request){
 		return view('admin.customers.create');
 	}
 
-	public function edit($id = null) {
+	public function edit($id = null){
 		$customer = Customer::retrieve($id);
 		if ($customer != null) {
 			return view('admin.customers.edit')->with('customer', $customer);

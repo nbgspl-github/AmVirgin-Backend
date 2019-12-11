@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
-use App\Http\Controllers\Base\WebController;
+use App\Http\Controllers\Base\BaseController;
 use App\Http\Resources\MovieResource;
 use App\Http\Resources\MoviesCollection;
 use App\Models\Movie;
 
-class MoviesController extends WebController {
-	public function index($id = null) {
+class MoviesController extends BaseController{
+	public function index($id = null){
 		$resource = null;
 		$collection = null;
 		if ($id == null) {
 			$movies = Movie::all();
 			$collection = new MoviesCollection($movies);
 			return $collection;
-		} else {
+		}
+		else {
 			$movie = Movie::find($id);
 			$resource = new MovieResource($movie);
 			if ($movie == null) {

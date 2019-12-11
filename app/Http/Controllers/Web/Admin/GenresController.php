@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
-use App\Http\Controllers\Base\WebController;
+use App\Http\Controllers\Base\BaseController;
 use App\Http\Resources\MovieResource;
 use App\Http\Resources\MoviesCollection;
 use App\Interfaces\Directories;
@@ -14,17 +14,17 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class GenresController extends WebController {
-	public function index() {
+class GenresController extends BaseController{
+	public function index(){
 		$genres = Genre::all();
 		return view('admin.genres.all')->with('genres', $genres);
 	}
 
-	public function create() {
+	public function create(){
 		return view('admin.genres.add');
 	}
 
-	public function edit($id) {
+	public function edit($id){
 		$genre = Genre::find($id);
 		if ($genre != null) {
 			return view('admin.genres.edit')->with('genre', $genre);

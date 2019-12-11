@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Base\WebController;
+use App\Http\Controllers\Base\BaseController;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 
-class CustomerLoginController extends WebController {
+class CustomerLoginController extends BaseController{
 	/*
 	|--------------------------------------------------------------------------
 	| Login Controller

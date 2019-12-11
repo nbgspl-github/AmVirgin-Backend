@@ -7,7 +7,7 @@ interface StatusCodes{
 
 	const Created = 201;
 
-	const NoContent = 203;
+	const NoContent = 204;
 
 	const InvalidRequestFormat = 400;
 

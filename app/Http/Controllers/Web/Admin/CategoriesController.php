@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Web\Admin;
 
 use App\Category;
-use App\Http\Controllers\Base\WebController;
+use App\Http\Controllers\Base\BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use stdClass;
 
-class CategoriesController extends WebController {
-	public function index() {
+class CategoriesController extends BaseController{
+	public function index(){
 		$categories = Category::all();
 		return view('admin.categories.index')->with('categories', $categories);
 	}
 
-	public function create() {
+	public function create(){
 		$relations = $this->relations();
 		return view('admin.categories.create')->with('all', $relations);
 	}

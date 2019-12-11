@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Base\WebController;
+use App\Http\Controllers\Base\BaseController;
 use Illuminate\Foundation\Auth\ConfirmsPasswords;
 
-class ConfirmPasswordController extends WebController{
+class ConfirmPasswordController extends BaseController{
 	/*
 	|--------------------------------------------------------------------------
 	| Confirm Password Controller

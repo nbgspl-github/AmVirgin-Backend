@@ -4,7 +4,7 @@ namespace App\Http\Controllers\App\Seller;
 
 use App\Exceptions\ResourceConflictException;
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\App\Auth\BaseAuthentication;
+use App\Http\Controllers\App\Auth\BaseAuthController;
 use App\Http\Resources\Auth\Seller\AuthProfileResource;
 use App\Interfaces\StatusCodes;
 use App\Models\Customer;
@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Hash;
  * Auth functionality for Seller.
  * @package App\Http\Controllers\App\Seller\Auth
  */
-class AuthController extends BaseAuthentication{
+class AuthController extends BaseAuthController{
 	/**
 	 * @var array
 	 */

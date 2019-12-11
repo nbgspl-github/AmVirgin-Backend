@@ -4,19 +4,20 @@ namespace App\Http\Controllers\app\Seller;
 
 use App\Category;
 use App\Http\Controllers\Base\AppController;
+use App\Http\Controllers\Base\ResourceController;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Validator;
 use Exception;
 
-class SellerController extends AppController
-{
+class SellerController extends ResourceController{
 
-	public function categories()
-	{
+	public function categories(){
 		$categories = Category::all();
 		try {
-			$categories->transform(function (Category $category) {
+			$categories->transform(function (Category $category){
 				return [
 					'id' => $category->getId(),
 					'name' => $category->getName(),
@@ -144,8 +145,24 @@ class SellerController extends AppController
 		$delete = DB::table('products')->where('id', $id)->delete();
 		if ($delete) {
 			return response()->json(['data' => 'Product Deleted Successfully'], 200);
-		} else {
+		}
+		else {
 			return response()->json(['message' => 'Technical Error'], 400);
 		}
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	protected function provider(){
+		// TODO: Implement provider() method.
+	}
+
+	protected function resource(){
+		// TODO: Implement resource() method.
+	}
+
+	protected function collection(){
+		// TODO: Implement collection() method.
 	}
 }

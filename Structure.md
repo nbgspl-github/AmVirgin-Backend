@@ -1,0 +1,12 @@
+#### Controllers
+* BaseController
+    * ResourceController
+        * ProductsController
+        * AttributesController
+    * BaseAuthController
+        * Admin
+            * AuthController
+        * Seller
+            * AuthController
+        * Customer
+            * AuthController
