@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\ActiveStatus;
 use App\Traits\FluentConstructor;
 use App\Traits\BroadcastPushNotifications;
 use App\Traits\RetrieveResource;
@@ -10,11 +11,12 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Customer extends Authenticatable implements JWTSubject {
+class Customer extends Authenticatable implements JWTSubject{
 	use Notifiable;
 	use BroadcastPushNotifications;
 	use RetrieveResource;
 	use FluentConstructor;
+	use ActiveStatus;
 
 	/**
 	 * The attributes that are mass assignable.
@@ -57,22 +59,6 @@ class Customer extends Authenticatable implements JWTSubject {
 	 */
 	public function setPassword(?string $password): Customer {
 		$this->password = Hash::make($password);
-		return $this;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function isActive(): int {
-		return $this->active;
-	}
-
-	/**
-	 * @param int $active
-	 * @return Customer
-	 */
-	public function setActive(int $active): Customer {
-		$this->active = $active;
 		return $this;
 	}
 

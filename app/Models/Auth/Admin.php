@@ -2,6 +2,7 @@
 
 namespace App\Models\Auth;
 
+use App\Traits\ActiveStatus;
 use App\Traits\BroadcastPushNotifications;
 use App\Traits\RetrieveResource;
 use App\Traits\FluentConstructor;
@@ -12,12 +13,13 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Admin extends Authenticatable implements JWTSubject {
+class Admin extends Authenticatable implements JWTSubject{
 	use Notifiable;
 	use BroadcastPushNotifications;
 	use RetrieveResource;
 	use FluentConstructor;
 	use HashPasswords;
+	use ActiveStatus;
 
 	/**
 	 * The attributes that are mass assignable.
@@ -55,14 +57,14 @@ class Admin extends Authenticatable implements JWTSubject {
 	/**
 	 * @inheritDoc
 	 */
-	public function getJWTIdentifier() {
+	public function getJWTIdentifier(){
 		$this->getKey();
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getJWTCustomClaims() {
+	public function getJWTCustomClaims(){
 		return [];
 	}
 }

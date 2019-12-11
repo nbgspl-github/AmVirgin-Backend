@@ -55,4 +55,8 @@ class AuthController extends BaseAuthentication{
 	protected function guard(){
 		return Auth::guard('seller-api');
 	}
+
+	protected function shouldAllowOnlyActiveUsers(){
+		return true;
+	}
 }

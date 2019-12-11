@@ -75,6 +75,14 @@ abstract class BaseAuthentication extends AppController{
 		return __('strings.auth.logout.failed');
 	}
 
+	protected function deniedAccess(){
+		return __('strings.auth.denied');
+	}
+
+	protected function shouldAllowOnlyActiveUsers(){
+		return false;
+	}
+
 	protected function conditionsExists(Request $request){
 		$hasMobile = ($request->has('mobile') && !empty($request->mobile));
 		$hasEmail = ($request->has('email') && !empty($request->email));
@@ -160,6 +168,9 @@ abstract class BaseAuthentication extends AppController{
 			$this->requestValid($request, $this->rulesLogin());
 			$conditions = $this->conditionsLogin($request);
 			$seller = $this->throwIfNotFound($conditions);
+			if ($this->shouldAllowOnlyActiveUsers() && !$seller->isActive()) {
+				return $this->failed()->status(StatusCodes::DeniedAccess)->message($this->deniedAccess())->send();
+			}
 			$token = $this->guard()->attempt($this->credentials($request));
 			if (!$token)
 				return $this->failed()->message($this->loginFailed())->status(StatusCodes::Unauthorized)->send();

@@ -25,5 +25,6 @@ return [
 			'success' => 'Successfully logged out.',
 			'failed' => 'Failed to log you out.',
 		],
+		'denied' => 'You account is temporarily suspended. Please try again in a while.',
 	],
 ];

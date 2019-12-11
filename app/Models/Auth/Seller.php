@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\ActiveStatus;
 use App\Traits\BroadcastPushNotifications;
 use App\Traits\FluentConstructor;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -16,6 +17,7 @@ class Seller extends Authenticatable implements JWTSubject{
 	use Notifiable;
 	use BroadcastPushNotifications;
 	use FluentConstructor;
+	use ActiveStatus;
 
 	/**
 	 * The attributes that are mass assignable.
@@ -54,7 +56,7 @@ class Seller extends Authenticatable implements JWTSubject{
 	/**
 	 * @return string
 	 */
-	public function getName(): string {
+	public function getName(): string{
 		return $this->name;
 	}
 
@@ -62,7 +64,7 @@ class Seller extends Authenticatable implements JWTSubject{
 	 * @param string $name
 	 * @return Seller
 	 */
-	public function setName(string $name): Seller {
+	public function setName(string $name): Seller{
 		$this->name = $name;
 		return $this;
 	}
@@ -70,7 +72,7 @@ class Seller extends Authenticatable implements JWTSubject{
 	/**
 	 * @return string
 	 */
-	public function getEmail(): string {
+	public function getEmail(): string{
 		return $this->email;
 	}
 
@@ -78,31 +80,15 @@ class Seller extends Authenticatable implements JWTSubject{
 	 * @param string $email
 	 * @return Seller
 	 */
-	public function setEmail(string $email): Seller {
+	public function setEmail(string $email): Seller{
 		$this->email = $email;
-		return $this;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function isActive(): bool {
-		return $this->active;
-	}
-
-	/**
-	 * @param bool $active
-	 * @return Seller
-	 */
-	public function setActive(bool $active): Seller {
-		$this->active = $active;
 		return $this;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getMobile(): string {
+	public function getMobile(): string{
 		return $this->mobile;
 	}
 
@@ -110,7 +96,7 @@ class Seller extends Authenticatable implements JWTSubject{
 	 * @param string $mobile
 	 * @return Seller
 	 */
-	public function setMobile(string $mobile): Seller {
+	public function setMobile(string $mobile): Seller{
 		$this->mobile = $mobile;
 		return $this;
 	}
@@ -118,14 +104,14 @@ class Seller extends Authenticatable implements JWTSubject{
 	/**
 	 * @inheritDoc
 	 */
-	public function getJWTIdentifier() {
+	public function getJWTIdentifier(){
 		return $this->getKey();
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getJWTCustomClaims() {
+	public function getJWTCustomClaims(){
 		return [];
 	}
 }

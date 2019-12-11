@@ -18,4 +18,6 @@ interface StatusCodes{
 	const ResourceAlreadyExists = 409;
 
 	const Unauthorized = 401;
+
+	const DeniedAccess = 403;
 }
