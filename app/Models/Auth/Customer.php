@@ -68,7 +68,7 @@ class Customer extends Authenticatable implements JWTSubject {
 	}
 
 	/**
-	 * @param int $status
+	 * @param int $active
 	 * @return Customer
 	 */
 	public function setActive(int $active): Customer {
