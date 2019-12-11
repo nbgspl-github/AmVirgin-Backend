@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Classes\Builders\Notifications\PushNotification;
 use App\Classes\Methods;
-use App\Http\Controllers\Web\CategoriesController;
 use App\Models\Auth\Admin;
 use App\Models\Customer;
 use App\Models\Seller;
@@ -45,10 +44,6 @@ class CodeTester extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		$results = Seller::where(function ($query){
-			$query->where('mobile', '6306520374')->orWhere('email', 'seller@gmail.comx');
-		})->get();
-		echo sprintf("Count of results is %d.", $results->count());
 		return;
 	}
 }

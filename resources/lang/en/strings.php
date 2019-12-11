@@ -14,6 +14,7 @@ return [
 			'check-failed' => 'Resource not found.',
 		],
 		'register' => [
+			'taken' => 'Either of your email or mobile number is already taken.',
 			'success' => 'You have been registered successfully.',
 			'failed' => 'Failed to sign you up.',
 			'404' => 'We could not find a user for that key.',

@@ -63,6 +63,10 @@ abstract class BaseAuthentication extends AppController{
 		return __('strings.auth.register.failed');
 	}
 
+	protected function registerTaken(){
+		return __('strings.auth.register.taken');
+	}
+
 	protected function logoutSuccess(){
 		return __('strings.auth.logout.success');
 	}
@@ -213,7 +217,7 @@ abstract class BaseAuthentication extends AppController{
 				return $this->success()->message($this->registerSuccess())->status(StatusCodes::Created)->setValue('data', $this->registerPayload($user, $token))->send();
 		}
 		catch (ResourceConflictException $exception) {
-			return $this->failed()->status(StatusCodes::ResourceAlreadyExists)->send();
+			return $this->failed()->status(StatusCodes::ResourceAlreadyExists)->message($this->registerTaken())->send();
 		}
 		catch (ValidationException $exception) {
 			return $this->failed()->message($exception->getError())->status(StatusCodes::InvalidRequestFormat)->send();
