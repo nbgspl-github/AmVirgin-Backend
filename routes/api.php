@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\app\Seller\SellerController;
 use App\Http\Controllers\App\Seller\AuthController as SellerAuthController;
 use App\Http\Controllers\App\Customer\AuthController as CustomerAuthController;
 
@@ -20,9 +19,3 @@ Route::prefix('customer')->group(function (){
 	Route::post('/register', [CustomerAuthController::class, 'register'])->name('customer.register');
 	Route::post('/logout', [CustomerAuthController::class, 'logout'])->name('customer.logout')->middleware('auth:customer-api');;
 });
-
-Route::get('/categories', [SellerController::class, 'categories']);
-Route::get('/products', [SellerController::class, 'products']);
-Route::post('/edit_product', [SellerController::class, 'product_edit']);
-Route::post('/delete_product', [SellerController::class, 'product_delete']);
-Route::post('/add_product', [SellerController::class, 'add_product']);

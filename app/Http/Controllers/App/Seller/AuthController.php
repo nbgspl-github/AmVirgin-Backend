@@ -2,21 +2,9 @@
 
 namespace App\Http\Controllers\App\Seller;
 
-use App\Exceptions\ResourceConflictException;
-use App\Exceptions\ValidationException;
-use App\Http\Controllers\App\Auth\BaseAuthController;
-use App\Http\Resources\Auth\Seller\AuthProfileResource;
-use App\Interfaces\StatusCodes;
-use App\Models\Customer;
+use App\Http\Controllers\App\BaseAuthController;
 use App\Models\Seller;
-use App\Traits\FluentResponse;
-use App\Traits\ValidatesRequest;
-use Exception;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 /**
  * Auth functionality for Seller.

@@ -3,7 +3,7 @@
  * Copyright (c) 2019. Aviral Singh
  */
 
-namespace App\Http\Controllers\App\Auth;
+namespace App\Http\Controllers\App;
 
 use App\Exceptions\ResourceConflictException;
 use App\Exceptions\ResourceNotFoundException;
