@@ -72,15 +72,31 @@ abstract class BaseAuthentication extends AppController{
 	}
 
 	protected function conditionsExists(Request $request){
-		return ($request->has('mobile') && !empty($request->mobile)) ? $conditions = ['mobile' => $request->mobile] : $conditions = ['email' => $request->email];
+		$hasMobile = ($request->has('mobile') && !empty($request->mobile));
+		$hasEmail = ($request->has('email') && !empty($request->email));
+		if ($hasEmail && $hasMobile) {
+			return function ($query) use ($request){
+				$query->where('mobile', $request->mobile)->where('email', $request->email);
+			};
+		}
+		else if ($hasEmail) {
+			return function ($query) use ($request){
+				$query->where('email', $request->email);
+			};
+		}
+		else {
+			return function ($query) use ($request){
+				$query->where('mobile', $request->mobile);
+			};
+		}
 	}
 
 	protected function conditionsLogin(Request $request){
-		return ($request->has('mobile') && !empty($request->mobile)) ? $conditions = ['mobile' => $request->mobile] : $conditions = ['email' => $request->email];
+		return $this->conditionsExists($request);
 	}
 
 	protected function conditionsRegister(Request $request){
-		return ($request->has('mobile') && !empty($request->mobile)) ? $conditions = ['mobile' => $request->mobile] : $conditions = ['email' => $request->email];
+		return $this->conditionsExists($request);
 	}
 
 	protected function check($conditions){

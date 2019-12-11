@@ -11,7 +11,7 @@ use App\Models\Seller;
 use App\Traits\GenerateUrls;
 use Illuminate\Console\Command;
 
-class CodeTester extends Command {
+class CodeTester extends Command{
 	use GenerateUrls;
 
 	protected $urlMethodPrefix = 'myUrl';
@@ -35,7 +35,7 @@ class CodeTester extends Command {
 	 *
 	 * @return void
 	 */
-	public function __construct() {
+	public function __construct(){
 		parent::__construct();
 	}
 
@@ -44,7 +44,11 @@ class CodeTester extends Command {
 	 *
 	 * @return mixed
 	 */
-	public function handle() {
+	public function handle(){
+		$results = Seller::where(function ($query){
+			$query->where('mobile', '6306520374')->orWhere('email', 'seller@gmail.comx');
+		})->get();
+		echo sprintf("Count of results is %d.", $results->count());
 		return;
 	}
 }
