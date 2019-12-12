@@ -27,4 +27,15 @@ return [
 		],
 		'denied' => 'You account is temporarily suspended. Please try again in a while.',
 	],
+	'category' => [
+		'not-found' => 'Category not found for that key.',
+		'store' => [
+			'success' => 'Attribute created successfully.',
+			'failed' => 'Failed to create attribute.',
+		],
+	],
+
+	'attribute' => [
+		'not-found' => 'Attribute not found for that key',
+	],
 ];

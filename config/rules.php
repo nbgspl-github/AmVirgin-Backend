@@ -7,8 +7,10 @@
  * |----------------------------------------------------------------------------------------------------
  */
 
-use App\Models\Customer;
+use App\Constants\OfferTypes;
 use Illuminate\Validation\Rule;
+
+define('RuleMaxInt', sprintf('max:%s', PHP_INT_MAX));
 
 return [
 
@@ -71,4 +73,32 @@ return [
 		],
 	],
 
+	'seller' => [
+		'category' => [
+			'store' => [
+				'attributeName' => ['bail', 'required', 'string', 'min:1', 'max:50', 'unique:attributes,name'],
+			],
+		],
+		'product' => [
+			'store' => [
+				'productName' => ['bail', 'required', 'string', 'min:1', 'max:500', 'unique:products,name'],
+				'categoryId' => ['bail', 'required', 'exists:categories,id'],
+				'sellerId' => ['bail', 'required', 'exists:sellers,id'],
+				'productType' => ['bail', 'required', 'string', 'min:1', 'max:256'],
+				'productMode' => ['bail', 'required', 'string', 'min:1', 'max:256'],
+				'listingType' => ['bail', 'required', 'string', 'min:1', 'max:256'],
+				'originalPrice' => ['bail', 'required', 'numeric', 'min:1', 'max:10000000'],
+				'offerType' => ['bail', 'required', Rule::in([OfferTypes::FlatRate, OfferTypes::Percentage])], /*Since we only have two offer types for now, it's 0 and 1, later on we'll add as required.*/
+				'offerValue' => ['bail', 'required', 'numeric', 'min:1', 'max:10000000'],
+				'currency' => ['bail', 'nullable', 'string', 'min:2', 'max:5'],
+				'taxRate' => ['bail', 'required', 'numeric', 'min:0.00', 'max:99.99'],
+				'countryId' => ['bail', 'required', 'exists:countries,id'],
+				'stateId' => ['bail', 'required', 'numeric', 'min:1', 'max:9999999'],
+				'cityId' => ['bail', 'required', 'numeric', 'min:1', RuleMaxInt],
+				'zipCode' => ['bail', 'required', 'min:1', RuleMaxInt],
+				'address' => ['bail', 'required', 'string', 'min:2', 'max:500'],
+				'status' => ['bail', 'nullable', ''],
+			],
+		],
+	],
 ];

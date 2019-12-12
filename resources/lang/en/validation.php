@@ -149,6 +149,7 @@ return [
 	'attributes' => [
 		'mobile' => 'mobile number',
 		'email' => 'email address',
+		'attributeName' => 'attribute name',
 	],
 
 ];

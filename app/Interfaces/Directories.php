@@ -2,6 +2,6 @@
 
 namespace App\Interfaces;
 
-class Directories {
+interface Directories{
 	const Genre = 'genre';
 }

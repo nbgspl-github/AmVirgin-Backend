@@ -10,6 +10,16 @@ class Attribute extends Model{
 
 	protected $table = 'attributes';
 
+	protected $fillable = [
+		'name',
+		'categoryId',
+	];
+
+	protected $hidden = [
+		'created_at',
+		'updated_at',
+	];
+
 	/**
 	 * @return int
 	 */

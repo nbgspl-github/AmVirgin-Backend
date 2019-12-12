@@ -44,6 +44,7 @@ class CodeTester extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
+		echo IntegerMax;
 		return;
 	}
 }

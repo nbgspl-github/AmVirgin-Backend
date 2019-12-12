@@ -22,7 +22,7 @@ class CreateProductsTable extends Migration{
 			$table->string('listingType')->nullable();
 			$table->integer('originalPrice');
 			$table->integer('offerValue')->comment('When type is fixed, this will be a percentage value, else fixed amount. Ignore if 0');
-			$table->integer('offerType')->comment('Either flat (fixed amount) or percentage');
+			$table->smallInteger('offerType')->comment('Either flat (fixed amount) or percentage');
 			$table->string('currency')->default('INR');
 			$table->float('taxRate')->comment('Will always be in percentage and will add up');
 			$table->integer('countryId')->nullable();
