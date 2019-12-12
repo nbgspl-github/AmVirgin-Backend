@@ -15,7 +15,7 @@ $authMiddleware = 'auth:seller-api';
 /**
  * | Set this to false to clear all middleware bindings.
  */
-$useAuthMiddleware = false;
+$useAuthMiddleware = true;
 
 if (!$useAuthMiddleware) {
 	$authMiddleware = [];
