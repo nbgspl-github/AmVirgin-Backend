@@ -34,7 +34,7 @@ class CreateProductsTable extends Migration{
 			$table->boolean('promoted')->default(false);
 			$table->timestamp('promotionStart')->nullable();
 			$table->timestamp('promotionEnd')->nullable();
-			$table->boolean('visible')->default(true);
+			$table->boolean('visibility')->default(true);
 			$table->float('rating', 4, 2)->default(0.0);
 			$table->bigInteger('hits')->default(0);
 			$table->bigInteger('stock')->default(0)->comment('How many units are in stock?');

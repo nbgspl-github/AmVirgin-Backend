@@ -8,6 +8,7 @@
  */
 
 use App\Constants\OfferTypes;
+use App\Constants\ProductStatus;
 use Illuminate\Validation\Rule;
 
 define('RuleMaxInt', sprintf('max:%s', PHP_INT_MAX));
@@ -97,7 +98,7 @@ return [
 				'cityId' => ['bail', 'required', 'numeric', 'min:1', RuleMaxInt],
 				'zipCode' => ['bail', 'required', 'min:1', RuleMaxInt],
 				'address' => ['bail', 'required', 'string', 'min:2', 'max:500'],
-				'status' => ['bail', 'nullable', ''],
+				'status' => ['bail', 'nullable', Rule::in([ProductStatus::DifferentStatus, ProductStatus::SomeOtherStatus, ProductStatus::SomeStatus])],
 			],
 		],
 	],

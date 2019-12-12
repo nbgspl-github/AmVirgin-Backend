@@ -2,11 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Classes\Builders\Notifications\PushNotification;
-use App\Classes\Methods;
-use App\Models\Auth\Admin;
-use App\Models\Customer;
-use App\Models\Seller;
+use App\Category;
 use App\Traits\GenerateUrls;
 use Illuminate\Console\Command;
 
@@ -44,7 +40,12 @@ class CodeTester extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		echo IntegerMax;
+		/**
+		 * @var Category $category
+		 */
+		$category = Category::find(1);
+		$cat = $category->attributes();
+		echo $cat->name;
 		return;
 	}
 }
