@@ -11,8 +11,12 @@ class CreateCurrenciesTable extends Migration{
 	 * @return void
 	 */
 	public function up(){
-		Schema::table('currencies', function (Blueprint $table){
-			//
+		Schema::create('currencies', function (Blueprint $table){
+			$table->increments('id');
+			$table->string('code', 10);
+			$table->string('name');
+			$table->string('symbol');
+			$table->string('hex', 25);
 		});
 	}
 
@@ -22,8 +26,6 @@ class CreateCurrenciesTable extends Migration{
 	 * @return void
 	 */
 	public function down(){
-		Schema::table('currencies', function (Blueprint $table){
-			//
-		});
+		Schema::dropIfExists('currencies');
 	}
 }

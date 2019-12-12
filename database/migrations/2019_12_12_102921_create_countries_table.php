@@ -11,8 +11,11 @@ class CreateCountriesTable extends Migration{
 	 * @return void
 	 */
 	public function up(){
-		Schema::table('countries', function (Blueprint $table){
-			//
+		Schema::create('countries', function (Blueprint $table){
+			$table->increments('id');
+			$table->string('initials', 5);
+			$table->string('name');
+			$table->integer('phoneCode');
 		});
 	}
 
@@ -22,8 +25,6 @@ class CreateCountriesTable extends Migration{
 	 * @return void
 	 */
 	public function down(){
-		Schema::table('countries', function (Blueprint $table){
-			//
-		});
+		Schema::dropIfExists('countries');
 	}
 }

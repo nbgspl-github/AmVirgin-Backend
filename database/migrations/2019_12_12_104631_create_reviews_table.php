@@ -11,8 +11,12 @@ class CreateReviewsTable extends Migration{
 	 * @return void
 	 */
 	public function up(){
-		Schema::table('reviews', function (Blueprint $table){
-			//
+		Schema::create('reviews', function (Blueprint $table){
+			$table->bigIncrements('id');
+			$table->unsignedBigInteger('productId');
+			$table->unsignedBigInteger('customerId');
+			$table->tinyInteger('stars')->default(0);
+			$table->string('review', 10000);
 		});
 	}
 
@@ -22,8 +26,6 @@ class CreateReviewsTable extends Migration{
 	 * @return void
 	 */
 	public function down(){
-		Schema::table('reviews', function (Blueprint $table){
-			//
-		});
+		Schema::dropIfExists('reviews');
 	}
 }
