@@ -15,7 +15,7 @@
 
 		<div id="sidebar-menu">
 			<ul>
-				<li class="menu-title text-danger">Main</li>
+				<li class="menu-title text-primary">Main</li>
 
 				<li>
 					<a href="{{route('admin.home')}}" class="waves-effect"><i class="mdi mdi-view-dashboard"></i><span>Dashboard</span></a>
@@ -29,13 +29,13 @@
 					<a href="{{route("admin.sliders.index")}}" class="waves-effect"><i class="mdi mdi-skip-next-circle mt-1"></i> <span>Sliders</span></a>
 				</li>
 
-				<li class="menu-title text-success">Shopping</li>
+				<li class="menu-title text-primary">Shopping</li>
 
 				<li>
 					<a href="{{route("admin.categories.index")}}" class="waves-effect"><i class="mdi mdi-cards mt-1"></i> <span>Categories </span></a>
 				</li>
 
-				<li class="menu-title text-warning">Entertainment</li>
+				<li class="menu-title text-primary">Entertainment</li>
 
 				<li>
 					<a href="{{route("admin.movies.index")}}" class="waves-effect"><i class="mdi mdi-movie" style="margin-top: 2px"></i> <span>Videos </span></a>
