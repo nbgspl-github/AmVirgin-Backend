@@ -31,7 +31,7 @@
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">
 									@if($slide->getPoster()!=null)
-										<img src="{{route('images.slider.poster',$slide->getKey())}}" style="width: 100px; height: 100px" alt="{{$slide->getTitle()}}"/>
+										<img src="{{route('images.slider.poster',$slide->getKey())}}" style="width: 100px; height: 60px" alt="{{$slide->getTitle()}}"/>
 									@else
 										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 90px"></i>
 									@endif
