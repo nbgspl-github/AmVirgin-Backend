@@ -1,13 +1,13 @@
-@extends('admin.layouts.header')
+@extends('admin.app.app')
 @section('content')
 	<div class="row">
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.layouts.pageHeader', ['breadcrumbs' =>['Dashboard'=>route('home'),'Categories'=>'#'],'title'=>trans('strings.categories.edit)])
+					@include('admin.extras.header', ['breadcrumbs' =>['Dashboard'=>route('admin.home'),'Categories'=>'#'],'title'=>trans('strings.categories.edit)])
 				</div>
 				<div class="card-body animatable">
-					<form action="{{route('genres.update',$genre->getId())}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
+					<form action="{{route('admin.genres.update',$genre->getId())}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
 						@csrf
 						<div class="form-group">
 							<label>Name<span class="text-primary">*</span></label>
@@ -63,7 +63,7 @@
 								<button type="submit" class="btn btn-primary waves-effect waves-light">
 									Update
 								</button>
-								<a href="{{route("genres.index")}}" class="btn btn-secondary waves-effect m-l-5">
+								<a href="{{route("admin.genres.index")}}" class="btn btn-secondary waves-effect m-l-5">
 									Cancel
 								</a>
 							</div>

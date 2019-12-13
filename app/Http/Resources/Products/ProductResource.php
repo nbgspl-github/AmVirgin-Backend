@@ -13,8 +13,8 @@ class ProductResource extends JsonResource{
 	 */
 	public function toArray($request){
 		return [
-			'id' => $this->getKey(),
-			'name' => $this->get,
+			'id' => $this->id,
+			'name' => $this->name,
 		];
 	}
 }

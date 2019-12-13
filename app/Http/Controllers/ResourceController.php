@@ -29,14 +29,18 @@ abstract class ResourceController extends BaseController{
 	protected abstract function provider();
 
 	/**
+	 * @param Model $model
 	 * @return AttributeResource
 	 */
 	protected abstract function resourceConverter(Model $model);
 
 	/**
+	 * @param Collection $collection
 	 * @return AttributeCollection
 	 */
 	protected abstract function collectionConverter(Collection $collection);
+
+	protected abstract function guard();
 
 	protected function throwIfExists($id){
 		$model = $this->provider()::find($id);
@@ -68,5 +72,75 @@ abstract class ResourceController extends BaseController{
 			return $model;
 		else
 			throw new ResourceNotFoundException();
+	}
+
+	protected function user(){
+		return $this->guard()->user();
+	}
+
+	protected function evaluate(callable $closure, ...$arguments){
+		return call_user_func($closure, $arguments);
+	}
+
+	/**
+	 * @param $value callable|integer|array
+	 * @return Model|null
+	 */
+	protected function retrieveChild($value){
+		$type = gettype($value);
+		if ($type == 'callable') {
+			return $this->provider()::where($value)->firstOrFail();
+		}
+		else if ($type == 'integer') {
+			return $this->provider()::findOrFail($value);
+		}
+		else {
+			return $this->provider()::where($value)->firstOrFail();
+		}
+	}
+
+	/**
+	 * @param $value callable|integer|array
+	 * @return Model|null
+	 */
+	protected function retrieveParent($value){
+		$type = gettype($value);
+		if ($type == 'callable') {
+			return $this->parentProvider()::where($value)->firstOrFail();
+		}
+		else if ($type == 'integer') {
+			return $this->parentProvider()::findOrFail($value);
+		}
+		else {
+			return $this->parentProvider()::where($value)->firstOrFail();
+		}
+	}
+
+	/**
+	 * @param $value callable|array
+	 * @return Collection
+	 */
+	protected function retrieveChildCollection($value){
+		$type = gettype($value);
+		if ($type == 'callable') {
+			return $this->provider()::where($value)->get();
+		}
+		else {
+			return $this->provider()::where($value)->get();
+		}
+	}
+
+	/**
+	 * @param $value callable|integer|array
+	 * @return Model|null
+	 */
+	protected function retrieveParentCollection($value){
+		$type = gettype($value);
+		if ($type == 'callable') {
+			return $this->parentProvider()::where($value)->get();
+		}
+		else {
+			return $this->parentProvider()::where($value)->get();
+		}
 	}
 }

@@ -2,6 +2,7 @@
 
 namespace App\Interfaces;
 
-interface Tables {
+interface Tables{
 	const Genres = 'genres';
+	const Sliders = 'sliders';
 }

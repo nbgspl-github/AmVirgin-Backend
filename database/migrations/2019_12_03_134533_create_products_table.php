@@ -43,8 +43,8 @@ class CreateProductsTable extends Migration{
 			$table->boolean('soldOut')->default(false)->comment('If the product has gone out od stock this will be true');
 			$table->boolean('deleted')->default(false)->comment('If the seller has deleted this product, this will be true');
 			$table->boolean('draft')->default(false)->comment('If the seller is halfway done through putting details this will be true');
-			$table->string('shortDescription');
-			$table->string('longDescription');
+			$table->string('shortDescription', 1000);
+			$table->string('longDescription', 10000);
 			$table->string('sku');
 			$table->timestamps();
 		});

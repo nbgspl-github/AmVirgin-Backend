@@ -16,8 +16,10 @@ class Product extends Model{
 	];
 
 	protected $hidden = [
+		'deleted',
 		'created_at',
 		'updated_at',
+		'sellerId',
 	];
 
 	/**
@@ -553,5 +555,12 @@ class Product extends Model{
 	 */
 	public function attributes(){
 		return $this->hasMany('App\Models\Attribute');
+	}
+
+	/**
+	 * @return HasMany
+	 */
+	public function images(){
+		return $this->hasMany('\App\Models\ProductImage', 'productId');
 	}
 }

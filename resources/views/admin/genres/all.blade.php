@@ -9,7 +9,7 @@
 				<div class="card-body animatable">
 					<div class="row pr-3">
 						<div class="col-6"><h4 class="mt-0 header-title ml-3 mb-4">All Genres</h4></div>
-						<div class="col-6"><a class="float-right btn btn-outline-primary waves-effect waves-light shadow-sm fadeInRightBig" href="{{route('genres.create')}}">Add Genre</a></div>
+						<div class="col-6"><a class="float-right btn btn-outline-primary waves-effect waves-light shadow-sm fadeInRightBig" href="{{route('admin.genres.create')}}">Add Genre</a></div>
 					</div>
 					<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 						<thead>
@@ -58,7 +58,7 @@
 								<td class="text-center">
 									<div class="btn-group">
 										<div class="col-sm-6 px-0">
-											<a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('genres.edit',$genre->getId())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
+											<a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('admin.genres.edit',$genre->getId())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
 										</div>
 										<div class="col-sm-6 px-0">
 											<a class="btn btn-outline-primary shadow-sm shadow-primary" href="javascript:void(0);" onclick="deleteGenre('{{$genre->getId()}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>

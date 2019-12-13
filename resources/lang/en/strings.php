@@ -35,6 +35,13 @@ return [
 		],
 	],
 
+	'product' => [
+		'store' => [
+			'success' => 'Product created successfully.',
+			'failed' => 'Failed to create product.',
+		],
+	],
+
 	'attribute' => [
 		'not-found' => 'Attribute not found for that key',
 	],

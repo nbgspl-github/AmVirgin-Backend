@@ -57,7 +57,7 @@ class GenresController extends BaseController{
 			setStatus($request->status)->
 			save();
 			notify()->success('Genre added successfully.');
-			return redirect(route('genres.index'));
+			return redirect(route('admin.genres.index'));
 		}
 	}
 
@@ -65,7 +65,7 @@ class GenresController extends BaseController{
 		$genre = Genre::find($id);
 		if ($genre == null) {
 			notify()->error('Unable to find genre for that Id.');
-			return redirect(route('genres.index'));
+			return redirect(route('admin.genres.index'));
 		}
 		else {
 			$validator = Validator::make($request->all(), [
@@ -95,7 +95,7 @@ class GenresController extends BaseController{
 				}
 
 				notify()->success('Updated genre details successfully.');
-				return redirect(route('genres.index'));
+				return redirect(route('admin.genres.index'));
 			}
 		}
 	}

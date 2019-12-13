@@ -4,23 +4,45 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['breadcrumbs' =>['Dashboard'=>route('admin.home'),'Genres'=>route('admin.genres.index'),'Add'=>'#'],'title'=>'Add a Genre'])
+					@include('admin.extras.header', ['title'=>'Create Slider'])
 				</div>
 				<div class="card-body">
 					<div class="row">
 						<div class="col-12 col-sm-10 col-md-10 col-lg-8 col-xl-6 mx-auto">
-							<form action="{{route('admin.genres.store')}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
+							<form action="{{route('admin.sliders.store')}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
 								@csrf
 								<div class="form-group">
-									<label>Name<span class="text-primary">*</span></label>
-									<input type="text" name="name" class="form-control" required placeholder="Type here the genre's name or title" minlength="1" maxlength="100" value="{{old('name')}}"/>
+									<label>Title<span class="text-primary">*</span></label>
+									<input type="text" name="title" class="form-control" required placeholder="Type title here" minlength="1" maxlength="100" value="{{old('title')}}"/>
 								</div>
 								<div class="form-group">
-									<label>Description</label>
-									<input type="text" name="description" class="form-control" placeholder="Type here the genre's description" value="{{old('description')}}"/>
+									<label>Description<span class="text-primary">*</span></label>
+									<input type="text" name="description" class="form-control" placeholder="Type description here" value="{{old('description')}}"/>
 								</div>
 								<div class="form-group">
-									<label>Poster</label>
+									<label>Target<span class="text-primary">*</span></label>
+									<input type="text" name="target" class="form-control" placeholder="Type target url here" value="{{old('target')}}"/>
+								</div>
+								<div class="form-group">
+									<label>Rating<span class="text-primary">*</span></label>
+									<select name="stars" class="form-control">
+										<option value="0">Not rated</option>
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<label>Active<span class="text-primary">*</span></label>
+									<select name="active" class="form-control">
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<label>Poster<span class="text-primary">*</span></label>
 									<div class="card" style="border: 1px solid #ced4da;">
 										<div class="card-header">
 											<div class="row">
@@ -44,25 +66,6 @@
 										</div>
 									</div>
 								</div>
-								<div class="form-group">
-									<label>Status</label>
-									@if (old('status',-1)==1)
-										<select class="form-control" name="status">
-											<option value="1" selected>Active</option>
-											<option value="0">Inactive</option>
-										</select>
-									@elseif(old('status',-1)==0)
-										<select class="form-control" name="status">
-											<option value="1">Active</option>
-											<option value="0" selected>Inactive</option>
-										</select>
-									@else
-										<select class="form-control" name="status">
-											<option value="1">Active</option>
-											<option value="0">Inactive</option>
-										</select>
-									@endif
-								</div>
 								<div class="form-row">
 									<div class="col-6">
 										<button type="submit" class="btn btn-primary waves-effect waves-light btn-block shadow-sm">
@@ -70,7 +73,7 @@
 										</button>
 									</div>
 									<div class="col-6">
-										<a href="{{route("admin.genres.index")}}" class="btn btn-secondary waves-effect btn-block shadow-sm">
+										<a href="{{route("admin.sliders.index")}}" class="btn btn-secondary waves-effect btn-block shadow-sm">
 											Cancel
 										</a>
 									</div>

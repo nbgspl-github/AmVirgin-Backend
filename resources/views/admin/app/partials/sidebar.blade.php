@@ -1,4 +1,4 @@
-<!-- ========== Left Sidebar Start ========== -->
+<!-- Left Sidebar Start -->
 <div class="left side-menu" style="box-shadow: 3px 0 10px rgba(0,0,0,0.25)">
 	<button type="button" class="button-menu-mobile button-menu-mobile-topbar open-left waves-effect">
 		<i class="ion-close"></i>
@@ -15,7 +15,7 @@
 
 		<div id="sidebar-menu">
 			<ul>
-				<li class="menu-title">Main</li>
+				<li class="menu-title text-danger">Main</li>
 
 				<li>
 					<a href="{{route('admin.home')}}" class="waves-effect"><i class="mdi mdi-view-dashboard"></i><span>Dashboard</span></a>
@@ -25,13 +25,17 @@
 					<a href="{{route("admin.customers.index")}}" class="waves-effect"><i class="mdi mdi-account-circle mt-1"></i> <span>Customers</span></a>
 				</li>
 
-				<li class="menu-title">Shopping</li>
+				<li>
+					<a href="{{route("admin.sliders.index")}}" class="waves-effect"><i class="mdi mdi-skip-next-circle mt-1"></i> <span>Sliders</span></a>
+				</li>
+
+				<li class="menu-title text-success">Shopping</li>
 
 				<li>
 					<a href="{{route("admin.categories.index")}}" class="waves-effect"><i class="mdi mdi-cards mt-1"></i> <span>Categories </span></a>
 				</li>
 
-				<li class="menu-title">Entertainment</li>
+				<li class="menu-title text-warning">Entertainment</li>
 
 				<li>
 					<a href="{{route("admin.movies.all")}}" class="waves-effect"><i class="mdi mdi-movie" style="margin-top: 2px"></i> <span>Movies </span></a>

@@ -2,14 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Category;
 use App\Traits\GenerateUrls;
 use Illuminate\Console\Command;
 
 class CodeTester extends Command{
 	use GenerateUrls;
-
-	protected $urlMethodPrefix = 'myUrl';
 
 	/**
 	 * The name and signature of the console command.
@@ -40,12 +37,33 @@ class CodeTester extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		/**
-		 * @var Category $category
-		 */
-		$category = Category::find(1);
-		$cat = $category->attributes();
-		echo $cat->name;
+		$arr = [
+			'product' => [
+				'store' => [
+					'success' => 'Reached success.',
+				],
+				'read' => [
+					'success' => 'Reached read',
+				],
+			],
+		];
+		$string = 'product.store.success';
+		$indices = explode('.', $string);
+		$index = 0;
+		$count = count($indices);
+		$lastArray = $arr;
+		$key = $indices[0];
+		while ($index != $count) {
+			$temp = $lastArray[$key];
+			if (is_array($temp))
+				$lastArray = $temp;
+			else {
+				$key = $temp;
+				echo $key;
+			}
+			$index++;
+		}
+		var_dump($lastArray);
 		return;
 	}
 }
