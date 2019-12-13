@@ -45,4 +45,8 @@ return [
 	'attribute' => [
 		'not-found' => 'Attribute not found for that key',
 	],
+
+	'slider' => [
+		'empty-data' => 'Could not find any sliders at this moment.',
+	],
 ];
