@@ -134,5 +134,14 @@ return [
 				'active' => ['bail', 'required', 'boolean'],
 			],
 		],
+
+		'movies' => [
+			'store' => [
+
+			],
+			'update' => [
+
+			],
+		],
 	],
 ];

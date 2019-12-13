@@ -35,8 +35,8 @@ function __rating($value){
 		return $value;
 }
 
-function __ellipsis($value){
-	return strlen($value) > 20 ? substr($value, 0, 20) . "..." : $value;
+function __ellipsis($value, $length = 20){
+	return strlen($value) > $length ? substr($value, 0, $length) . "..." : $value;
 }
 
 function image($path = null){

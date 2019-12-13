@@ -52,9 +52,11 @@ Route::prefix('admin')->group(function (){
 		});
 
 		// Movies Route(s)
-		Route::get('movies', [MoviesController::class, Methods::Index])->name('admin.movies.all')->middleware('auth:admin');
+		Route::prefix('movies')->middleware('auth:admin')->group(function (){
+			Route::get('', [MoviesController::class, Methods::Index])->name('admin.movies.index');
+		});
 
-		// Genres Routes
+		// Genres Route(s)
 		Route::prefix('genres')->middleware('auth:admin')->group(function (){
 			Route::get('', [GenresController::class, Methods::Index])->name('admin.genres.index');
 			Route::get('create', [GenresController::class, Methods::Create])->name('admin.genres.create');
