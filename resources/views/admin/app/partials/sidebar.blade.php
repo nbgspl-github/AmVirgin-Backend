@@ -38,7 +38,7 @@
 				<li class="menu-title text-warning">Entertainment</li>
 
 				<li>
-					<a href="{{route("admin.movies.all")}}" class="waves-effect"><i class="mdi mdi-movie" style="margin-top: 2px"></i> <span>Movies </span></a>
+					<a href="{{route("admin.movies.all")}}" class="waves-effect"><i class="mdi mdi-movie" style="margin-top: 2px"></i> <span>Videos </span></a>
 				</li>
 
 				<li>

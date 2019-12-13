@@ -3,14 +3,14 @@
 	<div class="row">
 		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0 pr-md-0">
 			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
-				<a href="javascript:void(0);" onclick="callTestAPI();" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
+				<a href="javascript:void(0);" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
 				<div class="card-body">
 					<div class="text-center">
 						<div>
 							<i class="mdi mdi-movie" style="font-size: 35px"></i>
 						</div>
 						<div>
-							<h4 class="mt-4">Movies</h4>
+							<h4 class="mt-4">Videos</h4>
 							<h5 class="">89</h5>
 						</div>
 					</div>
@@ -60,7 +60,7 @@
 							<i class="mdi mdi-movie" style="font-size: 35px"></i>
 						</div>
 						<div>
-							<h4 class="mt-4">New Movies</h4>
+							<h4 class="mt-4">New Videos</h4>
 							<h5 class="">8</h5>
 						</div>
 					</div>
@@ -111,7 +111,7 @@
 					<div class="row">
 						<div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3 mb-sm-3 mb-md-0">
 							<div class="card card-body border border-danger p-3 animatable" style="box-shadow: 0 2px 10px rgba(253,110,119,0.3);">
-								<h6 class="m-0 mb-2">Movies</h6>
+								<h6 class="m-0 mb-2">Videos</h6>
 								<ul class="list-group list-group-flush">
 									<li class="list-group-item px-0">Cras justo odio</li>
 									<li class="list-group-item px-0">Dapibus ac facilisis in</li>
