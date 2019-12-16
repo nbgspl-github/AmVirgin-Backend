@@ -7,9 +7,9 @@ use App\Http\Controllers\Web\Admin\CategoriesController;
 use App\Http\Controllers\Web\Admin\CustomerController;
 use App\Http\Controllers\Web\Admin\GenresController;
 use App\Http\Controllers\Web\Admin\HomeController as AdminHome;
-use App\Http\Controllers\Web\Admin\MoviesController;
 use App\Http\Controllers\Web\Admin\NotificationsController;
 use App\Http\Controllers\Web\Admin\SlidersController;
+use App\Http\Controllers\Web\Admin\VideosController;
 use App\Http\Controllers\Web\Customer\HomeController as CustomerHome;
 use App\Http\Controllers\Web\Seller\HomeController as SellerHome;
 use App\Models\Genre;
@@ -51,9 +51,13 @@ Route::prefix('admin')->group(function (){
 			Route::post('{id}', [CategoriesController::class, Methods::Update])->name('admin.categories.update');
 		});
 
-		// Movies Route(s)
-		Route::prefix('movies')->middleware('auth:admin')->group(function (){
-			Route::get('', [MoviesController::class, Methods::Index])->name('admin.movies.index');
+		// Videos Route(s)
+		Route::prefix('videos')->middleware('auth:admin')->group(function (){
+			Route::get('', [VideosController::class, Methods::Index])->name('admin.videos.index');
+			Route::get('create', [VideosController::class, Methods::Create])->name('admin.videos.create');
+			Route::get('{id}/edit', [VideosController::class, Methods::Edit])->name('admin.videos.edit');
+			Route::post('store', [VideosController::class, Methods::Store])->name('admin.videos.store');
+			Route::post('{id}', [VideosController::class, Methods::Update])->name('admin.videos.update');
 		});
 
 		// Genres Route(s)

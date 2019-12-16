@@ -40,5 +40,8 @@
 {{--Anime JS--}}
 <script src="{{asset('admin/js/anime.js')}}"></script>
 
+<!-- Dropzone js -->
+<script src="{{asset('admin/plugins/dropzone/dist/dropzone.js')}}"></script>
+
 {{--<!-- App js -->--}}
 <script src="{{asset("admin/js/app.js")}}"></script>

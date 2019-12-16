@@ -32,9 +32,9 @@ return [
 
 			],
 			'register' => [
-				'email' => ['bail', 'nullable', 'email', 'unique:sellers,email'],
+				'email' => ['bail', 'required_without:mobile', 'email', 'unique:sellers,email'],
 				'name' => ['bail', 'required', 'string', 'min:2', 'max:100'],
-				'mobile' => ['bail', 'nullable', 'digits:10', 'unique:sellers,mobile'],
+				'mobile' => ['bail', 'required_without:email', 'digits:10', 'unique:sellers,mobile'],
 				'password' => ['bail', 'required', 'string', 'min:4', 'max:64'],
 			],
 		],
@@ -54,9 +54,9 @@ return [
 
 			],
 			'register' => [
-				'email' => ['bail', 'nullable', 'email', 'unique:customers,email'],
+				'email' => ['bail', 'required_without:mobile', 'email', 'unique:customers,email'],
 				'name' => ['bail', 'required', 'string', 'min:2', 'max:100'],
-				'mobile' => ['bail', 'nullable', 'digits:10', 'unique:customers,mobile'],
+				'mobile' => ['bail', 'required_without:email', 'digits:10', 'unique:customers,mobile'],
 				'password' => ['bail', 'required', 'string', 'min:4', 'max:64'],
 			],
 		],
@@ -135,7 +135,7 @@ return [
 			],
 		],
 
-		'movies' => [
+		'videos' => [
 			'store' => [
 
 			],

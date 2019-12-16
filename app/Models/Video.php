@@ -5,29 +5,26 @@ namespace App\Models;
 use App\Contracts\FluentConstructor;
 use Illuminate\Database\Eloquent\Model;
 
-class Movie extends Model implements FluentConstructor {
-
-	protected $table = "movies";
-
+class Video extends Model implements FluentConstructor{
 	/**
 	 * @return int
 	 */
-	public function getId(): int {
+	public function getId(): int{
 		return $this->id;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getTitle(): string {
+	public function getTitle(): string{
 		return $this->title;
 	}
 
 	/**
 	 * @param string $title
-	 * @return Movie
+	 * @return Video
 	 */
-	public function setTitle(string $title): Movie {
+	public function setTitle(string $title): Video{
 		$this->title = $title;
 		return $this;
 	}
@@ -35,15 +32,15 @@ class Movie extends Model implements FluentConstructor {
 	/**
 	 * @return string|null
 	 */
-	public function getDescription(): ?string {
+	public function getDescription(): ?string{
 		return $this->description;
 	}
 
 	/**
 	 * @param string|null $description
-	 * @return Movie
+	 * @return Video
 	 */
-	public function setDescription(?string $description): Movie {
+	public function setDescription(?string $description): Video{
 		$this->description = $description;
 		return $this;
 	}
@@ -51,15 +48,15 @@ class Movie extends Model implements FluentConstructor {
 	/**
 	 * @return int|null
 	 */
-	public function getMovieDBId(): ?int {
+	public function getMovieDBId(): ?int{
 		return $this->movieDBId;
 	}
 
 	/**
 	 * @param int|null $movieDBId
-	 * @return Movie
+	 * @return Video
 	 */
-	public function setMovieDBId(?int $movieDBId): Movie {
+	public function setMovieDBId(?int $movieDBId): Video{
 		$this->movieDBId = $movieDBId;
 		return $this;
 	}
@@ -67,15 +64,15 @@ class Movie extends Model implements FluentConstructor {
 	/**
 	 * @return int|null
 	 */
-	public function getImdbId(): ?int {
+	public function getImdbId(): ?int{
 		return $this->imdbId;
 	}
 
 	/**
 	 * @param int|null $imdbId
-	 * @return Movie
+	 * @return Video
 	 */
-	public function setImdbId(?int $imdbId): Movie {
+	public function setImdbId(?int $imdbId): Video{
 		$this->imdbId = $imdbId;
 		return $this;
 	}
@@ -83,15 +80,15 @@ class Movie extends Model implements FluentConstructor {
 	/**
 	 * @return string|null
 	 */
-	public function getReleaseDate(): ?string {
+	public function getReleaseDate(): ?string{
 		return $this->releaseDate;
 	}
 
 	/**
 	 * @param string|null $releaseDate
-	 * @return Movie
+	 * @return Video
 	 */
-	public function setReleaseDate(?string $releaseDate): Movie {
+	public function setReleaseDate(?string $releaseDate): Video{
 		$this->releaseDate = $releaseDate;
 		return $this;
 	}
@@ -99,15 +96,15 @@ class Movie extends Model implements FluentConstructor {
 	/**
 	 * @return float
 	 */
-	public function getAverageRating(): float {
+	public function getAverageRating(): float{
 		return $this->averageRating;
 	}
 
 	/**
 	 * @param float $averageRating
-	 * @return Movie
+	 * @return Video
 	 */
-	public function setAverageRating(float $averageRating): Movie {
+	public function setAverageRating(float $averageRating): Video{
 		$this->averageRating = $averageRating;
 		return $this;
 	}
@@ -115,15 +112,15 @@ class Movie extends Model implements FluentConstructor {
 	/**
 	 * @return int
 	 */
-	public function getVotes(): int {
+	public function getVotes(): int{
 		return $this->votes;
 	}
 
 	/**
 	 * @param int $votes
-	 * @return Movie
+	 * @return Video
 	 */
-	public function setVotes(int $votes): Movie {
+	public function setVotes(int $votes): Video{
 		$this->votes = $votes;
 		return $this;
 	}
@@ -131,15 +128,15 @@ class Movie extends Model implements FluentConstructor {
 	/**
 	 * @return float
 	 */
-	public function getPopularity(): float {
+	public function getPopularity(): float{
 		return $this->popularity;
 	}
 
 	/**
 	 * @param float $popularity
-	 * @return Movie
+	 * @return Video
 	 */
-	public function setPopularity(float $popularity): Movie {
+	public function setPopularity(float $popularity): Video{
 		$this->popularity = $popularity;
 		return $this;
 	}
@@ -147,15 +144,15 @@ class Movie extends Model implements FluentConstructor {
 	/**
 	 * @return int
 	 */
-	public function getGenreId(): int {
+	public function getGenreId(): int{
 		return $this->genreId;
 	}
 
 	/**
 	 * @param int $genreId
-	 * @return Movie
+	 * @return Video
 	 */
-	public function setGenreId(int $genreId): Movie {
+	public function setGenreId(int $genreId): Video{
 		$this->genreId = $genreId;
 		return $this;
 	}
@@ -163,15 +160,15 @@ class Movie extends Model implements FluentConstructor {
 	/**
 	 * @return string|null
 	 */
-	public function getPoster(): ?string {
+	public function getPoster(): ?string{
 		return $this->poster;
 	}
 
 	/**
 	 * @param string|null $poster
-	 * @return Movie
+	 * @return Video
 	 */
-	public function setPoster(?string $poster): Movie {
+	public function setPoster(?string $poster): Video{
 		$this->poster = $poster;
 		return $this;
 	}
@@ -179,15 +176,15 @@ class Movie extends Model implements FluentConstructor {
 	/**
 	 * @return string|null
 	 */
-	public function getBackdrop(): ?string {
+	public function getBackdrop(): ?string{
 		return $this->backdrop;
 	}
 
 	/**
 	 * @param string|null $backdrop
-	 * @return Movie
+	 * @return Video
 	 */
-	public function setBackdrop(?string $backdrop): Movie {
+	public function setBackdrop(?string $backdrop): Video{
 		$this->backdrop = $backdrop;
 		return $this;
 	}
@@ -195,24 +192,24 @@ class Movie extends Model implements FluentConstructor {
 	/**
 	 * @return string|null
 	 */
-	public function getPreviewUrl(): ?string {
+	public function getPreviewUrl(): ?string{
 		return $this->previewUrl;
 	}
 
 	/**
 	 * @param string|null $previewUrl
-	 * @return Movie
+	 * @return Video
 	 */
-	public function setPreviewUrl(?string $previewUrl): Movie {
+	public function setPreviewUrl(?string $previewUrl): Video{
 		$this->previewUrl = $previewUrl;
 		return $this;
 	}
 
 	/**
 	 *  Makes a new instance and returns it.
-	 * @return Movie
+	 * @return Video
 	 */
-	public static function instance() {
+	public static function instance(){
 		return new self();
 	}
 }
