@@ -11,7 +11,7 @@
 					<div class="card-body">
 						<div class="row">
 							<div class="col-12 col-md-12 col-lg-6 col-xl-6">
-								<div class="card shadow-none" style="border: 1px solid #ced4da;">
+								<div class="card shadow-none" style="border: 1px solid #b4b9bf;">
 									<div class="card-header text-primary font-weight-bold bg-white">
 										Attributes
 									</div>
@@ -78,7 +78,7 @@
 												<option value="1">Standard (480p)</option>
 												<option value="2">HD (720p)</option>
 												<option value="3">FHD (1080p)</option>
-												<option value="4">UHD (2160p)</option>
+												<option value="4">2K (2048p)</option>
 												<option value="5">4K (3840p)</option>
 											</select>
 										</div>
@@ -95,7 +95,7 @@
 								</div>
 							</div>
 							<div class="col-12 col-md-12 col-lg-6 col-xl-6">
-								<div class="card shadow-none" style="border: 1px solid #ced4da;">
+								<div class="card shadow-none" style="border: 1px solid #b4b9bf;">
 									<div class="card-header text-primary font-weight-bold bg-white">
 										Media
 									</div>
@@ -108,7 +108,7 @@
 															<input id="pickPoster" type="file" name="poster" onclick="this.value=null;" onchange="previewPoster(event);" class="form-control" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('poster')}}">
 														</div>
 														<div class="col-6">
-															<h3 class="my-0 header-title">Poster</h3>
+															<h3 class="my-0 header-title">Poster <span class="text-warning">(Max 3MB)</span></h3>
 														</div>
 														<div class="col-6">
 															<button type="button" class="btn btn-outline-primary rounded shadow-sm float-right" onclick="$('#pickPoster').trigger('click');">Browse</button>
@@ -132,7 +132,7 @@
 															<input id="pickBackdrop" type="file" name="poster" onclick="this.value=null;" onchange="previewBackdrop(event);" class="form-control" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('poster')}}">
 														</div>
 														<div class="col-6">
-															<h3 class="my-0 header-title">Backdrop</h3>
+															<h3 class="my-0 header-title">Backdrop <span class="text-warning">(Max 2MB)</span></h3>
 														</div>
 														<div class="col-6">
 															<button type="button" class="btn btn-outline-primary rounded shadow-sm float-right" onclick="$('#pickBackdrop').trigger('click');">Browse</button>
@@ -152,15 +152,37 @@
 								</div>
 							</div>
 						</div>
+						<div class="row mt-4">
+							<div class="col-12">
+								<div class="card shadow-none" style="border: 1px solid #b4b9bf;">
+									<div class="card-header text-primary font-weight-bold bg-white">
+										Video
+									</div>
+									<div class="card-body">
+										<div class="form-group">
+											<label for="externalLink">External Link</label>
+											<input id="externalLink" type="url" name="title" class="form-control" required placeholder="Type here the movie's title" minlength="1" maxlength="100" value="{{old('movieDBId')}}"/>
+										</div>
+										<div class="form-group">
+											<div class="text-center"><span class="badge badge-primary text-white font-weight-bold text-center font-16 text-capitalize">or</span></div>
+										</div>
+										<div class="form-group">
+											<label for="video">Video file <span class="text-warning">(Max 2GB)</span></label>
+											<input id="video" type="file" placeholder="Choose a video..." name="video" class="form-control" style="height: unset; padding-left: 6px">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 					<div class="card-footer">
 						<div class="form-row">
-							<div class="col-md-6">
+							<div class="col-md-6 pr-3">
 								<button type="submit" class="btn btn-primary waves-effect waves-light btn-block shadow-sm">
 									Save
 								</button>
 							</div>
-							<div class="col-md-6">
+							<div class="col-md-6 pl-3">
 								<a href="{{route("admin.videos.index")}}" class="btn btn-secondary waves-effect btn-block shadow-sm">
 									Cancel
 								</a>

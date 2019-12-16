@@ -137,7 +137,16 @@ return [
 
 		'videos' => [
 			'store' => [
-
+				'title' => ['bail', 'required', 'string', 'min:1', 'max:256'],
+				'description' => ['bail', 'required', 'string', 'min:1', 'max:2000'],
+				'movieDBId' => ['bail', 'required', 'numeric', 'min:1', RuleMaxInt], // Later on, we'll add real API based validation here
+				'imdbId' => ['bail', 'required', 'numeric', 'min:1', RuleMaxInt], // Later on, we'll add real API based validation here
+				'releaseDate' => ['bail', 'required', 'date'],
+				'averageRating' => ['bail', 'required', 'numeric', 'min:0.00', 'max:100.00'],
+				'votes' => ['bail', 'required', 'numeric', 'min:0', RuleMaxInt],
+				'popularity' => ['bail', 'required', 'numeric', 'min:0', RuleMaxInt],
+				'genreId' => ['bail', 'required', 'exists:genres,id'],
+				'poster' => ['bail', 'required', 'mim'],
 			],
 			'update' => [
 

@@ -56,7 +56,7 @@ Route::prefix('customer')->group(function () use ($customerMiddleware){
 	Route::post('/register', [CustomerAuthController::class, 'register'])->name('customer.register');
 	Route::post('/logout', [CustomerAuthController::class, 'logout'])->name('customer.logout')->middleware($customerMiddleware);;
 
-	Route::middleware($customerMiddleware)->prefix('sliders')->group(function (){
+	Route::prefix('sliders')->group(function () use ($customerMiddleware){
 		Route::get('/', [])->name('customer.sliders.index');
 	});
 });
