@@ -65,9 +65,9 @@
 										<div class="form-group">
 											<label for="language">Language<span class="text-primary">*</span></label>
 											<select id="language" name="languageId" class="form-control">
-												<option value="-1">Choose...</option>
-												@foreach($genres as $genre)
-													<option value="{{$genre->getKey()}}">{{$genre->getName()}}</option>
+												<option value="0">Choose...</option>
+												@foreach($languages as $language)
+													<option value="{{$language->getKey()}}">{{$language->getName()}}</option>
 												@endforeach
 											</select>
 										</div>
