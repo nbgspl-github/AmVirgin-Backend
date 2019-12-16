@@ -15,7 +15,6 @@ class SlidersController extends ResourceController{
 	use FluentResponse;
 
 	public function index(){
-		$customerId = $this->user()->getKey();
 		$response = null;
 		try {
 			$all = $this->retrieveChildCollection(function ($query){
