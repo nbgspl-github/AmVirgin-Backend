@@ -5,6 +5,7 @@ use App\Http\Controllers\App\Seller\AttributesController as SellerAttributesCont
 use App\Http\Controllers\App\Seller\AuthController as SellerAuthController;
 use App\Http\Controllers\App\Seller\CategoriesController as SellerCategoriesController;
 use App\Http\Controllers\App\Seller\ProductsController as SellerProductsController;
+use App\Http\Controllers\App\Customer\SlidersController as CustomerSlidersController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -57,6 +58,6 @@ Route::prefix('customer')->group(function () use ($customerMiddleware){
 	Route::post('/logout', [CustomerAuthController::class, 'logout'])->name('customer.logout')->middleware($customerMiddleware);;
 
 	Route::prefix('sliders')->group(function () use ($customerMiddleware){
-		Route::get('/', [])->name('customer.sliders.index');
+		Route::get('/', [CustomerSlidersController::class, 'index'])->name('customer.sliders.index');
 	});
 });

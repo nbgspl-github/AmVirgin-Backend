@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Web\Customer;
+namespace App\Http\Controllers\App\Customer;
 
 use App\Http\Controllers\Base\ResourceController;
 use App\Interfaces\StatusCodes;
