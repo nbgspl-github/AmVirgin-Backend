@@ -149,7 +149,6 @@ return [
 				'poster' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp'],
 				'backdrop' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp'],
 				'previewUrl' => ['bail', 'required', 'string', 'min:6', 'max:2048'],
-				'',
 			],
 			'update' => [
 

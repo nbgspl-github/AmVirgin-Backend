@@ -25,13 +25,17 @@
 											<input id="movieDBId" type="text" name="movieDBId" class="form-control" required placeholder="Type reference number from TheMovieDB" minlength="1" maxlength="100" value="{{old('movieDBId')}}"/>
 										</div>
 										<div class="form-group">
+											<label for="imdbId">IMDB Id<span class="text-primary">*</span></label>
+											<input id="imdbId" type="text" name="imdbId" class="form-control" required placeholder="Type reference number from IMDB" minlength="1" maxlength="100" value="{{old('movieDBId')}}"/>
+										</div>
+										<div class="form-group">
 											<label for="description">Overview (Description)<span class="text-primary">*</span></label>
 											<textarea id="description" name="description" class="form-control" required placeholder="Type short summary about the movie or video" minlength="1" maxlength="100">{{old('description')}}</textarea>
 										</div>
 										<div class="form-group">
 											<label for="genre">Choose a genre<span class="text-primary">*</span></label>
-											<select id="genre" name="genreId" class="form-control">
-												<option value="-1">Choose...</option>
+											<select id="genre" name="genreId" class="form-control" required>
+												<option value="">Choose...</option>
 												@foreach($genres as $genre)
 													<option value="{{$genre->getKey()}}">{{$genre->getName()}}</option>
 												@endforeach
@@ -55,17 +59,17 @@
 										</div>
 										<div class="form-group">
 											<label for="server">Choose a server<span class="text-primary">*</span></label>
-											<select id="server" name="serverId" class="form-control">
-												<option value="-1">Choose...</option>
-												@foreach($genres as $genre)
-													<option value="{{$genre->getKey()}}">{{$genre->getName()}}</option>
+											<select id="server" name="serverId" class="form-control" required>
+												<option value="">Choose...</option>
+												@foreach($servers as $server)
+													<option value="{{$server->getKey()}}">{{$server->getName()}}</option>
 												@endforeach
 											</select>
 										</div>
 										<div class="form-group">
 											<label for="language">Language<span class="text-primary">*</span></label>
-											<select id="language" name="languageId" class="form-control">
-												<option value="0">Choose...</option>
+											<select id="language" name="languageId" class="form-control" required>
+												<option value="">Choose...</option>
 												@foreach($languages as $language)
 													<option value="{{$language->getKey()}}">{{$language->getName()}}</option>
 												@endforeach
@@ -73,8 +77,8 @@
 										</div>
 										<div class="form-group">
 											<label for="mediaQuality">Media quality<span class="text-primary">*</span></label>
-											<select id="mediaQuality" name="mediaQuality" class="form-control">
-												<option value="0">Choose...</option>
+											<select id="mediaQuality" name="mediaQuality" class="form-control" required>
+												<option value="">Choose...</option>
 												<option value="1">Standard (480p)</option>
 												<option value="2">HD (720p)</option>
 												<option value="3">FHD (1080p)</option>
