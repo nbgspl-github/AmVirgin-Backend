@@ -146,7 +146,10 @@ return [
 				'votes' => ['bail', 'required', 'numeric', 'min:0', RuleMaxInt],
 				'popularity' => ['bail', 'required', 'numeric', 'min:0', RuleMaxInt],
 				'genreId' => ['bail', 'required', 'exists:genres,id'],
-				'poster' => ['bail', 'required', 'mim'],
+				'poster' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp'],
+				'backdrop' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp'],
+				'previewUrl' => ['bail', 'required', 'string', 'min:6', 'max:2048'],
+				'',
 			],
 			'update' => [
 

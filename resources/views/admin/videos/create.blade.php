@@ -160,8 +160,12 @@
 									</div>
 									<div class="card-body">
 										<div class="form-group">
+											<label for="previewUrl">Preview URL</label>
+											<input id="previewUrl" type="url" name="previewUrl" class="form-control" required placeholder="Type or paste preview url here" minlength="1" maxlength="100" value="{{old('movieDBId')}}"/>
+										</div>
+										<div class="form-group">
 											<label for="externalLink">External Link</label>
-											<input id="externalLink" type="url" name="title" class="form-control" required placeholder="Type here the movie's title" minlength="1" maxlength="100" value="{{old('movieDBId')}}"/>
+											<input id="externalLink" type="url" name="title" class="form-control" required placeholder="Enter a url to HLS/M3U8/MP4/WEBM/OGV/FLV/EMBED/IFRAME" minlength="1" maxlength="100" value="{{old('movieDBId')}}"/>
 										</div>
 										<div class="form-group">
 											<div class="text-center"><span class="badge badge-primary text-white font-weight-bold text-center font-16 text-capitalize">or</span></div>
