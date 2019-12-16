@@ -15,7 +15,6 @@ class CreateMediaLanguagesTable extends Migration{
 			$table->bigIncrements('id');
 			$table->string('name');
 			$table->string('code', 5);
-			$table->timestamps();
 		});
 	}
 
