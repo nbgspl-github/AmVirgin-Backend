@@ -107,7 +107,7 @@
 										<div class="card-body p-0 rounded">
 											<div class="row">
 												<div class="col-12 text-center">
-													<img id="posterPreview" class="img-fluid" style="max-height: 400px!important;" src="{{route('images.slider.poster',$slide->getKey())}}"/>
+													<img id="posterPreview" class="img-fluid" style="max-height: 400px!important;" src="{{Storage::disk('public')->url($slide->getPoster())}}"/>
 												</div>
 											</div>
 										</div>
