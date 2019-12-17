@@ -178,6 +178,24 @@
 											<label for="video">Video file <span class="text-warning">(Max 2GB)</span></label>
 											<input id="video" type="file" placeholder="Choose a video..." name="video" class="form-control" style="height: unset; padding-left: 6px">
 										</div>
+										<div class="form-group">
+											<label>Show on homepage?</label>
+											<div>
+												<div class="custom-control custom-checkbox">
+													<input type="checkbox" class="custom-control-input" id="customCheck2">
+													<label class="custom-control-label" for="customCheck2">Yes</label>
+												</div>
+											</div>
+										</div>
+										<div class="form-group pb-0 mb-0">
+											<label>Mark as trending?</label>
+											<div>
+												<div class="custom-control custom-checkbox">
+													<input type="checkbox" class="custom-control-input" id="customCheck3">
+													<label class="custom-control-label" for="customCheck3">Yes</label>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>

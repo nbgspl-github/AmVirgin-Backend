@@ -25,6 +25,9 @@ class CreateVideosTable extends Migration{
 			$table->string('poster', 256)->nullable();
 			$table->string('backdrop', 256)->nullable();
 			$table->string('previewUrl', 2048)->nullable();
+			$table->boolean('visibleOnHome')->default(false);
+			$table->boolean('trending')->default(false);
+			$table->integer('trendingRank')->default(0);
 			$table->timestamps();
 		});
 	}

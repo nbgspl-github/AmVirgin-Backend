@@ -21,7 +21,7 @@ class SellerController extends BaseController{
 	}
 
 	public function create(){
-
+		return view('admin.sellers.create');
 	}
 
 	public function edit($id){
