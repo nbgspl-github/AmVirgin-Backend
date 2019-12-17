@@ -52,7 +52,7 @@ class SlidersController extends BaseController{
 		$response = null;
 		try {
 			$this->requestValid($request, $this->rules['store']);
-			$poster = Storage::putFile(Directories::Sliders, $request->file('poster'), 'public');
+			$poster = Storage::disk('public')->putFile(Directories::Sliders, $request->file('poster'), 'public');
 			Slider::create([
 				'title' => $request->title,
 				'description' => $request->description,
