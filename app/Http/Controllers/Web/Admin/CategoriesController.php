@@ -49,7 +49,7 @@ class CategoriesController extends BaseController{
 			return back()->withInput($request->all());
 		}
 		else {
-			Category::create($request->all());
+			Category::create($validator->validated());
 			notify()->success('Category created successfully.');
 			return redirect(route('admin.categories.index'));
 		}

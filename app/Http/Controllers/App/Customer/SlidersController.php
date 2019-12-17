@@ -10,6 +10,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class SlidersController extends ResourceController{
 	use FluentResponse;
@@ -19,6 +20,11 @@ class SlidersController extends ResourceController{
 		try {
 			$all = $this->retrieveChildCollection(function ($query){
 				$query->where('active', true);
+			});
+			$all->transform(function (Slider $slider){
+				$payload = $slider->toArray();
+				$payload['poster'] = Storage::disk('public')->url($slider->getPoster());
+				return $payload;
 			});
 			if ($all->count() > 0) {
 				$response = $this->success()->setValue('data', $all);
