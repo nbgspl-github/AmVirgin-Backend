@@ -21,35 +21,10 @@
 					</div>
 
 					<div class="slimscroll" style="max-height: 230px;">
-
-						<!-- item-->
 						<span href="javascript:void(0);" class="dropdown-item notify-item">
 							<div class="notify-icon bg-primary"><i class="mdi mdi-cart-outline"></i></div>
-							<p class="notify-details">Your order is placed<span class="text-muted">Dummy text of the printing and typesetting industry.</span></p>
+							<p class="notify-details">User 'Aviral' has just signed up!.</p>
 						</span>
-
-						<!-- item-->
-						<a href="javascript:void(0);" class="dropdown-item notify-item">
-							<div class="notify-icon bg-success"><i class="mdi mdi-message"></i></div>
-							<p class="notify-details">New Message received<span class="text-muted">You have 87 unread messages</span></p>
-						</a>
-
-						<!-- item-->
-						<a href="javascript:void(0);" class="dropdown-item notify-item">
-							<div class="notify-icon bg-warning"><i class="mdi mdi-martini"></i></div>
-							<p class="notify-details">Your item is shipped<span class="text-muted">It is a long established fact that a reader will</span></p>
-						</a>
-						<!-- item-->
-						<a href="javascript:void(0);" class="dropdown-item notify-item">
-							<div class="notify-icon bg-danger"><i class="mdi mdi-message"></i></div>
-							<p class="notify-details">New Message received<span class="text-muted">You have 87 unread messages</span></p>
-						</a>
-
-						<!-- item-->
-						<a href="javascript:void(0);" class="dropdown-item notify-item">
-							<div class="notify-icon bg-info"><i class="mdi mdi-martini"></i></div>
-							<p class="notify-details">Your item is shipped<span class="text-muted">It is a long established fact that a reader will</span></p>
-						</a>
 					</div>
 
 				</div>
