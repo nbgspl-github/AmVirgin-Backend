@@ -1026,7 +1026,7 @@ body.fixed-left .side-menu.left {
 }
 
 .button-menu-mobile {
-    background-color: #cf3f43;
+    background-color: unset;
     font-size: 28px;
     color: #fff;
     width: 60px;

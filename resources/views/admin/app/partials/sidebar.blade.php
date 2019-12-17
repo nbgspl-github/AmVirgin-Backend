@@ -26,6 +26,10 @@
 				</li>
 
 				<li>
+					<a href="{{route("admin.sellers.index")}}" class="waves-effect"><i class="mdi mdi-account-circle mt-1"></i> <span>Sellers</span></a>
+				</li>
+
+				<li>
 					<a href="{{route("admin.sliders.index")}}" class="waves-effect"><i class="mdi mdi-skip-next-circle mt-1"></i> <span>Sliders</span></a>
 				</li>
 

@@ -8,6 +8,7 @@ use App\Http\Controllers\Web\Admin\CustomerController;
 use App\Http\Controllers\Web\Admin\GenresController;
 use App\Http\Controllers\Web\Admin\HomeController as AdminHome;
 use App\Http\Controllers\Web\Admin\NotificationsController;
+use App\Http\Controllers\Web\Admin\SellerController;
 use App\Http\Controllers\Web\Admin\ServersController;
 use App\Http\Controllers\Web\Admin\SlidersController;
 use App\Http\Controllers\Web\Admin\VideosController;
@@ -53,6 +54,18 @@ Route::prefix('admin')->group(function (){
 			Route::post('{id}', [CustomerController::class, Methods::Update])->name('admin.customers.update');
 			Route::put('{id}/status', [CustomerController::class, Methods::UpdateStatus])->name('admin.customers.update.status');
 			Route::delete('{id}', [CustomerController::class, Methods::Delete])->name('admin.customers.delete');
+		});
+
+		// Seller's Route(s)
+		Route::prefix('sellers')->middleware('auth:admin')->group(function (){
+			Route::get('', [SellerController::class, Methods::Index])->name('admin.sellers.index');
+			Route::get('create', [SellerController::class, Methods::Create])->name('admin.sellers.create');
+			Route::get('{id}/edit', [SellerController::class, Methods::Edit])->name('admin.sellers.edit');
+			Route::get('{id}', [SellerController::class, Methods::Show])->name('admin.sellers.show');
+			Route::post('', [SellerController::class, Methods::Store])->name('admin.sellers.store');
+			Route::post('{id}', [SellerController::class, Methods::Update])->name('admin.sellers.update');
+			Route::put('{id}/status', [SellerController::class, Methods::UpdateStatus])->name('admin.sellers.update.status');
+			Route::delete('{id}', [SellerController::class, Methods::Delete])->name('admin.sellers.delete');
 		});
 
 		// Categories Route(s)
