@@ -11,6 +11,7 @@ use App\Http\Controllers\Web\Admin\NotificationsController;
 use App\Http\Controllers\Web\Admin\ServersController;
 use App\Http\Controllers\Web\Admin\SlidersController;
 use App\Http\Controllers\Web\Admin\VideosController;
+use App\Http\Controllers\Web\Admin\WebSeriesController;
 use App\Http\Controllers\Web\Customer\HomeController as CustomerHome;
 use App\Http\Controllers\Web\Seller\HomeController as SellerHome;
 use App\Models\Genre;
@@ -61,6 +62,7 @@ Route::prefix('admin')->group(function (){
 			Route::get('{id}/edit', [CategoriesController::class, Methods::Edit])->name('admin.categories.edit');
 			Route::post('store', [CategoriesController::class, Methods::Store])->name('admin.categories.store');
 			Route::post('{id}', [CategoriesController::class, Methods::Update])->name('admin.categories.update');
+			Route::delete('{id}', [CategoriesController::class, Methods::Delete])->name('admin.categories.delete');
 		});
 
 		// Videos Route(s)
@@ -149,6 +151,21 @@ Route::prefix('admin')->group(function (){
 			Route::post('{id}', [ServersController::class, Methods::Update])->name('admin.servers.update');
 			Route::put('{id}/status', [ServersController::class, Methods::UpdateStatus])->name('admin.servers.update.status');
 			Route::delete('{id}', [ServersController::class, Methods::Delete])->name('admin.servers.delete');
+		});
+
+		// Web-series Route(s)
+		Route::prefix('series')->middleware('auth:admin')->group(function (){
+			Route::get('', [WebSeriesController::class, Methods::Index])->name('admin.series.index');
+		});
+
+		// Live TV Route(s)
+		Route::prefix('live-tv')->middleware('auth:admin')->group(function (){
+			Route::get('', [WebSeriesController::class, Methods::Index])->name('admin.live-tv.index');
+		});
+
+		// Settings Route(s)
+		Route::prefix('settings')->middleware('auth:admin')->group(function (){
+			Route::get('', [WebSeriesController::class, Methods::Index])->name('admin.settings.index');
 		});
 	});
 });

@@ -42,11 +42,11 @@
 				</li>
 
 				<li>
-					<a href="{{route("admin.categories.index")}}" class="waves-effect"><i class="mdi mdi-step-forward mt-1"></i> <span>Series </span></a>
+					<a href="{{route("admin.series.index")}}" class="waves-effect"><i class="mdi mdi-step-forward mt-1"></i> <span>Series </span></a>
 				</li>
 
 				<li>
-					<a href="{{route("admin.categories.index")}}" class="waves-effect"><i class="mdi mdi-television mt-1"></i> <span>Live TV </span></a>
+					<a href="{{route("admin.live-tv.index")}}" class="waves-effect"><i class="mdi mdi-television mt-1"></i> <span>Live TV </span></a>
 				</li>
 
 				<li>
@@ -62,7 +62,7 @@
 				</li>
 
 				<li>
-					<a href="{{route("admin.categories.index")}}" class="waves-effect"><i class="mdi mdi-settings mt-1"></i> <span>Settings </span></a>
+					<a href="{{route("admin.settings.index")}}" class="waves-effect"><i class="mdi mdi-settings mt-1"></i> <span>Settings </span></a>
 				</li>
 			</ul>
 		</div>

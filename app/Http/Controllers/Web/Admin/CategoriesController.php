@@ -6,6 +6,8 @@ use App\Category;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Interfaces\Directories;
+use App\Interfaces\StatusCodes;
+use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -15,6 +17,7 @@ use stdClass;
 
 class CategoriesController extends BaseController{
 	use ValidatesRequest;
+	use FluentResponse;
 
 	protected $rules;
 
@@ -118,6 +121,17 @@ class CategoriesController extends BaseController{
 		}
 		finally {
 			return $response->send();
+		}
+	}
+
+	public function delete($id){
+		try {
+			$category = Category::retrieveThrows($id);
+			$category->delete();
+			return $this->success()->message('Category deleted successfully.')->status(StatusCodes::Okay)->send();
+		}
+		catch (ModelNotFoundException $exception) {
+			return $this->failed()->message($exception->getMessage())->status(StatusCodes::ResourceNotFound)->send();
 		}
 	}
 }
