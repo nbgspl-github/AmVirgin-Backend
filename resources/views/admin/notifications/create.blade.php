@@ -1,10 +1,10 @@
-@extends('admin.layouts.header')
+@extends('admin.app.app')
 @section('content')
 	<div class="row">
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.layouts.pageHeader', ['breadcrumbs' =>['Dashboard'=>route('home'),'Notifications'=>'#'],'title'=>'Notifications'])
+					@include('admin.extras.header', ['title'=>'Notifications'])
 				</div>
 				<div class="card-body animatable">
 					<div class="row">
@@ -27,7 +27,7 @@
 									<div class="row">
 										<div class="col-md-12">
 											<button id="send" type="button" class="animatable btn btn-block btn-primary waves-effect waves-light" onclick="send();">
-												Update
+												Push
 											</button>
 										</div>
 									</div>
@@ -44,7 +44,7 @@
 @section('javascript')
 	<script type="application/javascript">
 
-		let notificationSendRoute = '{{route('notifications.send')}}';
+		let notificationSendRoute = '{{route('admin.notifications.send')}}';
 
 		let sendButton = null;
 

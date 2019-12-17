@@ -8,6 +8,7 @@ use App\Http\Controllers\Web\Admin\CustomerController;
 use App\Http\Controllers\Web\Admin\GenresController;
 use App\Http\Controllers\Web\Admin\HomeController as AdminHome;
 use App\Http\Controllers\Web\Admin\NotificationsController;
+use App\Http\Controllers\Web\Admin\ServersController;
 use App\Http\Controllers\Web\Admin\SlidersController;
 use App\Http\Controllers\Web\Admin\VideosController;
 use App\Http\Controllers\Web\Customer\HomeController as CustomerHome;
@@ -17,6 +18,17 @@ use App\Models\Slider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+
+/**
+ * |------------------------------------------------
+ * | Customer Authentication Routes
+ * |------------------------------------------------
+ */
+Route::prefix('')->group(function (){
+	Route::get('/', [CustomerHome::class, Methods::Index])->name('customer.home');
+	Route::get('/login', [CustomerLoginController::class, Methods::auth()::LoginForm])->name('customer.login');
+	Route::post('/login', [CustomerLoginController::class, Methods::auth()::Login])->name('customer.login.submit');
+});
 
 /**
  * |------------------------------------------------
@@ -90,7 +102,7 @@ Route::prefix('admin')->group(function (){
 			Route::delete('{id}', [SlidersController::class, Methods::Delete])->name('admin.sliders.delete');
 		});
 
-		// Images Routes
+		// Images Route(s)
 		Route::prefix('images')->group(function (){
 
 			// Genre Poster
@@ -126,18 +138,19 @@ Route::prefix('admin')->group(function (){
 				}
 			})->name('images.slider.poster');
 		});
-	});
-});
 
-/**
- * |------------------------------------------------
- * | Customer Authentication Routes
- * |------------------------------------------------
- */
-Route::prefix('')->group(function (){
-	Route::get('/', [CustomerHome::class, Methods::Index])->name('customer.home');
-	Route::get('/login', [CustomerLoginController::class, Methods::auth()::LoginForm])->name('customer.login');
-	Route::post('/login', [CustomerLoginController::class, Methods::auth()::Login])->name('customer.login.submit');
+		// Servers' Route(s)
+		Route::prefix('servers')->middleware('auth:admin')->group(function (){
+			Route::get('', [ServersController::class, Methods::Index])->name('admin.servers.index');
+			Route::get('create', [ServersController::class, Methods::Create])->name('admin.servers.create');
+			Route::get('{id}/edit', [ServersController::class, Methods::Edit])->name('admin.servers.edit');
+			Route::get('{id}', [ServersController::class, Methods::Show])->name('admin.servers.show');
+			Route::post('', [ServersController::class, Methods::Store])->name('admin.servers.store');
+			Route::post('{id}', [ServersController::class, Methods::Update])->name('admin.servers.update');
+			Route::put('{id}/status', [ServersController::class, Methods::UpdateStatus])->name('admin.servers.update.status');
+			Route::delete('{id}', [ServersController::class, Methods::Delete])->name('admin.servers.delete');
+		});
+	});
 });
 
 /**

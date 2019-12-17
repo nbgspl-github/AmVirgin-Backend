@@ -34,7 +34,7 @@
 									<td>{{$loop->index+1}}</td>
 									<td class="text-center">
 										@if($category->getPoster()!=null)
-											<img src="{{route('images.category.poster',$category->getId())}}" style="width: 100px; height: 100px" alt="{{$category->getName()}}" @include('admin.extras.tooltip.right', ['title' => $category->getName()])/>
+											<img src="{{Storage::disk('public')->url($category->getPoster())}}" style="width: 100px; height: 100px" alt="{{$category->getName()}}" @include('admin.extras.tooltip.right', ['title' => $category->getName()])/>
 										@else
 											<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 90px"></i>
 										@endif
@@ -46,10 +46,10 @@
 									<td class="text-center">
 										<div class="btn-group">
 											<div class="col-sm-6 px-0">
-												<a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('admin.categories.edit',$category->getId())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
+												<a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('admin.categories.edit',$category->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
 											</div>
 											<div class="col-sm-6 px-0">
-												<a class="btn btn-outline-primary shadow-sm shadow-primary" href="javascript:void(0);" onclick="deleteCategory('{{$category->getId()}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>
+												<a class="btn btn-outline-primary shadow-sm shadow-primary" href="javascript:void(0);" onclick="deleteCategory('{{$category->getKey()}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>
 											</div>
 										</div>
 									</td>

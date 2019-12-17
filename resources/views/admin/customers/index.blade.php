@@ -4,7 +4,7 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['breadcrumbs' =>['Dashboard'=>route('admin.home'),'Customers'=>'#'],'title'=>trans('admin.customers.index')])
+					@include('admin.extras.header', ['title'=>'Customers'])
 				</div>
 				<div class="card-body animatable">
 					<div class="row px-2 mb-3">
@@ -35,7 +35,7 @@
 									<td>{{$user->getMobile()}}</td>
 									<td>{{$user->getEmail()}}</td>
 									<td>{{__status($user->isActive())}}</td>
-									<td><a style="text-decoration: underline" class="text-primary" href="{{route('admin.customers.edit',$user->getKey())}}">View Details</a></td>
+									<td><a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('admin.customers.edit',$user->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit customer details'])><i class="mdi mdi-pencil"></i></a></td>
 								</tr>
 							@endforeach
 							</tbody>

@@ -4,7 +4,7 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['breadcrumbs' =>['Dashboard'=>route('admin.home'),'Genres'=>'#'],'title'=>'Genres'])
+					@include('admin.extras.header', ['title'=>'Genres'])
 				</div>
 				<div class="card-body animatable">
 					<div class="row pr-3">
@@ -25,11 +25,11 @@
 
 						<tbody>
 						@foreach($genres as $genre)
-							<tr id="genre_row_{{$genre->getId()}}">
+							<tr id="genre_row_{{$genre->getKey()}}">
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">
 									@if($genre->getPoster()!=null)
-										<img src="{{route('images.genre.poster',$genre->getId())}}" style="width: 100px; height: 100px" alt="{{$genre->getName()}}" @include('admin.extras.tooltip.right', ['title' => $genre->getName()])/>
+										<img src="{{route('images.genre.poster',$genre->getKey())}}" style="width: 100px; height: 100px" alt="{{$genre->getName()}}" @include('admin.extras.tooltip.right', ['title' => $genre->getName()])/>
 									@else
 										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 90px"></i>
 									@endif
@@ -40,17 +40,17 @@
 									<div class="btn-group btn-group-toggle shadow-sm" data-toggle="buttons">
 										@if($genre->getStatus()==true)
 											<label class="btn btn-outline-danger active" @include('admin.extras.tooltip.left', ['title' => 'Set genre active'])>
-												<input type="radio" name="options" id="optionOn_{{$genre->getId()}}" onchange="toggleStatus('{{$genre->getId()}}',1);"/> On
+												<input type="radio" name="options" id="optionOn_{{$genre->getKey()}}" onchange="toggleStatus('{{$genre->getKey()}}',1);"/> On
 											</label>
 											<label class="btn btn-outline-primary" @include('admin.extras.tooltip.right', ['title' => 'Set genre inactive'])>
-												<input type="radio" name="options" id="optionOff_{{$genre->getId()}}" onchange="toggleStatus('{{$genre->getId()}}',0);"/> Off
+												<input type="radio" name="options" id="optionOff_{{$genre->getKey()}}" onchange="toggleStatus('{{$genre->getKey()}}',0);"/> Off
 											</label>
 										@else
 											<label class="btn btn-outline-danger" @include('admin.extras.tooltip.left', ['title' => 'Set genre active'])>
-												<input type="radio" name="options" id="optionOn_{{$genre->getId()}}" onchange="toggleStatus('{{$genre->getId()}}',1);"/> On
+												<input type="radio" name="options" id="optionOn_{{$genre->getKey()}}" onchange="toggleStatus('{{$genre->getKey()}}',1);"/> On
 											</label>
 											<label class="btn btn-outline-primary active" @include('admin.extras.tooltip.right', ['title' => 'Set genre inactive'])>
-												<input type="radio" name="options" id="optionOff_{{$genre->getId()}}" onchange="toggleStatus('{{$genre->getId()}}',0);"/> Off
+												<input type="radio" name="options" id="optionOff_{{$genre->getKey()}}" onchange="toggleStatus('{{$genre->getKey()}}',0);"/> Off
 											</label>
 										@endif
 									</div>
@@ -58,10 +58,10 @@
 								<td class="text-center">
 									<div class="btn-group">
 										<div class="col-sm-6 px-0">
-											<a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('admin.genres.edit',$genre->getId())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
+											<a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('admin.genres.edit',$genre->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
 										</div>
 										<div class="col-sm-6 px-0">
-											<a class="btn btn-outline-primary shadow-sm shadow-primary" href="javascript:void(0);" onclick="deleteGenre('{{$genre->getId()}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>
+											<a class="btn btn-outline-primary shadow-sm shadow-primary" href="javascript:void(0);" onclick="deleteGenre('{{$genre->getKey()}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>
 										</div>
 									</div>
 								</td>

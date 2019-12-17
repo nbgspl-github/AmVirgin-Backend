@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Models\MediaServer;
 use App\Traits\GenerateUrls;
+use Exception;
 use Illuminate\Console\Command;
 
 class CodeTester extends Command{
@@ -37,33 +39,12 @@ class CodeTester extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		$arr = [
-			'product' => [
-				'store' => [
-					'success' => 'Reached success.',
-				],
-				'read' => [
-					'success' => 'Reached read',
-				],
-			],
-		];
-		$string = 'product.store.success';
-		$indices = explode('.', $string);
-		$index = 0;
-		$count = count($indices);
-		$lastArray = $arr;
-		$key = $indices[0];
-		while ($index != $count) {
-			$temp = $lastArray[$key];
-			if (is_array($temp))
-				$lastArray = $temp;
-			else {
-				$key = $temp;
-				echo $key;
-			}
-			$index++;
+		try {
+			$server = MediaServer::retrieveThrows(55);
 		}
-		var_dump($lastArray);
+		catch (Exception $exception) {
+			echo $exception->getMessage();
+		}
 		return;
 	}
 }

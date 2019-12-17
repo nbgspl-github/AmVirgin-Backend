@@ -5,12 +5,10 @@ namespace App\Models;
 use App\Traits\ActiveStatus;
 use App\Traits\BroadcastPushNotifications;
 use App\Traits\FluentConstructor;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Model;
+use App\Traits\RetrieveCollection;
+use App\Traits\RetrieveResource;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Seller extends Authenticatable implements JWTSubject{
@@ -18,6 +16,8 @@ class Seller extends Authenticatable implements JWTSubject{
 	use BroadcastPushNotifications;
 	use FluentConstructor;
 	use ActiveStatus;
+	use RetrieveResource;
+	use RetrieveCollection;
 
 	/**
 	 * The attributes that are mass assignable.

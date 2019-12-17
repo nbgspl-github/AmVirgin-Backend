@@ -34,6 +34,15 @@ return [
 			'failed' => 'Failed to create attribute.',
 		],
 	],
+	'customer' => [
+		'store' => [
+			'success' => 'Customer details saved successfully.',
+		],
+		'update' => [
+			'success' => 'Customer details updated successfully.',
+		],
+		'not-found' => 'Could not find customer for that key.',
+	],
 
 	'product' => [
 		'store' => [
@@ -48,5 +57,19 @@ return [
 
 	'slider' => [
 		'empty-data' => 'Could not find any sliders at this moment.',
+	],
+
+	'genre' => [
+		'not-found' => 'Could not find any genre with that key.',
+		'store' => [
+			'success' => 'Genre created successfully.',
+		],
+	],
+
+	'server' => [
+		'not-found' => 'Could not find any server with that key.',
+		'store' => [
+			'success' => 'Media server created successfully.',
+		],
 	],
 ];

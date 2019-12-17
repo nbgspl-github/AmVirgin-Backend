@@ -9,6 +9,7 @@
 
 use App\Constants\OfferTypes;
 use App\Constants\ProductStatus;
+use App\Interfaces\Tables;
 use Illuminate\Validation\Rule;
 
 define('RuleMaxInt', sprintf('max:%d', PHP_INT_MAX));
@@ -149,6 +150,61 @@ return [
 				'poster' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp'],
 				'backdrop' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp'],
 				'previewUrl' => ['bail', 'required', 'string', 'min:6', 'max:2048'],
+			],
+			'update' => [
+
+			],
+		],
+
+		'customers' => [
+			'store' => [
+				'name' => ['bail', 'required', 'string', 'min:4', 'max:50'],
+				'mobile' => ['bail', 'required', 'digits:10', Rule::unique('customers', 'mobile')],
+				'email' => ['bail', 'required', 'email', Rule::unique('customers', 'email')],
+				'password' => ['bail', 'required', 'string', 'min:4', 'max:128'],
+				'active' => ['bail', 'required', Rule::in([0, 1])],
+			],
+			'update' => [
+				'name' => ['bail', 'required', 'string', 'min:4', 'max:50'],
+				'mobile' => ['bail', 'required', 'digits:10'],
+				'email' => ['bail', 'required', 'email'],
+				'active' => ['bail', 'required', Rule::in([0, 1])],
+			],
+		],
+
+		'categories' => [
+			'store' => [
+				'name' => ['bail', 'required', 'string', 'min:1', 'max:100'],
+				'parentId' => ['bail', 'required', 'numeric'],
+				'description' => ['bail', 'nullable', 'string', 'min:1', 'max:1000'],
+				'visibility' => ['bail', 'required', Rule::in([0, 1])],
+				'poster' => ['bail', 'nullable', 'image'],
+			],
+			'update' => [
+				'name' => ['bail', 'required', 'string', 'min:1', 'max:100'],
+				'parentId' => ['bail', 'required', 'numeric'],
+				'description' => ['bail', 'nullable', 'string', 'min:1', 'max:1000'],
+				'visibility' => ['bail', 'required', Rule::in([0, 1])],
+				'poster' => ['bail', 'nullable', 'image'],
+			],
+		],
+
+		'genres' => [
+			'store' => [
+				'name' => ['bail', 'required', 'string', 'min:1', 'max:100', Rule::unique(Tables::Genres, 'name')],
+				'poster' => ['bail', 'nullable', 'image'],
+				'status' => ['bail', 'required', Rule::in([0, 1])],
+			],
+			'update' => [
+				'name' => ['bail', 'required', 'string', 'min:1', 'max:100'],
+				'poster' => ['bail', 'nullable', 'mimes:jpg,jpeg,png,bmp'],
+				'status' => ['bail', 'required', Rule::in([0, 1])],
+			],
+		],
+
+		'servers' => [
+			'store' => [
+
 			],
 			'update' => [
 

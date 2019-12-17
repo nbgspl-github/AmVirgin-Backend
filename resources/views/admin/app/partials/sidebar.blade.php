@@ -50,7 +50,7 @@
 				</li>
 
 				<li>
-					<a href="{{route("admin.categories.index")}}" class="waves-effect"><i class="mdi mdi-server mt-1"></i> <span>Servers </span></a>
+					<a href="{{route("admin.servers.index")}}" class="waves-effect"><i class="mdi mdi-server mt-1"></i> <span>Servers </span></a>
 				</li>
 
 				<li>

@@ -39,6 +39,26 @@ function __ellipsis($value, $length = 20){
 	return strlen($value) > $length ? substr($value, 0, $length) . "..." : $value;
 }
 
+function __boolean($value){
+	$value = boolval($value);
+	return $value == true ? 'Yes' : 'No';
+}
+
+function null($expression){
+	return $expression == null;
+}
+
+function __modelNameFromSlug($slug){
+	$identifier = 'model-mapping.' . $slug;
+	$modelName = __($identifier);
+	if (strcmp($modelName, $identifier) == 0) {
+		$name = $slug;
+		$lastIndex = strrpos($name, "\\") + 1;
+		$modelName = substr($name, $lastIndex);
+	}
+	return $modelName;
+}
+
 function image($path = null){
 	if ($path == null)
 		return null;

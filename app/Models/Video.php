@@ -6,12 +6,6 @@ use App\Contracts\FluentConstructor;
 use Illuminate\Database\Eloquent\Model;
 
 class Video extends Model implements FluentConstructor{
-	/**
-	 * @return int
-	 */
-	public function getId(): int{
-		return $this->id;
-	}
 
 	/**
 	 * @return string

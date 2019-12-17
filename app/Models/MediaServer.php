@@ -2,9 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\RetrieveCollection;
+use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
 class MediaServer extends Model{
+	use RetrieveCollection;
+	use RetrieveResource;
+
 	protected $table = 'media-servers';
 
 	protected $fillable = [
@@ -38,7 +43,7 @@ class MediaServer extends Model{
 	/**
 	 * @return string
 	 */
-	public function getIpAddress(): string{
+	public function getIpAddress(): ?string{
 		return $this->ipAddress;
 	}
 
@@ -54,7 +59,7 @@ class MediaServer extends Model{
 	/**
 	 * @return bool
 	 */
-	public function isUseAuth(): bool{
+	public function getUsesAuth(): bool{
 		return $this->useAuth;
 	}
 
@@ -62,7 +67,7 @@ class MediaServer extends Model{
 	 * @param bool $useAuth
 	 * @return MediaServer
 	 */
-	public function setUseAuth(bool $useAuth): MediaServer{
+	public function setUsesAuth(bool $useAuth): MediaServer{
 		$this->useAuth = $useAuth;
 		return $this;
 	}

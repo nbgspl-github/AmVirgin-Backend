@@ -2,26 +2,35 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
+use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
-use App\Http\Resources\MovieResource;
-use App\Http\Resources\MoviesCollection;
 use App\Interfaces\Directories;
 use App\Interfaces\Tables;
 use App\Models\Genre;
-use App\Rules\UniqueExceptSelf;
+use App\Traits\ValidatesRequest;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class GenresController extends BaseController{
+	use ValidatesRequest;
+
+	protected $rules;
+
+	public function __construct(){
+		$this->rules = config('rules.admin.genres');
+	}
+
 	public function index(){
 		$genres = Genre::all();
-		return view('admin.genres.all')->with('genres', $genres);
+		return view('admin.genres.index')->with('genres', $genres);
 	}
 
 	public function create(){
-		return view('admin.genres.add');
+		return view('admin.genres.create');
 	}
 
 	public function edit($id){
@@ -30,77 +39,68 @@ class GenresController extends BaseController{
 			return view('admin.genres.edit')->with('genre', $genre);
 		}
 		else {
-			notify()->error('Could not find any genre with that Id.');
-			return redirect(route('admin.genres.index'));
+			return responseWeb()->
+			route('admin.genres.index')->
+			error(__('strings.genre.not-found'))->
+			send();
 		}
 	}
 
-	public function store(Request $request) {
-		$validator = Validator::make($request->all(), [
-			'name' => ['bail', 'required', 'string', 'min:1', 'max:100', Rule::unique(Tables::Genres, 'name')],
-			'poster' => ['bail', 'nullable', 'image'],
-			'status' => ['bail', 'required', Rule::in([0, 1])],
-		]);
-		if ($validator->fails()) {
-			notify()->error($validator->errors()->first());
-			return back()->withInput($request->all());
-		}
-		else {
-			$poster = null;
+	public function store(Request $request){
+		$response = responseWeb();
+		try {
+			$payload = $this->requestValid($request, $this->rules['store']);
+			$payload['poster'] = null;
 			if ($request->hasFile('poster'))
-				$poster = Storage::putFile(Directories::Genre, $request->file('poster'), 'public');
+				$payload = Storage::disk('public')->putFile(Directories::Genre, $request->file('poster'), 'public');
 
-			Genre::instance()->
-			setName($request->name)->
-			setDescription($request->description)->
-			setPoster($poster)->
-			setStatus($request->status)->
-			save();
-			notify()->success('Genre added successfully.');
-			return redirect(route('admin.genres.index'));
+			Genre::create($payload);
+			$response->success(__('strings.genre.store.success'))->route('admin.genres.index');
+		}
+		catch (ValidationException $exception) {
+			$response->error($exception->getError())->back()->data($request->all());
+		}
+		catch (Exception $exception) {
+			$response->error($exception->getMessage())->back()->data($request->all());
+		}
+		finally {
+			return $response->send();
 		}
 	}
 
-	public function update(Request $request, $id) {
-		$genre = Genre::find($id);
-		if ($genre == null) {
-			notify()->error('Unable to find genre for that Id.');
-			return redirect(route('admin.genres.index'));
+	public function update(Request $request, $id){
+		$response = responseWeb();
+		$genre = Genre::retrieve($id);
+		try {
+			if ($genre == null)
+				throw new ModelNotFoundException(__('strings.genre.not-found'));
+
+			$additional = [
+				'name' => [Rule::unique(Tables::Genres, 'name')->ignoreModel($genre)],
+			];
+			$payload = $this->requestValid($request, $this->rules['update'], $additional);
+			if ($request->hasFile('poster'))
+				$payload['poster'] = Storage::disk('public')->putFile(Directories::Genre, $request->file('poster'), 'public');
+			else
+				unset($payload['poster']);
+			$genre->update($payload);
+			$response->success(__('strings.genre.store.success'))->route('admin.genres.index');
 		}
-		else {
-			$validator = Validator::make($request->all(), [
-				'name' => ['bail', 'required', 'string', 'min:1', 'max:100', new UniqueExceptSelf(Genre::class, 'name', $request->name, $request->id)],
-				'poster' => ['bail', 'nullable', 'mimes:jpg,jpeg,png,bmp'],
-				'status' => ['bail', 'required', Rule::in([0, 1])],
-			]);
-			if ($validator->fails()) {
-				notify()->error($validator->errors()->first());
-				return back()->withInput($request->all());
-			}
-			else {
-				$poster = null;
-				if ($request->hasFile('poster'))
-					$poster = Storage::putFile(Directories::Genre, $request->file('poster'), 'public');
-
-				$genre->
-				setName($request->name)->
-				setDescription($request->description)->
-				setStatus($request->status)->
-				save();
-
-				if ($poster != null) {
-					$genre->
-					setPoster($poster)->
-					save();
-				}
-
-				notify()->success('Updated genre details successfully.');
-				return redirect(route('admin.genres.index'));
-			}
+		catch (ModelNotFoundException $exception) {
+			$response->error($exception->getMessage())->route('admin.genres.index');
+		}
+		catch (ValidationException $exception) {
+			$response->error($exception->getError())->back()->data($request->all());
+		}
+		catch (Exception $exception) {
+			$response->error($exception->getMessage())->back()->data($request->all());
+		}
+		finally {
+			return $response->send();
 		}
 	}
 
-	public function updateStatus(Request $request) {
+	public function updateStatus(Request $request){
 		$validator = Validator::make($request->all(), [
 			'id' => ['bail', 'required', Rule::exists(Tables::Genres, 'id')],
 			'status' => ['bail', 'required', Rule::in([0, 1])],
@@ -116,12 +116,12 @@ class GenresController extends BaseController{
 		}
 	}
 
-	public function delete($id = null) {
+	public function delete($id = null){
 		$validator = Validator::make(['id' => $id], [
 			'id' => ['bail', 'required', Rule::exists(Tables::Genres, 'id')],
 		]);
 		if ($validator->fails()) {
-			return response()->json(['code' => 400, 'message' => sprintf("Got id = %d", $id)]);
+			return response()->json(['code' => 400, 'message' => 'Could not find genre for that key.']);
 		}
 		else {
 			Genre::find($id)->delete();

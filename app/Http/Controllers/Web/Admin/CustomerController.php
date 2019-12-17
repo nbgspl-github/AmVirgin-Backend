@@ -2,18 +2,27 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
+use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
-use App\Interfaces\Roles;
+use App\Interfaces\Tables;
 use App\Models\Customer;
-use App\Models\Genre;
-use App\Rules\UniqueExceptSelf;
+use App\Traits\ValidatesRequest;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class CustomerController extends BaseController{
+	use ValidatesRequest;
+
+	protected $rules;
+
+	public function __construct(){
+		$this->rules = config('rules.admin.customers');
+	}
+
 	public function index(){
-		$users = Customer::all();
+		$users = Customer::retrieveAll();
 		return view('admin.customers.index')->with('users', $users);
 	}
 
@@ -27,63 +36,53 @@ class CustomerController extends BaseController{
 			return view('admin.customers.edit')->with('customer', $customer);
 		}
 		else {
-			notify()->error(trans('admin.customers.not-found'));
-			return redirect(route('admin.genres.index'));
+			return responseWeb()->route('admin.customers.index')->error(trans('admin.customers.not-found'))->send();
 		}
 	}
 
-	public function store(Request $request) {
-		$validator = Validator::make($request->all(), [
-			'name' => ['bail', 'required', 'string', 'min:4', 'max:50'],
-			'mobile' => ['bail', 'required', 'digits:10', Rule::unique('customers', 'mobile')],
-			'email' => ['bail', 'required', 'email', Rule::unique('customers', 'email')],
-			'password' => ['bail', 'required', 'string', 'min:4', 'max:128'],
-			'active' => ['bail', 'required', Rule::in([0, 1])],
-		]);
-		if ($validator->fails()) {
-			return responseWeb()->
-			route('admin.customers.create')->
-			data($request->all())->
-			error($validator->errors()->first())->
-			send();
+	public function store(Request $request){
+		$response = null;
+		try {
+			$payload = $this->requestValid($request, $this->rules['store']);
+			Customer::create($payload);
+			$response = responseWeb()->route('admin.customers.index')->success(__('strings.customer.store.success'));
 		}
-		else {
-			Customer::create($request->all());
-			return responseWeb()->
-			route('admin.customers.index')->
-			success(trans('admin.customers.store-success'))->
-			send();
+		catch (ValidationException $exception) {
+			$response = responseWeb()->back()->data($request->all())->error($exception->getError());
+		}
+		catch (Exception $exception) {
+			$response = responseWeb()->back()->data($request->all())->error($exception->getMessage());
+		}
+		finally {
+			return $response->send();
 		}
 	}
 
-	public function update(Request $request, $id = null) {
+	public function update(Request $request, $id = null){
+		$response = null;
 		$customer = Customer::retrieve($id);
-		if ($customer == null) {
-			return responseWeb()->
-			error(trans('admin.customers.not-found'))->
-			back()->
-			send();
+		try {
+			if ($customer == null)
+				throw new ModelNotFoundException(__('strings.customer.not-found'));
+			$additional = [
+				'mobile' => [Rule::unique(Tables::Customers, 'mobile')->ignore($customer->getKey())],
+				'email' => [Rule::unique(Tables::Customers, 'email')->ignore($customer->getKey())],
+			];
+			$payload = $this->requestValid($request, $this->rules['update'], $additional);
+			$customer->update($payload);
+			$response = responseWeb()->route('admin.customers.index')->success(__('strings.customer.update.success'));
 		}
-		$validator = Validator::make($request->all(), [
-			'name' => ['bail', 'required', 'string', 'min:4', 'max:50'],
-			'mobile' => ['bail', 'required', 'digits:10', new UniqueExceptSelf(Customer::class, 'mobile', $request->mobile, $id, 'Mobile number')],
-			'email' => ['bail', 'required', 'email', new UniqueExceptSelf(Customer::class, 'email', $request->email, $id, 'Email address')],
-			'active' => ['bail', 'required', Rule::in([0, 1])],
-		]);
-		if ($validator->fails()) {
-			return responseWeb()->
-			route('admin.customers.edit', $id)->
-			data($request->all())->
-			error($validator->errors()->first())->
-			send();
+		catch (ModelNotFoundException $exception) {
+			$response = responseWeb()->route('admin.customers.index')->error($exception->getMessage());
 		}
-		else {
-			$customer->update($request->all());
-			return responseWeb()->
-			route('admin.customers.index')->
-			success(trans('admin.customers.update-success'))->
-			send();
-
+		catch (ValidationException $exception) {
+			$response = responseWeb()->back()->data($request->all())->error($exception->getError());
+		}
+		catch (Exception $exception) {
+			$response = responseWeb()->route('admin.customers.index')->error($exception->getMessage());
+		}
+		finally {
+			return $response->send();
 		}
 	}
 }
