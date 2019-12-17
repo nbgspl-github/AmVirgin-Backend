@@ -117,7 +117,7 @@ class SlidersController extends BaseController{
 				'active' => $request->active,
 			]);
 			if ($request->hasFile('poster')) {
-				$poster = Storage::putFile(Directories::Sliders, $request->file('poster'), 'public');
+				$poster = Storage::disk('public')->putFile(Directories::Sliders, $request->file('poster'), 'public');
 				$slide->setPoster($poster)->save();
 			}
 			$response = responseWeb()->
