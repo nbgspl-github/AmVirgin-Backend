@@ -122,7 +122,7 @@
 												<div class="card-body p-0 rounded">
 													<div class="row">
 														<div class="col-12 text-center">
-															<img id="posterPreview" class="img-fluid" style="max-height: 600px!important; min-height: 600px;"/>
+															<img id="posterPreview" class="img-fluid" style="max-height: 684px!important; min-height: 684px;"/>
 														</div>
 													</div>
 												</div>

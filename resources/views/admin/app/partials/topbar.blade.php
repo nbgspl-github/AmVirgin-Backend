@@ -17,17 +17,16 @@
 				<div class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-lg">
 					<!-- item-->
 					<div class="dropdown-item noti-title">
-						<span class="badge badge-danger float-right">84</span>
-						<h5>Notification</h5>
+						<h5>Notifications</h5>
 					</div>
 
 					<div class="slimscroll" style="max-height: 230px;">
 
 						<!-- item-->
-						<a href="javascript:void(0);" class="dropdown-item notify-item">
+						<span href="javascript:void(0);" class="dropdown-item notify-item">
 							<div class="notify-icon bg-primary"><i class="mdi mdi-cart-outline"></i></div>
 							<p class="notify-details">Your order is placed<span class="text-muted">Dummy text of the printing and typesetting industry.</span></p>
-						</a>
+						</span>
 
 						<!-- item-->
 						<a href="javascript:void(0);" class="dropdown-item notify-item">
@@ -52,11 +51,6 @@
 							<p class="notify-details">Your item is shipped<span class="text-muted">It is a long established fact that a reader will</span></p>
 						</a>
 					</div>
-
-					<!-- All-->
-					<a href="javascript:void(0);" class="dropdown-item notify-all">
-						View All
-					</a>
 
 				</div>
 			</li>

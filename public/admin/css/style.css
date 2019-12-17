@@ -870,7 +870,7 @@ code {
     margin-bottom: 0;
     overflow: hidden;
     margin-left: 45px;
-    text-overflow: ellipsis;
+    text-overflow: fade;
     white-space: nowrap
 }
 
