@@ -5,17 +5,12 @@ namespace App\Http\Middleware;
 use App\Interfaces\StatusCodes;
 use Closure;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
-use Illuminate\Http\Request;
 
 class Authenticate extends Middleware{
 
 	private $redirectTo;
 
-	protected function unauthenticated($request, array $guards) {
-		return redirect($this->redirectTo);
-	}
-
-	public function handle($request, Closure $next, ...$guards) {
+	public function handle($request, Closure $next, ...$guards){
 		$guard = $guards[0];
 		if (!$this->auth->guard($guard)->user()) {
 			switch ($guard) {
@@ -32,19 +27,17 @@ class Authenticate extends Middleware{
 					break;
 
 				case 'seller-api':
-					return response()->json(['message' => 'Unauthorized'], StatusCodes::Unauthorized);
-					break;
-
 				case 'customer-api':
-					return response()->json(['message' => 'Unauthorized'], StatusCodes::Unauthorized);
-					break;
-
 				case 'admin-api':
-					return response()->json(['message' => 'Unauthorized'], StatusCodes::Unauthorized);
+					return response()->json(['message' => 'Unauthorized'], HttpUnauthorized);
 					break;
 			}
 		}
 		return $next($request);
+	}
+
+	protected function unauthenticated($request, array $guards){
+		return redirect($this->redirectTo);
 	}
 
 }

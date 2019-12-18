@@ -51,12 +51,17 @@ return [
 				'mobile' => ['bail', 'nullable', 'digits:10', 'exists:customers,mobile', 'required_without:email'],
 				'password' => ['bail', 'required', 'string', 'min:4', 'max:64'],
 			],
+			'login2F' => [
+				'email' => ['bail', 'nullable', 'email', 'exists:customers,email', 'required_without:mobile'],
+				'mobile' => ['bail', 'nullable', 'digits:10', 'exists:customers,mobile', 'required_without:email'],
+				'otp' => ['bail', 'required', 'numeric', 'min:1111', 'max:9999'],
+			],
 			'logout' => [
 
 			],
 			'register' => [
-				'email' => ['bail', 'required_without:mobile', 'email', 'unique:customers,email'],
 				'name' => ['bail', 'required', 'string', 'min:2', 'max:100'],
+				'email' => ['bail', 'required_without:mobile', 'email', 'unique:customers,email'],
 				'mobile' => ['bail', 'required_without:email', 'digits:10', 'unique:customers,mobile'],
 				'password' => ['bail', 'required', 'string', 'min:4', 'max:64'],
 			],

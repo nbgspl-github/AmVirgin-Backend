@@ -2,6 +2,24 @@
 
 use Illuminate\Support\Facades\Storage;
 
+const HttpOkay = 200;
+
+const HttpCreated = 201;
+
+const HttpNoContent = 204;
+
+const HttpInvalidRequestFormat = 400;
+
+const HttpResourceNotFound = 404;
+
+const HttpServerError = 500;
+
+const HttpResourceAlreadyExists = 409;
+
+const HttpUnauthorized = 401;
+
+const HttpDeniedAccess = 403;
+
 function __status($status){
 	if ($status == 1)
 		return 'Active';

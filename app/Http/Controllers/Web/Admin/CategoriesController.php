@@ -128,10 +128,10 @@ class CategoriesController extends BaseController{
 		try {
 			$category = Category::retrieveThrows($id);
 			$category->delete();
-			return $this->success()->message('Category deleted successfully.')->status(StatusCodes::Okay)->send();
+			return $this->success()->message('Category deleted successfully.')->status(HttpOkay)->send();
 		}
 		catch (ModelNotFoundException $exception) {
-			return $this->failed()->message($exception->getMessage())->status(StatusCodes::ResourceNotFound)->send();
+			return $this->failed()->message($exception->getMessage())->status(HttpResourceNotFound)->send();
 		}
 	}
 }

@@ -10,7 +10,6 @@ use App\Exceptions\ResourceNotFoundException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\Auth\Seller\AuthProfileResource;
-use App\Interfaces\StatusCodes;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Exception;
@@ -29,7 +28,7 @@ abstract class BaseAuthController extends BaseController{
 
 	}
 
-	protected abstract function authTarget();
+	protected abstract function authTarget(): string;
 
 	protected abstract function rulesExists();
 
@@ -77,7 +76,7 @@ abstract class BaseAuthController extends BaseController{
 		return __('strings.auth.denied');
 	}
 
-	protected function shouldAllowOnlyActiveUsers(){
+	protected function shouldAllowOnlyActiveUsers(): bool{
 		return false;
 	}
 
@@ -141,52 +140,54 @@ abstract class BaseAuthController extends BaseController{
 		return JWTAuth::fromUser($user);
 	}
 
-	protected function exists(Request $request){
+	protected function exists(){
 		try {
-			$this->requestValid($request, $this->rulesExists());
-			$conditions = $this->conditionsExists($request);
+			$this->requestValid(request(), $this->rulesExists());
+			$conditions = $this->conditionsExists(request());
 			$user = $this->check($conditions);
 			if ($user != null) {
-				return $this->success()->status(StatusCodes::Okay)->message($this->checkSuccess())->send();
+				return $this->success()->status(HttpOkay)->message($this->checkSuccess())->send();
 			}
 			else {
-				return $this->success()->status(StatusCodes::ResourceNotFound)->message($this->checkFailed())->send();
+				return $this->success()->status(HttpResourceNotFound)->message($this->checkFailed())->send();
 			}
 		}
 		catch (ValidationException $exception) {
-			return $this->failed()->status(StatusCodes::InvalidRequestFormat)->message($exception->getError())->send();
+			return $this->failed()->status(HttpInvalidRequestFormat)->message($exception->getError())->send();
 		}
 		catch (Exception $exception) {
 			return $this->error()->message($exception->getMessage())->send();
 		}
 	}
 
-	protected function login(Request $request){
+	protected function login(){
+		$request = request();
 		try {
 			$this->requestValid($request, $this->rulesLogin());
 			$conditions = $this->conditionsLogin($request);
 			$seller = $this->throwIfNotFound($conditions);
 			if ($this->shouldAllowOnlyActiveUsers() && !$seller->isActive()) {
-				return $this->failed()->status(StatusCodes::DeniedAccess)->message($this->deniedAccess())->send();
+				return $this->failed()->status(HttpDeniedAccess)->message($this->deniedAccess())->send();
 			}
 			$token = $this->guard()->attempt($this->credentials($request));
 			if (!$token)
-				return $this->failed()->message($this->loginFailed())->status(StatusCodes::Unauthorized)->send();
+				return $this->failed()->message($this->loginFailed())->status(HttpUnauthorized)->send();
 			else
 				return $this->success()->message($this->loginSuccess())->setValue('data', $this->loginPayload($seller, $token))->send();
 		}
 		catch (ResourceNotFoundException $exception) {
-			return $this->failed()->status(StatusCodes::ResourceNotFound)->send();
+			return $this->failed()->status(HttpResourceNotFound)->send();
 		}
 		catch (ValidationException $exception) {
-			return $this->failed()->message($exception->getError())->status(StatusCodes::InvalidRequestFormat)->send();
+			return $this->failed()->message($exception->getError())->status(HttpInvalidRequestFormat)->send();
 		}
 		catch (Exception $exception) {
 			return $this->error()->message($exception->getTraceAsString())->send();
 		}
 	}
 
-	protected function logout(Request $request){
+	protected function logout(){
+		$request = request();
 		try {
 			$this->guard()->logout();
 			return $this->success()->message($this->logoutSuccess())->send();
@@ -214,7 +215,8 @@ abstract class BaseAuthController extends BaseController{
 		];
 	}
 
-	protected function register(Request $request){
+	protected function register(){
+		$request = \request();
 		try {
 			$this->requestValid($request, $this->rulesRegister());
 			$this->throwIfFound($this->conditionsRegister($request));
@@ -223,20 +225,20 @@ abstract class BaseAuthController extends BaseController{
 			if (!$token)
 				return $this->failed()->message($this->registerFailed())->send();
 			else
-				return $this->success()->message($this->registerSuccess())->status(StatusCodes::Created)->setValue('data', $this->registerPayload($user, $token))->send();
+				return $this->success()->message($this->registerSuccess())->status(HttpCreated)->setValue('data', $this->registerPayload($user, $token))->send();
 		}
 		catch (ResourceConflictException $exception) {
-			return $this->failed()->status(StatusCodes::ResourceAlreadyExists)->message($this->registerTaken())->send();
+			return $this->failed()->status(HttpResourceAlreadyExists)->message($this->registerTaken())->send();
 		}
 		catch (ValidationException $exception) {
-			return $this->failed()->message($exception->getError())->status(StatusCodes::InvalidRequestFormat)->send();
+			return $this->failed()->message($exception->getError())->status(HttpInvalidRequestFormat)->send();
 		}
 		catch (Exception $exception) {
 			return $this->error()->message($exception->getMessage())->send();
 		}
 	}
 
-	protected function create(Request $request){
+	protected function create($request){
 		return $this->authTarget()::create([
 			'name' => $request->name,
 			'email' => $request->email,
@@ -245,7 +247,7 @@ abstract class BaseAuthController extends BaseController{
 		]);
 	}
 
-	protected function profile(Request $request){
+	protected function profile(){
 		return new AuthProfileResource($this->guard()->user());
 	}
 

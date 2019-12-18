@@ -24,7 +24,7 @@ class AuthController extends BaseAuthController{
 		$this->rules = config('rules.auth.customer');
 	}
 
-	protected function authTarget(){
+	protected function authTarget(): string{
 		return Customer::class;
 	}
 

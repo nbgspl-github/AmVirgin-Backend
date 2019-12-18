@@ -4,16 +4,16 @@ namespace App\Traits;
 
 use App\Classes\Builders\ResponseBuilder;
 
-trait FluentResponse {
-	private function success() {
+trait FluentResponse{
+	private function success(){
 		return ResponseBuilder::asSuccess();
 	}
 
-	private function failed() {
+	private function failed(){
 		return ResponseBuilder::asFailure();
 	}
 
-	private function error() {
+	private function error(){
 		return ResponseBuilder::asError();
 	}
 

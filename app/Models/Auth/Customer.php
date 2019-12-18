@@ -7,6 +7,7 @@ use App\Traits\BroadcastPushNotifications;
 use App\Traits\FluentConstructor;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
+use App\Traits\OtpVerificationSupport;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
@@ -19,6 +20,7 @@ class Customer extends Authenticatable implements JWTSubject{
 	use RetrieveCollection;
 	use FluentConstructor;
 	use ActiveStatus;
+	use OtpVerificationSupport;
 
 	/**
 	 * The attributes that are mass assignable.

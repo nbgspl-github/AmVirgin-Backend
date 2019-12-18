@@ -15,7 +15,6 @@
 					<i class="mdi mdi-bell-outline noti-icon"></i>
 				</a>
 				<div class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-lg">
-					<!-- item-->
 					<div class="dropdown-item noti-title">
 						<h5>Notifications</h5>
 					</div>
@@ -26,13 +25,12 @@
 							<p class="notify-details">User 'Aviral' has just signed up!.</p>
 						</span>
 					</div>
-
 				</div>
 			</li>
 			<li class="list-inline-item dropdown notification-list">
 				<a class="nav-link dropdown-toggle arrow-none waves-effect nav-user" data-toggle="dropdown" href="#" role="button"
 				   aria-haspopup="false" aria-expanded="false">
-					<span class="text-white text-decoration-none"><img src="{{asset("admin/img/user.png")}}" alt="user" class="rounded-circle">&nbsp;&nbsp;Super Admin</span>
+					<span class="text-white text-decoration-none"><img src="{{asset("admin/img/user.png")}}" alt="user" class="rounded-circle">&nbsp;&nbsp;{{auth()->guard('admin')->user()->name}}</span>
 				</a>
 				<div class="dropdown-menu dropdown-menu-right dropdown-menu-animated profile-dropdown ">
 					<a class="dropdown-item" href="#"><i class="mdi mdi-account-circle m-r-5 text-muted"></i>

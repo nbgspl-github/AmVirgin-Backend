@@ -24,7 +24,7 @@ class AuthController extends BaseAuthController{
 		$this->rules = config('rules.auth.seller');
 	}
 
-	protected function authTarget(){
+	protected function authTarget(): string{
 		return Seller::class;
 	}
 
@@ -44,7 +44,7 @@ class AuthController extends BaseAuthController{
 		return Auth::guard('seller-api');
 	}
 
-	protected function shouldAllowOnlyActiveUsers(){
+	protected function shouldAllowOnlyActiveUsers(): bool{
 		return true;
 	}
 }

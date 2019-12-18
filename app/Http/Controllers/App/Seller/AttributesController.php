@@ -32,10 +32,10 @@ class AttributesController extends ResourceController{
 			$collection = $this->provider()::all();
 			$resource = $this->collectionConverter($collection);
 			$response = $this->success()->setResource($resource);
-			$response = ($collection->count() < 1) ? $response->status(StatusCodes::NoContent) : $response->status(StatusCodes::Okay);
+			$response = ($collection->count() < 1) ? $response->status(HttpNoContent) : $response->status(HttpOkay);
 		}
 		catch (ResourceNotFoundException $exception) {
-			$response = $this->failed()->status(StatusCodes::ResourceNotFound)->message(__('strings.category.not-found'));
+			$response = $this->failed()->status(HttpResourceNotFound)->message(__('strings.category.not-found'));
 		}
 		catch (Exception $exception) {
 			$response = $this->error()->message($exception->getMessage());
@@ -52,7 +52,7 @@ class AttributesController extends ResourceController{
 			$response = $this->success()->setResource($this->resourceConverter($attribute));
 		}
 		catch (ResourceNotFoundException $exception) {
-			$response = $this->failed()->status(StatusCodes::ResourceNotFound)->message(__('strings.attribute.not-found'));
+			$response = $this->failed()->status(HttpResourceNotFound)->message(__('strings.attribute.not-found'));
 		}
 		catch (Exception $exception) {
 			$response = $this->error()->message($exception->getMessage());
@@ -73,10 +73,10 @@ class AttributesController extends ResourceController{
 				'attributeName' => $attributeName,
 				'categoryId' => $categoryId,
 			]);
-			$response = $this->success()->message(__('strings.category.store.success'))->status(StatusCodes::Created);
+			$response = $this->success()->message(__('strings.category.store.success'))->status(HttpCreated);
 		}
 		catch (ResourceNotFoundException $exception) {
-			$response = $this->failed()->message(__('strings.category.not-found'))->status(StatusCodes::ResourceNotFound);
+			$response = $this->failed()->message(__('strings.category.not-found'))->status(HttpResourceNotFound);
 		}
 		catch (Exception $exception) {
 			$response = $this->error()->message($exception->getMessage());

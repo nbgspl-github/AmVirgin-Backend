@@ -183,7 +183,7 @@
 											<div>
 												<div class="custom-control custom-checkbox">
 													<input type="checkbox" class="custom-control-input" id="customCheck2">
-													<label class="custom-control-label" for="customCheck2">Yes</label>
+													<label class="custom-control-label stretched-link" for="customCheck2">Yes</label>
 												</div>
 											</div>
 										</div>

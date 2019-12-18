@@ -71,10 +71,10 @@ class ProductsController extends ResourceController{
 				'longDescription' => $request->longDescription,
 				'sku' => $request->sku,
 			]);
-			$response = $this->success()->status(StatusCodes::Created)->setValue('data', $product)->message(__('strings.product.store.success'));
+			$response = $this->success()->status(HttpCreated)->setValue('data', $product)->message(__('strings.product.store.success'));
 		}
 		catch (ValidationException $exception) {
-			$response = $this->failed()->status(StatusCodes::InvalidRequestFormat)->message($exception->getError());
+			$response = $this->failed()->status(HttpInvalidRequestFormat)->message($exception->getError());
 		}
 		catch (Exception $exception) {
 			$response = $this->error()->message($exception->getMessage());
@@ -94,7 +94,7 @@ class ProductsController extends ResourceController{
 			$response = $this->success()->setValue('data', $product);
 		}
 		catch (ModelNotFoundException $exception) {
-			$response = $this->failed()->status(StatusCodes::ResourceNotFound);
+			$response = $this->failed()->status(HttpResourceNotFound);
 		}
 		catch (Exception $exception) {
 			$response = $this->error()->message($exception->getMessage());

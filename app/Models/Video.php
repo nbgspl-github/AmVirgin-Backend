@@ -3,9 +3,21 @@
 namespace App\Models;
 
 use App\Contracts\FluentConstructor;
+use App\Traits\RetrieveCollection;
+use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
 class Video extends Model implements FluentConstructor{
+	use RetrieveResource;
+	use RetrieveCollection;
+
+	/**
+	 *  Makes a new instance and returns it.
+	 * @return Video
+	 */
+	public static function instance(){
+		return new self();
+	}
 
 	/**
 	 * @return string
@@ -197,13 +209,5 @@ class Video extends Model implements FluentConstructor{
 	public function setPreviewUrl(?string $previewUrl): Video{
 		$this->previewUrl = $previewUrl;
 		return $this;
-	}
-
-	/**
-	 *  Makes a new instance and returns it.
-	 * @return Video
-	 */
-	public static function instance(){
-		return new self();
 	}
 }

@@ -7,6 +7,7 @@ use App\Traits\BroadcastPushNotifications;
 use App\Traits\FluentConstructor;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
+use App\Traits\OtpVerificationSupport;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -18,6 +19,7 @@ class Seller extends Authenticatable implements JWTSubject{
 	use ActiveStatus;
 	use RetrieveResource;
 	use RetrieveCollection;
+	use OtpVerificationSupport;
 
 	/**
 	 * The attributes that are mass assignable.

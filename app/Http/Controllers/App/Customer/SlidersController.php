@@ -30,7 +30,7 @@ class SlidersController extends ResourceController{
 				$response = $this->success()->setValue('data', $all);
 			}
 			else {
-				$response = $this->failed()->status(StatusCodes::NoContent);
+				$response = $this->failed()->status(HttpNoContent);
 			}
 		}
 		catch (Exception $exception) {

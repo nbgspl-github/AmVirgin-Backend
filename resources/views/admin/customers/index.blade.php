@@ -8,8 +8,8 @@
 				</div>
 				<div class="card-body animatable">
 					<div class="row px-2 mb-3">
-						<div class="col-sm-6"><h4 class="mt-0 header-title pt-1">All Customers</h4></div>
-						<div class="col-sm-6">
+						<div class="col-6"><h4 class="mt-0 header-title pt-1">All Customers</h4></div>
+						<div class="col-6">
 							<a class="float-right btn btn-outline-primary waves-effect waves-light" href="{{route('admin.customers.create')}}">
 								Add Customer
 							</a>

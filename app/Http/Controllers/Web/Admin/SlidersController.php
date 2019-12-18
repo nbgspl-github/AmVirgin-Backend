@@ -91,13 +91,13 @@ class SlidersController extends BaseController{
 		if ($slider == null) {
 			return $this->failed()->
 			message('Could not find slide for that key.')->
-			status(StatusCodes::ResourceNotFound)->
+			status(HttpResourceNotFound)->
 			send();
 		}
 		else {
 			$slider->delete();
 			return $this->success()->
-			status(StatusCodes::Okay)->
+			status(HttpOkay)->
 			message('Successfully deleted slide.')->
 			send();
 		}
@@ -149,7 +149,7 @@ class SlidersController extends BaseController{
 		if ($validator->fails()) {
 			return $this->failed()->
 			message($validator->errors()->first())->
-			status(StatusCodes::ResourceNotFound)->
+			status(HttpResourceNotFound)->
 			send();
 		}
 		else {
@@ -157,7 +157,7 @@ class SlidersController extends BaseController{
 			setActive($request->active)->
 			save();
 			return $this->success()->
-			status(StatusCodes::Okay)->
+			status(HttpOkay)->
 			message('Successfully updated active status.')->
 			send();
 		}

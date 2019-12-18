@@ -2,19 +2,15 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Customer;
-use App\Traits\GenerateUrls;
 use Illuminate\Console\Command;
 
-class CodeTester extends Command{
-	use GenerateUrls;
-
+class MyCommand extends Command{
 	/**
 	 * The name and signature of the console command.
 	 *
 	 * @var string
 	 */
-	protected $signature = 'code:test';
+	protected $signature = 'command:name';
 
 	/**
 	 * The console command description.
@@ -38,8 +34,6 @@ class CodeTester extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		$model = Customer::class;
-		echo $model;
-		return;
+		//
 	}
 }

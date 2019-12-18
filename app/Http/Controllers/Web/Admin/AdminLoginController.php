@@ -32,7 +32,7 @@ class AdminLoginController extends BaseController{
 			return redirect(route('admin.login'))->withInput($request->all());
 		}
 		else {
-			notify()->error('Login success');
+			notify()->success('Logged in successfully');
 			return redirect($this->redirectTo);
 		}
 	}

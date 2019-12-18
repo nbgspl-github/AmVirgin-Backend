@@ -80,7 +80,7 @@ class ResponseBuilder{
 		$object = new ResponseBuilder();
 		$object->message = 'Failed';
 		$object->status = 0;
-		$object->statusCode = StatusCodes::ServerError;
+		$object->statusCode = HttpServerError;
 		return $object;
 	}
 
