@@ -10,10 +10,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class VideosController extends ResourceController{
-
 	public function index(){
 		$payload = Video::retrieveAll();
-		return view('admin.videos.index')->with('videos', $payload);
+
 	}
 
 	protected function parentProvider(){

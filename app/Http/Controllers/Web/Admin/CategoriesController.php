@@ -98,7 +98,7 @@ class CategoriesController extends BaseController{
 			$response = responseWeb()->back()->data($request->all())->error($exception->getError());
 		}
 		catch (Exception $exception) {
-			$response = responseWeb()->back()->data($request->all())->error('Something went wrong. Please try again later.');
+			$response = responseWeb()->back()->data($request->all())->error($exception->getMessage());
 		}
 		finally {
 			return $response->send();
