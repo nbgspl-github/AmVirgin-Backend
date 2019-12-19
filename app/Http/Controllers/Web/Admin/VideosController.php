@@ -7,6 +7,7 @@ use App\Http\Controllers\BaseController;
 use App\Interfaces\Directories;
 use App\Models\Genre;
 use App\Models\MediaLanguage;
+use App\Models\MediaQuality;
 use App\Models\MediaServer;
 use App\Models\Video;
 use App\Traits\FluentResponse;
@@ -34,7 +35,12 @@ class VideosController extends BaseController{
 		$genrePayload = Genre::all();
 		$languagePayload = MediaLanguage::all()->sortBy('name')->all();
 		$serverPayload = MediaServer::all();
-		return view('admin.videos.create')->with('genres', $genrePayload)->with('languages', $languagePayload)->with('servers', $serverPayload);
+		$qualityPayload = MediaQuality::retrieveAll();
+		return view('admin.videos.create')->
+		with('genres', $genrePayload)->
+		with('languages', $languagePayload)->
+		with('servers', $serverPayload)->
+		with('qualities', $qualityPayload);
 	}
 
 	public function store(Request $request){

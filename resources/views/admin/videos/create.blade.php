@@ -18,19 +18,19 @@
 									<div class="card-body">
 										<div class="form-group">
 											<label for="title">Title<span class="text-primary">*</span></label>
-											<input id="title" type="text" name="title" class="form-control" required placeholder="Type here the movie's title" minlength="1" maxlength="100" value="{{old('title')}}"/>
+											<input id="title" type="text" name="title" class="form-control" required placeholder="Type here the movie's title" minlength="1" maxlength="256" value="Spectral"/>
 										</div>
 										<div class="form-group">
 											<label for="movieDBId">TheMovieDB Id<span class="text-primary">*</span></label>
-											<input id="movieDBId" type="text" name="movieDBId" class="form-control" required placeholder="Type reference number from TheMovieDB" minlength="1" maxlength="100" value="{{old('movieDBId')}}"/>
+											<input id="movieDBId" type="text" name="movieDBId" class="form-control" required placeholder="Type reference number from TheMovieDB" minlength="1" maxlength="100" value="324670"/>
 										</div>
 										<div class="form-group">
 											<label for="imdbId">IMDB Id<span class="text-primary">*</span></label>
-											<input id="imdbId" type="text" name="imdbId" class="form-control" required placeholder="Type reference number from IMDB" minlength="1" maxlength="100" value="{{old('imdbId')}}"/>
+											<input id="imdbId" type="text" name="imdbId" class="form-control" required placeholder="Type reference number from IMDB" minlength="1" maxlength="100" value="2106651"/>
 										</div>
 										<div class="form-group">
 											<label for="description">Overview (Description)<span class="text-primary">*</span></label>
-											<textarea id="description" name="description" class="form-control" required placeholder="Type short summary about the movie or video" minlength="1" maxlength="100">{{old('description')}}</textarea>
+											<textarea id="description" name="description" class="form-control" required placeholder="Type short summary about the movie or video" minlength="1" maxlength="100">A sci-fi/thriller story centered on a special-ops team that is dispatched to fight supernatural beings.</textarea>
 										</div>
 										<div class="form-group">
 											<label for="genre">Choose a genre<span class="text-primary">*</span></label>
@@ -43,19 +43,19 @@
 										</div>
 										<div class="form-group">
 											<label for="releaseDate">Release date<span class="text-primary">*</span></label>
-											<input id="releaseDate" type="date" name="releaseDate" class="form-control" required placeholder="Choose or type release date" minlength="1" maxlength="100" value="{{old('releaseDate')}}"/>
+											<input id="releaseDate" type="date" name="releaseDate" class="form-control" required placeholder="Choose or type release date" minlength="1" maxlength="100" value="2016"/>
 										</div>
 										<div class="form-group">
 											<label for="averageRating">Average rating<span class="text-primary">*</span></label>
-											<input id="averageRating" type="number" name="averageRating" class="form-control" required placeholder="Type average rating for this movie/video" minlength="1" maxlength="100" value="{{old('averageRating')}}"/>
+											<input id="averageRating" type="number" name="averageRating" class="form-control" required placeholder="Type average rating for this movie/video" minlength="1" maxlength="100" value="6.3"/>
 										</div>
 										<div class="form-group">
 											<label for="votes">Votes<span class="text-primary">*</span></label>
-											<input id="votes" type="number" name="votes" class="form-control" required placeholder="Type votes given to this movie/video" minlength="1" maxlength="100" value="{{old('votes')}}"/>
+											<input id="votes" type="number" name="votes" class="form-control" required placeholder="Type votes given to this movie/video" minlength="1" maxlength="100" value="45947"/>
 										</div>
 										<div class="form-group">
 											<label for="popularity">Popularity<span class="text-primary">*</span></label>
-											<input id="popularity" type="number" name="popularity" class="form-control" required placeholder="Type popularity of this movie/video" minlength="1" maxlength="100" value="{{old('popularity')}}"/>
+											<input id="popularity" type="number" name="popularity" class="form-control" required placeholder="Type popularity of this movie/video" minlength="1" maxlength="100" value="66"/>
 										</div>
 										<div class="form-group">
 											<label for="server">Choose a server<span class="text-primary">*</span></label>
@@ -78,12 +78,10 @@
 										<div class="form-group">
 											<label for="mediaQuality">Media quality<span class="text-primary">*</span></label>
 											<select id="mediaQuality" name="mediaQuality" class="form-control" required>
-												<option value="">Choose...</option>
-												<option value="1">Standard (480p)</option>
-												<option value="2">HD (720p)</option>
-												<option value="3">FHD (1080p)</option>
-												<option value="4">2K (2048p)</option>
-												<option value="5">4K (3840p)</option>
+												<option value="0">Choose...</option>
+												@foreach($qualities as $quality)
+													<option value="{{$quality->getKey()}}">{{$quality->getName()}}</option>
+												@endforeach
 											</select>
 										</div>
 										<div class="form-group pb-0 mb-0">
