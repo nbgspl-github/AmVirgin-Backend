@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 class VideosController extends ResourceController{
 	public function index(){
 		$payload = Video::retrieveAll();
-
 	}
 
 	protected function parentProvider(){

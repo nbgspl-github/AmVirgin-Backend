@@ -6,14 +6,14 @@ use App\Traits\FluentConstructor;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class CustomerOtp extends Model{
+class SellerOtp extends Model{
 	use RetrieveResource;
 	use FluentConstructor;
 
-	public $incrementing = false;
-	protected $table = 'otp-customers';
-	protected $primaryKey = 'mobile';
+	protected $table = 'otp-sellers';
 	protected $fillable = ['mobile', 'otp'];
+	protected $primaryKey = 'mobile';
+	protected $hidden = ['created_at', 'updated_at'];
 
 	/**
 	 * @return string
@@ -26,7 +26,7 @@ class CustomerOtp extends Model{
 	 * @param string $mobile
 	 * @return CustomerOtp
 	 */
-	public function setMobile(string $mobile): CustomerOtp{
+	public function setMobile(string $mobile): SellerOtp{
 		$this->mobile = $mobile;
 		return $this;
 	}
@@ -42,9 +42,8 @@ class CustomerOtp extends Model{
 	 * @param string $otp
 	 * @return CustomerOtp
 	 */
-	public function setOtp(string $otp): CustomerOtp{
+	public function setOtp(string $otp): SellerOtp{
 		$this->otp = $otp;
 		return $this;
 	}
-
 }

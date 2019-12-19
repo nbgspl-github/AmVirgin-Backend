@@ -21,49 +21,46 @@ return [
 		/* Seller Auth Rules*/
 		'seller' => [
 			'exists' => [
-				'email' => ['bail', 'required_without:mobile', 'email'],
-				'mobile' => ['bail', 'required_without:email', 'digits:10'],
+				'type' => ['bail', 'required', Rule::in([1, 2, 3])],
+				'email' => ['bail', 'email', 'required_if:type,1'],
+				'mobile' => ['bail', 'digits:10', 'required_if:type,2,3'],
 			],
 			'login' => [
-				'email' => ['bail', 'nullable', 'email', 'exists:sellers,email', 'required_without:mobile'],
-				'mobile' => ['bail', 'nullable', 'digits:10', 'exists:sellers,mobile', 'required_without:email'],
-				'password' => ['bail', 'required', 'string', 'min:4', 'max:64'],
-			],
-			'logout' => [
-
+				'type' => ['bail', 'required', Rule::in([1, 2, 3])],
+				'email' => ['bail', 'required_if:type,1', 'nullable'],
+				'mobile' => ['bail', 'required_if:type,2,3', 'nullable', 'digits:10'],
+				'password' => ['bail', 'required_if:type,1,2', 'string', 'min:4', 'max:64'],
+				'otp' => ['bail', 'required_if:type,3', 'numeric', 'min:1111', 'max:9999'],
 			],
 			'register' => [
-				'email' => ['bail', 'required_without:mobile', 'email', 'unique:sellers,email'],
 				'name' => ['bail', 'required', 'string', 'min:2', 'max:100'],
-				'mobile' => ['bail', 'required_without:email', 'digits:10', 'unique:sellers,mobile'],
+				'email' => ['bail', 'required', 'email'],
+				'mobile' => ['bail', 'required', 'digits:10'],
 				'password' => ['bail', 'required', 'string', 'min:4', 'max:64'],
+				'otp' => ['bail', 'required', 'numeric', 'min:1111', 'max:9999'],
 			],
 		],
 
 		/* Customer Auth Rules*/
 		'customer' => [
 			'exists' => [
-				'email' => ['bail', 'required_without:mobile', 'email'],
-				'mobile' => ['bail', 'required_without:email', 'digits:10'],
+				'type' => ['bail', 'required', Rule::in([1, 2, 3])],
+				'email' => ['bail', 'email', 'required_if:type,1'],
+				'mobile' => ['bail', 'digits:10', 'required_if:type,2,3'],
 			],
 			'login' => [
-				'email' => ['bail', 'nullable', 'email', 'exists:customers,email', 'required_without:mobile'],
-				'mobile' => ['bail', 'nullable', 'digits:10', 'exists:customers,mobile', 'required_without:email'],
-				'password' => ['bail', 'required', 'string', 'min:4', 'max:64'],
-			],
-			'login2F' => [
-				'email' => ['bail', 'nullable', 'email', 'exists:customers,email', 'required_without:mobile'],
-				'mobile' => ['bail', 'nullable', 'digits:10', 'exists:customers,mobile', 'required_without:email'],
-				'otp' => ['bail', 'required', 'numeric', 'min:1111', 'max:9999'],
-			],
-			'logout' => [
-
+				'type' => ['bail', 'required', Rule::in([1, 2, 3])],
+				'email' => ['bail', 'required_if:type,1', 'nullable'],
+				'mobile' => ['bail', 'required_if:type,2,3', 'nullable', 'digits:10'],
+				'password' => ['bail', 'required_if:type,1,2', 'string', 'min:4', 'max:64'],
+				'otp' => ['bail', 'required_if:type,3', 'numeric', 'min:1111', 'max:9999'],
 			],
 			'register' => [
 				'name' => ['bail', 'required', 'string', 'min:2', 'max:100'],
-				'email' => ['bail', 'required_without:mobile', 'email', 'unique:customers,email'],
-				'mobile' => ['bail', 'required_without:email', 'digits:10', 'unique:customers,mobile'],
+				'email' => ['bail', 'required', 'email', 'unique:customers,email'],
+				'mobile' => ['bail', 'required', 'digits:10', 'unique:customers,mobile'],
 				'password' => ['bail', 'required', 'string', 'min:4', 'max:64'],
+				'otp' => ['bail', 'required', 'numeric', 'min:1111', 'max:9999'],
 			],
 		],
 

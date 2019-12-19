@@ -1,26 +1,28 @@
 <?php
 
-namespace App\Http\Controllers\App\Customer;
+namespace App\Http\Controllers\App\Seller;
 
 use App\Http\Controllers\TwoFactorBaseAuthController;
 use App\Models\Customer;
 use App\Models\CustomerOtp;
+use App\Models\Seller;
+use App\Models\SellerOtp;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * Auth functionality for Customer.
- * @package App\Http\Controllers\App\Customer
+ * Auth functionality for Seller.
+ * @package App\Http\Controllers\App\Seller
  */
 class TwoFactorAuthController extends TwoFactorBaseAuthController{
 	protected $rules;
 
 	public function __construct(){
 		parent::__construct();
-		$this->rules = config('rules.auth.customer');
+		$this->rules = config('rules.auth.seller');
 	}
 
 	protected function authTarget(): string{
-		return Customer::class;
+		return Seller::class;
 	}
 
 	protected function rulesExists(): array{
@@ -36,11 +38,11 @@ class TwoFactorAuthController extends TwoFactorBaseAuthController{
 	}
 
 	protected function otpTarget(): string{
-		return CustomerOtp::class;
+		return SellerOtp::class;
 	}
 
 	protected function guard(){
-		return Auth::guard('customer-api');
+		return Auth::guard('seller-api');
 	}
 
 	protected function shouldVerifyOtpBeforeRegister(): bool{
