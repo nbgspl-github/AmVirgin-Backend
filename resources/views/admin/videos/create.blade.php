@@ -18,7 +18,7 @@
 									<div class="card-body">
 										<div class="form-group">
 											<label for="title">Title<span class="text-primary">*</span></label>
-											<input id="title" type="text" name="title" class="form-control" required placeholder="Type here the movie's title" minlength="1" maxlength="100" value="{{old('movieDBId')}}"/>
+											<input id="title" type="text" name="title" class="form-control" required placeholder="Type here the movie's title" minlength="1" maxlength="100" value="{{old('title')}}"/>
 										</div>
 										<div class="form-group">
 											<label for="movieDBId">TheMovieDB Id<span class="text-primary">*</span></label>
@@ -26,7 +26,7 @@
 										</div>
 										<div class="form-group">
 											<label for="imdbId">IMDB Id<span class="text-primary">*</span></label>
-											<input id="imdbId" type="text" name="imdbId" class="form-control" required placeholder="Type reference number from IMDB" minlength="1" maxlength="100" value="{{old('movieDBId')}}"/>
+											<input id="imdbId" type="text" name="imdbId" class="form-control" required placeholder="Type reference number from IMDB" minlength="1" maxlength="100" value="{{old('imdbId')}}"/>
 										</div>
 										<div class="form-group">
 											<label for="description">Overview (Description)<span class="text-primary">*</span></label>
@@ -182,19 +182,25 @@
 											<label>Show on homepage?</label>
 											<div>
 												<div class="custom-control custom-checkbox">
-													<input type="checkbox" class="custom-control-input" id="customCheck2">
+													<input type="checkbox" class="custom-control-input" id="customCheck2" name="visibleOnHome">
 													<label class="custom-control-label stretched-link" for="customCheck2">Yes</label>
 												</div>
 											</div>
 										</div>
-										<div class="form-group pb-0 mb-0">
+										<div class="form-group">
 											<label>Mark as trending?</label>
 											<div>
 												<div class="custom-control custom-checkbox">
-													<input type="checkbox" class="custom-control-input" id="customCheck3">
+													<input type="checkbox" class="custom-control-input" id="customCheck3" name="trending">
 													<label class="custom-control-label" for="customCheck3">Yes</label>
 												</div>
 											</div>
+										</div>
+										<div class="form-group mb-0">
+											<label for="trendingRank">Trending rank</label>
+											<select id="trendingRank" name="trendingRank" class="form-control" required>
+												<option value="0">Choose...</option>
+											</select>
 										</div>
 									</div>
 								</div>

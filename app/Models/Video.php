@@ -2,22 +2,38 @@
 
 namespace App\Models;
 
-use App\Contracts\FluentConstructor;
+use App\Traits\FluentConstructor;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class Video extends Model implements FluentConstructor{
+class Video extends Model{
 	use RetrieveResource;
 	use RetrieveCollection;
+	use FluentConstructor;
 
-	/**
-	 *  Makes a new instance and returns it.
-	 * @return Video
-	 */
-	public static function instance(){
-		return new self();
-	}
+	protected $fillable = [
+		'title',
+		'description',
+		'movieDBId',
+		'imdbId',
+		'releaseDate',
+		'averageRating',
+		'votes',
+		'popularity',
+		'genreId',
+		'poster',
+		'backdrop',
+		'previewUrl',
+		'visibleOnHome',
+		'trending',
+		'trendingRank',
+		'video',
+	];
+
+	protected $hidden = [
+
+	];
 
 	/**
 	 * @return string
@@ -208,6 +224,22 @@ class Video extends Model implements FluentConstructor{
 	 */
 	public function setPreviewUrl(?string $previewUrl): Video{
 		$this->previewUrl = $previewUrl;
+		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getVideo(){
+		return $this->video;
+	}
+
+	/**
+	 * @param string $video
+	 * @return Video
+	 */
+	public function setVideo(string $video){
+		$this->visible = $video;
 		return $this;
 	}
 }

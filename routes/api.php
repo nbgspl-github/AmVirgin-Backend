@@ -62,4 +62,8 @@ Route::prefix('customer')->group(function () use ($customerMiddleware){
 	Route::prefix('sliders')->group(function () use ($customerMiddleware){
 		Route::get('/', [CustomerSlidersController::class, 'index'])->name('customer.sliders.index');
 	});
+
+	Route::prefix('trending')->group(function (){
+		Route::get('/picks', [])->name('customer.trending.picks');
+	});
 });
