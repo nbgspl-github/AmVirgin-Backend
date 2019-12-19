@@ -30,7 +30,7 @@
 										</div>
 										<div class="form-group">
 											<label for="description">Overview (Description)<span class="text-primary">*</span></label>
-											<textarea id="description" name="description" class="form-control" required placeholder="Type short summary about the movie or video" minlength="1" maxlength="100">A sci-fi/thriller story centered on a special-ops team that is dispatched to fight supernatural beings.</textarea>
+											<textarea id="description" name="description" class="form-control" required placeholder="Type short summary about the movie or video" minlength="1" maxlength="2000">A sci-fi/thriller story centered on a special-ops team that is dispatched to fight supernatural beings.</textarea>
 										</div>
 										<div class="form-group">
 											<label for="genre">Choose a genre<span class="text-primary">*</span></label>
@@ -167,7 +167,7 @@
 										</div>
 										<div class="form-group">
 											<label for="externalLink">External Link</label>
-											<input id="externalLink" type="url" name="title" class="form-control" required placeholder="Enter a url to HLS/M3U8/MP4/WEBM/OGV/FLV/EMBED/IFRAME" minlength="1" maxlength="100" value="{{old('movieDBId')}}"/>
+											<input id="externalLink" type="url" name="title" class="form-control" placeholder="Enter a url to HLS/M3U8/MP4/WEBM/OGV/FLV/EMBED/IFRAME" minlength="1" maxlength="100" value="{{old('movieDBId')}}"/>
 										</div>
 										<div class="form-group">
 											<div class="text-center"><span class="badge badge-primary text-white font-weight-bold text-center font-16 text-capitalize">or</span></div>
