@@ -7,6 +7,8 @@ use App\Models\Settings;
 
 trait OtpVerificationSupport{
 	public function generateOtp($length){
+		// TODO: remove static value
+		return 1234;
 		switch ($length) {
 			case 5:
 				return mt_rand(11111, 99999);

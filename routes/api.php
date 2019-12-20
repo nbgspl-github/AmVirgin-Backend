@@ -64,6 +64,6 @@ Route::prefix('customer')->group(function () use ($customerMiddleware){
 	});
 
 	Route::prefix('trending')->group(function (){
-		Route::get('/picks', [])->name('customer.trending.picks');
+		Route::get('/picks', [TrendController::class])->name('customer.trending.picks');
 	});
 });

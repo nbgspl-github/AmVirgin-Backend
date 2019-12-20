@@ -20,26 +20,30 @@
 									<div class="card-body">
 										<div class="form-group">
 											<label for="title">Title<span class="text-primary">*</span></label>
-											<input id="title" type="text" name="title" class="form-control" required placeholder="Type here the movie's title" minlength="1" maxlength="256" value="Spectral"/>
+											<input id="title" type="text" name="title" class="form-control" required placeholder="Type here the movie's title" minlength="1" maxlength="256" value="{{old('title')}}"/>
 										</div>
 										<div class="form-group">
 											<label for="movieDBId">TheMovieDB Id<span class="text-primary">*</span></label>
-											<input id="movieDBId" type="text" name="movieDBId" class="form-control" required placeholder="Type reference number from TheMovieDB" minlength="1" maxlength="100" value="324670"/>
+											<input id="movieDBId" type="text" name="movieDBId" class="form-control" required placeholder="Type reference number from TheMovieDB" minlength="1" maxlength="100" value="{{old('movieDBId')}}"/>
 										</div>
 										<div class="form-group">
 											<label for="imdbId">IMDB Id<span class="text-primary">*</span></label>
-											<input id="imdbId" type="text" name="imdbId" class="form-control" required placeholder="Type reference number from IMDB" minlength="1" maxlength="100" value="2106651"/>
+											<input id="imdbId" type="text" name="imdbId" class="form-control" required placeholder="Type reference number from IMDB" minlength="1" maxlength="100" value="{{old('imdbId')}}"/>
 										</div>
 										<div class="form-group">
 											<label for="description">Overview (Description)<span class="text-primary">*</span></label>
-											<textarea id="description" name="description" class="form-control" required placeholder="Type short summary about the movie or video" minlength="1" maxlength="2000">A sci-fi/thriller story centered on a special-ops team that is dispatched to fight supernatural beings.</textarea>
+											<textarea id="description" name="description" class="form-control" required placeholder="Type short summary about the movie or video" minlength="1" maxlength="2000">{{old('description')}}</textarea>
 										</div>
 										<div class="form-group">
 											<label for="genre">Choose a genre<span class="text-primary">*</span></label>
 											<select id="genre" name="genreId" class="form-control" required>
 												<option value="0">Choose...</option>
 												@foreach($genres as $genre)
-													<option value="{{$genre->getKey()}}">{{$genre->getName()}}</option>
+													@if(old('genreId',-1)==$genre->getKey())
+														<option value="{{$genre->getKey()}}" selected>{{$genre->getName()}}</option>
+													@else
+														<option value="{{$genre->getKey()}}">{{$genre->getName()}}</option>
+													@endif
 												@endforeach
 											</select>
 										</div>
@@ -191,15 +195,18 @@
 											<label>Mark as trending?</label>
 											<div>
 												<div class="custom-control custom-checkbox">
-													<input type="checkbox" class="custom-control-input" id="customCheck3" name="trending">
-													<label class="custom-control-label" for="customCheck3">Yes</label>
+													<input type="checkbox" class="custom-control-input" id="trending" name="trending">
+													<label class="custom-control-label" for="trending">Yes</label>
 												</div>
 											</div>
 										</div>
 										<div class="form-group mb-0">
 											<label for="trendingRank">Trending rank</label>
-											<select id="trendingRank" name="trendingRank" class="form-control" required>
-												<option value="0">Choose...</option>
+											<select id="trendingRank" name="trendingRank" class="form-control">
+												<option value="">Choose...</option>
+												@for ($i = 1; $i < 11; $i++)
+													<option value="{{$i}}">{{$i}}</option>
+												@endfor
 											</select>
 										</div>
 									</div>
@@ -288,6 +295,13 @@
 			});
 			modal = $('#progressModal');
 			modalFinal = $('#okayBox');
+			$('#trending').change(function () {
+				if (this.checked) {
+					$('#trendingRank').prop("required", true);
+				} else {
+					$('#trendingRank').prop("required", false);
+				}
+			});
 		});
 
 		$('#uploadForm').submit(function (event) {
