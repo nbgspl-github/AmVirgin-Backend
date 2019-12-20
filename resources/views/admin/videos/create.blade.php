@@ -228,8 +228,9 @@
 
 @section('javascript')
 	<script>
-		var lastPoster = null;
-		var lastBackdrop = null;
+		let lastPoster = null;
+		let lastBackdrop = null;
+		let progressRing = null;
 		previewPoster = (event) => {
 			const reader = new FileReader();
 			reader.onload = function () {
@@ -255,7 +256,8 @@
 		};
 
 		$(document).ready(function () {
-			$('#progressCircle').percircle();
+			progressRing = $('#progressCircle');
+			progressRing.percircle();
 		});
 
 		$('#uploadForm').submit(function (event) {
@@ -263,7 +265,7 @@
 				onUploadProgress: function (progressEvent) {
 					const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
 					console.log('Percentage is ' + percentCompleted);
-					$('#progressCircle').percircle({
+					progressRing.percircle({
 						percent: percentCompleted
 					});
 				},
