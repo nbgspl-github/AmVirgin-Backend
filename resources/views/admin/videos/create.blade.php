@@ -231,6 +231,9 @@
 		let lastPoster = null;
 		let lastBackdrop = null;
 		let progressRing = null;
+		let CancelToken = axios.CancelToken;
+		let source = CancelToken.source();
+
 		previewPoster = (event) => {
 			const reader = new FileReader();
 			reader.onload = function () {
@@ -255,6 +258,10 @@
 			$('#pickImage').trigger('click');
 		};
 
+		cancelUpload = () => {
+			source.cancel();
+		};
+
 		$(document).ready(function () {
 			progressRing = $('#progressCircle');
 			progressRing.percircle();
@@ -276,7 +283,9 @@
 			event.preventDefault();
 			const formData = new FormData(this);
 			$('#progressModal').modal('show');
-			axios.post('/admin/videos/store', formData, config).then(response => {
+			axios.post('/admin/videos/store', formData, config, {
+				cancelToken: source.token
+			}).then(response => {
 				console.log(response);
 				toastr.success('Files uploaded successfully.');
 			}).catch(error => {
