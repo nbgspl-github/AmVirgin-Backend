@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\App\Customer\AuthController as CustomerAuth;
 use App\Http\Controllers\App\Customer\SlidersController as CustomerSlidersController;
+use App\Http\Controllers\App\Customer\TrendController;
 use App\Http\Controllers\App\Customer\TwoFactorAuthController as CustomerTwoFactorAuth;
 use App\Http\Controllers\App\Seller\AttributesController as SellerAttributesController;
 use App\Http\Controllers\App\Seller\AuthController as SellerAuth;
@@ -64,6 +65,6 @@ Route::prefix('customer')->group(function () use ($customerMiddleware){
 	});
 
 	Route::prefix('trending')->group(function (){
-		Route::get('/picks', [TrendController::class])->name('customer.trending.picks');
+		Route::get('/picks', [TrendController::class, 'index'])->name('customer.trending.picks');
 	});
 });

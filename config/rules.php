@@ -156,6 +156,7 @@ return [
 				'backdrop' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp'],
 				'previewUrl' => ['bail', 'required', 'string', 'min:6', 'max:2048'],
 				'video' => ['bail', 'required', 'mimes:mkv,mp4,flv,avi,wmv'],
+				'trendingRank' => ['bail', 'nullable', 'gte:1', 'lt:11'],
 			],
 			'update' => [
 

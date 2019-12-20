@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Customer;
+use App\Models\Video;
 use App\Traits\GenerateUrls;
 use Illuminate\Console\Command;
 
@@ -38,7 +38,7 @@ class CodeTester extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		$model = Customer::class;
+		$model = Video::find(1)->mediaLanguage->getName();
 		echo $model;
 		return;
 	}

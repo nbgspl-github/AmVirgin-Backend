@@ -13,7 +13,6 @@ use App\Models\Video;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class VideosController extends BaseController{
@@ -44,32 +43,36 @@ class VideosController extends BaseController{
 		with('qualities', $qualityPayload);
 	}
 
-	public function store(Request $request){
+	public function store(){
 		try {
-			$this->requestValid($request, $this->rules['store']);
-			$video = Storage::disk('secured')->putFile(Directories::Videos, $request->file('video'), 'public');
-			$poster = Storage::disk('public')->putFile(Directories::Posters, $request->file('poster'), 'public');
-			$backdrop = Storage::disk('public')->putFile(Directories::Backdrops, $request->file('backdrop'), 'public');
+			$payload = $this->requestValid(request(), $this->rules['store']);
+			$video = Storage::disk('secured')->putFile(Directories::Videos, request()->file('video'), 'public');
+			$poster = Storage::disk('public')->putFile(Directories::Posters, request()->file('poster'), 'public');
+			$backdrop = Storage::disk('public')->putFile(Directories::Backdrops, request()->file('backdrop'), 'public');
+			if (request()->has('trending')) {
+				$this->replaceTrendingItem($payload['trendingRank']);
+			}
+
 			Video::create([
-				'title' => $request->title,
-				'description' => $request->description,
-				'movieDBId' => $request->movieDBId,
-				'imdbId' => $request->imdbId,
-				'releaseDate' => $request->releaseDate,
-				'averageRating' => $request->averageRating,
-				'votes' => $request->votes,
-				'popularity' => $request->popularity,
-				'genreId' => $request->genreId,
-				'serverId' => $request->serverId,
-				'mediaLanguageId' => $request->mediaLanguageId,
-				'mediaQualityId' => $request->mediaQualityId,
+				'title' => $payload['title'],
+				'description' => $payload['description'],
+				'movieDBId' => $payload['movieDBId'],
+				'imdbId' => $payload['imdbId'],
+				'releaseDate' => $payload['releaseDate'],
+				'averageRating' => $payload['averageRating'],
+				'votes' => $payload['votes'],
+				'popularity' => $payload['popularity'],
+				'genreId' => $payload['genreId'],
+				'serverId' => $payload['serverId'],
+				'mediaLanguageId' => $payload['mediaLanguageId'],
+				'mediaQualityId' => $payload['mediaQualityId'],
 				'video' => $video,
 				'poster' => $poster,
 				'backdrop' => $backdrop,
-				'previewUrl' => $request->previewUrl,
-				'trending' => $request->has('trending'),
-				'trendingRank' => $request->trendingRank,
-				'visibleOnHome' => $request->has('visibleOnHome'),
+				'previewUrl' => $payload['previewUrl'],
+				'trending' => \request()->has('trending'),
+				'trendingRank' => null($payload['trendingRank']) ? 0 : $payload['trendingRank'],
+				'visibleOnHome' => \request()->has('visibleOnHome'),
 			]);
 			$response = $this->success()->message('Your video was successfully uploaded.');
 		}
@@ -81,6 +84,15 @@ class VideosController extends BaseController{
 		}
 		finally {
 			return $response->send();
+		}
+	}
+
+	public function replaceTrendingItem($chosenRank){
+		$ranked = Video::where('trendingRank', $chosenRank)->first();
+		if (!null($ranked)) {
+			$ranked->trendingRank = 0;
+			$ranked->trending = false;
+			$ranked->save();
 		}
 	}
 }

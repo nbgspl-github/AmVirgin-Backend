@@ -245,4 +245,16 @@ class Video extends Model{
 		$this->visible = $video;
 		return $this;
 	}
+
+	public function genre(){
+		return $this->belongsTo('App\Models\Genre', 'genreId');
+	}
+
+	public function language(){
+		return $this->belongsTo('App\Models\MediaLanguage', 'mediaLanguageId');
+	}
+
+	public function mediaQuality(){
+		return $this->belongsTo('App\Models\MediaQuality', 'mediaQualityId');
+	}
 }
