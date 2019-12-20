@@ -263,7 +263,9 @@
 				onUploadProgress: function (progressEvent) {
 					const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
 					console.log('Percentage is ' + percentCompleted);
-					$('#progressCircle').attr('data-percent', percentCompleted);
+					$('#progressCircle').percircle({
+						percent: percentCompleted
+					});
 				},
 				headers: {
 					'Content-Type': 'multipart/form-data'
