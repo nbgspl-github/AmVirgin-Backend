@@ -1,6 +1,7 @@
 @extends('admin.app.app')
 @section('content')
 	@include('admin.modals.uploadProgressBox')
+	@include('admin.modals.singleActionBox')
 	<div class="row">
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
@@ -70,7 +71,7 @@
 										<div class="form-group">
 											<label for="language">Language<span class="text-primary">*</span></label>
 											<select id="language" name="mediaLanguageId" class="form-control" required>
-												<option value="0">Choose...</option>
+												<option value="">Choose...</option>
 												@foreach($languages as $language)
 													<option value="{{$language->getKey()}}">{{$language->getName()}}</option>
 												@endforeach
@@ -79,7 +80,7 @@
 										<div class="form-group">
 											<label for="mediaQuality">Media quality<span class="text-primary">*</span></label>
 											<select id="mediaQuality" name="mediaQualityId" class="form-control" required>
-												<option value="0">Choose...</option>
+												<option value="">Choose...</option>
 												@foreach($qualities as $quality)
 													<option value="{{$quality->getKey()}}">{{$quality->getName()}}</option>
 												@endforeach
@@ -132,7 +133,7 @@
 												<div class="card-header">
 													<div class="row">
 														<div class="d-none">
-															<input id="pickBackdrop" type="file" name="backdrop" onclick="this.value=null;" onchange="previewBackdrop(event);" class="form-control" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('poster')}}">
+															<input id="pickBackdrop" type="file" name="backdrop" onclick="this.value=null;" onchange="previewBackdrop(event);" class="form-control" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('backdrop')}}">
 														</div>
 														<div class="col-6">
 															<h3 class="my-0 header-title">Backdrop <span class="text-warning">(Max 2MB)</span></h3>
@@ -235,6 +236,7 @@
 		let CancelToken = axios.CancelToken;
 		let source = CancelToken.source();
 		let modal = null;
+		let modalFinal = null;
 
 		previewPoster = (event) => {
 			const reader = new FileReader();
@@ -268,9 +270,10 @@
 			progressRing.circleProgress({
 				value: percentCompletedValue
 			});
-			if (percentCompleted === 100) {
-				modal.modal('hide');
-			}
+		}
+
+		function finishUpload() {
+			window.location.href = '/admin/videos';
 		}
 
 		$(document).ready(function () {
@@ -284,16 +287,31 @@
 				}
 			});
 			modal = $('#progressModal');
+			modalFinal = $('#okayBox');
 		});
 
 		$('#uploadForm').submit(function (event) {
+			event.preventDefault();
+			const validator = $('#uploadForm').parsley();
+			if (!validator.isValid()) {
+				alertify.alert('Fix the errors in the form and retry.');
+				return;
+			}
+			if (lastPoster === null) {
+				alertify.alert('Movie poster is required.');
+				return;
+			}
+			if (lastBackdrop === null) {
+				alertify.alert('Movie backdrop is required.');
+				return;
+			}
+
 			const config = {
 				onUploadProgress: uploadProgress,
 				headers: {
 					'Content-Type': 'multipart/form-data'
 				}
 			};
-			event.preventDefault();
 			const formData = new FormData(this);
 			modal.modal({
 				keyboard: false,
@@ -301,9 +319,19 @@
 				backdrop: 'static'
 			});
 			axios.post('/admin/videos/store', formData, config,).then(response => {
-				console.log(response);
-				toastr.success('Files uploaded successfully.');
+				const status = response.data.status;
+				modal.modal('hide');
+				if (status !== 200) {
+					alertify.alert(response.data.message);
+				} else {
+					modalFinal.modal({
+						show: true,
+						keyboard: false,
+						backdrop: 'static'
+					});
+				}
 			}).catch(error => {
+				modal.modal('hide');
 				console.log(error);
 				toastr.error('Something went wrong. Please try again.');
 			});
