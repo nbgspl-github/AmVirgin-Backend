@@ -258,34 +258,26 @@
 			$('#pickImage').trigger('click');
 		};
 
-		cancelUpload = () => {
-			source.cancel();
-		};
+		function cancelUpload() {
+
+		}
+
+		function uploadProgress(progressEvent) {
+			const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+			console.log('Percentage is ' + percentCompleted);
+			progressRing.percircle({
+				percent: percentCompleted
+			});
+		}
 
 		$(document).ready(function () {
 			progressRing = $('#progressCircle');
-			progressRing.circleProgress({
-				value: 0.0,
-				size: 80,
-				fill: {
-					gradient: ["red", "orange"]
-				}
-			});
+			progressRing.percircle();
 		});
 
 		$('#uploadForm').submit(function (event) {
 			const config = {
-				onUploadProgress: function (progressEvent) {
-					const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-					console.log('Percentage is ' + percentCompleted);
-					progressRing.circleProgress({
-						value: Math.round(percentCompleted / 100.0),
-						size: 80,
-						fill: {
-							gradient: ["red", "orange"]
-						}
-					});
-				},
+				onUploadProgress: uploadProgress,
 				headers: {
 					'Content-Type': 'multipart/form-data'
 				}
@@ -293,9 +285,7 @@
 			event.preventDefault();
 			const formData = new FormData(this);
 			$('#progressModal').modal('show');
-			axios.post('/admin/videos/store', formData, config, {
-				cancelToken: source.token
-			}).then(response => {
+			axios.post('/admin/videos/store', formData, config,).then(response => {
 				console.log(response);
 				toastr.success('Files uploaded successfully.');
 			}).catch(error => {
