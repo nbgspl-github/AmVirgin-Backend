@@ -18,12 +18,16 @@ class CreateVideosTable extends Migration{
 			$table->bigInteger('movieDBId')->nullable();
 			$table->bigInteger('imdbId')->nullable();
 			$table->date('releaseDate')->nullable();
-			$table->float('averageRating', 2, 2)->default(0.0);
+			$table->integer('averageRating')->default(0);
 			$table->integer('votes')->default(0);
-			$table->float('popularity', 2, 2)->default(0.0);
+			$table->integer('popularity')->default(0);
 			$table->string('genreId')->nullable();
+			$table->unsignedBigInteger('serverId');
+			$table->unsignedBigInteger('mediaLanguageId');
+			$table->unsignedInteger('mediaQualityId');
 			$table->string('poster', 256)->nullable();
 			$table->string('backdrop', 256)->nullable();
+			$table->string('video', 4096);
 			$table->string('previewUrl', 2048)->nullable();
 			$table->boolean('visibleOnHome')->default(false);
 			$table->boolean('trending')->default(false);
