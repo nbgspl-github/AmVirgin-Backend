@@ -278,6 +278,7 @@
 			progressPercent = $('#progressPercent');
 			progressRing.circleProgress({
 				value: 0.0,
+				animation: false,
 				fill: {
 					color: '#cf3f43'
 				}
