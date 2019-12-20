@@ -6,14 +6,12 @@
 			</div>
 			<div class="modal-body">
 				<div class="row">
-					<div class="col-auto mx-auto">
+					<div class="col-auto mx-auto text-center">
 						<div id="progressCircle" data-percent="0" class="medium m-0" data-progressBarColor="#cf3f43">
 						</div>
+						<span id="progressPercent" class="text-primary font-20">0%</span>
 					</div>
 				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="cancelUpload();">Cancel</button>
 			</div>
 		</div>
 	</div>

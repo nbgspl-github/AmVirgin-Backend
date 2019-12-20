@@ -231,8 +231,10 @@
 		let lastPoster = null;
 		let lastBackdrop = null;
 		let progressRing = null;
+		let progressPercent = null;
 		let CancelToken = axios.CancelToken;
 		let source = CancelToken.source();
+		let modal = null;
 
 		previewPoster = (event) => {
 			const reader = new FileReader();
@@ -258,21 +260,29 @@
 			$('#pickImage').trigger('click');
 		};
 
-		function cancelUpload() {
-
-		}
-
 		function uploadProgress(progressEvent) {
-			const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-			console.log('Percentage is ' + percentCompleted);
-			progressRing.percircle({
-				percent: percentCompleted
+			let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+			let percentCompletedValue = (percentCompleted / 100.0);
+			console.log('Percentage is ' + percentCompletedValue);
+			progressPercent.text(percentCompleted + ' %');
+			progressRing.circleProgress({
+				value: percentCompletedValue
 			});
+			if (percentCompleted === 100) {
+				modal.modal('hide');
+			}
 		}
 
 		$(document).ready(function () {
 			progressRing = $('#progressCircle');
-			progressRing.percircle();
+			progressPercent = $('#progressPercent');
+			progressRing.circleProgress({
+				value: 0.0,
+				fill: {
+					color: '#cf3f43'
+				}
+			});
+			modal = $('#progressModal');
 		});
 
 		$('#uploadForm').submit(function (event) {
@@ -284,7 +294,11 @@
 			};
 			event.preventDefault();
 			const formData = new FormData(this);
-			$('#progressModal').modal('show');
+			modal.modal({
+				keyboard: false,
+				show: true,
+				backdrop: 'static'
+			});
 			axios.post('/admin/videos/store', formData, config,).then(response => {
 				console.log(response);
 				toastr.success('Files uploaded successfully.');
