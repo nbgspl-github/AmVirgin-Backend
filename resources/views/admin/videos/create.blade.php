@@ -264,7 +264,13 @@
 
 		$(document).ready(function () {
 			progressRing = $('#progressCircle');
-			progressRing.percircle();
+			progressRing.circleProgress({
+				value: 0.0,
+				size: 80,
+				fill: {
+					gradient: ["red", "orange"]
+				}
+			});
 		});
 
 		$('#uploadForm').submit(function (event) {
@@ -272,8 +278,12 @@
 				onUploadProgress: function (progressEvent) {
 					const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
 					console.log('Percentage is ' + percentCompleted);
-					progressRing.percircle({
-						percent: percentCompleted
+					progressRing.circleProgress({
+						value: Math.round(percentCompleted / 100.0),
+						size: 80,
+						fill: {
+							gradient: ["red", "orange"]
+						}
 					});
 				},
 				headers: {

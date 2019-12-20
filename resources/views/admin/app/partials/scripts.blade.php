@@ -37,7 +37,7 @@
 <script src="{{asset('admin/plugins/alertify/js/alertify.js')}}"></script>
 
 <!-- jQuery Peity -->
-<script src="{{asset('admin/js/percircle.js')}}"></script>
+<script src="{{asset('admin/js/circle-progress.js')}}"></script>
 
 {{--Anime JS--}}
 <script src="{{asset('admin/js/anime.js')}}"></script>
