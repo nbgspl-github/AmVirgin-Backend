@@ -35,7 +35,9 @@
 
 <!-- Alertify js -->
 <script src="{{asset('admin/plugins/alertify/js/alertify.js')}}"></script>
-{{--<script src="{{asset('pages/alertify-init.js')}}"></script>--}}
+
+<!-- jQuery Peity -->
+<script src="{{asset('admin/js/percircle.js')}}"></script>
 
 {{--Anime JS--}}
 <script src="{{asset('admin/js/anime.js')}}"></script>

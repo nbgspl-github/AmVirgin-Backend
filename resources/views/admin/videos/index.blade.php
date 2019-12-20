@@ -19,8 +19,7 @@
 							<th class="text-center">Title</th>
 							<th class="text-center">Description</th>
 							<th class="text-center">Rating</th>
-							<th class="text-center">Active</th>
-							<th class="text-center">Target Link</th>
+							<th class="text-center">Trending</th>
 							<th class="text-center">Action(s)</th>
 						</tr>
 						</thead>
@@ -31,50 +30,29 @@
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">
 									@if($movie->getPoster()!=null)
-										<img src="{{route('images.slider.poster',$movie->getKey())}}" style="width: 100px; height: 100px" alt="{{$movie->getTitle()}}"/>
+										<img src="{{Storage::disk('public')->url($movie->getPoster())}}" style="width: 100px; height: 100px" alt="{{$movie->getTitle()}}"/>
 									@else
 										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 90px"></i>
 									@endif
 								</td>
 								<td class="text-center">{{$movie->getTitle()}}</td>
-								<td class="text-center">{{$movie->getDescription()}}</td>
-								<td class="text-center">{{__rating($movie->getStars())}}</td>
-								<td class="text-center">
-									<div class="btn-group btn-group-toggle shadow-sm" data-toggle="buttons">
-										@if($movie->isActive()==true)
-											<label class="btn btn-outline-danger active" @include('admin.extras.tooltip.left', ['title' => 'Set slider active'])>
-												<input type="radio" name="options" id="optionOn_{{$movie->getKey()}}" onchange="toggleStatus('{{$movie->getKey()}}',1);"/> On
-											</label>
-											<label class="btn btn-outline-primary" @include('admin.extras.tooltip.right', ['title' => 'Set slider inactive'])>
-												<input type="radio" name="options" id="optionOff_{{$movie->getKey()}}" onchange="toggleStatus('{{$movie->getKey()}}',0);"/> Off
-											</label>
-										@else
-											<label class="btn btn-outline-danger" @include('admin.extras.tooltip.left', ['title' => 'Set slider active'])>
-												<input type="radio" name="options" id="optionOn_{{$movie->getKey()}}" onchange="toggleStatus('{{$movie->getKey()}}',1);"/> On
-											</label>
-											<label class="btn btn-outline-primary active" @include('admin.extras.tooltip.right', ['title' => 'Set slider inactive'])>
-												<input type="radio" name="options" id="optionOff_{{$movie->getKey()}}" onchange="toggleStatus('{{$movie->getKey()}}',0);"/> Off
-											</label>
-										@endif
-									</div>
-								</td>
-								<td class="text-center"><a class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig" target="_blank" href="{{$movie->getTarget()}}">{{__ellipsis($movie->getTarget())}}</a></td>
+								<td class="text-center">{{__ellipsis($movie->getDescription(),20)}}</td>
+								<td class="text-center">{{$movie->getAverageRating()}}</td>
+								<td class="text-center">{{__boolean($movie->trending)}}</td>
 								<td class="text-center">
 									<div class="btn-group">
 										<div class="col-sm-6 px-0">
-											<a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('admin.sliders.edit',$movie->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
+											<a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('admin.videos.edit',$movie->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
 										</div>
 										<div class="col-sm-6 px-0">
-											<a class="btn btn-outline-primary shadow-sm shadow-primary" href="javascript:void(0);" onclick="deleteSlide('{{$movie->getKey()}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>
+											<a class="btn btn-outline-primary shadow-sm shadow-primary" href="javascript:void(0);" onclick="deleteMovie('{{$movie->getKey()}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>
 										</div>
 									</div>
 								</td>
 							</tr>
 						@endforeach
 						</tbody>
-
 					</table>
-
 				</div>
 			</div>
 		</div>
@@ -101,7 +79,7 @@
 		 * @param id
 		 * @returns {string}
 		 */
-		deleteSlideRoute = (id) => {
+		deleteMovieRoute = (id) => {
 			return 'sliders/' + id;
 		};
 
@@ -130,7 +108,7 @@
 		 * Callback for delete slide trigger.
 		 * @param genreId
 		 */
-		deleteSlide = (genreId) => {
+		deleteMovie = (genreId) => {
 			window.genreId = genreId;
 			alertify.confirm("Are you sure you want to delete this slide? ",
 				(ev) => {

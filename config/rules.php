@@ -149,10 +149,13 @@ return [
 				'votes' => ['bail', 'required', 'numeric', 'min:0', RuleMaxInt],
 				'popularity' => ['bail', 'required', 'numeric', 'min:0', RuleMaxInt],
 				'genreId' => ['bail', 'required', 'exists:genres,id'],
+				'serverId' => ['bail', 'required', 'exists:media-servers,id'],
+				'mediaLanguageId' => ['bail', 'required', 'exists:media-languages,id'],
+				'mediaQualityId' => ['bail', 'required', 'exists:media-qualities,id'],
 				'poster' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp'],
 				'backdrop' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp'],
 				'previewUrl' => ['bail', 'required', 'string', 'min:6', 'max:2048'],
-				'video' => ['bail', 'required', 'mimes:mkv,mp4,flv,avi', 'wmvxx'],
+				'video' => ['bail', 'required', 'mimes:mkv,mp4,flv,avi,wmv'],
 			],
 			'update' => [
 

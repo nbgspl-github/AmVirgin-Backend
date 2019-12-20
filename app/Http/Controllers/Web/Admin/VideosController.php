@@ -19,11 +19,12 @@ use Illuminate\Support\Facades\Storage;
 class VideosController extends BaseController{
 	use FluentResponse;
 	use ValidatesRequest;
+	use FluentResponse;
 
 	protected $rules;
 
 	public function __construct(){
-		$this->rules = config('rules.videos');
+		$this->rules = config('rules.admin.videos');
 	}
 
 	public function index(){
@@ -44,12 +45,11 @@ class VideosController extends BaseController{
 	}
 
 	public function store(Request $request){
-		$response = null;
 		try {
 			$this->requestValid($request, $this->rules['store']);
 			$video = Storage::disk('secured')->putFile(Directories::Videos, $request->file('video'), 'public');
 			$poster = Storage::disk('public')->putFile(Directories::Posters, $request->file('poster'), 'public');
-			$backdrop = Storage::disk('backdrop')->putFile(Directories::Backdrops, $request->file('backdrop'), 'public');
+			$backdrop = Storage::disk('public')->putFile(Directories::Backdrops, $request->file('backdrop'), 'public');
 			Video::create([
 				'title' => $request->title,
 				'description' => $request->description,
@@ -60,21 +60,24 @@ class VideosController extends BaseController{
 				'votes' => $request->votes,
 				'popularity' => $request->popularity,
 				'genreId' => $request->genreId,
+				'serverId' => $request->serverId,
+				'mediaLanguageId' => $request->mediaLanguageId,
+				'mediaQualityId' => $request->mediaQualityId,
 				'video' => $video,
 				'poster' => $poster,
 				'backdrop' => $backdrop,
 				'previewUrl' => $request->previewUrl,
-				'trending' => $request->trending,
+				'trending' => $request->has('trending'),
 				'trendingRank' => $request->trendingRank,
-				'visibleOnHome' => $request->visibleOnHome,
+				'visibleOnHome' => $request->has('visibleOnHome'),
 			]);
-			$response = responseWeb()->success('Your video was successfully uploaded.')->route('admin.videos.index');
+			$response = $this->success()->message('Your video was successfully uploaded.');
 		}
 		catch (ValidationException $exception) {
-			$response = responseWeb()->error($exception->getError())->data($request->all())->back();
+			$response = $this->failed()->message($exception->getError())->status(HttpInvalidRequestFormat);
 		}
 		catch (Exception $exception) {
-			$response = responseWeb()->error($exception->getMessage())->back()->data($request->all());
+			$response = $this->error()->message($exception->getMessage());
 		}
 		finally {
 			return $response->send();

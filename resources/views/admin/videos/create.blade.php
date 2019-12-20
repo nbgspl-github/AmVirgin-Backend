@@ -1,12 +1,13 @@
 @extends('admin.app.app')
 @section('content')
+	@include('admin.modals.uploadProgressBox')
 	<div class="row">
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Add a video'])
 				</div>
-				<form action="{{route('admin.videos.store')}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
+				<form id="uploadForm" action="{{route('admin.videos.store')}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="card-body">
 						<div class="row">
@@ -35,7 +36,7 @@
 										<div class="form-group">
 											<label for="genre">Choose a genre<span class="text-primary">*</span></label>
 											<select id="genre" name="genreId" class="form-control" required>
-												<option value="">Choose...</option>
+												<option value="0">Choose...</option>
 												@foreach($genres as $genre)
 													<option value="{{$genre->getKey()}}">{{$genre->getName()}}</option>
 												@endforeach
@@ -47,7 +48,7 @@
 										</div>
 										<div class="form-group">
 											<label for="averageRating">Average rating<span class="text-primary">*</span></label>
-											<input id="averageRating" type="number" name="averageRating" class="form-control" required placeholder="Type average rating for this movie/video" minlength="1" maxlength="100" value="6.3"/>
+											<input id="averageRating" type="number" name="averageRating" class="form-control" required placeholder="Type average rating for this movie/video" minlength="1" maxlength="100" value="63"/>
 										</div>
 										<div class="form-group">
 											<label for="votes">Votes<span class="text-primary">*</span></label>
@@ -68,8 +69,8 @@
 										</div>
 										<div class="form-group">
 											<label for="language">Language<span class="text-primary">*</span></label>
-											<select id="language" name="languageId" class="form-control" required>
-												<option value="">Choose...</option>
+											<select id="language" name="mediaLanguageId" class="form-control" required>
+												<option value="0">Choose...</option>
 												@foreach($languages as $language)
 													<option value="{{$language->getKey()}}">{{$language->getName()}}</option>
 												@endforeach
@@ -77,7 +78,7 @@
 										</div>
 										<div class="form-group">
 											<label for="mediaQuality">Media quality<span class="text-primary">*</span></label>
-											<select id="mediaQuality" name="mediaQuality" class="form-control" required>
+											<select id="mediaQuality" name="mediaQualityId" class="form-control" required>
 												<option value="0">Choose...</option>
 												@foreach($qualities as $quality)
 													<option value="{{$quality->getKey()}}">{{$quality->getName()}}</option>
@@ -131,7 +132,7 @@
 												<div class="card-header">
 													<div class="row">
 														<div class="d-none">
-															<input id="pickBackdrop" type="file" name="poster" onclick="this.value=null;" onchange="previewBackdrop(event);" class="form-control" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('poster')}}">
+															<input id="pickBackdrop" type="file" name="backdrop" onclick="this.value=null;" onchange="previewBackdrop(event);" class="form-control" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('poster')}}">
 														</div>
 														<div class="col-6">
 															<h3 class="my-0 header-title">Backdrop <span class="text-warning">(Max 2MB)</span></h3>
@@ -163,11 +164,11 @@
 									<div class="card-body">
 										<div class="form-group">
 											<label for="previewUrl">Preview URL</label>
-											<input id="previewUrl" type="url" name="previewUrl" class="form-control" required placeholder="Type or paste preview url here" minlength="1" maxlength="100" value="{{old('movieDBId')}}"/>
+											<input id="previewUrl" type="url" name="previewUrl" class="form-control" required placeholder="Type or paste preview url here" minlength="1" maxlength="100" value="http://hrms.zobofy.com/"/>
 										</div>
 										<div class="form-group">
 											<label for="externalLink">External Link</label>
-											<input id="externalLink" type="url" name="title" class="form-control" placeholder="Enter a url to HLS/M3U8/MP4/WEBM/OGV/FLV/EMBED/IFRAME" minlength="1" maxlength="100" value="{{old('movieDBId')}}"/>
+											<input id="externalLink" type="url" name="externalLink" class="form-control" placeholder="Enter a url to HLS/M3U8/MP4/WEBM/OGV/FLV/EMBED/IFRAME" minlength="1" maxlength="100" value="http://hrms.zobofy.com/"/>
 										</div>
 										<div class="form-group">
 											<div class="text-center"><span class="badge badge-primary text-white font-weight-bold text-center font-16 text-capitalize">or</span></div>
@@ -251,6 +252,33 @@
 
 		openImagePicker = () => {
 			$('#pickImage').trigger('click');
-		}
+		};
+
+		$(document).ready(function () {
+			$('#progressCircle').percircle();
+		});
+
+		$('#uploadForm').submit(function (event) {
+			const config = {
+				onUploadProgress: function (progressEvent) {
+					const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+					console.log('Percentage is ' + percentCompleted);
+					$('#progressCircle').attr('data-percent', percentCompleted);
+				},
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			};
+			event.preventDefault();
+			const formData = new FormData(this);
+			$('#progressModal').modal('show');
+			axios.post('/admin/videos/store', formData, config).then(response => {
+				console.log(response);
+				toastr.success('Files uploaded successfully.');
+			}).catch(error => {
+				console.log(error);
+				toastr.error('Something went wrong. Please try again.');
+			});
+		});
 	</script>
 @stop

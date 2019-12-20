@@ -10,5 +10,8 @@
 <link href="{{asset('admin/css/style.css')}}" rel="stylesheet" type="text/css">
 <link href="{{asset('admin/css/custom.css')}}" rel="stylesheet" type="text/css">
 
+<!--Morris Chart CSS -->
+<link rel="stylesheet" href="{{asset('admin/css/percircle.css')}}">
+
 <!-- Dropzone css -->
 <link href="{{asset('admin/plugins/dropzone/dist/dropzone.css')}}" rel="stylesheet" type="text/css">
