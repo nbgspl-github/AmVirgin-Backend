@@ -13,16 +13,13 @@ class CreateVideosTable extends Migration{
 	public function up(){
 		Schema::create('videos', function (Blueprint $table){
 			$table->bigIncrements('id');
-			$table->string('title');
+			$table->string('title', 256);
 			$table->string('description', 2000)->nullable();
-			$table->bigInteger('movieDBId')->nullable();
-			$table->bigInteger('imdbId')->nullable();
-			$table->date('releaseDate')->nullable();
-			$table->integer('averageRating')->default(0);
-			$table->integer('votes')->default(0);
-			$table->integer('popularity')->default(0);
-			$table->string('genreId')->nullable();
-			$table->unsignedBigInteger('serverId');
+			$table->smallInteger('type'); // [Movie or Series or Live]
+			$table->date('released')->nullable();
+			$table->float('rating', 3, 2)->default(0.0);
+			$table->integer('hits')->default(0);
+			$table->unsignedBigInteger('genreId');
 			$table->unsignedBigInteger('mediaLanguageId');
 			$table->unsignedInteger('mediaQualityId');
 			$table->string('poster', 256)->nullable();
