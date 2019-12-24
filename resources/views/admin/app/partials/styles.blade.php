@@ -13,5 +13,8 @@
 <!--Morris Chart CSS -->
 <link rel="stylesheet" href="{{asset('admin/css/percircle.css')}}">
 
+<!--CKIN Css-->
+<link rel="stylesheet" href="{{asset('admin/css/ckin.min.css')}}">
+
 <!-- Dropzone css -->
 <link href="{{asset('admin/plugins/dropzone/dist/dropzone.css')}}" rel="stylesheet" type="text/css">

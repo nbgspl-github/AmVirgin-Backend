@@ -6,27 +6,27 @@
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Notifications'])
 				</div>
-				<div class="card-body animatable">
+				<div class="card-body">
 					<div class="row">
 						<div class="col-md-6 mx-auto">
 							<form action="" data-parsley-validate="true">
 								@csrf
 								<div class="form-group">
-									<label for="title" class="animatable">Title<span class="text-primary">*</span></label>
-									<input id="title" type="text" name="title" class="form-control animatable" required placeholder="Notification title" minlength="1" maxlength="100" onchange="title=this.value"/>
+									<label for="title" class="">Title<span class="text-primary">*</span></label>
+									<input id="title" type="text" name="title" class="form-control" required placeholder="Notification title" minlength="1" maxlength="100" onchange="title=this.value"/>
 								</div>
 								<div class="form-group">
-									<label for="content" class="animatable">Content<span class="text-primary">*</span></label>
-									<textarea id="content" name="content" class="form-control animatable" required placeholder="Notification content" minlength="1" maxlength="150" rows="10" onchange="content=this.value"></textarea>
+									<label for="content" class="">Content<span class="text-primary">*</span></label>
+									<textarea id="content" name="content" class="form-control" required placeholder="Notification content" minlength="1" maxlength="150" rows="10" onchange="content=this.value"></textarea>
 								</div>
 								<div class="form-group">
-									<label for="url" class="animatable">Image</label>
-									<input id="url" type="text" name="url" class="form-control animatable" placeholder="URL Link" minlength="1" maxlength="100" onchange="url=this.value"/>
+									<label for="url" class="">Image</label>
+									<input id="url" type="text" name="url" class="form-control" placeholder="URL Link" minlength="1" maxlength="100" onchange="url=this.value"/>
 								</div>
 								<div class="form-group mb-0">
 									<div class="row">
 										<div class="col-md-12">
-											<button id="send" type="button" class="animatable btn btn-block btn-primary waves-effect waves-light" onclick="send();">
+											<button id="send" type="button" class=" btn btn-block btn-primary waves-effect waves-light" onclick="send();">
 												Push
 											</button>
 										</div>

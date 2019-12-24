@@ -45,5 +45,8 @@
 <!-- Dropzone js -->
 <script src="{{asset('admin/plugins/dropzone/dist/dropzone.js')}}"></script>
 
+<!--CKIN Js-->
+<script src="{{asset('admin/js/ckin.min.js')}}"></script>
+
 {{--<!-- App js -->--}}
 <script src="{{asset("admin/js/app.js")}}"></script>
