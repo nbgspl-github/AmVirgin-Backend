@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Video;
+use App\Models\Genre;
 use App\Traits\GenerateUrls;
 use Illuminate\Console\Command;
 
@@ -38,8 +38,8 @@ class CodeTester extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		$model = Video::find(1)->mediaLanguage->getName();
-		echo $model;
+		$model = new Genre();
+		echo $model->downloadPoster();
 		return;
 	}
 }
