@@ -11,7 +11,7 @@
 						</div>
 						<div>
 							<h4 class="mt-4">Videos</h4>
-							<h5 class="">89</h5>
+							<h5 class="">{{$payload['video']}}</h5>
 						</div>
 					</div>
 				</div>
