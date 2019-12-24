@@ -31,6 +31,11 @@ class VideosController extends BaseController{
 		return view('admin.videos.index')->with('movies', $movies);
 	}
 
+	public function edit($id){
+		$video = Storage::disk('secured')->url('videos/VI5kSqyvIecu4eBQHWRExRlXNm4tWseVJhWNREfM.mp4');
+		return view('admin.videos.edit')->with('video', $video);
+	}
+
 	public function create(){
 		$genrePayload = Genre::all();
 		$languagePayload = MediaLanguage::all()->sortBy('name')->all();

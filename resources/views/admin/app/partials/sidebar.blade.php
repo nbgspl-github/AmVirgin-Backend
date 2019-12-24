@@ -46,14 +46,6 @@
 				</li>
 
 				<li>
-					<a href="{{route("admin.series.index")}}" class="waves-effect"><i class="mdi mdi-step-forward mt-1"></i> <span>Series </span></a>
-				</li>
-
-				<li>
-					<a href="{{route("admin.live-tv.index")}}" class="waves-effect"><i class="mdi mdi-television mt-1"></i> <span>Live TV </span></a>
-				</li>
-
-				<li>
 					<a href="{{route("admin.servers.index")}}" class="waves-effect"><i class="mdi mdi-server mt-1"></i> <span>Servers </span></a>
 				</li>
 
