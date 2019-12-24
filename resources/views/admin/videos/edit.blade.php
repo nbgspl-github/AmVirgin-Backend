@@ -2,7 +2,7 @@
 @section('content')
 	<div class="row">
 		<div class="col-12">
-			<video src="{{$video}}" width="600px" height="400px" type="video/mkv">
+			<video src="{{Storage::disk('secured')->download($video)}}" width="600px" height="400px" type="video/mkv" poster="{{Storage::disk('public')->download($poster)}}">
 			</video>
 			{{--			<div class="card shadow-sm custom-card">--}}
 			{{--				<div class="card-header py-0">--}}

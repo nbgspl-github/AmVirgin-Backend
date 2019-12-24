@@ -32,9 +32,9 @@ class VideosController extends BaseController{
 	}
 
 	public function edit($id){
-		$video = Storage::disk('secured')->url('videos/VI5kSqyvIecu4eBQHWRExRlXNm4tWseVJhWNREfM.mp4');
-		$poster = Storage::disk('public')->url('backdrops/ZTf2caHAiBsadKu96iwpfVvlbxCxufyH72jbQX54.jpeg');
-		return view('admin.videos.edit')->with('video', $video);
+		$video = 'videos/VI5kSqyvIecu4eBQHWRExRlXNm4tWseVJhWNREfM.mp4';
+		$poster = 'backdrops/ZTf2caHAiBsadKu96iwpfVvlbxCxufyH72jbQX54.jpeg';
+		return view('admin.videos.edit')->with('video', $video)->with('poster', $poster);
 	}
 
 	public function create(){
