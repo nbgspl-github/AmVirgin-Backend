@@ -14,21 +14,26 @@ class CreateVideosTable extends Migration{
 		Schema::create('videos', function (Blueprint $table){
 			$table->bigIncrements('id');
 			$table->string('title', 256);
-			$table->string('description', 2000)->nullable();
-			$table->smallInteger('type'); // [Movie or Series or Live]
-			$table->date('released')->nullable();
-			$table->float('rating', 3, 2)->default(0.0);
-			$table->integer('hits')->default(0);
-			$table->unsignedBigInteger('genreId');
-			$table->unsignedBigInteger('mediaLanguageId');
-			$table->unsignedInteger('mediaQualityId');
-			$table->string('poster', 256)->nullable();
-			$table->string('backdrop', 256)->nullable();
-			$table->string('video', 4096);
-			$table->string('previewUrl', 2048)->nullable();
-			$table->boolean('visibleOnHome')->default(false);
+			$table->string('description', 5000);
+			$table->time('duration');
+			$table->string('cast', 1000);
+			$table->string('director', 256)->nullable();
+			$table->unsignedInteger('genreId');
+			$table->float('rating,3,2')->default(0.0);
+			$table->string('pgRating')->nullable();
+			$table->string('type', 25);
+			$table->bigInteger('hits')->default(0);
 			$table->boolean('trending')->default(false);
-			$table->integer('trendingRank')->default(0);
+			$table->boolean('showOnHomepage')->default(false);
+			$table->integer('rank')->default(0)->comment('0 means no rank assigned and with that, this is just a normal one');
+			$table->string('subscriptionType')->comment('free, paid, subscription');
+			$table->float('price')->default(0.00)->comment('In case of paid feature, check this column');
+			$table->boolean('hasSeasons')->default(false);
+			$table->boolean('active')->default(true);
+			$table->string('trailer', 4096);
+			$table->string('poster', 4096);
+			$table->string('backdrop', 4096);
+			$table->string('meta', 65535);
 			$table->timestamps();
 		});
 	}
