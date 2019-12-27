@@ -37,6 +37,7 @@ Route::prefix('seller')->group(function () use ($sellerMiddleware){
 	Route::post('/login', [SellerTwoFactorAuth::class, 'login'])->name('seller.login');
 	Route::post('/register', [SellerTwoFactorAuth::class, 'register'])->name('seller.register');
 	Route::post('/logout', [SellerAuth::class, 'logout'])->name('seller.logout')->middleware($sellerMiddleware);
+	Route::post('/profile', [SellerAuth::class, 'profile'])->name('seller.logout')->middleware($sellerMiddleware);
 
 	Route::middleware($sellerMiddleware)->prefix('categories')->group(function (){
 		Route::get('/', [SellerCategoriesController::class, 'index'])->name('seller.categories.index');
@@ -58,7 +59,8 @@ Route::prefix('customer')->group(function () use ($customerMiddleware){
 	Route::get('/profile', [CustomerAuth::class, 'profile'])->name('customer.profile')->middleware($customerMiddleware);
 	Route::post('/login', [CustomerTwoFactorAuth::class, 'login'])->name('customer.login');
 	Route::post('/register', [CustomerTwoFactorAuth::class, 'register'])->name('customer.register');
-	Route::post('/logout', [CustomerAuth::class, 'logout'])->name('customer.logout')->middleware($customerMiddleware);;
+	Route::post('/logout', [CustomerAuth::class, 'logout'])->name('customer.logout')->middleware($customerMiddleware);
+	Route::get('/profile', [CustomerAuth::class, 'profile'])->name('customer.profile')->middleware($customerMiddleware);
 
 	Route::prefix('sliders')->group(function () use ($customerMiddleware){
 		Route::get('/', [CustomerSlidersController::class, 'index'])->name('customer.sliders.index');
