@@ -9,10 +9,11 @@ use App\Exceptions\ResourceConflictException;
 use App\Exceptions\ResourceNotFoundException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\App\BaseAuthController;
-use App\Models\CustomerOtp;
 use App\Traits\FluentResponse;
 use App\Traits\GuestOtpVerificationSupport;
 use Exception;
+use RuntimeException;
+use Throwable;
 
 /**
  * Class TwoFactorBaseAuthController
@@ -84,7 +85,7 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController{
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
 		}
-		catch (Exception $exception) {
+		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
 		}
 		finally {
@@ -103,8 +104,8 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController{
 			$user = $this->throwIfNotFound($conditions);
 			if ($type == self::Type['2Factor']) {
 				if ($this->shouldVerifyOtpBeforeLogin()) {
-					throw_if((null($userOtp = $user->getOtp)), new OtpNotFoundException());
-					throw_if(($payload['otp'] != $userOtp->getOtp()), new OtpMismatchException());
+					throw_if((null($userOtp = $user->otp)), new OtpNotFoundException());
+					throw_if(($payload['otp'] != $userOtp), new OtpMismatchException());
 				}
 				$token = $this->generateToken($user);
 				$response->message($this->loginSuccess())->setValue('data', $this->loginPayload($user, $token))->status(HttpOkay);
@@ -127,34 +128,12 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController{
 			$response->status(HttpServerError)->message($exception->getMessage());
 		}
 		catch (ResourceNotFoundException $exception) {
-			if ($type == self::Type['2Factor']) {
-				try {
-					$otp = $this->sendGuestOtp($payload['mobile']);
-					$this->otpTarget()::updateOrCreate(
-						[
-							'mobile' => $payload['mobile'],
-						],
-						[
-							'otp' => $otp,
-						]
-					);
-					$response->status(HttpResourceNotFound)->message('An otp has been sent to your give mobile number to complete registration.');
-				}
-				catch (OtpPushException $exception) {
-					$response->status(HttpServerError)->message($exception->getMessage());
-				}
-				catch (Exception $exception) {
-					$response->status(HttpServerError)->message($exception->getMessage());
-				}
-			}
-			else {
-				$response->status(HttpResourceNotFound)->message(__('strings.customer.not-found'));
-			}
+			$response->status(HttpResourceNotFound)->message(__('strings.customer.not-found'));
 		}
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
 		}
-		catch (Exception $exception) {
+		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
 		}
 		finally {
@@ -197,7 +176,7 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController{
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
 		}
-		catch (Exception $exception) {
+		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
 		}
 		finally {

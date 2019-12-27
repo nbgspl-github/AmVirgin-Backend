@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Throwable;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 abstract class BaseAuthController extends BaseController{
@@ -155,7 +156,7 @@ abstract class BaseAuthController extends BaseController{
 		catch (ValidationException $exception) {
 			return $this->failed()->status(HttpInvalidRequestFormat)->message($exception->getError())->send();
 		}
-		catch (Exception $exception) {
+		catch (Throwable $exception) {
 			return $this->error()->message($exception->getMessage())->send();
 		}
 	}
@@ -181,7 +182,7 @@ abstract class BaseAuthController extends BaseController{
 		catch (ValidationException $exception) {
 			return $this->failed()->message($exception->getError())->status(HttpInvalidRequestFormat)->send();
 		}
-		catch (Exception $exception) {
+		catch (Throwable $exception) {
 			return $this->error()->message($exception->getTraceAsString())->send();
 		}
 	}
@@ -233,7 +234,7 @@ abstract class BaseAuthController extends BaseController{
 		catch (ValidationException $exception) {
 			return $this->failed()->message($exception->getError())->status(HttpInvalidRequestFormat)->send();
 		}
-		catch (Exception $exception) {
+		catch (Throwable $exception) {
 			return $this->error()->message($exception->getMessage())->send();
 		}
 	}
