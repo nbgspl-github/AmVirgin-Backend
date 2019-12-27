@@ -140,23 +140,40 @@ return [
 
 		'videos' => [
 			'store' => [
-				'title' => ['bail', 'required', 'string', 'min:1', 'max:256'],
+				'title' => ['bail', 'required', 'string', 'min:1', 'max:500'],
 				'description' => ['bail', 'required', 'string', 'min:1', 'max:2000'],
-				'movieDBId' => ['bail', 'required', 'numeric', 'min:1', RuleMaxInt], // Later on, we'll add real API based validation here
-				'imdbId' => ['bail', 'required', 'numeric', 'min:1', RuleMaxInt], // Later on, we'll add real API based validation here
-				'releaseDate' => ['bail', 'required', 'date'],
-				'averageRating' => ['bail', 'required', 'numeric', 'min:0.00', 'max:100.00'],
-				'votes' => ['bail', 'required', 'numeric', 'min:0', RuleMaxInt],
-				'popularity' => ['bail', 'required', 'numeric', 'min:0', RuleMaxInt],
+				'duration' => ['bail', 'required', 'regex:/^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$/'],
+				'released' => ['bail', 'required', 'date'],
+				'cast' => ['bail', 'required', 'string', 'min:1', 'max:500'],
+				'director' => ['bail', 'required', 'string', 'min:1', 'max:256'],
+				'trailer' => ['bail', 'required', 'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4'],
+				'poster' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
+				'backdrop' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
 				'genreId' => ['bail', 'required', 'exists:genres,id'],
-				'serverId' => ['bail', 'required', 'exists:media-servers,id'],
-				'mediaLanguageId' => ['bail', 'required', 'exists:media-languages,id'],
-				'mediaQualityId' => ['bail', 'required', 'exists:media-qualities,id'],
-				'poster' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp'],
-				'backdrop' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp'],
-				'previewUrl' => ['bail', 'required', 'string', 'min:6', 'max:2048'],
-				'video' => ['bail', 'required', 'mimes:mkv,mp4,flv,avi,wmv'],
-				'trendingRank' => ['bail', 'nullable', 'gte:1', 'lt:11'],
+				'rating' => ['bail', 'required', 'numeric', 'min:0.00', 'max:5.00'],
+				'pgRating' => ['bail', 'required', Rule::in(['G', 'PG', 'PG-13', 'R', 'NC-17'])],
+
+				'videoA' => ['bail', 'required', 'mimes:mkv,mp4,flv,avi,wmv', 'min:1', 'max:2048000'],
+				'mediaLanguageIdA' => ['bail', 'required', 'exists:media-languages,id'],
+				'mediaQualityIdA' => ['bail', 'required', 'exists:media-qualities,id'],
+
+				'videoB' => ['bail', 'nullable', 'mimes:mkv,mp4,flv,avi,wmv', 'min:1', 'max:2048000'],
+				'mediaLanguageIdB' => ['bail', 'required_with:videoB', 'exists:media-languages,id'],
+				'mediaQualityIdB' => ['bail', 'required_with:videoB', 'exists:media-qualities,id'],
+
+				'videoC' => ['bail', 'nullable', 'mimes:mkv,mp4,flv,avi,wmv', 'min:1', 'max:2048000'],
+				'mediaLanguageIdC' => ['bail', 'required_with:videoC', 'exists:media-languages,id'],
+				'mediaQualityIdC' => ['bail', 'required_with:videoC', 'exists:media-qualities,id'],
+
+				'videoD' => ['bail', 'nullable', 'mimes:mkv,mp4,flv,avi,wmv', 'min:1', 'max:2048000'],
+				'mediaLanguageIdD' => ['bail', 'required_with:videoD', 'exists:media-languages,id'],
+				'mediaQualityIdD' => ['bail', 'required_with:videoD', 'exists:media-qualities,id'],
+
+				'videoE' => ['bail', 'nullable', 'mimes:mkv,mp4,flv,avi,wmv', 'min:1', 'max:2048000'],
+				'mediaLanguageIdE' => ['bail', 'required_with:videoE', 'exists:media-languages,id'],
+				'mediaQualityIdE' => ['bail', 'required_with:videoE', 'exists:media-qualities,id'],
+
+				'rank' => ['bail', 'nullable', 'gte:1', 'lt:11'],
 			],
 			'update' => [
 
@@ -168,6 +185,22 @@ return [
 				'name' => ['bail', 'required', 'string', 'min:4', 'max:50'],
 				'mobile' => ['bail', 'required', 'digits:10', Rule::unique('customers', 'mobile')],
 				'email' => ['bail', 'required', 'email', Rule::unique('customers', 'email')],
+				'password' => ['bail', 'required', 'string', 'min:4', 'max:128'],
+				'active' => ['bail', 'required', Rule::in([0, 1])],
+			],
+			'update' => [
+				'name' => ['bail', 'required', 'string', 'min:4', 'max:50'],
+				'mobile' => ['bail', 'required', 'digits:10'],
+				'email' => ['bail', 'required', 'email'],
+				'active' => ['bail', 'required', Rule::in([0, 1])],
+			],
+		],
+
+		'sellers' => [
+			'store' => [
+				'name' => ['bail', 'required', 'string', 'min:4', 'max:50'],
+				'mobile' => ['bail', 'required', 'digits:10', Rule::unique('sellers', 'mobile')],
+				'email' => ['bail', 'required', 'email', Rule::unique('sellers', 'email')],
 				'password' => ['bail', 'required', 'string', 'min:4', 'max:128'],
 				'active' => ['bail', 'required', Rule::in([0, 1])],
 			],

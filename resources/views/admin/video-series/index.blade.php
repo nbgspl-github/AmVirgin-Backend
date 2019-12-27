@@ -4,12 +4,12 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Videos'])
+					@include('admin.extras.header', ['title'=>'Video series'])
 				</div>
 				<div class="card-body animatable">
 					<div class="row pr-3">
-						<div class="col-6"><h4 class="mt-0 header-title ml-3 mb-4">All Videos</h4></div>
-						<div class="col-6"><a class="float-right btn btn-outline-primary waves-effect waves-light shadow-sm fadeInRightBig" href="{{route('admin.videos.create')}}">Add video/movie</a></div>
+						<div class="col-6"><h4 class="mt-0 header-title ml-3 mb-4">All Video series'</h4></div>
+						<div class="col-6"><a class="float-right btn btn-outline-primary waves-effect waves-light shadow-sm fadeInRightBig" href="{{route('admin.video-series.create')}}">Add video series</a></div>
 					</div>
 					<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 						<thead>
@@ -42,7 +42,7 @@
 								<td class="text-center">
 									<div class="btn-group">
 										<div class="col-sm-6 px-0">
-											<a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('admin.videos.edit',$movie->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
+											<a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('admin.video-series.edit',$movie->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
 										</div>
 										<div class="col-sm-6 px-0">
 											<a class="btn btn-outline-primary shadow-sm shadow-primary" href="javascript:void(0);" onclick="deleteMovie('{{$movie->getKey()}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>

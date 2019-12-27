@@ -4,28 +4,28 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['breadcrumbs' =>['Dashboard'=>route('admin.home'),'Customers'=>route('admin.customers.index'),'Add'=>'#'],'title'=>trans('admin.customers.create')])
+					@include('admin.extras.header', ['title'=>'Add a seller'])
 				</div>
 				<div class="card-body animatable">
 					<div class="row">
 						<div class="col-md-6 mx-auto">
-							<form action="{{route('admin.customers.store')}}" method="POST" data-parsley-validate="true">
+							<form action="{{route('admin.sellers.store')}}" method="POST" data-parsley-validate="true">
 								@csrf
 								<div class="form-group">
 									<label>Name</label>
-									<input type="text" name="name" class="form-control" required placeholder="Type here the customer's name" minlength="4" maxlength="50" value="{{old('name')}}"/>
+									<input type="text" name="name" class="form-control" required placeholder="Type here the seller's name" minlength="4" maxlength="50" value="{{old('name')}}"/>
 								</div>
 								<div class="form-group">
 									<label>Email</label>
-									<input type="text" name="email" class="form-control" required placeholder="Type here the customer's email" data-parsley-type="email" value="{{old('email')}}"/>
+									<input type="text" name="email" class="form-control" required placeholder="Type here the seller's email" data-parsley-type="email" value="{{old('email')}}"/>
 								</div>
 								<div class="form-group">
 									<label>Mobile</label>
-									<input type="text" name="mobile" class="form-control" required placeholder="Type here the customer's mobile number" data-parsley-type="digits" minlength="10" maxlength="10" value="{{old('mobile')}}"/>
+									<input type="text" name="mobile" class="form-control" required placeholder="Type here the seller's mobile number" data-parsley-type="digits" minlength="10" maxlength="10" value="{{old('mobile')}}"/>
 								</div>
 								<div class="form-group">
 									<label>Password</label>
-									<input type="text" name="password" class="form-control" placeholder="Type a password for the customer" value="{{old('password','password@123456')}}"/>
+									<input type="text" name="password" class="form-control" placeholder="Type a seller for the customer" value="{{old('password','password@123456')}}"/>
 								</div>
 								<div class="form-group">
 									<label>Active</label>
@@ -42,7 +42,7 @@
 											</button>
 										</div>
 										<div class="col-6">
-											<a href="{{route("admin.customers.index")}}" class="btn btn-secondary waves-effect m-l-5 btn-block">
+											<a href="{{route("admin.sellers.index")}}" class="btn btn-secondary waves-effect m-l-5 btn-block">
 												Cancel
 											</a>
 										</div>

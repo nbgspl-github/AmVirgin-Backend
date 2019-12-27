@@ -44,6 +44,16 @@ return [
 		'not-found' => 'Could not find customer for that key.',
 	],
 
+	'seller' => [
+		'store' => [
+			'success' => 'Seller details saved successfully.',
+		],
+		'update' => [
+			'success' => 'Seller details updated successfully.',
+		],
+		'not-found' => 'Could not find Seller for that key.',
+	],
+
 	'product' => [
 		'store' => [
 			'success' => 'Product created successfully.',

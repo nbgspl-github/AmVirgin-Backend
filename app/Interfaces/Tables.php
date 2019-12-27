@@ -6,4 +6,5 @@ interface Tables{
 	const Genres = 'genres';
 	const Sliders = 'sliders';
 	const Customers = 'customers';
+	const Sellers = 'sellers';
 }

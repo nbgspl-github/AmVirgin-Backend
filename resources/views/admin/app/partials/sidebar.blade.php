@@ -42,7 +42,11 @@
 				<li class="menu-title text-primary">Entertainment</li>
 
 				<li>
-					<a href="{{route("admin.videos.index")}}" class="waves-effect"><i class="mdi mdi-movie" style="margin-top: 2px"></i> <span>Videos </span></a>
+					<a href="{{route('admin.videos.index')}}" class="waves-effect"><i class="mdi mdi-movie"></i><span> Videos </span></a>
+				</li>
+
+				<li>
+					<a href="{{route('admin.video-series.index')}}" class="waves-effect"><i class="mdi mdi-movie"></i><span> Video series </span></a>
 				</li>
 
 				<li>

@@ -9,4 +9,5 @@ interface Directories{
 	const Videos = 'videos';
 	const Posters = 'posters';
 	const Backdrops = 'backdrops';
+	const Trailers = 'trailers';
 }

@@ -48,5 +48,8 @@
 <!--CKIN Js-->
 <script src="{{asset('admin/js/ckin.min.js')}}"></script>
 
+<!--Bootstrap Duration Picker-->
+<script src="{{asset('admin/js/bootstrap-duration-picker.js')}}"></script>
+
 {{--<!-- App js -->--}}
 <script src="{{asset("admin/js/app.js")}}"></script>

@@ -14,10 +14,13 @@ class CreateVideoSourceTable extends Migration{
 		Schema::create('video-sources', function (Blueprint $table){
 			$table->bigIncrements('id');
 			$table->unsignedBigInteger('videoId');
-			$table->string('file', 4096);
-			$table->integer('season')->nullable();
+			$table->integer('seasonId')->nullable();
 			$table->string('description', 5000);
 			$table->bigInteger('hits')->default(0);
+			$table->boolean('active')->default(true);
+			$table->unsignedBigInteger('mediaLanguageId');
+			$table->unsignedBigInteger('mediaQualityId');
+			$table->string('file', 4096);
 			$table->timestamps();
 		});
 	}

@@ -16,5 +16,8 @@
 {{--<!--CKIN Css-->--}}
 {{--<link rel="stylesheet" href="{{asset('admin/css/ckin.min.css')}}">--}}
 
+<!--Bootstrap Duration Picker-->
+<link rel="stylesheet" href="{{asset('admin/css/bootstrap-duration-picker.css')}}">
+
 <!-- Dropzone css -->
 <link href="{{asset('admin/plugins/dropzone/dist/dropzone.css')}}" rel="stylesheet" type="text/css">

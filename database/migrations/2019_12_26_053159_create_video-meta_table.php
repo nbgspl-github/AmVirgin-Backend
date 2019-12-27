@@ -4,16 +4,19 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWebSeriesTable extends Migration{
+class CreateVideoMetaTable extends Migration{
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
 	public function up(){
-		Schema::create('web-series', function (Blueprint $table){
+		Schema::create('video-meta', function (Blueprint $table){
 			$table->bigIncrements('id');
-
+			$table->unsignedBigInteger('videoId');
+			$table->string('name', 256);
+			$table->string('displayName', 256);
+			$table->string('value', 5000);
 			$table->timestamps();
 		});
 	}
@@ -24,6 +27,6 @@ class CreateWebSeriesTable extends Migration{
 	 * @return void
 	 */
 	public function down(){
-		Schema::dropIfExists('web-series');
+		Schema::dropIfExists('video-meta');
 	}
 }
