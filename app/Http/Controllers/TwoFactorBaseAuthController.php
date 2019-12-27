@@ -103,7 +103,7 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController{
 			$user = $this->throwIfNotFound($conditions);
 			if ($type == self::Type['2Factor']) {
 				if ($this->shouldVerifyOtpBeforeLogin()) {
-					throw_if((null($userOtp = CustomerOtp::retrieve($payload['mobile']))), new OtpNotFoundException());
+					throw_if((null($userOtp = $user->getOtp)), new OtpNotFoundException());
 					throw_if(($payload['otp'] != $userOtp->getOtp()), new OtpMismatchException());
 				}
 				$token = $this->generateToken($user);
