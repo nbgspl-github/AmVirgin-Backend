@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Admin;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Interfaces\Directories;
+use App\Interfaces\VideoTypes;
 use App\Models\Genre;
 use App\Models\MediaLanguage;
 use App\Models\MediaQuality;
@@ -12,8 +13,10 @@ use App\Models\MediaServer;
 use App\Models\Video;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
-use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Throwable;
 
 class TvSeriesController extends BaseController{
 	use FluentResponse;
@@ -23,7 +26,7 @@ class TvSeriesController extends BaseController{
 	protected $rules;
 
 	public function __construct(){
-		$this->rules = config('rules.admin.videos');
+		$this->rules = config('rules.admin.tv-series');
 	}
 
 	public function index(){
@@ -32,9 +35,13 @@ class TvSeriesController extends BaseController{
 	}
 
 	public function edit($id){
-		$video = 'videos/VI5kSqyvIecu4eBQHWRExRlXNm4tWseVJhWNREfM.mp4';
-		$poster = 'backdrops/ZTf2caHAiBsadKu96iwpfVvlbxCxufyH72jbQX54.jpeg';
-		return view('admin.videos.edit')->with('video', $video)->with('poster', $poster);
+		$type = request('type');
+		if ($type == 'attributes') {
+			return $this->editAttributes($id);
+		}
+		else {
+			return $this->editContent($id);
+		}
 	}
 
 	public function create(){
@@ -50,43 +57,76 @@ class TvSeriesController extends BaseController{
 	}
 
 	public function store(){
+		$response = $this->response();
 		try {
-			$payload = $this->requestValid(request(), $this->rules['store']);
-			$video = Storage::disk('secured')->putFile(Directories::Videos, request()->file('video'), 'public');
+			$validated = $this->requestValid(request(), $this->rules['store']);
+			$trailer = Storage::disk('secured')->putFile(Directories::Trailers, request()->file('trailer'), 'public');
 			$poster = Storage::disk('public')->putFile(Directories::Posters, request()->file('poster'), 'public');
 			$backdrop = Storage::disk('public')->putFile(Directories::Backdrops, request()->file('backdrop'), 'public');
 			if (request()->has('trending')) {
-				$this->replaceTrendingItem($payload['trendingRank']);
+				$this->replaceTrendingItem($validated['rank']);
 			}
 
-			Video::create([
-				'title' => $payload['title'],
-				'description' => $payload['description'],
-				'movieDBId' => $payload['movieDBId'],
-				'imdbId' => $payload['imdbId'],
-				'releaseDate' => $payload['releaseDate'],
-				'averageRating' => $payload['averageRating'],
-				'votes' => $payload['votes'],
-				'popularity' => $payload['popularity'],
-				'genreId' => $payload['genreId'],
-				'serverId' => $payload['serverId'],
-				'mediaLanguageId' => $payload['mediaLanguageId'],
-				'mediaQualityId' => $payload['mediaQualityId'],
-				'video' => $video,
+			$validated = collect($validated)->filter()->all();
+			$video = Video::create([
+				'title' => $validated['title'],
+				'slug' => Str::slug($validated['title']),
+				'description' => $validated['description'],
+				'duration' => $validated['duration'],
+				'released' => $validated['released'],
+				'cast' => $validated['cast'],
+				'director' => $validated['director'],
+				'trailer' => $trailer,
 				'poster' => $poster,
 				'backdrop' => $backdrop,
-				'previewUrl' => $payload['previewUrl'],
-				'trending' => \request()->has('trending'),
-				'trendingRank' => null($payload['trendingRank']) ? 0 : $payload['trendingRank'],
-				'visibleOnHome' => \request()->has('visibleOnHome'),
+				'genreId' => $validated['genreId'],
+				'rating' => $validated['rating'],
+				'pgRating' => $validated['pgRating'],
+				'type' => VideoTypes::Series,
+				'hits' => 0,
+				'trending' => request()->has('trending'),
+				'rank' => null($validated['rank']) ? 0 : $validated['rank'],
+				'showOnHome' => request()->has('showOnHome'),
+				'subscriptionType' => $validated['subscriptionType'],
+				'price' => isset($validated['price']) ? $validated['price'] : 0.00,
+				'hasSeasons' => true,
 			]);
-			$response = $this->success()->message('Your video was successfully uploaded.');
+			$response = $this->success()->message('Tv series details were successfully saved. Please proceed to next step.');
 		}
 		catch (ValidationException $exception) {
 			$response = $this->failed()->message($exception->getError())->status(HttpInvalidRequestFormat);
 		}
-		catch (Exception $exception) {
-			$response = $this->error()->message($exception->getMessage());
+		catch (Throwable $exception) {
+			$response = $this->error()->message($exception->getTraceAsString());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+
+	public function update($id){
+		$type = request('type');
+		if ($type == 'attributes') {
+			return $this->updateAttributes($id);
+		}
+		else {
+			return $this->updateContent($id);
+		}
+	}
+
+	public function delete($id){
+		$tvSeries = null;
+		$response = $this->response();
+		try {
+			$tvSeries = Video::findOrFail($id);
+			$tvSeries->delete();
+			$response->setValue('code', 200)->message('Could not find tv series for that key.');
+		}
+		catch (ModelNotFoundException $exception) {
+			$response->setValue('code', 400)->message('Successfully deleted tv series.');
+		}
+		catch (Throwable $exception) {
+			$response->setValue('code,500')->message($exception->getMessage());
 		}
 		finally {
 			return $response->send();
@@ -94,11 +134,27 @@ class TvSeriesController extends BaseController{
 	}
 
 	public function replaceTrendingItem($chosenRank){
-		$ranked = Video::where('trendingRank', $chosenRank)->first();
+		$ranked = Video::where('rank', $chosenRank)->first();
 		if (!null($ranked)) {
-			$ranked->trendingRank = 0;
+			$ranked->rank = 0;
 			$ranked->trending = false;
 			$ranked->save();
 		}
+	}
+
+	private function editAttributes($id){
+
+	}
+
+	private function editContent($id){
+
+	}
+
+	private function updateAttributes($id){
+
+	}
+
+	private function updateContent($id){
+
 	}
 }

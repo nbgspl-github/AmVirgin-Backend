@@ -11,8 +11,8 @@ use App\Http\Controllers\Web\Admin\NotificationsController;
 use App\Http\Controllers\Web\Admin\SellerController;
 use App\Http\Controllers\Web\Admin\ServersController;
 use App\Http\Controllers\Web\Admin\SlidersController;
-use App\Http\Controllers\Web\Admin\VideosController;
 use App\Http\Controllers\Web\Admin\TvSeriesController;
+use App\Http\Controllers\Web\Admin\VideosController;
 use App\Http\Controllers\Web\Customer\HomeController as CustomerHome;
 use App\Http\Controllers\Web\Seller\HomeController as SellerHome;
 use App\Models\Genre;
@@ -91,9 +91,11 @@ Route::prefix('admin')->group(function (){
 		Route::prefix('tv-series')->middleware('auth:admin')->group(function (){
 			Route::get('', [TvSeriesController::class, Methods::Index])->name('admin.tv-series.index');
 			Route::get('create', [TvSeriesController::class, Methods::Create])->name('admin.tv-series.create');
-			Route::get('{id}/edit', [TvSeriesController::class, Methods::Edit])->name('admin.tv-series.edit');
+			Route::get('{id}/edit/attributes', [TvSeriesController::class, Methods::Edit])->name('admin.tv-series.edit.attributes')->defaults('type', 'attributes');
+			Route::get('{id}/edit/content', [TvSeriesController::class, Methods::Edit])->name('admin.tv-series.edit.content')->defaults('type', 'content');
 			Route::post('store', [TvSeriesController::class, Methods::Store])->name('admin.tv-series.store');
-			Route::post('{id}', [TvSeriesController::class, Methods::Update])->name('admin.tv-series.update');
+			Route::post('{id}/attributes', [TvSeriesController::class, Methods::Update])->name('admin.tv-series.update.attributes')->defaults('type', 'attributes');
+			Route::post('{id}/content', [TvSeriesController::class, Methods::Update])->name('admin.tv-series.update.content')->defaults('type', 'content');
 		});
 
 		// Genres Route(s)

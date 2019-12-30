@@ -7,4 +7,5 @@ interface Tables{
 	const Sliders = 'sliders';
 	const Customers = 'customers';
 	const Sellers = 'sellers';
+	const Videos = 'videos';
 }

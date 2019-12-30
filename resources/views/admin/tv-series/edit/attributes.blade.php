@@ -6,9 +6,9 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Add a video/movie'])
+					@include('admin.extras.header', ['title'=>'Edit TV series details])
 				</div>
-				<form id="uploadForm" action="{{route('admin.videos.store')}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
+				<form id="uploadForm" action="{{route('admin.tv-series.update.attributes')}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="card-body">
 						<div class="row">
@@ -184,185 +184,16 @@
 								</div>
 							</div>
 						</div>
-						<div class="row mt-4">
-							<div class="col-12">
-								<div class="card shadow-none" style="border: 1px solid #b4b9bf;">
-									<div class="card-header text-primary font-weight-bold bg-white">
-										Video (Minimum required is 1)
-									</div>
-									<div class="card-body">
-										<div class="row">
-											<div class="col-sm-6">
-												<div class="form-group">
-													<label for="videoA">(1.) Video file <span class="text-warning">(Max 2GB)<span class="text-primary">*</span></span></label>
-													<input id="videoA" type="file" placeholder="Choose a video..." name="videoA" class="form-control" style="height: unset; padding-left: 6px" required accept="video/*">
-												</div>
-											</div>
-											<div class="col-sm-3">
-												<div class="form-group">
-													<label for="languageA">Language<span class="text-primary">*</span></label>
-													<select id="languageA" name="mediaLanguageIdA" class="form-control" required>
-														<option value="" disabled selected>Choose...</option>
-														@foreach($languages as $language)
-															@if ($language->getCode()=='en')
-																<option value="{{$language->getKey()}}" selected>{{$language->getName()}}</option>
-															@else
-																<option value="{{$language->getKey()}}">{{$language->getName()}}</option>
-															@endif
-														@endforeach
-													</select>
-												</div>
-											</div>
-											<div class="col-sm-3">
-												<div class="form-group">
-													<label for="mediaQualityA">Media quality<span class="text-primary">*</span></label>
-													<select id="mediaQualityA" name="mediaQualityIdA" class="form-control" required>
-														<option value="" disabled selected>Choose...</option>
-														@foreach($qualities as $quality)
-															<option value="{{$quality->getKey()}}">{{$quality->getName()}}</option>
-														@endforeach
-													</select>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-sm-6">
-												<div class="form-group">
-													<label for="videoB">(2.) Video file <span class="text-warning">(Max 2GB)</span></label>
-													<input id="videoB" type="file" placeholder="Choose a video..." name="videoB" class="form-control" style="height: unset; padding-left: 6px" accept="video/*">
-												</div>
-											</div>
-											<div class="col-sm-3">
-												<div class="form-group">
-													<label for="languageB">Language</label>
-													<select id="languageB" name="mediaLanguageIdB" class="form-control">
-														<option value="" disabled selected>Choose...</option>
-														@foreach($languages as $language)
-															@if ($language->getCode()=='hi')
-																<option value="{{$language->getKey()}}" selected>{{$language->getName()}}</option>
-															@else
-																<option value="{{$language->getKey()}}">{{$language->getName()}}</option>
-															@endif
-														@endforeach
-													</select>
-												</div>
-											</div>
-											<div class="col-sm-3">
-												<div class="form-group">
-													<label for="mediaQualityB">Media quality</label>
-													<select id="mediaQualityB" name="mediaQualityIdB" class="form-control">
-														<option value="" disabled selected>Choose...</option>
-														@foreach($qualities as $quality)
-															<option value="{{$quality->getKey()}}">{{$quality->getName()}}</option>
-														@endforeach
-													</select>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-sm-6">
-												<div class="form-group">
-													<label for="videoC">(3.) Video file <span class="text-warning">(Max 2GB)</span></label>
-													<input id="videoC" type="file" placeholder="Choose a video..." name="videoC" class="form-control" style="height: unset; padding-left: 6px" accept="video/*">
-												</div>
-											</div>
-											<div class="col-sm-3">
-												<div class="form-group">
-													<label for="languageC">Language</label>
-													<select id="languageC" name="mediaLanguageIdC" class="form-control">
-														<option value="" disabled selected>Choose...</option>
-														@foreach($languages as $language)
-															<option value="{{$language->getKey()}}">{{$language->getName()}}</option>
-														@endforeach
-													</select>
-												</div>
-											</div>
-											<div class="col-sm-3">
-												<div class="form-group">
-													<label for="mediaQualityC">Media quality</label>
-													<select id="mediaQualityC" name="mediaQualityIdC" class="form-control">
-														<option value="" disabled selected>Choose...</option>
-														@foreach($qualities as $quality)
-															<option value="{{$quality->getKey()}}">{{$quality->getName()}}</option>
-														@endforeach
-													</select>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-sm-6">
-												<div class="form-group">
-													<label for="videoD">(4.) Video file <span class="text-warning">(Max 2GB)</span></label>
-													<input id="videoD" type="file" placeholder="Choose a video..." name="videoD" class="form-control" style="height: unset; padding-left: 6px" accept="video/*">
-												</div>
-											</div>
-											<div class="col-sm-3">
-												<div class="form-group">
-													<label for="languageD">Language</label>
-													<select id="languageD" name="mediaLanguageIdD" class="form-control">
-														<option value="" disabled selected>Choose...</option>
-														@foreach($languages as $language)
-															<option value="{{$language->getKey()}}">{{$language->getName()}}</option>
-														@endforeach
-													</select>
-												</div>
-											</div>
-											<div class="col-sm-3">
-												<div class="form-group">
-													<label for="mediaQualityD">Media quality</label>
-													<select id="mediaQualityD" name="mediaQualityIdD" class="form-control">
-														<option value="" disabled selected>Choose...</option>
-														@foreach($qualities as $quality)
-															<option value="{{$quality->getKey()}}">{{$quality->getName()}}</option>
-														@endforeach
-													</select>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-sm-6">
-												<div class="form-group">
-													<label for="video">(5.) Video file <span class="text-warning">(Max 2GB)</span></label>
-													<input id="videoE" type="file" placeholder="Choose a video..." name="videoE" class="form-control" style="height: unset; padding-left: 6px" accept="video/*">
-												</div>
-											</div>
-											<div class="col-sm-3">
-												<div class="form-group">
-													<label for="languageE">Language</label>
-													<select id="languageE" name="mediaLanguageIdE" class="form-control">
-														<option value="" disabled selected>Choose...</option>
-														@foreach($languages as $language)
-															<option value="{{$language->getKey()}}">{{$language->getName()}}</option>
-														@endforeach
-													</select>
-												</div>
-											</div>
-											<div class="col-sm-3">
-												<div class="form-group">
-													<label for="mediaQualityE">Media quality</label>
-													<select id="mediaQualityE" name="mediaQualityIdE" class="form-control">
-														<option value="" disabled selected>Choose...</option>
-														@foreach($qualities as $quality)
-															<option value="{{$quality->getKey()}}">{{$quality->getName()}}</option>
-														@endforeach
-													</select>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
 					</div>
 					<div class="card-footer">
 						<div class="form-row">
 							<div class="col-6">
 								<button type="submit" class="btn btn-primary waves-effect waves-light btn-block shadow-sm">
-									Save
+									Save & Next
 								</button>
 							</div>
 							<div class="col-6 pl-sm-3">
-								<a href="{{route("admin.videos.index")}}" class="btn btn-secondary waves-effect btn-block shadow-sm">
+								<a href="{{route("admin.tv-series.index")}}" class="btn btn-secondary waves-effect btn-block shadow-sm">
 									Cancel
 								</a>
 							</div>
@@ -420,7 +251,7 @@
 		}
 
 		function finishUpload() {
-			window.location.href = '/admin/videos';
+			window.location.href = '/admin/tv-series';
 		}
 
 		$(document).ready(function () {
@@ -472,7 +303,7 @@
 				show: true,
 				backdrop: 'static'
 			});
-			axios.post('/admin/videos/store', formData, config,).then(response => {
+			axios.post('/admin/tv-series/store', formData, config,).then(response => {
 				const status = response.data.status;
 				modal.modal('hide');
 				if (status !== 200) {

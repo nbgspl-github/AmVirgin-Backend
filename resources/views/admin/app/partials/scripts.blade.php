@@ -51,5 +51,8 @@
 <!--Bootstrap Duration Picker-->
 <script src="{{asset('admin/js/bootstrap-duration-picker.js')}}"></script>
 
+<script src="{{asset('admin/js/jquery.caret.min.js')}}"></script>
+<script src="{{asset('admin/js/jquery.tag-editor.min.js')}}"></script>
+
 {{--<!-- App js -->--}}
 <script src="{{asset("admin/js/app.js")}}"></script>

@@ -7,10 +7,11 @@ use App\Traits\ActiveStatus;
 use App\Traits\FluentConstructor;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Video extends EloquentMediaModel{
+class Video extends Model{
 	use RetrieveResource;
 	use RetrieveCollection;
 	use FluentConstructor;

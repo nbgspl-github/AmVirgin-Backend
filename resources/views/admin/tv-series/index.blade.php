@@ -20,17 +20,18 @@
 							<th class="text-center">Description</th>
 							<th class="text-center">Rating</th>
 							<th class="text-center">Trending</th>
-							<th class="text-center">Total Seasons</th>
+							<th class="text-center">Seasons</th>
+							<th class="text-center">Pending</th>
 							<th class="text-center">Action(s)</th>
 						</tr>
 						</thead>
 
 						<tbody>
 						@foreach($series as $s)
-							<tr id="genre_row_{{$s->getKey()}}">
+							<tr id="content_row_{{$s->getKey()}}">
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">
-									@if($movie->getPoster()!=null)
+									@if($s->getPoster()!=null)
 										<img src="{{Storage::disk('public')->url($s->getPoster())}}" style="width: 100px; height: 100px" alt="{{$s->getTitle()}}"/>
 									@else
 										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 90px"></i>
@@ -41,13 +42,13 @@
 								<td class="text-center">{{$s->getRating()}}</td>
 								<td class="text-center">{{__boolean($s->trending)}}</td>
 								<td class="text-center">{{5}}</td>
+								<td class="text-center">{{__boolean($s->pending)}}</td>
 								<td class="text-center">
-									<div class="btn-group">
-										<div class="col-sm-6 px-0">
-											<a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('admin.tv-series.edit',$movie->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
-										</div>
-										<div class="col-sm-6 px-0">
-											<a class="btn btn-outline-primary shadow-sm shadow-primary" href="javascript:void(0);" onclick="deleteMovie('{{$movie->getKey()}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>
+									<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+										<div class="btn-group" role="group" aria-label="First group">
+											<a class="btn btn-outline-success shadow-sm shadow-primary" href="{{route('admin.tv-series.edit.attributes',$s->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Add videos & seasons'])><i class="mdi mdi-plus"></i></a>
+											<a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('admin.tv-series.edit.content',$s->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit details'])><i class="mdi mdi-pencil"></i></a>
+											<a class="btn btn-outline-primary shadow-sm shadow-primary" href="javascript:void(0);" onclick="deleteMovie('{{$s->getKey()}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete this series'])><i class="mdi mdi-delete"></i></a>
 										</div>
 									</div>
 								</td>
@@ -82,7 +83,7 @@
 		 * @returns {string}
 		 */
 		deleteMovieRoute = (id) => {
-			return 'sliders/' + id;
+			return 'video-series/' + id;
 		};
 
 		/**
@@ -108,17 +109,17 @@
 
 		/**
 		 * Callback for delete slide trigger.
-		 * @param genreId
+		 * @param id
 		 */
-		deleteMovie = (genreId) => {
-			window.genreId = genreId;
-			alertify.confirm("Are you sure you want to delete this slide? ",
+		deleteMovie = (id) => {
+			window.genreId = id;
+			alertify.confirm("Are you sure you want to delete this tv series? ",
 				(ev) => {
 					ev.preventDefault();
-					axios.delete(deleteSlideRoute(genreId))
+					axios.delete(deleteMovieRoute(id))
 						.then(response => {
 							if (response.status === 200) {
-								$('#genre_row_' + genreId).remove();
+								$('#content_row_' + id).remove();
 								toastr.success(response.data.message);
 							} else {
 								toastr.error(response.data.message);
