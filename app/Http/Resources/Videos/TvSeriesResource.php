@@ -5,7 +5,7 @@ namespace App\Http\Resources\Videos;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
-class VideoResource extends JsonResource{
+class TvSeriesResource extends JsonResource{
 	public function toArray($request){
 		return [
 			'id' => $this->id,

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Admin;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Interfaces\Directories;
+use App\Interfaces\VideoTypes;
 use App\Models\Genre;
 use App\Models\MediaLanguage;
 use App\Models\MediaQuality;
@@ -13,9 +14,9 @@ use App\Models\Video;
 use App\Models\VideoSource;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
-use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Throwable;
 
 class VideosController extends BaseController{
 	use FluentResponse;
@@ -52,16 +53,17 @@ class VideosController extends BaseController{
 	}
 
 	public function store(){
+		$response = $this->response();
 		try {
 			$validated = $this->requestValid(request(), $this->rules['store']);
-			$video = Storage::disk('secured')->putFile(Directories::Videos, request()->file('video'), 'public');
 			$trailer = Storage::disk('secured')->putFile(Directories::Trailers, request()->file('trailer'), 'public');
 			$poster = Storage::disk('public')->putFile(Directories::Posters, request()->file('poster'), 'public');
 			$backdrop = Storage::disk('public')->putFile(Directories::Backdrops, request()->file('backdrop'), 'public');
 			if (request()->has('trending')) {
-				$this->replaceTrendingItem($validated['trendingRank']);
+				$this->replaceTrendingItem($validated['rank']);
 			}
 
+			$validated = collect($validated)->filter()->all();
 			$video = Video::create([
 				'title' => $validated['title'],
 				'slug' => Str::slug($validated['title']),
@@ -70,19 +72,19 @@ class VideosController extends BaseController{
 				'released' => $validated['released'],
 				'cast' => $validated['cast'],
 				'director' => $validated['director'],
-				'trailer' => $validated['trailer'],
+				'trailer' => $trailer,
 				'poster' => $poster,
 				'backdrop' => $backdrop,
 				'genreId' => $validated['genreId'],
 				'rating' => $validated['rating'],
 				'pgRating' => $validated['pgRating'],
-				'type' => $validated['type'],
-				'hits' => $validated['hits'],
+				'type' => VideoTypes::Movie,
+				'hits' => 0,
 				'trending' => request()->has('trending'),
 				'rank' => null($validated['rank']) ? 0 : $validated['rank'],
 				'showOnHome' => request()->has('showOnHome'),
 				'subscriptionType' => $validated['subscriptionType'],
-				'price' => $validated['price'],
+				'price' => isset($validated['price']) ? $validated['price'] : 0.00,
 				'hasSeasons' => false,
 			]);
 
@@ -93,7 +95,7 @@ class VideosController extends BaseController{
 				'hits' => 0,
 				'mediaLanguageId' => request('mediaLanguageIdA'),
 				'mediaQualityId' => request('mediaQualityIdA'),
-				'file' => request()->file('videoA')->store(Directories::Videos),
+				'file' => Storage::disk('secured')->putFile(Directories::Videos, request()->file('videoA'), 'public'),
 			]);
 
 			if (request()->hasFile('videoB')) {
@@ -104,7 +106,7 @@ class VideosController extends BaseController{
 					'hits' => 0,
 					'mediaLanguageId' => request('mediaLanguageIdB'),
 					'mediaQualityId' => request('mediaQualityIdB'),
-					'file' => request()->file('videoB')->store(Directories::Videos),
+					'file' => Storage::disk('secured')->putFile(Directories::Videos, request()->file('videoB'), 'public'),
 				]);
 			}
 
@@ -116,7 +118,7 @@ class VideosController extends BaseController{
 					'hits' => 0,
 					'mediaLanguageId' => request('mediaLanguageIdC'),
 					'mediaQualityId' => request('mediaQualityIdC'),
-					'file' => request()->file('videoC')->store(Directories::Videos),
+					'file' => Storage::disk('secured')->putFile(Directories::Videos, request()->file('videoC'), 'public'),
 				]);
 			}
 
@@ -128,7 +130,7 @@ class VideosController extends BaseController{
 					'hits' => 0,
 					'mediaLanguageId' => request('mediaLanguageIdD'),
 					'mediaQualityId' => request('mediaQualityIdD'),
-					'file' => request()->file('videoD')->store(Directories::Videos),
+					'file' => Storage::disk('secured')->putFile(Directories::Videos, request()->file('videoD')),
 				]);
 			}
 
@@ -140,16 +142,16 @@ class VideosController extends BaseController{
 					'hits' => 0,
 					'mediaLanguageId' => request('mediaLanguageIdE'),
 					'mediaQualityId' => request('mediaQualityIdE'),
-					'file' => request()->file('videoE')->store(Directories::Videos),
+					'file' => Storage::disk('secured')->putFile(Directories::Videos, request()->file('videoE')),
 				]);
 			}
 
 			$response = $this->success()->message('Your video was successfully uploaded.');
 		}
 		catch (ValidationException $exception) {
-			$response = $this->failed()->message(request('mediaLanguageId'))->status(HttpInvalidRequestFormat);
+			$response = $this->failed()->message($exception->getError())->status(HttpInvalidRequestFormat);
 		}
-		catch (Exception $exception) {
+		catch (Throwable $exception) {
 			$response = $this->error()->message($exception->getMessage());
 		}
 		finally {
@@ -160,7 +162,7 @@ class VideosController extends BaseController{
 	public function replaceTrendingItem($chosenRank){
 		$ranked = Video::where('rank', $chosenRank)->first();
 		if (!null($ranked)) {
-			$ranked->trendingRank = 0;
+			$ranked->rank = 0;
 			$ranked->trending = false;
 			$ranked->save();
 		}

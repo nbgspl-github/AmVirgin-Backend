@@ -46,7 +46,7 @@
 				</li>
 
 				<li>
-					<a href="{{route('admin.video-series.index')}}" class="waves-effect"><i class="mdi mdi-movie"></i><span> Video series </span></a>
+					<a href="{{route('admin.tv-series.index')}}" class="waves-effect"><i class="mdi mdi-movie"></i><span> TV series </span></a>
 				</li>
 
 				<li>

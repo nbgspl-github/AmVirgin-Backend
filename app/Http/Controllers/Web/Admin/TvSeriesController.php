@@ -15,7 +15,7 @@ use App\Traits\ValidatesRequest;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 
-class VideoSeriesController extends BaseController{
+class TvSeriesController extends BaseController{
 	use FluentResponse;
 	use ValidatesRequest;
 	use FluentResponse;
@@ -27,8 +27,8 @@ class VideoSeriesController extends BaseController{
 	}
 
 	public function index(){
-		$movies = Video::all();
-		return view('admin.video-series.index')->with('movies', $movies);
+		$series = Video::where('hasSeasons', true)->get();
+		return view('admin.tv-series.index')->with('series', $series);
 	}
 
 	public function edit($id){
@@ -42,7 +42,7 @@ class VideoSeriesController extends BaseController{
 		$languagePayload = MediaLanguage::all()->sortBy('name')->all();
 		$serverPayload = MediaServer::all();
 		$qualityPayload = MediaQuality::retrieveAll();
-		return view('admin.video-series.create')->
+		return view('admin.tv-series.create')->
 		with('genres', $genrePayload)->
 		with('languages', $languagePayload)->
 		with('servers', $serverPayload)->

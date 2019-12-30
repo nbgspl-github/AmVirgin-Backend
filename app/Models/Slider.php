@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Classes\EloquentMediaModel;
 use App\Traits\ActiveStatus;
-use Illuminate\Database\Eloquent\Model;
 
-class Slider extends Model{
+class Slider extends EloquentMediaModel{
 	use ActiveStatus;
 
 	protected $table = 'sliders';
@@ -22,6 +22,13 @@ class Slider extends Model{
 	protected $hidden = [
 		'created_at',
 		'updated_at',
+	];
+
+	protected $downloadableAttributes = [
+		'Poster' => [
+			'method' => 'Poster',
+			'poster',
+		],
 	];
 
 	/**

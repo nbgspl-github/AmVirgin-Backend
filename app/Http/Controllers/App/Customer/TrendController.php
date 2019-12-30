@@ -17,8 +17,8 @@ class TrendController extends ResourceController{
 	public function index(){
 		$trendingPicks = Video::where([
 			['trending', true],
-			['trendingRank', '>', 0],
-		])->orderBy('trendingRank', 'DESC')->get();
+			['rank', '>', 0],
+		])->orderBy('rank', 'DESC')->get();
 		$trendingPicks->transform(function (Video $video){
 			return new TrendingPicksVideoResource($video);
 		});
@@ -30,7 +30,7 @@ class TrendController extends ResourceController{
 
 		$topPicks = Video::where([
 			['trending', true],
-			['trendingRank', '>', 0],
+			['rank', '>', 0],
 		])->orderBy('trendingRank', 'DESC')->get();
 		$topPicks->transform(function (Video $video){
 			return new TopPicksVideoResource($video);

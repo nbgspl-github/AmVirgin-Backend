@@ -11,6 +11,21 @@ class VideoSource extends Model{
 
 	protected $table = 'video-sources';
 
+	protected $fillable = [
+		'videoId',
+		'seasonId',
+		'description',
+		'hits',
+		'mediaLanguageId',
+		'mediaQualityId',
+		'file',
+	];
+
+	protected $hidden = [
+		'created_at',
+		'updated_at',
+	];
+
 	/**
 	 * @return int
 	 */

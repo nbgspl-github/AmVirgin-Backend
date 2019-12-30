@@ -2,6 +2,7 @@
 
 namespace App\Classes;
 
+use App\Exceptions\DownloadableAttributeMissingException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -16,7 +17,7 @@ class EloquentMediaModel extends Model{
 	protected $supportedActions = [
 		'store',
 		'download',
-		'generate',
+		'url',
 		'delete',
 	];
 	private $collectionSupportedActions;
@@ -49,22 +50,33 @@ class EloquentMediaModel extends Model{
 
 	public function __call($method, $parameters){
 		if (!method_exists($this, $method)) {
-			$this->collectionSupportedActions->each(function (string $action) use ($method){
+			foreach ($this->collectionSupportedActions as $action) {
 				if (Str::startsWith($method, $action)) {
 					// Extract suffix from method
 					$suffix = substr($method, strlen($action));
-					$methodName = $action . $this->downloadableAttributes[$suffix]['method'];
 					if ($this->collectionDownloadableAttributes->has($suffix)) {
-						dd('No suffix');
-						printf('Calculated method name is %s', $methodName);
-						return "Called";
+						$attribute = $this->downloadableAttributes[$suffix]['attribute'];
+						if ($action == 'url') {
+							return Storage::disk($this->disk)->url($this->getAttributeValue($attribute));
+						}
+						else if ($action == 'download') {
+							return Storage::disk($this->disk)->download($this->getAttributeValue($attribute));
+						}
+						else if ($action == 'store') {
+							return Storage::disk($this->disk)->putFile($parameters[0], $parameters[1]);
+						}
+						else if ($action == 'delete') {
+							return Storage::disk($this->disk)->delete($this->getAttributeValue($attribute));
+						}
+						else {
+							throw new DownloadableAttributeMissingException(sprintf('No supported attribute [%s] was found for action [%s]. Method name was [%s]', $suffix, $action, $method));
+						}
 					}
 					else {
-						dd('Has suffix');
-						return 'Not found';
+						throw new DownloadableAttributeMissingException(sprintf('No supported attribute [%s] was found for action [%s]. Method name was [%s]', $suffix, $action, $method));
 					}
 				}
-			});
+			}
 		}
 		return parent::__call($method, $parameters);
 	}

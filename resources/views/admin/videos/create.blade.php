@@ -100,7 +100,7 @@
 											<label>Show on homepage?</label>
 											<div>
 												<div class="custom-control custom-checkbox">
-													<input type="checkbox" class="custom-control-input" id="customCheck2" name="visibleOnHome">
+													<input type="checkbox" class="custom-control-input" id="customCheck2" name="showOnHome">
 													<label class="custom-control-label stretched-link" for="customCheck2">Yes</label>
 												</div>
 											</div>
@@ -115,8 +115,8 @@
 											</div>
 										</div>
 										<div class="form-group mb-0">
-											<label for="trendingRank">Trending rank</label>
-											<select id="trendingRank" name="trendingRank" class="form-control">
+											<label for="rank">Trending rank</label>
+											<select id="rank" name="rank" class="form-control">
 												<option value="" disabled selected>Choose...</option>
 												@for ($i = 1; $i <= 10; $i++)
 													<option value="{{$i}}">{{$i}}</option>
@@ -300,7 +300,7 @@
 												<div class="form-group">
 													<label for="languageD">Language</label>
 													<select id="languageD" name="mediaLanguageIdD" class="form-control">
-														<option value="">Choose...</option>
+														<option value="" disabled selected>Choose...</option>
 														@foreach($languages as $language)
 															<option value="{{$language->getKey()}}">{{$language->getName()}}</option>
 														@endforeach
@@ -311,7 +311,7 @@
 												<div class="form-group">
 													<label for="mediaQualityD">Media quality</label>
 													<select id="mediaQualityD" name="mediaQualityIdD" class="form-control">
-														<option value="">Choose...</option>
+														<option value="" disabled selected>Choose...</option>
 														@foreach($qualities as $quality)
 															<option value="{{$quality->getKey()}}">{{$quality->getName()}}</option>
 														@endforeach

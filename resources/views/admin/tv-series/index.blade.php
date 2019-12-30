@@ -4,12 +4,12 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Video series'])
+					@include('admin.extras.header', ['title'=>'TV Series'])
 				</div>
 				<div class="card-body animatable">
 					<div class="row pr-3">
-						<div class="col-6"><h4 class="mt-0 header-title ml-3 mb-4">All Video series'</h4></div>
-						<div class="col-6"><a class="float-right btn btn-outline-primary waves-effect waves-light shadow-sm fadeInRightBig" href="{{route('admin.video-series.create')}}">Add video series</a></div>
+						<div class="col-6"><h4 class="mt-0 header-title ml-3 mb-4">All TV series'</h4></div>
+						<div class="col-6"><a class="float-right btn btn-outline-primary waves-effect waves-light shadow-sm fadeInRightBig" href="{{route('admin.tv-series.create')}}">Add TV series</a></div>
 					</div>
 					<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 						<thead>
@@ -20,29 +20,31 @@
 							<th class="text-center">Description</th>
 							<th class="text-center">Rating</th>
 							<th class="text-center">Trending</th>
+							<th class="text-center">Total Seasons</th>
 							<th class="text-center">Action(s)</th>
 						</tr>
 						</thead>
 
 						<tbody>
-						@foreach($movies as $movie)
-							<tr id="genre_row_{{$movie->getKey()}}">
+						@foreach($series as $s)
+							<tr id="genre_row_{{$s->getKey()}}">
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">
 									@if($movie->getPoster()!=null)
-										<img src="{{Storage::disk('public')->url($movie->getPoster())}}" style="width: 100px; height: 100px" alt="{{$movie->getTitle()}}"/>
+										<img src="{{Storage::disk('public')->url($s->getPoster())}}" style="width: 100px; height: 100px" alt="{{$s->getTitle()}}"/>
 									@else
 										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 90px"></i>
 									@endif
 								</td>
-								<td class="text-center">{{$movie->getTitle()}}</td>
-								<td class="text-center">{{__ellipsis($movie->getDescription(),20)}}</td>
-								<td class="text-center">{{$movie->getAverageRating()}}</td>
-								<td class="text-center">{{__boolean($movie->trending)}}</td>
+								<td class="text-center">{{$s->getTitle()}}</td>
+								<td class="text-center">{{__ellipsis($s->getDescription(),20)}}</td>
+								<td class="text-center">{{$s->getRating()}}</td>
+								<td class="text-center">{{__boolean($s->trending)}}</td>
+								<td class="text-center">{{5}}</td>
 								<td class="text-center">
 									<div class="btn-group">
 										<div class="col-sm-6 px-0">
-											<a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('admin.video-series.edit',$movie->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
+											<a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('admin.tv-series.edit',$movie->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
 										</div>
 										<div class="col-sm-6 px-0">
 											<a class="btn btn-outline-primary shadow-sm shadow-primary" href="javascript:void(0);" onclick="deleteMovie('{{$movie->getKey()}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>

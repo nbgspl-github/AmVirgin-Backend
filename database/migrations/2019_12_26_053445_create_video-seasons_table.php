@@ -16,6 +16,7 @@ class CreateVideoSeasonsTable extends Migration{
 			$table->string('title', 500);
 			$table->string('slug', 1000);
 			$table->string('description', 5000);
+			$table->unsignedBigInteger('videoId');
 			$table->string('cast', 1000);
 			$table->string('director', 256)->nullable();
 			$table->boolean('replaceParentOverview')->default(false);

@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
+use App\Classes\EloquentMediaModel;
 use App\Traits\ActiveStatus;
 use App\Traits\FluentConstructor;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Video extends Model{
+class Video extends EloquentMediaModel{
 	use RetrieveResource;
 	use RetrieveCollection;
 	use FluentConstructor;
@@ -40,9 +41,27 @@ class Video extends Model{
 		'active',
 	];
 
-	protected $hidden = [
-
+	protected $downloadableAttributes = [
+		'Poster' => [
+			'method' => 'Poster',
+			'attribute' => 'poster',
+		],
+		'Backdrop' => [
+			'method' => 'Backdrop',
+			'attribute' => 'backdrop',
+		],
+		'Trailer' => [
+			'method' => 'Trailer',
+			'attribute' => 'trailer',
+		],
 	];
+
+	protected $hidden = [
+		'created_at',
+		'updated_at',
+	];
+
+	protected $disk = 'public';
 
 	/**
 	 * @return string
@@ -367,5 +386,19 @@ class Video extends Model{
 	 */
 	public function genre(){
 		return $this->belongsTo('App\Models\Genre', 'genreId');
+	}
+
+	/**
+	 * @return HasMany
+	 */
+	public function sources(){
+		return $this->hasMany('App\Models\VideoSource', 'videoId');
+	}
+
+	/**
+	 * @return HasMany
+	 */
+	public function seasons(){
+		return $this->hasMany('App\Models\VideoSource', 'seasonId');
 	}
 }

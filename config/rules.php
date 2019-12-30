@@ -152,6 +152,8 @@ return [
 				'genreId' => ['bail', 'required', 'exists:genres,id'],
 				'rating' => ['bail', 'required', 'numeric', 'min:0.00', 'max:5.00'],
 				'pgRating' => ['bail', 'required', Rule::in(['G', 'PG', 'PG-13', 'R', 'NC-17'])],
+				'subscriptionType' => ['bail', 'required', Rule::in(['free', 'paid', 'subscription'])],
+				'price' => ['bail', 'nullable', 'required_unless:subscriptionType,free,subscription', 'numeric', 'min:0.01', 'max:10000.00'],
 
 				'videoA' => ['bail', 'required', 'mimes:mkv,mp4,flv,avi,wmv', 'min:1', 'max:2048000'],
 				'mediaLanguageIdA' => ['bail', 'required', 'exists:media-languages,id'],

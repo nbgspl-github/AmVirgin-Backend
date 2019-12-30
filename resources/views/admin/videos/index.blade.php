@@ -36,8 +36,8 @@
 									@endif
 								</td>
 								<td class="text-center">{{$movie->getTitle()}}</td>
-								<td class="text-center">{{__ellipsis($movie->getDescription(),20)}}</td>
-								<td class="text-center">{{$movie->getAverageRating()}}</td>
+								<td class="text-center">{{__ellipsis($movie->getDescription(),40)}}</td>
+								<td class="text-center">{{$movie->getRating()}}</td>
 								<td class="text-center">{{__boolean($movie->trending)}}</td>
 								<td class="text-center">
 									<div class="btn-group">

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\App\Seller;
 
 use App\Http\Controllers\Base\ResourceController;
-use App\Http\Resources\Videos\VideoResource;
+use App\Http\Resources\Videos\TvSeriesResource;
 use App\Models\Video;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -23,11 +23,11 @@ class VideosController extends ResourceController{
 	}
 
 	protected function resourceConverter(Model $model){
-		return VideoResource::make($model);
+		return TvSeriesResource::make($model);
 	}
 
 	protected function collectionConverter(Collection $collection){
-		return VideoResource::collection($collection);
+		return TvSeriesResource::collection($collection);
 	}
 
 	protected function guard(){

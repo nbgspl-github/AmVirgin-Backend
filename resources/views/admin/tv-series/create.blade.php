@@ -6,9 +6,9 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Add a video series'])
+					@include('admin.extras.header', ['title'=>'Add a TV series'])
 				</div>
-				<form id="uploadForm" action="{{route('admin.video-series.store')}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
+				<form id="uploadForm" action="{{route('admin.tv-series.store')}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="card-body">
 						<div class="row">
@@ -20,11 +20,11 @@
 									<div class="card-body">
 										<div class="form-group">
 											<label for="title">Title<span class="text-primary">*</span></label>
-											<input id="title" type="text" name="title" class="form-control" required placeholder="Type here the video/movie title" minlength="1" maxlength="256" value="{{old('title')}}"/>
+											<input id="title" type="text" name="title" class="form-control" required placeholder="Type here the series title" minlength="1" maxlength="256" value="{{old('title')}}"/>
 										</div>
 										<div class="form-group">
 											<label for="description">Overview (Description)<span class="text-primary">*</span></label>
-											<textarea id="description" name="description" class="form-control" required placeholder="Type short summary about the movie or video" minlength="1" maxlength="2000">{{old('description')}}</textarea>
+											<textarea id="description" name="description" class="form-control" required placeholder="Type short summary about the series" minlength="1" maxlength="2000">{{old('description')}}</textarea>
 										</div>
 										<div class="form-group">
 											<label for="genre">Choose a genre<span class="text-primary">*</span></label>
@@ -45,7 +45,7 @@
 										</div>
 										<div class="form-group">
 											<label for="rating">Rating<span class="text-primary">*</span></label>
-											<input id="rating" type="number" name="rating" class="form-control" required placeholder="Type rating for this movie/video" min="0.00" max="5.00" value="0.00" step="0.01"/>
+											<input id="rating" type="number" name="rating" class="form-control" required placeholder="Type rating for this series" min="0.00" max="5.00" value="0.00" step="0.01"/>
 										</div>
 										<div class="form-group">
 											<label for="pgRating">PG Rating<span class="text-primary">*</span></label>
@@ -197,7 +197,7 @@
 								</button>
 							</div>
 							<div class="col-md-6 pl-3">
-								<a href="{{route("admin.video-series.index")}}" class="btn btn-secondary waves-effect btn-block shadow-sm">
+								<a href="{{route("admin.tv-series.index")}}" class="btn btn-secondary waves-effect btn-block shadow-sm">
 									Cancel
 								</a>
 							</div>

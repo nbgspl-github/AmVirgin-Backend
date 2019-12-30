@@ -12,7 +12,7 @@ use App\Http\Controllers\Web\Admin\SellerController;
 use App\Http\Controllers\Web\Admin\ServersController;
 use App\Http\Controllers\Web\Admin\SlidersController;
 use App\Http\Controllers\Web\Admin\VideosController;
-use App\Http\Controllers\Web\Admin\VideoSeriesController;
+use App\Http\Controllers\Web\Admin\TvSeriesController;
 use App\Http\Controllers\Web\Customer\HomeController as CustomerHome;
 use App\Http\Controllers\Web\Seller\HomeController as SellerHome;
 use App\Models\Genre;
@@ -88,12 +88,12 @@ Route::prefix('admin')->group(function (){
 		});
 
 		// VideoSeries Route(s)
-		Route::prefix('video-series')->middleware('auth:admin')->group(function (){
-			Route::get('', [VideoSeriesController::class, Methods::Index])->name('admin.video-series.index');
-			Route::get('create', [VideoSeriesController::class, Methods::Create])->name('admin.video-series.create');
-			Route::get('{id}/edit', [VideoSeriesController::class, Methods::Edit])->name('admin.video-series.edit');
-			Route::post('store', [VideoSeriesController::class, Methods::Store])->name('admin.video-series.store');
-			Route::post('{id}', [VideoSeriesController::class, Methods::Update])->name('admin.video-series.update');
+		Route::prefix('tv-series')->middleware('auth:admin')->group(function (){
+			Route::get('', [TvSeriesController::class, Methods::Index])->name('admin.tv-series.index');
+			Route::get('create', [TvSeriesController::class, Methods::Create])->name('admin.tv-series.create');
+			Route::get('{id}/edit', [TvSeriesController::class, Methods::Edit])->name('admin.tv-series.edit');
+			Route::post('store', [TvSeriesController::class, Methods::Store])->name('admin.tv-series.store');
+			Route::post('{id}', [TvSeriesController::class, Methods::Update])->name('admin.tv-series.update');
 		});
 
 		// Genres Route(s)
@@ -177,17 +177,17 @@ Route::prefix('admin')->group(function (){
 
 		// Web-series Route(s)
 		Route::prefix('series')->middleware('auth:admin')->group(function (){
-			Route::get('', [VideoSeriesController::class, Methods::Index])->name('admin.series.index');
+			Route::get('', [TvSeriesController::class, Methods::Index])->name('admin.series.index');
 		});
 
 		// Live TV Route(s)
 		Route::prefix('live-tv')->middleware('auth:admin')->group(function (){
-			Route::get('', [VideoSeriesController::class, Methods::Index])->name('admin.live-tv.index');
+			Route::get('', [TvSeriesController::class, Methods::Index])->name('admin.live-tv.index');
 		});
 
 		// Settings Route(s)
 		Route::prefix('settings')->middleware('auth:admin')->group(function (){
-			Route::get('', [VideoSeriesController::class, Methods::Index])->name('admin.settings.index');
+			Route::get('', [TvSeriesController::class, Methods::Index])->name('admin.settings.index');
 		});
 	});
 });
