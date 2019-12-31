@@ -40,12 +40,11 @@
 								<td class="text-center">{{$movie->getRating()}}</td>
 								<td class="text-center">{{__boolean($movie->trending)}}</td>
 								<td class="text-center">
-									<div class="btn-group">
-										<div class="col-sm-6 px-0">
-											<a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('admin.videos.edit',$movie->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
-										</div>
-										<div class="col-sm-6 px-0">
-											<a class="btn btn-outline-primary shadow-sm shadow-primary" href="javascript:void(0);" onclick="deleteMovie('{{$movie->getKey()}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>
+									<div class="btn-toolbar" role="toolbar">
+										<div class="btn-group" role="group">
+											<a class="btn btn-outline-danger shadow-sm shadow-primary" href="{{route('admin.videos.edit.content',$movie->getKey())}}" @include('admin.extras.tooltip.left', ['title' => 'Add video(s)'])><i class="mdi mdi-plus"></i></a>
+											<a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('admin.videos.edit.attributes',$movie->getKey())}}" @include('admin.extras.tooltip.top', ['title' => 'Edit details'])><i class="mdi mdi-pencil"></i></a>
+											<a class="btn btn-outline-primary shadow-sm shadow-primary" href="javascript:void(0);" onclick="deleteMovie('{{$movie->getKey()}}');" @include('admin.extras.tooltip.right', ['title' => 'Delete this video'])><i class="mdi mdi-delete"></i></a>
 										</div>
 									</div>
 								</td>

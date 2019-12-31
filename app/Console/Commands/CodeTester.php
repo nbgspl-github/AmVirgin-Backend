@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Video;
 use App\Traits\GenerateUrls;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
 
 class CodeTester extends Command{
 	use GenerateUrls;
@@ -38,6 +39,9 @@ class CodeTester extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
+		$video = Video::first();
+		$url = Storage::disk('secured')->url($video->sources->first()->file);
+		echo $url;
 		return;
 	}
 }

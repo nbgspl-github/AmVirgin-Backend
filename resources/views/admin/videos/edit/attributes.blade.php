@@ -331,7 +331,7 @@
 				show: true,
 				backdrop: 'static'
 			});
-			axios.post('/admin/tv-series/{{$payload->getKey()}}/attributes', formData, config,).then(response => {
+			axios.post('/admin/videos/{{$payload->getKey()}}/attributes', formData, config,).then(response => {
 				const status = response.data.status;
 				modal.modal('hide');
 				if (status !== 200) {

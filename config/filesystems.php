@@ -58,7 +58,7 @@ return [
 		'secured' => [
 			'driver' => 'local',
 			'root' => storage_path('app/secured'),
-			'url' => env('APP_URL'),
+			'url' => env('APP_URL') . '/storage',
 			'visibility' => 'public',
 		],
 

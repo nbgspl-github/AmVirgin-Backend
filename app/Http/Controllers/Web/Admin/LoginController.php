@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AdminLoginController extends BaseController{
+class LoginController extends BaseController{
 	use AuthenticatesUsers;
 
 	protected $redirectTo = null;

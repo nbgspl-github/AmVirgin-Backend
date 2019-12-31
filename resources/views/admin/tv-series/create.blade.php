@@ -85,7 +85,7 @@
 										</div>
 										<div class="form-group">
 											<label for="price">Price<span class="text-primary">*</span></label>
-											<input id="price" type="number" name="price" class="form-control" required placeholder="Type price for this movie/video" min="0.00" max="10000.00" step="0.01" readonly/>
+											<input id="price" type="number" name="price" class="form-control" required placeholder="Type price for this movie/video" min="0" max="10000" step="1" readonly/>
 										</div>
 										<div class="form-group">
 											<label>Push notify customers?</label>

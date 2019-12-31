@@ -90,11 +90,6 @@
 												</button>
 											</div>
 										</div>
-
-										<div class="form-group m-t-15 mb-0 row">
-											<a href="{{ route('password.request') }}" class="text-muted mx-auto"><i class="mdi mdi-lock"></i>Forgot
-												your password?</a>
-										</div>
 									</form>
 								</div>
 

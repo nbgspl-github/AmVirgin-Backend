@@ -2,46 +2,34 @@
 
 use App\Category;
 use App\Classes\Methods;
-use App\Http\Controllers\Auth\AdminLoginController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Web\Admin\CategoriesController;
 use App\Http\Controllers\Web\Admin\CustomerController;
 use App\Http\Controllers\Web\Admin\GenresController;
-use App\Http\Controllers\Web\Admin\HomeController as AdminHome;
+use App\Http\Controllers\Web\Admin\HomeController;
 use App\Http\Controllers\Web\Admin\NotificationsController;
 use App\Http\Controllers\Web\Admin\SellerController;
 use App\Http\Controllers\Web\Admin\ServersController;
 use App\Http\Controllers\Web\Admin\SlidersController;
 use App\Http\Controllers\Web\Admin\TvSeriesController;
 use App\Http\Controllers\Web\Admin\VideosController;
-use App\Http\Controllers\Web\Customer\HomeController as CustomerHome;
-use App\Http\Controllers\Web\Seller\HomeController as SellerHome;
 use App\Models\Genre;
 use App\Models\Slider;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
-/**
- * |------------------------------------------------
- * | Customer Authentication Routes
- * |------------------------------------------------
- */
-Route::prefix('')->group(function (){
-	Route::get('/', [CustomerHome::class, Methods::Index])->name('customer.home');
-	Route::get('/login', [CustomerLoginController::class, Methods::auth()::LoginForm])->name('customer.login');
-	Route::post('/login', [CustomerLoginController::class, Methods::auth()::Login])->name('customer.login.submit');
-});
+Route::redirect('/', '/admin');
 
 /**
- * |------------------------------------------------
+ * |--------------------------------------------------------------------------
  * | Admin Authentication & Management Routes
- * |------------------------------------------------
+ * |--------------------------------------------------------------------------
  */
 Route::prefix('admin')->group(function (){
-	Route::get('/', [AdminHome::class, Methods::Index])->middleware('auth:admin')->name('admin.home');
-	Route::get('/login', [AdminLoginController::class, Methods::auth()::LoginForm])->name('admin.login');
-	Route::post('/login', [AdminLoginController::class, Methods::auth()::Login])->name('admin.login.submit');
-	Route::post('/logout', [AdminLoginController::class, Methods::auth()::Logout])->name('admin.logout');
+	Route::get('/', [HomeController::class, Methods::Index])->middleware('auth:admin')->name('admin.home');
+	Route::get('/login', [LoginController::class, Methods::auth()::LoginForm])->name('admin.login');
+	Route::post('/login', [LoginController::class, Methods::auth()::Login])->name('admin.login.submit');
+	Route::post('/logout', [LoginController::class, Methods::auth()::Logout])->name('admin.logout');
 	Route::middleware('auth:admin')->group(function (){
 
 		// Customer's Route(s)
@@ -82,20 +70,25 @@ Route::prefix('admin')->group(function (){
 		Route::prefix('videos')->middleware('auth:admin')->group(function (){
 			Route::get('', [VideosController::class, Methods::Index])->name('admin.videos.index');
 			Route::get('create', [VideosController::class, Methods::Create])->name('admin.videos.create');
-			Route::get('{id}/edit', [VideosController::class, Methods::Edit])->name('admin.videos.edit');
+			Route::get('/{slug}', [VideosController::class, Methods::Show])->name('admin.videos.show');
+			Route::get('{id}/edit/attributes', [VideosController::class, Methods::Edit])->name('admin.videos.edit.attributes')->defaults('type', 'attributes');
+			Route::get('{id}/edit/content', [VideosController::class, Methods::Edit])->name('admin.videos.edit.content')->defaults('type', 'content');
 			Route::post('store', [VideosController::class, Methods::Store])->name('admin.videos.store');
-			Route::post('{id}', [VideosController::class, Methods::Update])->name('admin.videos.update');
+			Route::post('{id}/attributes', [VideosController::class, Methods::Update])->name('admin.videos.update.attributes')->defaults('type', 'attributes');
+			Route::post('{id}/content', [VideosController::class, Methods::Update])->name('admin.videos.update.content')->defaults('type', 'content');
 		});
 
 		// VideoSeries Route(s)
 		Route::prefix('tv-series')->middleware('auth:admin')->group(function (){
 			Route::get('', [TvSeriesController::class, Methods::Index])->name('admin.tv-series.index');
 			Route::get('create', [TvSeriesController::class, Methods::Create])->name('admin.tv-series.create');
+			Route::get('/{slug}', [TvSeriesController::class, Methods::Show])->name('admin.tv-series.show');
 			Route::get('{id}/edit/attributes', [TvSeriesController::class, Methods::Edit])->name('admin.tv-series.edit.attributes')->defaults('type', 'attributes');
 			Route::get('{id}/edit/content', [TvSeriesController::class, Methods::Edit])->name('admin.tv-series.edit.content')->defaults('type', 'content');
 			Route::post('store', [TvSeriesController::class, Methods::Store])->name('admin.tv-series.store');
 			Route::post('{id}/attributes', [TvSeriesController::class, Methods::Update])->name('admin.tv-series.update.attributes')->defaults('type', 'attributes');
 			Route::post('{id}/content', [TvSeriesController::class, Methods::Update])->name('admin.tv-series.update.content')->defaults('type', 'content');
+			Route::delete('{id}', [TvSeriesController::class, Methods::Delete])->name('admin.tv-series.delete');
 		});
 
 		// Genres Route(s)
@@ -191,24 +184,6 @@ Route::prefix('admin')->group(function (){
 		Route::prefix('settings')->middleware('auth:admin')->group(function (){
 			Route::get('', [TvSeriesController::class, Methods::Index])->name('admin.settings.index');
 		});
+
 	});
 });
-
-/**
- * |------------------------------------------------
- * | Seller Authentication Routes
- * |------------------------------------------------
- */
-Route::prefix('seller')->group(function (){
-	Route::get('/', [SellerHome::class, Methods::Index])->middleware('auth:seller')->name('seller.home');
-	Route::get('/login', [SellerLoginController::class, Methods::auth()::LoginForm])->name('seller.login');
-	Route::post('/login', [SellerLoginController::class, Methods::auth()::Login])->name('seller.login.submit');
-	Route::post('/logout', [SellerLoginController::class, Methods::auth()::Logout])->name('seller.logout');
-});
-
-/**
- * |------------------------------------------------
- * | Common Authentication Routes
- * |------------------------------------------------
- */
-Auth::routes();

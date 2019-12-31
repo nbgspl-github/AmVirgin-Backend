@@ -67,6 +67,22 @@ class Video extends Model{
 	/**
 	 * @return string
 	 */
+	public function getDuration(): string{
+		return $this->duration;
+	}
+
+	/**
+	 * @param string $duration
+	 * @return Video
+	 */
+	public function setDuration(string $duration): Video{
+		$this->duration = $duration;
+		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
 	public function getTitle(): string{
 		return $this->title;
 	}
@@ -113,15 +129,15 @@ class Video extends Model{
 	/**
 	 * @return string|null
 	 */
-	public function getRelease(): ?string{
+	public function getReleased(): ?string{
 		return $this->released;
 	}
 
 	/**
-	 * @param string|null $releaseDate
+	 * @param string|null $release
 	 * @return Video
 	 */
-	public function setRelease(?string $release): Video{
+	public function setReleased(?string $release): Video{
 		$this->released = $release;
 		return $this;
 	}

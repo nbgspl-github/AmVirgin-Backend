@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
+use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Interfaces\Directories;
@@ -21,7 +22,6 @@ use Throwable;
 class TvSeriesController extends BaseController{
 	use FluentResponse;
 	use ValidatesRequest;
-	use FluentResponse;
 
 	protected $rules;
 
@@ -104,6 +104,20 @@ class TvSeriesController extends BaseController{
 		}
 	}
 
+	public function show($slug){
+		$video = null;
+		try {
+			$video = Video::where('slug', $slug)->where('hasSeasons', true)->firstOrFail();
+			return jsonEncode($video);
+		}
+		catch (ModelNotFoundException $exception) {
+			return $exception->getMessage();
+		}
+		catch (Throwable $exception) {
+			return $exception->getMessage();
+		}
+	}
+
 	public function update($id){
 		$type = request('type');
 		if ($type == 'attributes') {
@@ -120,10 +134,10 @@ class TvSeriesController extends BaseController{
 		try {
 			$tvSeries = Video::findOrFail($id);
 			$tvSeries->delete();
-			$response->setValue('code', 200)->message('Could not find tv series for that key.');
+			$response->setValue('code', 200)->message('Successfully deleted tv series.');
 		}
 		catch (ModelNotFoundException $exception) {
-			$response->setValue('code', 400)->message('Successfully deleted tv series.');
+			$response->setValue('code', 400)->message('Could not find tv series for that key.');
 		}
 		catch (Throwable $exception) {
 			$response->setValue('code,500')->message($exception->getMessage());
@@ -133,7 +147,7 @@ class TvSeriesController extends BaseController{
 		}
 	}
 
-	public function replaceTrendingItem($chosenRank){
+	protected function replaceTrendingItem($chosenRank){
 		$ranked = Video::where('rank', $chosenRank)->first();
 		if (!null($ranked)) {
 			$ranked->rank = 0;
@@ -143,15 +157,100 @@ class TvSeriesController extends BaseController{
 	}
 
 	private function editAttributes($id){
-
-	}
-
-	private function editContent($id){
-
+		$response = responseWeb();
+		try {
+			$genrePayload = Genre::all();
+			$languagePayload = MediaLanguage::all()->sortBy('name')->all();
+			$serverPayload = MediaServer::all();
+			$qualityPayload = MediaQuality::retrieveAll();
+			$payload = Video::findOrFail($id);
+			$response = view('admin.tv-series.edit.attributes')->
+			with('payload', $payload)->
+			with('genres', $genrePayload)->
+			with('languages', $languagePayload)->
+			with('servers', $serverPayload)->
+			with('qualities', $qualityPayload);
+		}
+		catch (ModelNotFoundException $exception) {
+			$response->route('admin.tv-series.index')->error('Could not find tv series for that key.');
+			dd('ModelNotFound');
+		}
+		catch (Throwable $exception) {
+			$response->route('admin.tv-series.index')->error($exception->getMessage());
+			dd('Throwable');
+		}
+		finally {
+			if ($response instanceof WebResponse)
+				return $response->send();
+			else
+				return $response;
+		}
 	}
 
 	private function updateAttributes($id){
+		$response = responseWeb();
+		$video = null;
+		try {
+			$video = Video::retrieveThrows($id);
+			$validated = $this->requestValid(request(), $this->rules['update']);
+			if (request()->has('trending')) {
+				$this->replaceTrendingItem($validated['rank']);
+			}
 
+			$validated = collect($validated)->filter()->all();
+
+			if (request()->hasFile('trailer')) {
+				Storage::disk('secured')->delete($video->getTrailer());
+				$validated['trailer'] = Storage::disk('secured')->putFile(Directories::Trailers, request()->file('trailer'), 'public');
+			}
+			if (request()->hasFile('poster')) {
+				Storage::disk('secured')->delete($video->getPoster());
+				$validated['poster'] = Storage::disk('public')->putFile(Directories::Posters, request()->file('poster'), 'public');
+			}
+			if (request()->hasFile('backdrop')) {
+				Storage::disk('secured')->delete($video->getBackdrop());
+				$validated['backdrop'] = Storage::disk('public')->putFile(Directories::Backdrops, request()->file('backdrop'), 'public');
+			}
+
+			$validated['trending'] = request()->has('trending');
+			$validated['showOnHome'] = request()->has('showOnHome');
+
+			$video->update($validated);
+			$response->success('Tv series details were successfully updated.')->route('admin.tv-series.index');
+		}
+		catch (ValidationException $exception) {
+			$response->error($exception->getError())->back();
+		}
+		catch (Throwable $exception) {
+			$response->error($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+
+	private function editContent($id){
+		$response = responseWeb();
+		try {
+			$languagePayload = MediaLanguage::all()->sortBy('name')->all();
+			$qualityPayload = MediaQuality::retrieveAll();
+			$videoRow = view('admin.tv-series.edit.row')->with('qualities', $qualityPayload)->with('languages', $languagePayload);
+			$payload = Video::retrieveThrows($id);
+			$payload = $payload->seasons();
+			$response = view('admin.tv-series.edit.content')->with('payload', $payload)->with('qualities', $qualityPayload)->with('languages', $languagePayload)->with('data', $videoRow);
+		}
+		catch (ModelNotFoundException $exception) {
+			$response->route('admin.tv-series.index')->error('Could not find tv series for that key.');
+		}
+		catch (Throwable $exception) {
+			$response->route('admin.tv-series.index')->error($exception->getMessage());
+		}
+		finally {
+			if ($response instanceof WebResponse)
+				return $response->send();
+			else
+				return $response;
+		}
 	}
 
 	private function updateContent($id){
