@@ -1,10 +1,10 @@
-/*@import url(https://fonts.googleapis.com/css?family="Varela Round":400,600,700);*/
-/*@import url('https://fonts.googleapis.com/css?family="Varela Round"&display=swap');*/
-@import url('https://fonts.googleapis.com/css?family=Varela+Round&display=swap');
+/*@import url(https://fonts.googleapis.com/css?family="Nunito Sans":400,600,700);*/
+/*@import url('https://fonts.googleapis.com/css?family="Nunito Sans"&display=swap');*/
+@import url('https://fonts.googleapis.com/css?family=Nunito+Sans&display=swap');
 
 body {
     background: #f2f5f7;
-    font-family: "Varela Round", sans-serif;
+    font-family: "Nunito Sans", sans-serif;
     margin: 0;
     font-size: 15px;
     color: #4e4a4a
@@ -20,7 +20,7 @@ html {
 h1, h2, h3, h4, h5, h6 {
     margin: 10px 0;
     font-weight: 600;
-    font-family: "Varela Round", sans-serif
+    font-family: "Nunito Sans", sans-serif
 }
 
 h1 {
@@ -1553,7 +1553,7 @@ body.fixed-left .side-menu.left {
     border: none;
     padding: 8px 16px 8px 46px;
     background: #f3f3f3;
-    font-family: "Varela Round", sans-serif
+    font-family: "Nunito Sans", sans-serif
 }
 
 .custom-dd-empty .dd-list .dd3-content:hover {
@@ -1597,7 +1597,7 @@ body.fixed-left .side-menu.left {
 }
 
 .swal2-modal {
-    font-family: "Varela Round", sans-serif
+    font-family: "Nunito Sans", sans-serif
 }
 
 .swal2-modal .swal2-title {
@@ -2097,7 +2097,7 @@ table.focus-on tbody tr.focused td {
 }
 
 .morris-charts text {
-    font-family: "Varela Round", sans-serif !important
+    font-family: "Nunito Sans", sans-serif !important
 }
 
 .morris-hover.morris-default-style {
@@ -2105,7 +2105,7 @@ table.focus-on tbody tr.focused td {
     padding: 10px 12px;
     background: #fff;
     border: none;
-    font-family: "Varela Round", sans-serif;
+    font-family: "Nunito Sans", sans-serif;
     -webkit-box-shadow: 0 5px 25px 5px rgba(0, 0, 0, .14);
     box-shadow: 0 5px 25px 5px rgba(0, 0, 0, .14)
 }
@@ -2244,7 +2244,7 @@ table.focus-on tbody tr.focused td {
 .c3-chart-arcs-title {
     font-size: 18px;
     font-weight: 600;
-    font-family: "Varela Round", sans-serif
+    font-family: "Nunito Sans", sans-serif
 }
 
 .c3-tooltip tr {
@@ -2257,7 +2257,7 @@ table.focus-on tbody tr.focused td {
 
 .c3-tooltip .value {
     font-weight: 600;
-    font-family: "Varela Round", sans-serif
+    font-family: "Nunito Sans", sans-serif
 }
 
 .c3-line {
@@ -2266,7 +2266,7 @@ table.focus-on tbody tr.focused td {
 
 .c3-legend-item {
     font-size: 13px;
-    font-family: "Varela Round", sans-serif
+    font-family: "Nunito Sans", sans-serif
 }
 
 .widget-chart li {
@@ -2921,4 +2921,12 @@ table.focus-on tbody tr.focused td {
 
 .transitionCard:hover {
     background-color: #d24180;
+}
+
+.shadow-primary {
+    box-shadow: 0 .25rem 1rem rgba(207, 63, 67, 0.5) !important
+}
+
+.shadow-danger {
+    box-shadow: 0 .25rem 1rem rgba(80, 138, 235, 0.5) !important
 }

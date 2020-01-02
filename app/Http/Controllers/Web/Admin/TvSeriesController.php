@@ -12,11 +12,13 @@ use App\Models\MediaLanguage;
 use App\Models\MediaQuality;
 use App\Models\MediaServer;
 use App\Models\Video;
+use App\Models\VideoSource;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use stdClass;
 use Throwable;
 
 class TvSeriesController extends BaseController{
@@ -234,10 +236,20 @@ class TvSeriesController extends BaseController{
 		try {
 			$languagePayload = MediaLanguage::all()->sortBy('name')->all();
 			$qualityPayload = MediaQuality::retrieveAll();
-			$videoRow = view('admin.tv-series.edit.row')->with('qualities', $qualityPayload)->with('languages', $languagePayload);
+			$payloadChosen = new stdClass();
+			$payloadChosen->season = null;
+			$payloadChosen->episode = null;
+			$payloadChosen->languageId = null;
+			$defaultRow = view('admin.tv-series.edit.rowNoCloseButton')->with('qualities', $qualityPayload)->with('languages', $languagePayload)->with('chosen', $payloadChosen);
+			$videoRow = view('admin.tv-series.edit.row')->with('qualities', $qualityPayload)->with('languages', $languagePayload)->with('chosen', $payloadChosen);
 			$payload = Video::retrieveThrows($id);
 			$payload = $payload->seasons();
-			$response = view('admin.tv-series.edit.content')->with('payload', $payload)->with('qualities', $qualityPayload)->with('languages', $languagePayload)->with('data', $videoRow);
+			$response = view('admin.tv-series.edit.content')->
+			with('payload', $payload)->
+			with('qualities', $qualityPayload)->
+			with('languages', $languagePayload)->
+			with('data', $videoRow)->
+			with('key', $id);
 		}
 		catch (ModelNotFoundException $exception) {
 			$response->route('admin.tv-series.index')->error('Could not find tv series for that key.');
@@ -254,6 +266,44 @@ class TvSeriesController extends BaseController{
 	}
 
 	private function updateContent($id){
-
+		$response = $this->response();
+		try {
+			$video = Video::retrieveThrows($id);
+			$payload = $this->requestValid(request(), $this->rules['update']['content']);
+			$videos = $payload['video'];
+			$qualities = $payload['quality'];
+			$episodes = $payload['episode'];
+			$languages = $payload['language'];
+			$seasons = $payload['season'];
+			$titles = $payload['title'];
+			$descriptions = $payload['description'];
+			$durations = $payload['duration'];
+			$count = count($videos);
+			for ($i = 0; $i < $count; $i++) {
+				VideoSource::create([
+					'title' => $titles[$i],
+					'description' => $descriptions[$i],
+					'duration' => $durations[$i],
+					'videoId' => $video->getKey(),
+					'videoIndex' => 0,
+					'seasonIndex' => $seasons[$i] - 1,
+					'episode' => $episodes[$i],
+					'hits' => 0,
+					'mediaLanguageId' => $languages[$i],
+					'mediaQualityId' => $qualities[$i],
+					'file' => Storage::disk('secured')->putFile(Directories::Videos, $videos[$i], 'public'),
+				]);
+			}
+			$response->status(HttpOkay)->message('Video content was updated successfully.');
+		}
+		catch (ModelNotFoundException $exception) {
+			$response->status(HttpResourceNotFound)->message('Could not find video or that key.');
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
 	}
 }

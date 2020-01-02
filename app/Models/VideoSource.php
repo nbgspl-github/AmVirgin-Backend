@@ -12,9 +12,12 @@ class VideoSource extends Model{
 	protected $table = 'video-sources';
 
 	protected $fillable = [
-		'videoId',
-		'seasonId',
+		'title',
 		'description',
+		'duration',
+		'videoId',
+		'seasonIndex',
+		'episode',
 		'hits',
 		'mediaLanguageId',
 		'mediaQualityId',
@@ -25,6 +28,54 @@ class VideoSource extends Model{
 		'created_at',
 		'updated_at',
 	];
+
+	/**
+	 * @return string
+	 */
+	public function getTitle(): string{
+		return $this->title;
+	}
+
+	/**
+	 * @param string $title
+	 * @return VideoSource
+	 */
+	public function setTitle(string $title): VideoSource{
+		$this->title = $title;
+		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDescription(): string{
+		return $this->description;
+	}
+
+	/**
+	 * @param string $description
+	 * @return VideoSource
+	 */
+	public function setDescription(string $description): VideoSource{
+		$this->description = $description;
+		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDuration(): string{
+		return $this->duration;
+	}
+
+	/**
+	 * @param string $duration
+	 * @return VideoSource
+	 */
+	public function setDuration(string $duration): VideoSource{
+		$this->duration = $duration;
+		return $this;
+	}
 
 	/**
 	 * @return int
@@ -45,32 +96,32 @@ class VideoSource extends Model{
 	/**
 	 * @return int
 	 */
-	public function getSeasonId(): int{
-		return $this->seasonId;
+	public function getSeasonIndex(): int{
+		return $this->seasonIndex;
 	}
 
 	/**
-	 * @param int $seasonId
+	 * @param int $seasonIndex
 	 * @return VideoSource
 	 */
-	public function setSeasonId(int $seasonId): VideoSource{
-		$this->seasonId = $seasonId;
+	public function setSeasonIndex(int $seasonIndex): VideoSource{
+		$this->seasonIndex = $seasonIndex;
 		return $this;
 	}
 
 	/**
-	 * @return string
+	 * @return int
 	 */
-	public function getDescription(): string{
-		return $this->description;
+	public function getEpisode(): int{
+		return $this->episode;
 	}
 
 	/**
-	 * @param string $description
+	 * @param int $episode
 	 * @return VideoSource
 	 */
-	public function setDescription(string $description): VideoSource{
-		$this->description = $description;
+	public function setEpisode(int $episode): VideoSource{
+		$this->episode = $episode;
 		return $this;
 	}
 
