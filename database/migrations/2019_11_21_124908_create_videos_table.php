@@ -34,6 +34,7 @@ class CreateVideosTable extends Migration{
 			$table->string('subscriptionType')->comment('free, paid, subscription');
 			$table->float('price')->default(0.00)->comment('In case of paid feature, check this column');
 			$table->boolean('hasSeasons')->default(false);
+			$table->integer('seasons')->default(0)->nullable();
 			$table->boolean('active')->default(true);
 			$table->timestamps();
 		});
