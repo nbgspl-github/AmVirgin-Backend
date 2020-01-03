@@ -427,11 +427,4 @@ class Video extends Model{
 	public function sources(){
 		return $this->hasMany('App\Models\VideoSource', 'videoId');
 	}
-
-	/**
-	 * @return HasMany
-	 */
-	public function seasons(){
-		return $this->hasMany('App\Models\VideoSource', 'seasonId');
-	}
 }
