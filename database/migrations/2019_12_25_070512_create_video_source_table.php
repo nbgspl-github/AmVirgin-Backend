@@ -17,8 +17,8 @@ class CreateVideoSourceTable extends Migration{
 			$table->string('description', 5000);
 			$table->time('duration')->comment('Duration of video');
 			$table->unsignedBigInteger('videoId');
-			$table->integer('videoIndex')->nullable();
-			$table->integer('seasonIndex')->nullable();
+			$table->integer('sortingIndex')->nullable();
+			$table->integer('season')->nullable();
 			$table->integer('episode')->nullable();
 			$table->bigInteger('hits')->default(0);
 			$table->boolean('active')->default(true);

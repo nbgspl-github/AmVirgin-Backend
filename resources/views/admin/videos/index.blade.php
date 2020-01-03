@@ -26,7 +26,7 @@
 
 						<tbody>
 						@foreach($movies as $movie)
-							<tr id="genre_row_{{$movie->getKey()}}">
+							<tr id="content_row_{{$movie->getKey()}}">
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">
 									@if($movie->getPoster()!=null)
@@ -42,9 +42,9 @@
 								<td class="text-center">
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group" role="group">
-											<a class="btn btn-outline-danger shadow-sm shadow-primary" href="{{route('admin.videos.edit.content',$movie->getKey())}}" @include('admin.extras.tooltip.left', ['title' => 'Add video(s)'])><i class="mdi mdi-plus"></i></a>
-											<a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('admin.videos.edit.attributes',$movie->getKey())}}" @include('admin.extras.tooltip.top', ['title' => 'Edit details'])><i class="mdi mdi-pencil"></i></a>
-											<a class="btn btn-outline-primary shadow-sm shadow-primary" href="javascript:void(0);" onclick="deleteMovie('{{$movie->getKey()}}');" @include('admin.extras.tooltip.right', ['title' => 'Delete this video'])><i class="mdi mdi-delete"></i></a>
+											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.videos.edit.content',$movie->getKey())}}" @include('admin.extras.tooltip.left', ['title' => 'Add video(s)'])><i class="mdi mdi-plus"></i></a>
+											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.videos.edit.attributes',$movie->getKey())}}" @include('admin.extras.tooltip.top', ['title' => 'Edit details'])><i class="mdi mdi-pencil"></i></a>
+											<a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);" onclick="deleteMovie('{{$movie->getKey()}}');" @include('admin.extras.tooltip.right', ['title' => 'Delete this video'])><i class="mdi mdi-delete"></i></a>
 										</div>
 									</div>
 								</td>
@@ -65,57 +65,27 @@
 		});
 
 		/**
-		 * Returns route for Genre/Update/Status route.
-		 * @param id
-		 * @returns {string}
-		 */
-		updateStatusRoute = (id) => {
-			return 'sliders/' + id + '/status';
-		};
-
-		/**
 		 * Returns route for Genre/Delete route.
 		 * @param id
 		 * @returns {string}
 		 */
-		deleteMovieRoute = (id) => {
-			return 'sliders/' + id;
-		};
-
-		/**
-		 * Callback for active status changes.
-		 * @param id
-		 * @param state
-		 */
-		toggleStatus = (id, state) => {
-			axios.put(updateStatusRoute(id),
-				{id: id, active: state})
-				.then(response => {
-					if (response.status === 200) {
-						toastr.success(response.data.message);
-					} else {
-						toastr.error(response.data.message);
-					}
-				})
-				.catch(reason => {
-					console.log(reason);
-					toastr.error('Failed to update status.');
-				});
+		deleteRoute = (id) => {
+			return 'videos/' + id;
 		};
 
 		/**
 		 * Callback for delete slide trigger.
-		 * @param genreId
+		 * @param id
 		 */
-		deleteMovie = (genreId) => {
-			window.genreId = genreId;
-			alertify.confirm("Are you sure you want to delete this slide? ",
+		deleteMovie = (id) => {
+			window.genreId = id;
+			alertify.confirm("Are you sure you want to delete this video? ",
 				(ev) => {
 					ev.preventDefault();
-					axios.delete(deleteSlideRoute(genreId))
+					axios.delete(deleteRoute(id))
 						.then(response => {
 							if (response.status === 200) {
-								$('#genre_row_' + genreId).remove();
+								$('#content_row_' + id).remove();
 								toastr.success(response.data.message);
 							} else {
 								toastr.error(response.data.message);

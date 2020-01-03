@@ -16,7 +16,8 @@ class VideoSource extends Model{
 		'description',
 		'duration',
 		'videoId',
-		'seasonIndex',
+		'sortingIndex',
+		'season',
 		'episode',
 		'hits',
 		'mediaLanguageId',
@@ -96,16 +97,32 @@ class VideoSource extends Model{
 	/**
 	 * @return int
 	 */
-	public function getSeasonIndex(): int{
-		return $this->seasonIndex;
+	public function getSeason(): int{
+		return $this->season;
 	}
 
 	/**
 	 * @param int $seasonIndex
 	 * @return VideoSource
 	 */
-	public function setSeasonIndex(int $seasonIndex): VideoSource{
-		$this->seasonIndex = $seasonIndex;
+	public function setSeason(int $season): VideoSource{
+		$this->season = $season;
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getSortingIndex(): int{
+		return $this->sortingIndex;
+	}
+
+	/**
+	 * @param int $sortingIndex
+	 * @return VideoSource
+	 */
+	public function setSortingIndex(int $sortingIndex): VideoSource{
+		$this->sortingIndex = $sortingIndex;
 		return $this;
 	}
 

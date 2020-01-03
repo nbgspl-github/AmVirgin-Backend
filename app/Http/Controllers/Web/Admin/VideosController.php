@@ -12,18 +12,19 @@ use App\Models\MediaLanguage;
 use App\Models\MediaQuality;
 use App\Models\MediaServer;
 use App\Models\Video;
+use App\Models\VideoMeta;
 use App\Models\VideoSource;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use stdClass;
 use Throwable;
 
 class VideosController extends BaseController{
 	use FluentResponse;
 	use ValidatesRequest;
-	use FluentResponse;
 
 	protected $rules;
 
@@ -189,6 +190,32 @@ class VideosController extends BaseController{
 		}
 	}
 
+	public function delete($id){
+		$video = null;
+		$response = $this->response();
+		try {
+			$video = Video::findOrFail($id);
+			$meta = VideoMeta::where('videoId', $video->getKey())->get();
+			$meta->each(function (VideoMeta $meta){
+				$meta->delete();
+			});
+			$sources = VideoSource::where('videoId', $video->getKey())->get();
+			$sources->each(function (VideoSource $videoSource){
+				$videoSource->delete();
+			});
+			$response->setValue('code', 200)->message('Successfully deleted video.');
+		}
+		catch (ModelNotFoundException $exception) {
+			$response->setValue('code', 400)->message('Could not find video for that key.');
+		}
+		catch (Throwable $exception) {
+			$response->setValue('code,500')->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+
 	protected function replaceTrendingItem($chosenRank){
 		$ranked = Video::where('rank', $chosenRank)->first();
 		if (!null($ranked)) {
@@ -206,7 +233,7 @@ class VideosController extends BaseController{
 			$serverPayload = MediaServer::all();
 			$qualityPayload = MediaQuality::retrieveAll();
 			$payload = Video::findOrFail($id);
-			$response = view('admin.tv-series.edit.attributes')->
+			$response = view('admin.videos.edit.attributes')->
 			with('payload', $payload)->
 			with('genres', $genrePayload)->
 			with('languages', $languagePayload)->
@@ -214,12 +241,10 @@ class VideosController extends BaseController{
 			with('qualities', $qualityPayload);
 		}
 		catch (ModelNotFoundException $exception) {
-			$response->route('admin.tv-series.index')->error('Could not find tv series for that key.');
-			dd('ModelNotFound');
+			$response->route('admin.videos.index')->error('Could not find video for that key.');
 		}
 		catch (Throwable $exception) {
-			$response->route('admin.tv-series.index')->error($exception->getMessage());
-			dd('Throwable');
+			$response->route('admin.videos.index')->error($exception->getMessage());
 		}
 		finally {
 			if ($response instanceof WebResponse)
@@ -274,17 +299,36 @@ class VideosController extends BaseController{
 	private function editContent($id){
 		$response = responseWeb();
 		try {
-			$payload = Video::findOrFail($id);
-			return view('admin.tv-series.edit.attributes')->with('payload', $payload);
+			$languagePayload = MediaLanguage::all()->sortBy('name')->all();
+			$qualityPayload = MediaQuality::retrieveAll();
+			$payloadChosen = new stdClass();
+			$payloadChosen->season = null;
+			$payloadChosen->episode = null;
+			$payloadChosen->languageId = null;
+			$payload = Video::retrieveThrows($id);
+			$payload = $payload->sources();
+			dd($payload->first());
+			$content = [];
+			$videoRow = view('admin.videos.edit.row')->with('qualities', $qualityPayload)->with('languages', $languagePayload)->with('chosen', $payloadChosen);
+			$response = view('admin.videos.edit.content')->
+			with('payload', $payload)->
+			with('qualities', $qualityPayload)->
+			with('languages', $languagePayload)->
+			with('content', $content)->
+			with('data', $videoRow)->
+			with('key', $id);
 		}
 		catch (ModelNotFoundException $exception) {
-			$response->route('admin.tv-series.index')->error('Could not find tv series for that key.');
+			$response->route('admin.videos.index')->error('Could not find video for that key.');
 		}
 		catch (Throwable $exception) {
-			$response->route('admin.tv-series.index')->error($exception->getMessage());
+			$response->route('admin.videos.index')->error($exception->getMessage());
 		}
 		finally {
-			return $response->send();
+			if ($response instanceof WebResponse)
+				return $response->send();
+			else
+				return $response;
 		}
 	}
 

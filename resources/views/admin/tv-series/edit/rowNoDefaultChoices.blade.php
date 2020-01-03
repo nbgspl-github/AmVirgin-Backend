@@ -8,13 +8,13 @@
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Title</label>
-						<textarea class="form-control" name="title[]" required placeholder="Title of this video in about 256 characters">{{$chosen->title}}</textarea>
+						<textarea class="form-control" name="title[]" required placeholder="Title of this video in about 256 characters"></textarea>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Description</label>
-						<textarea class="form-control" name="description[]" required placeholder="Description for this video in about 2000 characters">{{$chosen->description}}</textarea>
+						<textarea class="form-control" name="description[]" required placeholder="Description for this video in about 2000 characters"></textarea>
 					</div>
 				</div>
 			</div>
@@ -24,11 +24,7 @@
 						<label>Season</label>
 						<select name="season[]" class="form-control" required>
 							@for ($i = 1; $i <= 10; $i++)
-								@if ($i==$chosen->season)
-									<option value="{{$i}}" selected>{{$i}}</option>
-								@else
-									<option value="{{$i}}">{{$i}}</option>
-								@endif
+								<option value="{{$i}}">{{$i}}</option>
 							@endfor
 						</select>
 					</div>
@@ -38,11 +34,7 @@
 						<label>Episode</label>
 						<select name="episode[]" class="form-control" required>
 							@for ($i = 1; $i <= 100; $i++)
-								@if ($i==$chosen->episode)
-									<option value="{{$i}}" selected>{{$i}}</option>
-								@else
-									<option value="{{$i}}">{{$i}}</option>
-								@endif
+								<option value="{{$i}}">{{$i}}</option>
 							@endfor
 						</select>
 					</div>
@@ -52,11 +44,7 @@
 						<label>Language</label>
 						<select name="language[]" class="form-control" required>
 							@foreach ($languages as $language)
-								@if($language->getKey()==$chosen->languageId)
-									<option value="{{$language->getKey()}}" selected>{{$language->getName()}}</option>
-								@else
-									<option value="{{$language->getKey()}}">{{$language->getName()}}</option>
-								@endif
+								<option value="{{$language->getKey()}}">{{$language->getName()}}</option>
 							@endforeach
 						</select>
 					</div>
@@ -67,25 +55,21 @@
 						<select name="quality[]" class="form-control" required>
 							<option value="" selected disabled>Choose...</option>
 							@foreach ($qualities as $quality)
-								@if($quality->getKey()==$chosen->qualityId)
-									<option value="{{$quality->getKey()}}" selected>{{$quality->getName()}}</option>
-								@else
-									<option value="{{$quality->getKey()}}">{{$quality->getName()}}</option>
-								@endif
+								<option value="{{$quality->getKey()}}">{{$quality->getName()}}</option>
 							@endforeach
 						</select>
 					</div>
 				</div>
-				<div class="col-md-2 mt-md-0 mt-2">
+				<div class="col-md-3 mt-md-0 mt-2">
 					<div class="form-group mb-0">
 						<label>Duration</label>
-						<input name="duration[]" type="text" id="duration" class="form-control" required placeholder="Duration in hh:mm:ss" value="{{$chosen->duration}}">
+						<input name="duration[]" type="text" id="duration" class="form-control" required placeholder="Duration in hh:mm:ss">
 					</div>
 				</div>
-				<div class="col-md-4 mt-md-0 mt-2">
+				<div class="col-md-3 mt-md-0 mt-2">
 					<div class="form-group mb-0">
-						<label>Video (choose new to overwrite)</label>
-						<input name="video[]" type="file" id="video" class="form-control" style="padding-left: 4px; padding-top: 4px" required accept="video/*" value="{{$chosen->video}}">
+						<label>Video</label>
+						<input name="video[]" type="file" id="video" class="form-control" style="padding-left: 4px; padding-top: 4px" required accept="video/*">
 					</div>
 				</div>
 			</div>

@@ -10,6 +10,7 @@ use App\Http\Controllers\Web\Admin\HomeController;
 use App\Http\Controllers\Web\Admin\NotificationsController;
 use App\Http\Controllers\Web\Admin\SellerController;
 use App\Http\Controllers\Web\Admin\ServersController;
+use App\Http\Controllers\Web\Admin\SettingsController;
 use App\Http\Controllers\Web\Admin\SlidersController;
 use App\Http\Controllers\Web\Admin\TvSeriesController;
 use App\Http\Controllers\Web\Admin\VideosController;
@@ -76,6 +77,7 @@ Route::prefix('admin')->group(function (){
 			Route::post('store', [VideosController::class, Methods::Store])->name('admin.videos.store');
 			Route::post('{id}/attributes', [VideosController::class, Methods::Update])->name('admin.videos.update.attributes')->defaults('type', 'attributes');
 			Route::post('{id}/content', [VideosController::class, Methods::Update])->name('admin.videos.update.content')->defaults('type', 'content');
+			Route::delete('{id}', [VideosController::class, Methods::Delete])->name('admin.videos.delete');
 		});
 
 		// VideoSeries Route(s)
@@ -182,7 +184,7 @@ Route::prefix('admin')->group(function (){
 
 		// Settings Route(s)
 		Route::prefix('settings')->middleware('auth:admin')->group(function (){
-			Route::get('', [TvSeriesController::class, Methods::Index])->name('admin.settings.index');
+			Route::get('', [SettingsController::class, Methods::Index])->name('admin.settings.index');
 		});
 
 	});

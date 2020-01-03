@@ -12,13 +12,15 @@
 					<div class="row">
 						<div class="col-6"><h4 class="header-title">Add videos & seasons</h4></div>
 						<div class="col-6">
-							<button class="float-right btn btn-outline-primary waves-effect waves-light shadow-sm fadeInRightBig" onclick="addRow();">Add video</button>
+							<button class="float-right btn btn-outline-primary waves-effect waves-light shadow-sm fadeInRightBig" onclick="addRow();">Add row</button>
 						</div>
 					</div>
 					<form id="uploadForm" action="{{route('admin.tv-series.update.content',$key)}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
 						@csrf
 						<div id="form">
-
+							@foreach($contentPayload as $payload)
+								{!! $payload !!}
+							@endforeach
 						</div>
 						<div class="form-row mt-4 p-0">
 							<div class="col-6 m-0">
@@ -47,10 +49,14 @@
 		let source = CancelToken.source();
 		let modal = null;
 		let modalFinal = null;
+		let rowCount = 0;
+		const RowCountMax = 10;
 		const template = `{!! $data !!}`;
 
 		$(document).ready(function () {
-			addRow();
+			if ($('#form').children().length() < 1) {
+				addRow();
+			}
 			progressRing = $('#progressCircle');
 			progressPercent = $('#progressPercent');
 			progressRing.circleProgress({
@@ -79,11 +85,20 @@
 		}
 
 		function addRow() {
+			if (rowCount >= RowCountMax) {
+				alertify.alert('You can upload only 10 videos at a time.');
+				return;
+			}
 			$('#form').append(template);
+			rowCount++;
 		}
 
 		function deleteRow(target) {
+			if (rowCount === 0) {
+				return;
+			}
 			target.parentElement.parentElement.parentElement.remove();
+			rowCount--;
 		}
 
 		$('#uploadForm').submit(function (event) {

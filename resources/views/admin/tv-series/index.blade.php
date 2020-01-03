@@ -41,14 +41,14 @@
 								<td class="text-center">{{__ellipsis($s->getDescription(),20)}}</td>
 								<td class="text-center">{{$s->getRating()}}</td>
 								<td class="text-center">{{__boolean($s->trending)}}</td>
-								<td class="text-center">{{5}}</td>
+								<td class="text-center">{{$s->getSeasons()}}</td>
 								<td class="text-center">{{__boolean($s->pending)}}</td>
 								<td class="text-center">
 									<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
 										<div class="btn-group" role="group" aria-label="First group">
-											<a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('admin.tv-series.edit.content',$s->getKey())}}" @include('admin.extras.tooltip.top', ['title' => 'Add videos & seasons'])><i class="mdi mdi-plus"></i></a>
-											<a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('admin.tv-series.edit.attributes',$s->getKey())}}" @include('admin.extras.tooltip.left', ['title' => 'Edit details'])><i class="mdi mdi-pencil"></i></a>
-											<a class="btn btn-outline-primary shadow-sm shadow-primary" href="javascript:void(0);" onclick="deleteMovie('{{$s->getKey()}}');" @include('admin.extras.tooltip.right', ['title' => 'Delete this series'])><i class="mdi mdi-delete"></i></a>
+											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.tv-series.edit.content',$s->getKey())}}" @include('admin.extras.tooltip.top', ['title' => 'Add or update videos & seasons'])><i class="mdi mdi-plus"></i></a>
+											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.tv-series.edit.attributes',$s->getKey())}}" @include('admin.extras.tooltip.left', ['title' => 'Edit details'])><i class="mdi mdi-pencil"></i></a>
+											<a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);" onclick="deleteMovie('{{$s->getKey()}}');" @include('admin.extras.tooltip.right', ['title' => 'Delete this series'])><i class="mdi mdi-delete"></i></a>
 										</div>
 									</div>
 								</td>

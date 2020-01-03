@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Classes\EloquentMediaModel;
 use App\Traits\ActiveStatus;
 use App\Traits\FluentConstructor;
 use App\Traits\RetrieveCollection;
@@ -39,6 +38,7 @@ class Video extends Model{
 		'subscriptionType',
 		'price',
 		'hasSeasons',
+		'seasons',
 		'active',
 	];
 
@@ -63,6 +63,22 @@ class Video extends Model{
 	];
 
 	protected $disk = 'public';
+
+	/**
+	 * @return int
+	 */
+	public function getSeasons(): int{
+		return $this->seasons;
+	}
+
+	/**
+	 * @param int $seasons
+	 * @return Video
+	 */
+	public function setSeasons(int $seasons): Video{
+		$this->seasons = $seasons;
+		return $this;
+	}
 
 	/**
 	 * @return string

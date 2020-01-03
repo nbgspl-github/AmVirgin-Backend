@@ -63,7 +63,7 @@ function __boolean($value){
 }
 
 function null($expression){
-	return (isset($expression)) && ($expression == null);
+	return $expression == null;
 }
 
 function __modelNameFromSlug($slug){

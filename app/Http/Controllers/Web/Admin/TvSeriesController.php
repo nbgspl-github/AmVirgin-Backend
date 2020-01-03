@@ -12,6 +12,7 @@ use App\Models\MediaLanguage;
 use App\Models\MediaQuality;
 use App\Models\MediaServer;
 use App\Models\Video;
+use App\Models\VideoMeta;
 use App\Models\VideoSource;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
@@ -135,6 +136,14 @@ class TvSeriesController extends BaseController{
 		$response = $this->response();
 		try {
 			$tvSeries = Video::findOrFail($id);
+			$meta = VideoMeta::where('videoId', $tvSeries->getKey())->get();
+			$meta->each(function (VideoMeta $meta){
+				$meta->delete();
+			});
+			$sources = VideoSource::where('videoId', $tvSeries->getKey())->get();
+			$sources->each(function (VideoSource $videoSource){
+				$videoSource->delete();
+			});
 			$tvSeries->delete();
 			$response->setValue('code', 200)->message('Successfully deleted tv series.');
 		}
@@ -234,21 +243,33 @@ class TvSeriesController extends BaseController{
 	private function editContent($id){
 		$response = responseWeb();
 		try {
-			$languagePayload = MediaLanguage::all()->sortBy('name')->all();
-			$qualityPayload = MediaQuality::retrieveAll();
-			$payloadChosen = new stdClass();
-			$payloadChosen->season = null;
-			$payloadChosen->episode = null;
-			$payloadChosen->languageId = null;
-			$defaultRow = view('admin.tv-series.edit.rowNoCloseButton')->with('qualities', $qualityPayload)->with('languages', $languagePayload)->with('chosen', $payloadChosen);
-			$videoRow = view('admin.tv-series.edit.row')->with('qualities', $qualityPayload)->with('languages', $languagePayload)->with('chosen', $payloadChosen);
-			$payload = Video::retrieveThrows($id);
-			$payload = $payload->seasons();
+			$video = Video::retrieveThrows($id);
+			$languages = MediaLanguage::all()->sortBy('name')->all();
+			$qualities = MediaQuality::retrieveAll();
+
+			$contentPayload = [];
+			$sources = $video->sources();
+			$sources = $sources->get();
+			$sources->transform(function (VideoSource $videoSource) use ($qualities, $languages){
+				$payload = new stdClass();
+				$payload->title = $videoSource->getTitle();
+				$payload->description = $videoSource->getDescription();
+				$payload->season = $videoSource->getSeason();
+				$payload->languageId = $videoSource->language()->first()->getKey();
+				$payload->qualityId = $videoSource->mediaQuality()->first()->getKey();
+				$payload->duration = $videoSource->getDuration();
+				$payload->episode = $videoSource->getEpisode();
+				$payload->video = $videoSource->getFile();
+				return view('admin.tv-series.edit.row')->with('qualities', $qualities)->with('languages', $languages)->with('chosen', $payload);
+			});
+			$row = view('admin.tv-series.edit.rowNoDefaultChoices')->with('qualities', $qualities)->with('languages', $languages);
+
 			$response = view('admin.tv-series.edit.content')->
-			with('payload', $payload)->
-			with('qualities', $qualityPayload)->
-			with('languages', $languagePayload)->
-			with('data', $videoRow)->
+			with('contentPayload', $sources->all())->
+			with('payload', $video)->
+			with('qualities', $qualities)->
+			with('languages', $languages)->
+			with('data', $row)->
 			with('key', $id);
 		}
 		catch (ModelNotFoundException $exception) {
@@ -286,7 +307,7 @@ class TvSeriesController extends BaseController{
 					'duration' => $durations[$i],
 					'videoId' => $video->getKey(),
 					'videoIndex' => 0,
-					'seasonIndex' => $seasons[$i] - 1,
+					'season' => $seasons[$i],
 					'episode' => $episodes[$i],
 					'hits' => 0,
 					'mediaLanguageId' => $languages[$i],
@@ -294,6 +315,10 @@ class TvSeriesController extends BaseController{
 					'file' => Storage::disk('secured')->putFile(Directories::Videos, $videos[$i], 'public'),
 				]);
 			}
+			$seasonCount = VideoSource::distinct('season')->count('season');
+			$video->update([
+				'seasons' => $seasonCount,
+			]);
 			$response->status(HttpOkay)->message('Video content was updated successfully.');
 		}
 		catch (ModelNotFoundException $exception) {
