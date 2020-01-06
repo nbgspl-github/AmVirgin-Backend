@@ -54,7 +54,7 @@
 		const template = `{!! $data !!}`;
 
 		$(document).ready(function () {
-			if ($('#form').children().length() < 1) {
+			if ($('#form').children().length < 1) {
 				addRow();
 			}
 			progressRing = $('#progressCircle');
