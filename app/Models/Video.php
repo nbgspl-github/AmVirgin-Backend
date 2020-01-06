@@ -9,6 +9,7 @@ use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 class Video extends Model{
 	use RetrieveResource;
@@ -34,6 +35,7 @@ class Video extends Model{
 		'hits',
 		'trending',
 		'rank',
+		'topPick',
 		'showOnHome',
 		'subscriptionType',
 		'price',
@@ -353,6 +355,22 @@ class Video extends Model{
 	/**
 	 * @return bool
 	 */
+	public function isTopPick(): bool{
+		return $this->topPick;
+	}
+
+	/**
+	 * @param bool $topPick
+	 * @return Video
+	 */
+	public function setTopPick(bool $topPick): Video{
+		$this->topPick = $topPick;
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 */
 	public function showOnHome(): bool{
 		return $this->showOnHome;
 	}
@@ -411,6 +429,44 @@ class Video extends Model{
 	 */
 	public function setHasSeasons(bool $hasSeasons): Video{
 		$this->hasSeasons = $hasSeasons;
+		return $this;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getQualitySlug(): array{
+		return explode($this->qualitySlug, '|');
+	}
+
+	/**
+	 * @param Collection $mediaQualities
+	 * @return $this
+	 */
+	public function setQualitySlug(Collection $mediaQualities){
+		$mediaQualities->transform(function (MediaQuality $quality){
+			return $quality->getName();
+		});
+		$this->qualitySlug = implode('|', $mediaQualities->toArray());
+		return $this;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getLanguageSlug(): array{
+		return explode($this->qualitySlug, '|');
+	}
+
+	/**
+	 * @param Collection $mediaLanguages
+	 * @return $this
+	 */
+	public function setLanguageSlug(Collection $mediaLanguages){
+		$mediaLanguages->transform(function (MediaLanguage $language){
+			return $language->getName();
+		});
+		$this->languageSlug = implode('|', $mediaLanguages->toArray());
 		return $this;
 	}
 

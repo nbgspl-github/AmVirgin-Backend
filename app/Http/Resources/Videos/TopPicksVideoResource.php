@@ -15,11 +15,10 @@ class TopPicksVideoResource extends JsonResource{
 			'id' => $this->id,
 			'title' => $this->title,
 			'description' => $this->description,
-			'releaseDate' => $this->releaseDate,
-			'rating' => $this->averageRating,
+			'releaseDate' => $this->released,
+			'rating' => $this->rating,
 			'genre' => $this->genre->getName(),
 			'language' => $this->language->getName(),
-			'quality' => $this->mediaQuality->getName(),
 			'poster' => Storage::disk('public')->url($this->getPoster()),
 			'backdrop' => Storage::disk('public')->url($this->getBackdrop()),
 		];

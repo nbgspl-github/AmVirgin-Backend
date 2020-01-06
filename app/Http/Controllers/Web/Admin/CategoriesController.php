@@ -6,7 +6,8 @@ use App\Category;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Interfaces\Directories;
-use App\Interfaces\StatusCodes;
+use App\Models\Genre;
+use App\Rules\UniqueExceptSelf;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Exception;
@@ -78,6 +79,9 @@ class CategoriesController extends BaseController{
 	}
 
 	public function update(Request $request, $id = null){
+		$validation = [
+			'mobile' => ['bail', 'required', new UniqueExceptSelf(Genre::class, 'mobile', '8756651167', 5)],
+		];
 		$response = null;
 		try {
 			$category = Category::retrieve($id);

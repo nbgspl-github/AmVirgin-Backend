@@ -2,13 +2,12 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Video;
 use App\Traits\GenerateUrls;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
 
 class CodeTester extends Command{
 	use GenerateUrls;
+	const TwoHours = 7200;
 
 	/**
 	 * The name and signature of the console command.
@@ -39,9 +38,21 @@ class CodeTester extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		$video = Video::first();
-		$url = Storage::disk('secured')->url($video->sources->first()->file);
-		echo $url;
+		$pickup = jsonEncode([
+			'date' => '06-01-2020',
+			'time' => '05:02 PM',
+		]);
+		$dateX = jsonDecodeArray($pickup);
+		$date = $dateX['date'];
+		$time = $dateX['time'];
+		$timestamp = strtotime(sprintf("%s %s", $date, $time));
+		$current = time();
+		$difference = abs($timestamp - $current);
+		dd($difference);
+		if ($difference <= self::TwoHours)
+			echo "Yes";
+		else
+			echo 'Nope';
 		return;
 	}
 }

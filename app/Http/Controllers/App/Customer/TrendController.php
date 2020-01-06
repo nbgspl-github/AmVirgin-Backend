@@ -15,11 +15,11 @@ class TrendController extends ResourceController{
 	use FluentResponse;
 
 	public function index(){
-		$trendingPicks = Video::where([
+		$trending = Video::where([
 			['trending', true],
 			['rank', '>', 0],
 		])->orderBy('rank', 'DESC')->get();
-		$trendingPicks->transform(function (Video $video){
+		$trending->transform(function (Video $video){
 			return new TrendingPicksVideoResource($video);
 		});
 
@@ -29,15 +29,14 @@ class TrendController extends ResourceController{
 		});
 
 		$topPicks = Video::where([
-			['trending', true],
-			['rank', '>', 0],
-		])->orderBy('trendingRank', 'DESC')->get();
+			['topPick', true],
+		])->orderBy('created_at', 'DESC')->get();
 		$topPicks->transform(function (Video $video){
 			return new TopPicksVideoResource($video);
 		});
 
 		$payload = [
-			'trendingPicks' => $trendingPicks->all(),
+			'trendingPicks' => $trending->all(),
 			'justAdded' => $justAdded->all(),
 			'topPicks' => $topPicks->all(),
 		];

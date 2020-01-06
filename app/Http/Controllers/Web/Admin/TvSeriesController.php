@@ -316,9 +316,21 @@ class TvSeriesController extends BaseController{
 				]);
 			}
 			$seasonCount = VideoSource::distinct('season')->count('season');
+			$mediaLanguages = VideoSource::select('mediaLanguageId')->where('videoId', $video->getKey())->get();
+			$mediaLanguages->transform(function (int $id){
+				return MediaLanguage::find($id);
+			});
+			$mediaQualities = VideoSource::select('mediaQualityId')->where('videoId', $video->getKey())->get();
+			$mediaQualities->transform(function (int $id){
+				return MediaQuality::find($id);
+			});
 			$video->update([
 				'seasons' => $seasonCount,
 			]);
+			$video->setQualitySlug($mediaQualities);
+			$video->setLanguageSlug($mediaLanguages);
+			$video->save();
+
 			$response->status(HttpOkay)->message('Video content was updated successfully.');
 		}
 		catch (ModelNotFoundException $exception) {
