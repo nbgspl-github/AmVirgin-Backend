@@ -203,6 +203,7 @@ class VideosController extends BaseController{
 			$sources->each(function (VideoSource $videoSource){
 				$videoSource->delete();
 			});
+			$video->delete();
 			$response->setValue('code', 200)->message('Successfully deleted video.');
 		}
 		catch (ModelNotFoundException $exception) {
