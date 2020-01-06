@@ -85,7 +85,7 @@
 				<div class="col-md-4 mt-md-0 mt-2">
 					<div class="form-group mb-0">
 						<label>Video (choose new to overwrite)</label>
-						<input name="video[]" type="file" id="video" class="form-control" style="padding-left: 4px; padding-top: 4px" required accept="video/*" value="{{$chosen->video}}">
+						<input name="video[]" type="file" id="video" class="form-control" style="padding-left: 4px; padding-top: 4px" accept="video/*" value="{{$chosen->video}}">
 					</div>
 				</div>
 			</div>
