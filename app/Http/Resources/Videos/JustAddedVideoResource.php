@@ -12,16 +12,23 @@ class JustAddedVideoResource extends JsonResource{
 
 	public function toArray($request){
 		return [
-			'id' => $this->id,
+			'slug' => $this->slug,
 			'title' => $this->title,
 			'description' => $this->description,
-			'releaseDate' => $this->releaseDate,
-			'rating' => $this->averageRating,
-			'genre' => $this->genre->getName(),
-			'language' => $this->language->getName(),
-			'quality' => $this->mediaQuality->getName(),
+			'duration' => $this->duration,
+			'released' => $this->released,
+			'cast' => $this->cast,
+			'director' => $this->director,
+			'trailer' => Storage::disk('public')->url($this->trailer),
 			'poster' => Storage::disk('public')->url($this->getPoster()),
 			'backdrop' => Storage::disk('public')->url($this->getBackdrop()),
+			'genre' => $this->genre->getName(),
+			'rating' => $this->rating,
+			'pgRating' => $this->pgRating,
+			'type' => $this->type,
+			'subscriptionType' => $this->subcriptionType,
+			'hasSeasons' => $this->hasSeasons,
+			'price' => $this->price,
 		];
 	}
 }
