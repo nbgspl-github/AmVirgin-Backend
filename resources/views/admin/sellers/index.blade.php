@@ -35,7 +35,13 @@
 									<td>{{$seller->getMobile()}}</td>
 									<td>{{$seller->getEmail()}}</td>
 									<td>{{__status($seller->isActive())}}</td>
-									<td><a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('admin.sellers.edit',$seller->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit seller details'])><i class="mdi mdi-pencil"></i></a></td>
+									<td>
+										<div class="btn-toolbar" role="toolbar">
+											<div class="btn-group" role="group">
+												<a class="btn btn-outline-danger" href="{{route('admin.sellers.edit',$seller->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit seller details'])><i class="mdi mdi-pencil"></i></a>
+											</div>
+										</div>
+									</td>
 								</tr>
 							@endforeach
 							</tbody>

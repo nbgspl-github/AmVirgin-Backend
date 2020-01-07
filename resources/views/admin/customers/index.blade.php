@@ -35,7 +35,13 @@
 									<td>{{$user->getMobile()}}</td>
 									<td>{{$user->getEmail()}}</td>
 									<td>{{__status($user->isActive())}}</td>
-									<td><a class="btn btn-outline-danger shadow-sm shadow-danger" href="{{route('admin.customers.edit',$user->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit customer details'])><i class="mdi mdi-pencil"></i></a></td>
+									<td>
+										<div class="btn-toolbar" role="toolbar">
+											<div class="btn-group" role="group">
+												<a class="btn btn-outline-danger" href="{{route('admin.customers.edit',$user->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit customer details'])><i class="mdi mdi-pencil"></i></a>
+											</div>
+										</div>
+									</td>
 								</tr>
 							@endforeach
 							</tbody>
