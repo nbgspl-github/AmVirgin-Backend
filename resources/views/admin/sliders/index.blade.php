@@ -62,7 +62,7 @@
 									<td class="text-center"><a class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig" target="_blank" href="{{$slide->getTarget()}}">{{__ellipsis($slide->getTarget())}}</a></td>
 									<td class="text-center">
 										<div class="btn-toolbar" role="toolbar">
-											<div class="btn-group" role="group">
+											<div class="btn-group mx-auto" role="group">
 												<a class="btn btn-outline-danger" href="{{route('admin.sliders.edit',$slide->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
 												<a class="btn btn-outline-primary" href="javascript:void(0);" onclick="deleteSlide('{{$slide->getKey()}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>
 											</div>

@@ -37,7 +37,7 @@
 									<td>{{__status($user->isActive())}}</td>
 									<td>
 										<div class="btn-toolbar" role="toolbar">
-											<div class="btn-group" role="group">
+											<div class="btn-group mx-auto" role="group">
 												<a class="btn btn-outline-danger" href="{{route('admin.customers.edit',$user->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit customer details'])><i class="mdi mdi-pencil"></i></a>
 											</div>
 										</div>

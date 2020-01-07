@@ -45,7 +45,7 @@
 									<td>{{__visibility($category->isVisible())}}</td>
 									<td class="text-center">
 										<div class="btn-toolbar" role="toolbar">
-											<div class="btn-group" role="group">
+											<div class="btn-group mx-auto" role="group">
 												<a class="btn btn-outline-danger" href="{{route('admin.categories.edit',$category->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
 												<a class="btn btn-outline-primary" href="javascript:void(0);" onclick="deleteCategory('{{$category->getKey()}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>
 											</div>

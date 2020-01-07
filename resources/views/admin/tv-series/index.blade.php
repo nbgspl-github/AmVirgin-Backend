@@ -45,7 +45,7 @@
 								<td class="text-center">{{__boolean($s->pending)}}</td>
 								<td class="text-center">
 									<div class="btn-toolbar" role="toolbar">
-										<div class="btn-group" role="group">
+										<div class="btn-group mx-auto" role="group">
 											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.tv-series.edit.content',$s->getKey())}}" @include('admin.extras.tooltip.top', ['title' => 'Add or update videos & seasons'])><i class="mdi mdi-plus"></i></a>
 											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.tv-series.edit.attributes',$s->getKey())}}" @include('admin.extras.tooltip.left', ['title' => 'Edit details'])><i class="mdi mdi-pencil"></i></a>
 											<a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);" onclick="deleteMovie('{{$s->getKey()}}');" @include('admin.extras.tooltip.right', ['title' => 'Delete this series'])><i class="mdi mdi-delete"></i></a>
