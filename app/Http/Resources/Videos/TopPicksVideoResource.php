@@ -27,7 +27,7 @@ class TopPicksVideoResource extends JsonResource{
 			'pgRating' => $this->pgRating,
 			'type' => $this->type,
 			'subscriptionType' => $this->subcriptionType,
-			'hasSeasons' => $this->hasSeasons,
+			'hasSeasons' => __boolean($this->hasSeasons),
 			'price' => $this->price,
 		];
 	}
