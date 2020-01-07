@@ -43,10 +43,10 @@ class TrendController extends ResourceController{
 				'justAdded' => $justAdded->all(),
 				'topPicks' => $topPicks->all(),
 			];
-			$response->status(HttpOkay)->setValue('data', $payload);
+			$response->status(HttpOkay)->setValue('data', $payload)->message('Success');
 		}
 		catch (Throwable $exception) {
-			$response->status(HttpServerError)->setValue('data');
+			$response->status(HttpServerError)->setValue('data')->message('Error');
 		}
 		finally {
 			return $response->send();
