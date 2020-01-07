@@ -17,7 +17,7 @@ trait FluentResponse{
 		return ResponseBuilder::asError();
 	}
 
-	private function response() {
+	public function response(){
 		return ResponseBuilder::instance();
 	}
 }
