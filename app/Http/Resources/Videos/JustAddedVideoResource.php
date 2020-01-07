@@ -26,7 +26,7 @@ class JustAddedVideoResource extends JsonResource{
 			'rating' => $this->rating,
 			'pgRating' => $this->pgRating,
 			'type' => $this->type,
-			'subscriptionType' => $this->subcriptionType,
+			'subscriptionType' => $this->subscriptionType,
 			'hasSeasons' => boolval($this->hasSeasons),
 			'price' => $this->price,
 		];
