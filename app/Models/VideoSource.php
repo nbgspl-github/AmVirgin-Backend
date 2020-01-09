@@ -23,6 +23,7 @@ class VideoSource extends Model{
 		'mediaLanguageId',
 		'mediaQualityId',
 		'file',
+		'subtitle',
 	];
 
 	protected $hidden = [
@@ -172,6 +173,22 @@ class VideoSource extends Model{
 	public function setFile(string $file): VideoSource{
 		$this->file = $file;
 		return $this;
+	}
+
+	/**
+	 * @param string $file
+	 * @return VideoSource
+	 */
+	public function setSubtitle(string $file): VideoSource{
+		$this->subtitle = $file;
+		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSubtitle(){
+		return $this->subtitle;
 	}
 
 	/**

@@ -12,6 +12,7 @@ use App\Http\Controllers\Web\Admin\SellerController;
 use App\Http\Controllers\Web\Admin\ServersController;
 use App\Http\Controllers\Web\Admin\SettingsController;
 use App\Http\Controllers\Web\Admin\SlidersController;
+use App\Http\Controllers\Web\Admin\SubscriptionPlansController;
 use App\Http\Controllers\Web\Admin\TvSeriesController;
 use App\Http\Controllers\Web\Admin\VideosController;
 use App\Models\Genre;
@@ -180,6 +181,18 @@ Route::prefix('admin')->group(function (){
 		// Live TV Route(s)
 		Route::prefix('live-tv')->middleware('auth:admin')->group(function (){
 			Route::get('', [TvSeriesController::class, Methods::Index])->name('admin.live-tv.index');
+		});
+
+		// Subscription Plan Route(s)
+		Route::prefix('subscription-plans')->middleware('auth:admin')->group(function (){
+			Route::get('', [SubscriptionPlansController::class, Methods::Index])->name('admin.subscription-plans.index');
+			Route::get('create', [SubscriptionPlansController::class, Methods::Create])->name('admin.subscription-plans.create');
+			Route::get('{id}/edit', [SubscriptionPlansController::class, Methods::Edit])->name('admin.subscription-plans.edit');
+			Route::get('{id}', [SubscriptionPlansController::class, Methods::Show])->name('admin.subscription-plans.show');
+			Route::post('', [SubscriptionPlansController::class, Methods::Store])->name('admin.subscription-plans.store');
+			Route::post('{id}', [SubscriptionPlansController::class, Methods::Update])->name('admin.subscription-plans.update');
+			Route::put('{id}/status', [SubscriptionPlansController::class, Methods::UpdateStatus])->name('admin.subscription-plans.update.status');
+			Route::delete('{id}', [SubscriptionPlansController::class, Methods::Delete])->name('admin.subscription-plans.delete');
 		});
 
 		// Settings Route(s)

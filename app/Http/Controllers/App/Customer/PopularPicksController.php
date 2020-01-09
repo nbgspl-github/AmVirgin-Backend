@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Throwable;
 
 class PopularPicksController extends ExtendedResourceController{
-
 	public function index(){
 		$response = $this->response();
 		try {

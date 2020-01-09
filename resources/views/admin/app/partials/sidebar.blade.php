@@ -49,9 +49,9 @@
 					<a href="{{route('admin.tv-series.index')}}" class="waves-effect"><i class="mdi mdi-movie"></i><span> TV series </span></a>
 				</li>
 
-				{{--				<li>--}}
-				{{--					<a href="{{route("admin.servers.index")}}" class="waves-effect"><i class="mdi mdi-server mt-1"></i> <span>Servers </span></a>--}}
-				{{--				</li>--}}
+				<li>
+					<a href="{{route("admin.subscription-plans.index")}}" class="waves-effect"><i class="mdi mdi-shopping mt-1"></i> <span>Subscription Plans </span></a>
+				</li>
 
 				<li>
 					<a href="{{route("admin.genres.index")}}" class="waves-effect"><i class="mdi mdi-view-headline mt-1"></i> <span>Genres </span></a>
