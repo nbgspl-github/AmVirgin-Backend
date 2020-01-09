@@ -301,5 +301,17 @@ return [
 
 			],
 		],
+
+		'subscription-plans' => [
+			'store' => [
+				'name' => ['bail', 'required', 'string', 'min:1', 'max:100', Rule::unique(Tables::SubscriptionPlans, 'name')],
+				'description' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
+				'originalPrice' => ['bail', 'required', 'numeric', 'min:0.00', 'max:100000.00'],
+				'offerPrice' => ['bail', 'required', 'numeric', 'min:0.00', 'max:100000.00'],
+				'banner' => ['bail', 'required', 'image'],
+				'duration' => ['bail', 'required', 'numeric', 'min:0', 'max:1200'],
+				'active' => ['bail', 'required', 'boolean'],
+			],
+		],
 	],
 ];

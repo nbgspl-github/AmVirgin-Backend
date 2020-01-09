@@ -8,4 +8,5 @@ interface Tables{
 	const Customers = 'customers';
 	const Sellers = 'sellers';
 	const Videos = 'videos';
+	const SubscriptionPlans = 'subscription-plans';
 }
