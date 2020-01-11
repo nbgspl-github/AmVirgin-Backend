@@ -365,14 +365,14 @@ class Product extends Model{
 		return $this->visibility;
 	}
 
-	/**
-	 * @param bool $visible
-	 * @return Product
-	 */
-	public function setVisible(bool $visible): Product{
-		$this->visibility = $visible;
-		return $this;
-	}
+//	/**
+//	 * @param bool $visible
+//	 * @return Product
+//	 */
+//	public function setVisible(bool $visible): Product{
+//		$this->visibility = $visible;
+//		return $this;
+//	}
 
 	/**
 	 * @return int
@@ -547,6 +547,22 @@ class Product extends Model{
 	 */
 	public function setSku(string $sku): Product{
 		$this->sku = $sku;
+		return $this;
+	}
+
+	/**
+	 * @return string|null
+	 */
+	public function getTrailer(): ?string{
+		return $this->trailer;
+	}
+
+	/**
+	 * @param string $trailer
+	 * @return Product
+	 */
+	public function setTrailer(string $trailer): Product{
+		$this->trailer = $trailer;
 		return $this;
 	}
 

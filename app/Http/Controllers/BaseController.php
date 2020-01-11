@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\ValidationRuleset;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -13,4 +14,21 @@ class BaseController extends Controller{
 	use DispatchesJobs;
 	use ValidatesRequests;
 	use ResponseTrait;
+
+	/**
+	 * @var ValidationRuleset
+	 */
+	protected $ruleSet;
+
+	public function __construct(){
+		$this->ruleSet = new ValidationRuleset();
+	}
+
+	protected function rules(string $key){
+		return $this->ruleSet->rules($key);
+	}
+
+	protected function extend(array $rules){
+
+	}
 }

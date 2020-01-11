@@ -28,16 +28,16 @@ abstract class ResourceController extends BaseController{
 	 */
 	protected abstract function provider();
 
-	/**
-	 * @param Model $model
-	 * @return AttributeResource
-	 */
+//	/**
+//	 * @param Model $model
+//	 * @return AttributeResource
+//	 */
 	protected abstract function resourceConverter(Model $model);
 
-	/**
-	 * @param Collection $collection
-	 * @return AttributeCollection
-	 */
+//	/**
+//	 * @param Collection $collection
+//	 * @return AttributeCollection
+//	 */
 	protected abstract function collectionConverter(Collection $collection);
 
 	protected abstract function guard();

@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Schema;
 class CreateProductsTable extends Migration{
 	/**
 	 * Run the migrations.
-	 *
 	 * @return void
 	 */
 	public function up(){
@@ -44,8 +43,9 @@ class CreateProductsTable extends Migration{
 			$table->boolean('deleted')->default(false)->comment('If the seller has deleted this product, this will be true');
 			$table->boolean('draft')->default(false)->comment('If the seller is halfway done through putting details this will be true');
 			$table->string('shortDescription', 1000);
-			$table->string('longDescription', 10000);
+			$table->string('longDescription', 5000);
 			$table->string('sku');
+			$table->string('trailer', 4096)->nullable();
 			$table->timestamps();
 		});
 	}

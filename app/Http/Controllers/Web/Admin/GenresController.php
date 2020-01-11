@@ -18,10 +18,10 @@ use Illuminate\Validation\Rule;
 class GenresController extends BaseController{
 	use ValidatesRequest;
 
-	protected $rules;
+	protected $ruleSet;
 
 	public function __construct(){
-		$this->rules = config('rules.admin.genres');
+		$this->ruleSet = config('rules.admin.genres');
 	}
 
 	public function index(){
@@ -49,7 +49,7 @@ class GenresController extends BaseController{
 	public function store(Request $request){
 		$response = responseWeb();
 		try {
-			$payload = $this->requestValid($request, $this->rules['store']);
+			$payload = $this->requestValid($request, $this->ruleSet['store']);
 			$payload['poster'] = null;
 			if ($request->hasFile('poster'))
 				$payload = Storage::disk('public')->putFile(Directories::Genre, $request->file('poster'), 'public');
@@ -78,7 +78,7 @@ class GenresController extends BaseController{
 			$additional = [
 				'name' => [Rule::unique(Tables::Genres, 'name')->ignoreModel($genre)],
 			];
-			$payload = $this->requestValid($request, $this->rules['update'], $additional);
+			$payload = $this->requestValid($request, $this->ruleSet['update'], $additional);
 			if ($request->hasFile('poster'))
 				$payload['poster'] = Storage::disk('public')->putFile(Directories::Genre, $request->file('poster'), 'public');
 			else

@@ -20,10 +20,10 @@ class SlidersController extends BaseController{
 	use ValidatesRequest;
 	use FluentResponse;
 
-	protected $rules;
+	protected $ruleSet;
 
 	public function __construct(){
-		$this->rules = config('rules.admin.sliders');
+		$this->ruleSet = config('rules.admin.sliders');
 	}
 
 	public function index(){
@@ -51,7 +51,7 @@ class SlidersController extends BaseController{
 	public function store(Request $request){
 		$response = null;
 		try {
-			$this->requestValid($request, $this->rules['store']);
+			$this->requestValid($request, $this->ruleSet['store']);
 			$poster = Storage::disk('public')->putFile(Directories::Sliders, $request->file('poster'), 'public');
 			Slider::create([
 				'title' => $request->title,
@@ -107,7 +107,7 @@ class SlidersController extends BaseController{
 		$response = null;
 		$poster = null;
 		try {
-			$this->requestValid($request, $this->rules['update']);
+			$this->requestValid($request, $this->ruleSet['update']);
 			$slide = Slider::find($request->id);
 			$slide->update([
 				'title' => $request->title,

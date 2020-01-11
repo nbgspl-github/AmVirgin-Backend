@@ -8,6 +8,7 @@ use App\Http\Controllers\Web\Admin\CustomerController;
 use App\Http\Controllers\Web\Admin\GenresController;
 use App\Http\Controllers\Web\Admin\HomeController;
 use App\Http\Controllers\Web\Admin\NotificationsController;
+use App\Http\Controllers\Web\Admin\ProductsController;
 use App\Http\Controllers\Web\Admin\SellerController;
 use App\Http\Controllers\Web\Admin\ServersController;
 use App\Http\Controllers\Web\Admin\SettingsController;
@@ -19,8 +20,6 @@ use App\Models\Genre;
 use App\Models\Slider;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-
-\Illuminate\Support\Facades\Auth::routes();
 Route::redirect('/', '/admin');
 
 /**
@@ -194,6 +193,11 @@ Route::prefix('admin')->group(function (){
 			Route::post('{id}', [SubscriptionPlansController::class, Methods::Update])->name('admin.subscription-plans.update');
 			Route::put('{id}/status', [SubscriptionPlansController::class, Methods::UpdateStatus])->name('admin.subscription-plans.update.status');
 			Route::delete('{id}', [SubscriptionPlansController::class, Methods::Delete])->name('admin.subscription-plans.delete');
+		});
+
+		// Products Route(s)
+		Route::prefix('products')->middleware('auth:admin')->group(function (){
+			Route::get('', [ProductsController::class, Methods::Index])->name('admin.products.index');
 		});
 
 		// Settings Route(s)

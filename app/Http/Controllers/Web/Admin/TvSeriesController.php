@@ -26,10 +26,10 @@ class TvSeriesController extends BaseController{
 	use FluentResponse;
 	use ValidatesRequest;
 
-	protected $rules;
+	protected $ruleSet;
 
 	public function __construct(){
-		$this->rules = config('rules.admin.tv-series');
+		$this->ruleSet = config('rules.admin.tv-series');
 	}
 
 	public function index(){
@@ -62,7 +62,7 @@ class TvSeriesController extends BaseController{
 	public function store(){
 		$response = $this->response();
 		try {
-			$validated = $this->requestValid(request(), $this->rules['store']);
+			$validated = $this->requestValid(request(), $this->ruleSet['store']);
 			$trailer = Storage::disk('secured')->putFile(Directories::Trailers, request()->file('trailer'), 'public');
 			$poster = Storage::disk('public')->putFile(Directories::Posters, request()->file('poster'), 'public');
 			$backdrop = Storage::disk('public')->putFile(Directories::Backdrops, request()->file('backdrop'), 'public');
@@ -203,7 +203,7 @@ class TvSeriesController extends BaseController{
 		$video = null;
 		try {
 			$video = Video::retrieveThrows($id);
-			$validated = $this->requestValid(request(), $this->rules['update']);
+			$validated = $this->requestValid(request(), $this->ruleSet['update']);
 			if (request()->has('trending')) {
 				$this->replaceTrendingItem($validated['rank']);
 			}
@@ -290,7 +290,7 @@ class TvSeriesController extends BaseController{
 		$response = $this->response();
 		try {
 			$video = Video::retrieveThrows($id);
-			$payload = $this->requestValid(request(), $this->rules['update']['content']);
+			$payload = $this->requestValid(request(), $this->ruleSet['update']['content']);
 			$videos = $payload['video'];
 			$qualities = $payload['quality'];
 			$episodes = $payload['episode'];

@@ -112,7 +112,7 @@ return [
 				'shippingCost' => ['bail', 'required_if:shippingCostType,chargeable'],
 				'draft' => ['bail', 'boolean'],
 				'shortDescription' => ['bail', 'required', 'string', 'min:1', 'max:1000'],
-				'longDescription' => ['bail', 'required', 'string', 'min:1', 'max:10000'],
+				'longDescription' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
 				'sku' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 			],
 		],

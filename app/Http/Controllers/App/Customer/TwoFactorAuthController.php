@@ -12,11 +12,11 @@ use Illuminate\Support\Facades\Auth;
  * @package App\Http\Controllers\App\Customer
  */
 class TwoFactorAuthController extends TwoFactorBaseAuthController{
-	protected $rules;
+	protected $ruleSet;
 
 	public function __construct(){
 		parent::__construct();
-		$this->rules = config('rules.auth.customer');
+		$this->ruleSet = config('rules.auth.customer');
 	}
 
 	protected function authTarget(): string{
@@ -24,15 +24,15 @@ class TwoFactorAuthController extends TwoFactorBaseAuthController{
 	}
 
 	protected function rulesExists(): array{
-		return $this->rules['exists'];
+		return $this->ruleSet['exists'];
 	}
 
 	protected function rulesLogin(): array{
-		return $this->rules['login'];
+		return $this->ruleSet['login'];
 	}
 
 	protected function rulesRegister(){
-		return $this->rules['register'];
+		return $this->ruleSet['register'];
 	}
 
 	protected function otpTarget(): string{

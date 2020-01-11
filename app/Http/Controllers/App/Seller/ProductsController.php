@@ -20,10 +20,10 @@ class ProductsController extends ResourceController{
 	use ValidatesRequest;
 	use FluentResponse;
 
-	protected $rules;
+	protected $ruleSet;
 
 	public function __construct(){
-		$this->rules = config();
+		$this->ruleSet = config();
 	}
 
 	public function index(){
@@ -38,7 +38,7 @@ class ProductsController extends ResourceController{
 		$sellerId = $this->user()->getKey();
 		$response = null;
 		try {
-			$this->requestValid($request, $this->rules['store']);
+			$this->requestValid($request, $this->ruleSet['store']);
 			$product = Product::create([
 				'name' => $request->productName,
 				'slug' => Str::slug($request->productName),

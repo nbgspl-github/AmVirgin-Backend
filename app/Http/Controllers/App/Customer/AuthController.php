@@ -14,14 +14,14 @@ class AuthController extends BaseAuthController{
 	/**
 	 * @var array
 	 */
-	protected $rules;
+	protected $ruleSet;
 
 	/**
 	 * AuthController constructor.
 	 */
 	public function __construct(){
 		parent::__construct();
-		$this->rules = config('rules.auth.customer');
+		$this->ruleSet = config('rules.auth.customer');
 	}
 
 	protected function authTarget(): string{
@@ -29,15 +29,15 @@ class AuthController extends BaseAuthController{
 	}
 
 	protected function rulesExists(){
-		return $this->rules['exists'];
+		return $this->ruleSet['exists'];
 	}
 
 	protected function rulesLogin(){
-		return $this->rules['login'];
+		return $this->ruleSet['login'];
 	}
 
 	protected function rulesRegister(){
-		return $this->rules['register'];
+		return $this->ruleSet['register'];
 	}
 
 	protected function guard(){

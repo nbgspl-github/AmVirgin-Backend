@@ -12,10 +12,10 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class ServersController extends BaseController{
 	use ValidatesRequest;
 
-	protected $rules;
+	protected $ruleSet;
 
 	public function __construct(){
-		$this->rules = config('rules.admin.servers');
+		$this->ruleSet = config('rules.admin.servers');
 	}
 
 	public function index(){
@@ -40,7 +40,7 @@ class ServersController extends BaseController{
 	public function store(){
 		$response = responseWeb();
 		try {
-			$payload = $this->requestValid(request(), $this->rules['store']);
+			$payload = $this->requestValid(request(), $this->ruleSet['store']);
 			MediaServer::create($payload);
 			$response->success(__('strings.server.store.success'))->route('admin.servers.index');
 		}
@@ -59,7 +59,7 @@ class ServersController extends BaseController{
 		$response = responseWeb();
 		try {
 			$server = MediaServer::retrieveThrows($id);
-			$payload = $this->requestValid(request(), $this->rules['update']);
+			$payload = $this->requestValid(request(), $this->ruleSet['update']);
 			$server->update($payload);
 			$response->success(__('strings.server.store.success'))->route('admin.servers.index');
 		}

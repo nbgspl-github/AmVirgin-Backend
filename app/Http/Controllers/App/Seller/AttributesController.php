@@ -19,10 +19,11 @@ class AttributesController extends ResourceController{
 	use ValidatesRequest;
 	use FluentResponse;
 
-	protected $rules;
+	protected $ruleSet;
 
 	public function __construct(){
-		$this->rules = config('rules.seller.category');
+		parent::__construct();
+		$this->ruleSet = config('rules.seller.category');
 	}
 
 	public function indexFiltered($id){
@@ -67,7 +68,7 @@ class AttributesController extends ResourceController{
 		$categoryId = $id;
 		$attributeName = $request->name;
 		try {
-			$this->requestValid($request, $this->rules['store']);
+			$this->requestValid($request, $this->ruleSet['store']);
 			$this->throwIfParentNotExists($categoryId);
 			Attribute::create([
 				'attributeName' => $attributeName,
@@ -100,5 +101,9 @@ class AttributesController extends ResourceController{
 
 	protected function collectionConverter(Collection $collection){
 		return AttributeResource::collection($collection);
+	}
+
+	protected function guard(){
+		// TODO: Implement guard() method.
 	}
 }

@@ -39,6 +39,10 @@
 					<a href="{{route("admin.categories.index")}}" class="waves-effect animatableX"><i class="mdi mdi-cards mt-1"></i> <span>Categories </span></a>
 				</li>
 
+				<li>
+					<a href="{{route("admin.products.index")}}" class="waves-effect animatableX"><i class="mdi mdi-cube mt-1"></i> <span>Products </span></a>
+				</li>
+
 				<li class="menu-title text-primary animatableX">Entertainment</li>
 
 				<li>

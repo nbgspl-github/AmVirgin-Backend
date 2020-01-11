@@ -20,10 +20,10 @@ class CategoriesController extends BaseController{
 	use ValidatesRequest;
 	use FluentResponse;
 
-	protected $rules;
+	protected $ruleSet;
 
 	public function __construct(){
-		$this->rules = config('rules.admin.categories');
+		$this->ruleSet = config('rules.admin.categories');
 	}
 
 	public static function relations($insertSuper = true){
@@ -88,7 +88,7 @@ class CategoriesController extends BaseController{
 			if ($category == null) {
 				throw new ModelNotFoundException('Could not find category for that key.');
 			}
-			$payload = $this->requestValid($request, $this->rules['update']);
+			$payload = $this->requestValid($request, $this->ruleSet['update']);
 			if ($request->has('poster')) {
 				$payload['poster'] = Storage::disk('public')->putFile(Directories::Categories, $request->file('poster'), 'public');
 			}
@@ -112,7 +112,7 @@ class CategoriesController extends BaseController{
 	public function store(Request $request){
 		$response = null;
 		try {
-			$payload = $this->requestValid($request, $this->rules['update']);
+			$payload = $this->requestValid($request, $this->ruleSet['update']);
 			$payload['poster'] = Storage::disk('public')->putFile(Directories::Categories, $request->file('poster'), 'public');
 			Category::create($payload);
 			$response = responseWeb()->route('admin.categories.index')->success('Created category successfully.');

@@ -11,7 +11,7 @@ class CreateProductAttributesTable extends Migration{
 	 * @return void
 	 */
 	public function up(){
-		Schema::create('product_attributes', function (Blueprint $table){
+		Schema::create('product-attributes', function (Blueprint $table){
 			$table->bigIncrements('id');
 			$table->integer('productId');
 			$table->string('name');
@@ -26,6 +26,6 @@ class CreateProductAttributesTable extends Migration{
 	 * @return void
 	 */
 	public function down(){
-		Schema::dropIfExists('product_attributes');
+		Schema::dropIfExists('product-attributes');
 	}
 }

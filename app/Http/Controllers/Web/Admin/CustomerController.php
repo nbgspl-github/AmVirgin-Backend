@@ -15,10 +15,10 @@ use Illuminate\Validation\Rule;
 class CustomerController extends BaseController{
 	use ValidatesRequest;
 
-	protected $rules;
+	protected $ruleSet;
 
 	public function __construct(){
-		$this->rules = config('rules.admin.customers');
+		$this->ruleSet = config('rules.admin.customers');
 	}
 
 	public function index(){
@@ -43,7 +43,7 @@ class CustomerController extends BaseController{
 	public function store(Request $request){
 		$response = null;
 		try {
-			$payload = $this->requestValid($request, $this->rules['store']);
+			$payload = $this->requestValid($request, $this->ruleSet['store']);
 			Customer::create($payload);
 			$response = responseWeb()->route('admin.customers.index')->success(__('strings.customer.store.success'));
 		}
@@ -68,7 +68,7 @@ class CustomerController extends BaseController{
 				'mobile' => [Rule::unique(Tables::Customers, 'mobile')->ignore($customer->getKey())],
 				'email' => [Rule::unique(Tables::Customers, 'email')->ignore($customer->getKey())],
 			];
-			$payload = $this->requestValid($request, $this->rules['update'], $additional);
+			$payload = $this->requestValid($request, $this->ruleSet['update'], $additional);
 			$customer->update($payload);
 			$response = responseWeb()->route('admin.customers.index')->success(__('strings.customer.update.success'));
 		}

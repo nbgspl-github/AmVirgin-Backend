@@ -18,10 +18,9 @@ class SubscriptionPlansController extends BaseController{
 	use ValidatesRequest;
 	use FluentResponse;
 
-	protected $rules;
-
 	public function __construct(){
-		$this->rules = config('rules.admin.subscription-plans');
+		parent::__construct();
+		$this->ruleSet->load('rules.admin.subscription-plans');
 	}
 
 	public function index(){
@@ -60,7 +59,7 @@ class SubscriptionPlansController extends BaseController{
 	public function store(){
 		$response = responseWeb();
 		try {
-			$payload = $this->requestValid(request(), $this->rules['store']);
+			$payload = $this->requestValid(request(), $this->rules('store'));
 			$payload['slug'] = Str::slug($payload['name']);
 			SubscriptionPlan::create($payload);
 			$response->route('admin.subscription-plans.index')->success('Subscription plan created successfully.');
@@ -83,7 +82,7 @@ class SubscriptionPlansController extends BaseController{
 			$additional = [
 				'name' => [Rule::unique(Tables::SubscriptionPlans, 'name')->ignore($id)],
 			];
-			$payload = $this->requestValid(request(), $this->rules['update'], $additional);
+			$payload = $this->requestValid(request(), $this->rules('update'), $additional);
 			$payload['slug'] = Str::slug($payload['name']);
 			$payload = collect($payload)->filter()->toArray();
 			$plan->update($payload);
