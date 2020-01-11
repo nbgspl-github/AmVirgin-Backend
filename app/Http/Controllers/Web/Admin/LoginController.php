@@ -41,7 +41,7 @@ class LoginController extends BaseController{
 	}
 
 	public function logout(Request $request){
-		Auth::guard('admin')->logout();
+		$this->guard()->logout();
 		return redirect(route('admin.login'));
 	}
 

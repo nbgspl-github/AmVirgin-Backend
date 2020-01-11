@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Web\Admin;
 use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
+use App\Interfaces\Tables;
 use App\Models\SubscriptionPlan;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Throwable;
 
 class SubscriptionPlansController extends BaseController{
@@ -78,8 +80,12 @@ class SubscriptionPlansController extends BaseController{
 		$response = responseWeb();
 		try {
 			$plan = SubscriptionPlan::retrieveThrows($id);
-			$payload = $this->requestValid(request(), $this->rules['update']);
+			$additional = [
+				'name' => [Rule::unique(Tables::SubscriptionPlans, 'name')->ignore($id)],
+			];
+			$payload = $this->requestValid(request(), $this->rules['update'], $additional);
 			$payload['slug'] = Str::slug($payload['name']);
+			$payload = collect($payload)->filter()->toArray();
 			$plan->update($payload);
 			$response->route('admin.subscription-plans.index')->success('Plan details updated successfully.');
 		}
