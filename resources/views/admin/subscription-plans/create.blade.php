@@ -57,7 +57,7 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label>Status</label>
+									<label>Active</label>
 									@if (old('active',-1)==1)
 										<select class="form-control" name="active">
 											<option value="1" selected>Yes</option>
