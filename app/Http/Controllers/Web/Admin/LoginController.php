@@ -13,12 +13,15 @@ class LoginController extends BaseController{
 	protected $redirectTo = null;
 
 	public function __construct(){
-		$this->middleware('guest');
+		$this->middleware('guest')->except('logout');
 		$this->redirectTo = route('admin.home');
 	}
 
 	public function showLoginForm(){
-		return view('admin.auth.login');
+		if ($this->guard()->user() == null)
+			return view('admin.auth.login');
+		else
+			return redirect(route('admin.home'));
 	}
 
 	public function login(Request $request){

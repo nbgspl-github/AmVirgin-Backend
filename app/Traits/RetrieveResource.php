@@ -10,7 +10,7 @@ trait RetrieveResource{
 	/**
 	 * Gets the data pointed to by this Id, or null if not found.
 	 * @param null $id
-	 * @return self
+	 * @return static
 	 */
 	public static function retrieve($id = null){
 		return self::find($id);
@@ -19,7 +19,8 @@ trait RetrieveResource{
 	/**
 	 * Gets the data pointed to by this Id, or throws ModelNotFound exception if not found.
 	 * @param null $id
-	 * @return self
+	 * @return static
+	 * @throws ModelNotFoundException
 	 * @throws \Throwable
 	 */
 	public static function retrieveThrows($id = null){

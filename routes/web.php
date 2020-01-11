@@ -20,6 +20,7 @@ use App\Models\Slider;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
+\Illuminate\Support\Facades\Auth::routes();
 Route::redirect('/', '/admin');
 
 /**

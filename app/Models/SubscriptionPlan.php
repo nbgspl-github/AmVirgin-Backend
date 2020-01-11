@@ -3,12 +3,27 @@
 namespace App\Models;
 
 use App\Traits\ActiveStatus;
+use App\Traits\RetrieveCollection;
+use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
 class SubscriptionPlan extends Model{
 	use ActiveStatus;
+	use RetrieveCollection;
+	use RetrieveResource;
 
 	protected $table = 'subscription-plans';
+
+	protected $fillable = [
+		'name',
+		'description',
+		'slug',
+		'originalPrice',
+		'offerPrice',
+		'banner',
+		'duration',
+		'active',
+	];
 
 	/**
 	 * @return string
