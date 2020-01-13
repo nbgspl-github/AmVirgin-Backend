@@ -43,7 +43,7 @@
 					<a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-cube mt-1 animatableX"></i><span> Products </span> <span class="menu-arrow float-right"><i class="mdi mdi-chevron-right"></i></span></a>
 					<ul class="list-unstyled">
 						<li><a href="{{route('admin.products.index')}}">List all</a></li>
-						<li><a href="pages-login.html">Deleted by sellers</a></li>
+						<li><a href="{{route('admin.products.deleted.index')}}">Deleted by sellers</a></li>
 					</ul>
 				</li>
 
@@ -62,7 +62,7 @@
 				</li>
 
 				<li>
-					<a href="{{route("admin.genres.index")}}" class="waves-effect animatableX"><i class="mdi mdi-view-headline mt-1"></i> <span>Genres </span></a>
+					<a href="{{route("admin.genres.index")}}" class="waves-effect animatableX"><i class="mdi mdi-disk mt-1"></i> <span>Genres </span></a>
 				</li>
 
 				<li>

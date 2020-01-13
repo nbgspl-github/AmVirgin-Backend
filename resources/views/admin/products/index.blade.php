@@ -7,7 +7,7 @@
 					@include('admin.extras.header', ['title'=>'Products'])
 				</div>
 				<div class="card-body animatable">
-					<table id="datatable" class="table table-bordered pr-0 pl-0" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+					<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 						<thead>
 						<tr>
 							<th class="text-center">No.</th>
@@ -62,7 +62,11 @@
 		let dataTable = null;
 
 		$(document).ready(() => {
-			dataTable = $('#datatable').DataTable();
+			dataTable = $('#datatable').DataTable({
+				initComplete: function () {
+					$('#datatable_wrapper').addClass('px-0 mx-0');
+				}
+			});
 		});
 
 		/**

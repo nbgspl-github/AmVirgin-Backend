@@ -3,11 +3,15 @@
 namespace App\Models;
 
 use App\Traits\FluentConstructor;
+use App\Traits\RetrieveCollection;
+use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model{
 	use FluentConstructor;
+	use RetrieveResource;
+	use RetrieveCollection;
 
 	protected $table = 'products';
 

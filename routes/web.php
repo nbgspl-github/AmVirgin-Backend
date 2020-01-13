@@ -8,7 +8,8 @@ use App\Http\Controllers\Web\Admin\CustomerController;
 use App\Http\Controllers\Web\Admin\GenresController;
 use App\Http\Controllers\Web\Admin\HomeController;
 use App\Http\Controllers\Web\Admin\NotificationsController;
-use App\Http\Controllers\Web\Admin\ProductsController;
+use App\Http\Controllers\Web\Admin\Products\DeletedProductsController;
+use App\Http\Controllers\Web\Admin\Products\ProductsController;
 use App\Http\Controllers\Web\Admin\SellerController;
 use App\Http\Controllers\Web\Admin\ServersController;
 use App\Http\Controllers\Web\Admin\SettingsController;
@@ -198,6 +199,7 @@ Route::prefix('admin')->group(function (){
 		// Products Route(s)
 		Route::prefix('products')->middleware('auth:admin')->group(function (){
 			Route::get('', [ProductsController::class, Methods::Index])->name('admin.products.index');
+			Route::get('/deleted', [DeletedProductsController::class, Methods::Index])->name('admin.products.deleted.index');
 		});
 
 		// Settings Route(s)

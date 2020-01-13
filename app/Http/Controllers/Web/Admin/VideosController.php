@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Admin;
 use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
+use App\Http\Resources\Videos\VideoResource;
 use App\Interfaces\Directories;
 use App\Interfaces\VideoTypes;
 use App\Models\Genre;
@@ -26,10 +27,9 @@ class VideosController extends BaseController{
 	use FluentResponse;
 	use ValidatesRequest;
 
-	protected $ruleSet;
-
 	public function __construct(){
-		$this->ruleSet = config('rules.admin.videos');
+		parent::__construct();
+		$this->ruleSet->load('rules.admin.videos');
 	}
 
 	public function index(){
@@ -169,8 +169,18 @@ class VideosController extends BaseController{
 	public function show($slug){
 		$video = null;
 		try {
-			$video = Video::where('slug', $slug)->where('hasSeasons', false)->firstOrFail();
-			return jsonEncode($video);
+			/**
+			 * @var Video $video
+			 */
+			$video = Video::where('slug', $slug)->firstOrFail();
+			$payload = VideoResource::make($video);
+			if ($video->hasSeasons()) {
+
+			}
+			else {
+
+			}
+			return $payload;
 		}
 		catch (ModelNotFoundException $exception) {
 			return $exception->getMessage();

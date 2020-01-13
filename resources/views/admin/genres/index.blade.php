@@ -4,14 +4,10 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Genres'])
+					@include('admin.extras.header', ['title'=>'Genres','action'=>['link'=>route('admin.genres.create'),'text'=>'Add Genre']])
 				</div>
 				<div class="card-body animatable">
-					<div class="row pr-3">
-						<div class="col-6"><h4 class="mt-0 header-title ml-3 mb-4">All Genres</h4></div>
-						<div class="col-6"><a class="float-right btn btn-outline-primary waves-effect waves-light shadow-sm fadeInRightBig" href="{{route('admin.genres.create')}}">Add Genre</a></div>
-					</div>
-					<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+					<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 						<thead>
 						<tr>
 							<th class="text-center">No.</th>
@@ -31,7 +27,7 @@
 									@if($genre->getPoster()!=null)
 										<img src="{{route('images.genre.poster',$genre->getKey())}}" style="width: 100px; height: 100px" alt="{{$genre->getName()}}" @include('admin.extras.tooltip.right', ['title' => $genre->getName()])/>
 									@else
-										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 90px"></i>
+										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 25px"></i>
 									@endif
 								</td>
 								<td class="text-center">{{$genre->getName()}}</td>
@@ -75,8 +71,14 @@
 
 @section('javascript')
 	<script type="application/javascript">
+		let dataTable = null;
+
 		$(document).ready(() => {
-			$('#datatable').DataTable();
+			dataTable = $('#datatable').DataTable({
+				initComplete: function () {
+					$('#datatable_wrapper').addClass('px-0 mx-0');
+				}
+			});
 		});
 
 		/**

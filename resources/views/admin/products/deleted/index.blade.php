@@ -4,7 +4,7 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Subscription Plans','action'=>['link'=>route('admin.subscription-plans.create'),'text'=>'Add plan']])
+					@include('admin.extras.header', ['title'=>'Deleted products'])
 				</div>
 				<div class="card-body animatable">
 					<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -15,28 +15,37 @@
 							<th class="text-center">Name</th>
 							<th class="text-center">Description</th>
 							<th class="text-center">Original Price</th>
-							<th class="text-center">Offer Price</th>
+							<th class="text-center">Offer Value</th>
+							<th class="text-center">Discount Type</th>
 							<th class="text-center">Duration</th>
 							<th class="text-center">Active</th>
 							<th class="text-center">Action(s)</th>
 						</tr>
 						</thead>
-
 						<tbody>
-						@foreach($plans as $plan)
-							<tr id="content_row_{{$plan->getKey()}}">
+						@foreach($products as $product)
+							<tr id="content_row_{{$product->getKey()}}">
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">
-									@if($plan->getBanner()!=null&&Storage::disk('public')->exists($plan->getBanner()))
-										<img src="{{Storage::disk('public')->url($plan->getBanner())}}" style="width: 100px; height: 100px" alt="{{$plan->getName()}}"/>
+									@if($product->images()->count()>0&&Storage::disk('public')->exists($product->images()->first()->path))
+										<img src="{{Storage::disk('public')->url($product->images()->first()->path)}}" style="width: 100px; height: 100px" alt="{{$product->getName()}}"/>
 									@else
 										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 25px"></i>
 									@endif
 								</td>
-								<td class="text-center">{{$plan->getName()}}</td>
-								<td class="text-center">{{__ellipsis($plan->getDescription(),40)}}</td>
-								<td class="text-center">{{$plan->getOriginalPrice()}}</td>
-								<td class="text-center">{{$plan->getOfferPrice()}}</td>
+								<td class="text-center">{{$product->getName()}}</td>
+								<td class="text-center">{{__ellipsis($product->getShortDescription(),40)}}</td>
+								<td class="text-center">{{$product->getOriginalPrice()}}</td>
+								<td class="text-center">{{$product->getOfferValue()}}</td>
+								<td class="text-center">
+									@if($product->getOfferType()==0)
+										{{'No offer'}}
+									@elseif ($product->getOfferType()==1)
+										{{'Fixed amount'}}
+									@elseif($product->getOfferType()==2)
+										{{'Percentage off'}}
+									@endif
+								</td>
 								<td class="text-center">{{$plan->getDuration()}}</td>
 								<td class="text-center">{{__boolean($plan->isActive())}}</td>
 								<td class="text-center">
@@ -69,22 +78,13 @@
 			});
 		});
 
-		/**
-		 * Returns route for Resource/Delete route.
-		 * @param id
-		 * @returns {string}
-		 */
 		deleteRoute = (id) => {
-			return 'subscription-plans/' + id;
+			return 'products/' + id;
 		};
 
-		/**
-		 * Callback for delete resource trigger.
-		 * @param id
-		 */
 		deleteResource = (id) => {
 			window.genreId = id;
-			alertify.confirm("Are you sure you want to delete this subscription plan? ",
+			alertify.confirm("Are you sure you want to delete this product? ",
 				(ev) => {
 					ev.preventDefault();
 					axios.delete(deleteRoute(id))

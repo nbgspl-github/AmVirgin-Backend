@@ -10,12 +10,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class Video extends Model{
 	use RetrieveResource;
 	use RetrieveCollection;
 	use FluentConstructor;
 	use ActiveStatus;
+	use HasSlug;
 
 	protected $fillable = [
 		'title',
@@ -482,5 +485,11 @@ class Video extends Model{
 	 */
 	public function sources(){
 		return $this->hasMany('App\Models\VideoSource', 'videoId');
+	}
+
+	public function getSlugOptions(): SlugOptions{
+		return SlugOptions::create()
+			->generateSlugsFrom('name')
+			->saveSlugsTo('slug');
 	}
 }

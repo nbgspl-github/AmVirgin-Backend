@@ -8,11 +8,23 @@ use Illuminate\Support\Facades\Storage;
 class VideoResource extends JsonResource{
 	public function toArray($request){
 		return [
-			'id' => $this->id,
-			'seasonId' => $this->season,
+			'slug' => $this->slug,
+			'title' => $this->title,
 			'description' => $this->description,
-			'poster' => Storage::disk('public')->url($this->poster),
-			'backdrop' => Storage::disk('public')->url($this->backdrop),
+			'duration' => $this->duration,
+			'released' => $this->released,
+			'cast' => $this->cast,
+			'director' => $this->director,
+			'trailer' => Storage::disk('public')->url($this->trailer),
+			'poster' => Storage::disk('public')->url($this->getPoster()),
+			'backdrop' => Storage::disk('public')->url($this->getBackdrop()),
+			'genre' => $this->genre->getName(),
+			'rating' => $this->rating,
+			'pgRating' => $this->pgRating,
+			'type' => $this->type,
+			'subscriptionType' => $this->subscriptionType,
+			'hasSeasons' => boolval($this->hasSeasons),
+			'price' => $this->price,
 		];
 	}
 }

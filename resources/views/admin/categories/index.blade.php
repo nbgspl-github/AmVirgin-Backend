@@ -4,19 +4,11 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>trans('admin.categories.index')])
+					@include('admin.extras.header', ['title'=>trans('admin.categories.index'),'action'=>['link'=>route('admin.categories.create'),'text'=>'Add Category']])
 				</div>
 				<div class="card-body animatable">
-					<div class="row px-2 mb-3">
-						<div class="col-sm-6"><h4 class="mt-0 header-title pt-1">All Categories</h4></div>
-						<div class="col-sm-6">
-							<a class="float-right btn btn-outline-primary waves-effect waves-light" href="{{route('admin.categories.create')}}">
-								Create Category
-							</a>
-						</div>
-					</div>
 					<div class="table-responsive">
-						<table class="table table-hover mb-0">
+						<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 							<thead>
 							<tr>
 								<th>No.</th>
@@ -64,8 +56,14 @@
 
 @section('javascript')
 	<script type="application/javascript">
+		let dataTable = null;
+
 		$(document).ready(() => {
-			$('#datatable').DataTable();
+			dataTable = $('#datatable').DataTable({
+				initComplete: function () {
+					$('#datatable_wrapper').addClass('px-0 mx-0');
+				}
+			});
 		});
 
 		/**
