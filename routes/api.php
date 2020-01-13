@@ -74,4 +74,8 @@ Route::prefix('customer')->group(function () use ($customerMiddleware){
 	Route::prefix('popular')->group(function (){
 		Route::get('', [PopularPicksController::class, 'index'])->name('customer.popular.picks');
 	});
+
+	Route::prefix('videos')->group(function (){
+		Route::get('/{slug}', [\App\Http\Controllers\App\Customer\VideosController::class, 'show']);
+	});
 });
