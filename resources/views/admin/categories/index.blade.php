@@ -28,7 +28,7 @@
 										@if($category->getPoster()!=null)
 											<img src="{{Storage::disk('public')->url($category->getPoster())}}" style="width: 100px; height: 100px" alt="{{$category->getName()}}" @include('admin.extras.tooltip.right', ['title' => $category->getName()])/>
 										@else
-											<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 90px"></i>
+											<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 25px"></i>
 										@endif
 									</td>
 									<td>{{$category->getName()}}</td>
