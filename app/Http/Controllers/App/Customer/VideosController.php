@@ -19,12 +19,7 @@ class VideosController extends ResourceController{
 			 */
 			$video = Video::where('slug', $slug)->firstOrFail();
 			$payload = VideoResource::make($video);
-			if ($video->hasSeasons()) {
-
-			}
-			else {
-
-			}
+			$payload['sources'] = $video->sources();
 			return $payload;
 		}
 		catch (ModelNotFoundException $exception) {
