@@ -18,7 +18,7 @@
 				<li class="menu-title text-primary animatableX">Main</li>
 
 				<li>
-					<a href="{{route('admin.home')}}" class="waves-effect animatableX"><i class="mdi mdi-view-dashboard"></i><span>Dashboard</span></a>
+					<a href="{{route('admin.home')}}" class="waves-effect animatableX"><i class="mdi mdi-view-dashboard"></i><span> Dashboard </span></a>
 				</li>
 
 				<li>
@@ -36,11 +36,15 @@
 				<li class="menu-title text-primary animatableX">Shopping</li>
 
 				<li>
-					<a href="{{route("admin.categories.index")}}" class="waves-effect animatableX"><i class="mdi mdi-cards mt-1"></i> <span>Categories </span></a>
+					<a href="{{route("admin.categories.index")}}" class="waves-effect animatableX"><i class="mdi mdi-cards mt-1"></i> <span>Categories</span></a>
 				</li>
 
-				<li>
-					<a href="{{route("admin.products.index")}}" class="waves-effect animatableX"><i class="mdi mdi-cube mt-1"></i> <span>Products </span></a>
+				<li class="has_sub animatableX">
+					<a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-cube mt-1 animatableX"></i><span> Products </span> <span class="menu-arrow float-right"><i class="mdi mdi-chevron-right"></i></span></a>
+					<ul class="list-unstyled">
+						<li><a href="{{route('admin.products.index')}}">List all</a></li>
+						<li><a href="pages-login.html">Deleted by sellers</a></li>
+					</ul>
 				</li>
 
 				<li class="menu-title text-primary animatableX">Entertainment</li>
