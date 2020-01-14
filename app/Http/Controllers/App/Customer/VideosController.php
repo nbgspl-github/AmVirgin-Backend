@@ -18,7 +18,7 @@ class VideosController extends ResourceController{
 			 * @var Video $video
 			 */
 			$video = Video::where('slug', $slug)->firstOrFail();
-			$payload = VideoResource::make($video);
+			$payload = new VideoResource($video);
 			$payload['sources'] = $video->sources()->get()->toArray();
 			dd($payload);
 			return $payload;
