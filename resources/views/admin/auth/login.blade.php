@@ -35,7 +35,7 @@
 			<div class="container">
 				<div class="row justify-content-center">
 					<div class="col-lg-5 col-md-8">
-						<div class="card shadow-lg">
+						<div class="card shadow-sm">
 							<div class="card-body">
 
 								<h3 class="text-center m-b-15">
@@ -83,7 +83,7 @@
 											</div>
 										</div>
 
-										<div class="form-group text-center row m-t-20">
+										<div class="form-group mb-0 text-center row m-t-20">
 											<div class="col-12">
 												<button class="btn btn-primary btn-block waves-effect waves-light" type="submit">
 													Log In

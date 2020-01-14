@@ -19,11 +19,11 @@ class ProductsBase extends BaseController{
 		return Product::retrieveThrows($id);
 	}
 
-	protected function query(){
+	protected function model(){
 		return Product::class;
 	}
 
 	protected function softDeleted(): Builder{
-		return $this->query()::where('deleted', true);
+		return $this->model()::where('deleted', true);
 	}
 }

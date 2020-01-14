@@ -13,7 +13,8 @@ class LoginController extends BaseController{
 	protected $redirectTo = null;
 
 	public function __construct(){
-		$this->middleware('guest')->except('logout');
+		parent::__construct();
+		$this->middleware('guest');
 		$this->redirectTo = route('admin.home');
 	}
 
@@ -42,6 +43,7 @@ class LoginController extends BaseController{
 
 	public function logout(Request $request){
 		$this->guard()->logout();
+		$request->session()->invalidate();
 		return redirect(route('admin.login'));
 	}
 

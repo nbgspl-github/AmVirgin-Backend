@@ -10,7 +10,8 @@ class HomeController extends BaseController{
 	 * HomeController constructor.
 	 */
 	public function __construct(){
-
+		parent::__construct();
+		$this->middleware('auth:admin');
 	}
 
 	public function index(){
