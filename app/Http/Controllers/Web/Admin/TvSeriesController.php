@@ -60,6 +60,7 @@ class TvSeriesController extends BaseController{
 
 	public function store(){
 		$response = $this->response();
+		return jsonEncode($this->rules('store'));
 		try {
 			$validated = $this->requestValid(request(), $this->rules('store'));
 			$trailer = Storage::disk('secured')->putFile(Directories::Trailers, request()->file('trailer'), 'public');

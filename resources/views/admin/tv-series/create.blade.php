@@ -12,7 +12,7 @@
 					@csrf
 					<div class="card-body">
 						<div class="row">
-							<div class="col-12 col-md-12 col-lg-6 col-xl-6 mr-0 pr-0">
+							<div class="col-12 col-md-12 col-lg-6 col-xl-6 pr-0 mb-md-3 pr-md-3">
 								<div class="card shadow-none" style="border: 1px solid #b4b9bf;">
 									<div class="card-header text-primary font-weight-bold bg-white">
 										Attributes
@@ -187,7 +187,7 @@
 					</div>
 					<div class="card-footer">
 						<div class="form-row">
-							<div class="col-6">
+							<div class="col-6 pr-0">
 								<button type="submit" class="btn btn-primary waves-effect waves-light btn-block shadow-sm">
 									Save & Next
 								</button>
