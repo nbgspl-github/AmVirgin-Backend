@@ -4,12 +4,12 @@ use App\Http\Controllers\App\Customer\AuthController as CustomerAuth;
 use App\Http\Controllers\App\Customer\PopularPicksController;
 use App\Http\Controllers\App\Customer\SlidersController as CustomerSlidersController;
 use App\Http\Controllers\App\Customer\TrendController;
-use App\Http\Controllers\App\Customer\TwoFactorAuthController as CustomerTwoFactorAuth;
+use App\Http\Controllers\App\Customer\TwoFactorAuthController as Customer2FAuth;
 use App\Http\Controllers\App\Seller\AttributesController as SellerAttributesController;
 use App\Http\Controllers\App\Seller\AuthController as SellerAuth;
 use App\Http\Controllers\App\Seller\CategoriesController as SellerCategoriesController;
 use App\Http\Controllers\App\Seller\ProductsController as SellerProductsController;
-use App\Http\Controllers\App\Seller\TwoFactorAuthController as SellerTwoFactorAuth;
+use App\Http\Controllers\App\Seller\TwoFactorAuthController as Seller2FAuth;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -27,16 +27,22 @@ $customerMiddleware = 'auth:customer-api';
  */
 $useAuthMiddleware = true;
 
+/**
+ * Whether to enable middleware or not?
+ */
 if (!$useAuthMiddleware) {
 	$sellerMiddleware = [];
 	$customerMiddleware = [];
 }
 
+/**
+| Seller API Route(s)
+ */
 Route::prefix('seller')->group(function () use ($sellerMiddleware){
-	Route::get('/', [SellerTwoFactorAuth::class, 'exists'])->name('seller.check');
+	Route::get('/', [Seller2FAuth::class, 'exists'])->name('seller.check');
 	Route::get('/profile', [SellerAuth::class, 'profile'])->name('seller.profile')->middleware($sellerMiddleware);
-	Route::post('/login', [SellerTwoFactorAuth::class, 'login'])->name('seller.login');
-	Route::post('/register', [SellerTwoFactorAuth::class, 'register'])->name('seller.register');
+	Route::post('/login', [Seller2FAuth::class, 'login'])->name('seller.login');
+	Route::post('/register', [Seller2FAuth::class, 'register'])->name('seller.register');
 	Route::post('/logout', [SellerAuth::class, 'logout'])->name('seller.logout')->middleware($sellerMiddleware);
 	Route::post('/profile', [SellerAuth::class, 'profile'])->name('seller.logout')->middleware($sellerMiddleware);
 
@@ -55,11 +61,14 @@ Route::prefix('seller')->group(function () use ($sellerMiddleware){
 	});
 });
 
+/**
+| Customer API Route(s)
+ */
 Route::prefix('customer')->group(function () use ($customerMiddleware){
-	Route::get('/', [CustomerTwoFactorAuth::class, 'exists'])->name('customer.check');
+	Route::get('/', [Customer2FAuth::class, 'exists'])->name('customer.check');
 	Route::get('/profile', [CustomerAuth::class, 'profile'])->name('customer.profile')->middleware($customerMiddleware);
-	Route::post('/login', [CustomerTwoFactorAuth::class, 'login'])->name('customer.login');
-	Route::post('/register', [CustomerTwoFactorAuth::class, 'register'])->name('customer.register');
+	Route::post('/login', [Customer2FAuth::class, 'login'])->name('customer.login');
+	Route::post('/register', [Customer2FAuth::class, 'register'])->name('customer.register');
 	Route::post('/logout', [CustomerAuth::class, 'logout'])->name('customer.logout')->middleware($customerMiddleware);
 	Route::get('/profile', [CustomerAuth::class, 'profile'])->name('customer.profile')->middleware($customerMiddleware);
 
