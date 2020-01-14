@@ -19,8 +19,6 @@ class VideosController extends ResourceController{
 			 */
 			$video = Video::where('slug', $slug)->firstOrFail();
 			$payload = new VideoResource($video);
-			$payload['sources'] = $video->sources()->get()->toArray();
-			dd($payload);
 			return $payload;
 		}
 		catch (ModelNotFoundException $exception) {

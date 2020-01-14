@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Videos;
 
+use App\Http\Resources\VideoSource\VideoSourceResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
@@ -25,6 +26,7 @@ class VideoResource extends JsonResource{
 			'subscriptionType' => $this->subscriptionType,
 			'hasSeasons' => boolval($this->hasSeasons),
 			'price' => $this->price,
+			'sources' => $this->when($this->hasSeasons == true, VideoSourceResource::collection($this->sources()->get()->all())),
 		];
 	}
 }
