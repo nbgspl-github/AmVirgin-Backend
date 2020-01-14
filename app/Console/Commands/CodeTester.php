@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Traits\GenerateUrls;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
 
 class CodeTester extends Command{
 	use GenerateUrls;
@@ -38,21 +39,8 @@ class CodeTester extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		$pickup = jsonEncode([
-			'date' => '06-01-2020',
-			'time' => '05:02 PM',
-		]);
-		$dateX = jsonDecodeArray($pickup);
-		$date = $dateX['date'];
-		$time = $dateX['time'];
-		$timestamp = strtotime(sprintf("%s %s", $date, $time));
-		$current = time();
-		$difference = abs($timestamp - $current);
-		dd($difference);
-		if ($difference <= self::TwoHours)
-			echo "Yes";
-		else
-			echo 'Nope';
+		$file = Storage::disk('secured')->url('secured/videos/0G5WaTnK6lbQh1JmBw0RcI0Rxk7vmBnnJSKmEyvF.mp4');
+		echo $file;
 		return;
 	}
 }
