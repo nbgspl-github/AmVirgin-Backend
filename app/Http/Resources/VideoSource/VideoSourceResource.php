@@ -12,8 +12,8 @@ class VideoSourceResource extends JsonResource{
 			'description' => $this->description,
 			'duration' => $this->duration,
 			'season' => $this->season,
-			'language' => $this->language()->getName(),
-			'quality' => $this->quality->getName(),
+			'language' => $this->language()->first()->getName(),
+			'quality' => $this->mediaQuality()->first()->getName(),
 		];
 	}
 }
