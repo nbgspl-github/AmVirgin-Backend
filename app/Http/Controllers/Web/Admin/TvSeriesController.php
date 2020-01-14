@@ -61,7 +61,7 @@ class TvSeriesController extends BaseController{
 	public function store(){
 		$response = $this->response();
 		try {
-			$validated = $this->requestValid(request(), config('rules.admin.tv-series.store'));
+			$validated = $this->requestValid(request(), $this->rules('store'));
 			$trailer = Storage::disk('secured')->putFile(Directories::Trailers, request()->file('trailer'), 'public');
 			$poster = Storage::disk('public')->putFile(Directories::Posters, request()->file('poster'), 'public');
 			$backdrop = Storage::disk('public')->putFile(Directories::Backdrops, request()->file('backdrop'), 'public');
