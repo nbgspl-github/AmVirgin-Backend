@@ -250,7 +250,6 @@ class TvSeriesController extends BaseController{
 			$video = Video::retrieveThrows($id);
 			$languages = MediaLanguage::all()->sortBy('name')->all();
 			$qualities = MediaQuality::retrieveAll();
-
 			$contentPayload = [];
 			$sources = $video->sources();
 			$sources = $sources->get();
