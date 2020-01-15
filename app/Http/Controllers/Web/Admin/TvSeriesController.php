@@ -345,11 +345,11 @@ class TvSeriesController extends BaseController{
 			$seasonCount = VideoSource::distinct('season')->count('season');
 			$mediaLanguages = VideoSource::select('mediaLanguageId')->where('videoId', $video->getKey())->get();
 			$mediaLanguages->transform(function ($obj){
-				return MediaLanguage::find($obj->id);
+				return MediaLanguage::find($obj->mediaLanguageId);
 			});
 			$mediaQualities = VideoSource::select('mediaQualityId')->where('videoId', $video->getKey())->get();
 			$mediaQualities->transform(function ($obj){
-				return MediaQuality::find($obj->id);
+				return MediaQuality::find($obj->mediaQualityId);
 			});
 			$video->update([
 				'seasons' => $seasonCount,
