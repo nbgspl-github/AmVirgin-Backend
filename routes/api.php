@@ -36,7 +36,7 @@ if (!$useAuthMiddleware) {
 }
 
 /**
-| Seller API Route(s)
+ * | Seller API Route(s)
  */
 Route::prefix('seller')->group(function () use ($sellerMiddleware){
 	Route::get('/', [Seller2FAuth::class, 'exists'])->name('seller.check');
@@ -62,7 +62,7 @@ Route::prefix('seller')->group(function () use ($sellerMiddleware){
 });
 
 /**
-| Customer API Route(s)
+ * | Customer API Route(s)
  */
 Route::prefix('customer')->group(function () use ($customerMiddleware){
 	Route::get('/', [Customer2FAuth::class, 'exists'])->name('customer.check');
@@ -87,4 +87,9 @@ Route::prefix('customer')->group(function () use ($customerMiddleware){
 	Route::prefix('videos')->group(function (){
 		Route::get('/{slug}', [\App\Http\Controllers\App\Customer\VideosController::class, 'show']);
 	});
+});
+
+Route::get('test', function (){
+	$c = new \App\Http\Controllers\App\Customer\VideosController();
+	return $c->show('mirzapur');
 });

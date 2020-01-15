@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Controllers\App\Customer\VideosController;
 use App\Traits\GenerateUrls;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
 
 class CodeTester extends Command{
 	use GenerateUrls;
@@ -39,8 +39,8 @@ class CodeTester extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		$file = Storage::disk('secured')->url('secured/videos/0G5WaTnK6lbQh1JmBw0RcI0Rxk7vmBnnJSKmEyvF.mp4');
-		echo $file;
+		$controller = new VideosController();
+		$controller->show('mirzapur');
 		return;
 	}
 }

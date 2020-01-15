@@ -7,16 +7,50 @@ use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class Product extends Model{
 	use FluentConstructor;
 	use RetrieveResource;
 	use RetrieveCollection;
+	use HasSlug;
 
 	protected $table = 'products';
 
 	protected $fillable = [
-
+		'name',
+		'slug',
+		'categoryId',
+		'sellerId',
+		'productType',
+		'productMode',
+		'listingType',
+		'originalPrice',
+		'offerValue',
+		'offerType',
+		'currency',
+		'taxRate',
+		'countryId',
+		'stateId',
+		'cityId',
+		'zipCode',
+		'address',
+		'promoted',
+		'promotionStart',
+		'promotionEnd',
+		'visibility',
+		'rating',
+		'stock',
+		'shippingCostType',
+		'shippingCost',
+		'soldOut',
+		'deleted',
+		'draft',
+		'shortDescription',
+		'longDescription',
+		'sku',
+		'trailer',
 	];
 
 	protected $hidden = [
@@ -582,5 +616,9 @@ class Product extends Model{
 	 */
 	public function images(){
 		return $this->hasMany('\App\Models\ProductImage', 'productId');
+	}
+
+	public function getSlugOptions(): SlugOptions{
+		// TODO: Implement getSlugOptions() method.
 	}
 }

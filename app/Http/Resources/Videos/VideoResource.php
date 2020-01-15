@@ -30,7 +30,6 @@ class VideoResource extends JsonResource{
 			'subscriptionType' => $this->subscriptionType,
 			'hasSeasons' => boolval($this->hasSeasons),
 			'price' => $this->price,
-			'sources' => $this->when($this->hasSeasons == true, VideoSourceResource::collection($this->sources()->get())),
 		];
 	}
 }

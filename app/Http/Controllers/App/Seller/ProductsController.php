@@ -4,7 +4,6 @@ namespace App\Http\Controllers\App\Seller;
 
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Base\ResourceController;
-use App\Interfaces\StatusCodes;
 use App\Models\Product;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
@@ -20,10 +19,9 @@ class ProductsController extends ResourceController{
 	use ValidatesRequest;
 	use FluentResponse;
 
-	protected $ruleSet;
-
 	public function __construct(){
-		$this->ruleSet = config();
+		parent::__construct();
+		$this->ruleSet->load('rules.seller.product.store');
 	}
 
 	public function index(){
@@ -36,48 +34,48 @@ class ProductsController extends ResourceController{
 
 	public function store(Request $request){
 		$sellerId = $this->user()->getKey();
-		$response = null;
+		$response = $this->response();
 		try {
-			$this->requestValid($request, $this->ruleSet['store']);
+			$payload = $this->requestValid($request, $this->rules('store'));
 			$product = Product::create([
-				'name' => $request->productName,
-				'slug' => Str::slug($request->productName),
-				'categoryId' => $request->categoryId,
+				'name' => $payload['productName'],
+				'slug' => Str::slug($payload['productName']),
+				'categoryId' => $payload['categoryId'],
 				'sellerId' => $sellerId,
-				'productType' => $request->productType,
-				'productMode' => $request->productMode,
-				'listingType' => $request->listingType,
-				'originalPrice' => $request->originalPrice,
-				'offerValue' => $request->offerValue,
-				'offerType' => $request->offerType,
-				'currency' => $request->currency,
-				'taxRate' => $request->taxRate,
-				'countryId' => $request->countryId,
-				'stateId' => $request->stateId,
-				'cityId' => $request->cityId,
-				'zipCode' => $request->zipCode,
-				'address' => $request->address,
-				'status' => $request->status,
-				'promoted' => $request->promoted,
-				'promotionStart' => $request->promotionStart,
-				'promotionEnd' => $request->promotionEnd,
-				'visibility' => $request->visibility,
-				'stock' => $request->stock,
-				'shippingCostType' => $request->shippingCostType,
-				'shippingCost' => $request->shippingCost,
-				'soldOut' => $this->isSoldOut($request),
-				'draft' => $request->draft,
-				'shortDescription' => $request->shortDescription,
-				'longDescription' => $request->longDescription,
-				'sku' => $request->sku,
+				'productType' => $payload['productType'],
+				'productMode' => $payload['productMode'],
+				'listingType' => $payload['listingType'],
+				'originalPrice' => $payload['originalPrice'],
+				'offerValue' => $payload['offerValue'],
+				'offerType' => $payload['offerType'],
+				'currency' => $payload['currency'],
+				'taxRate' => $payload['taxRate'],
+				'countryId' => $payload['countryId'],
+				'stateId' => $payload['stateId'],
+				'cityId' => $payload['cityId'],
+				'zipCode' => $payload['zipCode'],
+				'address' => $payload['address'],
+				'status' => $payload['status'],
+				'promoted' => $payload['promoted'],
+				'promotionStart' => $payload['promotionStart'],
+				'promotionEnd' => $payload['promotionEnd'],
+				'visibility' => $payload['visibility'],
+				'stock' => $payload['stock'],
+				'shippingCostType' => $payload['shippingCostType'],
+				'shippingCost' => $payload['shippingCost'],
+				'soldOut' => $payload['stock'] < 1,
+				'draft' => $payload['draft'],
+				'shortDescription' => $payload['shortDescription'],
+				'longDescription' => $payload['longDescription'],
+				'sku' => $payload['sku'],
 			]);
-			$response = $this->success()->status(HttpCreated)->setValue('data', $product)->message(__('strings.product.store.success'));
+			$response->status(HttpCreated)->setValue('data', $product)->message(__('strings.product.store.success'));
 		}
 		catch (ValidationException $exception) {
-			$response = $this->failed()->status(HttpInvalidRequestFormat)->message($exception->getError());
+			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
 		}
 		catch (Exception $exception) {
-			$response = $this->error()->message($exception->getMessage());
+			$response->status(HttpServerError)->message($exception->getMessage());
 		}
 		finally {
 			return $response->send();
