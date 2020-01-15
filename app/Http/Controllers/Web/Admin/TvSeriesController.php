@@ -70,6 +70,9 @@ class TvSeriesController extends BaseController{
 			}
 
 			$validated = collect($validated)->filter()->all();
+			/**
+			 * @var Video $video
+			 */
 			$video = Video::create([
 				'title' => $validated['title'],
 				'slug' => Str::slug($validated['title']),
@@ -93,6 +96,8 @@ class TvSeriesController extends BaseController{
 				'price' => isset($validated['price']) ? $validated['price'] : 0.00,
 				'hasSeasons' => true,
 			]);
+			$video->generateSlug();
+			$video->save();
 			$response = $this->success()->message('Tv series details were successfully saved. Please proceed to next step.');
 		}
 		catch (ValidationException $exception) {
