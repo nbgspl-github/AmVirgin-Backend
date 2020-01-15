@@ -54,6 +54,7 @@
 		const template = `{!! $data !!}`;
 
 		$(document).ready(function () {
+			rowCount = $('#form').children().length;
 			if ($('#form').children().length < 1) {
 				addRow();
 			}
