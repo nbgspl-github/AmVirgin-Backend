@@ -4,6 +4,7 @@
 			<button type="button" onclick="deleteRow(this);" class="btn btn-outline-primary shadow-primary mb-4 mb-md-0" style="border-radius: 64px; padding-top: 8px; padding-bottom: 8px"><i type="" class="mdi mdi-close"></i></button>
 		</div>
 		<div class="col-12 col-md-11">
+			<input type="hidden" name="videoSourceId" value="{{$chosen->sourceId}}">
 			<div class="form-row">
 				<div class="col-md-6">
 					<div class="form-group">

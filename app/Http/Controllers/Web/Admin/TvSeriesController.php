@@ -264,6 +264,7 @@ class TvSeriesController extends BaseController{
 				$payload->duration = $videoSource->getDuration();
 				$payload->episode = $videoSource->getEpisode();
 				$payload->video = $videoSource->getFile();
+				$payload->sourceId = $videoSource->getKey();
 				return view('admin.tv-series.edit.row')->with('qualities', $qualities)->with('languages', $languages)->with('chosen', $payload);
 			});
 			$row = view('admin.tv-series.edit.rowNoDefaultChoices')->with('qualities', $qualities)->with('languages', $languages);
