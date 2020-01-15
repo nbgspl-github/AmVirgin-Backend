@@ -296,7 +296,8 @@ class TvSeriesController extends BaseController{
 		try {
 			$video = Video::retrieveThrows($id);
 			$payload = $this->requestValid(request(), $this->rules('update')['content']);
-			$videos = $payload['video'];
+			$sources = isset($payload['sources']) ? $payload['sources'] : [];
+			$videos = isset($payload['videos']) ? $payload['videos'] : [];
 			$qualities = $payload['quality'];
 			$episodes = $payload['episode'];
 			$languages = $payload['language'];
@@ -306,19 +307,40 @@ class TvSeriesController extends BaseController{
 			$durations = $payload['duration'];
 			$count = count($videos);
 			for ($i = 0; $i < $count; $i++) {
-				VideoSource::create([
-					'title' => $titles[$i],
-					'description' => $descriptions[$i],
-					'duration' => $durations[$i],
-					'videoId' => $video->getKey(),
-					'videoIndex' => 0,
-					'season' => $seasons[$i],
-					'episode' => $episodes[$i],
-					'hits' => 0,
-					'mediaLanguageId' => $languages[$i],
-					'mediaQualityId' => $qualities[$i],
-					'file' => Storage::disk('secured')->putFile(Directories::Videos, $videos[$i], 'public'),
-				]);
+				$source = VideoSource::find($sources[$i]);
+				if ($sources[$i] != null && $source != null) {
+					$fields = [
+						'title' => $titles[$i],
+						'description' => $descriptions[$i],
+						'duration' => $durations[$i],
+						'videoId' => $video->getKey(),
+						'videoIndex' => 0,
+						'season' => $seasons[$i],
+						'episode' => $episodes[$i],
+						'hits' => 0,
+						'mediaLanguageId' => $languages[$i],
+						'mediaQualityId' => $qualities[$i],
+					];
+					if (isset($videos[$i])) {
+						$fields['file'] = Storage::disk('secured')->putFile(Directories::Videos, $videos[$i], 'public');
+					}
+					$source->update($fields);
+				}
+				else {
+					VideoSource::create([
+						'title' => $titles[$i],
+						'description' => $descriptions[$i],
+						'duration' => $durations[$i],
+						'videoId' => $video->getKey(),
+						'videoIndex' => 0,
+						'season' => $seasons[$i],
+						'episode' => $episodes[$i],
+						'hits' => 0,
+						'mediaLanguageId' => $languages[$i],
+						'mediaQualityId' => $qualities[$i],
+						'file' => Storage::disk('secured')->putFile(Directories::Videos, $videos[$i], 'public'),
+					]);
+				}
 			}
 			$seasonCount = VideoSource::distinct('season')->count('season');
 			$mediaLanguages = VideoSource::select('mediaLanguageId')->where('videoId', $video->getKey())->get();
