@@ -26,7 +26,7 @@ abstract class BaseAuthController extends BaseController{
 	use FluentResponse;
 
 	public function __construct(){
-
+		parent::__construct();
 	}
 
 	protected abstract function authTarget(): string;
