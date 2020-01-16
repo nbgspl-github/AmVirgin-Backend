@@ -88,7 +88,6 @@ return [
 			'store' => [
 				'productName' => ['bail', 'required', 'string', 'min:1', 'max:500', 'unique:products,name'],
 				'categoryId' => ['bail', 'required', 'exists:categories,id'],
-				'sellerId' => ['bail', 'required', 'exists:sellers,id'],
 				'productType' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 				'productMode' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 				'listingType' => ['bail', 'required', 'string', 'min:1', 'max:256'],

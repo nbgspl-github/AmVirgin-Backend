@@ -619,6 +619,6 @@ class Product extends Model{
 	}
 
 	public function getSlugOptions(): SlugOptions{
-		// TODO: Implement getSlugOptions() method.
+		return SlugOptions::create()->saveSlugsTo('slug')->generateSlugsFrom('name');
 	}
 }

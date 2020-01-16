@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Throwable;
 
 class ProductsController extends ResourceController{
 	use ValidatesRequest;
@@ -21,7 +22,7 @@ class ProductsController extends ResourceController{
 
 	public function __construct(){
 		parent::__construct();
-		$this->ruleSet->load('rules.seller.product.store');
+		$this->ruleSet->load('rules.seller.product');
 	}
 
 	public function index(){
@@ -74,7 +75,7 @@ class ProductsController extends ResourceController{
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
 		}
-		catch (Exception $exception) {
+		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
 		}
 		finally {

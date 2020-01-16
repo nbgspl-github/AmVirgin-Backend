@@ -54,6 +54,7 @@ Route::prefix('seller')->group(function () use ($sellerMiddleware){
 
 	Route::middleware($sellerMiddleware)->prefix('products')->group(function (){
 		Route::get('/', [SellerProductsController::class, 'index'])->name('seller.products.index');
+		Route::post('/', [SellerProductsController::class, 'store']);
 	});
 
 	Route::middleware($sellerMiddleware)->prefix('attributes')->group(function (){
