@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\Traits\RetrieveCollection;
+use App\Traits\RetrieveResource;
 class ProductImage extends Model{
-	protected $table = 'product_images';
+	use RetrieveResource;
+	use RetrieveCollection;
+	
+	protected $table = 'product-images';
 
 	protected $fillable = [
 		'productId',
@@ -17,4 +21,12 @@ class ProductImage extends Model{
 		'created_at',
 		'updated_at',
 	];
+
+
+	/**
+	 * @return bool
+	 */
+	public function isDeleted(): bool{
+		return $this->deleted;
+	}
 }

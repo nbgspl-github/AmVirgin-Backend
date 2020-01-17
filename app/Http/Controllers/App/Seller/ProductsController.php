@@ -6,6 +6,7 @@ use App\Exceptions\ValidationException;
 use App\Http\Controllers\Base\ResourceController;
 use App\Interfaces\StatusCodes;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Traits\FluentResponse;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ValidatesRequest;
@@ -31,21 +32,39 @@ use FluentResponse;
 	}
 
 	public function index(){
+		$Getproducts = Product::all();
+		//multipal image upload
+	if ($Getproducts == null) {
+			 $response=$this->error()->message('product not found !');
+			}else {
 
+
+			$success['products-data'] = $Getproducts;
+			//$response= response()->json(['response'=>$success]);
+			$response = $this->success()->status(HttpCreated)->setValue('data', $success)->message(__('product details successfully'));
+	}
+			return $response->send();
 	}
 
 
 
 	public function edit($id = null){
-		$product = Product::retrieve($id);
-		if ($product != null) {
+		$product = Product::where('id', '=', $id)->get();
+		//multipal image upload
+	if ($product == null) {
 			$response=$this->error()->message('product not found !');
-		}
-		else {
-		$success['data'] = $product;
-		$success['msg'] = 'fetch successfully';
-		$response= response()->json(['response'=>$success]);
-		}
+			}else {
+   		$productimage=ProductImage::where('productId', '=', $id)->get();
+
+	  		foreach ($productimage as $key => $value) {
+		  	     $success['images'][]=$value['path'];
+			  }
+			$success['products-data'] = $product;
+
+
+			//$response= response()->json(['response'=>$success]);
+			$response = $this->success()->status(HttpCreated)->setValue('data', $success)->message(__('product details successfully'));
+	}
 			return $response->send();
 	}
 
@@ -53,6 +72,8 @@ use FluentResponse;
 	public function store(Request $request){
 		$sellerId = $this->user()->getKey();
 		$response =$this->response();
+		$images = $request->file('files');
+		//Product::getPdo()->lastInsertId();
 		try {
 			$this->requestValid($request, $this->rules('store'));
 			$product = Product::create([
@@ -87,7 +108,24 @@ use FluentResponse;
 				'longDescription' => $request->longDescription,
 				'sku' => $request->sku,
 			]);
-			$response = $this->success()->status(HttpCreated)->setValue('data', $product)->message(__('strings.product.update.success'));
+
+	  $productId=$product->getKey();
+      //multipal image upload
+		if (count($images)>0 && $productId !='') {
+							foreach ($images as $files) {
+								$destinationPath = 'public/products'; // upload path
+								$profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
+								$files->move($destinationPath, $profileImage);
+								$path=$destinationPath.'/'.$profileImage;
+								ProductImage::create([
+										'productId'=>$productId,
+										'path' => $path,
+										'tag' => Str::slug('Product image'),
+									]);
+							}
+						}
+
+			$response = $this->success()->status(HttpCreated)->setValue('data', $product)->message(__('strings.product.insert.success'));
 		}
 		catch (ValidationException $exception) {
 			$response = $this->failed()->status(HttpInvalidRequestFormat)->message($exception->getError());
@@ -119,8 +157,10 @@ use FluentResponse;
 			return $response->send();
 		}
 	}
+
  public function update(Request $request, $productId = null){
 	 	$rules=$this->rules('update');
+
 	   $validator = Validator::make($request->all(), [
 		 'categoryId' => ['bail', 'required', 'exists:categories,id'],
  		 'productType' => ['bail', 'required', 'string', 'min:1', 'max:256'],
@@ -178,6 +218,34 @@ use FluentResponse;
 		'longDescription' => $request->longDescription,
 		'sku' => $request->sku,
 	);
+	//updated image
+	$Newimages = $request->file('files');
+	if(count($Newimages)>0 && $productId !='') {
+		//delete old image
+		/*$image_path = "/images/filename.ext";  // Value is not URL but directory file path
+		if(File::exists($image_path)) {
+		  File::delete($image_path);
+		}*/
+			$GetImages = ProductImage::where('productId', $productId)->get();
+			if($GetImages !=null){
+         $GetImages->each(function(ProductImage $item){
+					 $item->delete();
+				 });
+		   }
+
+				foreach ($Newimages as $files) {
+					$destinationPath = 'public/products/'; // upload path
+					$profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
+					$files->move($destinationPath, $profileImage);
+					$path=$destinationPath.'/'.$profileImage;
+						ProductImage::create([
+							'productId'=>$productId,
+							'path' => $path,
+							'tag' => Str::slug('Product image'),
+					   ]);
+				}
+		}
+
 
 		if($validator->fails()){
      $response = $this->error()->message($validator->getMessage());
