@@ -21,6 +21,7 @@ use App\Models\Genre;
 use App\Models\Slider;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+
 Route::redirect('/', '/admin');
 
 /**
@@ -93,6 +94,7 @@ Route::prefix('admin')->group(function (){
 			Route::post('{id}/attributes', [TvSeriesController::class, Methods::Update])->name('admin.tv-series.update.attributes')->defaults('type', 'attributes');
 			Route::post('{id}/content', [TvSeriesController::class, Methods::Update])->name('admin.tv-series.update.content')->defaults('type', 'content');
 			Route::delete('{id}', [TvSeriesController::class, Methods::Delete])->name('admin.tv-series.delete');
+			Route::get('playback/{slug}', [\App\Http\Controllers\App\Customer\Playback\TrailerPlayback::class, 'series'])->name('admin.tv-series.playback');
 		});
 
 		// Genres Route(s)

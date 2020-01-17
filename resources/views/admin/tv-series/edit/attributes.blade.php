@@ -43,6 +43,12 @@
 											<input id="trailer" type="file" placeholder="Choose a trailer video file..." name="trailer" class="form-control" style="height: unset; padding-left: 6px">
 										</div>
 										<div class="form-group">
+											<video controls>
+												<source src="{{route('admin.tv-series.playback',$payload->getTrailer())}}" type="video/mp4">
+												Your browser does not support the video tag.
+											</video>
+										</div>
+										<div class="form-group">
 											<label for="genre">Choose a genre<span class="text-primary">*</span></label>
 											<select id="genre" name="genreId" class="form-control" required>
 												@foreach($genres as $genre)
