@@ -50,8 +50,9 @@ class VideosController extends ResourceController{
 						'content' => $item,
 					];
 				})->values();
+				$payload['content'] = $seasons;
 			}
-			$response->status(HttpOkay)->message('Success')->setValue('data', $seasons);
+			$response->status(HttpOkay)->message('Success')->setValue('data', $payload);
 		}
 		catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('No video/tv-series found for given key.')->setValue('data');
