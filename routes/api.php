@@ -55,6 +55,8 @@ Route::prefix('seller')->group(function () use ($sellerMiddleware){
 	Route::middleware($sellerMiddleware)->prefix('products')->group(function (){
 		Route::get('/', [SellerProductsController::class, 'index'])->name('seller.products.index');
 		Route::post('/', [SellerProductsController::class, 'store']);
+		Route::post('/update/{id}', [SellerProductsController::class, 'update']);
+		Route::post('/delete/{id}', [SellerProductsController::class, 'delete']);
 	});
 
 	Route::middleware($sellerMiddleware)->prefix('attributes')->group(function (){
