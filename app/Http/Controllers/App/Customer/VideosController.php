@@ -42,6 +42,14 @@ class VideosController extends ResourceController{
 						];
 					})->values();
 				})->values();
+				$season = 1;
+				$seasons = collect($seasons->toArray())->transform(function ($item) use (&$season){
+					return [
+						'season' => $season++,
+						'episodes' => count($item),
+						'content' => $item,
+					];
+				})->values();
 			}
 			$response->status(HttpOkay)->message('Success')->setValue('data', $seasons);
 		}

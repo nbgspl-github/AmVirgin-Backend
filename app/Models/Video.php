@@ -450,6 +450,7 @@ class Video extends Model{
 		$mediaQualities->transform(function (MediaQuality $quality){
 			return $quality->getName();
 		});
+		$mediaQualities = $mediaQualities->unique();
 		$this->qualitySlug = implode('|', $mediaQualities->toArray());
 		return $this;
 	}
@@ -469,6 +470,7 @@ class Video extends Model{
 		$mediaLanguages->transform(function (MediaLanguage $language){
 			return $language->getName();
 		});
+		$mediaLanguages = $mediaLanguages->unique();
 		$this->languageSlug = implode('|', $mediaLanguages->toArray());
 		return $this;
 	}
