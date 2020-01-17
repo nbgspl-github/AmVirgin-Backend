@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="AmVirgin AWS">
+  <component name="PublishConfigData" serverName="Amvirgin CentOS">
     <serverData>
-      <paths name="AmVirgin AWS">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="Avelo AWS">
+      <paths name="Amvirgin CentOS">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
