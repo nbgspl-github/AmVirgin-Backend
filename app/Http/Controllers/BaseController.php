@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+ini_set('serialize_precision', -1);
+ini_set('precision', 14);
+
 use App\Classes\ValidationRuleset;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
