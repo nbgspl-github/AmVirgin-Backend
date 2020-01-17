@@ -263,7 +263,7 @@ class Video extends Model{
 	 * @return float
 	 */
 	public function getRating(): float{
-		return $this->rating;
+		return round($this->rating, 2);
 	}
 
 	/**

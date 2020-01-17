@@ -360,7 +360,7 @@ class TvSeriesController extends BaseController{
 			$response->status(HttpOkay)->message('Video content was updated successfully.');
 		}
 		catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find video or that key.');
+			$response->status(HttpResourceNotFound)->message('Could not find video for that key.');
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
