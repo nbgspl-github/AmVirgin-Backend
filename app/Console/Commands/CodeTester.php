@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Http\Controllers\App\Customer\VideosController;
 use App\Traits\GenerateUrls;
 use Illuminate\Console\Command;
+use Sujip\Guid\Facades\Guid;
 
 class CodeTester extends Command{
 	use GenerateUrls;
@@ -39,8 +40,7 @@ class CodeTester extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		$controller = new VideosController();
-		$controller->show('mirzapur');
+		echo Guid::create();
 		return;
 	}
 }
