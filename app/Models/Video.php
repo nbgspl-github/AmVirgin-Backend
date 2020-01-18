@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\App\Customer\Playback\TrailerPlayback;
 use App\Traits\ActiveStatus;
 use App\Traits\FluentConstructor;
 use App\Traits\RetrieveCollection;
@@ -199,7 +200,8 @@ class Video extends Model{
 	 * @return string
 	 */
 	public function getTrailer(): string{
-		return $this->trailer;
+		$playback = new TrailerPlayback();
+		return $playback->series($this->slug);
 	}
 
 	/**

@@ -57,7 +57,7 @@ return [
 
 		'secured' => [
 			'driver' => 'local',
-			'root' => storage_path('app/secured'),
+			'root' => storage_path('app/public'),
 			'visibility' => 'private',
 		],
 

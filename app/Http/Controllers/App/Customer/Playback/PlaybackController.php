@@ -8,14 +8,14 @@ class PlaybackController extends PlaybackBase{
 	}
 
 	public function trailer(){
-		return $this->play('trailers/LwnoiQDXjfyx9kzBwpmYMSW0mYwrfYtNGEXqI7o2.mp4', 'secured');
+		return $this->play('trailers/H9g59lehlmhw5T05roIFII9f0T7QifbZ7s8T7GgD.mp4', 'secured');
 	}
 
 	public function video(){
-
+		return $this->play('trailers/H9g59lehlmhw5T05roIFII9f0T7QifbZ7s8T7GgD.mp4', 'secured');
 	}
 
 	public function series(){
-
+		return $this->play('trailers/H9g59lehlmhw5T05roIFII9f0T7QifbZ7s8T7GgD.mp4', 'secured');
 	}
 }

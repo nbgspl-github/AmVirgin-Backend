@@ -2,6 +2,7 @@
 
 use App\Category;
 use App\Classes\Methods;
+use App\Http\Controllers\App\Customer\Playback\TrailerPlayback;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Web\Admin\CategoriesController;
 use App\Http\Controllers\Web\Admin\CustomerController;
@@ -94,7 +95,7 @@ Route::prefix('admin')->group(function (){
 			Route::post('{id}/attributes', [TvSeriesController::class, Methods::Update])->name('admin.tv-series.update.attributes')->defaults('type', 'attributes');
 			Route::post('{id}/content', [TvSeriesController::class, Methods::Update])->name('admin.tv-series.update.content')->defaults('type', 'content');
 			Route::delete('{id}', [TvSeriesController::class, Methods::Delete])->name('admin.tv-series.delete');
-			Route::get('playback/{slug}', [\App\Http\Controllers\App\Customer\Playback\TrailerPlayback::class, 'series'])->name('admin.tv-series.playback');
+			Route::get('playback/{slug}', [TrailerPlayback::class, 'series'])->name('admin.tv-series.playback');
 		});
 
 		// Genres Route(s)

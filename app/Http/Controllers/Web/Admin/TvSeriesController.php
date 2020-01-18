@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web\Admin;
 
 use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
+use App\Http\Controllers\App\Customer\Playback\TrailerPlayback;
 use App\Http\Controllers\BaseController;
 use App\Interfaces\Directories;
 use App\Interfaces\VideoTypes;

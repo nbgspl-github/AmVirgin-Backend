@@ -43,10 +43,9 @@
 											<input id="trailer" type="file" placeholder="Choose a trailer video file..." name="trailer" class="form-control" style="height: unset; padding-left: 6px">
 										</div>
 										<div class="form-group">
-											<video controls>
-												<source src="{{route('admin.tv-series.playback',$payload->getTrailer())}}" type="video/mp4">
-												Your browser does not support the video tag.
-											</video>
+											<div class="embed-responsive embed-responsive-16by9 rounded-lg">
+												<iframe class="embed-responsive-item" src="{{$payload->getTrailer()}}"></iframe>
+											</div>
 										</div>
 										<div class="form-group">
 											<label for="genre">Choose a genre<span class="text-primary">*</span></label>

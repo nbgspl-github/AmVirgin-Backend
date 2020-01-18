@@ -14,11 +14,7 @@ class PlaybackBase extends BaseController{
 		$pathX = Storage::disk($disk)->path($path);
 		if (Storage::disk($disk)->exists($path)) {
 			$pathX = str_replace('\\', '/', $pathX);
-			$file = fopen($pathX, 'r');
-			$index = 0;
-			return response()->file($pathX, [
-				'ContentType' => 'video/mp4',
-			]);
+			return Storage::disk($disk)->url($path);
 		}
 		else {
 			return response()->json(['message' => 'No playable media found.'], 404);
