@@ -191,7 +191,6 @@ abstract class BaseAuthController extends BaseController{
 		$request = request();
 		try {
 			$this->guard()->logout();
-			$request->session()->invalidate();
 			return $this->success()->message($this->logoutSuccess())->send();
 		}
 		catch (Exception $exception) {
