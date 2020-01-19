@@ -10,6 +10,7 @@ use App\Http\Controllers\App\Customer\TwoFactorAuthController as Customer2FAuth;
 use App\Http\Controllers\App\Seller\AttributesController as SellerAttributesController;
 use App\Http\Controllers\App\Seller\AuthController as SellerAuth;
 use App\Http\Controllers\App\Seller\CategoriesController as SellerCategoriesController;
+use App\Http\Controllers\App\Seller\CountriesController;
 use App\Http\Controllers\App\Seller\CurrenciesController;
 use App\Http\Controllers\App\Seller\ProductsController as SellerProductsController;
 use App\Http\Controllers\App\Seller\TwoFactorAuthController as Seller2FAuth;
@@ -49,7 +50,7 @@ Route::prefix('seller')->group(function () use ($sellerMiddleware){
 	Route::post('/logout', [SellerAuth::class, 'logout'])->name('seller.logout')->middleware($sellerMiddleware);
 	Route::post('/profile', [SellerAuth::class, 'profile'])->name('seller.logout')->middleware($sellerMiddleware);
 
-	Route::middleware($sellerMiddleware)->prefix('categories')->group(function (){
+	Route::prefix('categories')->group(function (){
 		Route::get('/', [SellerCategoriesController::class, 'index'])->name('seller.categories.index');
 		Route::get('/{id}/attributes', [SellerAttributesController::class, 'indexFiltered'])->name('seller.attributes.index');
 		Route::post('/{id}/attributes', [SellerAttributesController::class, 'store'])->name('seller.attributes.store');
@@ -68,8 +69,12 @@ Route::prefix('seller')->group(function () use ($sellerMiddleware){
 		Route::get('/{id}', [SellerAttributesController::class, 'show'])->name('seller.attributes.show');
 	});
 
-	Route::prefix('static')->group(function (){
-		Route::get('currencies', [CurrenciesController::class, 'index']);
+	Route::prefix('currencies')->group(function (){
+		Route::get('/', [CurrenciesController::class, 'index'])->name('seller.currencies.index');
+	});
+
+	Route::prefix('countries')->group(function (){
+		Route::get('/', [CountriesController::class, 'index'])->name('seller.countries.index');
 	});
 });
 
