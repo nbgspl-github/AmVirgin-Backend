@@ -10,6 +10,7 @@ use App\Http\Controllers\App\Customer\TwoFactorAuthController as Customer2FAuth;
 use App\Http\Controllers\App\Seller\AttributesController as SellerAttributesController;
 use App\Http\Controllers\App\Seller\AuthController as SellerAuth;
 use App\Http\Controllers\App\Seller\CategoriesController as SellerCategoriesController;
+use App\Http\Controllers\App\Seller\CurrenciesController;
 use App\Http\Controllers\App\Seller\ProductsController as SellerProductsController;
 use App\Http\Controllers\App\Seller\TwoFactorAuthController as Seller2FAuth;
 use Illuminate\Support\Facades\Route;
@@ -65,6 +66,10 @@ Route::prefix('seller')->group(function () use ($sellerMiddleware){
 
 	Route::middleware($sellerMiddleware)->prefix('attributes')->group(function (){
 		Route::get('/{id}', [SellerAttributesController::class, 'show'])->name('seller.attributes.show');
+	});
+
+	Route::prefix('static')->group(function (){
+		Route::get('currencies', [CurrenciesController::class, 'index']);
 	});
 });
 

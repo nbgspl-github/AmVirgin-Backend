@@ -86,7 +86,6 @@ return [
 		],
 		'product' => [
 			'store' => [
-				//'files' => ['bail','required','size:1024'], // 1 MB
 				'productName' => ['bail', 'required', 'string', 'min:1', 'max:500', 'unique:products,name'],
 				'categoryId' => ['bail', 'required', 'exists:categories,id'],
 				'productType' => ['bail', 'required', 'string', 'min:1', 'max:256'],
@@ -116,7 +115,6 @@ return [
 				'sku' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 			],
 			'update' => [
-				//'id' => ['bail', 'required', 'string', 'min:1', 'max:500', 'unique:products,id'],
 				'categoryId' => ['bail', 'required', 'exists:categories,id'],
 				'productType' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 				'productMode' => ['bail', 'required', 'string', 'min:1', 'max:256'],
