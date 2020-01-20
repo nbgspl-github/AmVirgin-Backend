@@ -254,7 +254,7 @@ return [
 					'language.*' => ['bail', 'required', 'exists:media-languages,id'],
 					'quality.*' => ['bail', 'required', 'exists:media-qualities,id'],
 					'episode.*' => ['bail', 'required', 'numeric', 'min:1', 'max:250', 'distinct'],
-					'video.*' => ['bail', 'required', 'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4'],
+					'video.*' => ['bail', 'required', 'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4,video/mkv'],
 				],
 			],
 		],

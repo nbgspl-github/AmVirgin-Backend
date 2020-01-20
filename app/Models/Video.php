@@ -449,10 +449,10 @@ class Video extends Model{
 	 * @return $this
 	 */
 	public function setQualitySlug(Collection $mediaQualities){
+		$mediaQualities = $mediaQualities->unique('name');
 		$mediaQualities->transform(function (MediaQuality $quality){
 			return $quality->getName();
 		});
-		$mediaQualities = $mediaQualities->unique();
 		$this->qualitySlug = implode('|', $mediaQualities->toArray());
 		return $this;
 	}
@@ -469,10 +469,10 @@ class Video extends Model{
 	 * @return $this
 	 */
 	public function setLanguageSlug(Collection $mediaLanguages){
+		$mediaLanguages = $mediaLanguages->unique('name');
 		$mediaLanguages->transform(function (MediaLanguage $language){
 			return $language->getName();
 		});
-		$mediaLanguages = $mediaLanguages->unique();
 		$this->languageSlug = implode('|', $mediaLanguages->toArray());
 		return $this;
 	}

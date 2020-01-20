@@ -18,7 +18,6 @@ use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use stdClass;
@@ -300,8 +299,8 @@ class TvSeriesController extends BaseController{
 		try {
 			$video = Video::retrieveThrows($id);
 			$payload = $this->requestValid(request(), $this->rules('update')['content']);
-			$sources = isset($payload['sources']) ? $payload['sources'] : [];
-			$videos = isset($payload['videos']) ? $payload['videos'] : [];
+			$sources = isset($payload['source']) ? $payload['source'] : [];
+			$videos = isset($payload['video']) ? $payload['video'] : [];
 			$qualities = $payload['quality'];
 			$episodes = $payload['episode'];
 			$languages = $payload['language'];
@@ -311,8 +310,8 @@ class TvSeriesController extends BaseController{
 			$durations = $payload['duration'];
 			$count = count($videos);
 			for ($i = 0; $i < $count; $i++) {
-				$source = VideoSource::find($sources[$i]);
-				if ($sources[$i] != null && $source != null) {
+				$source = isset($sources[$i]) ? VideoSource::find($sources[$i]) : null;
+				if ($source != null) {
 					$fields = [
 						'title' => $titles[$i],
 						'description' => $descriptions[$i],
@@ -368,7 +367,8 @@ class TvSeriesController extends BaseController{
 			$response->status(HttpResourceNotFound)->message('Could not find video for that key.');
 		}
 		catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			dd($exception);
+			$response->status(HttpServerError)->message($exception->getTraceAsString());
 		}
 		finally {
 			return $response->send();

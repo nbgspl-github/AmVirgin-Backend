@@ -102,43 +102,43 @@
 			rowCount--;
 		}
 
-		$('#uploadForm').submit(function (event) {
-			event.preventDefault();
-			const validator = $('#uploadForm').parsley();
-			if (!validator.isValid()) {
-				alertify.alert('Fix the errors in the form and retry.');
-				return;
-			}
+		{{--$('#uploadForm').submit(function (event) {--}}
+		{{--	event.preventDefault();--}}
+		{{--	const validator = $('#uploadForm').parsley();--}}
+		{{--	if (!validator.isValid()) {--}}
+		{{--		alertify.alert('Fix the errors in the form and retry.');--}}
+		{{--		return;--}}
+		{{--	}--}}
 
-			const config = {
-				onUploadProgress: uploadProgress,
-				headers: {
-					'Content-Type': 'multipart/form-data'
-				}
-			};
-			const formData = new FormData(this);
-			modal.modal({
-				keyboard: false,
-				show: true,
-				backdrop: 'static'
-			});
-			axios.post('/admin/tv-series/{{$key}}/content', formData, config,).then(response => {
-				const status = response.data.status;
-				modal.modal('hide');
-				if (status !== 200) {
-					alertify.alert(response.data.message);
-				} else {
-					modalFinal.modal({
-						show: true,
-						keyboard: false,
-						backdrop: 'static'
-					});
-				}
-			}).catch(error => {
-				modal.modal('hide');
-				console.log(error);
-				toastr.error('Something went wrong. Please try again.');
-			});
-		});
+		{{--	const config = {--}}
+		{{--		onUploadProgress: uploadProgress,--}}
+		{{--		headers: {--}}
+		{{--			'Content-Type': 'multipart/form-data'--}}
+		{{--		}--}}
+		{{--	};--}}
+		{{--	const formData = new FormData(this);--}}
+		{{--	modal.modal({--}}
+		{{--		keyboard: false,--}}
+		{{--		show: true,--}}
+		{{--		backdrop: 'static'--}}
+		{{--	});--}}
+		{{--	axios.post('/admin/tv-series/{{$key}}/content', formData, config,).then(response => {--}}
+		{{--		const status = response.data.status;--}}
+		{{--		modal.modal('hide');--}}
+		{{--		if (status !== 200) {--}}
+		{{--			alertify.alert(response.data.message);--}}
+		{{--		} else {--}}
+		{{--			modalFinal.modal({--}}
+		{{--				show: true,--}}
+		{{--				keyboard: false,--}}
+		{{--				backdrop: 'static'--}}
+		{{--			});--}}
+		{{--		}--}}
+		{{--	}).catch(error => {--}}
+		{{--		modal.modal('hide');--}}
+		{{--		console.log(error);--}}
+		{{--		toastr.error('Something went wrong. Please try again.');--}}
+		{{--	});--}}
+		{{--});--}}
 	</script>
 @stop
