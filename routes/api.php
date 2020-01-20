@@ -115,8 +115,3 @@ Route::prefix('customer')->group(function () use ($customerMiddleware){
 		Route::get('tv-series', [PlaybackController::class, 'series']);
 	});
 });
-
-Route::get('test', function (){
-	$c = new \App\Http\Controllers\App\Customer\VideosController();
-	return $c->show('mirzapur');
-});
