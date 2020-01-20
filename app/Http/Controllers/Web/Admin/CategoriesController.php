@@ -10,11 +10,11 @@ use App\Models\Genre;
 use App\Rules\UniqueExceptSelf;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
-use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use stdClass;
+use Throwable;
 
 class CategoriesController extends BaseController{
 	use ValidatesRequest;
@@ -23,6 +23,7 @@ class CategoriesController extends BaseController{
 	protected $ruleSet;
 
 	public function __construct(){
+		parent::__construct();
 		$this->ruleSet = config('rules.admin.categories');
 	}
 
@@ -101,7 +102,7 @@ class CategoriesController extends BaseController{
 		catch (ValidationException $exception) {
 			$response = responseWeb()->back()->data($request->all())->error($exception->getError());
 		}
-		catch (Exception $exception) {
+		catch (Throwable $exception) {
 			$response = responseWeb()->back()->data($request->all())->error($exception->getMessage());
 		}
 		finally {
@@ -113,14 +114,14 @@ class CategoriesController extends BaseController{
 		$response = null;
 		try {
 			$payload = $this->requestValid($request, $this->ruleSet['update']);
-			$payload['poster'] = Storage::disk('public')->putFile(Directories::Categories, $request->file('poster'), 'public');
+			$payload['poster'] = $request->hasFile('poster') ? Storage::disk('public')->putFile(Directories::Categories, $request->file('poster'), 'public') : null;
 			Category::create($payload);
 			$response = responseWeb()->route('admin.categories.index')->success('Created category successfully.');
 		}
 		catch (ValidationException $exception) {
 			$response = responseWeb()->back()->data($request->all())->error($exception->getError());
 		}
-		catch (Exception $exception) {
+		catch (Throwable $exception) {
 			$response = responseWeb()->back()->data($request->all())->error($exception->getMessage());
 		}
 		finally {
