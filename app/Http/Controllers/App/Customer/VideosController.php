@@ -11,6 +11,7 @@ use App\Traits\FluentResponse;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class VideosController extends ResourceController{
@@ -35,7 +36,7 @@ class VideosController extends ResourceController{
 								return [
 									'language' => $source->language()->first()->getName(),
 									'quality' => $source->mediaQuality()->first()->getName(),
-									'url' => $source->getFile(),
+									'url' => Storage::disk('secured')->url($source->getFile()),
 									'subtitle' => $source->getSubtitle(),
 								];
 							})->values(),
