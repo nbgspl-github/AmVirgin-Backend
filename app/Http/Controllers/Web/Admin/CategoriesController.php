@@ -6,8 +6,6 @@ use App\Category;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Interfaces\Directories;
-use App\Models\Genre;
-use App\Rules\UniqueExceptSelf;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -20,11 +18,9 @@ class CategoriesController extends BaseController{
 	use ValidatesRequest;
 	use FluentResponse;
 
-	protected $ruleSet;
-
 	public function __construct(){
 		parent::__construct();
-		$this->ruleSet = config('rules.admin.categories');
+		$this->ruleSet->load('rules.admin.categories');
 	}
 
 	public static function relations($insertSuper = true){
@@ -80,16 +76,10 @@ class CategoriesController extends BaseController{
 	}
 
 	public function update(Request $request, $id = null){
-		$validation = [
-			'mobile' => ['bail', 'required', new UniqueExceptSelf(Genre::class, 'mobile', '8756651167', 5)],
-		];
 		$response = null;
 		try {
-			$category = Category::retrieve($id);
-			if ($category == null) {
-				throw new ModelNotFoundException('Could not find category for that key.');
-			}
-			$payload = $this->requestValid($request, $this->ruleSet['update']);
+			$category = Category::retrieveThrows($id);
+			$payload = $this->requestValid($request, $this->rules('update'));
 			if ($request->has('poster')) {
 				$payload['poster'] = Storage::disk('public')->putFile(Directories::Categories, $request->file('poster'), 'public');
 			}
@@ -97,7 +87,7 @@ class CategoriesController extends BaseController{
 			$response = responseWeb()->route('admin.categories.index')->success('Updated category successfully.');
 		}
 		catch (ModelNotFoundException $exception) {
-			$response = responseWeb()->route('admin.categories.index')->error($exception->getMessage());
+			$response = responseWeb()->route('admin.categories.index')->error('Could not find category for that key.');
 		}
 		catch (ValidationException $exception) {
 			$response = responseWeb()->back()->data($request->all())->error($exception->getError());
@@ -113,7 +103,7 @@ class CategoriesController extends BaseController{
 	public function store(Request $request){
 		$response = null;
 		try {
-			$payload = $this->requestValid($request, $this->ruleSet['update']);
+			$payload = $this->requestValid($request, $this->rules('store'));
 			$payload['poster'] = $request->hasFile('poster') ? Storage::disk('public')->putFile(Directories::Categories, $request->file('poster'), 'public') : null;
 			Category::create($payload);
 			$response = responseWeb()->route('admin.categories.index')->success('Created category successfully.');

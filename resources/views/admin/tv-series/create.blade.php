@@ -277,29 +277,27 @@
 
 		$('#uploadForm').submit(function (event) {
 			event.preventDefault();
-			// const validator = $('#uploadForm').parsley();
-			// if (!validator.isValid()) {
-			// 	alertify.alert('Fix the errors in the form and retry.');
-			// 	return;
-			// }
-			// if (lastPoster === null) {
-			// 	alertify.alert('Movie poster is required.');
-			// 	return;
-			// }
-			// if (lastBackdrop === null) {
-			// 	alertify.alert('Movie backdrop is required.');
-			// 	return;
-			// }
-			//
-			// const config = {
-			// 	onUploadProgress: uploadProgress,
-			// 	headers: {
-			// 		'Content-Type': 'multipart/form-data'
-			// 	}
-			// };
+			const validator = $('#uploadForm').parsley();
+			if (!validator.isValid()) {
+				alertify.alert('Fix the errors in the form and retry.');
+				return;
+			}
+			if (lastPoster === null) {
+				alertify.alert('Movie poster is required.');
+				return;
+			}
+			if (lastBackdrop === null) {
+				alertify.alert('Movie backdrop is required.');
+				return;
+			}
+
+			const config = {
+				onUploadProgress: uploadProgress,
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			};
 			const formData = new FormData(this);
-			console.log(formData);
-			return;
 			modal.modal({
 				keyboard: false,
 				show: true,

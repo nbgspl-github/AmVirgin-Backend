@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Web\Admin;
 
 use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\App\Customer\Playback\TrailerPlayback;
 use App\Http\Controllers\BaseController;
 use App\Interfaces\Directories;
 use App\Interfaces\VideoTypes;
@@ -20,12 +19,15 @@ use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 use stdClass;
 use Throwable;
 
 class TvSeriesController extends BaseController{
 	use FluentResponse;
 	use ValidatesRequest;
+	use HasSlug;
 
 	public function __construct(){
 		parent::__construct();
@@ -76,7 +78,6 @@ class TvSeriesController extends BaseController{
 			 */
 			$video = Video::create([
 				'title' => $validated['title'],
-				'slug' => Str::slug($validated['title']),
 				'description' => $validated['description'],
 				'duration' => $validated['duration'],
 				'released' => $validated['released'],
@@ -97,7 +98,6 @@ class TvSeriesController extends BaseController{
 				'price' => isset($validated['price']) ? $validated['price'] : 0.00,
 				'hasSeasons' => true,
 			]);
-			$video->generateSlug();
 			$video->save();
 			$response = $this->success()->message('Tv series details were successfully saved. Please proceed to next step.');
 		}
@@ -161,6 +161,10 @@ class TvSeriesController extends BaseController{
 		finally {
 			return $response->send();
 		}
+	}
+
+	public function getSlugOptions(): SlugOptions{
+		return SlugOptions::create()->generateSlugsFrom('title')->saveSlugsTo('slug');
 	}
 
 	protected function replaceTrendingItem($chosenRank){
