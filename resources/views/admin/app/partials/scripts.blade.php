@@ -38,8 +38,7 @@
 <!-- Dropzone js -->
 <script src="{{asset('admin/plugins/dropzone/dist/dropzone.js')}}"></script>
 
-<!--CKIN Js-->
-<script src="{{asset('admin/js/ckin.min.js')}}"></script>
+<script src="https://vjs.zencdn.net/7.6.6/video.js"></script>
 
 <!--Bootstrap Duration Picker-->
 <script src="{{asset('admin/js/bootstrap-duration-picker.js')}}"></script>

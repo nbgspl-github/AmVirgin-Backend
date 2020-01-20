@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use App\Classes\EloquentMediaModel;
 use App\Traits\ActiveStatus;
+use Illuminate\Database\Eloquent\Model;
 
-class Slider extends EloquentMediaModel{
+class Slider extends Model{
 	use ActiveStatus;
 
 	protected $table = 'sliders';

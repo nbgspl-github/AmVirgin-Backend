@@ -5,13 +5,13 @@
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://amvirginapp.cql24jytbtnm.ap-south-1.rds.amazonaws.com:3306/amvirgin_app</jdbc-url>
+      <jdbc-url>jdbc:mysql://3.6.127.206:3306/amvirgin</jdbc-url>
     </data-source>
     <data-source source="LOCAL" name="AmVirgin Local" uuid="1331ee31-f881-4834-a387-e6ac919d3c31">
       <driver-ref>mariadb</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mariadb://localhost:3306/amvirgin_app</jdbc-url>
+      <jdbc-url>jdbc:mariadb://localhost:3306/amvirgin</jdbc-url>
     </data-source>
   </component>
 </project>

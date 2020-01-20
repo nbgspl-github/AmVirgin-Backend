@@ -13,8 +13,7 @@
 <!--Morris Chart CSS -->
 <link rel="stylesheet" href="{{asset('admin/css/percircle.css')}}">
 
-{{--<!--CKIN Css-->--}}
-{{--<link rel="stylesheet" href="{{asset('admin/css/ckin.min.css')}}">--}}
+<link href="https://vjs.zencdn.net/7.6.6/video-js.css" rel="stylesheet"/>
 
 <!--Bootstrap Duration Picker-->
 <link rel="stylesheet" href="{{asset('admin/css/bootstrap-duration-picker.css')}}">

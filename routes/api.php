@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\App\Customer\AuthController as CustomerAuth;
+use App\Http\Controllers\App\Customer\Playback\PlaybackController;
+use App\Http\Controllers\App\Customer\Playback\TrailerPlayback;
 use App\Http\Controllers\App\Customer\PopularPicksController;
 use App\Http\Controllers\App\Customer\SlidersController as CustomerSlidersController;
 use App\Http\Controllers\App\Customer\TrendController;
@@ -8,6 +10,8 @@ use App\Http\Controllers\App\Customer\TwoFactorAuthController as Customer2FAuth;
 use App\Http\Controllers\App\Seller\AttributesController as SellerAttributesController;
 use App\Http\Controllers\App\Seller\AuthController as SellerAuth;
 use App\Http\Controllers\App\Seller\CategoriesController as SellerCategoriesController;
+use App\Http\Controllers\App\Seller\CountriesController;
+use App\Http\Controllers\App\Seller\CurrenciesController;
 use App\Http\Controllers\App\Seller\ProductsController as SellerProductsController;
 use App\Http\Controllers\App\Seller\TwoFactorAuthController as Seller2FAuth;
 use Illuminate\Support\Facades\Route;
@@ -46,7 +50,7 @@ Route::prefix('seller')->group(function () use ($sellerMiddleware){
 	Route::post('/logout', [SellerAuth::class, 'logout'])->name('seller.logout')->middleware($sellerMiddleware);
 	Route::post('/profile', [SellerAuth::class, 'profile'])->name('seller.logout')->middleware($sellerMiddleware);
 
-	Route::middleware($sellerMiddleware)->prefix('categories')->group(function (){
+	Route::prefix('categories')->group(function (){
 		Route::get('/', [SellerCategoriesController::class, 'index'])->name('seller.categories.index');
 		Route::get('/{id}/attributes', [SellerAttributesController::class, 'indexFiltered'])->name('seller.attributes.index');
 		Route::post('/{id}/attributes', [SellerAttributesController::class, 'store'])->name('seller.attributes.store');
@@ -55,10 +59,22 @@ Route::prefix('seller')->group(function () use ($sellerMiddleware){
 	Route::middleware($sellerMiddleware)->prefix('products')->group(function (){
 		Route::get('/', [SellerProductsController::class, 'index'])->name('seller.products.index');
 		Route::post('/', [SellerProductsController::class, 'store']);
+		Route::post('/edit/{id}', [SellerProductsController::class, 'edit']);
+		Route::post('/update/{id}', [SellerProductsController::class, 'update']);
+		Route::post('/delete/{id}', [SellerProductsController::class, 'delete']);
+
 	});
 
 	Route::middleware($sellerMiddleware)->prefix('attributes')->group(function (){
 		Route::get('/{id}', [SellerAttributesController::class, 'show'])->name('seller.attributes.show');
+	});
+
+	Route::prefix('currencies')->group(function (){
+		Route::get('/', [CurrenciesController::class, 'index'])->name('seller.currencies.index');
+	});
+
+	Route::prefix('countries')->group(function (){
+		Route::get('/', [CountriesController::class, 'index'])->name('seller.countries.index');
 	});
 });
 
@@ -88,9 +104,14 @@ Route::prefix('customer')->group(function () use ($customerMiddleware){
 	Route::prefix('videos')->group(function (){
 		Route::get('/{slug}', [\App\Http\Controllers\App\Customer\VideosController::class, 'show']);
 	});
-});
 
-Route::get('test', function (){
-	$c = new \App\Http\Controllers\App\Customer\VideosController();
-	return $c->show('mirzapur');
+	Route::prefix('playback')->middleware([])->group(function (){
+		Route::prefix('trailer')->group(function (){
+			Route::get('video/{slug}', [TrailerPlayback::class, 'video']);
+			Route::get('tv-series/{slug}', [TrailerPlayback::class, 'series']);
+			Route::get('product/{slug}', [TrailerPlayback::class, 'product']);
+		});
+		Route::get('video', [PlaybackController::class, 'video']);
+		Route::get('tv-series', [PlaybackController::class, 'series']);
+	});
 });

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Web\Admin;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Interfaces\Directories;
-use App\Interfaces\StatusCodes;
 use App\Interfaces\Tables;
 use App\Models\Slider;
 use App\Traits\FluentResponse;
@@ -23,6 +22,7 @@ class SlidersController extends BaseController{
 	protected $ruleSet;
 
 	public function __construct(){
+		parent::__construct();
 		$this->ruleSet = config('rules.admin.sliders');
 	}
 
@@ -51,16 +51,9 @@ class SlidersController extends BaseController{
 	public function store(Request $request){
 		$response = null;
 		try {
-			$this->requestValid($request, $this->ruleSet['store']);
-			$poster = Storage::disk('public')->putFile(Directories::Sliders, $request->file('poster'), 'public');
-			Slider::create([
-				'title' => $request->title,
-				'description' => $request->description,
-				'poster' => $poster,
-				'target' => $request->target,
-				'stars' => $request->stars,
-				'active' => $request->active,
-			]);
+			$payload = $this->requestValid($request, $this->ruleSet['store']);
+			$payload['poster'] = \request()->hasFile('poster') ? Storage::disk('public')->putFile(Directories::Sliders, $request->file('poster'), 'public') : null;
+			Slider::create($payload);
 			$response = responseWeb()->
 			route('admin.sliders.index')->
 			success('Slider created successfully.');

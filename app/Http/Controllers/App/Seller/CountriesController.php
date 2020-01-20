@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\App\Seller;
 
-use App\Category;
 use App\Http\Controllers\BaseController;
+use App\Models\Country;
 use App\Traits\FluentResponse;
 
-class CategoriesController extends BaseController{
+class CountriesController extends BaseController{
 	use FluentResponse;
 
 	public function __construct(){
@@ -14,15 +14,16 @@ class CategoriesController extends BaseController{
 	}
 
 	public function index(){
-		$categories = Category::all();
-		$categories->transform(function (Category $category){
+		$categories = Country::all();
+		$categories->transform(function (Country $country){
 			return [
-				'id' => $category->getKey(),
-				'name' => $category->getName(),
+				'id' => $country->getKey(),
+				'name' => $country->name,
+				'initials' => $country->initials,
 			];
 		});
 		return $this->response()->status(HttpOkay)->setValue('data', $categories)->message(function () use ($categories){
-			return sprintf('Found %d categories.', $categories->count());
+			return sprintf('Found %d countries.', $categories->count());
 		})->send();
 	}
 }

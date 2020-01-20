@@ -3,7 +3,7 @@
 	<div class="row">
 		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0 pr-md-0">
 			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
-				<a href="javascript:void(0);" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
+				<a href="javascript:void(0);" onclick="doShit();" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
 				<div class="card-body">
 					<div class="text-center">
 						<div>
@@ -19,7 +19,7 @@
 		</div>
 		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0 pr-md-0">
 			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
-				<a href="/" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
+				<a href="javascript:void(0);" onclick="doShit2();" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
 				<div class="card-body">
 					<div class="text-center">
 						<div>
@@ -154,7 +154,7 @@
 
 @section('javascript')
 	<script>
-
+		let token = null;
 		$(document).ready(() => {
 			anime.timeline({loop: false}).add({
 				targets: ['.animatableX'],

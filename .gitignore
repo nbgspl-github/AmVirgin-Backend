@@ -12,4 +12,5 @@ npm-debug.log
 yarn-error.log
 /AmVirgin.ppk
 /.env.example
-webServers.xml
+/.idea/deployment.xml
+/.idea/dataSources.xml

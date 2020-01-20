@@ -18,6 +18,10 @@ abstract class ResourceController extends BaseController{
 	use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 	use FluentResponse;
 
+	public function __construct(){
+		parent::__construct();
+	}
+
 	/**
 	 * @return Model
 	 */

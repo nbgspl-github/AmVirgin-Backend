@@ -11,6 +11,7 @@ use App\Traits\FluentResponse;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class VideosController extends ResourceController{
@@ -35,15 +36,24 @@ class VideosController extends ResourceController{
 								return [
 									'language' => $source->language()->first()->getName(),
 									'quality' => $source->mediaQuality()->first()->getName(),
-									'url' => $source->getFile(),
+									'url' => Storage::disk('secured')->url($source->getFile()),
 									'subtitle' => $source->getSubtitle(),
 								];
 							})->values(),
 						];
 					})->values();
 				})->values();
+				$season = 1;
+				$seasons = collect($seasons->toArray())->transform(function ($item) use (&$season){
+					return [
+						'season' => $season++,
+						'episodes' => count($item),
+						'content' => $item,
+					];
+				})->values();
+				$payload['content'] = $seasons;
 			}
-			$response->status(HttpOkay)->message('Success')->setValue('data', $seasons);
+			$response->status(HttpOkay)->message('Success')->setValue('data', $payload);
 		}
 		catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('No video/tv-series found for given key.')->setValue('data');

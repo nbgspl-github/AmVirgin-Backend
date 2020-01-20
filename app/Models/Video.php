@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\App\Customer\Playback\TrailerPlayback;
 use App\Traits\ActiveStatus;
 use App\Traits\FluentConstructor;
 use App\Traits\RetrieveCollection;
@@ -199,7 +200,8 @@ class Video extends Model{
 	 * @return string
 	 */
 	public function getTrailer(): string{
-		return $this->trailer;
+		$playback = new TrailerPlayback();
+		return $playback->series($this->slug);
 	}
 
 	/**
@@ -263,7 +265,7 @@ class Video extends Model{
 	 * @return float
 	 */
 	public function getRating(): float{
-		return $this->rating;
+		return round($this->rating, 2);
 	}
 
 	/**
@@ -447,6 +449,7 @@ class Video extends Model{
 	 * @return $this
 	 */
 	public function setQualitySlug(Collection $mediaQualities){
+		$mediaQualities = $mediaQualities->unique('name');
 		$mediaQualities->transform(function (MediaQuality $quality){
 			return $quality->getName();
 		});
@@ -466,6 +469,7 @@ class Video extends Model{
 	 * @return $this
 	 */
 	public function setLanguageSlug(Collection $mediaLanguages){
+		$mediaLanguages = $mediaLanguages->unique('name');
 		$mediaLanguages->transform(function (MediaLanguage $language){
 			return $language->getName();
 		});

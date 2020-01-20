@@ -18,13 +18,15 @@ use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 use stdClass;
 use Throwable;
 
 class TvSeriesController extends BaseController{
 	use FluentResponse;
 	use ValidatesRequest;
+	use HasSlug;
 
 	public function __construct(){
 		parent::__construct();
@@ -75,7 +77,6 @@ class TvSeriesController extends BaseController{
 			 */
 			$video = Video::create([
 				'title' => $validated['title'],
-				'slug' => Str::slug($validated['title']),
 				'description' => $validated['description'],
 				'duration' => $validated['duration'],
 				'released' => $validated['released'],
@@ -96,7 +97,6 @@ class TvSeriesController extends BaseController{
 				'price' => isset($validated['price']) ? $validated['price'] : 0.00,
 				'hasSeasons' => true,
 			]);
-			$video->generateSlug();
 			$video->save();
 			$response = $this->success()->message('Tv series details were successfully saved. Please proceed to next step.');
 		}
@@ -160,6 +160,10 @@ class TvSeriesController extends BaseController{
 		finally {
 			return $response->send();
 		}
+	}
+
+	public function getSlugOptions(): SlugOptions{
+		return SlugOptions::create()->generateSlugsFrom('title')->saveSlugsTo('slug');
 	}
 
 	protected function replaceTrendingItem($chosenRank){
@@ -295,8 +299,8 @@ class TvSeriesController extends BaseController{
 		try {
 			$video = Video::retrieveThrows($id);
 			$payload = $this->requestValid(request(), $this->rules('update')['content']);
-			$sources = isset($payload['sources']) ? $payload['sources'] : [];
-			$videos = isset($payload['videos']) ? $payload['videos'] : [];
+			$sources = isset($payload['source']) ? $payload['source'] : [];
+			$videos = isset($payload['video']) ? $payload['video'] : [];
 			$qualities = $payload['quality'];
 			$episodes = $payload['episode'];
 			$languages = $payload['language'];
@@ -306,8 +310,8 @@ class TvSeriesController extends BaseController{
 			$durations = $payload['duration'];
 			$count = count($videos);
 			for ($i = 0; $i < $count; $i++) {
-				$source = VideoSource::find($sources[$i]);
-				if ($sources[$i] != null && $source != null) {
+				$source = isset($sources[$i]) ? VideoSource::find($sources[$i]) : null;
+				if ($source != null) {
 					$fields = [
 						'title' => $titles[$i],
 						'description' => $descriptions[$i],
@@ -360,10 +364,11 @@ class TvSeriesController extends BaseController{
 			$response->status(HttpOkay)->message('Video content was updated successfully.');
 		}
 		catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find video or that key.');
+			$response->status(HttpResourceNotFound)->message('Could not find video for that key.');
 		}
 		catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			dd($exception);
+			$response->status(HttpServerError)->message($exception->getTraceAsString());
 		}
 		finally {
 			return $response->send();
