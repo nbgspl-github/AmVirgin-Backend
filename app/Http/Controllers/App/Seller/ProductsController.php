@@ -32,16 +32,16 @@ use FluentResponse;
 	}
 
 	public function index(){
-		$Getproducts = Product::all();
+	$sellerId = $this->user()->getKey();
+		$Getproducts = Product::where('sellerId', '=', $sellerId)->get();
+		$GetproductsImages = ProductImage::all();
 		//multipal image upload
-	if ($Getproducts == null) {
-			 $response=$this->error()->message('product not found !');
+	  if ($Getproducts == null) {
+			 $response=$this->error()->message('Product not found !');
 			}else {
-
-
 			$success['products-data'] = $Getproducts;
 			//$response= response()->json(['response'=>$success]);
-			$response = $this->success()->status(HttpCreated)->setValue('data', $success)->message(__('product details successfully'));
+			$response = $this->success()->status(HttpCreated)->setValue('data', $success)->message(__('All products show successfully'));
 	}
 			return $response->send();
 	}
