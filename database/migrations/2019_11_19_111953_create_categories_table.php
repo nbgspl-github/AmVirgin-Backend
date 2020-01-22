@@ -15,7 +15,6 @@ class CreateCategoriesTable extends Migration {
 			$table->bigIncrements('id');
 			$table->string('name', 250);
 			$table->bigInteger('parentId');
-			$table->string('icon', 250);
 			$table->string('description', 2048)->nullable();
 			$table->boolean('visibility')->default(true);
 			$table->string('poster', 256)->nullable();

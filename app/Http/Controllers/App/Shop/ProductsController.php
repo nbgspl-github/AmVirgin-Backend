@@ -33,19 +33,19 @@ use FluentResponse;
 	{   
         $response = null;
         try{
-            
-        $validator = Validator::make($request->all(), [ 
-        'offset'    => 'required',
-        'limit'     => 'required',
-        ]);
-        if ($validator->fails()) { 
-          return response()->json(['response'=>$validator->errors()], 500);
-                      
-        }
-        $offset = $request->input('offset');
-        $limit = $request->input('limit');
-        $sort = array("field"=>"id" , "key"=>"desc");
-        if($request->has('sort'))
+	        $data = null;
+	        $validator = Validator::make($request->all(), [
+		        'offset' => 'required',
+		        'limit' => 'required',
+	        ]);
+	        if ($validator->fails()) {
+		        return response()->json(['response' => $validator->errors()], 500);
+
+	        }
+	        $offset = $request->input('offset');
+	        $limit = $request->input('limit');
+	        $sort = ["field" => "id", "key" => "desc"];
+	        if($request->has('sort'))
         {  
             if($request->sort == "Oldest")
             {
