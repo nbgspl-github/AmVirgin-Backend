@@ -15,8 +15,9 @@ class Methods extends stdClass{
 	const Show = "show";
 	const Send = "send";
 	const Seller = "seller";
+	const ChooseAction = 'choose';
 
-	public static function auth() {
+	public static function auth(){
 		return new AuthMethods();
 	}
 }

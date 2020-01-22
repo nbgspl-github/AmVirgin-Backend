@@ -213,7 +213,7 @@
 												<div class="card-body p-0 rounded">
 													<div class="row">
 														<div class="col-12 text-center">
-															<img id="backdropPreview" class="img-fluid" style="max-height: 298px!important; min-height: 298px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
+															<img id="backdropPreview" class="img-fluid" style="max-height: 346px!important; min-height: 346px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
 														</div>
 													</div>
 												</div>
@@ -227,30 +227,30 @@
 															<input id="pickBackdrop" type="file" name="backdrop" onclick="this.value=null;" onchange="previewBackdrop(event);" class="form-control" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('backdrop')}}">
 														</div>
 														<div class="col-12">
-															<h3 class="my-0 header-title">Snapshots (Max 6 of 5MB each) <span class="text-warning">(Max 5MB)</span></h3>
+															<h3 class="my-0 header-title">Snapshots <span class="text-warning">(Max 6 of upto 5MB each)</span></h3>
 														</div>
 													</div>
 												</div>
-												<div class="row">
-													<div class="col-4">
-														<img id="backdropPreview" class="img-fluid" style="max-height: 100px!important; min-height: 100px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
+												<div class="row px-3 pt-3 pb-0">
+													<div class="col-4 pr-0 pb-0">
+														<img id="backdropPreview" class="img-fluid rounded" style="max-height: 150px!important; min-height: 150px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
 													</div>
-													<div class="col-4">
-														<img id="backdropPreview" class="img-fluid" style="max-height: 100px!important; min-height: 100px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
+													<div class="col-4 pr-0 pb-0">
+														<img id="backdropPreview" class="img-fluid rounded" style="max-height: 150px!important; min-height: 150px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
 													</div>
-													<div class="col-4">
-														<img id="backdropPreview" class="img-fluid" style="max-height: 100px!important; min-height: 100px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
+													<div class="col-4 pb-0">
+														<img id="backdropPreview" class="img-fluid rounded" style="max-height: 150px!important; min-height: 150px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
 													</div>
 												</div>
-												<div class="row">
-													<div class="col-4">
-														<img id="backdropPreview" class="img-fluid" style="max-height: 100px!important; min-height: 100px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
+												<div class="row p-3">
+													<div class="col-4 pr-0">
+														<img id="backdropPreview" class="img-fluid rounded" style="max-height: 150px!important; min-height: 150px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
+													</div>
+													<div class="col-4 pr-0">
+														<img id="backdropPreview" class="img-fluid rounded" style="max-height: 150px!important; min-height: 150px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
 													</div>
 													<div class="col-4">
-														<img id="backdropPreview" class="img-fluid" style="max-height: 100px!important; min-height: 100px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
-													</div>
-													<div class="col-4">
-														<img id="backdropPreview" class="img-fluid" style="max-height: 100px!important; min-height: 100px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
+														<img id="backdropPreview" class="img-fluid rounded" style="max-height: 150px!important; min-height: 150px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
 													</div>
 												</div>
 											</div>
@@ -259,11 +259,12 @@
 								</div>
 							</div>
 						</div>
-						<div class="card-footer">
-							<div class="form-row">
-								<div class="col-6">
-									<button type="submit" class="btn btn-primary waves-effect waves-light btn-block shadow-sm">
-										Update
+					</div>
+					<div class="card-footer">
+						<div class="form-row">
+							<div class="col-6">
+								<button type="submit" class="btn btn-primary waves-effect waves-light btn-block shadow-sm">
+									Update
 								</button>
 							</div>
 							<div class="col-6 pl-sm-3">
