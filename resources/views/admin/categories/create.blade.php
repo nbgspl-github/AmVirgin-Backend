@@ -22,7 +22,7 @@
 											<optgroup label="{{$item->name}}">
 												<option value="{{$item->id}}">{{$item->name}}</option>
 												@foreach($item->subItems as $subItem)
-													<option value="$subItem->id">{{$subItem->name}}</option>
+													<option value="{{ $subItem->id }}">{{$subItem->name}}</option>
 												@endforeach
 											</optgroup>
 										@endforeach

@@ -14,6 +14,8 @@ use App\Http\Controllers\App\Seller\CountriesController;
 use App\Http\Controllers\App\Seller\CurrenciesController;
 use App\Http\Controllers\App\Seller\ProductsController as SellerProductsController;
 use App\Http\Controllers\App\Seller\TwoFactorAuthController as Seller2FAuth;
+use App\Http\Controllers\App\Shop\CategoryController as ShopCategoryController;
+use App\Http\Controllers\App\Shop\ProductsController as ShopProductsController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -75,6 +77,25 @@ Route::prefix('seller')->group(function () use ($sellerMiddleware){
 
 	Route::prefix('countries')->group(function (){
 		Route::get('/', [CountriesController::class, 'index'])->name('seller.countries.index');
+	});
+});
+
+
+/**
+ * | Shop API Route(s)
+ */
+Route::prefix('shop')->group(function (){
+	Route::prefix('category')->group(function (){
+	 Route::get('/', [ShopCategoryController::class, 'index']);
+	});
+	  
+	Route::prefix('products')->group(function (){
+	  Route::post('/', [ShopProductsController::class, 'index']);
+	  Route::post('/details/{id}', [ShopProductsController::class, 'details']);
+	  Route::post('/categoryby/{id}', [ShopProductsController::class, 'categoryby']);
+	  Route::post('/addtocart', [ShopProductsController::class, 'addtocart']);
+	  Route::get('cart/{id}', [ShopProductsController::class, 'cart']);
+	  
 	});
 });
 

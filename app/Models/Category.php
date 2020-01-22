@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use App\Traits\GenerateUrls;
 use App\Traits\RetrieveResource;
@@ -18,7 +18,9 @@ class Category extends Model{
 		'parentId',
 		'description',
 		'visibility',
+		'icon',
 		'poster',
+
 	];
 
 	/**
