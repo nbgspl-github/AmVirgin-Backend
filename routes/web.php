@@ -87,7 +87,7 @@ Route::prefix('admin')->group(function (){
 		// VideoSeries Route(s)
 		Route::prefix('tv-series')->middleware('auth:admin')->group(function (){
 			Route::get('', [TvSeriesController::class, Methods::Index])->name('admin.tv-series.index');
-			Route::get('action/{id}', [TvSeriesController::class, Methods::ChooseAction])->name('admin.tv-series.edit.action');
+			Route::get('actions/{id}', [TvSeriesController::class, Methods::ChooseAction])->name('admin.tv-series.edit.action');
 			Route::get('create', [TvSeriesController::class, Methods::Create])->name('admin.tv-series.create');
 			Route::get('/{slug}', [TvSeriesController::class, Methods::Show])->name('admin.tv-series.show');
 			Route::get('{id}/edit/attributes', [TvSeriesController::class, Methods::Edit])->name('admin.tv-series.edit.attributes')->defaults('type', 'attributes');
