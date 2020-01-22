@@ -41,7 +41,7 @@ use FluentResponse;
 			}else {
 			$success['products-data'] = $Getproducts;
 			//$response= response()->json(['response'=>$success]);
-			$response = $this->success()->status(HttpCreated)->setValue('data', $success)->message(__('All products show successfully'));
+			$response = $this->success()->status(HttpOkay)->setValue('data', $success)->message(__('All products show successfully'));
 	}
 			return $response->send();
 	}
@@ -51,21 +51,19 @@ use FluentResponse;
 	public function edit($id = null){
 		$product = Product::where('id', '=', $id)->get();
 		//multipal image upload
-	if ($product == null) {
-			$response=$this->error()->message('product not found !');
-			}else {
-   		$productimage=ProductImage::where('productId', '=', $id)->get();
+		if ($product == null) {
+		$response=$this->error()->message('product not found !');
+		}else {
+		$success['images']=array();
+		$productimage=ProductImage::where('productId', '=', $id)->get();
 
-	  		foreach ($productimage as $key => $value) {
-		  	     $success['images'][]=$value['path'];
-			  }
-			$success['products-data'] = $product;
-
-
-			//$response= response()->json(['response'=>$success]);
-			$response = $this->success()->status(HttpCreated)->setValue('data', $success)->message(__('product details successfully'));
-	}
-			return $response->send();
+		foreach ($productimage as $key => $value) {
+		  $success['images'][]=$value['path'];
+		}
+		$success['products-data'] = $product;
+		$response = $this->success()->status(HttpOkay)->setValue('data', $success)->message(__('product details successfully'));
+		}
+		return $response->send();
 	}
 
 
@@ -77,55 +75,56 @@ use FluentResponse;
 		try {
 			$this->requestValid($request, $this->rules('store'));
 			$product = Product::create([
-				'name' => $request->productName,
-				'slug' => Str::slug($request->productName),
-				'categoryId' => $request->categoryId,
-				'sellerId' => $sellerId,
-				'productType' => $request->productType,
-				'productMode' => $request->productMode,
-				'listingType' => $request->listingType,
-				'originalPrice' => $request->originalPrice,
-				'offerValue' => $request->offerValue,
-				'offerType' => $request->offerType,
-				'currency' => $request->currency,
-				'taxRate' => $request->taxRate,
-				'countryId' => $request->countryId,
-				'stateId' => $request->stateId,
-				'cityId' => $request->cityId,
-				'zipCode' => $request->zipCode,
-				'address' => $request->address,
-				'status' => $request->status,
-				'promoted' => $request->promoted,
-				'promotionStart' => date('Y-m-d H:i:s', strtotime($request->promotionStart)),
-				'promotionEnd' => date('Y-m-d H:i:s', strtotime($request->promotionEnd)),
-				'visibility' => $request->visibility,
-				'stock' => $request->stock,
-				'shippingCostType' => $request->shippingCostType,
-				'shippingCost' => $request->shippingCost,
-				'soldOut' => $this->isSoldOut($request),
-				'draft' => $request->draft,
-				'shortDescription' => $request->shortDescription,
-				'longDescription' => $request->longDescription,
-				'sku' => $request->sku,
+			'name' => $request->productName,
+			'slug' => Str::slug($request->productName),
+			'categoryId' => $request->categoryId,
+			'sellerId' => $sellerId,
+			'productType' => $request->productType,
+			'productMode' => $request->productMode,
+			'listingType' => $request->listingType,
+			'originalPrice' => $request->originalPrice,
+			'offerValue' => $request->offerValue,
+			'offerType' => $request->offerType,
+			'currency' => $request->currency,
+			'taxRate' => $request->taxRate,
+			'countryId' => $request->countryId,
+			'stateId' => $request->stateId,
+			'cityId' => $request->cityId,
+			'zipCode' => $request->zipCode,
+			'address' => $request->address,
+			'status' => $request->status,
+			'promoted' => $request->promoted,
+			'promotionStart' => date('Y-m-d H:i:s', strtotime($request->promotionStart)),
+			'promotionEnd' => date('Y-m-d H:i:s', strtotime($request->promotionEnd)),
+			'visibility' => $request->visibility,
+			'stock' => $request->stock,
+			'shippingCostType' => $request->shippingCostType,
+			'shippingCost' => $request->shippingCost,
+			'soldOut' => $this->isSoldOut($request),
+			'draft' => $request->draft,
+			'shortDescription' => $request->shortDescription,
+			'longDescription' => $request->longDescription,
+			'sku' => $request->sku,
 			]);
 
-	  $productId=$product->getKey();
-      //multipal image upload
-		if (count($images)>0 && $productId !='') {
-							foreach ($images as $files) {
-								$destinationPath = 'public/products'; // upload path
-								$profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
-								$files->move($destinationPath, $profileImage);
-								$path=$destinationPath.'/'.$profileImage;
-								ProductImage::create([
-										'productId'=>$productId,
-										'path' => $path,
-										'tag' => Str::slug('Product image'),
-									]);
-							}
-						}
+		$productId=$product->getKey();
+		//multipal image upload
+			if (count($images)>0 && $productId !='') 
+			{
+					foreach ($images as $files) {
+						$destinationPath = 'products'; // upload path
+						$profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
+						$files->move($destinationPath, $profileImage);
+						$path=$destinationPath.'/'.$profileImage;
+						ProductImage::create([
+								'productId'=>$productId,
+								'path' => $path,
+								'tag' => Str::slug('Product image'),
+							]);
+					}
+				}
 
-			$response = $this->success()->status(HttpCreated)->setValue('data', $product)->message(__('strings.product.insert.success'));
+			$response = $this->success()->status(HttpCreated)->setValue('data', $product)->message(__('successfully add products'));
 		}
 		catch (ValidationException $exception) {
 			$response = $this->failed()->status(HttpInvalidRequestFormat)->message($exception->getError());
@@ -235,7 +234,7 @@ use FluentResponse;
 		   }
 
 				foreach ($Newimages as $files) {
-					$destinationPath = 'public/products/'; // upload path
+					$destinationPath = 'products/'; // upload path
 					$profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
 					$files->move($destinationPath, $profileImage);
 					$path=$destinationPath.'/'.$profileImage;
@@ -250,21 +249,21 @@ use FluentResponse;
 
 		if($validator->fails()){
 			  // $response = $this->error()->message($validator->getMessage());
-			  $response = $this->error()->message('product not updated !');
+			  $response = $this->failed()->status(HttpResourceNotFound);
 		}else{
 			$products = Product::retrieve($productId);
 			if ($products == null){
-				$response = $this->error()->message('product not found !');
+				$response = $this->failed()->status(HttpResourceNotFound);
 			}else {
 				$update = Product::find($productId);
 				Product::where('id', $productId)->update($data);
-				$response = $this->success()->message(__('product updated successfully'));
+				$response = $this->success()->status(HttpOkay)->message(__('product updated successfully'));
 			}
-
 
 		}
 
 	return $response->send();
+
  }
 
 	public function patch(Request $request, $id){
@@ -273,14 +272,27 @@ use FluentResponse;
 
 	public function delete($id){
 			$response = null;
+	  try{  
 			$product = Product::find($id);
-			if ($product != null) {
-			$product->delete();
-			$response = $this->success()->message(__('product delete successfully'));
-		}else {
-			$response = $this->error()->message(__('failed to delete product'));
+			$productimage = ProductImage::where('productId',$id)->select('id')->get();
+			
+			if ($product == null) {
+				$response = $this->failed()->status(HttpResourceNotFound);
 			}
-			return $response->send();
+		  $product->delete();
+		  ProductImage::destroy($productimage->toArray());
+	      $response = $this->success()->status(HttpOkay)->message(__('product deleted successfully'));
+		}
+
+			catch (ModelNotFoundException $exception) {
+				$response = $this->failed()->status(HttpResourceNotFound);
+			}
+			catch (Exception $exception) {
+				$response = $this->error()->message($exception->getMessage());
+			}
+			finally {
+				return $response->send();
+			}
 	}
 
 	protected function parentProvider(){

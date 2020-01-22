@@ -109,7 +109,7 @@ use FluentResponse;
                 'images'=>$productsimage,    
             );    
             }
-          $response = $this->success()->status(HttpCreated)->setValue('data', $success)->message(__('All products show successfully'));
+          $response = $this->success()->status(HttpOkay)->setValue('data', $success)->message(__('All products show successfully'));
         }
     } 
         catch (ValidationException $exception) {
@@ -125,10 +125,16 @@ use FluentResponse;
     
     public function details($id=null){
         $Getproduct = Product::where('id',$id)->get();
-        $Getproductsimages= ProductImage::where('productId',$id)->select('productId','path','tag')->get();
-        $success['images']=$Getproductsimages;
-        $success['details']=$Getproduct;
-        $response = $this->success()->status(HttpCreated)->setValue('data', $success)->message(__('All products show successfully'));
+        if(! count($Getproduct)>0){
+            $response = $this->failed()->status(HttpResourceNotFound)->message(__(' Product not found'));
+        }else{
+            $Getproductsimages= ProductImage::where('productId',$id)->select('productId','path','tag')->get();
+            $success['images']=$Getproductsimages;
+            $success['details']=$Getproduct;
+            $response = $this->success()->status(HttpOkay)->setValue('data', $success)->message(__('All products show successfully'));
+        }
+        
+        
         return $response->send();
     }
     
@@ -212,7 +218,7 @@ use FluentResponse;
                 'images'=>$productsimage,    
             );    
             }
-          $response = $this->success()->status(HttpCreated)->setValue('data', $success)->message(__('All products show successfully'));
+          $response = $this->success()->status(HttpOkay)->setValue('data', $success)->message(__('All products show successfully'));
         }
     } 
         catch (ValidationException $exception) {
@@ -264,7 +270,7 @@ use FluentResponse;
                 $product['cartdata']= Product::where('id', $cartsdata['productId'])->select('id','name','originalPrice','currency')->get();
                 
             }
-            $response = $this->success()->status(HttpCreated)->setValue('data', $product)->message(__('show cart'));
+            $response = $this->success()->status(HttpOkay)->setValue('data', $product)->message(__('show cart'));
         
         }
         catch (ValidationException $exception) {

@@ -76,7 +76,7 @@ use FluentResponse;
 				'category'=>$category_data
 				);
 			}
-              $response = $this->success()->status(HttpCreated)->setValue('Maincategory', $parientArr)
+              $response = $this->success()->status(HttpOkay)->setValue('Maincategory', $parientArr)
 				->message(__(' Category show successfully'));
 			}
 			
