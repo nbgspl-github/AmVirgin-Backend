@@ -5,3 +5,7 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+/webServers.xml
+!/deployment.xml
+!/webServers.xml
+!/dataSources.xml
