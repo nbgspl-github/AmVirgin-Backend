@@ -18,7 +18,9 @@ class Category extends Model{
 		'parentId',
 		'description',
 		'visibility',
+		'icon',
 		'poster',
+
 	];
 
 	/**
