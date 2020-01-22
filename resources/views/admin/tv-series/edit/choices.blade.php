@@ -8,7 +8,7 @@
 				</div>
 				<div class="card-body animatable">
 					<div class="row">
-						<img src="{{\Illuminate\Support\Facades\Storage::disk('secured')->url($payload->getBackdrop())}}" class="img-fluid" alt="Responsive image">
+						<img src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}" class="img-fluid" alt="Responsive image">
 					</div>
 					<div class="row">
 						<div class="col-sm-6">
