@@ -43,7 +43,8 @@
 											<input id="trailer" type="file" placeholder="Choose a trailer video file..." name="trailer" class="form-control" style="height: unset; padding-left: 6px">
 										</div>
 										<div class="form-group">
-											<div class="embed-responsive embed-responsive-16by9 rounded-lg">
+											<label for="trailer">Current trailer</label>
+											<div class="embed-responsive embed-responsive-16by9 rounded-lg border">
 												<iframe class="embed-responsive-item" src="{{$payload->getTrailer()}}"></iframe>
 											</div>
 										</div>
@@ -194,7 +195,7 @@
 												</div>
 											</div>
 										</div>
-										<div class="form-group pb-0 mb-0">
+										<div class="form-group">
 											<div class="card shadow-none bg-white" style="border: 1px solid #ced4da;">
 												<div class="card-header">
 													<div class="row">
@@ -218,16 +219,51 @@
 												</div>
 											</div>
 										</div>
+										<div class="form-group pb-0 mb-0">
+											<div class="card shadow-none bg-white" style="border: 1px solid #ced4da;">
+												<div class="card-header">
+													<div class="row">
+														<div class="d-none">
+															<input id="pickBackdrop" type="file" name="backdrop" onclick="this.value=null;" onchange="previewBackdrop(event);" class="form-control" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('backdrop')}}">
+														</div>
+														<div class="col-12">
+															<h3 class="my-0 header-title">Snapshots (Max 6 of 5MB each) <span class="text-warning">(Max 5MB)</span></h3>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-4">
+														<img id="backdropPreview" class="img-fluid" style="max-height: 100px!important; min-height: 100px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
+													</div>
+													<div class="col-4">
+														<img id="backdropPreview" class="img-fluid" style="max-height: 100px!important; min-height: 100px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
+													</div>
+													<div class="col-4">
+														<img id="backdropPreview" class="img-fluid" style="max-height: 100px!important; min-height: 100px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-4">
+														<img id="backdropPreview" class="img-fluid" style="max-height: 100px!important; min-height: 100px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
+													</div>
+													<div class="col-4">
+														<img id="backdropPreview" class="img-fluid" style="max-height: 100px!important; min-height: 100px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
+													</div>
+													<div class="col-4">
+														<img id="backdropPreview" class="img-fluid" style="max-height: 100px!important; min-height: 100px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
+													</div>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<div class="card-footer">
-						<div class="form-row">
-							<div class="col-6">
-								<button type="submit" class="btn btn-primary waves-effect waves-light btn-block shadow-sm">
-									Update
+						<div class="card-footer">
+							<div class="form-row">
+								<div class="col-6">
+									<button type="submit" class="btn btn-primary waves-effect waves-light btn-block shadow-sm">
+										Update
 								</button>
 							</div>
 							<div class="col-6 pl-sm-3">
