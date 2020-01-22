@@ -5,6 +5,7 @@ use App\Http\Controllers\BaseController;
 use App\Interfaces\StatusCodes;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductCart;
 use App\Models\ProductImage;
 use App\Traits\FluentResponse;
 use Illuminate\Support\Facades\Validator;
@@ -30,12 +31,16 @@ use FluentResponse;
 
 	public function index(Request $request)
 	{   
+        $response = null;
+        try{
+            
         $validator = Validator::make($request->all(), [ 
         'offset'    => 'required',
         'limit'     => 'required',
         ]);
         if ($validator->fails()) { 
-        return response()->json(['response'=>$validator->errors()], 500);            
+          return response()->json(['response'=>$validator->errors()], 500);
+                      
         }
         $offset = $request->input('offset');
         $limit = $request->input('limit');
@@ -55,9 +60,12 @@ use FluentResponse;
             $sort = array("field"=>"originalPrice" , "key"=>"desc");
             }
         }
+        //if($categoryid)
         $Getproducts = Product::orderBy($sort['field'],$sort['key'])->offset($offset)->limit($limit)->get();
-        if ($Getproducts == null) {
-           $response=$this->error()->message('Product not found !');
+
+        if (count($Getproducts)==0) {
+            $response = $this->failed()->status(HttpResourceNotFound)->message(__(' Products not found'));;
+      
         }else {
             foreach($Getproducts as $pdata){
             $productsimage= ProductImage::where('productId',$pdata['id'])->select('productId','path','tag')->get();
@@ -101,9 +109,18 @@ use FluentResponse;
                 'images'=>$productsimage,    
             );    
             }
-        $response = $this->success()->status(HttpCreated)->setValue('data', $success)->message(__('All products show successfully'));
+          $response = $this->success()->status(HttpCreated)->setValue('data', $success)->message(__('All products show successfully'));
         }
-        return $response->send();
+    } 
+        catch (ValidationException $exception) {
+			$response = $this->failed()->status(HttpInvalidRequestFormat)->message($exception->getError());
+		}
+		catch (Throwable $exception) {
+			$response = $this->error()->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
     }
     
     public function details($id=null){
@@ -117,12 +134,16 @@ use FluentResponse;
     
     public function categoryby(Request $request,$categoryId=null)
 	{   
+        $response = null;
+        try{
+            
         $validator = Validator::make($request->all(), [ 
         'offset'    => 'required',
         'limit'     => 'required',
         ]);
         if ($validator->fails()) { 
-        return response()->json(['response'=>$validator->errors()], 500);            
+          return response()->json(['response'=>$validator->errors()], 500);
+                      
         }
         $offset = $request->input('offset');
         $limit = $request->input('limit');
@@ -145,8 +166,9 @@ use FluentResponse;
         //if($categoryid)
         $Getproducts = Product::where('categoryId',$categoryId)->orderBy($sort['field'],$sort['key'])->offset($offset)->limit($limit)->get();
 
-        if ($Getproducts == null) {
-           $response=$this->error()->message('Product not found !');
+        if (count($Getproducts)==0) {
+            $response = $this->failed()->status(HttpResourceNotFound)->message(__(' Product not found'));
+      
         }else {
             foreach($Getproducts as $pdata){
             $productsimage= ProductImage::where('productId',$pdata['id'])->select('productId','path','tag')->get();
@@ -190,28 +212,74 @@ use FluentResponse;
                 'images'=>$productsimage,    
             );    
             }
-        $response = $this->success()->status(HttpCreated)->setValue('data', $success)->message(__('All products show successfully'));
+          $response = $this->success()->status(HttpCreated)->setValue('data', $success)->message(__('All products show successfully'));
         }
-        return $response->send();
+    } 
+        catch (ValidationException $exception) {
+			$response = $this->failed()->status(HttpInvalidRequestFormat)->message($exception->getError());
+		}
+		catch (Throwable $exception) {
+			$response = $this->error()->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
+    }
+    
+   
+    public function addtocart(Request $request){
+        $response = null;
+        try{
+            $this->requestValid($request, [
+                'cartId' => ['bail', 'required'],
+                'productId' => ['bail', 'required', 'numeric', 'min:1', 'max:99999'],
+                
+              ]);
+            $product = ProductCart::create($request->all());
+            $response = $this->success()->status(HttpCreated)->setValue('data', $product)->message(__('cart add successfully'));
+        
+        }
+        
+        catch (ValidationException $exception) {
+			$response = $this->failed()->status(HttpInvalidRequestFormat)->message($exception->getError());
+		}
+		catch (Throwable $exception) {
+			$response = $this->error()->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
     }
 
-    public function addtocart($productId=null){
-        $product= Product::find($productId)->first();
-        if ($product == null) {
-            $response=$this->error()->message('failed to addto cart !');
-         }else {
-            $cart = Session::get('cart');
-            $cart[$product->id] = array(
-            "id" => $product->id,
-            "name" => $product->name,
-            "price" => $product->pictoriginalPrice,
-            "currency" => $product->currency,
-            "taxRate" => $product->taxRate,
-            "qty" => 1,
-            );
-           Session::put('cart', $cart);
+    public function cart($cartId=null){
+        $response = null;
+        try{
+           
+           if($cartId==''){
+            $response = $this->failed()->status(HttpResourceNotFound)->message(__(' cart is empty !'));
+           }
+            $carts = ProductCart::where('cartId',$cartId)->get();
+            foreach($carts as $cartsdata){
+            
+                $product['cartdata']= Product::where('id', $cartsdata['productId'])->select('id','name','originalPrice','currency')->get();
+                
+            }
+            $response = $this->success()->status(HttpCreated)->setValue('data', $product)->message(__('show cart'));
+        
         }
-        $response = $this->success()->status(HttpCreated)->setValue('data', $success)->message(__('addto cart successfully'));
-        return $response->send();
+        catch (ValidationException $exception) {
+			$response = $this->failed()->status(HttpInvalidRequestFormat)->message($exception->getError());
+		}
+		catch (Throwable $exception) {
+			$response = $this->error()->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
     }
+    
+    
+    
+    
+    
 }

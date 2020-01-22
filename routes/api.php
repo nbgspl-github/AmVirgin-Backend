@@ -81,7 +81,8 @@ Route::prefix('shop')->group(function (){
 	  Route::post('/', [ShopProductsController::class, 'index']);
 	  Route::post('/details/{id}', [ShopProductsController::class, 'details']);
 	  Route::post('/categoryby/{id}', [ShopProductsController::class, 'categoryby']);
-	  Route::post('/addtocart/{id}', [ShopProductsController::class, 'addtocart']);
+	  Route::post('/addtocart', [ShopProductsController::class, 'addtocart']);
+	  Route::get('cart/{id}', [ShopProductsController::class, 'cart']);
 	  
 	});
 });

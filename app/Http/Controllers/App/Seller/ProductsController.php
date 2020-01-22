@@ -190,6 +190,7 @@ use FluentResponse;
  		 'sku' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 		]);
 		$data = array(
+		//'name'=>$request->name,	
 		'categoryId' => $request->categoryId,
 		'productType' => $request->productType,
 		'productMode' => $request->productMode,
@@ -220,7 +221,7 @@ use FluentResponse;
 	);
 	//updated image
 	$Newimages = $request->file('files');
-	if(count($Newimages)>0 && $productId !='') {
+	if(! empty($Newimages)) {
 		//delete old image
 		/*$image_path = "/images/filename.ext";  // Value is not URL but directory file path
 		if(File::exists($image_path)) {
@@ -228,7 +229,7 @@ use FluentResponse;
 		}*/
 			$GetImages = ProductImage::where('productId', $productId)->get();
 			if($GetImages !=null){
-         $GetImages->each(function(ProductImage $item){
+            $GetImages->each(function(ProductImage $item){
 					 $item->delete();
 				 });
 		   }
@@ -248,7 +249,8 @@ use FluentResponse;
 
 
 		if($validator->fails()){
-     $response = $this->error()->message($validator->getMessage());
+			  // $response = $this->error()->message($validator->getMessage());
+			  $response = $this->error()->message('product not updated !');
 		}else{
 			$products = Product::retrieve($productId);
 			if ($products == null){
