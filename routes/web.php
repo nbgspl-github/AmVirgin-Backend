@@ -1,6 +1,6 @@
 <?php
 
-use App\Category;
+use App\Models\Category;
 use App\Classes\Methods;
 use App\Http\Controllers\App\Customer\Playback\TrailerPlayback;
 use App\Http\Controllers\Auth\LoginController;
