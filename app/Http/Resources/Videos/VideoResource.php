@@ -20,7 +20,7 @@ class VideoResource extends JsonResource{
 			'released' => $this->released,
 			'cast' => $this->cast,
 			'director' => $this->director,
-			'trailer' => Storage::disk('public')->url($this->trailer),
+			'trailer' => Storage::disk('secured')->url($this->trailer),
 			'poster' => Storage::disk('public')->url($this->getPoster()),
 			'backdrop' => Storage::disk('public')->url($this->getBackdrop()),
 			'genre' => $this->genre->getName(),
