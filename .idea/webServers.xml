@@ -2,14 +2,6 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="d33bdf46-1fff-4a3a-b3f1-5d8832356041" name="Amvirgin CentOS" url="http://34.225.160.186">
-        <fileTransfer host="34.225.160.186" port="22" privateKey="D:\younggeekslightsai..ppk" accessType="SFTP" keyPair="true">
-          <advancedOptions>
-            <advancedOptions dataProtectionLevel="Private" muteSftpMessages="true" passiveMode="true" shareSSLContext="true" />
-          </advancedOptions>
-          <option name="port" value="22" />
-        </fileTransfer>
-      </webServer>
       <webServer id="4eacda5e-62b3-4dd8-9881-3e624b346f74" name="Amvirgin EC2" url="http://3.6.127.206">
         <fileTransfer host="3.6.127.206" port="22" privateKey="D:\Amvirgin.ppk" accessType="SFTP" keyPair="true">
           <advancedOptions>

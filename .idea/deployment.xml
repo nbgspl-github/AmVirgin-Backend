@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="Amvirgin CentOS">
+  <component name="PublishConfigData">
     <serverData>
-      <paths name="Amvirgin CentOS">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="CodeCrash Droplet">
+      <paths name="Amvirgin EC2">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />

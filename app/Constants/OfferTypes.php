@@ -3,7 +3,7 @@
 namespace App\Constants;
 
 interface OfferTypes{
-	const FlatRate = 0;
+	const FlatRate = 1;
 
-	const Percentage = 1;
+	const Percentage = 2;
 }
