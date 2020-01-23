@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\App\Seller;
 
-use App\Category;
+use App\Models\Category;
 use App\Http\Controllers\BaseController;
 use App\Traits\FluentResponse;
 
