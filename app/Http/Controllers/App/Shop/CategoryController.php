@@ -35,7 +35,7 @@ use FluentResponse;
    public function index(){
 		$response = null;
 		$parientArr=null;
-				$category_data=array();
+				
 				$subcategory_data='null';
 		try{
 			$Maincategorys = Category::where('parentId','0')->get();
