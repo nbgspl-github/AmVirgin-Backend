@@ -290,6 +290,31 @@ return [
 				'active' => ['bail', 'required', Rule::in([0, 1])],
 			],
 		],
+		
+		'categories-banner' => [
+			'store' => [
+				'title' => ['bail', 'required', 'string', 'min:1', 'max:500'],
+				'order' => ['bail', 'required', 'numeric'],
+				'status' => ['bail', 'required', ' boolean'],
+				'sectionTitle' => ['bail', 'nullable', 'string', 'min:1', 'max:500'],
+				'layoutType' => ['bail', 'required', 'string', 'min:1', 'max:100'], 
+				'validFrom' => ['bail', 'required', 'string'],   
+				'validUntil' => ['bail', 'required', 'string'],
+				//'image' => ['bail', 'nullable', 'image'],
+				//'hasValidity' => ['bail', 'required', ' boolean'],
+			],
+			'update' => [
+				'title' => ['bail', 'required', 'string', 'min:1', 'max:500'],
+				'order' => ['bail', 'required', 'numeric'],
+				'status' => ['bail', 'required', ' boolean'],
+				'sectionTitle' => ['bail', 'nullable', 'string', 'min:1', 'max:500'],
+				'layoutType' => ['bail', 'required', 'string', 'min:1', 'max:100'], 
+				'validFrom' => ['bail', 'required', 'string'],   
+				'validUntil' => ['bail', 'required', 'string'],
+				//'image' => ['bail', 'nullable', 'image'],
+				//'hasValidity' => ['bail', 'required', Rule::in([0, 1])],
+			],
+		],
 
 		'categories' => [
 			'store' => [

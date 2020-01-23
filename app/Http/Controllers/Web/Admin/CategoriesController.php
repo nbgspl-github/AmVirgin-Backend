@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers\Web\Admin;
-
 use App\Models\Category;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
