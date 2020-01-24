@@ -39,7 +39,7 @@ use FluentResponse;
 	  if ($Getproducts == null) {
 			 $response=$this->error()->message('Product not found !');
 			}else {
-			$success['products-data'] = $Getproducts;
+			$success['productsData'] = $Getproducts;
 			//$response= response()->json(['response'=>$success]);
 			$response = $this->success()->status(HttpOkay)->setValue('data', $success)->message(__('All products show successfully'));
 	}
