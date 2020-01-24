@@ -18,15 +18,12 @@ use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Storage;
-use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
 use stdClass;
 use Throwable;
 
 class TvSeriesController extends BaseController{
 	use FluentResponse;
 	use ValidatesRequest;
-	use HasSlug;
 
 	public function __construct(){
 		parent::__construct();
@@ -45,6 +42,26 @@ class TvSeriesController extends BaseController{
 		}
 		else {
 			return $this->editContent($id);
+		}
+	}
+
+	public function choose($id){
+		$response = responseWeb();
+		try {
+			$payload = Video::retrieveThrows($id);
+			$response = view('admin.tv-series.edit.choices')->with('payload', $payload);
+		}
+		catch (ModelNotFoundException $exception) {
+			$response->route('admin.tv-series.index')->error('Could not find tv series for that key.');
+		}
+		catch (Throwable $exception) {
+			$response->route('admin.tv-series.index')->error($exception->getMessage());
+		}
+		finally {
+			if ($response instanceof WebResponse)
+				return $response->send();
+			else
+				return $response;
 		}
 	}
 
@@ -160,10 +177,6 @@ class TvSeriesController extends BaseController{
 		finally {
 			return $response->send();
 		}
-	}
-
-	public function getSlugOptions(): SlugOptions{
-		return SlugOptions::create()->generateSlugsFrom('title')->saveSlugsTo('slug');
 	}
 
 	protected function replaceTrendingItem($chosenRank){
