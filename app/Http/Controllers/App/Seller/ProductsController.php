@@ -32,18 +32,53 @@ use FluentResponse;
 	}
 
 	public function index(){
-	$sellerId = $this->user()->getKey();
+		$sellerId = $this->user()->getKey();
 		$Getproducts = Product::where('sellerId', '=', $sellerId)->get();
-		$GetproductsImages = ProductImage::all();
+		//$GetproductsImages = ProductImage::find($productid);
 		//multipal image upload
-	  if ($Getproducts == null) {
-			 $response=$this->error()->message('Product not found !');
-			}else {
-			$success['productsData'] = $Getproducts;
-			//$response= response()->json(['response'=>$success]);
-			$response = $this->success()->status(HttpOkay)->setValue('data', $success)->message(__('All products show successfully'));
-	}
-			return $response->send();
+		if ($Getproducts == null) {
+			$response=$this->error()->message('Product not found !');
+		}else {
+			foreach ($Getproducts as $productdata) {
+				$image=ProductImage::where('productId',$productdata->id)->select('path')->get();
+				$productData[]=array(
+					'image'=>$image,
+					'name' => $productdata->name,
+					'slug' => $productdata->slug,
+					'categoryId' => $productdata->categoryId,
+					'sellerId' => $productdata->sellerId,
+					'productType' => $productdata->productType,
+					'productMode' => $productdata->productMode,
+					'listingType' => $productdata->listingType,
+					'originalPrice' => $productdata->originalPrice,
+					'offerValue' => $productdata->offerValue,
+					'offerType' => $productdata->offerType,
+					'currency' => $productdata->currency,
+					'taxRate' => $productdata->taxRate,
+					'countryId' => $productdata->countryId,
+					'stateId' => $productdata->stateId,
+					'cityId' => $productdata->cityId,
+					'zipCode' => $productdata->zipCode,
+					'address' => $productdata->address,
+					'status' => $productdata->status,
+					'promoted' => $productdata->promoted,
+					'promotionStart' => $productdata->promotionStart,
+					'promotionEnd' => $productdata->promotionEnd,
+					'visibility' => $productdata->visibility,
+					'stock' => $productdata->stock,
+					'shippingCostType' => $productdata->shippingCostType,
+					'shippingCost' => $productdata->shippingCost,
+					'soldOut' => $productdata->soldOut,
+					'draft' => $productdata->draft,
+					'shortDescription' => $productdata->shortDescription,
+					'longDescription' => $productdata->longDescription,
+					'sku' => $productdata->sku,
+				);
+			}
+
+			$response = $this->success()->status(HttpOkay)->setValue('data', $productData)->message(__('All products show successfully'));
+		}
+		return $response->send();
 	}
 
 
