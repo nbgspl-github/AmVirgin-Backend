@@ -19,15 +19,15 @@ class CategoriesBanner extends BaseController{
 		parent::__construct();
 		$this->ruleSet->load('rules.admin.categories-banner');
 	}
-
+	 
 	public function index(){
 		$categories = CategoryBanner::all();
-
+		
 		return view('admin.categories-banner.index')->with('categoriesBanner', $categories);
 	}
-
+	
 	public function create(){
-
+		
 		return view('admin.categories-banner.create');
 	}
 
@@ -35,18 +35,20 @@ class CategoriesBanner extends BaseController{
 		$images=array();
 		$response = null;
 		try {
-			if (count($request->file('image')) > 0) {
-				$i = 0;
+			if (count($request->file('image'))>0) 
+			{    
+				$i=0;
 				foreach ($request->file('image') as $files) {
 					$destinationPath = 'categories-banner'; // upload path
-					$profileImage = $i++ . date('YmdHis') . "." . $files->getClientOriginalExtension();
+					$profileImage = $i++.date('YmdHis') . "." . $files->getClientOriginalExtension();
 					$files->move($destinationPath, $profileImage);
-					$path = $destinationPath . '/' . $profileImage;
-					$images[] = $path;
+					$path=$destinationPath.'/'.$profileImage;
+					$images[]=$path;
 				}
 			}
 			$payload = $this->requestValid($request, $this->rules('store'));
 			$payload['image']=implode(",",$images);
+			//$payload['poster'] = $request->hasFile('images') ? Storage::disk('public')->putFile(Directories::CategoriesBanner, $request->file('image'), 'public') : null;
 			CategoryBanner::create($payload);
 			$response = responseWeb()->route('admin.categories-banner.index')->success('Created category banner successfully.');
 		}
@@ -60,7 +62,7 @@ class CategoriesBanner extends BaseController{
 			return $response->send();
 		}
 	}
-
+    
 	public function edit($id=null){
 		$response = null;
 		$categoriesdata= CategoryBanner::where('id',$id)->first();
@@ -72,21 +74,22 @@ class CategoriesBanner extends BaseController{
 	}
 
 	public function update(Request $request,$id = null){
-
+		
 		$response = null;
 	try {
 		$category = CategoryBanner::retrieveThrows($id);
-		$images = [];
-		//update Directory new image
-		if (count($request->file('image')) > 0) {
-			$oldimage = CategoryBanner::where('id', $id)->select('image')->first();
-			//delete Direcetory old image
-			if (!empty($oldimage->image)) {
-				$oldImagesArr = explode(",", $oldimage->image);
-				$image_path = [];
-				for ($i = 0; $i < count($oldImagesArr); $i++) {
-					$image_path = $oldImagesArr[$i];
-					Storage::disk('secured')->delete($image_path);
+		$images=array();
+			//update Directory new image
+		if (count($request->file('image'))>0) 
+		{    
+			$oldimage=CategoryBanner::where('id',$id)->select('image')->first();
+		    //delete Direcetory old image
+			if(!empty($oldimage->image)){
+				$oldImagesArr=explode(",",$oldimage->image);
+				$image_path=array();
+				for($i=0; $i<count($oldImagesArr); $i++){
+					$image_path=$oldImagesArr[$i];
+					Storage::disk('public')->delete($image_path);
 				}
 			}
 			//Upload New image
@@ -104,6 +107,9 @@ class CategoriesBanner extends BaseController{
 			}
 
 			$payload = $this->requestValid($request, $this->rules('update'));
+			
+		
+		//$payload['poster'] = $request->hasFile('images') ? Storage::disk('public')->putFile(Directories::CategoriesBanner, $request->file('image'), 'public') : null;
 		$category->update($payload);
 		$response = responseWeb()->route('admin.categories-banner.index')->success('Update category banner successfully.');
 	}
@@ -124,20 +130,20 @@ class CategoriesBanner extends BaseController{
 	public function delete($id){
 		$categories = CategoryBanner::whereid($id)->first();
 		try {
-
+			
 			$category = CategoryBanner::retrieveThrows($id);
 			if(!empty($categories->image)){
 				$images=explode(",",$categories->image);
 				$image_path=array();
 				for($i=0;$i<count($images); $i++){
-					$image_path = $images[$i];
-					Storage::disk('secured')->delete($image_path);
+					$image_path=$images[$i];
+					Storage::disk('public')->delete($image_path);
 				}
-
+				
 			}
 			$category->delete();
-
-
+			
+			
 			return $this->success()->message('Category deleted successfully.')->status(HttpOkay)->send();
 		}
 		catch (ModelNotFoundException $exception) {

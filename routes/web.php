@@ -3,6 +3,7 @@
 use App\Classes\Methods;
 use App\Http\Controllers\App\Customer\Playback\TrailerPlayback;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Web\Admin\CategoriesBanner;
 use App\Http\Controllers\Web\Admin\CategoriesController;
 use App\Http\Controllers\Web\Admin\CustomerController;
 use App\Http\Controllers\Web\Admin\GenresController;
@@ -22,6 +23,7 @@ use App\Models\Genre;
 use App\Models\Slider;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use Mockery\Generator\Method;
 
 Route::redirect('/', '/admin');
 
@@ -60,7 +62,17 @@ Route::prefix('admin')->group(function (){
 			Route::put('{id}/status', [SellerController::class, Methods::UpdateStatus])->name('admin.sellers.update.status');
 			Route::delete('{id}', [SellerController::class, Methods::Delete])->name('admin.sellers.delete');
 		});
-
+		
+		//Categories Banner(s)
+		Route::prefix('categories-banner')->middleware('auth:admin')->group(function(){
+		  Route::get('',[CategoriesBanner::class, Methods::Index])->name('admin.categories-banner.index');
+			Route::get('create',[CategoriesBanner::class, Methods::Create])->name('admin.categories-banner.create');
+			Route::get('{id}/edit', [CategoriesBanner::class, Methods::Edit])->name('admin.categories-banner.edit');
+			Route::post('store', [CategoriesBanner::class, Methods::Store])->name('admin.categories-banner.store');
+			Route::post('{id}', [CategoriesBanner::class, Methods::Update])->name('admin.categories-banner.update');
+			Route::delete('{id}', [CategoriesBanner::class, Methods::Delete])->name('admin.categories-banner.delete');
+		  
+		});
 		// Categories Route(s)
 		Route::prefix('categories')->middleware('auth:admin')->group(function (){
 			Route::get('', [CategoriesController::class, Methods::Index])->name('admin.categories.index');
@@ -70,7 +82,8 @@ Route::prefix('admin')->group(function (){
 			Route::post('{id}', [CategoriesController::class, Methods::Update])->name('admin.categories.update');
 			Route::delete('{id}', [CategoriesController::class, Methods::Delete])->name('admin.categories.delete');
 		});
-
+		
+		
 		// Videos Route(s)
 		Route::prefix('videos')->middleware('auth:admin')->group(function (){
 			Route::get('', [VideosController::class, Methods::Index])->name('admin.videos.index');

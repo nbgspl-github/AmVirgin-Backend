@@ -29,15 +29,15 @@
 								<tr id="{{'category_row_'.$category->getKey()}}">
 									<td>{{$loop->index+1}}</td>
 									<td class="text-center">
-										@if($category->image !=null)
-											<?php  $im = explode(",", $category->image);
-
-											?>
-
-											@for ($i =0; $i<count($im); $i++)
-
-												<img src="{{Storage::disk('secured')->url(@$im[$i])}}" style="width: 50px; height: 50px" alt="{{ $category->title }}" @include('admin.extras.tooltip.right', ['title' =>''])/>
-											@endfor
+									@if($category->image !=null)
+							<?php  $im=explode(",", $category->image); 
+							  
+							?>
+								
+									 @for ($i =0; $i<count($im); $i++)
+									 
+										  <img src="{{Storage::disk('public')->url(@$im[$i])}}" style="width: 50px; height: 50px" alt="{{ $category->title }}" @include('admin.extras.tooltip.right', ['title' =>''])/>
+									@endfor
 										@else
 											<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 25px"></i>
 										@endif
