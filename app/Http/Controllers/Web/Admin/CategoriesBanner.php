@@ -46,9 +46,11 @@ class CategoriesBanner extends BaseController{
 					$images[]=$path;
 				}
 			}
+			
 			$payload = $this->requestValid($request, $this->rules('store'));
 			$payload['image']=implode(",",$images);
-			//$payload['poster'] = $request->hasFile('images') ? Storage::disk('public')->putFile(Directories::CategoriesBanner, $request->file('image'), 'public') : null;
+
+			//$payload['image'] = $request->hasFile('image') ? Storage::disk('public')->putFile(Directories::CategoriesBanner, $request->file('image'), 'public') : null;
 			CategoryBanner::create($payload);
 			$response = responseWeb()->route('admin.categories-banner.index')->success('Created category banner successfully.');
 		}

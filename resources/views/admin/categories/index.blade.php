@@ -13,6 +13,7 @@
 							<tr>
 								<th>No.</th>
 								<th>Poster</th>
+								<th>Icon</th>
 								<th>Name</th>
 								<th>Parent Category</th>
 								<th>Description</th>
@@ -27,6 +28,14 @@
 									<td class="text-center">
 										@if($category->getPoster()!=null)
 											<img src="{{Storage::disk('public')->url($category->getPoster())}}" style="width: 100px; height: 100px" alt="{{$category->getName()}}" @include('admin.extras.tooltip.right', ['title' => $category->getName()])/>
+										@else
+											<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 25px"></i>
+										@endif
+									</td>
+									<td class="text-center">
+										@if($category->geticon()!=null)
+										<a href="{{Storage::disk('public')->url($category->geticon())}}">Click to view Icon</a>
+										
 										@else
 											<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 25px"></i>
 										@endif

@@ -102,13 +102,31 @@ class Category extends Model{
 	public function getPoster(): ?string{
 		return $this->poster;
 	}
+	
+	/**
+	 * @return string|null
+	 */
+	public function getIcon(): ?string{
+		return $this->icon;
+	}
 
 	/**
 	 * @param string|null $poster
 	 * @return Category
 	 */
+
 	public function setPoster(?string $poster): Category{
 		$this->poster = $poster;
+		return $this;
+	}
+
+	/**
+	 * @param string|null $Icon
+	 * @return Category
+	 */
+	
+	public function setIcon(?string $icon): Category{
+		$this->icon = $icon;
 		return $this;
 	}
 

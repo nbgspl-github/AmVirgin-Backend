@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use stdClass;
 use Throwable;
-
 class CategoriesController extends BaseController{
 	use ValidatesRequest;
 	use FluentResponse;
@@ -81,6 +80,10 @@ class CategoriesController extends BaseController{
 			if ($request->has('poster')) {
 				$payload['poster'] = Storage::disk('public')->putFile(Directories::Categories, $request->file('poster'), 'public');
 			}
+			
+			if($request->has('icon')){
+				$payload['icon'] = $request->hasFile('icon') ? Storage::disk('public')->putFile(Directories::Categories, $request->file('icon'), 'public') : null;
+			}
 			$category->update($payload);
 			$response = responseWeb()->route('admin.categories.index')->success('Updated category successfully.');
 		}
@@ -102,6 +105,7 @@ class CategoriesController extends BaseController{
 		$response = null;
 		try {
 			$payload = $this->requestValid($request, $this->rules('store'));
+			$payload['icon'] = $request->hasFile('icon') ? Storage::disk('public')->putFile(Directories::Categories, $request->file('icon'), 'public') : null;
 			$payload['poster'] = $request->hasFile('poster') ? Storage::disk('public')->putFile(Directories::Categories, $request->file('poster'), 'public') : null;
 			Category::create($payload);
 			$response = responseWeb()->route('admin.categories.index')->success('Created category successfully.');

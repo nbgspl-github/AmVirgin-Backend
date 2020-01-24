@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Constants\OfferTypes;
 use App\Constants\ProductStatus;
+use App\Interfaces\Directories;
+use Illuminate\Support\Facades\Storage;
 use Throwable;
 class ProductsController extends ResourceController{
 use ValidatesRequest;
@@ -34,18 +36,53 @@ use FluentResponse;
 	public function index(){
 	$sellerId = $this->user()->getKey();
 		$Getproducts = Product::where('sellerId', '=', $sellerId)->get();
-		$GetproductsImages = ProductImage::all();
+		//$GetproductsImages = ProductImage::find($productid);
 		//multipal image upload
 	  if ($Getproducts == null) {
 			 $response=$this->error()->message('Product not found !');
-			}else {
-			$success['products-data'] = $Getproducts;
-			//$response= response()->json(['response'=>$success]);
-			$response = $this->success()->status(HttpOkay)->setValue('data', $success)->message(__('All products show successfully'));
+	  }else {
+			foreach ($Getproducts as $productdata) {
+				$image=ProductImage::where('productId',$productdata->id)->select('path')->get();
+				$productData[]=array(
+				'image'=>$image,
+				'name' => $productdata->name,
+				'slug' => $productdata->slug,
+				'categoryId' => $productdata->categoryId,
+				'sellerId' => $productdata->sellerId,
+				'productType' => $productdata->productType,
+				'productMode' => $productdata->productMode,
+				'listingType' => $productdata->listingType,
+				'originalPrice' => $productdata->originalPrice,
+				'offerValue' => $productdata->offerValue,
+				'offerType' => $productdata->offerType,
+				'currency' => $productdata->currency,
+				'taxRate' => $productdata->taxRate,
+				'countryId' => $productdata->countryId,
+				'stateId' => $productdata->stateId,
+				'cityId' => $productdata->cityId,
+				'zipCode' => $productdata->zipCode,
+				'address' => $productdata->address,
+				'status' => $productdata->status,
+				'promoted' => $productdata->promoted,
+				'promotionStart' => $productdata->promotionStart,
+				'promotionEnd' => $productdata->promotionEnd,
+				'visibility' => $productdata->visibility,
+				'stock' => $productdata->stock,
+				'shippingCostType' => $productdata->shippingCostType,
+				'shippingCost' => $productdata->shippingCost,
+				'soldOut' => $productdata->soldOut,
+				'draft' => $productdata->draft,
+				'shortDescription' => $productdata->shortDescription,
+				'longDescription' => $productdata->longDescription,
+				'sku' => $productdata->sku,
+			   );
+			}
+
+			$response = $this->success()->status(HttpOkay)->setValue('data', $productData)->message(__('All products show successfully'));
 	}
 			return $response->send();
 	}
-
+	
 
 
 	public function edit($id = null){
@@ -108,22 +145,19 @@ use FluentResponse;
 			]);
 
 		$productId=$product->getKey();
+		$storeImage=[];
 		//multipal image upload
-			if (count($images)>0 && $productId !='') 
-			{
-					foreach ($images as $files) {
-						$destinationPath = 'products'; // upload path
-						$profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
-						$files->move($destinationPath, $profileImage);
-						$path=$destinationPath.'/'.$profileImage;
-						ProductImage::create([
-								'productId'=>$productId,
-								'path' => $path,
-								'tag' => Str::slug('Product image'),
-							]);
+			if (count($request->file('files'))>0 && $productId !='') 
+			{         
+					foreach ($request->file('files') as $imgdata) {
+						$productimage=new ProductImage();
+						$productimage->productId=$productId;
+						$productimage->path=Storage::disk('secured')->putFile(Directories::ProductImage,$imgdata,'private');
+						$productimage->tag='Product-Image';
+						$productimage->save();
 					}
 				}
-
+			   
 			$response = $this->success()->status(HttpCreated)->setValue('data', $product)->message(__('successfully add products'));
 		}
 		catch (ValidationException $exception) {
@@ -228,22 +262,20 @@ use FluentResponse;
 		}*/
 			$GetImages = ProductImage::where('productId', $productId)->get();
 			if($GetImages !=null){
-            $GetImages->each(function(ProductImage $item){
+               $GetImages->each(function(ProductImage $item){
 					 $item->delete();
 				 });
 		   }
 
-				foreach ($Newimages as $files) {
-					$destinationPath = 'products/'; // upload path
-					$profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
-					$files->move($destinationPath, $profileImage);
-					$path=$destinationPath.'/'.$profileImage;
-						ProductImage::create([
-							'productId'=>$productId,
-							'path' => $path,
-							'tag' => Str::slug('Product image'),
-					   ]);
-				}
+		   if (count($request->file('files'))>0) 
+		   {      foreach ($request->file('files') as $imgdata) {
+					   $productimage=new ProductImage();
+					   $productimage->productId=$productId;
+					   $productimage->path=Storage::disk('secured')->putFile(Directories::ProductImage,$imgdata,'private');
+					   $productimage->tag='Product-Image';
+					   $productimage->save();
+				   }
+			   }
 		}
 
 
