@@ -60,7 +60,7 @@ use FluentResponse;
 		foreach ($productimage as $key => $value) {
 		  $success['images'][]=$value['path'];
 		}
-		$success['products-data'] = $product;
+		$success['productsData'] = $product;
 		$response = $this->success()->status(HttpOkay)->setValue('data', $success)->message(__('product details successfully'));
 		}
 		return $response->send();
