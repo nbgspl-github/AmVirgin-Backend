@@ -117,7 +117,7 @@ Route::prefix('admin')->group(function (){
 			Route::prefix('{id}/')->group(function (){
 				Route::delete('', [\App\Http\Controllers\Web\Admin\TvSeries\TvSeriesBase::class, 'delete'])->name('admin.tv-series.delete');
 //				Route::delete('content/{id}', [\App\Http\Controllers\Web\Admin\TvSeries\ContentController::class, 'delete'])->name('admin.tv-series.delete.content');
-				Route::delete('snaps/{id}', [\App\Http\Controllers\Web\Admin\TvSeries\SnapsController::class, 'delete'])->name('admin.tv-series.delete.snaps');
+//				Route::delete('snaps/{id}', [\App\Http\Controllers\Web\Admin\TvSeries\SnapsController::class, 'delete'])->name('admin.tv-series.delete.snaps');
 			});
 			Route::get('playback/{slug}', [TrailerPlayback::class, 'series'])->name('admin.tv-series.playback');
 		});
