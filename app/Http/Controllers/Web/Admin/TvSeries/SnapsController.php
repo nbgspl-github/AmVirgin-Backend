@@ -17,7 +17,7 @@ class SnapsController extends TvSeriesBase{
 		try {
 			$payload = Video::findOrFail($id);
 			$snaps = $payload->snaps()->get()->toArray();
-			$response = view('admin.tv-series.attributes.edit')->
+			$response = view('admin.tv-series.snaps.edit')->
 			with('payload', $payload)->
 			with('snaps', $snaps);
 		}
