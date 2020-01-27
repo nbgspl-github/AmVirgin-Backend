@@ -92,7 +92,7 @@ class ProductsController extends ResourceController{
 		$response = $this->response();
 		try {
 			$product = Product::where('slug', $slug)->firstOrFail();
-			$images = $product->images();
+			$images = $product->images()->get();
 			$images->transform(function (ProductImage $image){
 				return Storage::disk('secured')->url($image->path);
 			});
