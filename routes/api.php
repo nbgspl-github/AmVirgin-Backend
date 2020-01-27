@@ -92,13 +92,13 @@ Route::prefix('shop')->group(function (){
 		});
 
 		Route::prefix('products')->group(function (){
-		Route::post('/', [ShopProductsController::class, 'index']);
-		Route::post('/details/{id}', [ShopProductsController::class, 'details']);
-		Route::post('/categoryby/{id}', [ShopProductsController::class, 'categoryby']);	  
+			Route::post('/', [ShopProductsController::class, 'index']);
+			Route::post('/details/{id}', [ShopProductsController::class, 'details']);
+			Route::post('/categoryby/{id}', [ShopProductsController::class, 'categoryby']);	  
 		});
 
 		Route::prefix('cart')->group(function (){
-			Route::get('/', [ShopCartController::class, 'index']);
+			Route::get('/{cartId}', [ShopCartController::class, 'index']);
 			Route::post('/', [ShopCartController::class, 'store']);
 			Route::post('/{id}', [ShopCartController::class, 'delete']);
 		});

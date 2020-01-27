@@ -73,7 +73,7 @@ use FluentResponse;
                 
               ]);
             $product = ProductCart::create($request->all());
-            $response = $this->success()->status(HttpCreated)->setValue('data', $product)->message(__('cart add successfully'));
+            $response = $this->success()->status(HttpCreated)->setValue('data', $product)->message(__('Successfully add to cart'));
         
         }
         
