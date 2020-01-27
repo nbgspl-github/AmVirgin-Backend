@@ -1,0 +1,28 @@
+.alertify .alert > *, .alertify .dialog > * {
+    border-radius: 16px;
+}
+
+.ml12 {
+    font-size: 16px;
+}
+
+.ml12 .letter {
+    display: inline-block;
+    line-height: unset;
+}
+
+.stretched-link {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    pointer-events: auto;
+    content: "";
+    background-color: rgba(0, 0, 0, 0)
+}
+
+.gallery img{
+    height:100px;
+    width:100px;
+}
