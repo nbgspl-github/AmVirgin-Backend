@@ -95,6 +95,7 @@ Route::prefix('shop')->group(function (){
 	  Route::post('/categoryby/{id}', [ShopProductsController::class, 'categoryby']);
 	  Route::post('/addtocart', [ShopProductsController::class, 'addtocart']);
 	  Route::post('/cart', [ShopProductsController::class, 'cart']);
+	  Route::post('/removecart/{id}', [ShopProductsController::class, 'removecart']);
 	  
 	});
 });

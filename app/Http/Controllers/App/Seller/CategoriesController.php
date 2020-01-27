@@ -19,6 +19,8 @@ class CategoriesController extends BaseController{
 				'name' => $category->getName(),
 			];
 		});
+
+		
 		return $this->response()->status(HttpOkay)->setValue('data', $categories)->message(function () use ($categories){
 			return sprintf('Found %d categories.', $categories->count());
 		})->send();

@@ -78,11 +78,11 @@ class CategoriesController extends BaseController{
 			$category = Category::retrieveThrows($id);
 			$payload = $this->requestValid($request, $this->rules('update'));
 			if ($request->has('poster')) {
-				$payload['poster'] = Storage::disk('public')->putFile(Directories::Categories, $request->file('poster'), 'public');
+				$payload['poster'] = Storage::disk('secured')->putFile(Directories::Categories, $request->file('poster'), 'private');
 			}
 			
 			if($request->has('icon')){
-				$payload['icon'] = $request->hasFile('icon') ? Storage::disk('public')->putFile(Directories::Categories, $request->file('icon'), 'public') : null;
+				$payload['icon'] = $request->hasFile('icon') ? Storage::disk('secured')->putFile(Directories::Categories, $request->file('icon'), 'private') : null;
 			}
 			$category->update($payload);
 			$response = responseWeb()->route('admin.categories.index')->success('Updated category successfully.');
@@ -105,8 +105,8 @@ class CategoriesController extends BaseController{
 		$response = null;
 		try {
 			$payload = $this->requestValid($request, $this->rules('store'));
-			$payload['icon'] = $request->hasFile('icon') ? Storage::disk('public')->putFile(Directories::Categories, $request->file('icon'), 'public') : null;
-			$payload['poster'] = $request->hasFile('poster') ? Storage::disk('public')->putFile(Directories::Categories, $request->file('poster'), 'public') : null;
+			$payload['icon'] = $request->hasFile('icon') ? Storage::disk('secured')->putFile(Directories::Categories, $request->file('icon'), 'private') : null;
+			$payload['poster'] = $request->hasFile('poster') ? Storage::disk('secured')->putFile(Directories::Categories, $request->file('poster'), 'private') : null;
 			Category::create($payload);
 			$response = responseWeb()->route('admin.categories.index')->success('Created category successfully.');
 		}
