@@ -23,7 +23,6 @@ use App\Models\Genre;
 use App\Models\Slider;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-use Mockery\Generator\Method;
 
 Route::redirect('/', '/admin');
 
@@ -62,16 +61,16 @@ Route::prefix('admin')->group(function (){
 			Route::put('{id}/status', [SellerController::class, Methods::UpdateStatus])->name('admin.sellers.update.status');
 			Route::delete('{id}', [SellerController::class, Methods::Delete])->name('admin.sellers.delete');
 		});
-		
+
 		//Categories Banner(s)
-		Route::prefix('categories-banner')->middleware('auth:admin')->group(function(){
-		  Route::get('',[CategoriesBanner::class, Methods::Index])->name('admin.categories-banner.index');
-			Route::get('create',[CategoriesBanner::class, Methods::Create])->name('admin.categories-banner.create');
+		Route::prefix('categories-banner')->middleware('auth:admin')->group(function (){
+			Route::get('', [CategoriesBanner::class, Methods::Index])->name('admin.categories-banner.index');
+			Route::get('create', [CategoriesBanner::class, Methods::Create])->name('admin.categories-banner.create');
 			Route::get('{id}/edit', [CategoriesBanner::class, Methods::Edit])->name('admin.categories-banner.edit');
 			Route::post('store', [CategoriesBanner::class, Methods::Store])->name('admin.categories-banner.store');
 			Route::post('{id}', [CategoriesBanner::class, Methods::Update])->name('admin.categories-banner.update');
 			Route::delete('{id}', [CategoriesBanner::class, Methods::Delete])->name('admin.categories-banner.delete');
-		  
+
 		});
 		// Categories Route(s)
 		Route::prefix('categories')->middleware('auth:admin')->group(function (){
@@ -82,8 +81,7 @@ Route::prefix('admin')->group(function (){
 			Route::post('{id}', [CategoriesController::class, Methods::Update])->name('admin.categories.update');
 			Route::delete('{id}', [CategoriesController::class, Methods::Delete])->name('admin.categories.delete');
 		});
-		
-		
+
 		// Videos Route(s)
 		Route::prefix('videos')->middleware('auth:admin')->group(function (){
 			Route::get('', [VideosController::class, Methods::Index])->name('admin.videos.index');
@@ -97,18 +95,30 @@ Route::prefix('admin')->group(function (){
 			Route::delete('{id}', [VideosController::class, Methods::Delete])->name('admin.videos.delete');
 		});
 
-		// VideoSeries Route(s)
+		// TV Series Route(s)
 		Route::prefix('tv-series')->middleware('auth:admin')->group(function (){
 			Route::get('', [TvSeriesController::class, Methods::Index])->name('admin.tv-series.index');
 			Route::get('actions/{id}', [TvSeriesController::class, Methods::ChooseAction])->name('admin.tv-series.edit.action');
 			Route::get('create', [TvSeriesController::class, Methods::Create])->name('admin.tv-series.create');
 			Route::get('/{slug}', [TvSeriesController::class, Methods::Show])->name('admin.tv-series.show');
-			Route::get('{id}/edit/attributes', [TvSeriesController::class, Methods::Edit])->name('admin.tv-series.edit.attributes')->defaults('type', 'attributes');
-			Route::get('{id}/edit/content', [TvSeriesController::class, Methods::Edit])->name('admin.tv-series.edit.content')->defaults('type', 'content');
+			Route::prefix('edit/{id}')->group(function (){
+				Route::get('attributes', [\App\Http\Controllers\Web\Admin\TvSeries\AttributesController::class, 'edit'])->name('admin.tv-series.edit.attributes');
+				Route::get('content', [\App\Http\Controllers\Web\Admin\TvSeries\ContentController::class, 'edit'])->name('admin.tv-series.edit.content');
+				Route::get('media', [\App\Http\Controllers\Web\Admin\TvSeries\MediaController::class, 'edit'])->name('admin.tv-series.edit.media');
+				Route::get('snaps', [\App\Http\Controllers\Web\Admin\TvSeries\SnapsController::class, 'edit'])->name('admin.tv-series.edit.snaps');
+			});
+			Route::prefix('{id}/update')->group(function (){
+				Route::get('attributes', [\App\Http\Controllers\Web\Admin\TvSeries\AttributesController::class, 'edit'])->name('admin.tv-series.update.attributes');
+				Route::get('content', [\App\Http\Controllers\Web\Admin\TvSeries\ContentController::class, 'edit'])->name('admin.tv-series.update.content');
+				Route::get('media', [\App\Http\Controllers\Web\Admin\TvSeries\MediaController::class, 'edit'])->name('admin.tv-series.update.media');
+				Route::get('snaps', [\App\Http\Controllers\Web\Admin\TvSeries\SnapsController::class, 'edit'])->name('admin.tv-series.update.snaps');
+			});
 			Route::post('store', [TvSeriesController::class, Methods::Store])->name('admin.tv-series.store');
-			Route::post('{id}/attributes', [TvSeriesController::class, Methods::Update])->name('admin.tv-series.update.attributes')->defaults('type', 'attributes');
-			Route::post('{id}/content', [TvSeriesController::class, Methods::Update])->name('admin.tv-series.update.content')->defaults('type', 'content');
-			Route::delete('{id}', [TvSeriesController::class, Methods::Delete])->name('admin.tv-series.delete');
+			Route::prefix('{id}/')->group(function (){
+				Route::delete('', [\App\Http\Controllers\Web\Admin\TvSeries\TvSeriesBase::class, 'delete'])->name('admin.tv-series.delete');
+				Route::delete('content/{id}', [\App\Http\Controllers\Web\Admin\TvSeries\ContentController::class, 'delete'])->name('admin.tv-series.delete.content');
+				Route::delete('snaps/{id}', [\App\Http\Controllers\Web\Admin\TvSeries\SnapsController::class, 'delete'])->name('admin.tv-series.delete.snaps');
+			});
 			Route::get('playback/{slug}', [TrailerPlayback::class, 'series'])->name('admin.tv-series.playback');
 		});
 

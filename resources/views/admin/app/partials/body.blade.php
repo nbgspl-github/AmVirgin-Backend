@@ -18,8 +18,7 @@
 			</div>
 		</div>
 	</div>
-
 	<footer class="footer">
-		<span class="d-none d-sm-inline-block">Copyright Â© 2019 AmVirgin Entertainment Pvt. Ltd.</span>
+		<span class="d-none d-sm-inline-block">Copyright © {{date('Y')}}  AmVirgin Entertainment Pvt. Ltd.</span>
 	</footer>
 </div>

@@ -491,6 +491,13 @@ class Video extends Model{
 		return $this->hasMany('App\Models\VideoSource', 'videoId');
 	}
 
+	/**
+	 * @return HasMany
+	 */
+	public function snaps(){
+		return $this->hasMany(VideoSnap::class, 'videoId');
+	}
+
 	public function getSlugOptions(): SlugOptions{
 		return SlugOptions::create()
 			->generateSlugsFrom('title')
