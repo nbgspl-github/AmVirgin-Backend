@@ -21,6 +21,7 @@ use Illuminate\Support\Str;
 use App\Constants\OfferTypes;
 use App\Constants\ProductStatus;
 use Throwable;
+use Illuminate\Support\Facades\Storage;
 class ProductsController extends BaseController{
 use ValidatesRequest;
 use FluentResponse;
@@ -69,6 +70,9 @@ use FluentResponse;
         }else {
             foreach($Getproducts as $pdata){
             $productsimage= ProductImage::where('productId',$pdata['id'])->select('productId','path','tag')->get();
+            $productsimage->transform(function(ProductImage $item) {
+              return Storage::disk('secured')->url($item->path);
+            });
             $success[]=array(
                 'id'=>$pdata['id'], 
                 'name'=>$pdata['name'], 
@@ -129,7 +133,13 @@ use FluentResponse;
             $response = $this->failed()->status(HttpResourceNotFound)->message(__(' Product not found'));
         }else{
             $Getproductsimages= ProductImage::where('productId',$id)->select('productId','path','tag')->get();
+            $Getproductsimages->transform(function (ProductImage $item){
+             return Storage::disk('secured')->url($item->path);
+            });
+           
+
             $success['images']=$Getproductsimages;
+
             $success['details']=$Getproduct;
             $response = $this->success()->status(HttpOkay)->setValue('data', $success)->message(__('All products show successfully'));
         }
@@ -178,6 +188,13 @@ use FluentResponse;
         }else {
             foreach($Getproducts as $pdata){
             $productsimage= ProductImage::where('productId',$pdata['id'])->select('productId','path','tag')->get();
+        
+          
+            $productsimage->transform(function(ProductImage $item) {
+              return Storage::disk('secured')->url($item->path);
+          });
+            //$transformer->addParam('images', ':D');
+
             $success[]=array(
                 'id'=>$pdata['id'], 
                 'name'=>$pdata['name'], 
@@ -272,21 +289,11 @@ use FluentResponse;
             $response = $this->failed()->status(HttpResourceNotFound)->message(__(' cart is empty !'));
            }
            
-           if(count($carts)>0){
-                foreach($carts as $cartsdata){
-                    //$image=ProductImage::where('id', $cartsdata['productId'])->select('path')->get();
-                    $pro=Product::where('id', $cartsdata['productId'])->select('id','name','originalPrice','currency')->get();
-                    //$pro->toArray();
-                    
-                    $productdata[]=$pro;
-                    
-                }
-                $response = $this->success()->status(HttpOkay)->setValue('data', $productdata)->message(__('show cart'));
+           if(count($carts)>0){    
+                $response = $this->success()->status(HttpOkay)->setValue('data', $carts)->message(__('show cart'));
            }else{
                $response = $this->failed()->status(HttpResourceNotFound)->message(__(' cart is empty !'));
-           }
-        
-           
+           }   
         
         }
         catch (ValidationException $exception) {
@@ -300,7 +307,27 @@ use FluentResponse;
 		}
     }
     
-    
+    public function removecart($id){
+      $response = null;
+      try{  
+        $GetCartProduct = ProductCart::find($id);
+        if ($GetCartProduct == null) {
+          $response = $this->failed()->status(HttpResourceNotFound);
+        }
+        $GetCartProduct->delete();
+          $response = $this->success()->status(HttpOkay)->message(__('Successfully remove this item'));
+      }
+  
+        catch (ModelNotFoundException $exception) {
+          $response = $this->failed()->status(HttpResourceNotFound);
+        }
+        catch (Exception $exception) {
+          $response = $this->error()->message($exception->getMessage());
+        }
+        finally {
+          return $response->send();
+        }
+    }
     
     
     

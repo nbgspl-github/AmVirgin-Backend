@@ -43,6 +43,10 @@ use FluentResponse;
 	  }else {
 			foreach ($Getproducts as $productdata) {
 				$image=ProductImage::where('productId',$productdata->id)->select('path')->get();
+			
+				$image->transform(function(ProductImage $item) {
+					return Storage::disk('secured')->url($item->path);
+				});
 				$productData[]=array(
 				'image'=>$image,
 				'name' => $productdata->name,
@@ -95,7 +99,7 @@ use FluentResponse;
 		$productimage=ProductImage::where('productId', '=', $id)->get();
 
 		foreach ($productimage as $key => $value) {
-		  $success['images'][]=$value['path'];
+		  $success['images'][]=Storage::disk('secured')->url($value['path']);
 		}
 		$success['products-data'] = $product;
 		$response = $this->success()->status(HttpOkay)->setValue('data', $success)->message(__('product details successfully'));

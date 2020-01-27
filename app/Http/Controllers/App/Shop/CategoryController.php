@@ -20,6 +20,7 @@ use Illuminate\Support\Str;
 use App\Constants\OfferTypes;
 use App\Constants\ProductStatus;
 use Throwable;
+use Illuminate\Support\Facades\Storage;
 class CategoryController extends BaseController{
 use ValidatesRequest;
 use FluentResponse;
@@ -45,6 +46,7 @@ use FluentResponse;
 			foreach ($Maincategorys as $mdata) 
 			{
 			$Getcategory=Category::where('parentId',$mdata['id'])->get();//get category data
+
 			if(count($Getcategory)>0)
 			{
 				foreach ($Getcategory as $cvalue) 
@@ -61,7 +63,7 @@ use FluentResponse;
 					'id'=>$cvalue['id'],
 					'name'=>$cvalue['name'],
 					'visibility'=>$cvalue['visibility'],
-					'poster'=>$cvalue['poster'],
+					'poster'=>Storage::disk('secured')->url($cvalue['poster']),
 					'description'=>$cvalue['description'],
 					'sub_category'=>$subcategory_data);
 				}
@@ -71,8 +73,8 @@ use FluentResponse;
 				$parientArr[]=array('id'=>$mdata['id'],
 				'name'=>$mdata['name'],
 				'visibility'=>$mdata['visibility'],
-				'poster'=>$mdata['poster'],
-				'icon'=>$mdata['icon'],
+				'poster'=>Storage::disk('secured')->url($mdata['poster']),
+				'icon'=>Storage::disk('secured')->url($mdata['icon']),
 				'description'=>$mdata['description'],
 				'category'=>$category_data
 				);
