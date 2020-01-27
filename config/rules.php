@@ -302,7 +302,7 @@ return [
 				'layoutType' => ['bail', 'required', 'string', 'min:1', 'max:100'], 
 				'validFrom' => ['bail', 'required', 'string'],   
 				'validUntil' => ['bail', 'required', 'string'],
-				//'image' => ['bail', 'nullable', 'image'],
+				'image.*' => ['bail', 'nullable', 'image'],
 				//'hasValidity' => ['bail', 'required', ' boolean'],
 			],
 			'update' => [

@@ -52,12 +52,13 @@ use FluentResponse;
 				//get subcategory data
 					$GetSubcategory=Category::where('parentId',$cvalue['id'])->select('id','name','poster','description','visibility')->get();//get category data
 					if(count($GetSubcategory)>0){
-					$subcategory_data=$GetSubcategory;
+					 $subcategory_data=$GetSubcategory;
 					}else{
-						$subcategory_data=array();
+						$subcategory_data=[];
 					}
 					/*--Get category data--*/
-					$category_data[]=array('id'=>$cvalue['id'],
+					$category_data[]=array(
+					'id'=>$cvalue['id'],
 					'name'=>$cvalue['name'],
 					'visibility'=>$cvalue['visibility'],
 					'poster'=>$cvalue['poster'],
@@ -65,7 +66,7 @@ use FluentResponse;
 					'sub_category'=>$subcategory_data);
 				}
 			}else{
-			  $category_data=array();
+			  $category_data=[];
 			}
 				$parientArr[]=array('id'=>$mdata['id'],
 				'name'=>$mdata['name'],

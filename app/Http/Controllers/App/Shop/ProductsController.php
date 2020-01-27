@@ -239,6 +239,7 @@ use FluentResponse;
             $this->requestValid($request, [
                 'cartId' => ['bail', 'required'],
                 'productId' => ['bail', 'required', 'numeric', 'min:1', 'max:99999'],
+                'quantity' => ['bail', 'required', 'numeric', 'min:1', 'max:20'],
                 
               ]);
             $product = ProductCart::create($request->all());
@@ -257,20 +258,35 @@ use FluentResponse;
 		}
     }
 
-    public function cart($cartId=null){
+    public function cart(Request $request){
         $response = null;
         try{
-           
-           if($cartId==''){
+         
+           if($request->cartId !='' &&  $request->customerId !=''){
+             $carts = ProductCart::where('cartId',$request->cartId)->Where('customerId',$request->customerId)->get();
+           }elseif($request->customerId !='' && $request->cartId ==''){
+             $carts = ProductCart::Where('customerId',$request->customerId)->get();
+           }elseif($request->customerId =='' && $request->cartId !=''){
+             $carts = ProductCart::Where('cartId', $request->cartId)->get();
+           }else{
             $response = $this->failed()->status(HttpResourceNotFound)->message(__(' cart is empty !'));
            }
-            $carts = ProductCart::where('cartId',$cartId)->get();
-            foreach($carts as $cartsdata){
-            
-                $product['cartdata']= Product::where('id', $cartsdata['productId'])->select('id','name','originalPrice','currency')->get();
-                
-            }
-            $response = $this->success()->status(HttpOkay)->setValue('data', $product)->message(__('show cart'));
+           
+           if(count($carts)>0){
+                foreach($carts as $cartsdata){
+                    //$image=ProductImage::where('id', $cartsdata['productId'])->select('path')->get();
+                    $pro=Product::where('id', $cartsdata['productId'])->select('id','name','originalPrice','currency')->get();
+                    //$pro->toArray();
+                    
+                    $productdata[]=$pro;
+                    
+                }
+                $response = $this->success()->status(HttpOkay)->setValue('data', $productdata)->message(__('show cart'));
+           }else{
+               $response = $this->failed()->status(HttpResourceNotFound)->message(__(' cart is empty !'));
+           }
+        
+           
         
         }
         catch (ValidationException $exception) {
