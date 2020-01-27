@@ -16,6 +16,7 @@ use App\Http\Controllers\App\Seller\ProductsController as SellerProductsControll
 use App\Http\Controllers\App\Seller\TwoFactorAuthController as Seller2FAuth;
 use App\Http\Controllers\App\Shop\CategoryController as ShopCategoryController;
 use App\Http\Controllers\App\Shop\ProductsController as ShopProductsController;
+use App\Http\Controllers\App\Shop\CartController as ShopCartController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -61,6 +62,7 @@ Route::prefix('seller')->group(function () use ($sellerMiddleware){
 	Route::middleware($sellerMiddleware)->prefix('products')->group(function (){
 		Route::get('/', [SellerProductsController::class, 'index'])->name('seller.products.index');
 		Route::post('/', [SellerProductsController::class, 'store']);
+		Route::get('/{slug}', [SellerProductsController::class, 'singal']);
 		Route::post('/edit/{id}', [SellerProductsController::class, 'edit']);
 		Route::post('/update/{id}', [SellerProductsController::class, 'update']);
 		Route::post('/delete/{id}', [SellerProductsController::class, 'delete']);
@@ -85,19 +87,21 @@ Route::prefix('seller')->group(function () use ($sellerMiddleware){
  * | Shop API Route(s)
  */
 Route::prefix('shop')->group(function (){
-	Route::prefix('category')->group(function (){
-	 Route::get('/', [ShopCategoryController::class, 'index']);
-	});
-	  
-	Route::prefix('products')->group(function (){
-	  Route::post('/', [ShopProductsController::class, 'index']);
-	  Route::post('/details/{id}', [ShopProductsController::class, 'details']);
-	  Route::post('/categoryby/{id}', [ShopProductsController::class, 'categoryby']);
-	  Route::post('/addtocart', [ShopProductsController::class, 'addtocart']);
-	  Route::post('/cart', [ShopProductsController::class, 'cart']);
-	  Route::post('/removecart/{id}', [ShopProductsController::class, 'removecart']);
-	  
-	});
+		Route::prefix('category')->group(function (){
+		Route::get('/', [ShopCategoryController::class, 'index']);
+		});
+
+		Route::prefix('products')->group(function (){
+			Route::post('/', [ShopProductsController::class, 'index']);
+			Route::post('/details/{id}', [ShopProductsController::class, 'details']);
+			Route::post('/categoryby/{id}', [ShopProductsController::class, 'categoryby']);	  
+		});
+
+		Route::prefix('cart')->group(function (){
+			Route::get('/{cartId}', [ShopCartController::class, 'index']);
+			Route::post('/', [ShopCartController::class, 'store']);
+			Route::post('/{id}', [ShopCartController::class, 'delete']);
+		});
 });
 
 /**

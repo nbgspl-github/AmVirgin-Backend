@@ -88,6 +88,23 @@ use FluentResponse;
 	}
 	
 
+    public function singal($slug){
+		$product = Product::where('slug', '=', $slug)->first();
+		//multipal image upload
+		if (empty($product)) {
+		$response=$this->error()->message('product not found !');
+		}else {
+		$success['images']=array();
+		$productimage=ProductImage::where('productId', '=', $product->id)->get();
+
+		foreach ($productimage as $key => $value) {
+		  $success['images'][]=Storage::disk('secured')->url($value['path']);
+		}
+		$success['products-data'] = $product;
+		$response = $this->success()->status(HttpOkay)->setValue('data', $success)->message(__('product details successfully'));
+		}
+		return $response->send();
+	}
 
 	public function edit($id = null){
 		$product = Product::where('id', '=', $id)->get();
@@ -107,7 +124,7 @@ use FluentResponse;
 		return $response->send();
 	}
 
-
+    
 	public function store(Request $request){
 		$sellerId = $this->user()->getKey();
 		$response =$this->response();
@@ -174,7 +191,7 @@ use FluentResponse;
 			return $response->send();
 		}
 	}
-
+    
 	public function show($id){
 		$sellerId = $this->user()->getKey();
 		$response = null;
