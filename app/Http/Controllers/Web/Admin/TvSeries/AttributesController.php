@@ -36,11 +36,9 @@ class AttributesController extends TvSeriesBase{
 		}
 		catch (ModelNotFoundException $exception) {
 			$response->route('admin.tv-series.index')->error('Could not find tv series for that key.');
-			dd('ModelNotFound');
 		}
 		catch (Throwable $exception) {
 			$response->route('admin.tv-series.index')->error($exception->getMessage());
-			dd('Throwable');
 		}
 		finally {
 			if ($response instanceof WebResponse)
