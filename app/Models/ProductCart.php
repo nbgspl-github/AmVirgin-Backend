@@ -16,6 +16,8 @@ class ProductCart extends Model{
 	protected $fillable = [
 		'cartId',
 		'productId',
+		'quantity',
+		'customerId',
 		'status',
 	];
 

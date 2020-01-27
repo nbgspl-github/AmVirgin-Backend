@@ -113,6 +113,7 @@ return [
 				'shortDescription' => ['bail', 'required', 'string', 'min:1', 'max:1000'],
 				'longDescription' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
 				'sku' => ['bail', 'required', 'string', 'min:1', 'max:256'],
+				//'files.*' => ['bail', 'required','mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
 			],
 			'update' => [
 				'categoryId' => ['bail', 'required', 'exists:categories,id'],
@@ -141,6 +142,7 @@ return [
 				'shortDescription' => ['bail', 'required', 'string', 'min:1', 'max:1000'],
 				'longDescription' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
 				'sku' => ['bail', 'required', 'string', 'min:1', 'max:256'],
+				//'files.*' => ['bail', 'required','mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
 			],
 		],
 	],
@@ -300,7 +302,7 @@ return [
 				'layoutType' => ['bail', 'required', 'string', 'min:1', 'max:100'], 
 				'validFrom' => ['bail', 'required', 'string'],   
 				'validUntil' => ['bail', 'required', 'string'],
-				//'image' => ['bail', 'nullable', 'image'],
+				'image.*' => ['bail', 'nullable', 'image'],
 				//'hasValidity' => ['bail', 'required', ' boolean'],
 			],
 			'update' => [
@@ -323,6 +325,7 @@ return [
 				'description' => ['bail', 'nullable', 'string', 'min:1', 'max:1000'],
 				'visibility' => ['bail', 'required', Rule::in([0, 1])],
 				'poster' => ['bail', 'nullable', 'image'],
+				'icon' => ['bail', 'nullable', 'image'],
 			],
 			'update' => [
 				'name' => ['bail', 'required', 'string', 'min:1', 'max:100'],
@@ -330,6 +333,7 @@ return [
 				'description' => ['bail', 'nullable', 'string', 'min:1', 'max:1000'],
 				'visibility' => ['bail', 'required', Rule::in([0, 1])],
 				'poster' => ['bail', 'nullable', 'image'],
+				'icon' => ['bail', 'nullable', 'image'],
 			],
 		],
 

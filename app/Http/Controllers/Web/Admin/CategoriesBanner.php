@@ -35,20 +35,20 @@ class CategoriesBanner extends BaseController{
 		$images=array();
 		$response = null;
 		try {
-			if (count($request->file('image'))>0) 
-			{    
-				$i=0;
-				foreach ($request->file('image') as $files) {
-					$destinationPath = 'categories-banner'; // upload path
-					$profileImage = $i++.date('YmdHis') . "." . $files->getClientOriginalExtension();
-					$files->move($destinationPath, $profileImage);
-					$path=$destinationPath.'/'.$profileImage;
-					$images[]=$path;
-				}
-			}
 			$payload = $this->requestValid($request, $this->rules('store'));
+			$images=array();
+			if (count($request->file('image'))>0) 
+		   {      foreach ($request->file('image') as $imgdata) {
+					  
+					   $images[]=Storage::disk('secured')->putFile(Directories::CategoriesBanner,$imgdata,'private');
+					   
+				   }
+			   }
+			
+			
 			$payload['image']=implode(",",$images);
-			//$payload['poster'] = $request->hasFile('images') ? Storage::disk('public')->putFile(Directories::CategoriesBanner, $request->file('image'), 'public') : null;
+
+			//$payload['image'] = $request->hasFile('image') ? Storage::disk('public')->putFile(Directories::CategoriesBanner, $request->file('image'), 'public') : null;
 			CategoryBanner::create($payload);
 			$response = responseWeb()->route('admin.categories-banner.index')->success('Created category banner successfully.');
 		}
@@ -89,17 +89,15 @@ class CategoriesBanner extends BaseController{
 				$image_path=array();
 				for($i=0; $i<count($oldImagesArr); $i++){
 					$image_path=$oldImagesArr[$i];
-					Storage::disk('public')->delete($image_path);
+					Storage::disk('secured')->delete($image_path);
 				}
 			}
-			//Upload New image
-			$i=0;
-				foreach ($request->file('image') as $files) {
-					$destinationPath = 'categories-banner'; // upload path
-					$profileImage =$i++.date('YmdHis') . "." . $files->getClientOriginalExtension();
-					$files->move($destinationPath, $profileImage);
-					$path=$destinationPath.'/'.$profileImage;
-					$images[]=$path;
+				//Upload New imag
+				$images=array();
+				if (count($request->file('image'))>0) 
+				  {      foreach ($request->file('image') as $imgdata) {
+				     $images[]=Storage::disk('secured')->putFile(Directories::CategoriesBanner,$imgdata,'private');
+				  }
 				}
 
 				$payloadimg['image']=implode(",",$images);

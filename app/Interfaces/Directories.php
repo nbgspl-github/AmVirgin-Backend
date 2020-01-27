@@ -11,4 +11,5 @@ interface Directories{
 	const Posters = 'posters';
 	const Backdrops = 'backdrops';
 	const Trailers = 'trailers';
+	const ProductImage="product-images";
 }
