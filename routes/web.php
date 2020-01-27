@@ -62,7 +62,7 @@ Route::prefix('admin')->group(function (){
 			Route::delete('{id}', [SellerController::class, Methods::Delete])->name('admin.sellers.delete');
 		});
 
-		//Categories Banner(s)
+		//Categories Banner Ro
 		Route::prefix('categories-banner')->middleware('auth:admin')->group(function (){
 			Route::get('', [CategoriesBanner::class, Methods::Index])->name('admin.categories-banner.index');
 			Route::get('create', [CategoriesBanner::class, Methods::Create])->name('admin.categories-banner.create');
@@ -72,6 +72,7 @@ Route::prefix('admin')->group(function (){
 			Route::delete('{id}', [CategoriesBanner::class, Methods::Delete])->name('admin.categories-banner.delete');
 
 		});
+
 		// Categories Route(s)
 		Route::prefix('categories')->middleware('auth:admin')->group(function (){
 			Route::get('', [CategoriesController::class, Methods::Index])->name('admin.categories.index');

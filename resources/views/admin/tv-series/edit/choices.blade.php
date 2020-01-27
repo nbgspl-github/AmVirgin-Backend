@@ -9,7 +9,7 @@
 				<div class="card-body animatable">
 					<div class="jumbotron" style="background-image: url({{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}});">
 						<div style="background-color: rgba(0,0,0,0.75); border-radius: 8px" class="row p-4 shadow">
-							<div class="col-auto my-auto"><img src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getPoster())}}" alt="" class="img-fluid" style="max-height: 200px;"/></div>
+							<div class="col-auto my-auto"><img src="{{\Illuminate\Support\Facades\Storage::disk('secured')->url($payload->getPoster())}}" alt="" class="img-fluid" style="max-height: 200px;"/></div>
 							<div class="col-10">
 								<div>
 									<h1 class="display-4 text-white">{{$payload->getTitle()}}</h1>

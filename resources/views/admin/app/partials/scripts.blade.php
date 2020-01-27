@@ -46,5 +46,8 @@
 <script src="{{asset('admin/js/jquery.caret.min.js')}}"></script>
 <script src="{{asset('admin/js/jquery.tag-editor.min.js')}}"></script>
 
+<!--Mustache Js-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.1.0/mustache.js"></script>
+
 {{--<!-- App js -->--}}
 <script src="{{asset("admin/js/app.js")}}"></script>
