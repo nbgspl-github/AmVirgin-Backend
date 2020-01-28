@@ -82,8 +82,8 @@ class TvSeriesController extends BaseController{
 		try {
 			$validated = $this->requestValid(request(), $this->rules('store'));
 			$trailer = Storage::disk('secured')->putFile(Directories::Trailers, request()->file('trailer'), 'public');
-			$poster = Storage::disk('public')->putFile(Directories::Posters, request()->file('poster'), 'public');
-			$backdrop = Storage::disk('public')->putFile(Directories::Backdrops, request()->file('backdrop'), 'public');
+			$poster = Storage::disk('secured')->putFile(Directories::Posters, request()->file('poster'), 'public');
+			$backdrop = Storage::disk('secured')->putFile(Directories::Backdrops, request()->file('backdrop'), 'public');
 			if (request()->has('trending')) {
 				$this->replaceTrendingItem($validated['rank']);
 			}
@@ -237,11 +237,11 @@ class TvSeriesController extends BaseController{
 			}
 			if (request()->hasFile('poster')) {
 				Storage::disk('secured')->delete($video->getPoster());
-				$validated['poster'] = Storage::disk('public')->putFile(Directories::Posters, request()->file('poster'), 'public');
+				$validated['poster'] = Storage::disk('secured')->putFile(Directories::Posters, request()->file('poster'), 'public');
 			}
 			if (request()->hasFile('backdrop')) {
 				Storage::disk('secured')->delete($video->getBackdrop());
-				$validated['backdrop'] = Storage::disk('public')->putFile(Directories::Backdrops, request()->file('backdrop'), 'public');
+				$validated['backdrop'] = Storage::disk('secured')->putFile(Directories::Backdrops, request()->file('backdrop'), 'public');
 			}
 
 			$validated['trending'] = request()->has('trending');

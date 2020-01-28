@@ -7,7 +7,7 @@
 					@include('admin.extras.header', ['title'=>'Choose edit action'])
 				</div>
 				<div class="card-body animatable">
-					<div class="jumbotron" style="background-image: url({{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}});">
+					<div class="jumbotron" style="background-image: url({{\Illuminate\Support\Facades\Storage::disk('secured')->url($payload->getBackdrop())}});">
 						<div style="background-color: rgba(0,0,0,0.75); border-radius: 8px" class="row p-4 shadow">
 							<div class="col-auto my-auto"><img src="{{\Illuminate\Support\Facades\Storage::disk('secured')->url($payload->getPoster())}}" alt="" class="img-fluid" style="max-height: 200px;"/></div>
 							<div class="col-10">

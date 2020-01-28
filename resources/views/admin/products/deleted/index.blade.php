@@ -27,8 +27,8 @@
 							<tr id="content_row_{{$product->getKey()}}">
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">
-									@if($product->images()->count()>0&&Storage::disk('public')->exists($product->images()->first()->path))
-										<img src="{{Storage::disk('public')->url($product->images()->first()->path)}}" style="width: 100px; height: 100px" alt="{{$product->getName()}}"/>
+									@if($product->images()->count()>0&&Storage::disk('secured')->exists($product->images()->first()->path))
+										<img src="{{Storage::disk('secured')->url($product->images()->first()->path)}}" style="width: 100px; height: 100px" alt="{{$product->getName()}}"/>
 									@else
 										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 25px"></i>
 									@endif

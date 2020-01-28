@@ -23,7 +23,7 @@ class SlidersController extends ResourceController{
 			});
 			$all->transform(function (Slider $slider){
 				$payload = $slider->toArray();
-				$payload['poster'] = Storage::disk('public')->url($slider->getPoster());
+				$payload['poster'] = Storage::disk('secured')->url($slider->getPoster());
 				return $payload;
 			});
 			if ($all->count() > 0) {

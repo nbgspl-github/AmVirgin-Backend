@@ -52,7 +52,7 @@ class GenresController extends BaseController{
 			$payload = $this->requestValid($request, $this->ruleSet['store']);
 			$payload['poster'] = null;
 			if ($request->hasFile('poster'))
-				$payload = Storage::disk('public')->putFile(Directories::Genre, $request->file('poster'), 'public');
+				$payload = Storage::disk('secured')->putFile(Directories::Genre, $request->file('poster'), 'public');
 
 			Genre::create($payload);
 			$response->success(__('strings.genre.store.success'))->route('admin.genres.index');
@@ -80,7 +80,7 @@ class GenresController extends BaseController{
 			];
 			$payload = $this->requestValid($request, $this->ruleSet['update'], $additional);
 			if ($request->hasFile('poster'))
-				$payload['poster'] = Storage::disk('public')->putFile(Directories::Genre, $request->file('poster'), 'public');
+				$payload['poster'] = Storage::disk('secured')->putFile(Directories::Genre, $request->file('poster'), 'public');
 			else
 				unset($payload['poster']);
 			$genre->update($payload);

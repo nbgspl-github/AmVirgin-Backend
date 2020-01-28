@@ -183,7 +183,7 @@
 												<div class="card-body p-0 rounded">
 													<div class="row">
 														<div class="col-12 text-center">
-															<img id="posterPreview" class="img-fluid" style="max-height: 800px!important; min-height: 800px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getPoster())}}"/>
+															<img id="posterPreview" class="img-fluid" style="max-height: 800px!important; min-height: 800px;" src="{{\Illuminate\Support\Facades\Storage::disk('secured')->url($payload->getPoster())}}"/>
 														</div>
 													</div>
 												</div>
@@ -207,7 +207,7 @@
 												<div class="card-body p-0 rounded">
 													<div class="row">
 														<div class="col-12 text-center">
-															<img id="backdropPreview" class="img-fluid" style="max-height: 298px!important; min-height: 298px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
+															<img id="backdropPreview" class="img-fluid" style="max-height: 298px!important; min-height: 298px;" src="{{\Illuminate\Support\Facades\Storage::disk('secured')->url($payload->getBackdrop())}}"/>
 														</div>
 													</div>
 												</div>

@@ -52,7 +52,7 @@ class SlidersController extends BaseController{
 		$response = null;
 		try {
 			$payload = $this->requestValid($request, $this->ruleSet['store']);
-			$payload['poster'] = \request()->hasFile('poster') ? Storage::disk('public')->putFile(Directories::Sliders, $request->file('poster'), 'public') : null;
+			$payload['poster'] = \request()->hasFile('poster') ? Storage::disk('secured')->putFile(Directories::Sliders, $request->file('poster'), 'public') : null;
 			Slider::create($payload);
 			$response = responseWeb()->
 			route('admin.sliders.index')->
@@ -110,7 +110,7 @@ class SlidersController extends BaseController{
 				'active' => $request->active,
 			]);
 			if ($request->hasFile('poster')) {
-				$poster = Storage::disk('public')->putFile(Directories::Sliders, $request->file('poster'), 'public');
+				$poster = Storage::disk('secured')->putFile(Directories::Sliders, $request->file('poster'), 'public');
 				$slide->setPoster($poster)->save();
 			}
 			$response = responseWeb()->

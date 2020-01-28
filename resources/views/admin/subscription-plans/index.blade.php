@@ -27,8 +27,8 @@
 							<tr id="content_row_{{$plan->getKey()}}">
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">
-									@if($plan->getBanner()!=null&&Storage::disk('public')->exists($plan->getBanner()))
-										<img src="{{Storage::disk('public')->url($plan->getBanner())}}" style="width: 100px; height: 100px" alt="{{$plan->getName()}}"/>
+									@if($plan->getBanner()!=null&&Storage::disk('secured')->exists($plan->getBanner()))
+										<img src="{{Storage::disk('secured')->url($plan->getBanner())}}" style="width: 100px; height: 100px" alt="{{$plan->getName()}}"/>
 									@else
 										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 25px"></i>
 									@endif

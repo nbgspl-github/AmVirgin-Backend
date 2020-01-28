@@ -5,16 +5,16 @@ namespace App\Models;
 use App\Traits\FluentConstructor;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
+use App\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 class Product extends Model{
 	use FluentConstructor;
 	use RetrieveResource;
 	use RetrieveCollection;
-	use HasSlug;
+	use Sluggable;
 
 	protected $table = 'products';
 
