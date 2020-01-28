@@ -7,6 +7,7 @@ use App\Traits\ActiveStatus;
 use App\Traits\FluentConstructor;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
+use App\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -19,7 +20,7 @@ class Video extends Model{
 	use RetrieveCollection;
 	use FluentConstructor;
 	use ActiveStatus;
-	use HasSlug;
+	use Sluggable;
 
 	protected $fillable = [
 		'title',

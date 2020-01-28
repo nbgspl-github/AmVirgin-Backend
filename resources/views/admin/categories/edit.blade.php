@@ -96,7 +96,7 @@
 										<div class="card-body p-0 rounded">
 											<div class="row">
 												<div class="col-12 text-center">
-													<img id="posterPreview" class="img-fluid" style="max-height: 400px!important;" src="{{old('poster',Storage::disk('public')->url($category->getPoster()))}}"/>
+													<img id="posterPreview" class="img-fluid" style="max-height: 400px!important;" src="{{old('poster',Storage::disk('secured')->url($category->getPoster()))}}"/>
 												</div>
 											</div>
 										</div>

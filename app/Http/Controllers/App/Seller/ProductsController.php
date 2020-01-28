@@ -91,7 +91,7 @@ class ProductsController extends ResourceController{
 	public function singal($slug){
 		$response = $this->response();
 		try {
-			$product = Product::where('slug', $slug)->firstOrFail();
+			$product = Product::findOrFailBySlug($slug);
 			$images = $product->images()->get();
 			$images->transform(function (ProductImage $image){
 				return Storage::disk('secured')->url($image->path);

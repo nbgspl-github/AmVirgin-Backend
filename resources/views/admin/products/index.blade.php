@@ -27,8 +27,8 @@
 							{{--							<tr id="content_row_{{$product->getKey()}}">--}}
 							{{--								<td class="text-center">{{$loop->index+1}}</td>--}}
 							{{--								<td class="text-center">--}}
-							{{--									@if($plan->getBanner()!=null&&Storage::disk('public')->exists($product->getBanner()))--}}
-							{{--										<img src="{{Storage::disk('public')->url($product->getBanner())}}" style="width: 100px; height: 100px" alt="{{$plan->getName()}}"/>--}}
+							{{--									@if($plan->getBanner()!=null&&Storage::disk('secured')->exists($product->getBanner()))--}}
+							{{--										<img src="{{Storage::disk('secured')->url($product->getBanner())}}" style="width: 100px; height: 100px" alt="{{$plan->getName()}}"/>--}}
 							{{--									@else--}}
 							{{--										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 25px"></i>--}}
 							{{--									@endif--}}

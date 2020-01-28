@@ -34,8 +34,8 @@
 									</td>
 									<td class="text-center">
 										@if($category->geticon()!=null)
-										<a href="{{Storage::disk('public')->url($category->geticon())}}">Click to view Icon</a>
-										
+											<a href="{{Storage::disk('secured')->url($category->geticon())}}">Click to view Icon</a>
+
 										@else
 											<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 25px"></i>
 										@endif

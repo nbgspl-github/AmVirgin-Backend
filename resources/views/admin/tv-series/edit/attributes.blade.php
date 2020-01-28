@@ -189,7 +189,7 @@
 												<div class="card-body p-0 rounded">
 													<div class="row">
 														<div class="col-12 text-center">
-															<img id="posterPreview" class="img-fluid" style="max-height: 800px!important; min-height: 800px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getPoster())}}"/>
+															<img id="posterPreview" class="img-fluid" style="max-height: 800px!important; min-height: 800px;" src="{{\Illuminate\Support\Facades\Storage::disk('secured')->url($payload->getPoster())}}"/>
 														</div>
 													</div>
 												</div>
@@ -213,7 +213,7 @@
 												<div class="card-body p-0 rounded">
 													<div class="row">
 														<div class="col-12 text-center">
-															<img id="backdropPreview" class="img-fluid" style="max-height: 346px!important; min-height: 346px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
+															<img id="backdropPreview" class="img-fluid" style="max-height: 346px!important; min-height: 346px;" src="{{\Illuminate\Support\Facades\Storage::disk('secured')->url($payload->getBackdrop())}}"/>
 														</div>
 													</div>
 												</div>
@@ -233,24 +233,24 @@
 												</div>
 												<div class="row px-3 pt-3 pb-0">
 													<div class="col-4 pr-0 pb-0">
-														<img id="backdropPreview" class="img-fluid rounded" style="max-height: 150px!important; min-height: 150px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
+														<img id="backdropPreview" class="img-fluid rounded" style="max-height: 150px!important; min-height: 150px;" src="{{\Illuminate\Support\Facades\Storage::disk('secured')->url($payload->getBackdrop())}}"/>
 													</div>
 													<div class="col-4 pr-0 pb-0">
-														<img id="backdropPreview" class="img-fluid rounded" style="max-height: 150px!important; min-height: 150px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
+														<img id="backdropPreview" class="img-fluid rounded" style="max-height: 150px!important; min-height: 150px;" src="{{\Illuminate\Support\Facades\Storage::disk('secured')->url($payload->getBackdrop())}}"/>
 													</div>
 													<div class="col-4 pb-0">
-														<img id="backdropPreview" class="img-fluid rounded" style="max-height: 150px!important; min-height: 150px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
+														<img id="backdropPreview" class="img-fluid rounded" style="max-height: 150px!important; min-height: 150px;" src="{{\Illuminate\Support\Facades\Storage::disk('secured')->url($payload->getBackdrop())}}"/>
 													</div>
 												</div>
 												<div class="row p-3">
 													<div class="col-4 pr-0">
-														<img id="backdropPreview" class="img-fluid rounded" style="max-height: 150px!important; min-height: 150px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
+														<img id="backdropPreview" class="img-fluid rounded" style="max-height: 150px!important; min-height: 150px;" src="{{\Illuminate\Support\Facades\Storage::disk('secured')->url($payload->getBackdrop())}}"/>
 													</div>
 													<div class="col-4 pr-0">
-														<img id="backdropPreview" class="img-fluid rounded" style="max-height: 150px!important; min-height: 150px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
+														<img id="backdropPreview" class="img-fluid rounded" style="max-height: 150px!important; min-height: 150px;" src="{{\Illuminate\Support\Facades\Storage::disk('secured')->url($payload->getBackdrop())}}"/>
 													</div>
 													<div class="col-4">
-														<img id="backdropPreview" class="img-fluid rounded" style="max-height: 150px!important; min-height: 150px;" src="{{\Illuminate\Support\Facades\Storage::disk('public')->url($payload->getBackdrop())}}"/>
+														<img id="backdropPreview" class="img-fluid rounded" style="max-height: 150px!important; min-height: 150px;" src="{{\Illuminate\Support\Facades\Storage::disk('secured')->url($payload->getBackdrop())}}"/>
 													</div>
 												</div>
 											</div>

@@ -26,7 +26,7 @@
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">
 									@if($movie->getPoster()!=null)
-										<img src="{{Storage::disk('public')->url($movie->getPoster())}}" style="width: 100px; height: 100px" alt="{{$movie->getTitle()}}"/>
+										<img src="{{Storage::disk('secured')->url($movie->getPoster())}}" style="width: 100px; height: 100px" alt="{{$movie->getTitle()}}"/>
 									@else
 										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 25px"></i>
 									@endif

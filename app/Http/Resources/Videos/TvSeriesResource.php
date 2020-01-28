@@ -11,8 +11,8 @@ class TvSeriesResource extends JsonResource{
 			'id' => $this->id,
 			'seasonId' => $this->season,
 			'description' => $this->description,
-			'poster' => Storage::disk('public')->url($this->poster),
-			'backdrop' => Storage::disk('public')->url($this->backdrop),
+			'poster' => Storage::disk('secured')->url($this->poster),
+			'backdrop' => Storage::disk('secured')->url($this->backdrop),
 		];
 	}
 }
