@@ -96,7 +96,9 @@ class ProductsController extends ResourceController{
 			$images->transform(function (ProductImage $image){
 				return Storage::disk('secured')->url($image->path);
 			});
-			$response->status(HttpOkay)->message('Found product by that key.')->setValue('data', $product)->setValue('images', $images);
+			$product = $product->toArray();
+			$product['images'] = $images;
+			$response->status(HttpOkay)->message('Found product by that key.')->setValue('data', $product);
 		}
 		catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('We could not find the resource for that key.');
