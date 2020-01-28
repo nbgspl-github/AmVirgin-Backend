@@ -109,16 +109,16 @@ Route::prefix('admin')->group(function (){
 				Route::get('snaps', [\App\Http\Controllers\Web\Admin\TvSeries\SnapsController::class, 'edit'])->name('admin.tv-series.edit.snaps');
 			});
 			Route::prefix('{id}/update')->group(function (){
-				Route::get('attributes', [\App\Http\Controllers\Web\Admin\TvSeries\AttributesController::class, 'edit'])->name('admin.tv-series.update.attributes');
-				Route::get('content', [\App\Http\Controllers\Web\Admin\TvSeries\ContentController::class, 'edit'])->name('admin.tv-series.update.content');
-				Route::get('media', [\App\Http\Controllers\Web\Admin\TvSeries\MediaController::class, 'edit'])->name('admin.tv-series.update.media');
-				Route::get('snaps', [\App\Http\Controllers\Web\Admin\TvSeries\SnapsController::class, 'edit'])->name('admin.tv-series.update.snaps');
+				Route::put('attributes', [\App\Http\Controllers\Web\Admin\TvSeries\AttributesController::class, 'edit'])->name('admin.tv-series.update.attributes');
+				Route::put('content', [\App\Http\Controllers\Web\Admin\TvSeries\ContentController::class, 'edit'])->name('admin.tv-series.update.content');
+				Route::put('media', [\App\Http\Controllers\Web\Admin\TvSeries\MediaController::class, 'edit'])->name('admin.tv-series.update.media');
+				Route::put('snaps', [\App\Http\Controllers\Web\Admin\TvSeries\SnapsController::class, 'edit'])->name('admin.tv-series.update.snaps');
 			});
 			Route::post('store', [TvSeriesController::class, Methods::Store])->name('admin.tv-series.store');
-			Route::prefix('{id}/')->group(function (){
+			Route::prefix('{id}')->group(function (){
 				Route::delete('', [\App\Http\Controllers\Web\Admin\TvSeries\TvSeriesBase::class, 'delete'])->name('admin.tv-series.delete');
-//				Route::delete('content/{id}', [\App\Http\Controllers\Web\Admin\TvSeries\ContentController::class, 'delete'])->name('admin.tv-series.delete.content');
-//				Route::delete('snaps/{id}', [\App\Http\Controllers\Web\Admin\TvSeries\SnapsController::class, 'delete'])->name('admin.tv-series.delete.snaps');
+				Route::delete('content/{contentId}', [\App\Http\Controllers\Web\Admin\TvSeries\ContentController::class, 'delete'])->name('admin.tv-series.delete.content');
+				Route::delete('snaps/{snapId}', [\App\Http\Controllers\Web\Admin\TvSeries\SnapsController::class, 'delete'])->name('admin.tv-series.delete.snaps');
 			});
 			Route::get('playback/{slug}', [TrailerPlayback::class, 'series'])->name('admin.tv-series.playback');
 		});

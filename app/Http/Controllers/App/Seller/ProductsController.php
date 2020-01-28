@@ -88,7 +88,7 @@ class ProductsController extends ResourceController{
 		return $response->send();
 	}
 
-	public function singal($slug){
+	public function single($slug){
 		$response = $this->response();
 		try {
 			$product = Product::findOrFailBySlug($slug);

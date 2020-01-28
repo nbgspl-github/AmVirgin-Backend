@@ -2930,3 +2930,20 @@ table.focus-on tbody tr.focused td {
 .shadow-danger {
     box-shadow: 0 .25rem 1rem rgba(80, 138, 235, 0.5) !important
 }
+
+.frost {
+    transition: .3s;
+    filter: blur(4px);
+}
+
+.greyscale {
+    transition: .3s;
+    filter: grayscale(100%);
+    transform: scaleX(.97) scaleY(.95);
+}
+
+.reset-animation {
+    transition: 1s;
+    filter: blur(0px) grayscale(0%);
+    transform: scaleX(1) scaleY(1);
+}
