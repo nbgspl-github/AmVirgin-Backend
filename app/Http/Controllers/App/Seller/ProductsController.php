@@ -101,7 +101,7 @@ class ProductsController extends ResourceController{
 			$response->status(HttpOkay)->message('Found product by that key.')->setValue('data', $product);
 		}
 		catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('We could not find the resource for that key.');
+			$response->status(HttpResourceNotFound)->message('We could not find the product for that key.');
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
