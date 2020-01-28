@@ -8,15 +8,11 @@
 	<meta content="Admin Dashboard [Login]" name="description"/>
 	<meta content="ThemeDesign" name="author"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-
 	<link rel="shortcut icon" href="{{asset("images/logo.png")}}">
-
 	<link href="{{asset("admin/css/bootstrap.min.css")}}" rel="stylesheet" type="text/css">
 	<link href="{{asset("admin/css/icons.css")}}" rel="stylesheet" type="text/css">
 	<link href="{{asset("admin/css/style.css")}}" rel="stylesheet" type="text/css">
-
 </head>
-
 
 <body class="fixed-left">
 
