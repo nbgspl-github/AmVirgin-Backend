@@ -58,7 +58,7 @@
 			if (currentIndex < 1) {
 				handleAdd();
 			}
-			$('#uploadForm').submit((event) => {
+			$('#uploadForm').submit(function (event) {
 				event.preventDefault();
 				handleSubmit(this);
 			});
@@ -132,20 +132,20 @@
 			element.addClass('reset-animation');
 		};
 
-		handleSubmit = (form) => {
+		handleSubmit = (context) => {
 			const config = {
 				onUploadProgress: handleUploadProgress,
 				headers: {
 					'Content-Type': 'multipart/form-data'
 				}
 			};
-			const formData = new FormData(document.getElementById('uploadForm'));
+			const formData = new FormData(context);
 			modal.modal({
 				keyboard: false,
 				show: true,
 				backdrop: 'static'
 			});
-			axios.put('/admin/tv-series/' + videoId + '/update/snaps', formData, config,).then(response => {
+			axios.post('/admin/tv-series/' + videoId + '/update/snaps', formData, config,).then(response => {
 				const status = response.data.status;
 				modal.modal('hide');
 				if (status !== 200) {

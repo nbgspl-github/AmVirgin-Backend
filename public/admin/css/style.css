@@ -2944,6 +2944,6 @@ table.focus-on tbody tr.focused td {
 
 .reset-animation {
     transition: 1s;
-    filter: blur(0px) grayscale(0%);
+    filter: blur(0px) grayscale(0%) drop-shadow(0px 0px 0px grey);
     transform: scaleX(1) scaleY(1);
 }
