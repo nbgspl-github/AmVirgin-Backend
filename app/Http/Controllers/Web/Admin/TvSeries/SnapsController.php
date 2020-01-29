@@ -58,7 +58,7 @@ class SnapsController extends TvSeriesBase{
 				VideoSnap::newObject()->
 				setVideoId($video->getKey())->
 				setFile(Storage::disk('secured')->putFile(Directories::VideoSnaps, $item, 'private'))->
-				setDescription('Random screenshot')->
+				setDescription('Special snaps')->
 				save();
 			});
 			$response->status(HttpOkay)->message('Snapshots uploaded/updated successfully.');

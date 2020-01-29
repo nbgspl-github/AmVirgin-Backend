@@ -20,21 +20,6 @@ class VideoSnap extends Model{
 	];
 
 	/**
-	 * @var integer
-	 */
-	private $videoId;
-
-	/**
-	 * @var string
-	 */
-	private $file;
-
-	/**
-	 * @var string|null
-	 */
-	private $description;
-
-	/**
 	 * @return int
 	 */
 	public function getVideoId(): int{

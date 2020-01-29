@@ -54,7 +54,8 @@
 		let manuallyFired = true;
 
 		window.onload = () => {
-			currentIndex = $('#container').children().length;
+			currentIndex = $('#container').children().length - 1;
+			console.log('Current index is ' + currentIndex);
 			if (currentIndex < 1) {
 				handleAdd();
 			}
@@ -76,10 +77,10 @@
 		};
 
 		handleAdd = () => {
+			currentIndex++;
 			const render = Mustache.render(template, {
 				id: currentIndex
 			});
-			currentIndex++;
 			$('#container').append(render);
 		};
 
