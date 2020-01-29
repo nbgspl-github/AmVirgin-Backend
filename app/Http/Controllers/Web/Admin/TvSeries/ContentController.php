@@ -145,7 +145,7 @@ class ContentController extends TvSeriesBase{
 		}
 	}
 
-	public function delete($id){
+	public function delete(...$id){
 
 	}
 }
