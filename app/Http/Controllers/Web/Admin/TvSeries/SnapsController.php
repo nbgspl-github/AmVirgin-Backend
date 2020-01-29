@@ -7,18 +7,15 @@ use App\Exceptions\ValidationException;
 use App\Interfaces\Directories;
 use App\Models\Video;
 use App\Models\VideoSnap;
+use App\Storage\SecuredDisk;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
 use Throwable;
 
 class SnapsController extends TvSeriesBase{
 	public function __construct(){
 		parent::__construct();
 		$this->ruleSet->load('rules.admin.tv-series.snaps');
-	}
-
-	public function create(){
-
 	}
 
 	public function edit($id){
@@ -45,19 +42,15 @@ class SnapsController extends TvSeriesBase{
 		}
 	}
 
-	public function store(){
-
-	}
-
 	public function update($id){
 		$response = $this->response();
 		try {
 			$video = Video::retrieveThrows($id);
 			$payload = $this->requestValid(request(), $this->rules('store'));
-			collect($payload['image'])->each(function ($item) use ($video){
+			collect($payload['image'])->each(function (UploadedFile $file) use ($video){
 				VideoSnap::newObject()->
 				setVideoId($video->getKey())->
-				setFile(Storage::disk('secured')->putFile(Directories::VideoSnaps, $item, 'private'))->
+				setFile(SecuredDisk::access()->putFile(Directories::VideoSnaps, $file, 'private'))->
 				setDescription('Special snaps')->
 				save();
 			});

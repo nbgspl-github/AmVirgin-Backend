@@ -43,20 +43,25 @@
 
 		const videoId = '{{$payload->getKey()}}';
 
-		let currentIndex = 0;
+		let currentIndex = -1;
 
 		let progressRing = null;
+
 		let progressPercent = null;
+
 		let CancelToken = axios.CancelToken;
+
 		let source = CancelToken.source();
+
 		let modal = null;
+
 		let modalFinal = null;
+
 		let manuallyFired = true;
 
 		window.onload = () => {
-			currentIndex = $('#container').children().length - 1;
-			console.log('Current index is ' + currentIndex);
-			if (currentIndex < 1) {
+			countChildren();
+			if (currentIndex < 0) {
 				handleAdd();
 			}
 			$('#uploadForm').submit(function (event) {
@@ -77,16 +82,18 @@
 		};
 
 		handleAdd = () => {
-			currentIndex++;
 			const render = Mustache.render(template, {
 				id: currentIndex
 			});
+			currentIndex++;
 			$('#container').append(render);
 		};
 
 		handleDelete = (id) => {
 			$('#item_' + id).remove();
 			currentIndex--;
+			if (currentIndex < 0)
+				handleAdd();
 		};
 
 		handleAsyncDelete = (id, key) => {
@@ -152,11 +159,8 @@
 				if (status !== 200) {
 					alertify.alert(response.data.message);
 				} else {
-					modalFinal.modal({
-						show: true,
-						keyboard: false,
-						backdrop: 'static'
-					});
+					location.reload();
+					toastr.success(response.data.message);
 				}
 			}).catch(error => {
 				modal.modal('hide');
@@ -177,12 +181,26 @@
 
 		handleImage = (event, id) => {
 			const reader = new FileReader();
+			const output = document.getElementById('preview_' + id);
 			reader.onload = function () {
-				const output = document.getElementById('preview_' + id);
 				output.src = reader.result;
 			};
 			const poster = event.target.files[0];
-			reader.readAsDataURL(poster);
+			const element = $('#blank_' + id);
+			if (poster !== undefined) {
+				console.log('Not undefined');
+				element.addClass('d-none');
+				reader.readAsDataURL(poster);
+			} else {
+				console.log('Undefined');
+				element.removeClass('d-none');
+				output.src = '';
+			}
+		};
+
+		countChildren = () => {
+			currentIndex = $('#container').children().length - 1;
+			return currentIndex;
 		};
 	</script>
 @stop
