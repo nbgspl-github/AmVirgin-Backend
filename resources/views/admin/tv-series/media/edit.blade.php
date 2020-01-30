@@ -6,15 +6,62 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Tv series - Edit or update snapshots','onClick'=>['link'=>'handleAdd()','text'=>'Add more']])
+					@include('admin.extras.header', ['title'=>'Tv series - Edit or update media'])
 				</div>
 				<form id="uploadForm" action="{{route('admin.tv-series.update.attributes',$payload->getKey())}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="card-body">
-						<div class="form-row" id="container">
-							@foreach($snaps as $snap)
-								@include('admin.tv-series.snaps.bladeImageBox',['id'=>$loop->index,'key'=>$snap['id']])
-							@endforeach
+						<div class="row" id="container">
+							<div class="col-4 animated zoomIn pr-0">
+								<div class="card" style="border: 1px solid #aeb4ba;">
+									<div class="card-header">
+										<span class="header-title">Poster</span>
+									</div>
+									<div class="card-body rounded p-0">
+										<div class="row">
+											<div class="col-12 text-center">
+												<img id="previewPoster" class="img-fluid" style="max-height: 650px!important; min-height: 650px; object-fit: scale-down" src="{{\App\Storage\SecuredDisk::access()->url($payload->getPoster())}}"/>
+												<input type="file" class="d-none" onchange="handlePoster(event)" data-id="@{{id}}" id="input_@{{id}}" name="image[]"/>
+												<button type="button" onclick="handlePosterDialog();" class="btn btn-danger position-absolute shadow-sm shadow-danger" style="bottom: 3%; right: 6%; border-radius: 40px; width: 50px; height: 50px;"><i class="fa fa-camera-retro font-20 pt-1"></i></button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-4 animated zoomIn pr-0">
+								<div class="card" style="border: 1px solid #aeb4ba;">
+									<div class="card-header">
+										<span class="header-title">Backdrop</span>
+									</div>
+									<div class="card-body rounded p-0">
+										<div class="row">
+											<div class="col-12 text-center">
+												<img id="previewPoster" class="img-fluid" style="max-height: 650px!important; min-height: 650px; object-fit: scale-down" src="{{\App\Storage\SecuredDisk::access()->url($payload->getBackdrop())}}"/>
+												<input type="file" class="d-none" onchange="handlePoster(event)" data-id="@{{id}}" id="input_@{{id}}" name="image[]"/>
+												<button type="button" onclick="handlePosterDialog();" class="btn btn-danger position-absolute shadow-sm shadow-danger" style="bottom: 3%; right: 6%; border-radius: 40px; width: 50px; height: 50px;"><i class="fa fa-camera-retro font-20 pt-1"></i></button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-4 animated zoomIn my-auto">
+								<div class="card" style="border: 1px solid #aeb4ba;">
+									<div class="card-header">
+										<span class="header-title">Trailer</span>
+									</div>
+									<div class="card-body rounded p-0">
+										<div class="row">
+											<div class="col-12 text-center">
+												<input type="file" class="d-none" onchange="handleTrailer(event)" id="input_trailer" name="image[]"/>
+												<div class="embed-responsive embed-responsive-16by9 rounded-lg border">
+													<iframe class="embed-responsive-item" src="{{$payload->getTrailer()}}" id="trailer"></iframe>
+												</div>
+												<button type="button" onclick="handleTrailerDialog();" class="btn btn-danger position-absolute shadow-sm shadow-danger" style="top: 6%; right: 6%; border-radius: 40px; width: 50px; height: 50px;"><i class="fa fa-camera-retro font-20 pt-1"></i></button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="card-footer">
@@ -39,7 +86,7 @@
 
 @section('javascript')
 	<script>
-		const template = `{!! $template !!}`;
+			{{--const template = `{!! $template !!}`;--}}
 
 		const videoId = '{{$payload->getKey()}}';
 
@@ -173,7 +220,7 @@
 			});
 		};
 
-		handleImage = (event, id) => {
+		handlePoster = (event) => {
 			const reader = new FileReader();
 			const output = document.getElementById('preview_' + id);
 			reader.onload = function () {
@@ -188,6 +235,41 @@
 				element.removeClass('d-none');
 				output.src = '';
 			}
+		};
+
+		handleBackdrop = (event) => {
+			const reader = new FileReader();
+			const output = document.getElementById('preview_' + id);
+			reader.onload = function () {
+				output.src = reader.result;
+			};
+			const poster = event.target.files[0];
+			const element = $('#blank_' + id);
+			if (poster !== undefined) {
+				element.addClass('d-none');
+				reader.readAsDataURL(poster);
+			} else {
+				element.removeClass('d-none');
+				output.src = '';
+			}
+		};
+
+		handleTrailer = (event) => {
+			const reader = new FileReader();
+			const output = document.getElementById('trailer');
+			reader.onload = function () {
+				output.src = reader.result;
+			};
+			const poster = event.target.files[0];
+			if (poster !== undefined) {
+				reader.readAsDataURL(poster);
+			} else {
+				output.src = '';
+			}
+		};
+
+		handleTrailerDialog = () => {
+			$('#input_trailer').trigger('click');
 		};
 
 		countChildren = () => {
