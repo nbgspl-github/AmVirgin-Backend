@@ -28,7 +28,7 @@
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">
 									@if($s->getPoster()!=null)
-										<img src="{{Storage::disk('secured')->url($s->getPoster())}}" style="width: 100px; height: 100px" alt="{{$s->getTitle()}}"/>
+										<img src="{{\App\Storage\SecuredDisk::access()->url($s->getPoster())}}" style="width: 100px; height: 150px; filter: drop-shadow(2px 2px 8px black)" alt="{{$s->getTitle()}}"/>
 									@else
 										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 25px"></i>
 									@endif

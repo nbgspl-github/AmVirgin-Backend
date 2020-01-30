@@ -1,4 +1,4 @@
-<div class="col-6 mb-2" id="item_{{$id}}">
+<div class="col-6 mb-2 animated zoomIn" id="item_{{$id}}">
 	<div class="card" style="border: 1px solid #aeb4ba;">
 		<div class="card-body rounded p-0">
 			<div class="row">

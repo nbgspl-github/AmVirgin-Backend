@@ -199,7 +199,7 @@
 		};
 
 		countChildren = () => {
-			currentIndex = $('#container').children().length - 1;
+			currentIndex = $('#container').children().length + 1;
 			return currentIndex;
 		};
 	</script>
