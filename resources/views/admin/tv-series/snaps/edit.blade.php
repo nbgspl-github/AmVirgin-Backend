@@ -43,7 +43,7 @@
 
 		const videoId = '{{$payload->getKey()}}';
 
-		let currentIndex = -1;
+		let currentIndex = 0;
 
 		let progressRing = null;
 
@@ -60,10 +60,8 @@
 		let manuallyFired = true;
 
 		window.onload = () => {
-			countChildren();
-			if (currentIndex < 0) {
-				handleAdd();
-			}
+			currentIndex = $('#container').children().length;
+			insertConditionally();
 			$('#uploadForm').submit(function (event) {
 				event.preventDefault();
 				handleSubmit(this);
@@ -82,18 +80,16 @@
 		};
 
 		handleAdd = () => {
+			currentIndex++;
 			const render = Mustache.render(template, {
 				id: currentIndex
 			});
-			currentIndex++;
 			$('#container').append(render);
 		};
 
 		handleDelete = (id) => {
 			$('#item_' + id).remove();
-			currentIndex--;
-			if (currentIndex < 0)
-				handleAdd();
+			insertConditionally();
 		};
 
 		handleAsyncDelete = (id, key) => {
@@ -119,7 +115,6 @@
 		};
 
 		handleFileDialog = (id) => {
-			console.log(id);
 			$('#input_' + id).trigger('click');
 		};
 
@@ -172,7 +167,6 @@
 		handleUploadProgress = (progressEvent) => {
 			let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
 			let percentCompletedValue = (percentCompleted / 100.0);
-			console.log('Percentage is ' + percentCompletedValue);
 			progressPercent.text(percentCompleted + ' %');
 			progressRing.circleProgress({
 				value: percentCompletedValue
@@ -188,19 +182,23 @@
 			const poster = event.target.files[0];
 			const element = $('#blank_' + id);
 			if (poster !== undefined) {
-				console.log('Not undefined');
 				element.addClass('d-none');
 				reader.readAsDataURL(poster);
 			} else {
-				console.log('Undefined');
 				element.removeClass('d-none');
 				output.src = '';
 			}
 		};
 
 		countChildren = () => {
-			currentIndex = $('#container').children().length + 1;
+			currentIndex = $('#container').children().length;
 			return currentIndex;
+		};
+
+		insertConditionally = () => {
+			const currentItemsCount = $('#container').children().length;
+			if (currentItemsCount == 0)
+				handleAdd();
 		};
 	</script>
 @stop
