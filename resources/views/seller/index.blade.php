@@ -2,17 +2,17 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8"/>
-	<link rel="icon" href="/app/img/logo.png"/>
+	<link rel="icon" href="{{asset('app/img/logo.png')}}"/>
 	<meta name="viewport" content="width=device-width,initial-scale=1"/>
 	<meta name="theme-color" content="#000000"/>
 	<meta name="description" content="Web site created using create-react-app"/>
-	<link rel="stylesheet" href="/app/assets/style2.css"/>
-	<link rel="stylesheet" href="/app/assets/css/vendor/line-awesome.css"/>
-	<link rel="stylesheet" href="/app/assets/css/vendor/themify.css"/>
-	<link rel="stylesheet" href="/app/assets/css/swiper.min.css"/>
-	<link rel="stylesheet" href="/app/bootstrap/bootstrap.min.css"/>
-	<link rel="stylesheet" href="/app/slider/slick.css"/>
-	<link rel="apple-touch-icon" href="/app/img/logo.png"/>
+	<link rel="stylesheet" href="{{asset('app/assets/style2.css')}}"/>
+	<link rel="stylesheet" href="{{asset('app/assets/css/vendor/line-awesome.css')}}"/>
+	<link rel="stylesheet" href="{{asset('app/assets/css/vendor/themify.css')}}"/>
+	<link rel="stylesheet" href="{{asset('app/assets/css/swiper.min.css')}}"/>
+	<link rel="stylesheet" href="{{asset('app/bootstrap/bootstrap.min.css')}}"/>
+	<link rel="stylesheet" href="{{asset('app/slider/slick.css')}}"/>
+	<link rel="apple-touch-icon" href="{{asset('app/img/logo.png')}}"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
 	<script defer="defer" src="https://kit.fontawesome.com/961bdbfd19.js" crossorigin="anonymous"></script>
@@ -23,35 +23,27 @@
 	<link href="https://fonts.googleapis.com/css?family=Muli&display=swap" rel="stylesheet"/>
 	<link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet"/>
 	<link rel="stylesheet" href="https://video-react.github.io/assets/video-react.css"/>
-	<link rel="stylesheet" href="/app/assets/appcss/style.css"/>
+	<link rel="stylesheet" href="{{asset('app/assets/sellercss/style.css')}}"/>
 	<title>
 		Amvirgin</title>
-	<link href="/app/static/css/main.921498ef.chunk.css" rel="stylesheet">
+	<link href="{{asset('app/static/css/main.921498ef.chunk.css')}}" rel="stylesheet">
 </head>
 <body>
 <a href="#0" id="scroll" style="display:none"><span></span></a>
 <noscript>
-	You
-	need
-	to
-	enable
-	JavaScript
-	to
-	run
-	this
-	app.
+	You need to enable JavaScript to run this app.
 </noscript>
 <div id="root"></div>
-<script src="/app/js/jquery.min.js"></script>
+<script src="{{asset('app/js/jquery.min.js')}}"></script>
 <script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-<script src="/app/bootstrap/bootstrap.min.js"></script>
+<script src="{{asset('app/bootstrap/bootstrap.min.js')}}"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="/app/slider/slick.js"></script>
+<script src="{{asset('app/slider/slick.js')}}"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.slick/1.5.7/slick.min.js"></script>
-<script src="/app/assets/sli.js"></script>
-<script src="/app/assets/shop.js"></script>
-<script type="text/javascript" src="/app/assets/sticky-sidebar.js"></script>
-<script type="text/javascript" src="/app/assets/jqzoom.js"></script>
+<script src="{{asset('app/assets/sli.js')}}"></script>
+<script src="{{asset('app/assets/shop.js')}}"></script>
+<script type="text/javascript" src="{{asset('app/assets/sticky-sidebar.js')}}"></script>
+<script type="text/javascript" src="{{asset('app/assets/jqzoom.js')}}"></script>
 <script src="https://unpkg.com/video.js/dist/video.js"></script>
 <script src="https://unpkg.com/@videojs/http-streaming/dist/videojs-http-streaming.js"></script>
 <script>$(document).ready(function () {
@@ -129,7 +121,7 @@
 		var s = n;
 		c()
 	}([])</script>
-<script src="/app/static/js/2.ed8d8ca9.chunk.js"></script>
-<script src="/app/static/js/main.48143131.chunk.js"></script>
+<script src="{{asset('app/static/js/2.ed8d8ca9.chunk.js')}}"></script>
+<script src="{{asset('app/static/js/main.43c174bd.chunk.js')}}"></script>
 </body>
 </html>
