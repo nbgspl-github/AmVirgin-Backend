@@ -89,6 +89,7 @@
 						<input name="video[]" type="file" id="video" class="form-control" style="padding-left: 4px; padding-top: 4px" accept="video/*" value="{{$chosen->video}}">
 					</div>
 				</div>
+
 			</div>
 		</div>
 	</div>

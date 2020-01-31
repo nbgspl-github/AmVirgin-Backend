@@ -10,7 +10,7 @@
 				</div>
 				<form id="uploadForm" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
 					@csrf
-					<div class="card-body">
+					<div class="card-body pb-0">
 						<div class="form-row" id="container">
 							@foreach($videos as $video)
 								@include('admin.tv-series.content.bladeVideoBox',['id'=>$loop->index,'key'=>$snap['id']])
@@ -85,6 +85,9 @@
 				id: currentIndex
 			});
 			$('#container').append(render);
+			$('html, body').animate({
+				scrollTop: $("#item_" + currentIndex).offset().top
+			}, 1000, 'swing');
 		};
 
 		handleDelete = (id) => {
@@ -93,10 +96,10 @@
 		};
 
 		handleAsyncDelete = (id, key) => {
-			alertify.confirm("Are you sure you want to delete this snapshot?",
+			alertify.confirm("Are you sure you want to delete this video?",
 				(ev) => {
 					ev.preventDefault();
-					axios.delete('/admin/tv-series/' + videoId + '/snaps/' + key)
+					axios.delete('/admin/tv-series/' + videoId + '/content/' + key)
 						.then(response => {
 							if (response.data.status === 200) {
 								handleDelete(id);
@@ -173,7 +176,7 @@
 			});
 		};
 
-		handleImage = (event, id) => {
+		handleVideo = (event, id) => {
 			const reader = new FileReader();
 			const output = document.getElementById('preview_' + id);
 			reader.onload = function () {
