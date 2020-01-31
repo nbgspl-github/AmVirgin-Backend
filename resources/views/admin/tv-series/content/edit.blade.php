@@ -122,20 +122,20 @@
 		};
 
 		handleEnter = (id, action) => {
-			const element = $('#preview_' + id);
-			if (action === 'switch') {
-				element.removeClass('reset-animation');
-				element.addClass('frost');
-			} else {
-				element.removeClass('reset-animation');
-				element.addClass('greyscale');
-			}
+			// const element = $('#preview_' + id);
+			// if (action === 'switch') {
+			// 	element.removeClass('reset-animation');
+			// 	element.addClass('frost');
+			// } else {
+			// 	element.removeClass('reset-animation');
+			// 	element.addClass('greyscale');
+			// }
 		};
 
 		handleLeave = (id, action) => {
-			const element = $('#preview_' + id);
-			element.removeClass('greyscale frost');
-			element.addClass('reset-animation');
+			// const element = $('#preview_' + id);
+			// element.removeClass('greyscale frost');
+			// element.addClass('reset-animation');
 		};
 
 		handleSubmit = (context) => {
@@ -177,20 +177,8 @@
 		};
 
 		handleVideo = (event, id) => {
-			const reader = new FileReader();
 			const output = document.getElementById('preview_' + id);
-			reader.onload = function () {
-				output.src = reader.result;
-			};
-			const poster = event.target.files[0];
-			const element = $('#blank_' + id);
-			if (poster !== undefined) {
-				element.addClass('d-none');
-				reader.readAsDataURL(poster);
-			} else {
-				element.removeClass('d-none');
-				output.src = '';
-			}
+			output.src = window.URL.createObjectURL(event.target.files[0]);
 		};
 
 		countChildren = () => {

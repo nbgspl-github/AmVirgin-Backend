@@ -2924,11 +2924,15 @@ table.focus-on tbody tr.focused td {
 }
 
 .shadow-primary {
-    box-shadow: 0 .25rem 1rem rgba(207, 63, 67, 0.5) !important
+    box-shadow: 0 .25rem 1rem rgba(207, 63, 67, 0.75) !important
 }
 
 .shadow-danger {
-    box-shadow: 0 .25rem 1rem rgba(80, 138, 235, 0.5) !important
+    box-shadow: 0 .25rem 1rem rgba(80, 138, 235, 0.75) !important
+}
+
+.shadow-success {
+    box-shadow: 0 .25rem 1rem rgba(82, 204, 150, 0.75) !important
 }
 
 .frost {

@@ -6,9 +6,10 @@
 			<div class="row my-auto">
 				<div class="col-6 my-auto">
 					<div class="embed-responsive embed-responsive-16by9 bg-muted border-dark" style=" max-height: 500px!important; min-height: 500px; border-radius: 4px">
-						<button type="button" onmouseenter="handleEnter(this.getAttribute('data-id'), 'remove');" onmouseleave="handleLeave(this.getAttribute('data-id'),'remove');" onclick="handleAsyncDelete(this.getAttribute('data-id'),this.getAttribute('data-key'));" class="btn btn-danger position-absolute shadow-sm shadow-danger" style="bottom: 32px; left:47%;border-radius: 32px; width: 50px; height: 50px; z-index: 10;"><i class="ion-videocamera font-20 pt-1"></i>
+						<button data-id="@{{id}}" type="button" onmouseenter="handleEnter(this.getAttribute('data-id'), 'remove');" onmouseleave="handleLeave(this.getAttribute('data-id'),'remove');" onclick="handleFileDialog(this.getAttribute('data-id'));" class="btn btn-danger position-absolute shadow-sm shadow-danger" style="bottom: 32px; left:47%;border-radius: 32px; width: 50px; height: 50px; z-index: 10;"><i class="ion-videocamera font-20 pt-1"></i>
 						</button>
-						<iframe class="embed-responsive-item" src="" id="preview_@{{id}}" style=" max-height: 325px!important; min-height: 325px;">
+						<input type="file" data-id="@{{id}}" class="d-none" onchange="handleVideo(event,this.getAttribute('data-id'))" id="input_@{{id}}" name="trailer" accept=".mp4, .avi"/>
+						<iframe class="embed-responsive-item my-auto" src="" id="preview_@{{id}}" style=" max-height: 325px!important; min-height: 325px;">
 							<span class="text-center my-auto" id="blankVideo"><i class="ion ion-videocamera text-muted" style="font-size: 80px;"></i></span>
 						</iframe>
 					</div>
