@@ -131,7 +131,7 @@ class TvSeriesBase extends BaseController{
 		}
 	}
 
-	public function delete($id, $slugId = null){
+	public function delete($id, $subId = null){
 		$tvSeries = null;
 		$response = $this->response();
 		try {

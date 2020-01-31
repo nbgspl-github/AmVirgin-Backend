@@ -25,8 +25,7 @@ class ContentController extends TvSeriesBase{
 			$languages = MediaLanguage::all()->sortBy('name')->all();
 			$qualities = MediaQuality::retrieveAll();
 			$contentPayload = [];
-			$sources = $video->sources();
-			$sources = $sources->get();
+			$sources = $video->sources()->get();
 			$sources->transform(function (VideoSource $videoSource) use ($qualities, $languages){
 				$payload = new stdClass();
 				$payload->title = $videoSource->getTitle();
@@ -38,16 +37,16 @@ class ContentController extends TvSeriesBase{
 				$payload->episode = $videoSource->getEpisode();
 				$payload->video = $videoSource->getFile();
 				$payload->sourceId = $videoSource->getKey();
-				return view('admin.tv-series.edit.row')->with('qualities', $qualities)->with('languages', $languages)->with('chosen', $payload);
+				return $payload;
 			});
-			$row = view('admin.tv-series.edit.rowNoDefaultChoices')->with('qualities', $qualities)->with('languages', $languages);
+			$row = view('admin.tv-series.content.videoBox')->with('qualities', $qualities)->with('languages', $languages);
 
-			$response = view('admin.tv-series.edit.content')->
-			with('contentPayload', $sources->all())->
+			$response = view('admin.tv-series.content.edit')->
+			with('videos', $sources->all())->
 			with('payload', $video)->
 			with('qualities', $qualities)->
 			with('languages', $languages)->
-			with('data', $row)->
+			with('template', $row)->
 			with('key', $id);
 		}
 		catch (ModelNotFoundException $exception) {
@@ -145,7 +144,21 @@ class ContentController extends TvSeriesBase{
 		}
 	}
 
-	public function delete($id, $slugId = null){
-
+	public function delete($id, $subId = null){
+		$response = $this->response();
+		try {
+			$videoSnap = VideoSource::retrieveThrows($subId);
+			$videoSnap->delete();
+			$response->status(HttpOkay)->message('Video deleted successfully.');
+		}
+		catch (ModelNotFoundException $exception) {
+			$response->status(HttpResourceNotFound)->message('Could not find tv series for that key.');
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
 	}
 }

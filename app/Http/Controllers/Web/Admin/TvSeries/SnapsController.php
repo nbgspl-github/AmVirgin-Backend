@@ -70,10 +70,10 @@ class SnapsController extends TvSeriesBase{
 		}
 	}
 
-	public function delete($id, $slugId = null){
+	public function delete($id, $subId = null){
 		$response = $this->response();
 		try {
-			$videoSnap = VideoSnap::retrieveThrows($slugId);
+			$videoSnap = VideoSnap::retrieveThrows($subId);
 			$videoSnap->delete();
 			$response->status(HttpOkay)->message('Snapshot deleted successfully.');
 		}
