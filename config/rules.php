@@ -283,7 +283,9 @@ return [
 
 				],
 				'update' => [
-
+					'poster' => ['bail', 'nullable', 'image', 'min:1', 'max:5096'],
+					'backdrop' => ['bail', 'nullable', 'image', 'min:1', 'max:5096'],
+					'trailer' => ['bail', 'nullable', 'mimetypes:video/avi,video/mpeg,video/mp4', 'min:1', 'max:131072'],
 				],
 			],
 			'content' => [

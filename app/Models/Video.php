@@ -201,8 +201,7 @@ class Video extends Model{
 	 * @return string
 	 */
 	public function getTrailer(): string{
-		$playback = new TrailerPlayback();
-		return $playback->series($this->slug);
+		return $this->trailer;
 	}
 
 	/**
