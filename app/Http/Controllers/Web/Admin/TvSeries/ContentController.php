@@ -74,6 +74,7 @@ class ContentController extends TvSeriesBase{
 			$videos = isset($payload['video']) ? $payload['video'] : [];
 			$qualities = $payload['quality'];
 			$episodes = $payload['episode'];
+			$subtitles = $payload['subtitle'];
 			$languages = $payload['language'];
 			$seasons = $payload['season'];
 			$titles = $payload['title'];
@@ -116,6 +117,13 @@ class ContentController extends TvSeriesBase{
 					if (isset($episodes[$i]))
 						$source->setEpisode($episodes[$i]);
 
+					if (isset($subtitles[$i])) {
+						if (SecuredDisk::access()->exists($source->getSubtitle())) {
+							SecuredDisk::access()->delete($source->getSubtitle());
+						}
+						$source->setSubtitle(SecuredDisk::access()->putFile(Directories::Subtitles, $subtitles[$i], 'private'));
+					}
+
 					if (isset($videos[$i])) {
 						if (SecuredDisk::access()->exists($source->getFile())) {
 							SecuredDisk::access()->delete($source->getFile());
@@ -126,12 +134,14 @@ class ContentController extends TvSeriesBase{
 					$source->save();
 				}
 			}
-			$response->status(HttpOkay)->message('Tv series content was updated successfully.');
+			$response->status(HttpOkay)->message('Episodes were updated successfully.');
 		}
 		catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('Could not find tv series for that key.');
 		}
-		catch (Throwable $exception) {
+
+		catch
+		(Throwable $exception) {
 			dd($exception);
 			$response->status(HttpServerError)->message($exception->getTraceAsString());
 		}

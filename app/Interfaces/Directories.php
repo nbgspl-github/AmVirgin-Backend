@@ -13,4 +13,5 @@ interface Directories{
 	const Trailers = 'trailers';
 	const ProductImage = "product-images";
 	const VideoSnaps = 'video-snaps';
+	const Subtitles = 'subtitles';
 }
