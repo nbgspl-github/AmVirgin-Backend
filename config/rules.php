@@ -434,6 +434,5 @@ return [
 				'active' => ['bail', 'required', 'boolean'],
 			],
 		],
-
 	],
 ];

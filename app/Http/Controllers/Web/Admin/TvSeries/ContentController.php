@@ -140,8 +140,7 @@ class ContentController extends TvSeriesBase{
 			$response->status(HttpResourceNotFound)->message('Could not find tv series for that key.');
 		}
 
-		catch
-		(Throwable $exception) {
+		catch (Throwable $exception) {
 			dd($exception);
 			$response->status(HttpServerError)->message($exception->getTraceAsString());
 		}
