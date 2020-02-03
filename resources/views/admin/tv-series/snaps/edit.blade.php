@@ -25,7 +25,7 @@
 								</button>
 							</div>
 							<div class="col-6">
-								<a href="{{route("admin.tv-series.index")}}" class="btn btn-secondary waves-effect btn-block shadow-sm">
+								<a href="{{route("admin.tv-series.edit.action",$payload->getKey())}}" class="btn btn-secondary waves-effect btn-block shadow-sm">
 									Cancel
 								</a>
 							</div>

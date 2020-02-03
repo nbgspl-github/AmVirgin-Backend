@@ -13,7 +13,7 @@
 					<div class="card-body pb-0">
 						<div class="form-row" id="container">
 							@foreach($videos as $video)
-								@include('admin.tv-series.content.bladeVideoBox',['id'=>$loop->index,'key'=>$snap['id']])
+								@include('admin.tv-series.content.bladeVideoBox',['qualities'=>$qualities,'languages'=>$languages,'payload'=>$video,'id'=>$loop->index])
 							@endforeach
 						</div>
 					</div>
@@ -91,12 +91,13 @@
 		};
 
 		handleDelete = (id) => {
+			console.log(id);
 			$('#item_' + id).remove();
 			insertConditionally();
 		};
 
 		handleAsyncDelete = (id, key) => {
-			alertify.confirm("Are you sure you want to delete this video?",
+			alertify.confirm("Are you sure you want to delete this episode?",
 				(ev) => {
 					ev.preventDefault();
 					axios.delete('/admin/tv-series/' + videoId + '/content/' + key)
@@ -121,24 +122,13 @@
 			$('#input_' + id).trigger('click');
 		};
 
-		handleEnter = (id, action) => {
-			// const element = $('#preview_' + id);
-			// if (action === 'switch') {
-			// 	element.removeClass('reset-animation');
-			// 	element.addClass('frost');
-			// } else {
-			// 	element.removeClass('reset-animation');
-			// 	element.addClass('greyscale');
-			// }
-		};
-
-		handleLeave = (id, action) => {
-			// const element = $('#preview_' + id);
-			// element.removeClass('greyscale frost');
-			// element.addClass('reset-animation');
-		};
-
 		handleSubmit = (context) => {
+			const validator = $('#uploadForm').parsley();
+			if (!validator.isValid()) {
+				alertify.alert('Fix the errors in the form and retry.');
+				return;
+			}
+
 			const config = {
 				onUploadProgress: handleUploadProgress,
 				headers: {
@@ -151,7 +141,7 @@
 				show: true,
 				backdrop: 'static'
 			});
-			axios.post('/admin/tv-series/' + videoId + '/update/snaps', formData, config,).then(response => {
+			axios.post('/admin/tv-series/' + videoId + '/update/content', formData, config,).then(response => {
 				const status = response.data.status;
 				modal.modal('hide');
 				if (status !== 200) {

@@ -3,11 +3,15 @@
 namespace App\Models;
 
 use App\Traits\ActiveStatus;
+use App\Traits\FluentConstructor;
+use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class VideoSource extends Model{
 	use ActiveStatus;
+	use RetrieveResource;
+	use FluentConstructor;
 
 	protected $table = 'video-sources';
 
@@ -160,9 +164,9 @@ class VideoSource extends Model{
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
-	public function getFile(): string{
+	public function getFile(): ?string{
 		return $this->file;
 	}
 
@@ -185,7 +189,7 @@ class VideoSource extends Model{
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
 	public function getSubtitle(){
 		return $this->subtitle;

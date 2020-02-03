@@ -107,7 +107,7 @@ Route::prefix('admin')->group(function (){
 			});
 			Route::prefix('{id}/update')->group(function (){
 				Route::put('attributes', [AttributesController::class, 'edit'])->name('admin.tv-series.update.attributes');
-				Route::post('content', [ContentController::class, 'edit'])->name('admin.tv-series.update.content');
+				Route::post('content', [ContentController::class, 'update'])->name('admin.tv-series.update.content');
 				Route::post('media', [MediaController::class, 'update'])->name('admin.tv-series.update.media');
 				Route::post('snaps', [SnapsController::class, 'update'])->name('admin.tv-series.update.snaps');
 			});

@@ -293,7 +293,15 @@ return [
 
 				],
 				'update' => [
-
+					'title.*' => ['bail', 'required', 'string', 'min:1', 'max:256'],
+					'description.*' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
+					'duration.*' => ['bail', 'required', 'date_format:H:i:s'],
+					'season.*' => ['bail', 'required', 'numeric', 'min:1', 'max:25'],
+					'language.*' => ['bail', 'required', 'exists:media-languages,id'],
+					'quality.*' => ['bail', 'required', 'exists:media-qualities,id'],
+					'episode.*' => ['bail', 'required', 'numeric', 'min:1', 'max:250', 'distinct'],
+					'video.*' => ['bail', 'required', 'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4,video/mkv'],
+					'source.*' => ['bail', 'nullable'],
 				],
 			],
 			'snaps' => [

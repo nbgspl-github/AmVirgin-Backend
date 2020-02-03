@@ -3,19 +3,21 @@
 namespace App\Http\Controllers\Web\Admin\TvSeries;
 
 use App\Classes\WebResponse;
+use App\Events\Admin\TvSeries\TvSeriesUpdated;
 use App\Interfaces\Directories;
 use App\Models\MediaLanguage;
 use App\Models\MediaQuality;
 use App\Models\Video;
 use App\Models\VideoSource;
+use App\Storage\SecuredDisk;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Storage;
 use stdClass;
 use Throwable;
 
 class ContentController extends TvSeriesBase{
-	public function create(){
-
+	public function __construct(){
+		parent::__construct();
+		$this->ruleSet->load('rules.admin.tv-series.content');
 	}
 
 	public function edit($id){
@@ -67,8 +69,8 @@ class ContentController extends TvSeriesBase{
 		$response = $this->response();
 		try {
 			$video = Video::retrieveThrows($id);
-			$payload = $this->requestValid(request(), $this->rules('update')['content']);
-			$sources = isset($payload['source']) ? $payload['source'] : [];
+			$payload = $this->requestValid(request(), $this->rules('update'));
+			$sources = $payload['source'];
 			$videos = isset($payload['video']) ? $payload['video'] : [];
 			$qualities = $payload['quality'];
 			$episodes = $payload['episode'];
@@ -77,69 +79,64 @@ class ContentController extends TvSeriesBase{
 			$titles = $payload['title'];
 			$descriptions = $payload['description'];
 			$durations = $payload['duration'];
-			$count = count($videos);
+			$count = count($sources);
 			for ($i = 0; $i < $count; $i++) {
-				$source = isset($sources[$i]) ? VideoSource::find($sources[$i]) : null;
-				if ($source != null) {
-					$fields = [
-						'title' => $titles[$i],
-						'description' => $descriptions[$i],
-						'duration' => $durations[$i],
-						'videoId' => $video->getKey(),
-						'videoIndex' => 0,
-						'season' => $seasons[$i],
-						'episode' => $episodes[$i],
-						'hits' => 0,
-						'mediaLanguageId' => $languages[$i],
-						'mediaQualityId' => $qualities[$i],
-					];
-					if (isset($videos[$i])) {
-						$fields['file'] = Storage::disk('secured')->putFile(Directories::Videos, $videos[$i], 'public');
-					}
-					$source->update($fields);
+				try {
+					$source = VideoSource::retrieveThrows($sources[$i]);
 				}
-				else {
-					VideoSource::create([
-						'title' => $titles[$i],
-						'description' => $descriptions[$i],
-						'duration' => $durations[$i],
-						'videoId' => $video->getKey(),
-						'videoIndex' => 0,
-						'season' => $seasons[$i],
-						'episode' => $episodes[$i],
-						'hits' => 0,
-						'mediaLanguageId' => $languages[$i],
-						'mediaQualityId' => $qualities[$i],
-						'file' => Storage::disk('secured')->putFile(Directories::Videos, $videos[$i], 'public'),
-					]);
+				catch (ModelNotFoundException $exception) {
+					$source = VideoSource::newObject();
+					$source->setVideoId($id);
+				}
+				finally {
+					if (isset($titles[$i]))
+						$source->setTitle($titles[$i]);
+
+					if (isset($descriptions[$i]))
+						$source->setDescription($descriptions[$i]);
+
+					if (isset($durations[$i]))
+						$source->setDuration($durations[$i]);
+
+					if (isset($seasons[$i]))
+						$source->setSeason($seasons[$i]);
+
+					if (isset($qualities[$i]))
+						$source->mediaQualityId = $qualities[$i];
+
+					if (isset($languages[$i]))
+						$source->mediaLanguageId = $languages[$i];
+
+					if (isset($durations[$i]))
+						$source->setDuration($durations[$i]);
+
+					if (isset($seasons[$i]))
+						$source->setSeason($seasons[$i]);
+
+					if (isset($episodes[$i]))
+						$source->setEpisode($episodes[$i]);
+
+					if (isset($videos[$i])) {
+						if (SecuredDisk::access()->exists($source->getFile())) {
+							SecuredDisk::access()->delete($source->getFile());
+						}
+						$source->setFile(SecuredDisk::access()->putFile(Directories::Videos, $videos[$i], 'private'));
+					}
+
+					$source->save();
 				}
 			}
-			$seasonCount = VideoSource::distinct('season')->count('season');
-			$mediaLanguages = VideoSource::select('mediaLanguageId')->where('videoId', $video->getKey())->get();
-			$mediaLanguages->transform(function ($obj){
-				return MediaLanguage::find($obj->mediaLanguageId);
-			});
-			$mediaQualities = VideoSource::select('mediaQualityId')->where('videoId', $video->getKey())->get();
-			$mediaQualities->transform(function ($obj){
-				return MediaQuality::find($obj->mediaQualityId);
-			});
-			$video->update([
-				'seasons' => $seasonCount,
-			]);
-			$video->setQualitySlug($mediaQualities);
-			$video->setLanguageSlug($mediaLanguages);
-			$video->save();
-
-			$response->status(HttpOkay)->message('Video content was updated successfully.');
+			$response->status(HttpOkay)->message('Tv series content was updated successfully.');
 		}
 		catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find video for that key.');
+			$response->status(HttpResourceNotFound)->message('Could not find tv series for that key.');
 		}
 		catch (Throwable $exception) {
 			dd($exception);
 			$response->status(HttpServerError)->message($exception->getTraceAsString());
 		}
 		finally {
+			event(new TvSeriesUpdated($id));
 			return $response->send();
 		}
 	}
@@ -149,15 +146,16 @@ class ContentController extends TvSeriesBase{
 		try {
 			$videoSnap = VideoSource::retrieveThrows($subId);
 			$videoSnap->delete();
-			$response->status(HttpOkay)->message('Video deleted successfully.');
+			$response->status(HttpOkay)->message('Episode deleted successfully.');
 		}
 		catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find tv series for that key.');
+			$response->status(HttpResourceNotFound)->message('Could not find episode for that key.');
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
 		}
 		finally {
+			event(new TvSeriesUpdated($id));
 			return $response->send();
 		}
 	}
