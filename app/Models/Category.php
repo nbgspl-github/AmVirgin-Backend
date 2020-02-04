@@ -6,6 +6,7 @@ use App\Traits\GenerateUrls;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\Resources\PotentiallyMissing;
 
 class Category extends Model{
 	use RetrieveResource;
@@ -102,7 +103,7 @@ class Category extends Model{
 	public function getPoster(): ?string{
 		return $this->poster;
 	}
-	
+
 	/**
 	 * @return string|null
 	 */
@@ -124,7 +125,7 @@ class Category extends Model{
 	 * @param string|null $Icon
 	 * @return Category
 	 */
-	
+
 	public function setIcon(?string $icon): Category{
 		$this->icon = $icon;
 		return $this;
@@ -135,5 +136,9 @@ class Category extends Model{
 	 */
 	public function attributes(){
 		return $this->hasMany('App\Models\Attribute', 'categoryId');
+	}
+
+	public function children(){
+		return $this->hasMany(Category::class, 'parentId');
 	}
 }

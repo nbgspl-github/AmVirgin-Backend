@@ -7,11 +7,11 @@ use App\Http\Resources\Videos\VideoResource;
 use App\Interfaces\VideoTypes;
 use App\Models\Video;
 use App\Models\VideoSource;
+use App\Storage\SecuredDisk;
 use App\Traits\FluentResponse;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class VideosController extends ResourceController{
@@ -36,8 +36,8 @@ class VideosController extends ResourceController{
 								return [
 									'language' => $source->language()->first()->getName(),
 									'quality' => $source->mediaQuality()->first()->getName(),
-									'url' => Storage::disk('secured')->url($source->getFile()),
-									'subtitle' => $source->getSubtitle(),
+									'url' => SecuredDisk::access()->url($source->getFile()),
+									'subtitle' => SecuredDisk::access()->url($source->getSubtitle()),
 								];
 							})->values(),
 						];

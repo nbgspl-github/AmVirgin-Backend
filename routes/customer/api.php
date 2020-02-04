@@ -33,6 +33,10 @@ Route::prefix('customer')->group(function (){
 		Route::get('/{slug}', [\App\Http\Controllers\App\Customer\VideosController::class, 'show']);
 	});
 
+	Route::prefix('categories')->group(function (){
+		Route::get('/', [\App\Http\Controllers\App\Seller\CategoriesController::class, 'index']);
+	});
+
 	Route::prefix('playback')->middleware([])->group(function (){
 		Route::prefix('trailer')->group(function (){
 			Route::get('video/{slug}', [TrailerPlayback::class, 'video']);
