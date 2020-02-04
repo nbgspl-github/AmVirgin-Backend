@@ -29,7 +29,6 @@ class SessionController extends BaseController{
 		$response = $this->response();
 		try {
 			$session = CartSession::where('sessionId', $sessionId)->firstOrFail();
-			dd($session);
 			$response->status(HttpOkay)->message('Session token is valid.')->setValue('valid', true);
 		}
 		catch (ModelNotFoundException $exception) {
