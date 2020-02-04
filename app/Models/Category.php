@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
+use App\Traits\FluentConstructor;
 use App\Traits\GenerateUrls;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Http\Resources\PotentiallyMissing;
 
 class Category extends Model{
 	use RetrieveResource;
 	use GenerateUrls;
+	use FluentConstructor;
 
 	protected $table = 'categories';
 
