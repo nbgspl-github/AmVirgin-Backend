@@ -7,6 +7,7 @@ use App\Http\Controllers\BaseController;
 use App\Models\Category;
 use App\Storage\SecuredDisk;
 use App\Traits\FluentResponse;
+use Sujip\Guid\Facades\Guid;
 
 class CategoriesController extends BaseController{
 	use FluentResponse;

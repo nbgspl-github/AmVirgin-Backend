@@ -24,18 +24,22 @@ class CreateVideosTable extends Migration{
 			$table->string('poster', 512);
 			$table->string('backdrop', 512);
 			$table->unsignedBigInteger('genreId');
+			$table->string('qualitySlug', 500)->nullable();
+			$table->string('languageSlug', 500)->nullable();
 			$table->float('rating', 3, 2)->default(0.0);
 			$table->string('pgRating')->nullable();
 			$table->string('type', 25);
 			$table->bigInteger('hits')->default(0);
 			$table->boolean('trending')->default(false);
 			$table->integer('rank')->default(0)->comment('0 means no rank assigned and with that, this is just a normal one');
+			$table->boolean('topPick')->default(false);
 			$table->boolean('showOnHome')->default(false);
 			$table->string('subscriptionType')->comment('free, paid, subscription');
 			$table->float('price')->default(0.00)->comment('In case of paid feature, check this column');
 			$table->boolean('hasSeasons')->default(false);
-			$table->integer('seasons')->default(0)->nullable();
+			$table->integer('seasons')->default(0);
 			$table->boolean('active')->default(true);
+			$table->boolean('pending')->default(true);
 			$table->timestamps();
 		});
 	}

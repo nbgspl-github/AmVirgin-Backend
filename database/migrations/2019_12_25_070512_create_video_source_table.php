@@ -24,6 +24,7 @@ class CreateVideoSourceTable extends Migration{
 			$table->boolean('active')->default(true);
 			$table->unsignedBigInteger('mediaLanguageId');
 			$table->unsignedBigInteger('mediaQualityId');
+			$table->string('subtitle', 4096)->nullable();
 			$table->string('file', 4096);
 			$table->timestamps();
 		});

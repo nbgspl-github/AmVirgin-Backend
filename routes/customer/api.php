@@ -37,6 +37,11 @@ Route::prefix('customer')->group(function (){
 		Route::get('/', [\App\Http\Controllers\App\Seller\CategoriesController::class, 'index']);
 	});
 
+	Route::prefix('sessions')->group(function (){
+		Route::get('/start', [\App\Http\Controllers\App\Customer\Session\SessionController::class, 'create']);
+		Route::get('/{sessionId}', [\App\Http\Controllers\App\Customer\Session\SessionController::class, 'check']);
+	});
+
 	Route::prefix('playback')->middleware([])->group(function (){
 		Route::prefix('trailer')->group(function (){
 			Route::get('video/{slug}', [TrailerPlayback::class, 'video']);
