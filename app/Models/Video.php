@@ -49,27 +49,10 @@ class Video extends Model{
 		'active',
 	];
 
-	protected $downloadableAttributes = [
-		'Poster' => [
-			'method' => 'Poster',
-			'attribute' => 'poster',
-		],
-		'Backdrop' => [
-			'method' => 'Backdrop',
-			'attribute' => 'backdrop',
-		],
-		'Trailer' => [
-			'method' => 'Trailer',
-			'attribute' => 'trailer',
-		],
-	];
-
 	protected $hidden = [
 		'created_at',
 		'updated_at',
 	];
-
-	protected $disk = 'public';
 
 	/**
 	 * @return int
@@ -441,7 +424,7 @@ class Video extends Model{
 	 * @return array
 	 */
 	public function getQualitySlug(): array{
-		return explode($this->qualitySlug, '|');
+		return explode($this->qualitySlug, '/');
 	}
 
 	/**
@@ -453,7 +436,7 @@ class Video extends Model{
 		$mediaQualities->transform(function (MediaQuality $quality){
 			return $quality->getName();
 		});
-		$this->qualitySlug = implode('|', $mediaQualities->toArray());
+		$this->qualitySlug = implode('/', $mediaQualities->toArray());
 		return $this;
 	}
 
@@ -461,7 +444,7 @@ class Video extends Model{
 	 * @return array
 	 */
 	public function getLanguageSlug(): array{
-		return explode($this->qualitySlug, '|');
+		return explode($this->qualitySlug, '/');
 	}
 
 	/**
@@ -473,7 +456,7 @@ class Video extends Model{
 		$mediaLanguages->transform(function (MediaLanguage $language){
 			return $language->getName();
 		});
-		$this->languageSlug = implode('|', $mediaLanguages->toArray());
+		$this->languageSlug = implode('/', $mediaLanguages->toArray());
 		return $this;
 	}
 

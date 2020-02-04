@@ -51,4 +51,8 @@ Route::prefix('customer')->group(function (){
 		Route::get('video', [PlaybackController::class, 'video']);
 		Route::get('tv-series', [PlaybackController::class, 'series']);
 	});
+
+	Route::get('/test', function (){
+		event(new \App\Events\Admin\TvSeries\TvSeriesUpdated(1));
+	});
 });
