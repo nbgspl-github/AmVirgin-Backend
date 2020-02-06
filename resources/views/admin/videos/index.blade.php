@@ -1,6 +1,6 @@
 @extends('admin.app.app')
 @section('content')
-	<div class="row">
+	<div class="row ">
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
