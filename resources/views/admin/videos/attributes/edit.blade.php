@@ -6,9 +6,9 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Tv series - Edit or update attributes'])
+					@include('admin.extras.header', ['title'=>'Video - Edit or update attributes'])
 				</div>
-				<form id="uploadForm" action="{{route('admin.tv-series.update.attributes',$payload->getKey())}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
+				<form id="uploadForm" action="{{route('admin.videos.update.attributes',$payload->getKey())}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="card-body">
 						<div class="form-group">
@@ -154,7 +154,7 @@
 								</button>
 							</div>
 							<div class="col-6 pl-sm-3">
-								<a href="{{route("admin.tv-series.edit.action",$payload->getKey())}}" class="btn btn-secondary waves-effect btn-block shadow-sm">
+								<a href="{{route("admin.videos.edit.action",$payload->getKey())}}" class="btn btn-secondary waves-effect btn-block shadow-sm">
 									Cancel
 								</a>
 							</div>
@@ -237,46 +237,46 @@
 			});
 		});
 
-		$('#uploadForm').submit(function (event) {
-			if (manuallyFired)
-				return;
+		{{--$('#uploadForm').submit(function (event) {--}}
+		{{--	if (manuallyFired)--}}
+		{{--		return;--}}
 
-			event.preventDefault();
-			const validator = $('#uploadForm').parsley();
-			if (!validator.isValid()) {
-				alertify.alert('Fix the errors in the form and retry.');
-				return;
-			}
-			const config = {
-				onUploadProgress: uploadProgress,
-				headers: {
-					'Content-Type': 'multipart/form-data'
-				}
-			};
-			const formData = new FormData(this);
-			modal.modal({
-				keyboard: false,
-				show: true,
-				backdrop: 'static'
-			});
-			axios.post('/admin/tv-series/{{$payload->getKey()}}/attributes', formData, config,).then(response => {
-				const status = response.data.status;
-				modal.modal('hide');
-				if (status !== 200) {
-					alertify.alert(response.data.message);
-				} else {
-					modalFinal.modal({
-						show: true,
-						keyboard: false,
-						backdrop: 'static'
-					});
-				}
-			}).catch(error => {
-				modal.modal('hide');
-				console.log(error);
-				toastr.error('Something went wrong. Please try again.');
-			});
-		});
+		{{--	event.preventDefault();--}}
+		{{--	const validator = $('#uploadForm').parsley();--}}
+		{{--	if (!validator.isValid()) {--}}
+		{{--		alertify.alert('Fix the errors in the form and retry.');--}}
+		{{--		return;--}}
+		{{--	}--}}
+		{{--	const config = {--}}
+		{{--		onUploadProgress: uploadProgress,--}}
+		{{--		headers: {--}}
+		{{--			'Content-Type': 'multipart/form-data'--}}
+		{{--		}--}}
+		{{--	};--}}
+		{{--	const formData = new FormData(this);--}}
+		{{--	modal.modal({--}}
+		{{--		keyboard: false,--}}
+		{{--		show: true,--}}
+		{{--		backdrop: 'static'--}}
+		{{--	});--}}
+		{{--	axios.post('/admin/tv-series/{{$payload->getKey()}}/attributes', formData, config,).then(response => {--}}
+		{{--		const status = response.data.status;--}}
+		{{--		modal.modal('hide');--}}
+		{{--		if (status !== 200) {--}}
+		{{--			alertify.alert(response.data.message);--}}
+		{{--		} else {--}}
+		{{--			modalFinal.modal({--}}
+		{{--				show: true,--}}
+		{{--				keyboard: false,--}}
+		{{--				backdrop: 'static'--}}
+		{{--			});--}}
+		{{--		}--}}
+		{{--	}).catch(error => {--}}
+		{{--		modal.modal('hide');--}}
+		{{--		console.log(error);--}}
+		{{--		toastr.error('Something went wrong. Please try again.');--}}
+		{{--	});--}}
+		{{--});--}}
 
 		function subscriptionTypeChanged(type) {
 			const elem = $('#price');
