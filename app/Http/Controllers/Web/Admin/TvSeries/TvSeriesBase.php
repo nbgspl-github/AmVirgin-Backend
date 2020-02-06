@@ -14,10 +14,10 @@ use App\Models\MediaServer;
 use App\Models\Video;
 use App\Models\VideoMeta;
 use App\Models\VideoSource;
+use App\Storage\SecuredDisk;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class TvSeriesBase extends BaseController{
@@ -70,17 +70,14 @@ class TvSeriesBase extends BaseController{
 		$response = $this->response();
 		try {
 			$validated = $this->requestValid(request(), $this->rules('store'));
-			$trailer = Storage::disk('secured')->putFile(Directories::Trailers, request()->file('trailer'), 'public');
-			$poster = Storage::disk('secured')->putFile(Directories::Posters, request()->file('poster'), 'public');
-			$backdrop = Storage::disk('secured')->putFile(Directories::Backdrops, request()->file('backdrop'), 'public');
+			$trailer = SecuredDisk::access()->putFile(Directories::Trailers, request()->file('trailer'));
+			$poster = SecuredDisk::access()->putFile(Directories::Posters, request()->file('poster'));
+			$backdrop = SecuredDisk::access()->putFile(Directories::Backdrops, request()->file('backdrop'));
 			if (request()->has('trending')) {
 				$this->replaceTrending($validated['rank']);
 			}
 
 			$validated = collect($validated)->filter()->all();
-			/**
-			 * @var Video $video
-			 */
 			$video = Video::create([
 				'title' => $validated['title'],
 				'description' => $validated['description'],

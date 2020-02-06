@@ -1691,9 +1691,9 @@ label {
 }
 
 .form-control:focus {
-    border-color: rgba(207, 63, 67, 0.75);
-    box-shadow: 0 5px 8px rgba(207, 63, 67, 0.75);
-    -webkit-box-shadow: 0 5px 8px rgba(207, 63, 67, 0.76);
+    border-color: rgba(207, 63, 67, 0.45);
+    box-shadow: 0 5px 8px rgba(207, 63, 67, 0.35);
+    -webkit-box-shadow: 0 5px 8px rgba(207, 63, 67, 0.35);
     transform: translateY(-2px);
     transition: .3s;
 }

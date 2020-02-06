@@ -23,14 +23,14 @@ class MediaController extends TvSeriesBase{
 	public function edit($id){
 		$response = responseWeb();
 		try {
-			$tvSeries = Video::retrieveThrows($id);
-			$response = view('admin.tv-series.media.edit')->with('payload', $tvSeries);
+			$video = Video::retrieveThrows($id);
+			$response = view('admin.videos.media.edit')->with('payload', $video);
 		}
 		catch (ModelNotFoundException $exception) {
-			$response->route('admin.tv-series.index')->error('Could not find tv series for that key.');
+			$response->route('admin.videos.index')->error('Could not find video for that key.');
 		}
 		catch (Throwable $exception) {
-			$response->route('admin.tv-series.index')->error($exception->getMessage());
+			$response->route('admin.videos.index')->error($exception->getMessage());
 		}
 		finally {
 			if ($response instanceof WebResponse)

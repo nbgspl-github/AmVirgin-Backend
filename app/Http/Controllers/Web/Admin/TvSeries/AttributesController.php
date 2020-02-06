@@ -20,10 +20,6 @@ class AttributesController extends TvSeriesBase{
 		$this->ruleSet->load('rules.admin.tv-series.attributes');
 	}
 
-	public function create(){
-
-	}
-
 	public function edit($id){
 		$response = responseWeb();
 		try {
@@ -51,10 +47,6 @@ class AttributesController extends TvSeriesBase{
 			else
 				return $response;
 		}
-	}
-
-	public function store(){
-
 	}
 
 	public function update($id){

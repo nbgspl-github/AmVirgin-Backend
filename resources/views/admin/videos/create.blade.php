@@ -13,7 +13,7 @@
 					<div class="card-body">
 						<div class="row">
 							<div class="col-6 mx-auto">
-								<div class="card shadow-none" style="border: 1px solid #b4b9bf;">
+								<div class="card shadow-none" style="border: 1px solid rgba(180,185,191,0.4);">
 									<div class="card-header text-primary font-weight-bold bg-white">
 										Type the following details to proceed to next step...
 									</div>
