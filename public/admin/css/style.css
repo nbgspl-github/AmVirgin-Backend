@@ -1686,13 +1686,15 @@ label {
 }
 
 .form-control {
-    font-size: 15px
+    font-size: 15px;
+    transition: .3s;
 }
 
 .form-control:focus {
-    border-color: #cf3f43;
-    box-shadow: 0 4px 8px rgba(207, 63, 67, 0.75);
-    -webkit-box-shadow: 0 4px 8px rgba(207, 63, 67, 0.76);
+    border-color: rgba(207, 63, 67, 0.75);
+    box-shadow: 0 5px 8px rgba(207, 63, 67, 0.75);
+    -webkit-box-shadow: 0 5px 8px rgba(207, 63, 67, 0.76);
+    transform: translateY(-2px);
     transition: .3s;
 }
 
