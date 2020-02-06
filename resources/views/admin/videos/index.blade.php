@@ -16,31 +16,34 @@
 							<th class="text-center">Description</th>
 							<th class="text-center">Rating</th>
 							<th class="text-center">Trending</th>
+							<th class="text-center">Seasons</th>
+							<th class="text-center">Pending</th>
 							<th class="text-center">Action(s)</th>
 						</tr>
 						</thead>
 
 						<tbody>
-						@foreach($movies as $movie)
-							<tr id="content_row_{{$movie->getKey()}}">
+						@foreach($videos as $video)
+							<tr id="content_row_{{$video->getKey()}}">
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">
-									@if($movie->getPoster()!=null)
-										<img src="{{Storage::disk('secured')->url($movie->getPoster())}}" style="width: 100px; height: 100px" alt="{{$movie->getTitle()}}"/>
+									@if($video->getPoster()!=null)
+										<img src="{{\App\Storage\SecuredDisk::access()->url($video->getPoster())}}" style="width: 100px; height: 150px; filter: drop-shadow(2px 2px 8px black)" alt="{{$video->getTitle()}}"/>
 									@else
 										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 25px"></i>
 									@endif
 								</td>
-								<td class="text-center">{{$movie->getTitle()}}</td>
-								<td class="text-center">{{__ellipsis($movie->getDescription(),40)}}</td>
-								<td class="text-center">{{$movie->getRating()}}</td>
-								<td class="text-center">{{__boolean($movie->trending)}}</td>
+								<td class="text-center">{{$video->getTitle()}}</td>
+								<td class="text-center">{{__ellipsis($video->getDescription(),50)}}</td>
+								<td class="text-center">{{$video->getRating()}}</td>
+								<td class="text-center">{{__boolean($video->trending)}}</td>
+								<td class="text-center">{{$video->getSeasons()}}</td>
+								<td class="text-center">{{__boolean($videoi->pending)}}</td>
 								<td class="text-center">
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group mx-auto" role="group">
-											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.videos.edit.content',$movie->getKey())}}" @include('admin.extras.tooltip.left', ['title' => 'Add video(s)'])><i class="mdi mdi-plus"></i></a>
-											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.videos.edit.attributes',$movie->getKey())}}" @include('admin.extras.tooltip.top', ['title' => 'Edit details'])><i class="mdi mdi-pencil"></i></a>
-											<a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);" onclick="deleteMovie('{{$movie->getKey()}}');" @include('admin.extras.tooltip.right', ['title' => 'Delete this video'])><i class="mdi mdi-delete"></i></a>
+											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.videos.edit.action',$s->getKey())}}" @include('admin.extras.tooltip.left', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
+											<a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);" onclick="deleteMovie('{{$s->getKey()}}');" @include('admin.extras.tooltip.right', ['title' => 'Delete this video'])><i class="mdi mdi-delete"></i></a>
 										</div>
 									</div>
 								</td>

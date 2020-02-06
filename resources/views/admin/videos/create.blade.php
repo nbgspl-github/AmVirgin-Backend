@@ -6,16 +6,16 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Add a video/movie'])
+					@include('admin.extras.header', ['title'=>'Add a Video/Movie'])
 				</div>
 				<form id="uploadForm" action="{{route('admin.videos.store')}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="card-body">
 						<div class="row">
-							<div class="col-12 col-md-12 col-lg-6 col-xl-6 mr-0 pr-0">
+							<div class="col-6 mx-auto">
 								<div class="card shadow-none" style="border: 1px solid #b4b9bf;">
 									<div class="card-header text-primary font-weight-bold bg-white">
-										Attributes
+										Type the following details proceed next step...
 									</div>
 									<div class="card-body">
 										<div class="form-group">
@@ -28,19 +28,15 @@
 										</div>
 										<div class="form-group">
 											<label for="cast">Cast<span class="text-primary">*</span></label>
-											<input id="cast" type="text" name="cast" class="form-control" required placeholder="Type here the movie's cast name (separate with ,)" minlength="1" maxlength="256" value="{{old('title')}}"/>
+											<input id="cast" type="text" name="cast" class="form-control" required placeholder="Type here the movie's cast name (separate with /)" minlength="1" maxlength="256" value="{{old('title')}}"/>
 										</div>
 										<div class="form-group">
 											<label for="director">Director<span class="text-primary">*</span></label>
-											<input id="director" type="text" name="director" class="form-control" required placeholder="Type here the movie's director's name (separate with ,)" minlength="1" maxlength="256" value="{{old('title')}}"/>
+											<input id="director" type="text" name="director" class="form-control" required placeholder="Type here the movie's director's name (separate with /)" minlength="1" maxlength="256" value="{{old('title')}}"/>
 										</div>
 										<div class="form-group">
 											<label for="description">Overview (Description)<span class="text-primary">*</span></label>
-											<textarea id="description" name="description" class="form-control" required placeholder="Type short summary about the movie or video" minlength="1" maxlength="2000">{{old('description')}}</textarea>
-										</div>
-										<div class="form-group">
-											<label for="trailer">Trailer video<span class="text-primary">*</span></label>
-											<input id="trailer" type="file" placeholder="Choose a trailer video file..." name="trailer" class="form-control" style="height: unset; padding-left: 6px" required>
+											<textarea id="description" name="description" class="form-control" required placeholder="Type short summary about the movie or video" minlength="1" rows="5" maxlength="2000">{{old('description')}}</textarea>
 										</div>
 										<div class="form-group">
 											<label for="genre">Choose a genre<span class="text-primary">*</span></label>
@@ -85,7 +81,7 @@
 										</div>
 										<div class="form-group">
 											<label for="price">Price<span class="text-primary">*</span></label>
-											<input id="price" type="number" name="price" class="form-control" required placeholder="Type price for this movie/video" min="0.00" max="10000.00" step="0.01" readonly/>
+											<input id="price" type="number" name="price" class="form-control" required placeholder="Type price for this movie/video" min="0" max="10000" step="1" readonly/>
 										</div>
 										<div class="form-group">
 											<label>Push notify customers?</label>
@@ -126,245 +122,23 @@
 									</div>
 								</div>
 							</div>
-							<div class="col-12 col-md-12 col-lg-6 col-xl-6 mt-3 mt-sm-0">
-								<div class="card shadow-none" style="border: 1px solid #b4b9bf;">
-									<div class="card-header text-primary font-weight-bold bg-white">
-										Media
-									</div>
-									<div class="card-body">
-										<div class="form-group">
-											<div class="card bg-white shadow-none" style="border: 1px solid #ced4da;">
-												<div class="card-header">
-													<div class="row">
-														<div class="d-none">
-															<input id="pickPoster" type="file" name="poster" onclick="this.value=null;" onchange="previewPoster(event);" class="form-control" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('poster')}}">
-														</div>
-														<div class="col-6">
-															<h3 class="my-0 header-title">Poster <span class="text-warning">(Max 5MB)</span></h3>
-														</div>
-														<div class="col-6">
-															<button type="button" class="btn btn-outline-primary rounded shadow-sm float-right" onclick="$('#pickPoster').trigger('click');">Browse</button>
-														</div>
-													</div>
-												</div>
-												<div class="card-body p-0 rounded">
-													<div class="row">
-														<div class="col-12 text-center">
-															<img id="posterPreview" class="img-fluid" style="max-height: 800px!important; min-height: 800px;"/>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="form-group pb-0 mb-0">
-											<div class="card shadow-none bg-white" style="border: 1px solid #ced4da;">
-												<div class="card-header">
-													<div class="row">
-														<div class="d-none">
-															<input id="pickBackdrop" type="file" name="backdrop" onclick="this.value=null;" onchange="previewBackdrop(event);" class="form-control" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('backdrop')}}">
-														</div>
-														<div class="col-6">
-															<h3 class="my-0 header-title">Backdrop <span class="text-warning">(Max 5MB)</span></h3>
-														</div>
-														<div class="col-6">
-															<button type="button" class="btn btn-outline-primary rounded shadow-sm float-right" onclick="$('#pickBackdrop').trigger('click');">Browse</button>
-														</div>
-													</div>
-												</div>
-												<div class="card-body p-0 rounded">
-													<div class="row">
-														<div class="col-12 text-center">
-															<img id="backdropPreview" class="img-fluid" style="max-height: 367px!important; min-height: 367px;"/>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="row mt-4">
-							<div class="col-12">
-								<div class="card shadow-none" style="border: 1px solid #b4b9bf;">
-									<div class="card-header text-primary font-weight-bold bg-white">
-										Video (Minimum required is 1)
-									</div>
-									<div class="card-body">
-										<div class="row">
-											<div class="col-sm-6">
-												<div class="form-group">
-													<label for="videoA">(1.) Video file <span class="text-warning">(Max 2GB)<span class="text-primary">*</span></span></label>
-													<input id="videoA" type="file" placeholder="Choose a video..." name="videoA" class="form-control" style="height: unset; padding-left: 6px" required accept="video/*">
-												</div>
-											</div>
-											<div class="col-sm-3">
-												<div class="form-group">
-													<label for="languageA">Language<span class="text-primary">*</span></label>
-													<select id="languageA" name="mediaLanguageIdA" class="form-control" required>
-														<option value="" disabled selected>Choose...</option>
-														@foreach($languages as $language)
-															@if ($language->getCode()=='en')
-																<option value="{{$language->getKey()}}" selected>{{$language->getName()}}</option>
-															@else
-																<option value="{{$language->getKey()}}">{{$language->getName()}}</option>
-															@endif
-														@endforeach
-													</select>
-												</div>
-											</div>
-											<div class="col-sm-3">
-												<div class="form-group">
-													<label for="mediaQualityA">Media quality<span class="text-primary">*</span></label>
-													<select id="mediaQualityA" name="mediaQualityIdA" class="form-control" required>
-														<option value="" disabled selected>Choose...</option>
-														@foreach($qualities as $quality)
-															<option value="{{$quality->getKey()}}">{{$quality->getName()}}</option>
-														@endforeach
-													</select>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-sm-6">
-												<div class="form-group">
-													<label for="videoB">(2.) Video file <span class="text-warning">(Max 2GB)</span></label>
-													<input id="videoB" type="file" placeholder="Choose a video..." name="videoB" class="form-control" style="height: unset; padding-left: 6px" accept="video/*">
-												</div>
-											</div>
-											<div class="col-sm-3">
-												<div class="form-group">
-													<label for="languageB">Language</label>
-													<select id="languageB" name="mediaLanguageIdB" class="form-control">
-														<option value="" disabled selected>Choose...</option>
-														@foreach($languages as $language)
-															@if ($language->getCode()=='hi')
-																<option value="{{$language->getKey()}}" selected>{{$language->getName()}}</option>
-															@else
-																<option value="{{$language->getKey()}}">{{$language->getName()}}</option>
-															@endif
-														@endforeach
-													</select>
-												</div>
-											</div>
-											<div class="col-sm-3">
-												<div class="form-group">
-													<label for="mediaQualityB">Media quality</label>
-													<select id="mediaQualityB" name="mediaQualityIdB" class="form-control">
-														<option value="" disabled selected>Choose...</option>
-														@foreach($qualities as $quality)
-															<option value="{{$quality->getKey()}}">{{$quality->getName()}}</option>
-														@endforeach
-													</select>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-sm-6">
-												<div class="form-group">
-													<label for="videoC">(3.) Video file <span class="text-warning">(Max 2GB)</span></label>
-													<input id="videoC" type="file" placeholder="Choose a video..." name="videoC" class="form-control" style="height: unset; padding-left: 6px" accept="video/*">
-												</div>
-											</div>
-											<div class="col-sm-3">
-												<div class="form-group">
-													<label for="languageC">Language</label>
-													<select id="languageC" name="mediaLanguageIdC" class="form-control">
-														<option value="" disabled selected>Choose...</option>
-														@foreach($languages as $language)
-															<option value="{{$language->getKey()}}">{{$language->getName()}}</option>
-														@endforeach
-													</select>
-												</div>
-											</div>
-											<div class="col-sm-3">
-												<div class="form-group">
-													<label for="mediaQualityC">Media quality</label>
-													<select id="mediaQualityC" name="mediaQualityIdC" class="form-control">
-														<option value="" disabled selected>Choose...</option>
-														@foreach($qualities as $quality)
-															<option value="{{$quality->getKey()}}">{{$quality->getName()}}</option>
-														@endforeach
-													</select>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-sm-6">
-												<div class="form-group">
-													<label for="videoD">(4.) Video file <span class="text-warning">(Max 2GB)</span></label>
-													<input id="videoD" type="file" placeholder="Choose a video..." name="videoD" class="form-control" style="height: unset; padding-left: 6px" accept="video/*">
-												</div>
-											</div>
-											<div class="col-sm-3">
-												<div class="form-group">
-													<label for="languageD">Language</label>
-													<select id="languageD" name="mediaLanguageIdD" class="form-control">
-														<option value="" disabled selected>Choose...</option>
-														@foreach($languages as $language)
-															<option value="{{$language->getKey()}}">{{$language->getName()}}</option>
-														@endforeach
-													</select>
-												</div>
-											</div>
-											<div class="col-sm-3">
-												<div class="form-group">
-													<label for="mediaQualityD">Media quality</label>
-													<select id="mediaQualityD" name="mediaQualityIdD" class="form-control">
-														<option value="" disabled selected>Choose...</option>
-														@foreach($qualities as $quality)
-															<option value="{{$quality->getKey()}}">{{$quality->getName()}}</option>
-														@endforeach
-													</select>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col-sm-6">
-												<div class="form-group">
-													<label for="video">(5.) Video file <span class="text-warning">(Max 2GB)</span></label>
-													<input id="videoE" type="file" placeholder="Choose a video..." name="videoE" class="form-control" style="height: unset; padding-left: 6px" accept="video/*">
-												</div>
-											</div>
-											<div class="col-sm-3">
-												<div class="form-group">
-													<label for="languageE">Language</label>
-													<select id="languageE" name="mediaLanguageIdE" class="form-control">
-														<option value="" disabled selected>Choose...</option>
-														@foreach($languages as $language)
-															<option value="{{$language->getKey()}}">{{$language->getName()}}</option>
-														@endforeach
-													</select>
-												</div>
-											</div>
-											<div class="col-sm-3">
-												<div class="form-group">
-													<label for="mediaQualityE">Media quality</label>
-													<select id="mediaQualityE" name="mediaQualityIdE" class="form-control">
-														<option value="" disabled selected>Choose...</option>
-														@foreach($qualities as $quality)
-															<option value="{{$quality->getKey()}}">{{$quality->getName()}}</option>
-														@endforeach
-													</select>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
 						</div>
 					</div>
 					<div class="card-footer">
-						<div class="form-row">
-							<div class="col-6">
-								<button type="submit" class="btn btn-primary waves-effect waves-light btn-block shadow-sm">
-									Save
-								</button>
-							</div>
-							<div class="col-6 pl-sm-3">
-								<a href="{{route("admin.videos.index")}}" class="btn btn-secondary waves-effect btn-block shadow-sm">
-									Cancel
-								</a>
+						<div class="row">
+							<div class="col-6 mx-auto">
+								<div class="row">
+									<div class="col-6">
+										<button type="submit" class="btn btn-primary waves-effect waves-light btn-block shadow-primary">
+											Save
+										</button>
+									</div>
+									<div class="col-6">
+										<a href="{{route("admin.genres.index")}}" class="btn btn-secondary waves-effect btn-block shadow-secondary">
+											Cancel
+										</a>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -420,7 +194,7 @@
 		}
 
 		function finishUpload() {
-			window.location.href = '/admin/videos';
+			window.location.href = '/admin/tv-series';
 		}
 
 		$(document).ready(function () {
@@ -444,52 +218,52 @@
 			});
 		});
 
-		$('#uploadForm').submit(function (event) {
-			event.preventDefault();
-			const validator = $('#uploadForm').parsley();
-			if (!validator.isValid()) {
-				alertify.alert('Fix the errors in the form and retry.');
-				return;
-			}
-			if (lastPoster === null) {
-				alertify.alert('Movie poster is required.');
-				return;
-			}
-			if (lastBackdrop === null) {
-				alertify.alert('Movie backdrop is required.');
-				return;
-			}
-
-			const config = {
-				onUploadProgress: uploadProgress,
-				headers: {
-					'Content-Type': 'multipart/form-data'
-				}
-			};
-			const formData = new FormData(this);
-			modal.modal({
-				keyboard: false,
-				show: true,
-				backdrop: 'static'
-			});
-			axios.post('/admin/videos/store', formData, config,).then(response => {
-				const status = response.data.status;
-				modal.modal('hide');
-				if (status !== 200) {
-					alertify.alert(response.data.message);
-				} else {
-					modalFinal.modal({
-						show: true,
-						keyboard: false,
-						backdrop: 'static'
-					});
-				}
-			}).catch(error => {
-				modal.modal('hide');
-				console.log(error);
-				toastr.error('Something went wrong. Please try again.');
-			});
-		});
+		// $('#uploadForm').submit(function (event) {
+		// 	event.preventDefault();
+		// 	const validator = $('#uploadForm').parsley();
+		// 	if (!validator.isValid()) {
+		// 		alertify.alert('Fix the errors in the form and retry.');
+		// 		return;
+		// 	}
+		// 	if (lastPoster === null) {
+		// 		alertify.alert('Movie poster is required.');
+		// 		return;
+		// 	}
+		// 	if (lastBackdrop === null) {
+		// 		alertify.alert('Movie backdrop is required.');
+		// 		return;
+		// 	}
+		//
+		// 	const config = {
+		// 		onUploadProgress: uploadProgress,
+		// 		headers: {
+		// 			'Content-Type': 'multipart/form-data'
+		// 		}
+		// 	};
+		// 	const formData = new FormData(this);
+		// 	modal.modal({
+		// 		keyboard: false,
+		// 		show: true,
+		// 		backdrop: 'static'
+		// 	});
+		// 	axios.post('/admin/tv-series/store', formData, config,).then(response => {
+		// 		const status = response.data.status;
+		// 		modal.modal('hide');
+		// 		if (status !== 200) {
+		// 			alertify.alert(response.data.message);
+		// 		} else {
+		// 			modalFinal.modal({
+		// 				show: true,
+		// 				keyboard: false,
+		// 				backdrop: 'static'
+		// 			});
+		// 		}
+		// 	}).catch(error => {
+		// 		modal.modal('hide');
+		// 		console.log(error);
+		// 		toastr.error('Something went wrong. Please try again.');
+		// 	});
+		// });
 
 		function subscriptionTypeChanged(type) {
 			const elem = $('#price');

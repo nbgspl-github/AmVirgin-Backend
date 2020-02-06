@@ -21,6 +21,7 @@ use App\Http\Controllers\Web\Admin\TvSeries\ContentController;
 use App\Http\Controllers\Web\Admin\TvSeries\MediaController;
 use App\Http\Controllers\Web\Admin\TvSeries\SnapsController;
 use App\Http\Controllers\Web\Admin\TvSeriesController;
+use App\Http\Controllers\Web\Admin\Videos\VideosBase;
 use App\Http\Controllers\Web\Admin\VideosController;
 use App\Models\Category;
 use App\Models\Genre;
@@ -82,15 +83,29 @@ Route::prefix('admin')->group(function (){
 
 		// Videos Route(s)
 		Route::prefix('videos')->middleware('auth:admin')->group(function (){
-			Route::get('', [VideosController::class, Methods::Index])->name('admin.videos.index');
-			Route::get('create', [VideosController::class, Methods::Create])->name('admin.videos.create');
-			Route::get('/{slug}', [VideosController::class, Methods::Show])->name('admin.videos.show');
-			Route::get('{id}/edit/attributes', [VideosController::class, Methods::Edit])->name('admin.videos.edit.attributes')->defaults('type', 'attributes');
-			Route::get('{id}/edit/content', [VideosController::class, Methods::Edit])->name('admin.videos.edit.content')->defaults('type', 'content');
-			Route::post('store', [VideosController::class, Methods::Store])->name('admin.videos.store');
-			Route::post('{id}/attributes', [VideosController::class, Methods::Update])->name('admin.videos.update.attributes')->defaults('type', 'attributes');
-			Route::post('{id}/content', [VideosController::class, Methods::Update])->name('admin.videos.update.content')->defaults('type', 'content');
-			Route::delete('{id}', [VideosController::class, Methods::Delete])->name('admin.videos.delete');
+			Route::get('', [TvSeriesController::class, Methods::Index])->name('admin.videos.index');
+			Route::get('actions/{id}', [TvSeriesController::class, Methods::ChooseAction])->name('admin.videos.edit.action');
+			Route::get('create', [TvSeriesController::class, Methods::Create])->name('admin.videos.create');
+			Route::get('/{slug}', [TvSeriesController::class, Methods::Show])->name('admin.videos.show');
+			Route::prefix('edit/{id}')->group(function (){
+				Route::get('attributes', [\App\Http\Controllers\Web\Admin\Videos\AttributesController::class, 'edit'])->name('admin.videos.edit.attributes');
+				Route::get('content', [\App\Http\Controllers\Web\Admin\Videos\ContentController::class, 'edit'])->name('admin.videos.edit.content');
+				Route::get('media', [\App\Http\Controllers\Web\Admin\Videos\MediaController::class, 'edit'])->name('admin.videos.edit.media');
+				Route::get('snaps', [\App\Http\Controllers\Web\Admin\Videos\SnapsController::class, 'edit'])->name('admin.videos.edit.snaps');
+			});
+			Route::prefix('{id}/update')->group(function (){
+				Route::put('attributes', [\App\Http\Controllers\Web\Admin\Videos\AttributesController::class, 'edit'])->name('admin.videos.update.attributes');
+				Route::post('content', [\App\Http\Controllers\Web\Admin\Videos\ContentController::class, 'update'])->name('admin.videos.update.content');
+				Route::post('media', [\App\Http\Controllers\Web\Admin\Videos\MediaController::class, 'update'])->name('admin.videos.update.media');
+				Route::post('snaps', [\App\Http\Controllers\Web\Admin\Videos\SnapsController::class, 'update'])->name('admin.videos.update.snaps');
+			});
+			Route::post('store', [TvSeriesController::class, Methods::Store])->name('admin.videos.store');
+			Route::prefix('{id}')->group(function (){
+				Route::delete('', [\App\Http\Controllers\Web\Admin\TvSeries\TvSeriesBase::class, 'delete'])->name('admin.videos.delete');
+				Route::delete('content/{contentId}', [ContentController::class, 'delete'])->name('admin.videos.delete.content');
+				Route::delete('snaps/{snapId}', [SnapsController::class, 'delete'])->name('admin.videos.delete.snaps');
+			});
+			Route::get('playback/{slug}', [TrailerPlayback::class, 'series'])->name('admin.videos.playback');
 		});
 
 		// TV Series Route(s)

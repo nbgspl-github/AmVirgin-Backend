@@ -12,6 +12,12 @@ class SubscriptionPlan extends Model{
 	use RetrieveCollection;
 	use RetrieveResource;
 
+	const Paid = 'paid';
+
+	const Free = 'free';
+
+	const Subscription = 'subscription';
+
 	protected $table = 'subscription-plans';
 
 	protected $fillable = [

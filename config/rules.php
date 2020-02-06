@@ -176,35 +176,11 @@ return [
 				'released' => ['bail', 'required', 'date'],
 				'cast' => ['bail', 'required', 'string', 'min:1', 'max:500'],
 				'director' => ['bail', 'required', 'string', 'min:1', 'max:256'],
-				'trailer' => ['bail', 'required', 'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4'],
-				'poster' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
-				'backdrop' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
 				'genreId' => ['bail', 'required', 'exists:genres,id'],
 				'rating' => ['bail', 'required', 'numeric', 'min:0.00', 'max:5.00'],
 				'pgRating' => ['bail', 'required', Rule::in(['G', 'PG', 'PG-13', 'R', 'NC-17'])],
 				'subscriptionType' => ['bail', 'required', Rule::in(['free', 'paid', 'subscription'])],
 				'price' => ['bail', 'nullable', 'required_unless:subscriptionType,free,subscription', 'numeric', 'min:0.01', 'max:10000.00'],
-
-				'videoA' => ['bail', 'required', 'mimes:mkv,mp4,flv,avi,wmv', 'min:1', 'max:2048000'],
-				'mediaLanguageIdA' => ['bail', 'required', 'exists:media-languages,id'],
-				'mediaQualityIdA' => ['bail', 'required', 'exists:media-qualities,id'],
-
-				'videoB' => ['bail', 'nullable', 'mimes:mkv,mp4,flv,avi,wmv', 'min:1', 'max:2048000'],
-				'mediaLanguageIdB' => ['bail', 'required_with:videoB', 'exists:media-languages,id'],
-				'mediaQualityIdB' => ['bail', 'required_with:videoB', 'exists:media-qualities,id'],
-
-				'videoC' => ['bail', 'nullable', 'mimes:mkv,mp4,flv,avi,wmv', 'min:1', 'max:2048000'],
-				'mediaLanguageIdC' => ['bail', 'required_with:videoC', 'exists:media-languages,id'],
-				'mediaQualityIdC' => ['bail', 'required_with:videoC', 'exists:media-qualities,id'],
-
-				'videoD' => ['bail', 'nullable', 'mimes:mkv,mp4,flv,avi,wmv', 'min:1', 'max:2048000'],
-				'mediaLanguageIdD' => ['bail', 'required_with:videoD', 'exists:media-languages,id'],
-				'mediaQualityIdD' => ['bail', 'required_with:videoD', 'exists:media-qualities,id'],
-
-				'videoE' => ['bail', 'nullable', 'mimes:mkv,mp4,flv,avi,wmv', 'min:1', 'max:2048000'],
-				'mediaLanguageIdE' => ['bail', 'required_with:videoE', 'exists:media-languages,id'],
-				'mediaQualityIdE' => ['bail', 'required_with:videoE', 'exists:media-qualities,id'],
-
 				'rank' => ['bail', 'nullable', 'gte:1', 'lt:11'],
 			],
 			'update' => [
