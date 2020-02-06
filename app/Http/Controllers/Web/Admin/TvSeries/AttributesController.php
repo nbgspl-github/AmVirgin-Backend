@@ -15,6 +15,11 @@ use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class AttributesController extends TvSeriesBase{
+	public function __construct(){
+		parent::__construct();
+		$this->ruleSet->load('rules.admin.tv-series.attributes');
+	}
+
 	public function create(){
 
 	}
@@ -82,11 +87,14 @@ class AttributesController extends TvSeriesBase{
 
 			$video->update($validated);
 			$response->success('Tv series details were successfully updated.')->route('admin.tv-series.index');
+//			dd('All good');
 		}
 		catch (ValidationException $exception) {
+//			dd('Validatuion exception');
 			$response->error($exception->getError())->back();
 		}
 		catch (Throwable $exception) {
+//			dd($exception->getMessage());
 			$response->error($exception->getMessage());
 		}
 		finally {
