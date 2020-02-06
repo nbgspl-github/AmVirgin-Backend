@@ -87,7 +87,7 @@
 						<div class="col-12">
 							<div class="form-group mb-0">
 								<label>Subtitle file</label>
-								<input name="subtitle[]" type="file" id="subtitle" class="form-control" required placeholder="Duration in hh:mm:ss" value="" accept=".srt" style="padding: 4px">
+								<input name="subtitle[]" type="file" id="subtitle" class="form-control" placeholder="Duration in hh:mm:ss" value="" accept=".srt" style="padding: 4px">
 							</div>
 						</div>
 					</div>
