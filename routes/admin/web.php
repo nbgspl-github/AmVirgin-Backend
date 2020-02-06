@@ -83,10 +83,10 @@ Route::prefix('admin')->group(function (){
 
 		// Videos Route(s)
 		Route::prefix('videos')->middleware('auth:admin')->group(function (){
-			Route::get('', [TvSeriesController::class, Methods::Index])->name('admin.videos.index');
-			Route::get('actions/{id}', [TvSeriesController::class, Methods::ChooseAction])->name('admin.videos.edit.action');
-			Route::get('create', [TvSeriesController::class, Methods::Create])->name('admin.videos.create');
-			Route::get('/{slug}', [TvSeriesController::class, Methods::Show])->name('admin.videos.show');
+			Route::get('', [VideosBase::class, Methods::Index])->name('admin.videos.index');
+			Route::get('actions/{id}', [VideosBase::class, Methods::ChooseAction])->name('admin.videos.edit.action');
+			Route::get('create', [VideosBase::class, Methods::Create])->name('admin.videos.create');
+			Route::get('/{slug}', [VideosBase::class, Methods::Show])->name('admin.videos.show');
 			Route::prefix('edit/{id}')->group(function (){
 				Route::get('attributes', [\App\Http\Controllers\Web\Admin\Videos\AttributesController::class, 'edit'])->name('admin.videos.edit.attributes');
 				Route::get('content', [\App\Http\Controllers\Web\Admin\Videos\ContentController::class, 'edit'])->name('admin.videos.edit.content');
@@ -99,11 +99,11 @@ Route::prefix('admin')->group(function (){
 				Route::post('media', [\App\Http\Controllers\Web\Admin\Videos\MediaController::class, 'update'])->name('admin.videos.update.media');
 				Route::post('snaps', [\App\Http\Controllers\Web\Admin\Videos\SnapsController::class, 'update'])->name('admin.videos.update.snaps');
 			});
-			Route::post('store', [TvSeriesController::class, Methods::Store])->name('admin.videos.store');
+			Route::post('store', [VideosBase::class, Methods::Store])->name('admin.videos.store');
 			Route::prefix('{id}')->group(function (){
 				Route::delete('', [\App\Http\Controllers\Web\Admin\TvSeries\TvSeriesBase::class, 'delete'])->name('admin.videos.delete');
-				Route::delete('content/{contentId}', [ContentController::class, 'delete'])->name('admin.videos.delete.content');
-				Route::delete('snaps/{snapId}', [SnapsController::class, 'delete'])->name('admin.videos.delete.snaps');
+				Route::delete('content/{contentId}', [\App\Http\Controllers\Web\Admin\Videos\ContentController::class, 'delete'])->name('admin.videos.delete.content');
+				Route::delete('snaps/{snapId}', [\App\Http\Controllers\Web\Admin\Videos\SnapsController::class, 'delete'])->name('admin.videos.delete.snaps');
 			});
 			Route::get('playback/{slug}', [TrailerPlayback::class, 'series'])->name('admin.videos.playback');
 		});

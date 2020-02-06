@@ -16,7 +16,6 @@
 							<th class="text-center">Description</th>
 							<th class="text-center">Rating</th>
 							<th class="text-center">Trending</th>
-							<th class="text-center">Seasons</th>
 							<th class="text-center">Pending</th>
 							<th class="text-center">Action(s)</th>
 						</tr>
@@ -37,13 +36,12 @@
 								<td class="text-center">{{__ellipsis($video->getDescription(),50)}}</td>
 								<td class="text-center">{{$video->getRating()}}</td>
 								<td class="text-center">{{__boolean($video->trending)}}</td>
-								<td class="text-center">{{$video->getSeasons()}}</td>
-								<td class="text-center">{{__boolean($videoi->pending)}}</td>
+								<td class="text-center">{{__boolean($video->pending)}}</td>
 								<td class="text-center">
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group mx-auto" role="group">
-											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.videos.edit.action',$s->getKey())}}" @include('admin.extras.tooltip.left', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
-											<a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);" onclick="deleteMovie('{{$s->getKey()}}');" @include('admin.extras.tooltip.right', ['title' => 'Delete this video'])><i class="mdi mdi-delete"></i></a>
+											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.videos.edit.action',$video->getKey())}}" @include('admin.extras.tooltip.left', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
+											<a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);" onclick="deleteMovie('{{$video->getKey()}}');" @include('admin.extras.tooltip.right', ['title' => 'Delete this video'])><i class="mdi mdi-delete"></i></a>
 										</div>
 									</div>
 								</td>

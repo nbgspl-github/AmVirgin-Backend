@@ -27,7 +27,6 @@ class VideosBase extends BaseController{
 
 	public function index(){
 		$videos = Video::where('hasSeasons', false)->get();
-		dd($videos);
 		return view('admin.videos.index')->with('videos', $videos);
 	}
 
