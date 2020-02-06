@@ -15,7 +15,7 @@
 							<div class="col-6 mx-auto">
 								<div class="card shadow-none" style="border: 1px solid #b4b9bf;">
 									<div class="card-header text-primary font-weight-bold bg-white">
-										Type the following details proceed next step...
+										Type the following details to proceed to next step...
 									</div>
 									<div class="card-body">
 										<div class="form-group">

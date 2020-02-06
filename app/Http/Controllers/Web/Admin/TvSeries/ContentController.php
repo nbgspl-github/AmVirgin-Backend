@@ -74,7 +74,7 @@ class ContentController extends TvSeriesBase{
 			$videos = isset($payload['video']) ? $payload['video'] : [];
 			$qualities = $payload['quality'];
 			$episodes = $payload['episode'];
-			$subtitles = $payload['subtitle'];
+			$subtitles = isset($payload['subtitle']) ? $payload['subtitle'] : [];
 			$languages = $payload['language'];
 			$seasons = $payload['season'];
 			$titles = $payload['title'];

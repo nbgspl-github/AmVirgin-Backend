@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\App\Customer;
 
+use App\Classes\Str;
 use App\Http\Controllers\Base\ResourceController;
 use App\Http\Resources\Videos\VideoResource;
 use App\Interfaces\VideoTypes;
@@ -37,7 +38,10 @@ class VideosController extends ResourceController{
 									'language' => $source->language()->first()->getName(),
 									'quality' => $source->mediaQuality()->first()->getName(),
 									'url' => SecuredDisk::access()->url($source->getFile()),
-									'subtitle' => SecuredDisk::access()->url($source->getSubtitle()),
+									'subtitle' => [
+										'available' => SecuredDisk::access()->exists($source->getSubtitle()),
+										'url' => SecuredDisk::access()->exists($source->getSubtitle()) ? SecuredDisk::access()->url($source->getSubtitle()) : Str::Empty,
+									],
 								];
 							})->values(),
 						];

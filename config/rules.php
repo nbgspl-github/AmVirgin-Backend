@@ -277,7 +277,7 @@ return [
 					'quality.*' => ['bail', 'required', 'exists:media-qualities,id'],
 					'episode.*' => ['bail', 'required', 'numeric', 'min:1', 'max:250', 'distinct'],
 					'video.*' => ['bail', 'required', 'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4,video/mkv'],
-					'subtitle.*' => ['bail', 'required', 'min:1', 'max:5120'],
+					'subtitle.*' => ['bail', 'nullable', 'min:1', 'max:5120'],
 					'source.*' => ['bail', 'nullable'],
 				],
 			],
