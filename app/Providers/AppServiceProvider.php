@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider{
 		Schema::defaultStringLength(256);
 
 		Blade::directive('required', function ($name){
-			return "$name<span class=\"text-muted\">*</span>";
+			return "$name<span class='text-primary'>*</span>";
 		});
 
 		Blade::directive('img', function ($path, $attributes = [], $accessor = SecuredDisk::class){
