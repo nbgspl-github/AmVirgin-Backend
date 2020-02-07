@@ -94,7 +94,7 @@ Route::prefix('admin')->group(function (){
 				Route::get('snaps', [\App\Http\Controllers\Web\Admin\Videos\SnapsController::class, 'edit'])->name('admin.videos.edit.snaps');
 			});
 			Route::prefix('{id}/update')->group(function (){
-				Route::put('attributes', [\App\Http\Controllers\Web\Admin\Videos\AttributesController::class, 'edit'])->name('admin.videos.update.attributes');
+				Route::post('attributes', [\App\Http\Controllers\Web\Admin\Videos\AttributesController::class, 'update'])->name('admin.videos.update.attributes');
 				Route::post('content', [\App\Http\Controllers\Web\Admin\Videos\ContentController::class, 'update'])->name('admin.videos.update.content');
 				Route::post('media', [\App\Http\Controllers\Web\Admin\Videos\MediaController::class, 'update'])->name('admin.videos.update.media');
 				Route::post('snaps', [\App\Http\Controllers\Web\Admin\Videos\SnapsController::class, 'update'])->name('admin.videos.update.snaps');

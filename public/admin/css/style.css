@@ -1188,7 +1188,12 @@ body.fixed-left .side-menu.left {
 
 .btn {
     border-radius: 3px;
-    font-size: 15px
+    font-size: 15px;
+    transition: .3s;
+}
+
+.btn:hover {
+
 }
 
 .btn-danger, .btn-dark, .btn-info, .btn-primary, .btn-success, .btn-warning {

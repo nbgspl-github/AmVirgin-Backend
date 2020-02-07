@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider{
 	public function boot(){
 		Schema::defaultStringLength(256);
 		Blade::directive('required', function ($name){
-			return "$name<span class=\"text-primary\">*</span>";
+			return "$name<span class=\"text-muted\">*</span>";
 		});
 	}
 }

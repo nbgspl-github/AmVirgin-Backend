@@ -4,19 +4,18 @@ namespace App\Http\Controllers\Web\Admin\Videos;
 
 use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
-use App\Interfaces\Directories;
 use App\Models\Genre;
 use App\Models\MediaLanguage;
 use App\Models\MediaQuality;
 use App\Models\MediaServer;
 use App\Models\Video;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class AttributesController extends VideosBase{
 	public function __construct(){
 		parent::__construct();
+		$this->ruleSet->load('rules.admin.videos.attributes');
 	}
 
 	public function edit($id){
