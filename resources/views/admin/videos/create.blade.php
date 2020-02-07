@@ -24,15 +24,15 @@
 										</div>
 										<div class="form-group">
 											<label for="duration">Duration<span class="text-primary">*</span></label>
-											<input id="duration" pattern="^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$" type="text" name="duration" class="form-control" required placeholder="Type duration of video in hh:mm:ss" value="{{old('title')}}"/>
+											<input id="duration" pattern="^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$" type="text" name="duration" class="form-control" required placeholder="Type duration of video in hh:mm:ss" value="{{old('duration')}}"/>
 										</div>
 										<div class="form-group">
 											<label for="cast">Cast<span class="text-primary">*</span></label>
-											<input id="cast" type="text" name="cast" class="form-control" required placeholder="Type here the movie's cast name (separate with /)" minlength="1" maxlength="256" value="{{old('title')}}"/>
+											<input id="cast" type="text" name="cast" class="form-control" required placeholder="Type here the movie's cast name (separate with /)" minlength="1" maxlength="256" value="{{old('cast')}}"/>
 										</div>
 										<div class="form-group">
 											<label for="director">Director<span class="text-primary">*</span></label>
-											<input id="director" type="text" name="director" class="form-control" required placeholder="Type here the movie's director's name (separate with /)" minlength="1" maxlength="256" value="{{old('title')}}"/>
+											<input id="director" type="text" name="director" class="form-control" required placeholder="Type here the movie's director's name (separate with /)" minlength="1" maxlength="256" value="{{old('director')}}"/>
 										</div>
 										<div class="form-group">
 											<label for="description">Overview (Description)<span class="text-primary">*</span></label>

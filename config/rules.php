@@ -202,6 +202,14 @@ return [
 			'update' => [
 
 			],
+			'snaps' => [
+				'store' => [
+					'image.*' => ['bail', 'required', 'image', 'min:1', 'max:5120'],
+				],
+				'update' => [
+
+				],
+			],
 		],
 
 		'tv-series' => [

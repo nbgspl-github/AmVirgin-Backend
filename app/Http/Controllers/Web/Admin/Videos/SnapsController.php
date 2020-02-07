@@ -13,10 +13,10 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\UploadedFile;
 use Throwable;
 
-class SnapsController extends TvSeriesBase{
+class SnapsController extends VideosBase{
 	public function __construct(){
 		parent::__construct();
-		$this->ruleSet->load('rules.admin.tv-series.snaps');
+		$this->ruleSet->load('rules.admin.videos.snaps');
 	}
 
 	public function edit($id){
@@ -24,16 +24,16 @@ class SnapsController extends TvSeriesBase{
 		try {
 			$payload = Video::findOrFail($id);
 			$snaps = $payload->snaps()->get()->toArray();
-			$response = view('admin.tv-series.snaps.edit')->
+			$response = view('admin.videos.snaps.edit')->
 			with('payload', $payload)->
 			with('snaps', $snaps)->
-			with('template', view('admin.tv-series.snaps.imageBox')->render());
+			with('template', view('admin.videos.snaps.imageBox')->render());
 		}
 		catch (ModelNotFoundException $exception) {
-			$response->route('admin.tv-series.index')->error('Could not find tv series for that key.');
+			$response->route('admin.videos.index')->error('Could not find video for that key.');
 		}
 		catch (Throwable $exception) {
-			$response->route('admin.tv-series.index')->error($exception->getMessage());
+			$response->route('admin.videos.index')->error($exception->getMessage());
 		}
 		finally {
 			if ($response instanceof WebResponse)
@@ -58,7 +58,7 @@ class SnapsController extends TvSeriesBase{
 			$response->status(HttpOkay)->message('Snapshots uploaded/updated successfully.');
 		}
 		catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find tv-series for that key.');
+			$response->status(HttpResourceNotFound)->message('Could not find video for that key.');
 		}
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
