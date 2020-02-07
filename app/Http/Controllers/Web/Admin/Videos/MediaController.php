@@ -10,14 +10,10 @@ use App\Storage\SecuredDisk;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class MediaController extends TvSeriesBase{
+class MediaController extends VideosBase{
 	public function __construct(){
 		parent::__construct();
-		$this->ruleSet->load('rules.admin.tv-series.media');
-	}
-
-	public function create(){
-
+		$this->ruleSet->load('rules.admin.videos.media');
 	}
 
 	public function edit($id){
@@ -40,40 +36,36 @@ class MediaController extends TvSeriesBase{
 		}
 	}
 
-	public function store(){
-
-	}
-
 	public function update($id){
 		$response = $this->response();
 		try {
-			$tvSeries = Video::retrieveThrows($id);
+			$video = Video::retrieveThrows($id);
 			$this->requestValid(request(), $this->rules('update'));
 			if (request()->hasFile('poster')) {
-				if (SecuredDisk::access()->exists($tvSeries->getPoster())) {
-					SecuredDisk::access()->delete($tvSeries->getPoster());
+				if (SecuredDisk::access()->exists($video->getPoster())) {
+					SecuredDisk::access()->delete($video->getPoster());
 				}
-				$tvSeries->setPoster(SecuredDisk::access()->putFile(Directories::Posters, request()->file('poster'), 'private'));
+				$video->setPoster(SecuredDisk::access()->putFile(Directories::Posters, request()->file('poster'), 'private'));
 			}
 
 			if (request()->hasFile('backdrop')) {
-				if (SecuredDisk::access()->exists($tvSeries->getBackdrop())) {
-					SecuredDisk::access()->delete($tvSeries->getBackdrop());
+				if (SecuredDisk::access()->exists($video->getBackdrop())) {
+					SecuredDisk::access()->delete($video->getBackdrop());
 				}
-				$tvSeries->setBackdrop(SecuredDisk::access()->putFile(Directories::Backdrops, request()->file('backdrop'), 'private'));
+				$video->setBackdrop(SecuredDisk::access()->putFile(Directories::Backdrops, request()->file('backdrop'), 'private'));
 			}
 
 			if (request()->hasFile('trailer')) {
-				if (SecuredDisk::access()->exists($tvSeries->getTrailer())) {
-					SecuredDisk::access()->delete($tvSeries->getTrailer());
+				if (SecuredDisk::access()->exists($video->getTrailer())) {
+					SecuredDisk::access()->delete($video->getTrailer());
 				}
-				$tvSeries->setTrailer(SecuredDisk::access()->putFile(Directories::Trailers, request()->file('trailer'), 'private'));
+				$video->setTrailer(SecuredDisk::access()->putFile(Directories::Trailers, request()->file('trailer'), 'private'));
 			}
-			$tvSeries->save();
-			$response->status(HttpOkay)->message('Successfully uploaded/updated media for tv series.');
+			$video->save();
+			$response->status(HttpOkay)->message('Successfully uploaded/updated media for video.');
 		}
 		catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find tv series for that key.');
+			$response->status(HttpResourceNotFound)->message('Could not find video for that key.');
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());

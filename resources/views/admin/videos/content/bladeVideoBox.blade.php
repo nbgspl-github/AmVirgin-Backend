@@ -6,7 +6,7 @@
 			</button>
 			<div class="row my-auto">
 				<div class="col-6 my-auto">
-					<div class="embed-responsive embed-responsive-16by9 bg-muted border-dark" style=" max-height: 500px!important; min-height: 500px; border-radius: 4px">
+					<div class="embed-responsive embed-responsive-16by9 border-dark" style=" max-height: 500px!important; min-height: 500px; border-radius: 4px">
 						<button data-id="{{$id}}" type="button" onclick="handleFileDialog(this.getAttribute('data-id'));" class="btn btn-danger position-absolute shadow-sm shadow-danger" style="bottom: 32px; left:47%;border-radius: 32px; width: 50px; height: 50px; z-index: 10;"><i class="ion-videocamera font-20 pt-1"></i>
 						</button>
 						<input type="file" data-id="{{$id}}" class="d-none" onchange="handleVideo(event,this.getAttribute('data-id'))" id="input_{{$id}}" name="video[]" accept=".mp4, .avi"/>
@@ -33,34 +33,6 @@
 						</div>
 					</div>
 					<div class="form-row">
-						<div class="col-2">
-							<div class="form-group">
-								<label>Season</label>
-								<select name="season[]" class="form-control" required>
-									@for ($i = 1; $i <= 10; $i++)
-										@if($payload->season==$i)
-											<option value="{{$i}}" selected>{{$i}}</option>
-										@else
-											<option value="{{$i}}">{{$i}}</option>
-										@endif
-									@endfor
-								</select>
-							</div>
-						</div>
-						<div class="col-2">
-							<div class="form-group">
-								<label>Episode</label>
-								<select name="episode[]" class="form-control" required>
-									@for ($i = 1; $i <= 100; $i++)
-										@if($payload->episode==$i)
-											<option value="{{$i}}" selected>{{$i}}</option>
-										@else
-											<option value="{{$i}}">{{$i}}</option>
-										@endif
-									@endfor
-								</select>
-							</div>
-						</div>
 						<div class="col-4">
 							<div class="form-group">
 								<label>Language</label>
@@ -90,9 +62,7 @@
 								</select>
 							</div>
 						</div>
-					</div>
-					<div class="form-row">
-						<div class="col-12">
+						<div class="col-4">
 							<div class="form-group">
 								<label>Duration</label>
 								<input name="duration[]" type="text" id="duration" class="form-control" required placeholder="Duration in hh:mm:ss" value="{{$payload->duration}}">

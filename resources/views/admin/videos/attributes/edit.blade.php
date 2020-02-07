@@ -12,9 +12,9 @@
 					@csrf
 					<div class="card-body">
 						<div class="row">
-							<div class="col-6 mx-auto">
+							<div class="col-8 mx-auto">
 								<div class="card shadow-none" style="border: 1px solid rgba(180,185,191,0.4);">
-									<div class="card-header text-muted bg-white">
+									<div class="card-header text-white bg-secondary">
 										Editing attributes for - {{$payload->getTitle()}}
 									</div>
 									<div class="card-body">
@@ -159,7 +159,7 @@
 					</div>
 					<div class="card-footer">
 						<div class="row">
-							<div class="col-6 mx-auto">
+							<div class="col-8 mx-auto">
 								<div class="row">
 									<div class="col-6">
 										<button type="submit" class="btn btn-primary waves-effect waves-light btn-block shadow-primary">
@@ -167,7 +167,7 @@
 										</button>
 									</div>
 									<div class="col-6">
-										<a href="{{route("admin.videos.edit.action",$payload->getKey())}}" class="btn btn-secondary waves-effect btn-block shadow-sm">
+										<a href="{{route("admin.videos.edit.action",$payload->getKey())}}" class="btn btn-secondary waves-effect btn-block shadow-secondary">
 											Cancel
 										</a>
 									</div>

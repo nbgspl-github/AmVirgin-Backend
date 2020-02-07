@@ -100,9 +100,9 @@ class VideoSource extends Model{
 	}
 
 	/**
-	 * @return int
+	 * @return int|null
 	 */
-	public function getSeason(): int{
+	public function getSeason(): ?int{
 		return $this->season;
 	}
 
@@ -132,9 +132,9 @@ class VideoSource extends Model{
 	}
 
 	/**
-	 * @return int
+	 * @return int|null
 	 */
-	public function getEpisode(): int{
+	public function getEpisode(): ?int{
 		return $this->episode;
 	}
 

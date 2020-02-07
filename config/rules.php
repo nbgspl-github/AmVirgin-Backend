@@ -210,6 +210,31 @@ return [
 
 				],
 			],
+			'media' => [
+				'store' => [
+
+				],
+				'update' => [
+					'poster' => ['bail', 'nullable', 'image', 'min:1', 'max:5096'],
+					'backdrop' => ['bail', 'nullable', 'image', 'min:1', 'max:5096'],
+					'trailer' => ['bail', 'nullable', 'mimetypes:video/avi,video/mpeg,video/mp4', 'min:1', 'max:131072'],
+				],
+			],
+			'content' => [
+				'store' => [
+
+				],
+				'update' => [
+					'title.*' => ['bail', 'required', 'string', 'min:1', 'max:256'],
+					'description.*' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
+					'duration.*' => ['bail', 'required', 'date_format:H:i:s'],
+					'language.*' => ['bail', 'required', 'exists:media-languages,id'],
+					'quality.*' => ['bail', 'required', 'exists:media-qualities,id'],
+					'video.*' => ['bail', 'required', 'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4,video/mkv'],
+					'subtitle.*' => ['bail', 'nullable', 'min:1', 'max:5120'],
+					'source.*' => ['bail', 'nullable'],
+				],
+			],
 		],
 
 		'tv-series' => [

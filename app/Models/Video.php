@@ -57,7 +57,7 @@ class Video extends Model{
 	/**
 	 * @return int
 	 */
-	public function getSeasons(): int{
+	public function getSeasons(): ?int{
 		return $this->seasons;
 	}
 
