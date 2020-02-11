@@ -24,5 +24,7 @@
 
 <link rel="stylesheet" href="{{asset('admin/css/animate.css')}}">
 
+<link rel="stylesheet" href="{{asset('admin/css/loading.min.css')}}">
+
 <!-- Dropzone css -->
 <link href="{{asset('admin/plugins/dropzone/dist/dropzone.css')}}" rel="stylesheet" type="text/css">

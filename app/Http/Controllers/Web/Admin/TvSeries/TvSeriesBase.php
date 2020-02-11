@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Web\Admin\TvSeries;
 use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
-use App\Interfaces\Directories;
 use App\Interfaces\VideoTypes;
 use App\Models\Genre;
 use App\Models\MediaLanguage;
@@ -14,7 +13,6 @@ use App\Models\MediaServer;
 use App\Models\Video;
 use App\Models\VideoMeta;
 use App\Models\VideoSource;
-use App\Storage\SecuredDisk;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -80,13 +78,9 @@ class TvSeriesBase extends BaseController{
 		$response = $this->response();
 		try {
 			$validated = $this->requestValid(request(), $this->rules('store'));
-			$trailer = SecuredDisk::access()->putFile(Directories::Trailers, request()->file('trailer'));
-			$poster = SecuredDisk::access()->putFile(Directories::Posters, request()->file('poster'));
-			$backdrop = SecuredDisk::access()->putFile(Directories::Backdrops, request()->file('backdrop'));
 			if (request()->has('trending')) {
 				$this->replaceTrending($validated['rank']);
 			}
-
 			$validated = collect($validated)->filter()->all();
 			$video = Video::create([
 				'title' => $validated['title'],
@@ -95,9 +89,6 @@ class TvSeriesBase extends BaseController{
 				'released' => $validated['released'],
 				'cast' => $validated['cast'],
 				'director' => $validated['director'],
-				'trailer' => $trailer,
-				'poster' => $poster,
-				'backdrop' => $backdrop,
 				'genreId' => $validated['genreId'],
 				'rating' => $validated['rating'],
 				'pgRating' => $validated['pgRating'],
@@ -111,7 +102,7 @@ class TvSeriesBase extends BaseController{
 				'hasSeasons' => true,
 			]);
 			$video->save();
-			$response = $this->success()->message('Tv series details were successfully saved. Please proceed to next step.');
+			$response = $this->success()->message('Tv series details were successfully saved. Please proceed to next step.')->setValue('route', route('admin.tv-series.edit.action', $video->getKey()));
 		}
 		catch (ValidationException $exception) {
 			$response = $this->failed()->message($exception->getError())->status(HttpInvalidRequestFormat);

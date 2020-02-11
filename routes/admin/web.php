@@ -213,16 +213,6 @@ Route::prefix('admin')->group(function (){
 			Route::delete('{id}', [ServersController::class, Methods::Delete])->name('admin.servers.delete');
 		});
 
-		// Web-series Route(s)
-		Route::prefix('series')->middleware('auth:admin')->group(function (){
-			Route::get('', [TvSeriesController::class, Methods::Index])->name('admin.series.index');
-		});
-
-		// Live TV Route(s)
-		Route::prefix('live-tv')->middleware('auth:admin')->group(function (){
-			Route::get('', [TvSeriesController::class, Methods::Index])->name('admin.live-tv.index');
-		});
-
 		// Subscription Plan Route(s)
 		Route::prefix('subscription-plans')->middleware('auth:admin')->group(function (){
 			Route::get('', [SubscriptionPlansController::class, Methods::Index])->name('admin.subscription-plans.index');
@@ -245,6 +235,5 @@ Route::prefix('admin')->group(function (){
 		Route::prefix('settings')->middleware('auth:admin')->group(function (){
 			Route::get('', [SettingsController::class, Methods::Index])->name('admin.settings.index');
 		});
-
 	});
 });

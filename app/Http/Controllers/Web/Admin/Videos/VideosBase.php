@@ -65,7 +65,7 @@ class VideosBase extends BaseController{
 	}
 
 	public function store(){
-		$response = responseWeb();
+		$response = $this->response();
 		try {
 			$payload = $this->requestValid(request(), $this->rules('store'));
 			$video = Video::create([
@@ -82,7 +82,7 @@ class VideosBase extends BaseController{
 				'price' => $payload['subscriptionType'] == SubscriptionPlan::Paid ? $payload['price'] : 0,
 				'rank' => $payload['rank'],
 			]);
-			$response->success('Video details were saved successfully.')->route('admin.videos.edit.action', $video->getKey());
+			$response->setValue('route', route('admin.videos.edit.action', $video->getKey()))->success('Video details were saved successfully.');
 		}
 		catch (ValidationException $exception) {
 			$response->data(request()->all())->back()->error($exception->getError());
@@ -91,10 +91,7 @@ class VideosBase extends BaseController{
 			$response->data(request()->all())->back()->error($exception->getMessage());
 		}
 		finally {
-			if ($response instanceof WebResponse)
-				return $response->send();
-			else
-				return $response;
+			return $response->send();
 		}
 	}
 
