@@ -4,7 +4,7 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'TV Series','action'=>['link'=>route('admin.tv-series.create'),'text'=>'Add TV series']])
+					@include('admin.extras.header', ['title'=>'TV Series','action'=>['link'=>route('admin.tv-series.create'),'text'=>'Add series']])
 				</div>
 				<div class="card-body animatable">
 					<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">

@@ -6,41 +6,37 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Add a TV series'])
+					@include('admin.extras.header', ['title'=>'Add a Tv/Web Series'])
 				</div>
 				<form id="uploadForm" action="{{route('admin.tv-series.store')}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="card-body">
 						<div class="row">
-							<div class="col-12 col-md-12 col-lg-6 col-xl-6 pr-0 mb-md-3 pr-md-3">
-								<div class="card shadow-none" style="border: 1px solid #b4b9bf;">
+							<div class="col-6 mx-auto">
+								<div class="card shadow-none" style="border: 1px solid rgba(180,185,191,0.4);">
 									<div class="card-header text-primary font-weight-bold bg-white">
-										Attributes
+										Type the following details to proceed to next step...
 									</div>
 									<div class="card-body">
 										<div class="form-group">
 											<label for="title">Title<span class="text-primary">*</span></label>
-											<input id="title" type="text" name="title" class="form-control" required placeholder="Type here the video/movie title" minlength="1" maxlength="256" value="{{old('title')}}"/>
+											<input id="title" type="text" name="title" class="form-control" required placeholder="Type here the series title" minlength="1" maxlength="256" value="{{old('title')}}"/>
 										</div>
 										<div class="form-group">
 											<label for="duration">Duration<span class="text-primary">*</span></label>
-											<input id="duration" pattern="^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$" type="text" name="duration" class="form-control" required placeholder="Type duration of video in hh:mm:ss" value="{{old('title')}}"/>
+											<input id="duration" pattern="^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$" type="text" name="duration" class="form-control" required placeholder="Type collective duration of series in hh:mm:ss" value="{{old('duration')}}"/>
 										</div>
 										<div class="form-group">
 											<label for="cast">Cast<span class="text-primary">*</span></label>
-											<input id="cast" type="text" name="cast" class="form-control" required placeholder="Type here the movie's cast name (separate with ,)" minlength="1" maxlength="256" value="{{old('title')}}"/>
+											<input id="cast" type="text" name="cast" class="form-control" required placeholder="Type here the series' cast(s) name (separate with /)" minlength="1" maxlength="256" value="{{old('cast')}}"/>
 										</div>
 										<div class="form-group">
 											<label for="director">Director<span class="text-primary">*</span></label>
-											<input id="director" type="text" name="director" class="form-control" required placeholder="Type here the movie's director's name (separate with ,)" minlength="1" maxlength="256" value="{{old('title')}}"/>
+											<input id="director" type="text" name="director" class="form-control" required placeholder="Type here the series' director(s) name (separate with /)" minlength="1" maxlength="256" value="{{old('director')}}"/>
 										</div>
 										<div class="form-group">
 											<label for="description">Overview (Description)<span class="text-primary">*</span></label>
-											<textarea id="description" name="description" class="form-control" required placeholder="Type short summary about the movie or video" minlength="1" maxlength="2000">{{old('description')}}</textarea>
-										</div>
-										<div class="form-group">
-											<label for="trailer">Trailer video<span class="text-primary">*</span></label>
-											<input id="trailer" type="file" placeholder="Choose a trailer video file..." name="trailer" class="form-control" style="height: unset; padding-left: 6px" required>
+											<textarea id="description" name="description" class="form-control" required placeholder="Type short summary about the series" minlength="1" rows="5" maxlength="2000">{{old('description')}}</textarea>
 										</div>
 										<div class="form-group">
 											<label for="genre">Choose a genre<span class="text-primary">*</span></label>
@@ -61,7 +57,7 @@
 										</div>
 										<div class="form-group">
 											<label for="rating">Rating<span class="text-primary">*</span></label>
-											<input id="rating" type="number" name="rating" class="form-control" required placeholder="Type rating for this movie/video" min="0.00" max="5.00" value="0.00" step="0.01"/>
+											<input id="rating" type="number" name="rating" class="form-control" required placeholder="Type rating for this series" min="0.00" max="5.00" value="0.00" step="0.01"/>
 										</div>
 										<div class="form-group">
 											<label for="pgRating">PG Rating<span class="text-primary">*</span></label>
@@ -85,7 +81,7 @@
 										</div>
 										<div class="form-group">
 											<label for="price">Price<span class="text-primary">*</span></label>
-											<input id="price" type="number" name="price" class="form-control" required placeholder="Type price for this movie/video" min="0" max="10000" step="1" readonly/>
+											<input id="price" type="number" name="price" class="form-control" required placeholder="Type price for this series" min="0" max="10000" step="1" readonly/>
 										</div>
 										<div class="form-group">
 											<label>Push notify customers?</label>
@@ -126,76 +122,23 @@
 									</div>
 								</div>
 							</div>
-							<div class="col-12 col-md-12 col-lg-6 col-xl-6 mt-3 mt-sm-0">
-								<div class="card shadow-none" style="border: 1px solid #b4b9bf;">
-									<div class="card-header text-primary font-weight-bold bg-white">
-										Media
-									</div>
-									<div class="card-body">
-										<div class="form-group">
-											<div class="card bg-white shadow-none" style="border: 1px solid #ced4da;">
-												<div class="card-header">
-													<div class="row">
-														<div class="d-none">
-															<input id="pickPoster" type="file" name="poster" onclick="this.value=null;" onchange="previewPoster(event);" class="form-control" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('poster')}}">
-														</div>
-														<div class="col-6">
-															<h3 class="my-0 header-title">Poster <span class="text-warning">(Max 5MB)</span></h3>
-														</div>
-														<div class="col-6">
-															<button type="button" class="btn btn-outline-primary rounded shadow-sm float-right" onclick="$('#pickPoster').trigger('click');">Browse</button>
-														</div>
-													</div>
-												</div>
-												<div class="card-body p-0 rounded">
-													<div class="row">
-														<div class="col-12 text-center">
-															<img id="posterPreview" class="img-fluid" style="max-height: 800px!important; min-height: 800px;"/>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="form-group pb-0 mb-0">
-											<div class="card shadow-none bg-white" style="border: 1px solid #ced4da;">
-												<div class="card-header">
-													<div class="row">
-														<div class="d-none">
-															<input id="pickBackdrop" type="file" name="backdrop" onclick="this.value=null;" onchange="previewBackdrop(event);" class="form-control" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('backdrop')}}">
-														</div>
-														<div class="col-6">
-															<h3 class="my-0 header-title">Backdrop <span class="text-warning">(Max 5MB)</span></h3>
-														</div>
-														<div class="col-6">
-															<button type="button" class="btn btn-outline-primary rounded shadow-sm float-right" onclick="$('#pickBackdrop').trigger('click');">Browse</button>
-														</div>
-													</div>
-												</div>
-												<div class="card-body p-0 rounded">
-													<div class="row">
-														<div class="col-12 text-center">
-															<img id="backdropPreview" class="img-fluid" style="max-height: 367px!important; min-height: 367px;"/>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
 						</div>
 					</div>
 					<div class="card-footer">
-						<div class="form-row">
-							<div class="col-6 pr-0">
-								<button type="submit" class="btn btn-primary waves-effect waves-light btn-block shadow-sm">
-									Save & Next
-								</button>
-							</div>
-							<div class="col-6 pl-sm-3">
-								<a href="{{route("admin.tv-series.index")}}" class="btn btn-secondary waves-effect btn-block shadow-sm">
-									Cancel
-								</a>
+						<div class="row">
+							<div class="col-6 mx-auto">
+								<div class="row">
+									<div class="col-6">
+										<button type="submit" class="btn btn-primary waves-effect waves-light btn-block shadow-primary">
+											Save & Proceed
+										</button>
+									</div>
+									<div class="col-6">
+										<a href="{{route("admin.genres.index")}}" class="btn btn-secondary waves-effect btn-block shadow-secondary">
+											Cancel
+										</a>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -275,52 +218,52 @@
 			});
 		});
 
-		$('#uploadForm').submit(function (event) {
-			event.preventDefault();
-			const validator = $('#uploadForm').parsley();
-			if (!validator.isValid()) {
-				alertify.alert('Fix the errors in the form and retry.');
-				return;
-			}
-			if (lastPoster === null) {
-				alertify.alert('Movie poster is required.');
-				return;
-			}
-			if (lastBackdrop === null) {
-				alertify.alert('Movie backdrop is required.');
-				return;
-			}
-
-			const config = {
-				onUploadProgress: uploadProgress,
-				headers: {
-					'Content-Type': 'multipart/form-data'
-				}
-			};
-			const formData = new FormData(this);
-			modal.modal({
-				keyboard: false,
-				show: true,
-				backdrop: 'static'
-			});
-			axios.post('/admin/tv-series/store', formData, config,).then(response => {
-				const status = response.data.status;
-				modal.modal('hide');
-				if (status !== 200) {
-					alertify.alert(response.data.message);
-				} else {
-					modalFinal.modal({
-						show: true,
-						keyboard: false,
-						backdrop: 'static'
-					});
-				}
-			}).catch(error => {
-				modal.modal('hide');
-				console.log(error);
-				toastr.error('Something went wrong. Please try again.');
-			});
-		});
+		// $('#uploadForm').submit(function (event) {
+		// 	event.preventDefault();
+		// 	const validator = $('#uploadForm').parsley();
+		// 	if (!validator.isValid()) {
+		// 		alertify.alert('Fix the errors in the form and retry.');
+		// 		return;
+		// 	}
+		// 	if (lastPoster === null) {
+		// 		alertify.alert('Movie poster is required.');
+		// 		return;
+		// 	}
+		// 	if (lastBackdrop === null) {
+		// 		alertify.alert('Movie backdrop is required.');
+		// 		return;
+		// 	}
+		//
+		// 	const config = {
+		// 		onUploadProgress: uploadProgress,
+		// 		headers: {
+		// 			'Content-Type': 'multipart/form-data'
+		// 		}
+		// 	};
+		// 	const formData = new FormData(this);
+		// 	modal.modal({
+		// 		keyboard: false,
+		// 		show: true,
+		// 		backdrop: 'static'
+		// 	});
+		// 	axios.post('/admin/tv-series/store', formData, config,).then(response => {
+		// 		const status = response.data.status;
+		// 		modal.modal('hide');
+		// 		if (status !== 200) {
+		// 			alertify.alert(response.data.message);
+		// 		} else {
+		// 			modalFinal.modal({
+		// 				show: true,
+		// 				keyboard: false,
+		// 				backdrop: 'static'
+		// 			});
+		// 		}
+		// 	}).catch(error => {
+		// 		modal.modal('hide');
+		// 		console.log(error);
+		// 		toastr.error('Something went wrong. Please try again.');
+		// 	});
+		// });
 
 		function subscriptionTypeChanged(type) {
 			const elem = $('#price');
