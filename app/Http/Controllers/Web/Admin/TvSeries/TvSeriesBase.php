@@ -34,10 +34,20 @@ class TvSeriesBase extends BaseController{
 		return view('admin.tv-series.index')->with('series', $series);
 	}
 
+	public function edit($id){
+		$type = request('type');
+		if ($type == 'attributes') {
+			return $this->editAttributes($id);
+		}
+		else {
+			return $this->editContent($id);
+		}
+	}
+
 	public function choose($id){
 		$response = responseWeb();
 		try {
-			$payload = Video::retrieveThrows($id);
+			$payload = Video::where(['id' => $id, 'hasSeasons' => true])->firstOrFail();
 			$response = view('admin.tv-series.edit.choices')->with('payload', $payload);
 		}
 		catch (ModelNotFoundException $exception) {

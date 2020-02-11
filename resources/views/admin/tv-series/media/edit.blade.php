@@ -6,65 +6,85 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Tv series - Edit or update media'])
+					@include('admin.extras.header', ['title'=>'Videos'])
 				</div>
 				<form id="uploadForm" action="{{route('admin.tv-series.update.attributes',$payload->getKey())}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="card-body">
-						<div class="row" id="container">
-							<div class="col-6 animated zoomIn my-auto pr-1">
-								<div class="card" style="border: 1px solid #aeb4ba;">
-									<div class="card-header">
-										<span class="header-title">Poster</span>
+						<div class="row">
+							<div class="col-8 mx-auto">
+								<div class="card shadow-none" style="border: 1px solid rgba(180,185,191,0.4);">
+									<div class="card-header text-white bg-secondary">
+										Editing media for - {{$payload->getTitle()}}
 									</div>
-									<div class="card-body rounded p-0">
-										<div class="row">
-											<div class="col-12 text-center">
-												<span class="text-center my-auto" id="blankPoster"><i class="ion ion-image text-muted" style="font-size: 80px"></i></span>
-												<img id="previewPoster" class="img-fluid" style="max-height: 710px!important; min-height: 710px; object-fit: contain" src="{{\App\Storage\SecuredDisk::access()->url($payload->getPoster())}}"/>
-												<input type="file" class="d-none" onchange="handlePoster(event)" name="poster" id="posterInput" accept=".jpg, .png, .jpeg"/>
-												<button type="button" onclick="handlePosterDialog();" class="btn btn-danger position-absolute shadow-sm shadow-danger" style="bottom: 3%; right: 5%; border-radius: 40px; width: 50px; height: 50px;"><i class="fa fa-camera-retro font-20 pt-1"></i></button>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-6 pl-1">
-								<div class="row mb-2">
-									<div class="col-12 animated zoomIn">
-										<div class="card" style="border: 1px solid #aeb4ba;">
-											<div class="card-header">
-												<span class="header-title">Backdrop</span>
-											</div>
-											<div class="card-body rounded p-0">
+									<div class="card-body">
+										<div class="row" id="container">
+											<div class="col-12 mx-auto">
 												<div class="row">
-													<div class="col-12 text-center">
-														<span class="text-center my-auto" id="blankBackdrop"><i class="ion ion-image text-muted" style="font-size: 80px"></i></span>
-														<img id="previewBackdrop" class="img-fluid" style="max-height: 325px!important; min-height: 325px; object-fit: scale-down" src="{{\App\Storage\SecuredDisk::access()->url($payload->getBackdrop())}}"/>
-														<input type="file" class="d-none" onchange="handleBackdrop(event)" name="backdrop" id="backdropInput" accept=".jpg, .png, .jpeg"/>
-														<button type="button" onclick="handleBackdropDialog();" class="btn btn-danger position-absolute shadow-sm shadow-danger" style="bottom: 3%; right:3%; border-radius: 40px; width: 50px; height: 50px;"><i class="fa fa-camera-retro font-20 pt-1"></i></button>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-12 animated zoomIn">
-										<div class="card" style="border: 1px solid #aeb4ba;">
-											<div class="card-header">
-												<span class="header-title">Trailer</span>
-											</div>
-											<div class="card-body rounded p-0">
-												<div class="row">
-													<div class="col-12 text-center">
-														<input type="file" class="d-none" onchange="handleTrailer(event)" id="trailerInput" name="trailer" accept=".mp4, .avi"/>
-														<div class="embed-responsive embed-responsive-16by9 rounded-lg border" style=" max-height: 325px!important; min-height: 325px;">
-															<iframe class="embed-responsive-item" src="{{\App\Storage\SecuredDisk::access()->url($payload->getTrailer())}}" id="trailer" style=" max-height: 325px!important; min-height: 325px;">
-																<span class="text-center my-auto" id="blankVideo"><i class="ion ion-videocamera text-muted" style="font-size: 80px;"></i></span>
-															</iframe>
+													<div class="col-5 animated zoomIn my-auto pr-1">
+														<div class="card" style="border: 1px solid #aeb4ba;">
+															<div class="card-body rounded p-0">
+																<div class="row">
+																	<div class="col-12 text-center">
+																		<span class="text-center my-auto" id="blankPoster"><i class="ion ion-image text-muted" style="font-size: 80px"></i></span>
+																		@if(\App\Storage\SecuredDisk::access()->exists($payload->getPoster()))
+																			<img id="previewPoster" class="img-fluid" style="max-height: 660px!important; min-height: 660px; object-fit: contain" src="{{\App\Storage\SecuredDisk::access()->url($payload->getPoster())}}"/>
+																		@else
+																			<img id="previewPoster" class="img-fluid" style="max-height: 660px!important; min-height: 660px; object-fit: contain"/>
+																		@endif
+																		<input type="file" class="d-none" onchange="handlePoster(event)" name="poster" id="posterInput" accept=".jpg, .png, .jpeg"/>
+																		<button type="button" onclick="handlePosterDialog();" class="btn btn-danger position-absolute shadow-sm shadow-danger" style="bottom: 16px; right: 30px; border-radius: 70px; width: auto; height: 50px;">Poster &nbsp;&nbsp;<i class="fa fa-camera-retro"></i></button>
+																	</div>
+																</div>
+															</div>
 														</div>
-														<button type="button" onclick="handleTrailerDialog();" class="btn btn-danger position-absolute shadow-sm shadow-danger" style="top: 3%; right: 3%; border-radius: 40px; width: 50px; height: 50px;"><i class="fa fa-camera-retro font-20 pt-1"></i></button>
+													</div>
+													<div class="col-7 pl-1">
+														<div class="row mb-2">
+															<div class="col-12 animated zoomIn">
+																<div class="card" style="border: 1px solid #aeb4ba;">
+																	<div class="card-body rounded p-0">
+																		<div class="row">
+																			<div class="col-12 text-center">
+																				<span class="text-center my-auto" id="blankBackdrop"><i class="ion ion-image text-muted" style="font-size: 80px"></i></span>
+																				@if(\App\Storage\SecuredDisk::access()->exists($payload->getBackdrop()))
+																					<img id="previewBackdrop" class="img-fluid" style="max-height: 325px!important; min-height: 325px; object-fit: scale-down" src="{{\App\Storage\SecuredDisk::access()->url($payload->getBackdrop())}}"/>
+																				@else
+																					<img id="previewBackdrop" class="img-fluid" style="max-height: 325px!important; min-height: 325px; object-fit: scale-down"/>
+																				@endif
+																				<input type="file" class="d-none" onchange="handleBackdrop(event)" name="backdrop" id="backdropInput" accept=".jpg, .png, .jpeg"/>
+																				<button type="button" onclick="handleBackdropDialog();" class="btn btn-danger position-absolute shadow-sm shadow-danger" style="bottom: 16px; right: 30px; border-radius: 70px; width: auto; height: 50px;">Backdrop &nbsp;&nbsp;<i class="fa fa-camera-retro"></i></button>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-12 animated zoomIn">
+																<div class="card" style="border: 1px solid #aeb4ba;">
+																	<div class="card-body rounded p-0">
+																		<div class="row">
+																			<div class="col-12 text-center">
+																				<input type="file" class="d-none" onchange="handleTrailer(event)" id="trailerInput" name="trailer" accept=".mp4, .avi"/>
+																				<div class="embed-responsive embed-responsive-16by9 rounded-lg border" style=" max-height: 325px!important; min-height: 325px;">
+																					@if(\App\Storage\SecuredDisk::access()->exists($payload->getTrailer()))
+																						<iframe class="embed-responsive-item" src="{{\App\Storage\SecuredDisk::access()->url($payload->getTrailer())}}" id="trailer" style=" max-height: 325px!important; min-height: 325px;">
+																							<span class="text-center my-auto" id="blankVideo"><i class="ion ion-videocamera text-muted" style="font-size: 80px;"></i></span>
+																						</iframe>
+																					@else
+																						<iframe class="embed-responsive-item" id="trailer" style=" max-height: 325px!important; min-height: 325px;">
+																							<span class="text-center my-auto" id="blankVideo"><i class="ion ion-videocamera text-muted" style="font-size: 80px;"></i></span>
+																						</iframe>
+																					@endif
+																				</div>
+																				<button type="button" onclick="handleTrailerDialog();" class="btn btn-danger position-absolute shadow-sm shadow-danger" style="top: 16px; right: 30px; border-radius: 70px; width: auto; height: 50px;">Trailer &nbsp;&nbsp;<i class="fa fa-video-camera"></i></button>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
 													</div>
 												</div>
 											</div>
@@ -75,16 +95,20 @@
 						</div>
 					</div>
 					<div class="card-footer">
-						<div class="form-row">
-							<div class="col-6">
-								<button type="submit" class="btn btn-primary waves-effect waves-light btn-block shadow-sm">
-									Update
-								</button>
-							</div>
-							<div class="col-6">
-								<a href="{{route("admin.tv-series.edit.action",$payload->getKey())}}" class="btn btn-secondary waves-effect btn-block shadow-sm">
-									Cancel
-								</a>
+						<div class="row">
+							<div class="col-8 mx-auto">
+								<div class="row">
+									<div class="col-6 pr-1">
+										<button type="submit" class="btn btn-primary waves-effect waves-light btn-block shadow-primary">
+											Update
+										</button>
+									</div>
+									<div class="col-6 pl-1">
+										<a href="{{route("admin.tv-series.edit.action",$payload->getKey())}}" class="btn btn-secondary waves-effect btn-block shadow-secondary">
+											Cancel
+										</a>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -156,7 +180,7 @@
 				show: true,
 				backdrop: 'static'
 			});
-			axios.post('/admin/tv-series/' + videoId + '/update/media', formData, config,).then(response => {
+			axios.post('/admin/videos/' + videoId + '/update/media', formData, config,).then(response => {
 				const status = response.data.status;
 				modal.modal('hide');
 				if (status !== 200) {

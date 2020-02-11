@@ -11,6 +11,8 @@ use App\Models\MediaQuality;
 use App\Models\MediaServer;
 use App\Models\SubscriptionPlan;
 use App\Models\Video;
+use App\Models\VideoMeta;
+use App\Models\VideoSource;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -33,7 +35,7 @@ class VideosBase extends BaseController{
 	public function choose($id){
 		$response = responseWeb();
 		try {
-			$payload = Video::retrieveThrows($id);
+			$payload = Video::where(['id' => $id, 'hasSeasons' => false])->firstOrFail();
 			$response = view('admin.videos.edit.choices')->with('payload', $payload);
 		}
 		catch (ModelNotFoundException $exception) {
@@ -93,6 +95,33 @@ class VideosBase extends BaseController{
 				return $response->send();
 			else
 				return $response;
+		}
+	}
+
+	public function delete($id, $subId = null){
+		$tvSeries = null;
+		$response = $this->response();
+		try {
+			$tvSeries = Video::findOrFail($id);
+			$meta = VideoMeta::where('videoId', $tvSeries->getKey())->get();
+			$meta->each(function (VideoMeta $meta){
+				$meta->delete();
+			});
+			$sources = VideoSource::where('videoId', $tvSeries->getKey())->get();
+			$sources->each(function (VideoSource $videoSource){
+				$videoSource->delete();
+			});
+			$tvSeries->delete();
+			$response->setValue('code', 200)->message('Successfully deleted video.');
+		}
+		catch (ModelNotFoundException $exception) {
+			$response->setValue('code', 400)->message('Could not find video for that key.');
+		}
+		catch (Throwable $exception) {
+			$response->setValue('code', 500)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
 		}
 	}
 }

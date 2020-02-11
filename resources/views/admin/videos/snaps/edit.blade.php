@@ -111,7 +111,7 @@
 			alertify.confirm("Are you sure you want to delete this snapshot?",
 				(ev) => {
 					ev.preventDefault();
-					axios.delete('/admin/tv-series/' + videoId + '/snaps/' + key)
+					axios.delete('/admin/videos/' + videoId + '/snaps/' + key)
 						.then(response => {
 							if (response.data.status === 200) {
 								handleDelete(id);

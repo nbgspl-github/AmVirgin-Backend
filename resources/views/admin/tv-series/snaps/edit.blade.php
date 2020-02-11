@@ -6,28 +6,43 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Tv series - Edit or update snapshots','onClick'=>['link'=>'handleAdd()','text'=>'Add more']])
+					@include('admin.extras.header', ['title'=>'Videos','onClick'=>['link'=>'handleAdd()','text'=>'Add more']])
 				</div>
 				<form id="uploadForm" action="{{route('admin.tv-series.update.attributes',$payload->getKey())}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="card-body">
-						<div class="form-row" id="container">
-							@foreach($snaps as $snap)
-								@include('admin.tv-series.snaps.bladeImageBox',['id'=>$loop->index,'key'=>$snap['id']])
-							@endforeach
+						<div class="row">
+							<div class="col-8 mx-auto">
+								<div class="card shadow-none" style="border: 1px solid rgba(180,185,191,0.4);">
+									<div class="card-header text-white bg-secondary">
+										Editing snapshots for - {{$payload->getTitle()}}
+									</div>
+									<div class="card-body">
+										<div class="form-row" id="container">
+											@foreach($snaps as $snap)
+												@include('admin.tv-series.snaps.bladeImageBox',['id'=>$loop->index,'key'=>$snap['id']])
+											@endforeach
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="card-footer">
-						<div class="form-row">
-							<div class="col-6">
-								<button type="submit" class="btn btn-primary waves-effect waves-light btn-block shadow-sm">
-									Update
-								</button>
-							</div>
-							<div class="col-6">
-								<a href="{{route("admin.tv-series.edit.action",$payload->getKey())}}" class="btn btn-secondary waves-effect btn-block shadow-sm">
-									Cancel
-								</a>
+						<div class="row">
+							<div class="col-8 mx-auto">
+								<div class="row">
+									<div class="col-6 pr-1">
+										<button type="submit" class="btn btn-primary waves-effect waves-light btn-block shadow-primary">
+											Update
+										</button>
+									</div>
+									<div class="col-6 pl-1">
+										<a href="{{route("admin.tv-series.edit.action",$payload->getKey())}}" class="btn btn-secondary waves-effect btn-block shadow-secondary">
+											Cancel
+										</a>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

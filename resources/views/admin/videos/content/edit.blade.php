@@ -115,7 +115,7 @@
 			alertify.confirm("Are you sure you want to delete this episode?",
 				(ev) => {
 					ev.preventDefault();
-					axios.delete('/admin/tv-series/' + videoId + '/content/' + key)
+					axios.delete('/admin/videos/' + videoId + '/content/' + key)
 						.then(response => {
 							if (response.data.status === 200) {
 								handleDelete(id);

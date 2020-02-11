@@ -8,7 +8,7 @@
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Videos'])
 				</div>
-				<form id="uploadForm" action="{{route('admin.tv-series.update.attributes',$payload->getKey())}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
+				<form id="uploadForm" action="{{route('admin.videos.update.attributes',$payload->getKey())}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="card-body">
 						<div class="row">

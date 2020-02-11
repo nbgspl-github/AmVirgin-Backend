@@ -35,36 +35,6 @@ class TvSeriesController extends BaseController{
 		return view('admin.tv-series.index')->with('series', $series);
 	}
 
-	public function edit($id){
-		$type = request('type');
-		if ($type == 'attributes') {
-			return $this->editAttributes($id);
-		}
-		else {
-			return $this->editContent($id);
-		}
-	}
-
-	public function choose($id){
-		$response = responseWeb();
-		try {
-			$payload = Video::retrieveThrows($id);
-			$response = view('admin.tv-series.edit.choices')->with('payload', $payload);
-		}
-		catch (ModelNotFoundException $exception) {
-			$response->route('admin.tv-series.index')->error('Could not find tv series for that key.');
-		}
-		catch (Throwable $exception) {
-			$response->route('admin.tv-series.index')->error($exception->getMessage());
-		}
-		finally {
-			if ($response instanceof WebResponse)
-				return $response->send();
-			else
-				return $response;
-		}
-	}
-
 	public function create(){
 		$genrePayload = Genre::all();
 		$languagePayload = MediaLanguage::all()->sortBy('name')->all();
