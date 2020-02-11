@@ -55,7 +55,6 @@ class ContentController extends TvSeriesBase{
 			$response->route('admin.videos.index')->error('Could not find video for that key.');
 		}
 		catch (Throwable $exception) {
-//			dd($exception->getTraceAsString());
 			$response->route('admin.videos.index')->error($exception->getMessage());
 		}
 		finally {
