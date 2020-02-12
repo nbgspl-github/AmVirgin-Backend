@@ -99,10 +99,10 @@ class VideosBase extends BaseController{
 			$response->setValue('route', route('admin.videos.edit.action', $video->getKey()))->success('Video details were saved successfully.');
 		}
 		catch (ValidationException $exception) {
-			$response->data(request()->all())->back()->error($exception->getError());
+			$response->message($exception->getError())->status(HttpInvalidRequestFormat);
 		}
 		catch (Throwable $exception) {
-			$response->data(request()->all())->back()->error($exception->getMessage());
+			$response->status(HttpServerError)->error($exception->getMessage());
 		}
 		finally {
 			return $response->send();
