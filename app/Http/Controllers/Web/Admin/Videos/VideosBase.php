@@ -64,6 +64,20 @@ class VideosBase extends BaseController{
 		with('qualities', $quality);
 	}
 
+	public function show($slug){
+		$video = null;
+		try {
+			$video = Video::where('slug', $slug)->where('hasSeasons', true)->firstOrFail();
+			return jsonEncode($video);
+		}
+		catch (ModelNotFoundException $exception) {
+			return $exception->getMessage();
+		}
+		catch (Throwable $exception) {
+			return $exception->getMessage();
+		}
+	}
+
 	public function store(){
 		$response = $this->response();
 		try {

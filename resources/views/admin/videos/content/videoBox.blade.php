@@ -64,7 +64,7 @@
 						<div class="col-6">
 							<div class="form-group">
 								<label>Duration</label>
-								<input name="duration[]" id="duration_@{{id}}" data-id="@{{id}}" type="text" class="form-control duration-picker bg-white" required placeholder="Type in hh:mm:ss" value="" onclick="handleInvokeDurationPicker(this.getAttribute('data-id'));" readonly>
+								<input name="duration[]" id="duration_@{{id}}" data-id="@{{id}}" type="text" class="form-control duration-picker bg-white" required placeholder="Choose duration" value="" onclick="handleInvokeDurationPicker(this.getAttribute('data-id'));" readonly>
 							</div>
 						</div>
 					</div>
