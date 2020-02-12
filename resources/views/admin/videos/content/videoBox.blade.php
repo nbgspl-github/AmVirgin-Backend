@@ -32,7 +32,7 @@
 						</div>
 					</div>
 					<div class="form-row">
-						<div class="col-4">
+						<div class="col-6">
 							<div class="form-group">
 								<label>Language</label>
 								<select name="language[]" class="form-control" required>
@@ -42,7 +42,7 @@
 								</select>
 							</div>
 						</div>
-						<div class="col-4">
+						<div class="col-6">
 							<div class="form-group">
 								<label>Quality</label>
 								<select name="quality[]" class="form-control" required>
@@ -58,13 +58,13 @@
 						<div class="col-6">
 							<div class="form-group mb-0">
 								<label>Subtitle file</label>
-								<input name="subtitle[]" type="file" id="subtitle" class="form-control" placeholder="Duration in hh:mm:ss" value="" accept=".srt" style="padding: 4px">
+								<input name="subtitle[]" type="file" id="subtitle" class="form-control" value="" accept=".srt" style="padding: 4px">
 							</div>
 						</div>
 						<div class="col-6">
 							<div class="form-group">
 								<label>Duration</label>
-								<input name="duration[]" type="text" id="duration" class="form-control" required placeholder="Duration in hh:mm:ss" value="">
+								<input name="duration[]" pattern="^(?:(?:([01]?\\d|2[0-3]):){1}([0-5]?\\d):){1}([0-5]?\\d)$" type="text" class="form-control duration-picker" required placeholder="Type in hh:mm:ss" value="">
 							</div>
 						</div>
 					</div>

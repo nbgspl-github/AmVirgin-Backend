@@ -79,7 +79,7 @@
 						<div class="col-12">
 							<div class="form-group">
 								<label>Duration</label>
-								<input name="duration[]" type="text" id="duration" class="form-control" required placeholder="Duration in hh:mm:ss" value="">
+								<input name="duration[]" pattern="^(?:(?:([01]?\\d|2[0-3]):){1}([0-5]?\\d):){1}([0-5]?\\d)$" type="text" id="duration" class="form-control" required placeholder="Duration in hh:mm:ss" value="">
 							</div>
 						</div>
 					</div>
