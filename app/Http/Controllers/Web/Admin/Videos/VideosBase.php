@@ -102,7 +102,6 @@ class VideosBase extends BaseController{
 			$response->message($exception->getError())->status(HttpInvalidRequestFormat);
 		}
 		catch (Throwable $exception) {
-			dd($exception);
 			$response->status(HttpServerError)->error($exception->getMessage());
 		}
 		finally {
