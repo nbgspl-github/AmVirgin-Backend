@@ -2,6 +2,7 @@
 @section('content')
 	@include('admin.modals.uploadProgressBox')
 	@include('admin.modals.singleActionBox')
+	@include('admin.modals.durationPicker')
 	<div class="row">
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
@@ -74,6 +75,8 @@
 
 		let manuallyFired = true;
 
+		let lastChosenDurationId = null;
+
 		window.onload = () => {
 			currentIndex = $('#container').children().length;
 			insertConditionally();
@@ -139,6 +142,18 @@
 
 		handleSubmit = (context) => {
 			const validator = $('#uploadForm').parsley();
+			const clientChosen = document.getElementsByName('video[]');
+			console.log(clientChosen.length);
+			for (let i = 0; i < clientChosen.length; i++) {
+				const element = clientChosen[i];
+				if (element.getAttribute('data-type') === 'client') {
+					if (element.files.length === 0) {
+						alertify.alert('Fix the video file in row ' + (i + 1) + ' to continue.');
+						return;
+					}
+				}
+			}
+
 			if (!validator.isValid()) {
 				alertify.alert('Fix the errors in the form and retry.');
 				return;
@@ -195,6 +210,32 @@
 			const currentItemsCount = $('#container').children().length;
 			if (currentItemsCount === 0)
 				handleAdd();
+		};
+
+		handleDurationChosen = (hours, minutes, seconds) => {
+			$('#durationPicker').modal('hide');
+			const element = $('#duration_' + lastChosenDurationId);
+			if (element.parent().children().length >= 3)
+				element.parent().children()[2].remove();
+			element.removeClass('parsley-error');
+			let duration = hours + ":" + minutes + ":" + seconds;
+			if (duration === '00:00:00')
+				duration = '00:01:00';
+			element.val(duration);
+		};
+
+		handleInvokeDurationPicker = (id) => {
+			lastChosenDurationId = id;
+			const duration = $('#duration_' + lastChosenDurationId);
+			if (duration.val().length === 8) {
+				const segments = duration.val().split(':');
+				if (segments.length === 3) {
+					$('#hours').val(segments[0]);
+					$('#minutes').val(segments[1]);
+					$('#seconds').val(segments[2]);
+				}
+			}
+			$('#durationPicker').modal('show');
 		};
 	</script>
 @stop

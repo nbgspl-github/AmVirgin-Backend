@@ -1,0 +1,61 @@
+<form style="z-index: 999" onsubmit="handleDurationChosen('{{$id}}',document.getElementById('hours_{{$id}}').value,document.getElementById('minutes_{{$id}}').value,document.getElementById('seconds_{{$id}}').value);" data-parsley-validate="true" data-id="{{$id}}">
+	<div class="modal fade" tabindex="-1" role="dialog" id="durationPicker_{{$id}}">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Choose duration</h5>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-4">
+							<div class="form-group">
+								<label for="">Hours</label>
+								<select class="form-control" id="hours_{{$id}}">
+									<option value="00" selected>00</option>
+									@for ($i = 0; $i <=9 ; $i++)
+										<option value="0{{$i}}">0{{$i}}</option>
+									@endfor
+									@for ($i = 10; $i <=24 ; $i++)
+										<option value="{{$i}}">{{$i}}</option>
+									@endfor
+								</select>
+							</div>
+						</div>
+						<div class="col-4">
+							<div class="form-group">
+								<label for="">Minutes</label>
+								<select class="form-control" required data-parsley-type="number" min="1" max="60" id="minutes_{{$id}}">
+									<option value="01" selected>01</option>
+									@for ($i = 2; $i <=9 ; $i++)
+										<option value="0{{$i}}">0{{$i}}</option>
+									@endfor
+									@for ($i = 10; $i <=60 ; $i++)
+										<option value="{{$i}}">{{$i}}</option>
+									@endfor
+								</select>
+							</div>
+						</div>
+						<div class="col-4">
+							<div class="form-group">
+								<label for="">Seconds</label>
+								<select class="form-control" required data-parsley-type="number" min="0" max="60" id="seconds_{{$id}}">
+									<option value="00" selected>00</option>
+									@for ($i = 1; $i <=9 ; $i++)
+										<option value="0{{$i}}">0{{$i}}</option>
+									@endfor
+									@for ($i = 10; $i <=60 ; $i++)
+										<option value="{{$i}}">{{$i}}</option>
+									@endfor
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary">Done</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>

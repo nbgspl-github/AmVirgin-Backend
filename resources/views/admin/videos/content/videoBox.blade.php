@@ -8,7 +8,7 @@
 				<button data-id="@{{id}}" type="button" onclick="handleFileDialog(this.getAttribute('data-id'));" class="btn btn-danger position-absolute shadow-sm shadow-danger" style="bottom: 30px; left:19%;border-radius: 32px; width: auto; height: 50px; z-index: 10;">Choose Video&nbsp;&nbsp;<i class="ion-videocamera"></i></button>
 				<div class="col-6 my-auto">
 					<div class="embed-responsive embed-responsive-16by9 border-dark" style="max-height: 300px!important; min-height: 300px; border-radius: 4px">
-						<input type="file" data-id="@{{id}}" class="d-none" onchange="handleVideo(event,this.getAttribute('data-id'))" id="input_@{{id}}" name="video[]" accept=".mp4, .avi"/>
+						<input type="file" data-id="@{{id}}" class="d-none" onchange="handleVideo(event,this.getAttribute('data-id'))" id="input_@{{id}}" name="video[]" accept=".mp4, .avi" data-type="client"/>
 						<iframe class="embed-responsive-item my-auto" src="" id="preview_@{{id}}" style=" max-height: 300px!important; min-height: 300px;">
 							<span class="text-center my-auto" id="blankVideo"><i class="ion ion-videocamera text-muted" style="font-size: 80px;"></i></span>
 						</iframe>
@@ -64,7 +64,7 @@
 						<div class="col-6">
 							<div class="form-group">
 								<label>Duration</label>
-								<input name="duration[]" pattern="^(?:(?:([01]?\d|2[0-3]):){1}([0-5]?\d):){1}([0-5]?\d)$" type="text" class="form-control duration-picker" required placeholder="Type in hh:mm:ss" value="">
+								<input name="duration[]" id="duration_@{{id}}" data-id="@{{id}}" type="text" class="form-control duration-picker bg-white" required placeholder="Type in hh:mm:ss" value="" onclick="handleInvokeDurationPicker(this.getAttribute('data-id'));" readonly>
 							</div>
 						</div>
 					</div>
