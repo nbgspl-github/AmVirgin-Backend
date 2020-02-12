@@ -42,7 +42,7 @@ class ContentController extends VideosBase{
 				$payload->sourceId = $videoSource->getKey();
 				return $payload;
 			});
-			$row = view('admin.videos.content.videoBox')->with('qualities', $qualities)->with('languages', $languages);
+			$row = view('admin.videos.content.videoBox')->with('qualities', $qualities)->with('languages', $languages)->render();
 			$response = view('admin.videos.content.edit')->
 			with('videos', $sources->all())->
 			with('payload', $video)->
