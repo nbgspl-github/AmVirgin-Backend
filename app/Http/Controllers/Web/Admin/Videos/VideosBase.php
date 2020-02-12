@@ -96,13 +96,12 @@ class VideosBase extends BaseController{
 				'price' => $payload['subscriptionType'] == SubscriptionPlan::Paid ? $payload['price'] : 0,
 				'rank' => $payload['rank'],
 			]);
-			$response->setValue('route', route('admin.videos.edit.action', $video->getKey()))->success('Video details were saved successfully.');
+			$response->setValue('route', route('admin.videos.edit.action', $video->getKey()))->message('Video details were saved successfully.');
 		}
 		catch (ValidationException $exception) {
 			$response->message($exception->getError())->status(HttpInvalidRequestFormat);
 		}
 		catch (Throwable $exception) {
-			dd($exception);
 			$response->status(HttpServerError)->error($exception->getMessage());
 		}
 		finally {
