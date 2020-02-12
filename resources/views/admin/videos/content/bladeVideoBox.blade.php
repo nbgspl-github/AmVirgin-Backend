@@ -65,7 +65,7 @@
 						<div class="col-4">
 							<div class="form-group">
 								<label>Duration</label>
-								<input name="duration[]" pattern="^(?:(?:([01]?\\d|2[0-3]):){1}([0-5]?\\d):){1}([0-5]?\\d)$" type="text" class="form-control duration-picker" required placeholder="Type in hh:mm:ss" value="{{$payload->duration}}">
+								<input name="duration[]" pattern="^(?:(?:([01]?\d|2[0-3]):){1}([0-5]?\d):){1}([0-5]?\d)$" type="text" class="form-control duration-picker" required placeholder="Type in hh:mm:ss" value="{{$payload->duration}}">
 							</div>
 						</div>
 					</div>
