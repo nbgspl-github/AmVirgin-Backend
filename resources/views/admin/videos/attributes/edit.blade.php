@@ -2,6 +2,7 @@
 @section('content')
 	@include('admin.modals.uploadProgressBox')
 	@include('admin.modals.singleActionBox')
+	@include('admin.modals.durationPicker')
 	<div class="row">
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
@@ -24,7 +25,7 @@
 										</div>
 										<div class="form-group">
 											<label for="duration">@required (Duration)</label>
-											<input id="duration" pattern="^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$" type="text" name="duration" class="form-control" required placeholder="Type duration of video in hh:mm:ss" value="{{old('duration',$payload->getDuration())}}"/>
+											<input id="duration" type="text" name="duration" class="form-control" required placeholder="Choose duration" value="{{old('duration',$payload->getDuration())}}"/>
 										</div>
 										<div class="form-group">
 											<label for="cast">@required (Cast)</label>
@@ -52,7 +53,7 @@
 										</div>
 										<div class="form-group">
 											<label for="released">@required (Release date)</label>
-											<input id="released" type="date" name="released" class="form-control" required placeholder="Choose or type release date" value="{{old('released',$payload->getReleased())}}"/>
+											<input id="released" type="date" name="released" class="form-control" required placeholder="Choose or type release date" value="{{old('released',$payload->getReleased())}}" onkeydown="return false;"/>
 										</div>
 										<div class="form-group">
 											<label for="rating">@required (Rating)</label>
@@ -182,6 +183,7 @@
 @endsection
 
 @section('javascript')
+	<script src="{{asset('admin/utils/DurationPicker.js')}}"></script>
 	<script>
 		let lastPoster = null;
 		let lastBackdrop = null;
@@ -232,6 +234,10 @@
 		}
 
 		$(document).ready(function () {
+			setupDurationPicker({
+				modalId: 'durationPicker',
+				durationId: 'duration'
+			});
 			progressRing = $('#progressCircle');
 			progressPercent = $('#progressPercent');
 			progressRing.circleProgress({

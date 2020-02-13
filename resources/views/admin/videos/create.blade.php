@@ -1,6 +1,7 @@
 @extends('admin.app.app')
 @section('content')
 	@include('admin.videos.actionBox')
+	@include('admin.modals.durationPicker')
 	<div class="row">
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
@@ -23,7 +24,7 @@
 										</div>
 										<div class="form-group">
 											<label for="duration">Duration<span class="text-primary">*</span></label>
-											<input id="duration" pattern="^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$" type="text" name="duration" class="form-control" required placeholder="Type duration of video in hh:mm:ss" value="{{old('duration')}}"/>
+											<input id="duration" type="text" name="duration" class="form-control bg-white" required placeholder="Type duration of video in hh:mm:ss" value="{{old('duration')}}" readonly/>
 										</div>
 										<div class="form-group">
 											<label for="cast">Cast<span class="text-primary">*</span></label>
@@ -52,7 +53,7 @@
 										</div>
 										<div class="form-group">
 											<label for="released">Release date<span class="text-primary">*</span></label>
-											<input id="released" type="date" name="released" class="form-control" required placeholder="Choose or type release date"/>
+											<input id="released" type="date" name="released" class="form-control" required placeholder="Choose release date" onkeydown="return false;"/>
 										</div>
 										<div class="form-group">
 											<label for="rating">Rating<span class="text-primary">*</span></label>
@@ -148,6 +149,7 @@
 @endsection
 
 @section('javascript')
+	<script src="{{asset('admin/utils/DurationPicker.js')}}"></script>
 	<script>
 		let modal = null;
 		let submitButton = null;
@@ -160,6 +162,10 @@
 		$(document).ready(function () {
 			modal = $('#okayBox');
 			submitButton = $('#submitButton');
+			setupDurationPicker({
+				modalId: 'durationPicker',
+				durationId: 'duration'
+			});
 			$('#trending').change(function () {
 				if (this.checked) {
 					$('#trendingRank').prop("required", true);

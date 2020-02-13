@@ -52,7 +52,7 @@
 										</div>
 										<div class="form-group">
 											<label for="released">Release date<span class="text-primary">*</span></label>
-											<input id="released" type="date" name="released" class="form-control" required placeholder="Choose or type release date"/>
+											<input id="released" type="date" name="released" class="form-control" required placeholder="Choose or type release date" onkeydown="return false;"/>
 										</div>
 										<div class="form-group">
 											<label for="rating">Rating<span class="text-primary">*</span></label>

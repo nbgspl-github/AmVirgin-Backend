@@ -54,6 +54,7 @@
 @endsection
 
 @section('javascript')
+	<script src="{{asset('admin/utils/DurationPicker.js')}}"></script>
 	<script>
 		const template = `{!! $template !!}`;
 

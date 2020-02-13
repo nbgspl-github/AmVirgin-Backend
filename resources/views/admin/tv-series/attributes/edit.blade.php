@@ -52,7 +52,7 @@
 										</div>
 										<div class="form-group">
 											<label for="released">@required (Release date)</label>
-											<input id="released" type="date" name="released" class="form-control" required placeholder="Choose or type release date" value="{{old('released',$payload->getReleased())}}"/>
+											<input id="released" type="date" name="released" class="form-control" required placeholder="Choose or type release date" value="{{old('released',$payload->getReleased())}}" onkeydown="return false;"/>
 										</div>
 										<div class="form-group">
 											<label for="rating">@required (Rating)</label>
