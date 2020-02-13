@@ -33,7 +33,7 @@
 									@endif
 								</td>
 								<td class="text-center">{{$video->getTitle()}}</td>
-								<td class="text-center">{{__ellipsis($video->getDescription(),50)}}</td>
+								<td class="text-center">{{__ellipsis($video->getDescription(),100)}}</td>
 								<td class="text-center">{{$video->getRating()}}</td>
 								<td class="text-center">{{__boolean($video->trending)}}</td>
 								<td class="text-center">{{__boolean($video->pending)}}</td>

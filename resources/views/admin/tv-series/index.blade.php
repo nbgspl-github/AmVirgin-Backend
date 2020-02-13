@@ -34,7 +34,7 @@
 									@endif
 								</td>
 								<td class="text-center">{{$s->getTitle()}}</td>
-								<td class="text-center">{{__ellipsis($s->getDescription(),50)}}</td>
+								<td class="text-center">{{__ellipsis($s->getDescription(),100)}}</td>
 								<td class="text-center">{{$s->getRating()}}</td>
 								<td class="text-center">{{__boolean($s->trending)}}</td>
 								<td class="text-center">{{$s->getSeasons()}}</td>

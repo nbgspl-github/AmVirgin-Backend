@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Admin\Videos;
 use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
+use App\Interfaces\VideoTypes;
 use App\Models\Genre;
 use App\Models\MediaLanguage;
 use App\Models\MediaQuality;
@@ -92,9 +93,14 @@ class VideosBase extends BaseController{
 				'genreId' => $payload['genreId'],
 				'rating' => $payload['rating'],
 				'pgRating' => $payload['pgRating'],
+				'type' => VideoTypes::Movie,
+				'hits' => 0,
+				'trending' => request()->has('trending'),
+				'rank' => $payload['rank'],
+				'showOnHome' => request()->has('showOnHome'),
 				'subscriptionType' => $payload['subscriptionType'],
 				'price' => $payload['subscriptionType'] == SubscriptionPlan::Paid ? $payload['price'] : 0,
-				'rank' => $payload['rank'],
+				'hasSeasons' => false,
 			]);
 			$response->setValue('route', route('admin.videos.edit.action', $video->getKey()))->message('Video details were saved successfully.');
 		}
