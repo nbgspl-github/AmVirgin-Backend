@@ -135,4 +135,13 @@ class VideosBase extends BaseController{
 			return $response->send();
 		}
 	}
+
+	protected function replaceTrending($chosenRank){
+		$ranked = Video::where('rank', $chosenRank)->first();
+		if (!null($ranked)) {
+			$ranked->rank = 0;
+			$ranked->trending = false;
+			$ranked->save();
+		}
+	}
 }
