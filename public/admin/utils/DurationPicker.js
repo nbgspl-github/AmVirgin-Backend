@@ -3,6 +3,10 @@ let config = {
 	durationId: null,
 };
 
+let lastHours = '00';
+let lastMinutes = '00';
+let lastSeconds = '00';
+
 setupDurationPicker = (config) => {
 	window.config = config;
 	idify(config.durationId).click(function () {
@@ -40,12 +44,34 @@ handleInvokeDurationPicker = () => {
 	if (duration.val().length === 8) {
 		const segments = duration.val().split(':');
 		if (segments.length === 3) {
-			$('#hours').val(segments[0]);
-			$('#minutes').val(segments[1]);
-			$('#seconds').val(segments[2]);
+			$('#hours').val(lastHours = segments[0]);
+			$('#minutes').val(lastMinutes = segments[1]);
+			$('#seconds').val(lastSeconds = segments[2]);
 		}
 	}
 	idify(window.config.modalId).modal('show');
+};
+
+handleHours = (hours) => {
+	lastHours = hours;
+	handleTimeExceptions();
+};
+
+handleMinutes = (minutes) => {
+	lastMinutes = minutes;
+	handleTimeExceptions();
+};
+
+handleTimeExceptions = () => {
+	const element = $('#seconds');
+	if (lastHours === '23' && lastMinutes === '59') {
+		if (element.val() == '60') {
+			element.val('59');
+		}
+		element.children('option[value="60"]').attr('disabled', true);
+	} else {
+		element.children('option[value="60"]').attr('disabled', false);
+	}
 };
 
 idify = (id) => {

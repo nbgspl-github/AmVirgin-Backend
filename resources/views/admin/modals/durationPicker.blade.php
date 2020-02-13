@@ -9,7 +9,7 @@
 					<div class="col-4">
 						<div class="form-group">
 							<label for="">Hours</label>
-							<select name="quality[]" class="form-control" id="hours">
+							<select name="hoursSelect" class="form-control" id="hours" onchange="handleHours(this.value);">
 								<option value="00" selected>00</option>
 								@for ($i = 0; $i <=9 ; $i++)
 									<option value="0{{$i}}">0{{$i}}</option>
@@ -23,7 +23,7 @@
 					<div class="col-4">
 						<div class="form-group">
 							<label for="">Minutes</label>
-							<select name="quality[]" class="form-control" required data-parsley-type="number" min="0" max="60" id="minutes">
+							<select name="minutesSelect" class="form-control" required data-parsley-type="number" min="0" max="60" id="minutes" onchange="handleMinutes(this.value);">
 								<option value="00" selected>00</option>
 								@for ($i = 1; $i <=9 ; $i++)
 									<option value="0{{$i}}">0{{$i}}</option>
@@ -37,7 +37,7 @@
 					<div class="col-4">
 						<div class="form-group">
 							<label for="">Seconds</label>
-							<select name="quality[]" class="form-control" required data-parsley-type="number" min="0" max="60" id="seconds">
+							<select name="secondsSelect" class="form-control" required data-parsley-type="number" min="0" max="60" id="seconds">
 								<option value="00" selected>00</option>
 								@for ($i = 1; $i <=9 ; $i++)
 									<option value="0{{$i}}">0{{$i}}</option>
