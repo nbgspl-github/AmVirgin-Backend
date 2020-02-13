@@ -81,7 +81,7 @@
 										</div>
 										<div class="form-group">
 											<label for="price">Price<span class="text-primary">*</span></label>
-											<input id="price" type="number" name="price" class="form-control" required placeholder="Type price for this movie/video" min="0" max="10000" step="1" readonly/>
+											<input id="price" type="number" name="price" class="form-control" required placeholder="Type price for this movie/video" min="0.01" max="10000.00" step="0.01" readonly/>
 										</div>
 										<div class="form-group">
 											<label>Push notify customers?</label>
@@ -185,22 +185,18 @@
 				return;
 			}
 			const formData = new FormData(this);
-			modal.modal({
-				keyboard: false,
-				show: true,
-				backdrop: 'static'
-			});
 			axios.post('/admin/videos/store', formData).then(response => {
 				const status = response.data.status;
-				if (status !== 200) {
-					alertify.alert(response.data.message);
-				} else {
+				if (status === 200) {
 					route = response.data.route;
 					modal.modal({
 						show: true,
 						keyboard: false,
 						backdrop: 'static'
 					});
+				} else {
+					disableSubmit(false);
+					alertify.alert(response.data.message);
 				}
 			}).catch(error => {
 				disableSubmit(false);
