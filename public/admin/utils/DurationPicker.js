@@ -64,7 +64,7 @@ handleMinutes = (minutes) => {
 
 handleTimeExceptions = () => {
 	const element = $('#seconds');
-	if (lastHours === '23' && lastMinutes === '59') {
+	if (lastHours === '23' && lastMinutes === '59' || lastMinutes === '59') {
 		if (element.val() == '60') {
 			element.val('59');
 		}

@@ -24,7 +24,7 @@
 										</div>
 										<div class="form-group">
 											<label for="duration">Duration<span class="text-primary">*</span></label>
-											<input id="duration" type="text" name="duration" class="form-control bg-white" required placeholder="Type duration of video in hh:mm:ss" value="{{old('duration')}}" readonly/>
+											<input id="duration" type="text" name="duration" class="form-control bg-white" required placeholder="Choose duration" value="{{old('duration')}}" readonly/>
 										</div>
 										<div class="form-group">
 											<label for="cast">Cast<span class="text-primary">*</span></label>
@@ -57,7 +57,7 @@
 										</div>
 										<div class="form-group">
 											<label for="rating">Rating<span class="text-primary">*</span></label>
-											<input id="rating" type="number" name="rating" class="form-control" required placeholder="Type rating for this movie/video" min="0.00" max="5.00" value="0.00" step="0.01"/>
+											<input id="rating" type="number" name="rating" class="form-control" required placeholder="Type rating for this movie/video" min="0.0" max="5.0" value="0.0" step="0.1"/>
 										</div>
 										<div class="form-group">
 											<label for="pgRating">PG Rating<span class="text-primary">*</span></label>
@@ -81,7 +81,7 @@
 										</div>
 										<div class="form-group">
 											<label for="price">Price<span class="text-primary">*</span></label>
-											<input id="price" type="number" name="price" class="form-control" required placeholder="Type price for this movie/video" min="0" max="10000" step="1" readonly/>
+											<input id="price" type="number" name="price" class="form-control" required placeholder="Type price for this movie/video" pattern="[0-9]" min="0" max="10000" step="1" readonly/>
 										</div>
 										<div class="form-group">
 											<label>Push notify customers?</label>
@@ -134,7 +134,7 @@
 										</button>
 									</div>
 									<div class="col-6">
-										<a href="{{route("admin.genres.index")}}" class="btn btn-secondary waves-effect btn-block shadow-secondary">
+										<a href="{{route("admin.videos.index")}}" class="btn btn-secondary waves-effect btn-block shadow-secondary">
 											Cancel
 										</a>
 									</div>
