@@ -14,7 +14,7 @@
 								@for ($i = 0; $i <=9 ; $i++)
 									<option value="0{{$i}}">0{{$i}}</option>
 								@endfor
-								@for ($i = 10; $i <=24 ; $i++)
+								@for ($i = 10; $i <=23 ; $i++)
 									<option value="{{$i}}">{{$i}}</option>
 								@endfor
 							</select>
