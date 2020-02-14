@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
+use Illuminate\Database\Eloquent\Model;
+
 class ProductImage extends Model{
 	use RetrieveResource;
 	use RetrieveCollection;
-	
+
 	protected $table = 'product-images';
 
 	protected $fillable = [
@@ -18,10 +19,11 @@ class ProductImage extends Model{
 	];
 
 	protected $hidden = [
+		'id',
+		'productId',
 		'created_at',
 		'updated_at',
 	];
-
 
 	/**
 	 * @return bool

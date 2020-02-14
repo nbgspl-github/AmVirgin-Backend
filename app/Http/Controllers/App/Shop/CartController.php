@@ -110,7 +110,4 @@ use FluentResponse;
           return $response->send();
         }
     }
-    
-    
-    
 }

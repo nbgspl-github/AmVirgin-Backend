@@ -60,6 +60,12 @@ class Product extends Model{
 		'sellerId',
 	];
 
+	protected $casts = [
+		'visibility' => 'bool',
+		'draft' => 'bool',
+		'soldOut' => 'bool',
+	];
+
 	/**
 	 * @return string
 	 */

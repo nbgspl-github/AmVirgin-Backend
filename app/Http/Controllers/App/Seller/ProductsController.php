@@ -9,17 +9,18 @@ use App\Http\Controllers\Base\ResourceController;
 use App\Interfaces\Directories;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Storage\SecuredDisk;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Throwable;
 
@@ -131,65 +132,65 @@ class ProductsController extends ResourceController{
 	}
 
 	public function store(Request $request){
-		$sellerId = $this->user()->getKey();
+		/**
+		 * @var Product $product
+		 */
 		$response = $this->response();
-		$images = $request->file('files');
-		//Product::getPdo()->lastInsertId();
 		try {
-			$this->requestValid($request, $this->rules('store'));
+			$payload = $this->requestValid($request, $this->rules('store'));
 			$product = Product::create([
-				'name' => $request->productName,
-				'slug' => Str::slug($request->productName),
-				'categoryId' => $request->categoryId,
-				'sellerId' => $sellerId,
-				'productType' => $request->productType,
-				'productMode' => $request->productMode,
-				'listingType' => $request->listingType,
-				'originalPrice' => $request->originalPrice,
-				'offerValue' => $request->offerValue,
-				'offerType' => $request->offerType,
-				'currency' => $request->currency,
-				'taxRate' => $request->taxRate,
-				'countryId' => $request->countryId,
-				'stateId' => $request->stateId,
-				'cityId' => $request->cityId,
-				'zipCode' => $request->zipCode,
-				'address' => $request->address,
-				'status' => $request->status,
-				'promoted' => $request->promoted,
-				'promotionStart' => date('Y-m-d H:i:s', strtotime($request->promotionStart)),
-				'promotionEnd' => date('Y-m-d H:i:s', strtotime($request->promotionEnd)),
-				'visibility' => $request->visibility,
-				'stock' => $request->stock,
-				'shippingCostType' => $request->shippingCostType,
-				'shippingCost' => $request->shippingCost,
+				'name' => $payload['productName'],
+				'categoryId' => $payload['categoryId'],
+				'sellerId' => $this->user()->getKey(),
+				'productType' => $payload['productType'],
+				'productMode' => $payload['productMode'],
+				'listingType' => $payload['listingType'],
+				'originalPrice' => $payload['originalPrice'],
+				'offerValue' => $payload['offerValue'],
+				'offerType' => $payload['offerType'],
+				'currency' => $payload['currency'],
+				'taxRate' => $payload['taxRate'],
+				'countryId' => $payload['countryId'],
+				'stateId' => $payload['stateId'],
+				'cityId' => $payload['cityId'],
+				'zipCode' => $payload['zipCode'],
+				'address' => $payload['address'],
+				'status' => $payload['status'],
+				'promoted' => $payload['promoted'],
+				'promotionStart' => date('Y-m-d H:i:s', strtotime($payload['promotionStart'])),
+				'promotionEnd' => date('Y-m-d H:i:s', strtotime($payload['promotionEnd'])),
+				'visibility' => $payload['visibility'],
+				'stock' => $payload['stock'],
+				'shippingCostType' => $payload['shippingCostType'],
+				'shippingCost' => $payload['shippingCost'],
 				'soldOut' => $this->isSoldOut($request),
-				'draft' => $request->draft,
-				'shortDescription' => $request->shortDescription,
-				'longDescription' => $request->longDescription,
-				'sku' => $request->sku,
+				'draft' => $payload['draft'],
+				'shortDescription' => $payload['shortDescription'],
+				'longDescription' => $payload['longDescription'],
+				'sku' => $payload['sku'],
 			]);
-
-			$productId = $product->getKey();
-			$storeImage = [];
-			//multipal image upload
-			if (count($request->file('files')) > 0 && $productId != '') {
-				foreach ($request->file('files') as $imgdata) {
-					$productimage = new ProductImage();
-					$productimage->productId = $productId;
-					$productimage->path = Storage::disk('secured')->putFile(Directories::ProductImage, $imgdata, 'private');
-					$productimage->tag = 'Product-Image';
-					$productimage->save();
-				}
+			if ($request->hasFile('files')) {
+				collect($request->file('files'))->each(function (UploadedFile $uploadedFile) use ($product){
+					ProductImage::create([
+						'productId' => $product->getKey(),
+						'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile),
+						'tag' => sprintf('product-%d-images', $product->getKey()),
+					]);
+				});
 			}
-
-			$response = $this->success()->status(HttpCreated)->setValue('data', $product)->message(__('successfully add products'));
+			$images = $product->images()->get()->transform(function (ProductImage $productImage){
+				return [
+					'url' => SecuredDisk::access()->exists($productImage->path) ? SecuredDisk::access()->url($productImage->path) : null,
+				];
+			});
+			$images = $images->filter()->values();
+			$response->status(HttpCreated)->setValue('data', $product)->setValue('images', $images)->message('Product details were saved successfully.');
 		}
 		catch (ValidationException $exception) {
-			$response = $this->failed()->status(HttpInvalidRequestFormat)->message($exception->getError());
+			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
 		}
 		catch (Throwable $exception) {
-			$response = $this->error()->message($exception->getMessage());
+			$response->status(HttpServerError)->message($exception->getMessage());
 		}
 		finally {
 			return $response->send();
