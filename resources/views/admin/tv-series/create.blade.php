@@ -1,6 +1,9 @@
 @extends('admin.app.app')
 @section('content')
 	@include('admin.tv-series.actionBox')
+	@include('admin.modals.durationPicker')
+	@include('admin.modals.multiEntryModal',['key'=>'cast'])
+	@include('admin.modals.multiEntryModal',['key'=>'director'])
 	<div class="row">
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
@@ -12,7 +15,7 @@
 					<div class="card-body">
 						<div class="row">
 							<div class="col-6 mx-auto">
-								<div class="card shadow-none" style="border: 1px solid rgba(180,185,191,0.4);">
+								<div class="card shadow-sm" style="border: 1px solid rgba(180,185,191,0.4);">
 									<div class="card-header text-primary font-weight-bold bg-white">
 										Type the following details to proceed to next step...
 									</div>
@@ -149,6 +152,8 @@
 @endsection
 
 @section('javascript')
+	<script src="{{asset('admin/utils/DurationPicker.js')}}"></script>
+	<script src="{{asset('admin/utils/MultiEntryModal.js')}}"></script>
 	<script>
 		let modal = null;
 		let submitButton = null;
@@ -159,6 +164,56 @@
 		}
 
 		$(document).ready(function () {
+			setupDurationPicker({
+				modalId: 'durationPicker',
+				durationId: 'duration'
+			});
+			MultiEntryModal.setupMultiEntryModal({
+				title: 'Cast & Crew',
+				separator: '-',
+				key: 'cast',
+				boundEditBoxId: 'cast',
+				modalId: 'cast_multiEntryModal',
+				inputClass: 'cast_input',
+				listGroupId: 'cast_listGroup',
+				addMoreButtonId: 'cast_addMoreButton',
+				doneButtonId: 'cast_doneButton',
+				deleteButtonClass: 'cast_delete-button',
+				template: `<li class="list-group-item px-0 py-1 border-0 animated slideInDown">
+								\t\t\t\t\t\t<div class="col-auto px-0">
+								\t\t\t\t\t\t\t<div class="input-group mb-2">
+								\t\t\t\t\t\t\t\t<input type="text" class="form-control cast_input" placeholder="Type here..." value=@{{value}}>
+								\t\t\t\t\t\t\t\t<div class="input-group-append">
+								\t\t\t\t\t\t\t\t\t<div class="input-group-text text-white bg-primary cast_delete-button">&times;</div>
+								\t\t\t\t\t\t\t\t</div>
+								\t\t\t\t\t\t\t</div>
+								\t\t\t\t\t\t</div>
+								\t\t\t\t\t
+							</li>`
+			});
+			MultiEntryModal.setupMultiEntryModal({
+				title: 'Director(s)',
+				separator: '-',
+				key: 'director',
+				boundEditBoxId: 'director',
+				modalId: 'director_multiEntryModal',
+				inputClass: 'director_input',
+				listGroupId: 'director_listGroup',
+				addMoreButtonId: 'director_addMoreButton',
+				doneButtonId: 'director_doneButton',
+				deleteButtonClass: 'director_delete-button',
+				template: `<li class="list-group-item px-0 py-1 border-0 animated slideInDown">
+								\t\t\t\t\t\t<div class="col-auto px-0">
+								\t\t\t\t\t\t\t<div class="input-group mb-2">
+								\t\t\t\t\t\t\t\t<input type="text" class="form-control director_input" placeholder="Type here..." value=@{{value}}>
+								\t\t\t\t\t\t\t\t<div class="input-group-append">
+								\t\t\t\t\t\t\t\t\t<div class="input-group-text text-white bg-primary director_delete-button">&times;</div>
+								\t\t\t\t\t\t\t\t</div>
+								\t\t\t\t\t\t\t</div>
+								\t\t\t\t\t\t</div>
+								\t\t\t\t\t
+							</li>`
+			});
 			modal = $('#okayBox');
 			submitButton = $('#submitButton');
 			$('#trending').change(function () {

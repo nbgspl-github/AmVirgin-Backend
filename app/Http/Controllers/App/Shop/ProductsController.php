@@ -22,7 +22,7 @@ class ProductsController extends BaseController{
 
 	public function __construct(){
 		parent::__construct();
-		//$this->ruleSet->load('rules.shop.product');
+//		$this->ruleSet->load('rules.shop.product');
 	}
 
 	public function index(Request $request){
