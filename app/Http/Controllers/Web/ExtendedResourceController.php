@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\BaseController;
+use App\Queries\QueryProvider;
 use App\Traits\FluentResponse;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -16,8 +17,16 @@ abstract class ExtendedResourceController extends BaseController{
 		return $this->guard()->user();
 	}
 
+	protected function userKey(){
+		return $this->guard()->user()->getKey();
+	}
+
 	protected function evaluate(callable $closure, ...$arguments){
 		return call_user_func($closure, $arguments);
+	}
+
+	protected function query(){
+		return QueryProvider::class;
 	}
 
 	protected abstract function guard();

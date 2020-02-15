@@ -2,12 +2,8 @@
 
 namespace App\Queries;
 
-use Illuminate\Support\Collection;
-
 abstract class BaseQuery{
-	public function all(): Collection{
-		return $this->model()::all();
+	public static function products(): string{
+		return new ProductsQuery();
 	}
-
-	protected abstract function model(): string;
 }

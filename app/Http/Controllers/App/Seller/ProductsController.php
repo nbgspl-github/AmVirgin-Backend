@@ -5,104 +5,48 @@ namespace App\Http\Controllers\App\Seller;
 use App\Constants\OfferTypes;
 use App\Constants\ProductStatus;
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\Base\ResourceController;
+use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Interfaces\Directories;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Resources\Products\Seller\ProductEditResource;
+use App\Resources\Products\Seller\ProductResource;
 use App\Storage\SecuredDisk;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
-use Exception;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Throwable;
 
-class ProductsController extends ResourceController{
+class ProductsController extends ExtendedResourceController{
 	use ValidatesRequest;
 	use FluentResponse;
+	use ConditionallyLoadsAttributes;
 
 	public function __construct(){
 		parent::__construct();
 		$this->ruleSet->load('rules.seller.product');
-
 	}
 
 	public function index(){
-		$sellerId = $this->user()->getKey();
-		$Getproducts = Product::where('sellerId', '=', $sellerId)->get();
-		//$GetproductsImages = ProductImage::find($productid);
-		//multipal image upload
-		if ($Getproducts == null) {
-			$response = $this->error()->message('Product not found !');
-		}
-		else {
-			foreach ($Getproducts as $productdata) {
-				$image = ProductImage::where('productId', $productdata->id)->select('path')->get();
-
-				$image->transform(function (ProductImage $item){
-					return Storage::disk('secured')->url($item->path);
-				});
-				$productData[] = [
-					'image' => $image,
-					'name' => $productdata->name,
-					'slug' => $productdata->slug,
-					'categoryId' => $productdata->categoryId,
-					'sellerId' => $productdata->sellerId,
-					'productType' => $productdata->productType,
-					'productMode' => $productdata->productMode,
-					'listingType' => $productdata->listingType,
-					'originalPrice' => $productdata->originalPrice,
-					'offerValue' => $productdata->offerValue,
-					'offerType' => $productdata->offerType,
-					'currency' => $productdata->currency,
-					'taxRate' => $productdata->taxRate,
-					'countryId' => $productdata->countryId,
-					'stateId' => $productdata->stateId,
-					'cityId' => $productdata->cityId,
-					'zipCode' => $productdata->zipCode,
-					'address' => $productdata->address,
-					'status' => $productdata->status,
-					'promoted' => $productdata->promoted,
-					'promotionStart' => $productdata->promotionStart,
-					'promotionEnd' => $productdata->promotionEnd,
-					'visibility' => $productdata->visibility,
-					'stock' => $productdata->stock,
-					'shippingCostType' => $productdata->shippingCostType,
-					'shippingCost' => $productdata->shippingCost,
-					'soldOut' => $productdata->soldOut,
-					'draft' => $productdata->draft,
-					'shortDescription' => $productdata->shortDescription,
-					'longDescription' => $productdata->longDescription,
-					'sku' => $productdata->sku,
-				];
-			}
-
-			$response = $this->success()->status(HttpOkay)->setValue('data', $productData)->message(__('All products show successfully'));
-		}
-		return $response->send();
-	}
-
-	public function single($slug){
 		$response = $this->response();
 		try {
-			$product = Product::findOrFailBySlug($slug);
-			$images = $product->images()->get();
-			$images->transform(function (ProductImage $image){
-				return Storage::disk('secured')->url($image->path);
-			});
-			$product = $product->toArray();
-			$product['images'] = $images;
-			$response->status(HttpOkay)->message('Found product by that key.')->setValue('data', $product);
-		}
-		catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('We could not find the product for that key.');
+			$products = Product::where([
+				['sellerId', $this->user()->getKey()],
+				['deleted', false],
+				['soldOut', false],
+				['draft', false],
+			])->get();
+			$products = ProductResource::collection($products);
+			$response->status(HttpOkay)->message(function () use ($products){
+				return sprintf('Found %d products by specified seller.', $products->count());
+			})->setValue('data', $products);
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
@@ -112,32 +56,32 @@ class ProductsController extends ResourceController{
 		}
 	}
 
-	public function edit($id = null){
-		$product = Product::where('id', '=', $id)->get();
-		//multipal image upload
-		if ($product == null) {
-			$response = $this->error()->message('product not found !');
-		}
-		else {
-			$success['images'] = [];
-			$productimage = ProductImage::where('productId', '=', $id)->get();
-
-			foreach ($productimage as $key => $value) {
-				$success['images'][] = Storage::disk('secured')->url($value['path']);
-			}
-			$success['products-data'] = $product;
-			$response = $this->success()->status(HttpOkay)->setValue('data', $success)->message(__('product details successfully'));
-		}
-		return $response->send();
-	}
-
-	public function store(Request $request){
-		/**
-		 * @var Product $product
-		 */
+	public function edit($id){
 		$response = $this->response();
 		try {
-			$payload = $this->requestValid($request, $this->rules('store'));
+			$product = Product::where([
+				['sellerId', $this->user()->getKey()],
+				['deleted', false],
+				['id', $id],
+			])->firstOrFail();
+			$product = new ProductEditResource($product);
+			$response->status(HttpOkay)->message('Found product details for that key.')->setValue('data', $product);
+		}
+		catch (ModelNotFoundException $exception) {
+			$response->status(HttpServerError)->message('Could not find product for that key.');
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+
+	public function store(){
+		$response = $this->response();
+		try {
+			$payload = $this->requestValid(\request(), $this->rules('store'));
 			$product = Product::create([
 				'name' => $payload['productName'],
 				'categoryId' => $payload['categoryId'],
@@ -163,14 +107,14 @@ class ProductsController extends ResourceController{
 				'stock' => $payload['stock'],
 				'shippingCostType' => $payload['shippingCostType'],
 				'shippingCost' => $payload['shippingCost'],
-				'soldOut' => $this->isSoldOut($request),
+				'soldOut' => \request('stock') < 1,
 				'draft' => $payload['draft'],
 				'shortDescription' => $payload['shortDescription'],
 				'longDescription' => $payload['longDescription'],
 				'sku' => $payload['sku'],
 			]);
-			if ($request->hasFile('files')) {
-				collect($request->file('files'))->each(function (UploadedFile $uploadedFile) use ($product){
+			if (\request()->hasFile('files')) {
+				collect(\request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product){
 					ProductImage::create([
 						'productId' => $product->getKey(),
 						'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile),
@@ -198,19 +142,23 @@ class ProductsController extends ResourceController{
 	}
 
 	public function show($id){
-		$sellerId = $this->user()->getKey();
-		$response = null;
+		$response = $this->response();
 		try {
-			$product = $this->retrieveChild(function ($query) use ($sellerId, $id){
-				$query->where('sellerId', $sellerId)->where('id', $id);
-			});
-			$response = $this->success()->setValue('data', $product);
+			$product = Product::where([
+				['sellerId', $this->user()->getKey()],
+				['deleted', false],
+				['soldOut', false],
+				['draft', false],
+				['id', $id],
+			])->firstOrFail();
+			$product = new ProductResource($product);
+			$response->status(HttpOkay)->message('Found product for the specified key.')->setValue('data', $product);
 		}
 		catch (ModelNotFoundException $exception) {
-			$response = $this->failed()->status(HttpResourceNotFound);
+			$response->status(HttpResourceNotFound)->message('Could not find the product for that key.');
 		}
-		catch (Exception $exception) {
-			$response = $this->error()->message($exception->getMessage());
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
 		}
 		finally {
 			return $response->send();
@@ -272,7 +220,7 @@ class ProductsController extends ResourceController{
 			'stock' => $request->stock,
 			'shippingCostType' => $request->shippingCostType,
 			'shippingCost' => $request->shippingCost,
-			'soldOut' => $this->isSoldOut($request),
+			'soldOut' => \request('stock') < 1,
 			'draft' => $request->draft,
 			'shortDescription' => $request->shortDescription,
 			'longDescription' => $request->longDescription,
@@ -325,56 +273,24 @@ class ProductsController extends ResourceController{
 
 	}
 
-	public function patch(Request $request, $id){
-
-	}
-
 	public function delete($id){
-		$response = null;
+		$response = $this->response();
 		try {
-			$product = Product::find($id);
-			$productimage = ProductImage::where('productId', $id)->select('id')->get();
-
-			if ($product == null) {
-				$response = $this->failed()->status(HttpResourceNotFound);
-			}
-			$product->delete();
-			ProductImage::destroy($productimage->toArray());
-			$response = $this->success()->status(HttpOkay)->message(__('product deleted successfully'));
+			Product::retrieveThrows($id)->setDeleted(true)->save();
+			$response->status(HttpOkay)->message('Product deleted successfully.');
 		}
-
 		catch (ModelNotFoundException $exception) {
-			$response = $this->failed()->status(HttpResourceNotFound);
+			$response->status(HttpResourceNotFound)->message('Could not find product for that key.');
 		}
-		catch (Exception $exception) {
-			$response = $this->error()->message($exception->getMessage());
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
 		}
 		finally {
 			return $response->send();
 		}
 	}
 
-	protected function parentProvider(){
-		return null;
-	}
-
-	protected function provider(){
-		return Product::class;
-	}
-
-	protected function resourceConverter(Model $model){
-
-	}
-
-	protected function collectionConverter(Collection $collection){
-
-	}
-
 	protected function guard(){
 		return Auth::guard('seller-api');
-	}
-
-	private function isSoldOut(Request $request){
-		return $request->stock < 1;
 	}
 }

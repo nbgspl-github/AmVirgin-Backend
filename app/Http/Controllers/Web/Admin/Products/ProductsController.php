@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Web\Admin\Products;
 
-use App\Queries\VideoQuery;
-
 class ProductsController extends ProductsBase{
 	public function __construct(){
 		parent::__construct();
