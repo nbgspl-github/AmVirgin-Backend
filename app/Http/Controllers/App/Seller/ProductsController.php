@@ -20,7 +20,6 @@ use Throwable;
 
 class ProductsController extends ExtendedResourceController{
 	use ValidatesRequest;
-	use FluentResponse;
 	use ConditionallyLoadsAttributes;
 
 	public function __construct(){
@@ -29,7 +28,7 @@ class ProductsController extends ExtendedResourceController{
 	}
 
 	public function index(){
-		$response = $this->response();
+		$response = responseApp();
 		try {
 			$products = Product::where([
 				['sellerId', $this->user()->getKey()],
@@ -51,7 +50,7 @@ class ProductsController extends ExtendedResourceController{
 	}
 
 	public function edit($id){
-		$response = $this->response();
+		$response = responseApp();
 		try {
 			$product = Product::where([
 				['sellerId', $this->user()->getKey()],
@@ -73,7 +72,7 @@ class ProductsController extends ExtendedResourceController{
 	}
 
 	public function store(){
-		$response = $this->response();
+		$response = responseApp();
 		try {
 			$payload = $this->requestValid(\request(), $this->rules('store'));
 			$product = Product::create([
@@ -101,7 +100,7 @@ class ProductsController extends ExtendedResourceController{
 				'stock' => $payload['stock'],
 				'shippingCostType' => $payload['shippingCostType'],
 				'shippingCost' => $payload['shippingCost'],
-				'soldOut' => \request('stock') < 1,
+				'soldOut' => request('stock') < 1,
 				'draft' => $payload['draft'],
 				'shortDescription' => $payload['shortDescription'],
 				'longDescription' => $payload['longDescription'],
@@ -136,7 +135,7 @@ class ProductsController extends ExtendedResourceController{
 	}
 
 	public function show($id){
-		$response = $this->response();
+		$response = responseApp();
 		try {
 			$product = Product::where([
 				['sellerId', $this->user()->getKey()],
@@ -218,7 +217,7 @@ class ProductsController extends ExtendedResourceController{
 	}
 
 	public function delete($id){
-		$response = $this->response();
+		$response = responseApp();
 		try {
 			$product = Product::where([
 				['deleted', false],

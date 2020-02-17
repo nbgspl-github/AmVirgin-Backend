@@ -10,7 +10,6 @@ use App\Models\ProductImage;
 use App\Traits\FluentResponse;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ValidatesRequest;
-use Exception;
 use Illuminate\Validation\Rule;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
