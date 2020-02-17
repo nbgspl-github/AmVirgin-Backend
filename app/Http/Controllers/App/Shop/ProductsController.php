@@ -25,99 +25,6 @@ class ProductsController extends BaseController{
 //		$this->ruleSet->load('rules.shop.product');
 	}
 
-	public function index(Request $request){
-		$response = null;
-		try {
-			$data = null;
-			$validator = Validator::make($request->all(), [
-				'offset' => 'required',
-				'limit' => 'required',
-			]);
-			if ($validator->fails()) {
-				return response()->json(['response' => $validator->errors()], 500);
-
-			}
-			$offset = $request->input('offset');
-			$limit = $request->input('limit');
-			$sort = ["field" => "id", "key" => "desc"];
-			if ($request->has('sort')) {
-				if ($request->sort == "Oldest") {
-					$sort = ["field" => "id", "key" => "asc"];
-				}
-				if ($request->sort == "Cheapest") {
-					$sort = ["field" => "originalPrice", "key" => "asc"];
-				}
-				if ($request->sort == "Highest") {
-					$sort = ["field" => "originalPrice", "key" => "desc"];
-				}
-			}
-			//if($categoryid)
-			$Getproducts = Product::orderBy($sort['field'], $sort['key'])->offset($offset)->limit($limit)->get();
-
-			if (count($Getproducts) == 0) {
-				$response = $this->failed()->status(HttpResourceNotFound)->message(__(' Products not found'));;
-
-			}
-			else {
-				foreach ($Getproducts as $pdata) {
-					$productsimage = ProductImage::where('productId', $pdata['id'])->select('productId', 'path', 'tag')->get();
-					$productsimage->transform(function (ProductImage $item){
-						return Storage::disk('secured')->url($item->path);
-					});
-					$success[] = [
-						'id' => $pdata['id'],
-						'name' => $pdata['name'],
-						'slug' => $pdata['slug'],
-						'categoryId' => $pdata['categoryId'],
-						'sellerId' => $pdata['sellerId'],
-						'productType' => $pdata['productType'],
-						'productMode' => $pdata['productMode'],
-						'listingType' => $pdata['listingType'],
-						'originalPrice' => $pdata['originalPrice'],
-						'offerValue' => $pdata['offerValue'],
-						'offerType' => $pdata['offerType'],
-						'currency' => $pdata['currency'],
-						'taxRate' => $pdata['taxRate'],
-						'countryId' => $pdata['countryId'],
-						'stateId' => $pdata['stateId'],
-						'cityId' => $pdata['cityId'],
-						'zipCode' => $pdata['zipCode'],
-						'address' => $pdata['address'],
-						'status' => $pdata['status'],
-						'promoted' => $pdata['promoted'],
-						'promotionStart' => $pdata['promotionStart'],
-						'promotionEnd' => $pdata['promotionEnd'],
-						'visibility' => $pdata['visibility'],
-						'rating' => $pdata['rating'],
-						'hits' => $pdata['hits'],
-						'stock' => $pdata['stock'],
-						'shippingCostType' => $pdata['shippingCostType'],
-						'shippingCost' => $pdata['shippingCost'],
-						'soldOut' => $pdata['soldOut'],
-						'deleted' => $pdata['deleted'],
-						'draft' => $pdata['draft'],
-						'shortDescription' => $pdata['shortDescription'],
-						'longDescription' => $pdata['longDescription'],
-						'sku' => $pdata['sku'],
-						'trailer' => $pdata['trailer'],
-						'created_at' => $pdata['created_at'],
-						'images' => $productsimage,
-					];
-				}
-				$response = $this->success()->status(HttpOkay)->setValue('data', $success)->message(__('All products show successfully'));
-			}
-		}
-		catch (ValidationException $exception) {
-			$response = $this->failed()->status(HttpInvalidRequestFormat)->message($exception->getError());
-		}
-		catch (Throwable $exception) {
-			$response = $this->error()->message($exception->getMessage());
-		}
-		finally {
-			return $response->send();
-		}
-	}
-
 	public function details($id = null){
 		$Getproduct = Product::where('id', $id)->get();
 		if (!count($Getproduct) > 0) {
@@ -150,6 +57,7 @@ class ProductsController extends BaseController{
 				return response()->json(['response' => $validator->errors()], 500);
 
 			}
+
 			$offset = $request->input('offset');
 			$limit = $request->input('limit');
 			$sort = ["field" => "id", "key" => "desc"];

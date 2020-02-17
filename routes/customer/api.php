@@ -4,6 +4,7 @@ use App\Http\Controllers\App\Customer\AuthController as CustomerAuth;
 use App\Http\Controllers\App\Customer\Playback\PlaybackController;
 use App\Http\Controllers\App\Customer\Playback\TrailerPlayback;
 use App\Http\Controllers\App\Customer\PopularPicksController;
+use App\Http\Controllers\App\Customer\ProductsController;
 use App\Http\Controllers\App\Customer\SlidersController as CustomerSlidersController;
 use App\Http\Controllers\App\Customer\TrendController;
 use App\Http\Controllers\App\Customer\TwoFactorAuthController as Customer2FAuth;
@@ -39,6 +40,10 @@ Route::prefix('categories')->group(function (){
 Route::prefix('sessions')->group(function (){
 	Route::get('/start', [\App\Http\Controllers\App\Customer\Session\SessionController::class, 'create']);
 	Route::get('/{sessionId}', [\App\Http\Controllers\App\Customer\Session\SessionController::class, 'check']);
+});
+
+Route::prefix('products')->group(function (){
+	Route::get('/', [ProductsController::class, 'index']);
 });
 
 Route::prefix('playback')->middleware([])->group(function (){
