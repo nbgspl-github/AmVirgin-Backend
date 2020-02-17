@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\App\Seller;
 
-use App\Constants\OfferTypes;
-use App\Constants\ProductStatus;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Interfaces\Directories;
@@ -15,13 +13,9 @@ use App\Storage\SecuredDisk;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use Throwable;
 
 class ProductsController extends ExtendedResourceController{
@@ -165,112 +159,62 @@ class ProductsController extends ExtendedResourceController{
 		}
 	}
 
-	public function update(Request $request, $productId = null){
-		$rules = $this->rules('update');
-
-		$validator = Validator::make($request->all(), [
-			'categoryId' => ['bail', 'required', 'exists:categories,id'],
-			'productType' => ['bail', 'required', 'string', 'min:1', 'max:256'],
-			'productMode' => ['bail', 'required', 'string', 'min:1', 'max:256'],
-			'listingType' => ['bail', 'required', 'string', 'min:1', 'max:256'],
-			'originalPrice' => ['bail', 'required', 'numeric', 'min:1', 'max:10000000'],
-			'offerType' => ['bail', 'required', Rule::in([OfferTypes::FlatRate, OfferTypes::Percentage])], /*Since we only have two offer types for now, it's 0 and 1, later on we'll add as required.*/
-			'offerValue' => ['bail', 'required', 'numeric', 'min:1', 'max:10000000'],
-			'currency' => ['bail', 'nullable', 'string', 'min:2', 'max:5', 'exists:currencies,code'],
-			'taxRate' => ['bail', 'required', 'numeric', 'min:0.00', 'max:99.99'],
-			'countryId' => ['bail', 'required', 'exists:countries,id'],
-			'stateId' => ['bail', 'required', 'numeric', 'min:1', 'max:9999999'],
-			'cityId' => ['bail', 'required', 'numeric', 'min:1', RuleMaxInt],
-			'zipCode' => ['bail', 'required', 'min:1', RuleMaxInt],
-			'address' => ['bail', 'required', 'string', 'min:2', 'max:500'],
-			'status' => ['bail', 'nullable', Rule::in([ProductStatus::DifferentStatus, ProductStatus::SomeOtherStatus, ProductStatus::SomeStatus])],
-			'promoted' => ['bail', 'boolean'],
-			'promotionStart' => ['bail', 'required_with:promoted', 'date'],
-			'promotionEnd' => ['bail', 'required_with:promoted', 'date', 'after:promotionStart'],
-			'visibility' => ['bail', 'boolean'],
-			'stock' => ['bail', 'required', 'numeric', 'min:0', RuleMaxStock],
-			'shippingCostType' => ['bail', 'required', Rule::in(['free', 'chargeable'])],
-			'shippingCost' => ['bail', 'required_if:shippingCostType,chargeable'],
-			'draft' => ['bail', 'boolean'],
-			'shortDescription' => ['bail', 'required', 'string', 'min:1', 'max:1000'],
-			'longDescription' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
-			'sku' => ['bail', 'required', 'string', 'min:1', 'max:256'],
-		]);
-		$data = [
-			//'name'=>$request->name,
-			'categoryId' => $request->categoryId,
-			'productType' => $request->productType,
-			'productMode' => $request->productMode,
-			'listingType' => $request->listingType,
-			'originalPrice' => $request->originalPrice,
-			'offerValue' => $request->offerValue,
-			'offerType' => $request->offerType,
-			'currency' => $request->currency,
-			'taxRate' => $request->taxRate,
-			'countryId' => $request->countryId,
-			'stateId' => $request->stateId,
-			'cityId' => $request->cityId,
-			'zipCode' => $request->zipCode,
-			'address' => $request->address,
-			'status' => $request->status,
-			'promoted' => $request->promoted,
-			'promotionStart' => date('Y-m-d H:i:s', strtotime($request->promotionStart)),
-			'promotionEnd' => date('Y-m-d H:i:s', strtotime($request->promotionEnd)),
-			'visibility' => $request->visibility,
-			'stock' => $request->stock,
-			'shippingCostType' => $request->shippingCostType,
-			'shippingCost' => $request->shippingCost,
-			'soldOut' => \request('stock') < 1,
-			'draft' => $request->draft,
-			'shortDescription' => $request->shortDescription,
-			'longDescription' => $request->longDescription,
-			'sku' => $request->sku,
-		];
-		//updated image
-		$Newimages = $request->file('files');
-		if (!empty($Newimages)) {
-			//delete old image
-			/*$image_path = "/images/filename.ext";  // Value is not URL but directory file path
-			if(File::exists($image_path)) {
-			  File::delete($image_path);
-			}*/
-			$GetImages = ProductImage::where('productId', $productId)->get();
-			if ($GetImages != null) {
-				$GetImages->each(function (ProductImage $item){
-					$item->delete();
+	public function update($id){
+		$response = responseApp();
+		try {
+			$product = Product::retrieveThrows($id);
+			$validated = $this->requestValid(request(), $this->rules('update'));
+			$product->update([
+				'name' => $validated['productName'],
+				'categoryId' => $validated['categoryId'],
+				'sellerId' => $this->user()->getKey(),
+				'productType' => $validated['productType'],
+				'productMode' => $validated['productMode'],
+				'listingType' => $validated['listingType'],
+				'originalPrice' => $validated['originalPrice'],
+				'offerValue' => $validated['offerValue'],
+				'offerType' => $validated['offerType'],
+				'currency' => $validated['currency'],
+				'taxRate' => $validated['taxRate'],
+				'countryId' => $validated['countryId'],
+				'stateId' => $validated['stateId'],
+				'cityId' => $validated['cityId'],
+				'zipCode' => $validated['zipCode'],
+				'address' => $validated['address'],
+				'status' => $validated['status'],
+				'promoted' => $validated['promoted'],
+				'promotionStart' => date('Y-m-d H:i:s', strtotime($validated['promotionStart'])),
+				'promotionEnd' => date('Y-m-d H:i:s', strtotime($validated['promotionEnd'])),
+				'visibility' => $validated['visibility'],
+				'stock' => $validated['stock'],
+				'shippingCostType' => $validated['shippingCostType'],
+				'shippingCost' => $validated['shippingCost'],
+				'soldOut' => \request('stock') < 1,
+				'draft' => $validated['draft'],
+				'shortDescription' => $validated['shortDescription'],
+				'longDescription' => $validated['longDescription'],
+				'sku' => $validated['sku'],
+			]);
+			if (\request()->hasFile('files')) {
+				collect(\request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product){
+					ProductImage::create([
+						'productId' => $product->getKey(),
+						'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile),
+						'tag' => sprintf('product-%d-images', $product->getKey()),
+					]);
 				});
 			}
-
-			if (count($request->file('files')) > 0) {
-				foreach ($request->file('files') as $imgdata) {
-					$productimage = new ProductImage();
-					$productimage->productId = $productId;
-					$productimage->path = Storage::disk('secured')->putFile(Directories::ProductImage, $imgdata, 'private');
-					$productimage->tag = 'Product-Image';
-					$productimage->save();
-				}
-			}
+			$response->status(HttpOkay)->message('Product details were updated successfully.');
 		}
-
-		if ($validator->fails()) {
-			// $response = $this->error()->message($validator->getMessage());
-			$response = $this->failed()->status(HttpResourceNotFound);
+		catch (ModelNotFoundException $exception) {
+			$response->status(HttpResourceNotFound)->message('Could not find product for that key.');
 		}
-		else {
-			$products = Product::retrieve($productId);
-			if ($products == null) {
-				$response = $this->failed()->status(HttpResourceNotFound);
-			}
-			else {
-				$update = Product::find($productId);
-				Product::where('id', $productId)->update($data);
-				$response = $this->success()->status(HttpOkay)->message(__('product updated successfully'));
-			}
-
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
 		}
-
-		return $response->send();
-
+		finally {
+			return $response->send();
+		}
 	}
 
 	public function delete($id){

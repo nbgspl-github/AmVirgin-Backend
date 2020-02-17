@@ -118,3 +118,7 @@ function jsonDecodeArray($payload){
 function responseWeb(){
 	return \App\Classes\WebResponse::instance();
 }
+
+function responseApp(){
+	return \App\Classes\Builders\ResponseBuilder::instance();
+}
