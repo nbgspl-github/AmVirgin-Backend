@@ -276,7 +276,11 @@ class ProductsController extends ExtendedResourceController{
 	public function delete($id){
 		$response = $this->response();
 		try {
-			Product::retrieveThrows($id)->setDeleted(true)->save();
+			$product = Product::where([
+				['deleted', false],
+				['id', $id],
+			])->firstOrFail();
+			$product->setDeleted(true)->save();
 			$response->status(HttpOkay)->message('Product deleted successfully.');
 		}
 		catch (ModelNotFoundException $exception) {
