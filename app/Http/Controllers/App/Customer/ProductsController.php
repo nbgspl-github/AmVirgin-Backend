@@ -19,6 +19,8 @@ class ProductsController extends ExtendedResourceController{
 
 	protected $defaultSort = 'relevance';
 
+	protected $resultsPerPage = 50;
+
 	protected $sortingOptions = [
 		[
 			'name' => 'Relevance',
@@ -55,8 +57,7 @@ class ProductsController extends ExtendedResourceController{
 	protected $rules = [
 		'index' => [
 			'sortKey' => ['bail', 'nullable', 'string', 'min:1', 'max:50'],
-			'offset' => ['bail', 'nullable', 'numeric', 'min:0', 'max:1000'],
-			'limit' => ['bail', 'nullable', 'numeric', 'min:1', 'max:1000'],
+			'page' => ['bail', 'nullable', 'numeric', 'min:1', 'max:10000'],
 		],
 	];
 
@@ -64,22 +65,23 @@ class ProductsController extends ExtendedResourceController{
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules['index']);
-			if (!isset($validated['offset'])) $validated['offset'] = 0;
-			if (!isset($validated['limit'])) $validated['limit'] = 1;
+			if (!isset($validated['page'])) $validated['page'] = 0;
 			if (!isset($validated['sortKey'])) $validated['sortKey'] = $this->defaultSort;
 			$sorts = collect($this->sortingOptions);
 			$chosenSort = $sorts->firstWhere('key', $validated['sortKey']);
 			$algorithm = $chosenSort['algorithm']::obtain();
-			$products = Product::where('categoryId', request('categoryId'))
-				->offset($validated['offset'])
-				->limit($validated['limit'])
-				->orderBy($algorithm[0], $algorithm[1])
-				->get();
-
+			$products = Product::where([
+				['categoryId', request('categoryId')],
+				['draft', false],
+				['deleted', false],
+				['visibility', true],
+			]);
+			$totalInCategory = $products->count('id');
+			$products = $products->orderBy($algorithm[0], $algorithm[1])->paginate(5);
 			$products = ProductResource::collection($products);
 			$response->status(HttpOkay)->message(function () use ($products){
 				return sprintf('Found %d products under that category.', count($products));
-			})->setValue('data', $products);
+			})->setValue('meta', ['total' => $totalInCategory, 'pageCount' => $this->countRequiredPages($totalInCategory, $this->resultsPerPage)])->setValue('data', $products);
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
@@ -89,7 +91,30 @@ class ProductsController extends ExtendedResourceController{
 		}
 	}
 
+	public function sortsIndex(){
+		$sorts = collect($this->sortingOptions);
+		$sorts->transform(function ($item){
+			unset($item['algorithm']);
+			return $item;
+		});
+		return responseApp()->status(HttpOkay)->message(function () use ($sorts){
+			return sprintf('There are a total of %d sorting options available.', $sorts->count());
+		})->setValue('data', $sorts)->send();
+	}
+
 	protected function guard(){
 		return auth('customer-api');
+	}
+
+	protected function countRequiredPages(int $total, int $perPage){
+		if ($total <= $perPage)
+			return 1;
+
+		$result = $total / $perPage;
+		$remainder = $total % $perPage;
+		if ($remainder > 0 && $remainder <= $perPage) {
+			$result += 1;
+		}
+		return $result;
 	}
 }

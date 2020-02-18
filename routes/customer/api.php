@@ -44,6 +44,7 @@ Route::prefix('sessions')->group(function (){
 
 Route::prefix('products')->group(function (){
 	Route::get('/', [ProductsController::class, 'index']);
+	Route::get('/sorts', [ProductsController::class, 'sortsIndex']);
 });
 
 Route::prefix('playback')->middleware([])->group(function (){
