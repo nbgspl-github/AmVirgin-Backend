@@ -4,16 +4,16 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateQuotesTable extends Migration{
+class CreateCartsTable extends Migration {
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
-	public function up(){
-		Schema::create('quotes', function (Blueprint $table){
+	public function up() {
+		Schema::create('carts', function (Blueprint $table) {
 			$table->bigIncrements('id');
-			$table->string('sessionId', 29);
+			$table->unsignedBigInteger('sessionId');
 			$table->unsignedBigInteger('addressId')->nullable();
 			$table->unsignedBigInteger('customerId')->nullable();
 			$table->integer('itemCount')->default(0);
@@ -31,7 +31,7 @@ class CreateQuotesTable extends Migration{
 	 *
 	 * @return void
 	 */
-	public function down(){
-		Schema::dropIfExists('quotes');
+	public function down() {
+		Schema::dropIfExists('carts');
 	}
 }
