@@ -77,10 +77,10 @@ class ProductsController extends ExtendedResourceController{
 				['visibility', true],
 			]);
 			$totalInCategory = $products->count('id');
-			$products = $products->orderBy($algorithm[0], $algorithm[1])->paginate(5);
+			$products = $products->orderBy($algorithm[0], $algorithm[1])->paginate(50);
 			$products = ProductResource::collection($products);
-			$response->status(HttpOkay)->message(function () use ($products){
-				return sprintf('Found %d products under that category.', count($products));
+			$response->status(HttpOkay)->message(function () use ($totalInCategory){
+				return sprintf('Found %d products under that category.', $totalInCategory);
 			})->setValue('meta', ['total' => $totalInCategory, 'pageCount' => $this->countRequiredPages($totalInCategory, $this->resultsPerPage)])->setValue('data', $products);
 		}
 		catch (Throwable $exception) {
