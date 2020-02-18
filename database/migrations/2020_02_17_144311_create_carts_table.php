@@ -4,22 +4,22 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCartsTable extends Migration {
+class CreateCartsTable extends Migration{
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
-	public function up() {
-		Schema::create('carts', function (Blueprint $table) {
+	public function up(){
+		Schema::create('carts', function (Blueprint $table){
 			$table->bigIncrements('id');
 			$table->unsignedBigInteger('sessionId');
 			$table->unsignedBigInteger('addressId')->nullable();
 			$table->unsignedBigInteger('customerId')->nullable();
 			$table->integer('itemCount')->default(0);
 			$table->float('subTotal')->default(0.0);
-			$table->float('cgst')->default(0.0);
-			$table->float('sgst')->default(0.0);
+			$table->float('tax')->default(0.0);
+			$table->integer('total')->default(0.0);
 			$table->string('paymentMode', 50);
 			$table->string('status');
 			$table->timestamps();
@@ -31,7 +31,7 @@ class CreateCartsTable extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down() {
+	public function down(){
 		Schema::dropIfExists('carts');
 	}
 }
