@@ -2,8 +2,8 @@
 
 namespace App\Classes\Sorting;
 
-class PriceDescending implements SortingAlgorithm{
-	public function obtain(){
-		// TODO: Implement obtain() method.
+class PriceDescending implements SortingAlgorithm {
+	public static function obtain() {
+		return ['originalPrice', 'desc'];
 	}
 }
