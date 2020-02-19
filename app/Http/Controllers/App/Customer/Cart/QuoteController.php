@@ -6,13 +6,17 @@ use App\Classes\Cart\Cart;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Interfaces\Tables;
+use App\Models\CartItem;
+use App\Models\Product;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 use Illuminate\Validation\Rule;
 use Throwable;
 
 class QuoteController extends ExtendedResourceController {
 	use ValidatesRequest;
+	use ConditionallyLoadsAttributes;
 
 	protected $rules = [];
 
@@ -30,20 +34,29 @@ class QuoteController extends ExtendedResourceController {
 
 	public function add() {
 		$response = responseApp();
+		$validated = null;
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['add']);
 			$cart = null($validated->customerId) ? new Cart($validated->sessionId) : new Cart($validated->sessionId, $validated->customerId);
+			$cartItem = CartItem::make($cart, Product::retrieve($validated->key));
+			$cart->addItem($cartItem);
+			$response->status(HttpOkay)->message('Item added to cart successfully.')->setValue('data', $cart->render());
 		}
 		catch (ModelNotFoundException $exception) {
 			\App\Models\Cart::create([
-				'sessionId',
+				'sessionId' => $validated->sessionId,
+				'customerId' => $validated->customerId,
 			]);
-			$response->status(HttpResourceNotFound)->message('No cart exists for that session. Please create a session and try again.');
+			$cart = null($validated->customerId) ? new Cart($validated->sessionId) : new Cart($validated->sessionId, $validated->customerId);
+			$cartItem = CartItem::make($cart, Product::retrieve($validated->key));
+			$cart->addItem($cartItem);
+			$response->status(HttpOkay)->message('Cart initialized and item added to cart successfully.')->setValue('data', $cart->render());
 		}
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
 		}
 		catch (Throwable $exception) {
+			dd($exception);
 			$response->status(HttpServerError)->message($exception->getMessage());
 		}
 		finally {

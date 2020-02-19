@@ -7,7 +7,7 @@ use App\Models\Product;
 use JsonSerializable;
 use stdClass;
 
-class CartItem extends stdClass implements JsonSerializable {
+class CartItemXyz extends stdClass implements JsonSerializable {
 	/**
 	 * @var integer
 	 */
@@ -76,9 +76,9 @@ class CartItem extends stdClass implements JsonSerializable {
 
 	/**
 	 * @param array $attributes
-	 * @return CartItem
+	 * @return CartItemXyz
 	 */
-	protected function setAttributes(array $attributes): CartItem {
+	protected function setAttributes(array $attributes): CartItemXyz {
 		$this->attributes = $attributes;
 		return $this;
 	}
@@ -92,9 +92,9 @@ class CartItem extends stdClass implements JsonSerializable {
 
 	/**
 	 * @param int $itemId
-	 * @return CartItem
+	 * @return CartItemXyz
 	 */
-	protected function setItemId(int $itemId): CartItem {
+	protected function setItemId(int $itemId): CartItemXyz {
 		$this->itemId = $itemId;
 		return $this;
 	}
@@ -108,9 +108,9 @@ class CartItem extends stdClass implements JsonSerializable {
 
 	/**
 	 * @param string $itemIdentifier
-	 * @return CartItem
+	 * @return CartItemXyz
 	 */
-	protected function setItemIdentifier(string $itemIdentifier): CartItem {
+	protected function setItemIdentifier(string $itemIdentifier): CartItemXyz {
 		$this->itemIdentifier = $itemIdentifier;
 		return $this;
 	}
@@ -140,9 +140,9 @@ class CartItem extends stdClass implements JsonSerializable {
 
 	/**
 	 * @param Product $product
-	 * @return CartItem
+	 * @return CartItemXyz
 	 */
-	public function setProduct(Product $product): CartItem {
+	public function setProduct(Product $product): CartItemXyz {
 		$this->product = $product;
 		return $this;
 	}
@@ -176,9 +176,9 @@ class CartItem extends stdClass implements JsonSerializable {
 
 	/**
 	 * @param Cart $cart
-	 * @return CartItem
+	 * @return CartItemXyz
 	 */
-	public function setCart(Cart $cart): CartItem {
+	public function setCart(Cart $cart): CartItemXyz {
 		$this->cart = $cart;
 		return $this;
 	}

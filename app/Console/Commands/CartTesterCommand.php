@@ -2,14 +2,17 @@
 
 namespace App\Console\Commands;
 
-use App\Classes\Cart\Cart;
-use App\Classes\Cart\CartItem;
-use App\Exceptions\MaxAllowedQuantityReachedException;
-use App\Models\Product;
 use Illuminate\Console\Command;
-use Sujip\Guid\Facades\Guid;
+use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 
 class CartTesterCommand extends Command {
+	use ConditionallyLoadsAttributes;
+
+	/**
+	 * @var integer
+	 */
+	protected $x;
+
 	/**
 	 * The name and signature of the console command.
 	 *
@@ -39,6 +42,7 @@ class CartTesterCommand extends Command {
 	 * @return mixed
 	 */
 	public function handle() {
-
+		$this->x = 'xyz';
+		echo $this->x;
 	}
 }

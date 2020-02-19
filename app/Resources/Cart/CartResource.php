@@ -11,7 +11,8 @@ class CartResource extends JsonResource {
 
 	public function toArray($request) {
 		return [
-			'session' => $this->session()->first(),
+			'session' => $this->session()->first()->toArray(),
+			'items' => CartItemResource::collection($this->items()->get()),
 		];
 	}
 }

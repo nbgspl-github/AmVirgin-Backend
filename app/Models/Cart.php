@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Resources\Cart\CartResource;
+use App\Resources\Cart\CartItemResource;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
@@ -39,10 +39,13 @@ class Cart extends Model {
 	}
 
 	public function session() {
-		return $this->hasOne(CartSession::class, 'id', 'sessionId');
+		return $this->hasOne(CartSession::class, 'sessionId', 'sessionId');
 	}
 
 	public function render() {
-		return new CartResource($this);
+		return [
+			'session' => $this->session()->first(),
+			'items' => CartItemResource::collection($this->items()->get()),
+		];
 	}
 }
