@@ -4,19 +4,19 @@ namespace App\Classes\Cart;
 
 use App\Exceptions\MaxAllowedQuantityReachedException;
 use App\Models\Product;
+use JsonSerializable;
 use stdClass;
 
-class CartItem extends stdClass {
+class CartItem extends stdClass implements JsonSerializable {
 	/**
-	 * Maximum number of units of a product that can be added to a single cart.
+	 * @var integer
 	 */
-	const MaxAllowedQuantity = 10;
+	protected $maxAllowedQuantity;
 
 	/**
-	 * Minimum number of units required of a product in cart. If the count reaches below this, the item
-	 * should be removed automatically.
+	 * @var integer
 	 */
-	const MinAllowedQuantity = 1;
+	protected $minAllowedQuantity;
 
 	/**
 	 * @var integer
@@ -63,13 +63,8 @@ class CartItem extends stdClass {
 		$this->setAttributes($attributes);
 		$this->setCart($cart);
 		$this->increaseQuantity();
-	}
-
-	public static function fromArray(array $data, Cart $cart): self {
-		$self = new self($cart, Product::retrieve($data['product']), $data['attributes']);
-		$self->setQuantity($data['quantity']);
-		$self->decreaseQuantity();
-		return $self;
+		$this->minAllowedQuantity = \App\Models\CartItem::MinAllowedQuantity;
+		$this->minAllowedQuantity = \App\Models\CartItem::MaxAllowedQuantity;
 	}
 
 	/**
@@ -158,8 +153,8 @@ class CartItem extends stdClass {
 	 * @throws MaxAllowedQuantityReachedException
 	 */
 	public function increaseQuantity(int $incrementBy = 1) {
-		if ($this->getQuantity() < self::MaxAllowedQuantity) {
-			if ($incrementBy > 1 && ($this->getQuantity() + $incrementBy) > self::MaxAllowedQuantity) $incrementBy = 1;
+		if ($this->getQuantity() < $this->maxAllowedQuantity) {
+			if ($incrementBy > 1 && ($this->getQuantity() + $incrementBy) > $this->maxAllowedQuantity) $incrementBy = 1;
 			$this->setQuantity($this->getQuantity() + 1);
 		}
 		else {
@@ -172,23 +167,11 @@ class CartItem extends stdClass {
 	 * from the cart if its quantity falls below minimum required.
 	 */
 	public function decreaseQuantity() {
-		if ($this->getQuantity() > self::MinAllowedQuantity)
+		if ($this->getQuantity() > $this->minAllowedQuantity)
 			$this->setQuantity($this->getQuantity() - 1);
 		else {
 			$this->removeSelf();
 		}
-	}
-
-	public function toArray(): array {
-		return [
-			'MaxAllowedQuantity' => self::MaxAllowedQuantity,
-			'MinAllowedQuantity' => self::MinAllowedQuantity,
-			'itemId' => $this->getItemId(),
-			'itemIdentifier' => $this->getItemIdentifier(),
-			'product' => $this->getProduct()->getKey(),
-			'quantity' => $this->getQuantity(),
-			'attributes' => $this->getAttributes(),
-		];
 	}
 
 	/**
@@ -198,6 +181,22 @@ class CartItem extends stdClass {
 	public function setCart(Cart $cart): CartItem {
 		$this->cart = $cart;
 		return $this;
+	}
+
+	/**
+	 * @return array|mixed
+	 */
+	public function jsonSerialize() {
+		return [
+			'key' => $this->getItemId(),
+			'identifier' => $this->getItemIdentifier(),
+			'quantity' => $this->getQuantity(),
+			'details' => $this->getProduct()->toArray(),
+		];
+	}
+
+	public function save() {
+
 	}
 
 	/**

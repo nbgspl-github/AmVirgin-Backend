@@ -18,7 +18,7 @@ class CreateCartItemsTable extends Migration {
 			$table->string('uniqueId');
 			$table->integer('quantity');
 			$table->float('itemTotal')->default(0.0);
-			$table->json('attributes');
+			$table->json('options')->default(jsonEncode('[]'));
 			$table->timestamps();
 		});
 	}

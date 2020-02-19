@@ -5,6 +5,7 @@ namespace App\Classes\Cart;
 use stdClass;
 
 class Cart extends stdClass {
+
 	/**
 	 * Items available in the cart.
 	 * @var array
@@ -17,29 +18,30 @@ class Cart extends stdClass {
 	protected $sessionId;
 
 	/**
+	 * @var integer
+	 */
+	protected $customerId;
+
+	/**
 	 * @var int
 	 */
 	protected $totalQuantity = 0;
 
 	/**
-	 * Cart constructor.
-	 * @param string $sessionId
+	 * @var \App\Models\Cart
 	 */
-	public function __construct(string $sessionId) {
+	protected $model;
+
+	public function __construct(string $sessionId, int $customerId = 0) {
+		$this->model = \App\Models\Cart::retrieveThrows($sessionId, $customerId);
 		$this->sessionId = $sessionId;
+		$this->customerId = $customerId;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getSessionId(): string {
 		return $this->sessionId;
 	}
 
-	/**
-	 * @param string $sessionId
-	 * @return Cart
-	 */
 	public function setSessionId(string $sessionId): Cart {
 		$this->sessionId = $sessionId;
 		return $this;
@@ -64,21 +66,8 @@ class Cart extends stdClass {
 		$this->handleItemsUpdated();
 	}
 
-	public function toArray(): array {
-		return [
-			'sessionId' => $this->getSessionId(),
-			'items' => collect($this->items)->transform(function (CartItem $cartItem) {
-				return $cartItem->toArray();
-			})->all(),
-		];
-	}
+	public function save() {
 
-	public function fromArray(array $data): self {
-		$self = new self($data['sessionId']);
-		collect($data['items'])->each(function ($item) {
-			$this->items[] = CartItem::fromArray($item, $this);
-		});
-		return $self;
 	}
 
 	protected function handleItemsUpdated() {
@@ -98,6 +87,10 @@ class Cart extends stdClass {
 	}
 
 	protected function calculateTaxesAndTotals(CartItem $cartItem) {
+
+	}
+
+	protected function triggerUpdateModel() {
 
 	}
 }

@@ -10,4 +10,5 @@ interface Tables {
 	const Videos = 'videos';
 	const SubscriptionPlans = 'subscription-plans';
 	const Products = 'products';
+	const CartSessions = 'cart-sessions';
 }

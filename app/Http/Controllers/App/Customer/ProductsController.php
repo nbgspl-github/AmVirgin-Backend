@@ -12,9 +12,10 @@ use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Models\Product;
 use App\Resources\Products\Seller\ProductResource;
 use App\Traits\ValidatesRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class ProductsController extends ExtendedResourceController{
+class ProductsController extends ExtendedResourceController {
 	use ValidatesRequest;
 
 	protected $defaultSort = 'relevance';
@@ -61,7 +62,7 @@ class ProductsController extends ExtendedResourceController{
 		],
 	];
 
-	public function index(){
+	public function index() {
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules['index']);
@@ -79,7 +80,7 @@ class ProductsController extends ExtendedResourceController{
 			$totalInCategory = $products->count('id');
 			$products = $products->orderBy($algorithm[0], $algorithm[1])->paginate(50);
 			$products = ProductResource::collection($products);
-			$response->status(HttpOkay)->message(function () use ($totalInCategory){
+			$response->status(HttpOkay)->message(function () use ($totalInCategory) {
 				return sprintf('Found %d products under that category.', $totalInCategory);
 			})->setValue('meta', ['total' => $totalInCategory, 'pageCount' => $this->countRequiredPages($totalInCategory, $this->resultsPerPage)])->setValue('data', $products);
 		}
@@ -91,22 +92,45 @@ class ProductsController extends ExtendedResourceController{
 		}
 	}
 
-	public function sortsIndex(){
+	public function sortsIndex() {
 		$sorts = collect($this->sortingOptions);
-		$sorts->transform(function ($item){
+		$sorts->transform(function ($item) {
 			unset($item['algorithm']);
 			return $item;
 		});
-		return responseApp()->status(HttpOkay)->message(function () use ($sorts){
+		return responseApp()->status(HttpOkay)->message(function () use ($sorts) {
 			return sprintf('There are a total of %d sorting options available.', $sorts->count());
 		})->setValue('data', $sorts)->send();
 	}
 
-	protected function guard(){
+	public function show($id) {
+		$response = responseApp();
+		try {
+			$product = Product::where([
+				['deleted', false],
+				['soldOut', false],
+				['draft', false],
+				['id', $id],
+			])->firstOrFail();
+			$product = new ProductResource($product);
+			$response->status(HttpOkay)->message('Found product for the specified key.')->setValue('data', $product);
+		}
+		catch (ModelNotFoundException $exception) {
+			$response->status(HttpResourceNotFound)->message('Could not find the product for that key.');
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+
+	protected function guard() {
 		return auth('customer-api');
 	}
 
-	protected function countRequiredPages(int $total, int $perPage){
+	protected function countRequiredPages(int $total, int $perPage) {
 		if ($total <= $perPage)
 			return 1;
 
