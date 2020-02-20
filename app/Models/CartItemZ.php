@@ -7,13 +7,21 @@ use App\Resources\Cart\CartItemResource;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class CartItem extends Model {
+class CartItemZ extends Model {
 	use RetrieveResource;
 	protected $product;
 	protected $minAllowedQuantity;
 	protected $maxAllowedQuantity;
 	protected $cart;
 	protected $table = 'cart-items';
+	protected $attributes = [
+		'cartId' => null,
+		'productId' => null,
+		'uniqueId' => null,
+		'quantity' => 0,
+		'itemTotal' => 0,
+		'options' => [],
+	];
 	protected $fillable = [
 		'cartId',
 		'productId',
@@ -41,7 +49,7 @@ class CartItem extends Model {
 	}
 
 	public static function make(\App\Classes\Cart\Cart $cart, Product $product = null): self {
-		$cartItem = new CartItem();
+		$cartItem = new CartItemZ();
 		$cartItem->product = $product;
 		$cartItem->minAllowedQuantity = 1;
 		$cartItem->maxAllowedQuantity = 10;
@@ -52,17 +60,6 @@ class CartItem extends Model {
 		$cartItem->setUniqueId(sprintf('%s-%d', $cart->getSessionId(), $product->getKey()));
 		return $cartItem;
 	}
-
-//	public function getOptionsAttribute() {
-//		return jsonDecodeArray($this->options);
-//	}
-//
-//	public function setOptionsAttribute($value) {
-//		if ($value != null)
-//			$this->options = jsonEncode($value);
-//		else
-//			$this->options = jsonEncode('[]');
-//	}
 
 	public function getUniqueId(): string {
 		return $this->uniqueId;
@@ -90,7 +87,7 @@ class CartItem extends Model {
 	}
 
 	public function getOptions(): array {
-		return $this->options;
+		return jsonDecodeArray($this->options);
 	}
 
 	public function getApplicablePrice() {
@@ -98,7 +95,7 @@ class CartItem extends Model {
 	}
 
 	public function setOptions(array $options) {
-		$this->options = $options;
+		$this->options = jsonEncode($options);
 	}
 
 	public function increaseQuantity(int $incrementBy = 1) {

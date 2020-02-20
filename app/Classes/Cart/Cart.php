@@ -2,7 +2,7 @@
 
 namespace App\Classes\Cart;
 
-use App\Models\CartItem;
+use App\Models\CartItemZ;
 use App\Resources\Cart\CartResource;
 use stdClass;
 
@@ -23,7 +23,7 @@ class Cart extends stdClass {
 	public function __construct(string $sessionId, int $customerId = 0) {
 		$this->model = \App\Models\Cart::retrieveThrows($sessionId, $customerId);
 		$this->model->customerId = $customerId;
-		collect($this->model->items()->get()->all())->each(function (\App\Models\CartItem $cartItem) {
+		collect($this->model->items()->get()->all())->each(function (\App\Models\CartItemZ $cartItem) {
 			$cartItem->setCart($this);
 			$this->items[$cartItem->getUniqueId()] = $cartItem;
 		});
@@ -37,8 +37,8 @@ class Cart extends stdClass {
 		return $this->model->getKey();
 	}
 
-	public function addItem(CartItem ...$cartItem) {
-		collect($cartItem)->each(function (CartItem $item) {
+	public function addItem(CartItemZ ...$cartItem) {
+		collect($cartItem)->each(function (CartItemZ $item) {
 			if (!isset($this->items[$item->getUniqueId()])) {
 				$item->save();
 				$this->items[$item->getUniqueId()] = $item;
@@ -51,8 +51,8 @@ class Cart extends stdClass {
 		$this->handleItemsUpdated();
 	}
 
-	public function removeItem(CartItem ...$cartItem) {
-		collect($cartItem)->each(function (CartItem $item) {
+	public function removeItem(CartItemZ ...$cartItem) {
+		collect($cartItem)->each(function (CartItemZ $item) {
 			if (isset($this->items[$item->getUniqueId()])) {
 				$cartItem = $this->items[$item->getUniqueId()];
 				$cartItem->decreaseQuantity();
@@ -61,8 +61,8 @@ class Cart extends stdClass {
 		$this->handleItemsUpdated();
 	}
 
-	public function destroyItem(CartItem ...$cartItem) {
-		collect($cartItem)->each(function (CartItem $item) {
+	public function destroyItem(CartItemZ ...$cartItem) {
+		collect($cartItem)->each(function (CartItemZ $item) {
 			unset($this->items[$item->getUniqueId()]);
 			$item->delete();
 		});
@@ -80,7 +80,7 @@ class Cart extends stdClass {
 
 	protected function handleItemsUpdated() {
 		$this->resetCalculations();
-		collect($this->items)->each(function (CartItem $cartItem) {
+		collect($this->items)->each(function (CartItemZ $cartItem) {
 			$this->addToTotalQuantity($cartItem);
 			$this->calculateSubtotals($cartItem);
 		});
@@ -95,11 +95,11 @@ class Cart extends stdClass {
 		$this->model->total = 0;
 	}
 
-	protected function addToTotalQuantity(CartItem $cartItem) {
+	protected function addToTotalQuantity(CartItemZ $cartItem) {
 		$this->model->itemCount += $cartItem->getQuantity();
 	}
 
-	protected function calculateSubtotals(CartItem $cartItem) {
+	protected function calculateSubtotals(CartItemZ $cartItem) {
 		$this->model->subTotal += $cartItem->getItemTotal();
 	}
 

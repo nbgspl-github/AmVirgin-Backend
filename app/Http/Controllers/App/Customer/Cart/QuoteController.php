@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\App\Customer\Cart;
 
-use App\Classes\Cart\Cart;
+use App\Classes\Cart\CartItem;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Interfaces\Tables;
-use App\Models\CartItem;
-use App\Models\Product;
+use App\Models\Cart;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
@@ -28,6 +27,7 @@ class QuoteController extends ExtendedResourceController {
 				'customerId' => ['bail', 'nullable', Rule::exists(Tables::Customers, 'id')],
 				'key' => ['bail', 'required', Rule::exists(Tables::Products, 'id')],
 				'quantity' => ['bail', 'nullable', 'numeric', 'min:1', 'max:10'],
+				'attributes' => ['bail', 'required'],
 			],
 		];
 	}
@@ -37,8 +37,9 @@ class QuoteController extends ExtendedResourceController {
 		$validated = null;
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['add']);
-			$cart = null($validated->customerId) ? new Cart($validated->sessionId) : new Cart($validated->sessionId, $validated->customerId);
-			$cartItem = CartItem::make($cart, Product::retrieve($validated->key));
+			$cart = null($validated->customerId) ? Cart::retrieveThrows($validated->sessionId) : Cart::retrieveThrows($validated->sessionId, $validated->customerId);
+			$cartItem = new CartItem($cart, $validated->key, $validated->attributes);
+			$cart->addItem($cartItem);
 			$cart->addItem($cartItem);
 			$response->status(HttpOkay)->message('Item added to cart successfully.')->setValue('data', $cart->render());
 		}
@@ -47,8 +48,9 @@ class QuoteController extends ExtendedResourceController {
 				'sessionId' => $validated->sessionId,
 				'customerId' => $validated->customerId,
 			]);
-			$cart = null($validated->customerId) ? new Cart($validated->sessionId) : new Cart($validated->sessionId, $validated->customerId);
-			$cartItem = CartItem::make($cart, Product::retrieve($validated->key));
+			$cart = null($validated->customerId) ? Cart::retrieveThrows($validated->sessionId) : Cart::retrieveThrows($validated->sessionId, $validated->customerId);
+			$cartItem = new CartItem($cart, $validated->key, $validated->attributes);
+			$cart->addItem($cartItem);
 			$cart->addItem($cartItem);
 			$response->status(HttpOkay)->message('Cart initialized and item added to cart successfully.')->setValue('data', $cart->render());
 		}
@@ -57,7 +59,7 @@ class QuoteController extends ExtendedResourceController {
 		}
 		catch (Throwable $exception) {
 			dd($exception);
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(HttpServerError)->message($exception->getTraceAsString());
 		}
 		finally {
 			return $response->send();

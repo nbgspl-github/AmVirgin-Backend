@@ -14,6 +14,7 @@ class CreateCartsTable extends Migration {
 		Schema::create('carts', function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->string('sessionId', 100);
+			$table->json('items')->default(jsonEncode('[]'));
 			$table->unsignedBigInteger('addressId')->nullable();
 			$table->unsignedBigInteger('customerId')->nullable();
 			$table->integer('itemCount')->default(0);
