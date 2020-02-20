@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Classes\Cart\CartItem;
+use App\Classes\Cart\CartItemCollection;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,62 +22,53 @@ class Cart extends Model {
 		'paymentMode',
 		'status',
 	];
-	protected $cartItems = [];
+	protected $itemCollection;
 
 	public function __construct(array $attributes = []) {
 		parent::__construct($attributes);
-		collect(jsonDecode($this->items))->each(function ($item) {
-			$item = (object)$item;
-			$cartItem = new CartItem($this, $item->key, $item->attributes);
-			$cartItem->setUniqueId($item->uniqueId);
-			$cartItem->setQuantity($item->quantity);
-			$this->cartItems[$cartItem->getUniqueId()] = $cartItem;
-		});
 	}
 
-	public static function retrieveThrows(string $sessionId, int $customerId = 0) {
-		if ($customerId == 0)
-			return self::where('sessionId', $sessionId)->firstOrFail();
-		else
-			return self::where('sessionId', $sessionId)->where('customerId', $customerId)->firstOrFail();
+	public static function retrieveThrows(string $sessionId, int $customerId = 0): self {
+		if ($customerId == 0) {
+			$model = self::where('sessionId', $sessionId)->firstOrFail();
+			$model->loadModel();
+			return $model;
+		}
+		else {
+			echo 'With customer';
+			$model = self::where('sessionId', $sessionId)->where('customerId', $customerId)->firstOrFail();
+			$model->loadModel();
+			return $model;
+		}
 	}
 
-	public function getItemsAttribute() {
-		return jsonDecode($this->items);
-	}
-
-	public function setItemsAttribute(array $items = []) {
-		$this->items = jsonEncode($items);
+	public function loadModel() {
+		$this->itemCollection = new CartItemCollection($this, jsonDecodeArray($this->attributes['items']));
 	}
 
 	public function addItem(CartItem ...$cartItem) {
 		collect($cartItem)->each(function (CartItem $item) {
-			if (!isset($this->cartItems[$item->getUniqueId()])) {
-				$item->increaseQuantity();
-				$this->cartItems[$item->getUniqueId()] = $item;
-			}
-			else {
-				$cartItem = $this->cartItems[$item->getUniqueId()];
-				$cartItem->increaseQuantity();
-			}
+			$uniqueId = $item->getUniqueId();
+			if (!$this->itemCollection->has($uniqueId))
+				$this->itemCollection->setItem($uniqueId, $item)->increaseQuantity();
+			else
+				$this->itemCollection->getItem($uniqueId)->increaseQuantity();
 		});
 		$this->handleItemsUpdated();
 	}
 
 	public function removeItem(CartItem ...$cartItem) {
 		collect($cartItem)->each(function (CartItem $item) {
-			if (isset($this->cartItems[$item->getUniqueId()])) {
-				$cartItem = $this->cartItems[$item->getUniqueId()];
-				$cartItem->decreaseQuantity();
-			}
+			$uniqueId = $item->getUniqueId();
+			if ($this->itemCollection->has($uniqueId))
+				$this->itemCollection->getItem($uniqueId)->decreaseQuantity();
 		});
 		$this->handleItemsUpdated();
 	}
 
 	public function destroyItem(CartItem ...$cartItem) {
 		collect($cartItem)->each(function (CartItem $item) {
-			unset($this->cartItems[$item->getUniqueId()]);
-			$item->delete();
+			$this->itemCollection->deleteItem($item->getUniqueId());
 		});
 		$this->handleItemsUpdated();
 	}
@@ -90,6 +82,7 @@ class Cart extends Model {
 	}
 
 	public function render() {
+		$items = $this->itemCollection->all();
 		return [
 			'cart' => [
 				'session' => $this->session,
@@ -101,7 +94,7 @@ class Cart extends Model {
 				'total' => $this->total,
 				'paymentMode' => $this->paymentMode,
 				'status' => $this->status,
-				'items' => collect($this->cartItems)->transform(function (CartItem $cartItem) {
+				'items' => collect($items)->transform(function (CartItem $cartItem) {
 					return $cartItem->render();
 				})->values(),
 			],
@@ -109,13 +102,15 @@ class Cart extends Model {
 	}
 
 	public function save(array $options = []) {
-		$this->items = $this->cartItems;
+		$this->items = $this->itemCollection->values()->transform(function (CartItem $cartItem) {
+			return $cartItem->render();
+		});
 		return parent::save($options);
 	}
 
 	protected function handleItemsUpdated() {
 		$this->resetCalculations();
-		collect($this->cartItems)->each(function (CartItem $cartItem) {
+		$this->itemCollection->iterate(function (CartItem $cartItem) {
 			$this->addToTotalQuantity($cartItem);
 			$this->calculateSubtotals($cartItem);
 		});

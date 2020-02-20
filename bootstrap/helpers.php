@@ -20,7 +20,7 @@ const HttpUnauthorized = 401;
 
 const HttpDeniedAccess = 403;
 
-function __status($status){
+function __status($status) {
 	if ($status == 1)
 		return 'Active';
 	else if ($status == 0)
@@ -29,7 +29,7 @@ function __status($status){
 		return 'Unknown';
 }
 
-function __visibility($visibility){
+function __visibility($visibility) {
 	if ($visibility == 1)
 		return "Visible";
 	else if ($visibility == 2)
@@ -38,7 +38,7 @@ function __visibility($visibility){
 		return "Unknown";
 }
 
-function __blank($value){
+function __blank($value) {
 	$value = trim($value);
 	if ($value == null || strlen($value) < 1)
 		return '-';
@@ -46,27 +46,27 @@ function __blank($value){
 		return $value;
 }
 
-function __rating($value){
+function __rating($value) {
 	if ($value == 0)
 		return '<Not rated>';
 	else
 		return $value;
 }
 
-function __ellipsis($value, $length = 20){
+function __ellipsis($value, $length = 20) {
 	return strlen($value) > $length ? substr($value, 0, $length) . "..." : $value;
 }
 
-function __boolean($value){
+function __boolean($value) {
 	$value = boolval($value);
 	return $value == true ? 'Yes' : 'No';
 }
 
-function null($expression){
+function null($expression) {
 	return $expression == null;
 }
 
-function __modelNameFromSlug($slug){
+function __modelNameFromSlug($slug) {
 	$identifier = 'model-mapping.' . $slug;
 	$modelName = __($identifier);
 	if (strcmp($modelName, $identifier) == 0) {
@@ -77,7 +77,7 @@ function __modelNameFromSlug($slug){
 	return $modelName;
 }
 
-function image($path = null){
+function image($path = null) {
 	if ($path == null)
 		return null;
 	else
@@ -88,7 +88,7 @@ function image($path = null){
  * @param $payload
  * @return false|string
  */
-function jsonEncode($payload){
+function jsonEncode($payload) {
 	$encoded = json_encode($payload);
 	return $encoded == false ? '' : $encoded;
 }
@@ -97,7 +97,7 @@ function jsonEncode($payload){
  * @param $payload
  * @return mixed
  */
-function jsonDecode($payload){
+function jsonDecode($payload) {
 	$decoded = json_decode($payload);
 	return $decoded;
 }
@@ -106,7 +106,7 @@ function jsonDecode($payload){
  * @param $payload
  * @return array
  */
-function jsonDecodeArray($payload){
+function jsonDecodeArray($payload) {
 	$decoded = json_decode($payload, true);
 	return $decoded == null ? [] : $decoded;
 }
@@ -115,10 +115,14 @@ function jsonDecodeArray($payload){
  * @param string $route
  * @return \App\Classes\WebResponse
  */
-function responseWeb(){
+function responseWeb() {
 	return \App\Classes\WebResponse::instance();
 }
 
-function responseApp(){
+function responseApp() {
 	return \App\Classes\Builders\ResponseBuilder::instance();
+}
+
+function iterate($arrayable, $callback) {
+	collect($arrayable)->each($callback);
 }

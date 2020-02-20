@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\App\Customer\Cart;
 
 use App\Classes\Cart\CartItem;
+use App\Exceptions\MaxAllowedQuantityReachedException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Interfaces\Tables;
@@ -37,28 +38,33 @@ class QuoteController extends ExtendedResourceController {
 		$validated = null;
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['add']);
-			$cart = null($validated->customerId) ? Cart::retrieveThrows($validated->sessionId) : Cart::retrieveThrows($validated->sessionId, $validated->customerId);
+			$cart = Cart::retrieveThrows($validated->sessionId);
+			$cart->customerId = $validated->customerId;
 			$cartItem = new CartItem($cart, $validated->key, $validated->attributes);
 			$cart->addItem($cartItem);
 			$cart->addItem($cartItem);
+			$cart->save();
 			$response->status(HttpOkay)->message('Item added to cart successfully.')->setValue('data', $cart->render());
+		}
+		catch (MaxAllowedQuantityReachedException $exception) {
+			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage())->setValue('data', $cart->render());
 		}
 		catch (ModelNotFoundException $exception) {
 			\App\Models\Cart::create([
 				'sessionId' => $validated->sessionId,
 				'customerId' => $validated->customerId,
 			]);
-			$cart = null($validated->customerId) ? Cart::retrieveThrows($validated->sessionId) : Cart::retrieveThrows($validated->sessionId, $validated->customerId);
+			$cart = Cart::retrieveThrows($validated->sessionId);
 			$cartItem = new CartItem($cart, $validated->key, $validated->attributes);
 			$cart->addItem($cartItem);
 			$cart->addItem($cartItem);
+			$cart->save();
 			$response->status(HttpOkay)->message('Cart initialized and item added to cart successfully.')->setValue('data', $cart->render());
 		}
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
 		}
 		catch (Throwable $exception) {
-			dd($exception);
 			$response->status(HttpServerError)->message($exception->getTraceAsString());
 		}
 		finally {

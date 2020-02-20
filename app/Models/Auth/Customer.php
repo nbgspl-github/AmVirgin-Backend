@@ -5,15 +5,15 @@ namespace App\Models;
 use App\Traits\ActiveStatus;
 use App\Traits\BroadcastPushNotifications;
 use App\Traits\FluentConstructor;
+use App\Traits\OtpVerificationSupport;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
-use App\Traits\OtpVerificationSupport;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Customer extends Authenticatable implements JWTSubject{
+class Customer extends Authenticatable implements JWTSubject {
 	use Notifiable;
 	use BroadcastPushNotifications;
 	use RetrieveResource;
@@ -43,6 +43,11 @@ class Customer extends Authenticatable implements JWTSubject{
 	protected $hidden = [
 		'password',
 		'remember_token',
+		'created_at',
+		'updated_at',
+		'email_verified_at',
+		'active',
+		'otp',
 	];
 
 	/**
@@ -61,7 +66,7 @@ class Customer extends Authenticatable implements JWTSubject{
 	 * @param string|null $password
 	 * @return Customer
 	 */
-	public function setPassword(?string $password): Customer{
+	public function setPassword(?string $password): Customer {
 		$this->password = Hash::make($password);
 		return $this;
 	}
@@ -69,7 +74,7 @@ class Customer extends Authenticatable implements JWTSubject{
 	/**
 	 * @return string
 	 */
-	public function getName(): string{
+	public function getName(): string {
 		return $this->name;
 	}
 
@@ -77,7 +82,7 @@ class Customer extends Authenticatable implements JWTSubject{
 	 * @param string $name
 	 * @return Customer
 	 */
-	public function setName(string $name): Customer{
+	public function setName(string $name): Customer {
 		$this->name = $name;
 		return $this;
 	}
@@ -85,7 +90,7 @@ class Customer extends Authenticatable implements JWTSubject{
 	/**
 	 * @return string|null
 	 */
-	public function getEmail(): ?string{
+	public function getEmail(): ?string {
 		return $this->email;
 	}
 
@@ -93,7 +98,7 @@ class Customer extends Authenticatable implements JWTSubject{
 	 * @param string|null $email
 	 * @return Customer
 	 */
-	public function setEmail(?string $email): Customer{
+	public function setEmail(?string $email): Customer {
 		$this->email = $email;
 		return $this;
 	}
@@ -101,7 +106,7 @@ class Customer extends Authenticatable implements JWTSubject{
 	/**
 	 * @return string|null
 	 */
-	public function getMobile(): ?string{
+	public function getMobile(): ?string {
 		return $this->mobile;
 	}
 
@@ -109,7 +114,7 @@ class Customer extends Authenticatable implements JWTSubject{
 	 * @param string|null $mobile
 	 * @return Customer
 	 */
-	public function setMobile(?string $mobile): Customer{
+	public function setMobile(?string $mobile): Customer {
 		$this->mobile = $mobile;
 		return $this;
 	}
@@ -117,14 +122,14 @@ class Customer extends Authenticatable implements JWTSubject{
 	/**
 	 * @inheritDoc
 	 */
-	public function getJWTIdentifier(){
+	public function getJWTIdentifier() {
 		return $this->getKey();
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getJWTCustomClaims(){
+	public function getJWTCustomClaims() {
 		return [];
 	}
 }
