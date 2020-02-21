@@ -110,10 +110,6 @@ class Cart extends Model {
 		];
 	}
 
-	public function save(array $options = []) {
-		return parent::save($options);
-	}
-
 	protected function handleItemsUpdated() {
 		$this->resetCalculations();
 		$this->itemCollection->iterate(function (CartItem $cartItem) {
