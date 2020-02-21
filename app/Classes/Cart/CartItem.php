@@ -2,6 +2,7 @@
 
 namespace App\Classes\Cart;
 
+use App\Constants\OfferTypes;
 use App\Exceptions\MaxAllowedQuantityReachedException;
 use App\Models\Product;
 use App\Resources\Products\Customer\ProductResource;
@@ -256,6 +257,31 @@ class CartItem extends stdClass implements JsonSerializable {
 	}
 
 	protected function getApplicablePrice(): float {
+		$offerType = $this->getProduct()->getOfferType();
+		$offerValue = $this->getProduct()->getOfferValue();
+		$originalPrice = $this->getProduct()->getOriginalPrice();
+		if ($offerValue > 0) {
+			if ($offerType == OfferTypes::FlatRate) {
+				if ($originalPrice > $offerValue) {
+					return $originalPrice - $offerValue;
+				}
+				else {
+					return 0;
+				}
+			}
+			else if ($this->getProduct()->getOfferType() == OfferTypes::Percentage) {
+				$amount = $offerValue * $originalPrice;
+				if ($originalPrice > $amount) {
+					return $originalPrice - $amount;
+				}
+				else {
+					return 0;
+				}
+			}
+			else {
+				return $this->product->getOriginalPrice();
+			}
+		}
 		return $this->product->getOriginalPrice();
 	}
 
