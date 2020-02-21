@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Classes\Cart\CartItem;
 use App\Classes\Cart\CartItemCollection;
+use App\Exceptions\CartItemNotFoundException;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
@@ -35,7 +36,6 @@ class Cart extends Model {
 			return $model;
 		}
 		else {
-			echo 'With customer';
 			$model = self::where('sessionId', $sessionId)->where('customerId', $customerId)->firstOrFail();
 			$model->loadModel();
 			return $model;
@@ -43,7 +43,13 @@ class Cart extends Model {
 	}
 
 	public function loadModel() {
-		$this->itemCollection = new CartItemCollection($this, jsonDecodeArray($this->attributes['items']));
+		$decoded = jsonDecodeArray($this->items);
+		$this->itemCollection = new CartItemCollection($this);
+		$this->itemCollection->setItemsUpdatedCallback(function (array $items) {
+			$this->items = $items;
+		});
+		if (count($decoded) > 0)
+			$this->itemCollection->loadItems($decoded);
 	}
 
 	public function addItem(CartItem ...$cartItem) {
@@ -62,13 +68,19 @@ class Cart extends Model {
 			$uniqueId = $item->getUniqueId();
 			if ($this->itemCollection->has($uniqueId))
 				$this->itemCollection->getItem($uniqueId)->decreaseQuantity();
+			else
+				throw new CartItemNotFoundException($item);
 		});
 		$this->handleItemsUpdated();
 	}
 
 	public function destroyItem(CartItem ...$cartItem) {
 		collect($cartItem)->each(function (CartItem $item) {
-			$this->itemCollection->deleteItem($item->getUniqueId());
+			$uniqueId = $item->getUniqueId();
+			if ($this->itemCollection->has($uniqueId))
+				$this->itemCollection->deleteItem($uniqueId);
+			else
+				throw new CartItemNotFoundException($item);
 		});
 		$this->handleItemsUpdated();
 	}
@@ -82,10 +94,9 @@ class Cart extends Model {
 	}
 
 	public function render() {
-		$items = $this->itemCollection->all();
 		return [
 			'cart' => [
-				'session' => $this->session,
+				'session' => $this->session->sessionId,
 				'address' => null,
 				'customer' => $this->customer,
 				'itemCount' => $this->itemCount,
@@ -94,17 +105,12 @@ class Cart extends Model {
 				'total' => $this->total,
 				'paymentMode' => $this->paymentMode,
 				'status' => $this->status,
-				'items' => collect($items)->transform(function (CartItem $cartItem) {
-					return $cartItem->render();
-				})->values(),
+				'items' => array_values($this->items),
 			],
 		];
 	}
 
 	public function save(array $options = []) {
-		$this->items = $this->itemCollection->values()->transform(function (CartItem $cartItem) {
-			return $cartItem->render();
-		});
 		return parent::save($options);
 	}
 

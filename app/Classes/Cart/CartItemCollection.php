@@ -4,24 +4,34 @@ namespace App\Classes\Cart;
 
 class CartItemCollection {
 	protected $items;
+	protected $cart;
+	protected $callback;
 
-	public function __construct(\App\Models\Cart $cart, $items = []) {
-		collect($items)->each(function ($item) use ($cart) {
+	public function __construct(\App\Models\Cart $cart) {
+		$this->cart = $cart;
+		$this->items = [];
+	}
+
+	public function loadItems(array $items = []) {
+		collect($items)->each(function ($item, $key) {
 			$item = (object)$item;
-			$cartItem = new CartItem($cart, $item->key, $item->attributes);
+			$cartItem = new CartItem($this->cart, $item->key, $item->attributes);
 			$cartItem->setKey($item->key);
 			$cartItem->setQuantity($item->quantity);
-			$this->setItem($cartItem->getUniqueId(), $cartItem);
+			$cartItem->setUniqueId($key);
+			$this->setItem($key, $cartItem);
 		});
 	}
 
 	public function setItem(string $key, CartItem $item): CartItem {
 		$this->items[$key] = $item;
+		call_user_func($this->callback, $this->items);
 		return $item;
 	}
 
 	public function deleteItem(string $key) {
 		unset($this->items[$key]);
+		call_user_func($this->callback, $this->items);
 	}
 
 	public function getItem(string $key): ?CartItem {
@@ -36,11 +46,7 @@ class CartItemCollection {
 		collect($this->items)->each($callback);
 	}
 
-	public function all() {
-		return $this->items;
-	}
-
-	public function values() {
-		return collect($this->items)->values();
+	public function setItemsUpdatedCallback(callable $callback) {
+		$this->callback = $callback;
 	}
 }
