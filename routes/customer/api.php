@@ -62,4 +62,5 @@ Route::prefix('playback')->middleware([])->group(function () {
 Route::prefix('cart')->middleware([])->group(function () {
 	Route::post('add', [QuoteController::class, 'add']);
 	Route::post('remove', [QuoteController::class, 'remove']);
+	Route::get('retrieve', [QuoteController::class, 'retrieve']);
 });

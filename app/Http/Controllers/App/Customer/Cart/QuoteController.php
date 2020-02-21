@@ -35,6 +35,16 @@ class QuoteController extends ExtendedResourceController {
 				'customerId' => ['bail', 'nullable', Rule::exists(Tables::Customers, 'id')],
 				'key' => ['bail', 'required', Rule::exists(Tables::Products, 'id')],
 			],
+			'retrieve' => [
+				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
+				'customerId' => ['bail', 'nullable', Rule::exists(Tables::Customers, 'id')],
+				'key' => ['bail', 'required', Rule::exists(Tables::Products, 'id')],
+			],
+			'update' => [
+				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
+				'customerId' => ['bail', 'nullable', Rule::exists(Tables::Customers, 'id')],
+				'key' => ['bail', 'required', Rule::exists(Tables::Products, 'id')],
+			],
 		];
 	}
 
@@ -77,19 +87,47 @@ class QuoteController extends ExtendedResourceController {
 	}
 
 	public function retrieve() {
+		$response = responseApp();
+		$validated = null;
 		try {
-
+			$validated = (object)$this->requestValid(request(), $this->rules['remove']);
+			$cart = Cart::retrieveThrows($validated->sessionId);
+			$response->status(HttpOkay)->message('Cart retrieved successfully.')->setValue('data', $cart->render());
+		}
+		catch (ModelNotFoundException $exception) {
+			$response->status(HttpOkay)->message('No cart was found for that session.');
+		}
+		catch (ValidationException $exception) {
+			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
 		}
 		catch (Throwable $exception) {
-
+			$response->status(HttpServerError)->message($exception->getTraceAsString());
 		}
 		finally {
-
+			return $response->send();
 		}
 	}
 
 	public function update() {
-
+		$response = responseApp();
+		$validated = null;
+		try {
+			$validated = (object)$this->requestValid(request(), $this->rules['remove']);
+			$cart = Cart::retrieveThrows($validated->sessionId);
+			$response->status(HttpOkay)->message('Cart retrieved successfully.')->setValue('data', $cart->render());
+		}
+		catch (ModelNotFoundException $exception) {
+			$response->status(HttpOkay)->message('No cart was found for that session.');
+		}
+		catch (ValidationException $exception) {
+			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getTraceAsString());
+		}
+		finally {
+			return $response->send();
+		}
 	}
 
 	public function remove() {
