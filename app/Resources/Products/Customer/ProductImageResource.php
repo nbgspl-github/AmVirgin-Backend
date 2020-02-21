@@ -11,8 +11,6 @@ class ProductImageResource extends JsonResource {
 	}
 
 	public function toArray($request) {
-		return [
-			'url' => $this->when(SecuredDisk::access()->exists($this->path) == true, SecuredDisk::access()->url($this->path)),
-		];
+		return $this->when(SecuredDisk::access()->exists($this->path) == true, SecuredDisk::access()->url($this->path));
 	}
 }
