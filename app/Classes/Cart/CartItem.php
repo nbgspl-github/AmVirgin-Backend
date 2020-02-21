@@ -269,8 +269,8 @@ class CartItem extends stdClass implements JsonSerializable {
 					return 0;
 				}
 			}
-			else if ($this->getProduct()->getOfferType() == OfferTypes::Percentage) {
-				$amount = $offerValue * $originalPrice;
+			else if ($offerType == OfferTypes::Percentage) {
+				$amount = ($offerValue / 100.0) * $originalPrice;
 				if ($originalPrice > $amount) {
 					return $originalPrice - $amount;
 				}
