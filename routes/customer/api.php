@@ -1,25 +1,25 @@
 <?php
 
-use App\Http\Controllers\App\Customer\AuthController as CustomerAuth;
+use App\Http\Controllers\App\Customer\AuthController;
 use App\Http\Controllers\App\Customer\Cart\QuoteController;
 use App\Http\Controllers\App\Customer\Playback\PlaybackController;
 use App\Http\Controllers\App\Customer\Playback\TrailerPlayback;
 use App\Http\Controllers\App\Customer\PopularPicksController;
 use App\Http\Controllers\App\Customer\ProductsController;
-use App\Http\Controllers\App\Customer\SlidersController as CustomerSlidersController;
+use App\Http\Controllers\App\Customer\SlidersController;
 use App\Http\Controllers\App\Customer\TrendController;
-use App\Http\Controllers\App\Customer\TwoFactorAuthController as Customer2FAuth;
+use App\Http\Controllers\App\Customer\TwoFactorAuthController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [Customer2FAuth::class, 'exists'])->name('customer.check');
-Route::get('/profile', [CustomerAuth::class, 'profile'])->name('customer.profile')->middleware('auth:customer-api');
-Route::post('/login', [Customer2FAuth::class, 'login'])->name('customer.login');
-Route::post('/register', [Customer2FAuth::class, 'register'])->name('customer.register');
-Route::post('/logout', [CustomerAuth::class, 'logout'])->name('customer.logout')->middleware('auth:customer-api');
-Route::get('/profile', [CustomerAuth::class, 'profile'])->name('customer.profile')->middleware('auth:customer-api');
+Route::get('/', [TwoFactorAuthController::class, 'exists'])->name('customer.check');
+Route::get('/profile', [AuthController::class, 'profile'])->name('customer.profile')->middleware('auth:customer-api');
+Route::post('/login', [TwoFactorAuthController::class, 'login'])->name('customer.login');
+Route::post('/register', [TwoFactorAuthController::class, 'register'])->name('customer.register');
+Route::post('/logout', [AuthController::class, 'logout'])->name('customer.logout')->middleware('auth:customer-api');
+Route::get('/profile', [AuthController::class, 'profile'])->name('customer.profile')->middleware('auth:customer-api');
 
 Route::prefix('sliders')->group(function () {
-	Route::get('/', [CustomerSlidersController::class, 'index'])->name('customer.sliders.index');
+	Route::get('/', [SlidersController::class, 'index'])->name('customer.sliders.index');
 });
 
 Route::prefix('trending')->group(function () {

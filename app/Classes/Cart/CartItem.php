@@ -4,6 +4,7 @@ namespace App\Classes\Cart;
 
 use App\Exceptions\MaxAllowedQuantityReachedException;
 use App\Models\Product;
+use App\Resources\Products\Customer\ProductResource;
 use JsonSerializable;
 use stdClass;
 
@@ -246,6 +247,7 @@ class CartItem extends stdClass implements JsonSerializable {
 	public function jsonSerialize() {
 		return [
 			'key' => $this->getKey(),
+			'product' => new ProductResource($this->getProduct()),
 			'quantity' => $this->getQuantity(),
 			'uniqueId' => $this->getUniqueId(),
 			'itemTotal' => $this->getItemTotal(),
