@@ -41,6 +41,7 @@ class QuoteController extends ExtendedResourceController {
 	public function add() {
 		$response = responseApp();
 		$validated = null;
+		$cart = null;
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['add']);
 			$cart = Cart::retrieveThrows($validated->sessionId);
@@ -94,6 +95,7 @@ class QuoteController extends ExtendedResourceController {
 	public function remove() {
 		$response = responseApp();
 		$validated = null;
+		$cart = null;
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['remove']);
 			$cart = Cart::retrieveThrows($validated->sessionId);
