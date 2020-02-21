@@ -44,6 +44,11 @@ class QuoteController extends ExtendedResourceController {
 				'customerId' => ['bail', 'nullable', Rule::exists(Tables::Customers, 'id')],
 				'key' => ['bail', 'required', Rule::exists(Tables::Products, 'id')],
 			],
+			'destroy' => [
+				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
+				'customerId' => ['bail', 'nullable', Rule::exists(Tables::Customers, 'id')],
+				'key' => ['bail', 'required', Rule::exists(Tables::Products, 'id')],
+			],
 		];
 	}
 
@@ -141,6 +146,35 @@ class QuoteController extends ExtendedResourceController {
 			$cart->removeItem($cartItem);
 			$cart->save();
 			$response->status(HttpOkay)->message('Item removed from cart successfully.')->setValue('data', $cart->render());
+		}
+		catch (ModelNotFoundException $exception) {
+			$response->status(HttpOkay)->message('No cart was found for that session.')->setValue('data', $cart->render());
+		}
+		catch (CartItemNotFoundException $exception) {
+			$response->status(HttpResourceNotFound)->message($exception->getMessage())->setValue('data', $cart->render());
+		}
+		catch (ValidationException $exception) {
+			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getTraceAsString());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+
+	public function destroy() {
+		$response = responseApp();
+		$validated = null;
+		$cart = null;
+		try {
+			$validated = (object)$this->requestValid(request(), $this->rules['destroy']);
+			$cart = Cart::retrieveThrows($validated->sessionId);
+			$cartItem = new CartItem($cart, $validated->key);
+			$cart->destroyItem($cartItem);
+			$cart->save();
+			$response->status(HttpOkay)->message('Item destroyed from cart successfully.')->setValue('data', $cart->render());
 		}
 		catch (ModelNotFoundException $exception) {
 			$response->status(HttpOkay)->message('No cart was found for that session.')->setValue('data', $cart->render());
