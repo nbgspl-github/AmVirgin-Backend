@@ -38,7 +38,6 @@ class QuoteController extends ExtendedResourceController {
 			'retrieve' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
 				'customerId' => ['bail', 'nullable', Rule::exists(Tables::Customers, 'id')],
-				'key' => ['bail', 'required', Rule::exists(Tables::Products, 'id')],
 			],
 			'update' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
