@@ -89,7 +89,7 @@ class QuoteController extends ExtendedResourceController {
 		$response = responseApp();
 		$validated = null;
 		try {
-			$validated = (object)$this->requestValid(request(), $this->rules['remove']);
+			$validated = (object)$this->requestValid(request(), $this->rules['retrieve']);
 			$cart = Cart::retrieveThrows($validated->sessionId);
 			$response->status(HttpOkay)->message('Cart retrieved successfully.')->setValue('data', $cart->render());
 		}
