@@ -73,7 +73,7 @@ class QuoteController extends ExtendedResourceController {
 				'sessionId' => $validated->sessionId,
 				'customerId' => $validated->customerId,
 			]);
-			$cart = Cart::retrieveThrows($validated->sessionId);
+			$cart = Cart::retrieve($validated->sessionId);
 			$cartItem = new CartItem($cart, $validated->key, $validated->attributes);
 			$cart->addItem($cartItem);
 			$cart->save();

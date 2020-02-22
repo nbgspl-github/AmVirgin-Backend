@@ -60,7 +60,6 @@ class CartItem extends stdClass implements JsonSerializable {
 	 * @param \App\Models\Cart $cart
 	 * @param int $key
 	 * @param array $attributes
-	 * @throws MaxAllowedQuantityReachedException
 	 */
 	public function __construct(\App\Models\Cart $cart, int $key, $attributes = []) {
 		$this->setMinAllowedQuantity(1);

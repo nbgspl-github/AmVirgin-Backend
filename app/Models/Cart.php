@@ -25,11 +25,24 @@ class Cart extends Model {
 	];
 	protected $itemCollection;
 
-	public function __construct(array $attributes = []) {
+	public function __construct(array $attributes = []){
 		parent::__construct($attributes);
 	}
 
-	public static function retrieveThrows(string $sessionId, int $customerId = 0): self {
+	public static function retrieve(string $sessionId, int $customerId = 0): self{
+		if ($customerId == 0) {
+			$model = self::where('sessionId', $sessionId)->first();
+			$model->loadModel();
+			return $model;
+		}
+		else {
+			$model = self::where('sessionId', $sessionId)->where('customerId', $customerId)->first();
+			$model->loadModel();
+			return $model;
+		}
+	}
+
+	public static function retrieveThrows(string $sessionId, int $customerId = 0): self{
 		if ($customerId == 0) {
 			$model = self::where('sessionId', $sessionId)->firstOrFail();
 			$model->loadModel();
