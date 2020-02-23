@@ -7,7 +7,7 @@
 	<div class="left-side-logo d-block d-lg-none">
 		<div class="text-center">
 
-			<a href="/" class="logo"><img src="{{asset("admin/images/logo.png")}}" height="50" alt="logo"></a>
+			<a href="/" class="logo"><img src="{{asset("assets/admin/images/logo.png")}}" height="50" alt="logo"></a>
 		</div>
 	</div>
 

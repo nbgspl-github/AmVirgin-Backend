@@ -3,7 +3,7 @@
 	<div class="topbar-left d-none d-lg-block bg-dark">
 		<div class="text-center">
 
-			<a href="{{route('admin.home')}}" class="logo"><img src="{{asset("admin/images/logo.png")}}" height="50" alt="logo" class="customLogo"></a>
+			<a href="{{route('admin.home')}}" class="logo"><img src="{{asset("assets/admin/images/logo.png")}}" height="50" alt="logo" class="customLogo"></a>
 		</div>
 	</div>
 
@@ -30,7 +30,7 @@
 			<li class="list-inline-item dropdown notification-list">
 				<a class="nav-link dropdown-toggle arrow-none waves-effect nav-user" data-toggle="dropdown" href="#" role="button"
 				   aria-haspopup="false" aria-expanded="false">
-					<span class="text-white text-decoration-none"><img src="{{asset("admin/img/user.png")}}" alt="user" class="rounded-circle">&nbsp;&nbsp;{{auth()->guard('admin')->user()->name}}</span>
+					<span class="text-white text-decoration-none"><img src="{{asset("assets/admin/img/user.png")}}" alt="user" class="rounded-circle">&nbsp;&nbsp;{{auth()->guard('admin')->user()->name}}</span>
 				</a>
 				<div class="dropdown-menu dropdown-menu-right dropdown-menu-animated profile-dropdown ">
 					<a class="dropdown-item" href="#"><i class="mdi mdi-account-circle m-r-5 text-muted"></i>

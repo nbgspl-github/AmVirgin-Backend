@@ -4,4 +4,4 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <meta content="{{config("app.name","AmVirgin Dashboard")}}" name="AmVirgin Admin Dashboard"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-<link rel="shortcut icon" href="{{asset("admin/images/logo.png")}}">
+<link rel="shortcut icon" href="{{asset("assets/admin/images/logo.png")}}">
