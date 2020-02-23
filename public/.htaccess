@@ -6,6 +6,7 @@ DirectoryIndex index.php
     </IfModule>
 
     RewriteEngine On
+    RewriteBase /admin
 
         # Handle Authorization Header
      RewriteCond %{HTTP:Authorization} .

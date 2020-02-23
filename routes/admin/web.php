@@ -30,7 +30,9 @@ use App\Models\Slider;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
-Route::prefix('admin')->group(function (){
+const SubDomainPrefix = 'admin';
+
+Route::domain(subDomain(SubDomainPrefix))->group(function (){
 	Route::get('/', [HomeController::class, Methods::Index])->middleware('auth:admin')->name('admin.home');
 	Route::get('/login', [LoginController::class, Methods::auth()::LoginForm])->name('admin.login');
 	Route::post('/login', [LoginController::class, Methods::auth()::Login])->name('admin.login.submit');
