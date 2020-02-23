@@ -41,7 +41,7 @@
 								<h4 class="text-muted text-center font-18"><b>{{ __('Login') }}</b></h4>
 
 								<div class="p-2">
-									<form class="form-horizontal m-t-20" method="POST" action="{{ route('assets/admin.login.submit') }}">
+									<form class="form-horizontal m-t-20" method="POST" action="{{ route('admin.login.submit') }}">
 										@csrf
 										<div class="form-group row">
 											<div class="col-md-12">
