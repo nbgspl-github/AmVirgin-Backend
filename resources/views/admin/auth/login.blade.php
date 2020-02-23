@@ -9,9 +9,9 @@
 	<meta content="ThemeDesign" name="author"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 	<link rel="shortcut icon" href="{{asset("images/logo.png")}}">
-	<link href="{{asset("admin/css/bootstrap.min.css")}}" rel="stylesheet" type="text/css">
-	<link href="{{asset("admin/css/icons.css")}}" rel="stylesheet" type="text/css">
-	<link href="{{asset("admin/css/style.css")}}" rel="stylesheet" type="text/css">
+	<link href="{{asset("assets/admin/css/bootstrap.min.css")}}" rel="stylesheet" type="text/css">
+	<link href="{{asset("assets/admin/css/icons.css")}}" rel="stylesheet" type="text/css">
+	<link href="{{asset("assets/admin/css/style.css")}}" rel="stylesheet" type="text/css">
 </head>
 
 <body class="fixed-left">
@@ -35,13 +35,13 @@
 							<div class="card-body">
 
 								<h3 class="text-center m-b-15">
-									<a href="#" class="logo logo-admin"><img src="{{asset("admin/images/logo.png")}}" height="50" alt="logo"></a>
+									<a href="#" class="logo logo-admin"><img src="{{asset("assets/admin/images/logo.png")}}" height="50" alt="logo"></a>
 								</h3>
 
 								<h4 class="text-muted text-center font-18"><b>{{ __('Login') }}</b></h4>
 
 								<div class="p-2">
-									<form class="form-horizontal m-t-20" method="POST" action="{{ route('admin.login.submit') }}">
+									<form class="form-horizontal m-t-20" method="POST" action="{{ route('assets/admin.login.submit') }}">
 										@csrf
 										<div class="form-group row">
 											<div class="col-md-12">
