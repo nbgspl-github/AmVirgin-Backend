@@ -5,12 +5,12 @@ namespace App\Models;
 use App\Traits\ActiveStatus;
 use Illuminate\Database\Eloquent\Model;
 
-class Slider extends Model{
+class Slider extends Model {
 	use ActiveStatus;
 
-	protected $table = 'sliders';
+	protected string $table = 'sliders';
 
-	protected $fillable = [
+	protected array $fillable = [
 		'title',
 		'description',
 		'poster',
@@ -19,12 +19,12 @@ class Slider extends Model{
 		'active',
 	];
 
-	protected $hidden = [
+	protected array $hidden = [
 		'created_at',
 		'updated_at',
 	];
 
-	protected $downloadableAttributes = [
+	protected array $downloadableAttributes = [
 		'Poster' => [
 			'method' => 'Poster',
 			'poster',
@@ -34,7 +34,7 @@ class Slider extends Model{
 	/**
 	 * @return string
 	 */
-	public function getTitle(): string{
+	public function getTitle(): string {
 		return $this->title;
 	}
 

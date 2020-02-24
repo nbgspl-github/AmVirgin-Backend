@@ -15,14 +15,14 @@ use Illuminate\Support\Collection;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Video extends Model{
+class Video extends Model {
 	use RetrieveResource;
 	use RetrieveCollection;
 	use FluentConstructor;
 	use ActiveStatus;
 	use Sluggable;
 
-	protected $fillable = [
+	protected array $fillable = [
 		'title',
 		'slug',
 		'description',
@@ -49,7 +49,7 @@ class Video extends Model{
 		'active',
 	];
 
-	protected $hidden = [
+	protected array $hidden = [
 		'created_at',
 		'updated_at',
 	];
@@ -57,7 +57,7 @@ class Video extends Model{
 	/**
 	 * @return int
 	 */
-	public function getSeasons(): ?int{
+	public function getSeasons(): ?int {
 		return $this->seasons;
 	}
 

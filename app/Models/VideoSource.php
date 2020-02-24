@@ -8,14 +8,14 @@ use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class VideoSource extends Model{
+class VideoSource extends Model {
 	use ActiveStatus;
 	use RetrieveResource;
 	use FluentConstructor;
 
-	protected $table = 'video-sources';
+	protected string $table = 'video-sources';
 
-	protected $fillable = [
+	protected array $fillable = [
 		'title',
 		'description',
 		'duration',

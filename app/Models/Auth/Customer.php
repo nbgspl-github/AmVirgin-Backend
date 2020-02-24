@@ -27,7 +27,7 @@ class Customer extends Authenticatable implements JWTSubject {
 	 *
 	 * @var array
 	 */
-	protected $fillable = [
+	protected array $fillable = [
 		'name',
 		'email',
 		'password',
@@ -40,7 +40,7 @@ class Customer extends Authenticatable implements JWTSubject {
 	 *
 	 * @var array
 	 */
-	protected $hidden = [
+	protected array $hidden = [
 		'password',
 		'remember_token',
 		'created_at',
@@ -55,7 +55,7 @@ class Customer extends Authenticatable implements JWTSubject {
 	 *
 	 * @var array
 	 */
-	protected $casts = [
+	protected array $casts = [
 		'id' => 'integer',
 		'name' => 'string',
 		'email' => 'string',

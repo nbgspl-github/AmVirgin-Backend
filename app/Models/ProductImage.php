@@ -6,19 +6,19 @@ use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductImage extends Model{
+class ProductImage extends Model {
 	use RetrieveResource;
 	use RetrieveCollection;
 
-	protected $table = 'product-images';
+	protected string $table = 'product-images';
 
-	protected $fillable = [
+	protected array $fillable = [
 		'productId',
 		'path',
 		'tag',
 	];
 
-	protected $hidden = [
+	protected array $hidden = [
 		'id',
 		'productId',
 		'created_at',
@@ -28,7 +28,7 @@ class ProductImage extends Model{
 	/**
 	 * @return bool
 	 */
-	public function isDeleted(): bool{
+	public function isDeleted(): bool {
 		return $this->deleted;
 	}
 }

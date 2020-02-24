@@ -8,12 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 
-class ProductCart extends Model{
-	
+class ProductCart extends Model {
 
-	protected $table = 'cart';
+	protected string $table = 'cart';
 
-	protected $fillable = [
+	protected array $fillable = [
 		'cartId',
 		'productId',
 		'quantity',
@@ -21,14 +20,13 @@ class ProductCart extends Model{
 		'status',
 	];
 
-	protected $hidden = [
+	protected array $hidden = [
 		'deleted',
 		'created_at',
 		'updated_at',
-		
+
 	];
 
-	
 	/**
 	 * @return HasMany
 	 */

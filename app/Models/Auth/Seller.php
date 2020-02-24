@@ -26,7 +26,7 @@ class Seller extends Authenticatable implements JWTSubject{
 	 *
 	 * @var array
 	 */
-	protected $fillable = [
+	protected array $fillable = [
 		'name',
 		'email',
 		'password',
@@ -38,7 +38,7 @@ class Seller extends Authenticatable implements JWTSubject{
 	 *
 	 * @var array
 	 */
-	protected $hidden = [
+	protected array $hidden = [
 		'password',
 		'remember_token',
 	];
@@ -48,7 +48,7 @@ class Seller extends Authenticatable implements JWTSubject{
 	 *
 	 * @var array
 	 */
-	protected $casts = [
+	protected array $casts = [
 		'id' => 'integer',
 		'name' => 'string',
 		'email' => 'string',
@@ -58,7 +58,7 @@ class Seller extends Authenticatable implements JWTSubject{
 	/**
 	 * @return string
 	 */
-	public function getName(): string{
+	public function getName(): string {
 		return $this->name;
 	}
 

@@ -4,13 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class VideoMeta extends Model{
-	protected $table = 'video-meta';
+class VideoMeta extends Model {
+	protected string $table = 'video-meta';
 
 	/**
 	 * @return int
 	 */
-	public function getVideoId(): int{
+	public function getVideoId(): int {
 		return $this->videoId;
 	}
 

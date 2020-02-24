@@ -7,17 +7,17 @@ use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class MediaQuality extends Model{
+class MediaQuality extends Model {
 	use RetrieveResource;
 	use RetrieveCollection;
 	use FluentConstructor;
 
-	protected $table = 'media-qualities';
+	protected string $table = 'media-qualities';
 
 	/**
 	 * @return string
 	 */
-	public function getName(): string{
+	public function getName(): string {
 		return $this->name;
 	}
 

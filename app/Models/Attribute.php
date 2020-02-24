@@ -5,17 +5,17 @@ namespace App\Models;
 use App\Traits\FluentConstructor;
 use Illuminate\Database\Eloquent\Model;
 
-class Attribute extends Model{
+class Attribute extends Model {
 	use FluentConstructor;
 
-	protected $table = 'attributes';
+	protected string $table = 'attributes';
 
-	protected $fillable = [
+	protected array $fillable = [
 		'name',
 		'categoryId',
 	];
 
-	protected $hidden = [
+	protected array $hidden = [
 		'created_at',
 		'updated_at',
 	];
@@ -23,7 +23,7 @@ class Attribute extends Model{
 	/**
 	 * @return int
 	 */
-	public function getCategoryId(): int{
+	public function getCategoryId(): int {
 		return $this->categoryId;
 	}
 

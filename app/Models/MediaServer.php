@@ -6,20 +6,20 @@ use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class MediaServer extends Model{
+class MediaServer extends Model {
 	use RetrieveCollection;
 	use RetrieveResource;
 
-	protected $table = 'media-servers';
+	protected string $table = 'media-servers';
 
-	protected $fillable = [
+	protected array $fillable = [
 		'name',
 		'ipAddress',
 		'useAuth',
 		'basePath',
 	];
 
-	protected $hidden = [
+	protected array $hidden = [
 		'created_at',
 		'updated_at',
 	];
@@ -27,7 +27,7 @@ class MediaServer extends Model{
 	/**
 	 * @return string
 	 */
-	public function getName(): string{
+	public function getName(): string {
 		return $this->name;
 	}
 

@@ -8,14 +8,14 @@ use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Category extends Model{
+class Category extends Model {
 	use RetrieveResource;
 	use GenerateUrls;
 	use FluentConstructor;
 
-	protected $table = 'categories';
+	protected string $table = 'categories';
 
-	protected $fillable = [
+	protected array $fillable = [
 		'name',
 		'parentId',
 		'description',

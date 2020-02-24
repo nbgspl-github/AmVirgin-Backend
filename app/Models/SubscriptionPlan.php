@@ -18,9 +18,9 @@ class SubscriptionPlan extends Model{
 
 	const Subscription = 'subscription';
 
-	protected $table = 'subscription-plans';
+	protected string $table = 'subscription-plans';
 
-	protected $fillable = [
+	protected array $fillable = [
 		'name',
 		'description',
 		'slug',

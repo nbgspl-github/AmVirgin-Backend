@@ -7,18 +7,18 @@ use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class Genre extends Model implements FluentConstructor{
+class Genre extends Model implements FluentConstructor {
 	use RetrieveResource;
 	use RetrieveCollection;
 
-	protected $fillable = [
+	protected array $fillable = [
 		'name',
 		'description',
 		'poster',
 		'status',
 	];
 
-	protected $hidden = [
+	protected array $hidden = [
 		'created_at',
 		'updated_at',
 	];
@@ -27,7 +27,7 @@ class Genre extends Model implements FluentConstructor{
 	 *  Makes a new instance and returns it.
 	 * @return Genre
 	 */
-	public static function instance(){
+	public static function instance() {
 		return new self();
 	}
 
