@@ -122,7 +122,7 @@ class Cart extends Model {
 				'total' => $this->total,
 				'paymentMode' => $this->paymentMode,
 				'status' => $this->status,
-				'items' => array_values($this->items),
+				'items' => gettype($this->items) == 'array' ? array_values($this->items) : $this->items,
 			],
 		];
 	}
