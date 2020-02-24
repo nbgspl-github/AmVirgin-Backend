@@ -4,7 +4,7 @@
 		"Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
 		"This file is @generated automatically"
 	],
-	"content-hash": "3c6a2ff4e48223749f71c6c43e28ebbd",
+	"content-hash": "b2e08b0423562bf1077cdbe4365fdf6b",
 	"packages": [
 		{
 			"name": "dnoegel/php-xdg-base-dir",
@@ -35,16 +35,16 @@
 			"notification-url": "https://packagist.org/downloads/",
 			"license": [
 				"MIT"
-            ],
-            "description": "implementation of xdg base directory specification for php",
-            "time": "2019-12-04T15:06:13+00:00"
-        },
-        {
-            "name": "doctrine/inflector",
-            "version": "1.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/doctrine/inflector.git",
+			],
+			"description": "implementation of xdg base directory specification for php",
+			"time": "2019-12-04T15:06:13+00:00"
+		},
+		{
+			"name": "doctrine/inflector",
+			"version": "1.3.1",
+			"source": {
+				"type": "git",
+				"url": "https://github.com/doctrine/inflector.git",
                 "reference": "ec3a55242203ffa6a4b27c58176da97ff0a7aec1"
             },
             "dist": {
@@ -5663,16 +5663,16 @@
                 "phpunit/phpunit": "^4.8.36 || ^7.5.13"
             },
             "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Webmozart\\Assert\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
+			"autoload": {
+				"psr-4": {
+					"Webmozart\\Assert\\": "src/"
+				}
+			},
+			"notification-url": "https://packagist.org/downloads/",
+			"license": [
+				"MIT"
+			],
+			"authors": [
 				{
 					"name": "Bernhard Schussek",
 					"email": "bschussek@gmail.com"
@@ -5693,7 +5693,7 @@
 	"prefer-stable": true,
 	"prefer-lowest": false,
 	"platform": {
-		"php": "^7.4.2",
+		"php": "7.4.2",
 		"ext-json": "*"
 	},
 	"platform-dev": []
