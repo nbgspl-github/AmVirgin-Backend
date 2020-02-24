@@ -60,7 +60,10 @@ class Cart extends Model {
 		$decoded = jsonDecodeArray($this->items);
 		$this->itemCollection = new CartItemCollection($this);
 		$this->itemCollection->setItemsUpdatedCallback(function (array $items) {
-			$this->items = $items;
+			if (count($items) < 1)
+				$this->items = jsonDecodeArray(jsonEncode(new stdClass()));
+			else
+				$this->items = $items;
 		});
 		if (count($decoded) > 0)
 			$this->itemCollection->loadItems($decoded);
@@ -125,9 +128,6 @@ class Cart extends Model {
 	}
 
 	public function save(array $options = []) {
-		if (count($this->items) < 1) {
-			$this->items = new stdClass();
-		}
 		return parent::save($options);
 	}
 
