@@ -65,9 +65,11 @@ Route::prefix('cart')->middleware([])->group(function () {
 	Route::post('remove', [QuoteController::class, 'remove']);
 	Route::post('destroy', [QuoteController::class, 'destroy']);
 	Route::get('retrieve', [QuoteController::class, 'retrieve']);
+	Route::post('move', [QuoteController::class, 'moveToWishlist']);
 
 	Route::prefix('wishlist')->middleware('auth:customer-api')->group(function () {
 		Route::get('/', [CustomerWishlistController::class, 'index']);
+		Route::post('move', [QuoteController::class, 'moveToWishlist']);
 		Route::post('/', [CustomerWishlistController::class, 'store']);
 		Route::delete('/{productId}', [CustomerWishlistController::class, 'delete']);
 	});
