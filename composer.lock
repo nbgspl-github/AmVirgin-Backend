@@ -4,7 +4,7 @@
 		"Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
 		"This file is @generated automatically"
 	],
-	"content-hash": "b2e08b0423562bf1077cdbe4365fdf6b",
+	"content-hash": "c7cb0b78918cf17ae73d63d4b6349f34",
 	"packages": [
 		{
 			"name": "dnoegel/php-xdg-base-dir",
@@ -45,16 +45,16 @@
 			"source": {
 				"type": "git",
 				"url": "https://github.com/doctrine/inflector.git",
-                "reference": "ec3a55242203ffa6a4b27c58176da97ff0a7aec1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/inflector/zipball/ec3a55242203ffa6a4b27c58176da97ff0a7aec1",
-                "reference": "ec3a55242203ffa6a4b27c58176da97ff0a7aec1",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1"
+				"reference": "ec3a55242203ffa6a4b27c58176da97ff0a7aec1"
+			},
+			"dist": {
+				"type": "zip",
+				"url": "https://api.github.com/repos/doctrine/inflector/zipball/ec3a55242203ffa6a4b27c58176da97ff0a7aec1",
+				"reference": "ec3a55242203ffa6a4b27c58176da97ff0a7aec1",
+				"shasum": ""
+			},
+			"require": {
+				"php": "^7.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^6.2"
@@ -5653,16 +5653,16 @@
                 "shasum": ""
             },
             "require": {
-                "php": "^5.3.3 || ^7.0",
-                "symfony/polyfill-ctype": "^1.8"
-            },
-            "conflict": {
-                "vimeo/psalm": "<3.6.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8.36 || ^7.5.13"
-            },
-            "type": "library",
+				"php": "^5.3.3 || ^7.0",
+				"symfony/polyfill-ctype": "^1.8"
+			},
+			"conflict": {
+				"vimeo/psalm": "<3.6.0"
+			},
+			"require-dev": {
+				"phpunit/phpunit": "^4.8.36 || ^7.5.13"
+			},
+			"type": "library",
 			"autoload": {
 				"psr-4": {
 					"Webmozart\\Assert\\": "src/"
@@ -5693,7 +5693,7 @@
 	"prefer-stable": true,
 	"prefer-lowest": false,
 	"platform": {
-		"php": "7.4.2",
+		"php": "7.4.3",
 		"ext-json": "*"
 	},
 	"platform-dev": []

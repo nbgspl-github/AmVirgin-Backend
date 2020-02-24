@@ -30,7 +30,7 @@ class VideoSource extends Model {
 		'subtitle',
 	];
 
-	protected $hidden = [
+	protected array $hidden = [
 		'created_at',
 		'updated_at',
 	];
@@ -38,7 +38,7 @@ class VideoSource extends Model {
 	/**
 	 * @return string
 	 */
-	public function getTitle(): string{
+	public function getTitle(): string {
 		return $this->title;
 	}
 
