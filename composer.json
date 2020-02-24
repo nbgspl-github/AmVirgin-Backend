@@ -8,7 +8,7 @@
 	],
 	"license": "MIT",
 	"require": {
-		"php": "^7.4",
+		"php": "^7.2",
 		"ext-json": "*",
 		"fideloper/proxy": "^4.0",
 		"jeremeamia/superclosure": "^2.4",

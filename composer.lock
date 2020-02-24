@@ -1,20 +1,20 @@
 {
-    "_readme": [
-        "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
-        "This file is @generated automatically"
-    ],
-    "content-hash": "62a82b16bf51a2fd20ac15c0483ecc37",
-    "packages": [
-        {
-            "name": "dnoegel/php-xdg-base-dir",
-            "version": "v0.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/dnoegel/php-xdg-base-dir.git",
-                "reference": "8f8a6e48c5ecb0f991c2fdcf5f154a47d85f9ffd"
-            },
-            "dist": {
+	"_readme": [
+		"This file locks the dependencies of your project to a known state",
+		"Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+		"This file is @generated automatically"
+	],
+	"content-hash": "9d3ffe5b924978c51ddf6245e880b7d8",
+	"packages": [
+		{
+			"name": "dnoegel/php-xdg-base-dir",
+			"version": "v0.1.1",
+			"source": {
+				"type": "git",
+				"url": "https://github.com/dnoegel/php-xdg-base-dir.git",
+				"reference": "8f8a6e48c5ecb0f991c2fdcf5f154a47d85f9ffd"
+			},
+			"dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/dnoegel/php-xdg-base-dir/zipball/8f8a6e48c5ecb0f991c2fdcf5f154a47d85f9ffd",
                 "reference": "8f8a6e48c5ecb0f991c2fdcf5f154a47d85f9ffd",
@@ -5693,8 +5693,8 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.4",
-        "ext-json": "*"
-    },
+		"php": "^7.2",
+		"ext-json": "*"
+	},
     "platform-dev": []
 }
