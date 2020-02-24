@@ -5,5 +5,5 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class Country extends Model {
-	protected string $table = 'countries';
+	protected $table = 'countries';
 }

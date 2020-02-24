@@ -10,15 +10,15 @@ class ProductImage extends Model {
 	use RetrieveResource;
 	use RetrieveCollection;
 
-	protected string $table = 'product-images';
+	protected $table = 'product-images';
 
-	protected array $fillable = [
+	protected $fillable = [
 		'productId',
 		'path',
 		'tag',
 	];
 
-	protected array $hidden = [
+	protected $hidden = [
 		'id',
 		'productId',
 		'created_at',

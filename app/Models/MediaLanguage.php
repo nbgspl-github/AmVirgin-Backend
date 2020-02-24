@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class MediaLanguage extends Model {
-	public bool $timestamps = false;
-	protected string $table = 'media-languages';
+	public $timestamps = false;
+	protected $table = 'media-languages';
 
 	/**
 	 * @return string

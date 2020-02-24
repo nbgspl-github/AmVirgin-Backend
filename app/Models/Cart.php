@@ -12,8 +12,8 @@ use stdClass;
 class Cart extends Model {
 	use RetrieveResource;
 	const TaxRate = 0.25;
-	protected string $table = 'carts';
-	protected array $fillable = [
+	protected $table = 'carts';
+	protected $fillable = [
 		'sessionId',
 		'addressId',
 		'customerId',

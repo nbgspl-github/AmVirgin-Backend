@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class VideoMeta extends Model {
-	protected string $table = 'video-meta';
+	protected $table = 'video-meta';
 
 	/**
 	 * @return int

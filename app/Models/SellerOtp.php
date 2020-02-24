@@ -10,10 +10,10 @@ class SellerOtp extends Model {
 	use RetrieveResource;
 	use FluentConstructor;
 
-	protected string $table = 'otp-sellers';
-	protected array $fillable = ['mobile', 'otp'];
-	protected string $primaryKey = 'mobile';
-	protected array $hidden = ['created_at', 'updated_at'];
+	protected $table = 'otp-sellers';
+	protected $fillable = ['mobile', 'otp'];
+	protected $primaryKey = 'mobile';
+	protected $hidden = ['created_at', 'updated_at'];
 
 	/**
 	 * @return string

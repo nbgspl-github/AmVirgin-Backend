@@ -22,7 +22,7 @@ class Video extends Model {
 	use ActiveStatus;
 	use Sluggable;
 
-	protected array $fillable = [
+	protected $fillable = [
 		'title',
 		'slug',
 		'description',
@@ -49,7 +49,7 @@ class Video extends Model {
 		'active',
 	];
 
-	protected array $hidden = [
+	protected $hidden = [
 		'created_at',
 		'updated_at',
 	];

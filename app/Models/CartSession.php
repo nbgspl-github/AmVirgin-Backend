@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class CartSession extends Model {
-	protected string $table = 'cart-sessions';
-	protected array $fillable = [
+	protected $table = 'cart-sessions';
+	protected $fillable = [
 		'sessionId',
 		'customerId',
 	];
-	protected array $hidden = [
+	protected $hidden = [
 		'id',
 		'created_at',
 		'updated_at',

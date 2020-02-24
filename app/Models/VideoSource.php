@@ -13,9 +13,9 @@ class VideoSource extends Model {
 	use RetrieveResource;
 	use FluentConstructor;
 
-	protected string $table = 'video-sources';
+	protected $table = 'video-sources';
 
-	protected array $fillable = [
+	protected $fillable = [
 		'title',
 		'description',
 		'duration',
@@ -30,7 +30,7 @@ class VideoSource extends Model {
 		'subtitle',
 	];
 
-	protected array $hidden = [
+	protected $hidden = [
 		'created_at',
 		'updated_at',
 	];

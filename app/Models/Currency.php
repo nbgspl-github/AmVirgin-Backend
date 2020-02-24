@@ -5,5 +5,5 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class Currency extends Model {
-	protected string $table = 'currencies';
+	protected $table = 'currencies';
 }

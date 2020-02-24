@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Slider extends Model {
 	use ActiveStatus;
 
-	protected string $table = 'sliders';
+	protected $table = 'sliders';
 
-	protected array $fillable = [
+	protected $fillable = [
 		'title',
 		'description',
 		'poster',
@@ -19,7 +19,7 @@ class Slider extends Model {
 		'active',
 	];
 
-	protected array $hidden = [
+	protected $hidden = [
 		'created_at',
 		'updated_at',
 	];

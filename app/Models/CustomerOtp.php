@@ -10,10 +10,10 @@ class CustomerOtp extends Model {
 	use RetrieveResource;
 	use FluentConstructor;
 
-	public bool $incrementing = false;
-	protected string $table = 'otp-customers';
-	protected string $primaryKey = 'mobile';
-	protected array $fillable = ['mobile', 'otp'];
+	public $incrementing = false;
+	protected $table = 'otp-customers';
+	protected $primaryKey = 'mobile';
+	protected $fillable = ['mobile', 'otp'];
 
 	/**
 	 * @return string

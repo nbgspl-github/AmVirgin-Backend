@@ -13,9 +13,9 @@ class Category extends Model {
 	use GenerateUrls;
 	use FluentConstructor;
 
-	protected string $table = 'categories';
+	protected $table = 'categories';
 
-	protected array $fillable = [
+	protected $fillable = [
 		'name',
 		'parentId',
 		'description',

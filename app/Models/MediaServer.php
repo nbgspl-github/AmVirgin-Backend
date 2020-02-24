@@ -10,16 +10,16 @@ class MediaServer extends Model {
 	use RetrieveCollection;
 	use RetrieveResource;
 
-	protected string $table = 'media-servers';
+	protected $table = 'media-servers';
 
-	protected array $fillable = [
+	protected $fillable = [
 		'name',
 		'ipAddress',
 		'useAuth',
 		'basePath',
 	];
 
-	protected array $hidden = [
+	protected $hidden = [
 		'created_at',
 		'updated_at',
 	];

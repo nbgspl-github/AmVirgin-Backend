@@ -16,9 +16,9 @@ class Product extends Model {
 	use RetrieveCollection;
 	use Sluggable;
 
-	protected string $table = 'products';
+	protected $table = 'products';
 
-	protected array $fillable = [
+	protected $fillable = [
 		'name',
 		'slug',
 		'categoryId',
@@ -53,14 +53,14 @@ class Product extends Model {
 		'trailer',
 	];
 
-	protected array $hidden = [
+	protected $hidden = [
 		'deleted',
 		'created_at',
 		'updated_at',
 		'sellerId',
 	];
 
-	protected array $casts = [
+	protected $casts = [
 		'visibility' => 'bool',
 		'draft' => 'bool',
 		'soldOut' => 'bool',

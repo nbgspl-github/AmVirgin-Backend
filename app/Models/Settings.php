@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class Settings extends Model {
-	protected string $table = 'settings';
-	protected array $fillable = ['key', 'value'];
-	protected string $primaryKey = 'key';
-	public bool $incrementing = false;
-	public bool $timestamps = false;
+	protected $table = 'settings';
+	protected $fillable = ['key', 'value'];
+	protected $primaryKey = 'key';
+	public $incrementing = false;
+	public $timestamps = false;
 
 	public static function get($key, $default = null) {
 		$setting = Settings::find($key);

@@ -12,7 +12,7 @@ class MediaQuality extends Model {
 	use RetrieveCollection;
 	use FluentConstructor;
 
-	protected string $table = 'media-qualities';
+	protected $table = 'media-qualities';
 
 	/**
 	 * @return string

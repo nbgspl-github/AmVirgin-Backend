@@ -9,9 +9,9 @@ class CategoryBanner extends Model {
 	use RetrieveResource;
 	use GenerateUrls;
 
-	protected string $table = 'category-banner';
+	protected $table = 'category-banner';
 
-	protected array $fillable = [
+	protected $fillable = [
 		'title',
 		'order',
 		'image',
@@ -23,7 +23,7 @@ class CategoryBanner extends Model {
 		'hasValidity',
 	];
 
-	protected array $hidden = [
+	protected $hidden = [
 		'deleted',
 		'created_at',
 		'updated_at',

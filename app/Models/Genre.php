@@ -11,14 +11,14 @@ class Genre extends Model implements FluentConstructor {
 	use RetrieveResource;
 	use RetrieveCollection;
 
-	protected array $fillable = [
+	protected $fillable = [
 		'name',
 		'description',
 		'poster',
 		'status',
 	];
 
-	protected array $hidden = [
+	protected $hidden = [
 		'created_at',
 		'updated_at',
 	];

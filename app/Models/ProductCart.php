@@ -10,9 +10,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProductCart extends Model {
 
-	protected string $table = 'cart';
+	protected $table = 'cart';
 
-	protected array $fillable = [
+	protected $fillable = [
 		'cartId',
 		'productId',
 		'quantity',
@@ -20,7 +20,7 @@ class ProductCart extends Model {
 		'status',
 	];
 
-	protected array $hidden = [
+	protected $hidden = [
 		'deleted',
 		'created_at',
 		'updated_at',
@@ -30,7 +30,7 @@ class ProductCart extends Model {
 	/**
 	 * @return HasMany
 	 */
-	public function images(){
+	public function images() {
 		return $this->hasMany('\App\Models\ProductImage', 'productId');
 	}
 

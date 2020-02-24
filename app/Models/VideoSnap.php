@@ -12,8 +12,8 @@ class VideoSnap extends Model {
 	use RetrieveCollection;
 	use FluentConstructor;
 
-	protected string $table = 'video-snapshots';
-	protected array $fillable = [
+	protected $table = 'video-snapshots';
+	protected $fillable = [
 		'videoId',
 		'file',
 		'description',
