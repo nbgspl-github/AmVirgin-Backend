@@ -7,12 +7,13 @@ use App\Classes\Cart\CartItemCollection;
 use App\Exceptions\CartItemNotFoundException;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
+use stdClass;
 
 class Cart extends Model {
 	use RetrieveResource;
 	const TaxRate = 0.25;
-	protected $table = 'carts';
-	protected $fillable = [
+	protected string $table = 'carts';
+	protected array $fillable = [
 		'sessionId',
 		'addressId',
 		'customerId',
@@ -23,13 +24,13 @@ class Cart extends Model {
 		'paymentMode',
 		'status',
 	];
-	protected $itemCollection;
+	protected CartItemCollection $itemCollection;
 
-	public function __construct(array $attributes = []){
+	public function __construct(array $attributes = []) {
 		parent::__construct($attributes);
 	}
 
-	public static function retrieve(string $sessionId, int $customerId = 0): self{
+	public static function retrieve(string $sessionId, int $customerId = 0): self {
 		if ($customerId == 0) {
 			$model = self::where('sessionId', $sessionId)->first();
 			$model->loadModel();
@@ -42,7 +43,7 @@ class Cart extends Model {
 		}
 	}
 
-	public static function retrieveThrows(string $sessionId, int $customerId = 0): self{
+	public static function retrieveThrows(string $sessionId, int $customerId = 0): self {
 		if ($customerId == 0) {
 			$model = self::where('sessionId', $sessionId)->firstOrFail();
 			$model->loadModel();
@@ -121,6 +122,13 @@ class Cart extends Model {
 				'items' => array_values($this->items),
 			],
 		];
+	}
+
+	public function save(array $options = []) {
+		if (count($this->items) < 1) {
+			$this->items = new stdClass();
+		}
+		return parent::save($options);
 	}
 
 	protected function handleItemsUpdated() {

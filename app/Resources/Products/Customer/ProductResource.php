@@ -13,10 +13,6 @@ class ProductResource extends JsonResource {
 
 	public function toArray($request) {
 		$category = Category::retrieve($this->categoryId);
-
-		/**
-		 * Calculating applicable discount details.
-		 */
 		$discount = [
 			'type' => OfferTypes::name($this->offerType),
 			'value' => $this->offerValue,
