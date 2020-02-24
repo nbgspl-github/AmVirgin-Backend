@@ -19,7 +19,7 @@ class QuoteController extends ExtendedResourceController {
 	use ValidatesRequest;
 	use ConditionallyLoadsAttributes;
 
-	protected $rules = [];
+	protected array $rules;
 
 	public function __construct() {
 		parent::__construct();
@@ -82,12 +82,12 @@ class QuoteController extends ExtendedResourceController {
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
 		}
-//		catch (Throwable $exception) {
-//			$response->status(HttpServerError)->message($exception->getTraceAsString());
-//		}
-//		finally {
-//			return $response->send();
-//		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getTraceAsString());
+		}
+		finally {
+			return $response->send();
+		}
 	}
 
 	public function retrieve() {
