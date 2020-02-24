@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\App\Customer\Cart;
 
+use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Interfaces\Tables;
 use App\Models\CustomerWishlist;
@@ -34,12 +35,15 @@ class CustomerWishlistController extends ExtendedResourceController {
 		$response = responseApp();
 		$validated = null;
 		try {
-			$validated = (object)$this->requestValid($this->rules['store']);
+			$validated = (object)$this->requestValid(request(), $this->rules['store']);
 			CustomerWishlist::where([
 				['customerId', $this->guard()->id()],
 				['productId', $validated->productId],
 			])->firstOrFail();
 			$response->status(HttpResourceAlreadyExists)->message('Item already exists in wishlist.');
+		}
+		catch (ValidationException $exception) {
+			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
 		}
 		catch (ModelNotFoundException $exception) {
 			CustomerWishlist::create([
