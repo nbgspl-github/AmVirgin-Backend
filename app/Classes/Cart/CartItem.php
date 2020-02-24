@@ -13,47 +13,47 @@ class CartItem extends stdClass implements JsonSerializable {
 	/**
 	 * @var integer
 	 */
-	protected $maxAllowedQuantity;
+	protected int $maxAllowedQuantity;
 
 	/**
 	 * @var integer
 	 */
-	protected $minAllowedQuantity;
+	protected int $minAllowedQuantity;
 
 	/**
 	 * @var integer
 	 */
-	protected $key;
+	protected int $key;
 
 	/**
 	 * @var string
 	 */
-	protected $uniqueId;
+	protected string $uniqueId;
 
 	/**
 	 * @var integer
 	 */
-	protected $quantity;
+	protected int $quantity;
 
 	/**
 	 * @var float
 	 */
-	protected $itemTotal;
+	protected float $itemTotal;
 
 	/**
 	 * @var Product
 	 */
-	protected $product;
+	protected Product $product;
 
 	/**
 	 * @var \App\Models\Cart
 	 */
-	protected $cart;
+	protected \App\Models\Cart $cart;
 
 	/**
 	 * @var array
 	 */
-	protected $attributes;
+	protected array $attributes;
 
 	/**
 	 * CartItem constructor.
