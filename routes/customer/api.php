@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\App\Customer\AuthController;
+use App\Http\Controllers\App\Customer\Cart\CustomerWishlistController;
 use App\Http\Controllers\App\Customer\Cart\QuoteController;
 use App\Http\Controllers\App\Customer\Playback\PlaybackController;
 use App\Http\Controllers\App\Customer\Playback\TrailerPlayback;
@@ -64,4 +65,10 @@ Route::prefix('cart')->middleware([])->group(function () {
 	Route::post('remove', [QuoteController::class, 'remove']);
 	Route::post('destroy', [QuoteController::class, 'destroy']);
 	Route::get('retrieve', [QuoteController::class, 'retrieve']);
+
+	Route::prefix('wishlist')->middleware('auth:customer-api')->group(function () {
+		Route::get('/', [CustomerWishlistController::class, 'index']);
+		Route::post('/', [CustomerWishlistController::class, 'store']);
+		Route::delete('/{productId}', [CustomerWishlistController::class, 'delete']);
+	});
 });
