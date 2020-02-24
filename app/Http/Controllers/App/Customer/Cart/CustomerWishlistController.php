@@ -26,6 +26,9 @@ class CustomerWishlistController extends ExtendedResourceController {
 
 	public function index() {
 		$wishList = CustomerWishlist::where('customerId', $this->guard()->id())->get();
+		$wishList->transform(function (CustomerWishlist $item) {
+			return $item->productId;
+		});
 		return responseApp()->status(HttpOkay)->setValue('data', $wishList)->message(function () use ($wishList) {
 			return sprintf('Found %d items on the wishlist.', $wishList->count());
 		})->send();
