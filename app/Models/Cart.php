@@ -127,7 +127,7 @@ class Cart extends Model {
 				'total' => $this->total,
 				'paymentMode' => $this->paymentMode,
 				'status' => $this->status,
-				'items' => gettype($this->items) == 'array' ? array_values($this->items) : $this->items,
+				'items' => gettype($this->items) == 'array' ? array_values($this->items) : jsonDecodeArray($this->items),
 			],
 		];
 	}
