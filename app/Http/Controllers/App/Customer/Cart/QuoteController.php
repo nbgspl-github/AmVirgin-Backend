@@ -243,6 +243,46 @@ class QuoteController extends ExtendedResourceController {
 		}
 	}
 
+	public function moveToCart() {
+		$response = responseApp();
+		$validated = null;
+		$cart = null;
+		try {
+			$validated = (object)$this->requestValid(request(), $this->rules['moveToCart']);
+			CustomerWishlist::where([
+				['customerId', $this->guard()->id()],
+				['productId', $validated->key],
+			])->firstOrFail();
+			try {
+				$cart = Cart::retrieveThrows($validated->sessionId);
+				$cartItem = new CartItem($cart, $validated->key, $validated->attributes);
+				if (!$cart->contains($cartItem)) {
+					$cart->addItem($cartItem);
+					$response->status(HttpResourceAlreadyExists)->message('Item moved to cart.');
+					$cart->save();
+				}
+				else {
+					$response->status(HttpResourceAlreadyExists)->message('Item already exists in wishlist.');
+				}
+			}
+			catch (ModelNotFoundException $exception) {
+				$response->status(HttpOkay)->message('No cart was found for that session.');
+			}
+		}
+		catch (ModelNotFoundException $exception) {
+			$response->status(HttpOkay)->message('Item was not found in wishlist.');
+		}
+		catch (ValidationException $exception) {
+			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getTraceAsString());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+
 	protected function guard() {
 		return auth('customer-api');
 	}

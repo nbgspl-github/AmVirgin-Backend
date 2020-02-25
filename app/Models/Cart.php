@@ -102,6 +102,11 @@ class Cart extends Model {
 		$this->handleItemsUpdated();
 	}
 
+	public function contains(CartItem $item) {
+		$uniqueId = $item->getUniqueId();
+		return $this->itemCollection->has($uniqueId);
+	}
+
 	public function session() {
 		return $this->hasOne(CartSession::class, 'sessionId', 'sessionId');
 	}
