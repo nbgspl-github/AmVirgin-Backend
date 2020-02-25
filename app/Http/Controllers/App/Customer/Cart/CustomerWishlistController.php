@@ -97,7 +97,7 @@ class CustomerWishlistController extends ExtendedResourceController {
 			$wishlistItem = CustomerWishlist::where([
 				['customerId', $this->guard()->id()],
 				['productId', $productId],
-			])->first();
+			])->firstOrFail();
 			if ($wishlistItem == null) {
 				try {
 					$cart = Cart::retrieveThrows($validated->sessionId);
