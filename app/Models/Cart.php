@@ -69,8 +69,8 @@ class Cart extends Model {
 			$this->itemCollection->loadItems($decoded);
 	}
 
-	public function addItem(CartItem ...$cartItem) {
-		collect($cartItem)->each(function (CartItem $item) {
+	public function addItem(CartItem ...$cartItems) {
+		collect($cartItems)->each(function (CartItem $item) {
 			$uniqueId = $item->getUniqueId();
 			if (!$this->itemCollection->has($uniqueId))
 				$this->itemCollection->setItem($uniqueId, $item)->increaseQuantity();
@@ -80,8 +80,19 @@ class Cart extends Model {
 		$this->handleItemsUpdated();
 	}
 
-	public function removeItem(CartItem ...$cartItem) {
-		collect($cartItem)->each(function (CartItem $item) {
+	public function updateItem(CartItem ...$cartItems) {
+		collect($cartItems)->each(function (CartItem $item) {
+			$uniqueId = $item->getUniqueId();
+			if (!$this->itemCollection->has($uniqueId))
+				$this->itemCollection->setItem($uniqueId, $item)->setQuantity($item->getQuantity());
+			else
+				$this->itemCollection->getItem($uniqueId)->setQuantity($item->getQuantity());
+		});
+		$this->handleItemsUpdated();
+	}
+
+	public function removeItem(CartItem ...$cartItems) {
+		collect($cartItems)->each(function (CartItem $item) {
 			$uniqueId = $item->getUniqueId();
 			if ($this->itemCollection->has($uniqueId))
 				$this->itemCollection->getItem($uniqueId)->decreaseQuantity();
@@ -91,8 +102,8 @@ class Cart extends Model {
 		$this->handleItemsUpdated();
 	}
 
-	public function destroyItem(CartItem ...$cartItem) {
-		collect($cartItem)->each(function (CartItem $item) {
+	public function destroyItem(CartItem ...$cartItems) {
+		collect($cartItems)->each(function (CartItem $item) {
 			$uniqueId = $item->getUniqueId();
 			if ($this->itemCollection->has($uniqueId))
 				$this->itemCollection->deleteItem($uniqueId);
