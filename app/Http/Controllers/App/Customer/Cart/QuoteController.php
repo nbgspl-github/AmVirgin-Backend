@@ -214,7 +214,7 @@ class QuoteController extends ExtendedResourceController {
 			if ($wishlistItem == null) {
 				try {
 					$cart = Cart::retrieveThrows($validated->sessionId);
-					$cartItem = new CartItem($cart, $validated->key);
+					$cartItem = new CartItem($cart, $productId);
 					if ($cart->contains($cartItem)) {
 						CustomerWishlist::create([
 							'customerId' => $this->guard()->id(),

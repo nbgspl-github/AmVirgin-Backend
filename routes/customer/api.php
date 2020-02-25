@@ -71,7 +71,8 @@ Route::prefix('cart')->middleware([])->group(function () {
 
 Route::prefix('wishlist')->middleware('auth:customer-api')->group(function () {
 	Route::get('/', [CustomerWishlistController::class, 'index']);
-	Route::put('cart/{productId}', [CustomerWishlistController::class, 'moveToCart']);
 	Route::put('/{productId}', [CustomerWishlistController::class, 'store']);
+	Route::delete('/{product}', [CustomerWishlistController::class, 'delete']);
 	Route::delete('/{productId}', [CustomerWishlistController::class, 'move']);
+	Route::put('cart/{productId}', [CustomerWishlistController::class, 'moveToCart']);
 });
