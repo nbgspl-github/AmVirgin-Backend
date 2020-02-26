@@ -6,7 +6,7 @@ use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Interfaces\Directories;
 use App\Interfaces\Tables;
-use App\Models\ShopBanner;
+use App\Models\ShopSlider;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Exception;
@@ -26,8 +26,8 @@ class ShopBannerController extends BaseController{
 		$this->ruleSet = config('rules.admin.home-banner');
 	}
 
-	public function index(){
-		$slides = ShopBanner::all();
+	public function index() {
+		$slides = ShopSlider::all();
 		return view('admin.home-banners.index')->with('slides', $slides);
 	}
 
@@ -35,8 +35,8 @@ class ShopBannerController extends BaseController{
 		return view('admin.home-banners.create');
 	}
 
-	public function edit($id){
-		$slider = ShopBanner::find($id);
+	public function edit($id) {
+		$slider = ShopSlider::find($id);
 		if ($slider != null) {
 			return view('admin.home-banners.edit')->with('slide', $slider);
 		}
@@ -54,8 +54,8 @@ class ShopBannerController extends BaseController{
 		try {
 
 			$payload = $this->requestValid($request, $this->ruleSet['store']);
-			$payload['banner'] = \request()->hasFile('banner') ? Storage::disk('secured')->putFile(Directories::ShopBanners, $request->file('banner'), 'public') : null; 
-			ShopBanner::create($payload);
+			$payload['banner'] = \request()->hasFile('banner') ? Storage::disk('secured')->putFile(Directories::ShopBanners, $request->file('banner'), 'public') : null;
+			ShopSlider::create($payload);
 			$response = responseWeb()->
 			route('admin.shop-banners.index')->
 			success('Home Banner created successfully.');
@@ -81,8 +81,8 @@ class ShopBannerController extends BaseController{
 
 	}
 
-	public function delete($id){
-		$slider = ShopBanner::find($id);
+	public function delete($id) {
+		$slider = ShopSlider::find($id);
 		if ($slider == null) {
 			return $this->failed()->
 			message('Could not find slide for that key.')->
@@ -103,7 +103,7 @@ class ShopBannerController extends BaseController{
 		$poster = null;
 		try {
 			$this->requestValid($request, $this->ruleSet['update']);
-			$slide = ShopBanner::find($request->id);
+			$slide = ShopSlider::find($request->id);
 			$slide->update([
 				'title' => $request->title,
 				'description' => $request->description,
@@ -148,7 +148,7 @@ class ShopBannerController extends BaseController{
 			send();
 		}
 		else {
-			ShopBanner::find($request->id)->
+			ShopSlider::find($request->id)->
 			setActive($request->active)->
 			save();
 			return $this->success()->
