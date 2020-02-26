@@ -75,7 +75,7 @@ class CustomerWishlistController extends ExtendedResourceController {
 				['productId', $productId],
 			])->firstOrFail();
 			$wishListItem->delete();
-			$response->status(HttpResourceAlreadyExists)->message('Item removed from wishlist.');
+			$response->status(HttpOkay)->message('Item removed from wishlist.');
 		}
 		catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('Item not found in wishlist.');
