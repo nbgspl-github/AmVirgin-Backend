@@ -10,4 +10,11 @@
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-require('./components/admin/shop/sale-offer/SaleOfferTimerEdit');
+import ReactDOM from "react-dom";
+import React from "react";
+import HomePageAppearance from "./components/admin/shop/home-page/HomePageAppearance";
+
+require('./components/admin/shop/home-page/HomePageAppearance');
+if (document.getElementById('react')) {
+	ReactDOM.render(<HomePageAppearance/>, document.getElementById('react'));
+}

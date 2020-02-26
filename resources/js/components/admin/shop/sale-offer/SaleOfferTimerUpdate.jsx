@@ -2,15 +2,10 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import PageHeader from "../../common/PageHeader";
 
-export default class SaleOfferTimerEdit extends Component {
-	constructor(props) {
-		super(props);
-		console.log('Rendering edit');
-	}
-
-
+export default class SaleOfferTimerUpdate extends Component {
 	handleAction(value) {
 		event.preventDefault();
+		console.log('Rendering update');
 	};
 
 	render() {
@@ -19,7 +14,7 @@ export default class SaleOfferTimerEdit extends Component {
 				<div className="col-12">
 					<div className="card shadow-sm custom-card">
 						<div className="card-header py-0">
-							<PageHeader title={'Modify Sale Offer Details'} action={this.handleAction} text={''}/>
+							<PageHeader title={'Modify Sale Offer Details Update'} action={this.handleAction} text={''}/>
 						</div>
 						<div className="card-body animatable">
 							<div className="row">
@@ -28,7 +23,7 @@ export default class SaleOfferTimerEdit extends Component {
 										<div className="card-body">
 											<h5 className="card-title">Sliders</h5>
 											<p className="card-text">Choose this to update sliders which show up in the header section of shop homepage.</p>
-											<a href="" className="btn btn-primary shadow-primary" data-name="sliders" onClick={this.handleAction.bind(this, 'edit')}>Edit&nbsp;&nbsp;<i className="mdi mdi-arrow-right"></i></a>
+											<a href="" className="btn btn-primary shadow-primary" data-name="sliders" onClick={this.handleAction.bind(this, 'sliders')}>Edit&nbsp;&nbsp;<i className="mdi mdi-arrow-right"></i></a>
 										</div>
 									</div>
 								</div>
@@ -37,7 +32,7 @@ export default class SaleOfferTimerEdit extends Component {
 										<div className="card-body">
 											<h5 className="card-title">Sale Offer Timer</h5>
 											<p className="card-text">Choose this to offer timer details such as displayed text, remaining time, etc.</p>
-											<a href="#!" className="btn btn-primary shadow-primary" data-name={'saleOfferTime'} onClick={this.handleAction.bind(this, 'update')}>Edit&nbsp;&nbsp;<i className="mdi mdi-arrow-right"></i></a>
+											<a href="#!" className="btn btn-primary shadow-primary" data-name={'saleOfferTime'} onClick={this.handleAction.bind(this, 'saleOfferTime')}>Edit&nbsp;&nbsp;<i className="mdi mdi-arrow-right"></i></a>
 										</div>
 									</div>
 								</div>

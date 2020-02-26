@@ -108,7 +108,7 @@ class CustomerWishlistController extends ExtendedResourceController {
 					]);
 					$cart->addItem($cartItem);
 					$cart->save();
-					$response->status(HttpOkay)->message('Item moved to wishlist.');
+					$response->status(HttpOkay)->message('Item moved to cart.');
 				}
 				else {
 					$response->status(HttpResourceNotFound)->message('Cart already contains the item you specified.');

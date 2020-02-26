@@ -32260,9 +32260,21 @@ object-assign
 	/*!*****************************!*\
   !*** ./resources/js/app.js ***!
   \*****************************/
-	/*! no static exports found */
-	/***/ (function (module, exports, __webpack_require__) {
+	/*! no exports provided */
+	/***/ (function (module, __webpack_exports__, __webpack_require__) {
 
+		"use strict";
+		__webpack_require__.r(__webpack_exports__);
+		/* harmony import */
+		var react_dom__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+		/* harmony import */
+		var react_dom__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_0__);
+		/* harmony import */
+		var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+		/* harmony import */
+		var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+		/* harmony import */
+		var _components_admin_shop_home_page_HomePageAppearance__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/admin/shop/home-page/HomePageAppearance */ "./resources/js/components/admin/shop/home-page/HomePageAppearance.jsx");
 		/**
 		 * First we will load all of this project's JavaScript dependencies which
 		 * includes React and other helpers. It's a great starting point while
@@ -32274,7 +32286,309 @@ object-assign
 		 * the page. Then, you may begin adding components to this application
 		 * or customize the JavaScript scaffolding to fit your unique needs.
 		 */
-		__webpack_require__(/*! ./components/admin/shop/sale-offer/SaleOfferTimerEdit */ "./resources/js/components/admin/shop/sale-offer/SaleOfferTimerEdit.jsx");
+
+
+		__webpack_require__(/*! ./components/admin/shop/home-page/HomePageAppearance */ "./resources/js/components/admin/shop/home-page/HomePageAppearance.jsx");
+
+		if (document.getElementById('react')) {
+			react_dom__WEBPACK_IMPORTED_MODULE_0___default.a.render(react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_admin_shop_home_page_HomePageAppearance__WEBPACK_IMPORTED_MODULE_2__["default"], null), document.getElementById('react'));
+		}
+
+		/***/
+	}),
+
+	/***/ "./resources/js/components/admin/common/PageHeader.jsx":
+	/*!*************************************************************!*\
+  !*** ./resources/js/components/admin/common/PageHeader.jsx ***!
+  \*************************************************************/
+	/*! exports provided: default */
+	/***/ (function (module, __webpack_exports__, __webpack_require__) {
+
+		"use strict";
+		__webpack_require__.r(__webpack_exports__);
+		/* harmony export (binding) */
+		__webpack_require__.d(__webpack_exports__, "default", function () {
+			return PageHeader;
+		});
+		/* harmony import */
+		var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+		/* harmony import */
+		var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+		function _typeof(obj) {
+			"@babel/helpers - typeof";
+			if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+				_typeof = function _typeof(obj) {
+					return typeof obj;
+				};
+			} else {
+				_typeof = function _typeof(obj) {
+					return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+				};
+			}
+			return _typeof(obj);
+		}
+
+		function _classCallCheck(instance, Constructor) {
+			if (!(instance instanceof Constructor)) {
+				throw new TypeError("Cannot call a class as a function");
+			}
+		}
+
+		function _defineProperties(target, props) {
+			for (var i = 0; i < props.length; i++) {
+				var descriptor = props[i];
+				descriptor.enumerable = descriptor.enumerable || false;
+				descriptor.configurable = true;
+				if ("value" in descriptor) descriptor.writable = true;
+				Object.defineProperty(target, descriptor.key, descriptor);
+			}
+		}
+
+		function _createClass(Constructor, protoProps, staticProps) {
+			if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+			if (staticProps) _defineProperties(Constructor, staticProps);
+			return Constructor;
+		}
+
+		function _possibleConstructorReturn(self, call) {
+			if (call && (_typeof(call) === "object" || typeof call === "function")) {
+				return call;
+			}
+			return _assertThisInitialized(self);
+		}
+
+		function _assertThisInitialized(self) {
+			if (self === void 0) {
+				throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+			}
+			return self;
+		}
+
+		function _getPrototypeOf(o) {
+			_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+				return o.__proto__ || Object.getPrototypeOf(o);
+			};
+			return _getPrototypeOf(o);
+		}
+
+		function _inherits(subClass, superClass) {
+			if (typeof superClass !== "function" && superClass !== null) {
+				throw new TypeError("Super expression must either be null or a function");
+			}
+			subClass.prototype = Object.create(superClass && superClass.prototype, {constructor: {value: subClass, writable: true, configurable: true}});
+			if (superClass) _setPrototypeOf(subClass, superClass);
+		}
+
+		function _setPrototypeOf(o, p) {
+			_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+				o.__proto__ = p;
+				return o;
+			};
+			return _setPrototypeOf(o, p);
+		}
+
+
+		var PageHeader =
+			/*#__PURE__*/
+			function (_React$Component) {
+				_inherits(PageHeader, _React$Component);
+
+				function PageHeader(props) {
+					_classCallCheck(this, PageHeader);
+
+					return _possibleConstructorReturn(this, _getPrototypeOf(PageHeader).call(this, props));
+				}
+
+				_createClass(PageHeader, [{
+					key: "render",
+					value: function render() {
+						return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "row"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "col-8"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+							className: "page-title animatable"
+						}, this.props.title)), this.props.text.length > 0 && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "col-4 my-auto"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+							className: "float-right btn btn-outline-primary waves-effect waves-light shadow-sm fadeInRightBig",
+							href: "javascript:void(0);",
+							onClick: "{this.props.handleClick}"
+						}, this.props.text)));
+					}
+				}]);
+
+				return PageHeader;
+			}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+
+		/***/
+	}),
+
+	/***/ "./resources/js/components/admin/shop/home-page/HomePageAppearance.jsx":
+	/*!*****************************************************************************!*\
+  !*** ./resources/js/components/admin/shop/home-page/HomePageAppearance.jsx ***!
+  \*****************************************************************************/
+	/*! exports provided: default */
+	/***/ (function (module, __webpack_exports__, __webpack_require__) {
+
+		"use strict";
+		__webpack_require__.r(__webpack_exports__);
+		/* harmony export (binding) */
+		__webpack_require__.d(__webpack_exports__, "default", function () {
+			return HomePageAppearance;
+		});
+		/* harmony import */
+		var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+		/* harmony import */
+		var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+		/* harmony import */
+		var _sale_offer_SaleOfferTimerEdit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../sale-offer/SaleOfferTimerEdit */ "./resources/js/components/admin/shop/sale-offer/SaleOfferTimerEdit.jsx");
+		/* harmony import */
+		var _sale_offer_SaleOfferTimerUpdate__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../sale-offer/SaleOfferTimerUpdate */ "./resources/js/components/admin/shop/sale-offer/SaleOfferTimerUpdate.jsx");
+
+		function _typeof(obj) {
+			"@babel/helpers - typeof";
+			if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+				_typeof = function _typeof(obj) {
+					return typeof obj;
+				};
+			} else {
+				_typeof = function _typeof(obj) {
+					return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+				};
+			}
+			return _typeof(obj);
+		}
+
+		function _classCallCheck(instance, Constructor) {
+			if (!(instance instanceof Constructor)) {
+				throw new TypeError("Cannot call a class as a function");
+			}
+		}
+
+		function _defineProperties(target, props) {
+			for (var i = 0; i < props.length; i++) {
+				var descriptor = props[i];
+				descriptor.enumerable = descriptor.enumerable || false;
+				descriptor.configurable = true;
+				if ("value" in descriptor) descriptor.writable = true;
+				Object.defineProperty(target, descriptor.key, descriptor);
+			}
+		}
+
+		function _createClass(Constructor, protoProps, staticProps) {
+			if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+			if (staticProps) _defineProperties(Constructor, staticProps);
+			return Constructor;
+		}
+
+		function _possibleConstructorReturn(self, call) {
+			if (call && (_typeof(call) === "object" || typeof call === "function")) {
+				return call;
+			}
+			return _assertThisInitialized(self);
+		}
+
+		function _assertThisInitialized(self) {
+			if (self === void 0) {
+				throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+			}
+			return self;
+		}
+
+		function _getPrototypeOf(o) {
+			_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+				return o.__proto__ || Object.getPrototypeOf(o);
+			};
+			return _getPrototypeOf(o);
+		}
+
+		function _inherits(subClass, superClass) {
+			if (typeof superClass !== "function" && superClass !== null) {
+				throw new TypeError("Super expression must either be null or a function");
+			}
+			subClass.prototype = Object.create(superClass && superClass.prototype, {constructor: {value: subClass, writable: true, configurable: true}});
+			if (superClass) _setPrototypeOf(subClass, superClass);
+		}
+
+		function _setPrototypeOf(o, p) {
+			_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+				o.__proto__ = p;
+				return o;
+			};
+			return _setPrototypeOf(o, p);
+		}
+
+
+		var HomePageAppearance =
+			/*#__PURE__*/
+			function (_React$Component) {
+				_inherits(HomePageAppearance, _React$Component);
+
+				function HomePageAppearance(props) {
+					var _this;
+
+					_classCallCheck(this, HomePageAppearance);
+
+					_this = _possibleConstructorReturn(this, _getPrototypeOf(HomePageAppearance).call(this, props));
+					_this.state = {
+						action: 'edit'
+					};
+					return _this;
+				}
+
+				_createClass(HomePageAppearance, [{
+					key: "componentDidMount",
+					value: function componentDidMount() {
+						var _this2 = this;
+
+						setInterval(function () {
+							return _this2.handleTimer();
+						}, 2000);
+					}
+				}, {
+					key: "handleTimer",
+					value: function handleTimer() {
+						if (this.state.action === 'edit') {
+							this.setState({
+								action: 'update'
+							});
+						} else {
+							this.setState({
+								action: 'edit'
+							});
+						}
+					}
+				}, {
+					key: "handleAction",
+					value: function handleAction(value) {
+						this.setState({
+							action: value
+						});
+					}
+				}, {
+					key: "renderElement",
+					value: function renderElement() {
+						if (this.state.action === 'edit') {
+							return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_sale_offer_SaleOfferTimerEdit__WEBPACK_IMPORTED_MODULE_1__["default"], null);
+						} else if (this.state.action === 'update') {
+							return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_sale_offer_SaleOfferTimerUpdate__WEBPACK_IMPORTED_MODULE_2__["default"], null);
+						} else {
+							return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_sale_offer_SaleOfferTimerEdit__WEBPACK_IMPORTED_MODULE_1__["default"], null);
+						}
+					}
+				}, {
+					key: "render",
+					value: function render() {
+						return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, this.renderElement());
+					}
+				}]);
+
+				return HomePageAppearance;
+			}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
 
 		/***/
 	}),
@@ -32300,6 +32614,8 @@ object-assign
 		var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 		/* harmony import */
 		var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
+		/* harmony import */
+		var _common_PageHeader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../common/PageHeader */ "./resources/js/components/admin/common/PageHeader.jsx");
 
 		function _typeof(obj) {
 			"@babel/helpers - typeof";
@@ -32380,13 +32696,22 @@ object-assign
 			function (_Component) {
 				_inherits(SaleOfferTimerEdit, _Component);
 
-				function SaleOfferTimerEdit() {
+				function SaleOfferTimerEdit(props) {
+					var _this;
+
 					_classCallCheck(this, SaleOfferTimerEdit);
 
-					return _possibleConstructorReturn(this, _getPrototypeOf(SaleOfferTimerEdit).apply(this, arguments));
+					_this = _possibleConstructorReturn(this, _getPrototypeOf(SaleOfferTimerEdit).call(this, props));
+					console.log('Rendering edit');
+					return _this;
 				}
 
 				_createClass(SaleOfferTimerEdit, [{
+					key: "handleAction",
+					value: function handleAction(value) {
+						event.preventDefault();
+					}
+				}, {
 					key: "render",
 					value: function render() {
 						return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -32397,14 +32722,18 @@ object-assign
 							className: "card shadow-sm custom-card"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "card-header py-0"
-						}, "@include('admin.extras.header', ['title'=>'Customize Shop Appearance'])"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_PageHeader__WEBPACK_IMPORTED_MODULE_2__["default"], {
+							title: 'Modify Sale Offer Details',
+							action: this.handleAction,
+							text: ''
+						})), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "card-body animatable"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "row"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "col-sm-6 pr-0"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated slideInDown"
+							className: "card shadow-sm border animated zoomIn"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "card-body"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
@@ -32413,13 +32742,15 @@ object-assign
 							className: "card-text"
 						}, "Choose this to update sliders which show up in the header section of shop homepage."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
 							href: "",
-							className: "btn btn-primary shadow-primary"
+							className: "btn btn-primary shadow-primary",
+							"data-name": "sliders",
+							onClick: this.handleAction.bind(this, 'edit')
 						}, "Edit\xA0\xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
 							className: "mdi mdi-arrow-right"
 						}))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "col-sm-6 mr-0"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated slideInDown"
+							className: "card shadow-sm border animated zoomIn"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "card-body"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
@@ -32427,8 +32758,10 @@ object-assign
 						}, "Sale Offer Timer"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
 							className: "card-text"
 						}, "Choose this to offer timer details such as displayed text, remaining time, etc."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-							href: "{{route('admin.shop.sale-offer-timer.edit')}}",
-							className: "btn btn-primary shadow-primary"
+							href: "#!",
+							className: "btn btn-primary shadow-primary",
+							"data-name": 'saleOfferTime',
+							onClick: this.handleAction.bind(this, 'update')
 						}, "Edit\xA0\xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
 							className: "mdi mdi-arrow-right"
 						})))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -32436,7 +32769,7 @@ object-assign
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "col-sm-6 pr-0"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated slideInDown"
+							className: "card shadow-sm border animated zoomIn"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "card-body"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
@@ -32445,13 +32778,15 @@ object-assign
 							className: "card-text"
 						}, "Choose this to modify categories which will show up with a banner on the homepage."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
 							href: "",
-							className: "btn btn-primary shadow-primary"
+							className: "btn btn-primary shadow-primary",
+							"data-name": 'brandsInFocus',
+							onClick: this.handleAction.bind(this)
 						}, "Edit\xA0\xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
 							className: "mdi mdi-arrow-right"
 						}))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "col-sm-6 mr-0"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated slideInDown"
+							className: "card shadow-sm border animated zoomIn"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "card-body"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
@@ -32460,7 +32795,9 @@ object-assign
 							className: "card-text"
 						}, "Choose this to marks products which will show up in today's hot deals."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
 							href: "",
-							className: "btn btn-primary shadow-primary"
+							className: "btn btn-primary shadow-primary",
+							"data-name": 'todaysDeals',
+							onClick: this.handleAction.bind(this)
 						}, "Edit\xA0\xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
 							className: "mdi mdi-arrow-right"
 						})))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -32468,7 +32805,7 @@ object-assign
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "col-sm-6 pr-0"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated slideInDown"
+							className: "card shadow-sm border animated zoomIn"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "card-body"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
@@ -32477,13 +32814,15 @@ object-assign
 							className: "card-text"
 						}, "Choose this to update which categories will shop up in popular stuff section."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
 							href: "",
-							className: "btn btn-primary shadow-primary"
+							className: "btn btn-primary shadow-primary",
+							"data-name": 'popularStuff',
+							onClick: this.handleAction.bind(this)
 						}, "Edit\xA0\xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
 							className: "mdi mdi-arrow-right"
 						}))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "col-sm-6 mr-0"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated slideInDown"
+							className: "card shadow-sm border animated zoomIn"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "card-body"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
@@ -32492,7 +32831,9 @@ object-assign
 							className: "card-text"
 						}, "Choose this to update what categories will show up in trending now section."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
 							href: "",
-							className: "btn btn-primary shadow-primary"
+							className: "btn btn-primary shadow-primary",
+							"data-name": 'trendingNow',
+							onClick: this.handleAction.bind(this)
 						}, "Edit\xA0\xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
 							className: "mdi mdi-arrow-right"
 						}))))))))));
@@ -32503,9 +32844,256 @@ object-assign
 			}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 
-		if (document.getElementById('react')) {
-			react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(SaleOfferTimerEdit, null), document.getElementById('example'));
+		/***/
+	}),
+
+	/***/ "./resources/js/components/admin/shop/sale-offer/SaleOfferTimerUpdate.jsx":
+	/*!********************************************************************************!*\
+  !*** ./resources/js/components/admin/shop/sale-offer/SaleOfferTimerUpdate.jsx ***!
+  \********************************************************************************/
+	/*! exports provided: default */
+	/***/ (function (module, __webpack_exports__, __webpack_require__) {
+
+		"use strict";
+		__webpack_require__.r(__webpack_exports__);
+		/* harmony export (binding) */
+		__webpack_require__.d(__webpack_exports__, "default", function () {
+			return SaleOfferTimerUpdate;
+		});
+		/* harmony import */
+		var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+		/* harmony import */
+		var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+		/* harmony import */
+		var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+		/* harmony import */
+		var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
+		/* harmony import */
+		var _common_PageHeader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../common/PageHeader */ "./resources/js/components/admin/common/PageHeader.jsx");
+
+		function _typeof(obj) {
+			"@babel/helpers - typeof";
+			if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+				_typeof = function _typeof(obj) {
+					return typeof obj;
+				};
+			} else {
+				_typeof = function _typeof(obj) {
+					return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+				};
+			}
+			return _typeof(obj);
 		}
+
+		function _classCallCheck(instance, Constructor) {
+			if (!(instance instanceof Constructor)) {
+				throw new TypeError("Cannot call a class as a function");
+			}
+		}
+
+		function _defineProperties(target, props) {
+			for (var i = 0; i < props.length; i++) {
+				var descriptor = props[i];
+				descriptor.enumerable = descriptor.enumerable || false;
+				descriptor.configurable = true;
+				if ("value" in descriptor) descriptor.writable = true;
+				Object.defineProperty(target, descriptor.key, descriptor);
+			}
+		}
+
+		function _createClass(Constructor, protoProps, staticProps) {
+			if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+			if (staticProps) _defineProperties(Constructor, staticProps);
+			return Constructor;
+		}
+
+		function _possibleConstructorReturn(self, call) {
+			if (call && (_typeof(call) === "object" || typeof call === "function")) {
+				return call;
+			}
+			return _assertThisInitialized(self);
+		}
+
+		function _assertThisInitialized(self) {
+			if (self === void 0) {
+				throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+			}
+			return self;
+		}
+
+		function _getPrototypeOf(o) {
+			_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+				return o.__proto__ || Object.getPrototypeOf(o);
+			};
+			return _getPrototypeOf(o);
+		}
+
+		function _inherits(subClass, superClass) {
+			if (typeof superClass !== "function" && superClass !== null) {
+				throw new TypeError("Super expression must either be null or a function");
+			}
+			subClass.prototype = Object.create(superClass && superClass.prototype, {constructor: {value: subClass, writable: true, configurable: true}});
+			if (superClass) _setPrototypeOf(subClass, superClass);
+		}
+
+		function _setPrototypeOf(o, p) {
+			_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+				o.__proto__ = p;
+				return o;
+			};
+			return _setPrototypeOf(o, p);
+		}
+
+
+		var SaleOfferTimerUpdate =
+			/*#__PURE__*/
+			function (_Component) {
+				_inherits(SaleOfferTimerUpdate, _Component);
+
+				function SaleOfferTimerUpdate() {
+					_classCallCheck(this, SaleOfferTimerUpdate);
+
+					return _possibleConstructorReturn(this, _getPrototypeOf(SaleOfferTimerUpdate).apply(this, arguments));
+				}
+
+				_createClass(SaleOfferTimerUpdate, [{
+					key: "handleAction",
+					value: function handleAction(value) {
+						event.preventDefault();
+						console.log('Rendering update');
+					}
+				}, {
+					key: "render",
+					value: function render() {
+						return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "row"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "col-12"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "card shadow-sm custom-card"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "card-header py-0"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_PageHeader__WEBPACK_IMPORTED_MODULE_2__["default"], {
+							title: 'Modify Sale Offer Details Update',
+							action: this.handleAction,
+							text: ''
+						})), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "card-body animatable"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "row"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "col-sm-6 pr-0"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "card shadow-sm border animated zoomIn"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "card-body"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+							className: "card-title"
+						}, "Sliders"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+							className: "card-text"
+						}, "Choose this to update sliders which show up in the header section of shop homepage."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+							href: "",
+							className: "btn btn-primary shadow-primary",
+							"data-name": "sliders",
+							onClick: this.handleAction.bind(this, 'sliders')
+						}, "Edit\xA0\xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+							className: "mdi mdi-arrow-right"
+						}))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "col-sm-6 mr-0"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "card shadow-sm border animated zoomIn"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "card-body"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+							className: "card-title"
+						}, "Sale Offer Timer"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+							className: "card-text"
+						}, "Choose this to offer timer details such as displayed text, remaining time, etc."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+							href: "#!",
+							className: "btn btn-primary shadow-primary",
+							"data-name": 'saleOfferTime',
+							onClick: this.handleAction.bind(this, 'saleOfferTime')
+						}, "Edit\xA0\xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+							className: "mdi mdi-arrow-right"
+						})))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "row mt-3"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "col-sm-6 pr-0"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "card shadow-sm border animated zoomIn"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "card-body"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+							className: "card-title"
+						}, "Brands in Focus"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+							className: "card-text"
+						}, "Choose this to modify categories which will show up with a banner on the homepage."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+							href: "",
+							className: "btn btn-primary shadow-primary",
+							"data-name": 'brandsInFocus',
+							onClick: this.handleAction.bind(this)
+						}, "Edit\xA0\xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+							className: "mdi mdi-arrow-right"
+						}))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "col-sm-6 mr-0"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "card shadow-sm border animated zoomIn"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "card-body"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+							className: "card-title"
+						}, "Today's Deals"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+							className: "card-text"
+						}, "Choose this to marks products which will show up in today's hot deals."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+							href: "",
+							className: "btn btn-primary shadow-primary",
+							"data-name": 'todaysDeals',
+							onClick: this.handleAction.bind(this)
+						}, "Edit\xA0\xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+							className: "mdi mdi-arrow-right"
+						})))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "row mt-3"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "col-sm-6 pr-0"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "card shadow-sm border animated zoomIn"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "card-body"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+							className: "card-title"
+						}, "Popular Stuff"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+							className: "card-text"
+						}, "Choose this to update which categories will shop up in popular stuff section."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+							href: "",
+							className: "btn btn-primary shadow-primary",
+							"data-name": 'popularStuff',
+							onClick: this.handleAction.bind(this)
+						}, "Edit\xA0\xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+							className: "mdi mdi-arrow-right"
+						}))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "col-sm-6 mr-0"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "card shadow-sm border animated zoomIn"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "card-body"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+							className: "card-title"
+						}, "Trending Now"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+							className: "card-text"
+						}, "Choose this to update what categories will show up in trending now section."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+							href: "",
+							className: "btn btn-primary shadow-primary",
+							"data-name": 'trendingNow',
+							onClick: this.handleAction.bind(this)
+						}, "Edit\xA0\xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+							className: "mdi mdi-arrow-right"
+						}))))))))));
+					}
+				}]);
+
+				return SaleOfferTimerUpdate;
+			}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
 
 		/***/
 	}),
