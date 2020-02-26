@@ -168,6 +168,23 @@ return [
 				'active' => ['bail', 'required', 'boolean'],
 			],
 		],
+		'home-banner' => [
+			'store' => [
+				'title' => ['bail', 'required', 'string', 'min:1', 'max:256'], 
+
+				'banner' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp'],
+				'target' => ['bail', 'required', 'url'],
+				'stars' => ['bail', 'nullable', 'numeric', 'min:0', 'max:5'],
+				'active' => ['bail', 'required', 'boolean'],
+			],
+			'update' => [
+				'title' => ['bail', 'required', 'string', 'min:1', 'max:256'], 
+				'banner' => ['bail', 'nullable', 'mimes:jpg,jpeg,png,bmp'],
+				'target' => ['bail', 'required', 'url'],
+				'stars' => ['bail', 'nullable', 'numeric', 'min:0', 'max:5'],
+				'active' => ['bail', 'required', 'boolean'],
+			],
+		],
 
 		'videos' => [
 			'attributes' => [

@@ -24,9 +24,11 @@ use App\Http\Controllers\Web\Admin\TvSeries\TvSeriesBase;
 use App\Http\Controllers\Web\Admin\TvSeriesController;
 use App\Http\Controllers\Web\Admin\Videos\VideosBase;
 use App\Http\Controllers\Web\Admin\VideosController;
+use App\Http\Controllers\Web\Admin\ShopBannerController;
 use App\Models\Category;
 use App\Models\Genre;
 use App\Models\Slider;
+use App\Models\HomeBanner;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -164,6 +166,18 @@ Route::prefix('admin')->group(function (){
 			Route::post('{id}', [SlidersController::class, Methods::Update])->name('admin.sliders.update');
 			Route::put('{id}/status', [SlidersController::class, Methods::UpdateStatus])->name('admin.sliders.update.status');
 			Route::delete('{id}', [SlidersController::class, Methods::Delete])->name('admin.sliders.delete');
+		});
+
+		// Home Page Banner Route(s)
+		Route::prefix('shop-banners')->middleware('auth:admin')->group(function (){
+			Route::get('', [ShopBannerController::class, Methods::Index])->name('admin.shop-banners.index');
+			Route::get('create', [ShopBannerController::class, Methods::Create])->name('admin.shop-banner.create');
+			Route::get('{id}/edit', [ShopBannerController::class, Methods::Edit])->name('admin.shop-banner.edit');
+			Route::get('{id}', [ShopBannerController::class, Methods::Show])->name('admin.shop-banner.show');
+			Route::post('', [ShopBannerController::class, Methods::Store])->name('admin.shop-banner.store');
+			Route::post('{id}', [ShopBannerController::class, Methods::Update])->name('admin.shop-banner.update');
+			Route::put('{id}/status', [ShopBannerController::class, Methods::UpdateStatus])->name('admin.shop-banner.update.status');
+			Route::delete('{id}', [ShopBannerController::class, Methods::Delete])->name('admin.shop-banner.delete');
 		});
 
 		// Images Route(s)

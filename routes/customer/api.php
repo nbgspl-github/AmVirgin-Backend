@@ -8,6 +8,7 @@ use App\Http\Controllers\App\Customer\Playback\TrailerPlayback;
 use App\Http\Controllers\App\Customer\PopularPicksController;
 use App\Http\Controllers\App\Customer\ProductsController;
 use App\Http\Controllers\App\Customer\SlidersController;
+use App\Http\Controllers\App\Customer\ShopBannerController;
 use App\Http\Controllers\App\Customer\TrendController;
 use App\Http\Controllers\App\Customer\TwoFactorAuthController;
 use Illuminate\Support\Facades\Route;
@@ -73,4 +74,8 @@ Route::prefix('wishlist')->middleware('auth:customer-api')->group(function () {
 	Route::put('cart/{productId}', [CustomerWishlistController::class, 'moveToCart']);
 	Route::put('/{productId}', [CustomerWishlistController::class, 'store']);
 	Route::delete('/{productId}', [CustomerWishlistController::class, 'move']);
+});
+
+Route::prefix('shop-banner')->group(function () {
+	Route::get('/', [ShopBannerController::class, 'index'])->name('customer.shop-banner.index');
 });

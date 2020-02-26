@@ -32,6 +32,9 @@
 				<li>
 					<a href="{{route("admin.sliders.index")}}" class="waves-effect animatableX"><i class="mdi mdi-skip-next-circle mt-1"></i> <span>Sliders</span></a>
 				</li>
+				<li>
+					<a href="{{route("admin.shop-banners.index")}}" class="waves-effect animatableX"><i class="mdi mdi-skip-next-circle mt-1"></i> <span>Shop Banners</span></a>
+				</li>
 
 				<li class="menu-title text-primary animatableX">Shopping</li>
                 <li>
