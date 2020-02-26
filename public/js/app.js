@@ -32447,6 +32447,8 @@ object-assign
 		var _sale_offer_SaleOfferTimerEdit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../sale-offer/SaleOfferTimerEdit */ "./resources/js/components/admin/shop/sale-offer/SaleOfferTimerEdit.jsx");
 		/* harmony import */
 		var _sale_offer_SaleOfferTimerUpdate__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../sale-offer/SaleOfferTimerUpdate */ "./resources/js/components/admin/shop/sale-offer/SaleOfferTimerUpdate.jsx");
+		/* harmony import */
+		var _common_PageHeader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../common/PageHeader */ "./resources/js/components/admin/common/PageHeader.jsx");
 
 		function _typeof(obj) {
 			"@babel/helpers - typeof";
@@ -32534,7 +32536,8 @@ object-assign
 
 					_this = _possibleConstructorReturn(this, _getPrototypeOf(HomePageAppearance).call(this, props));
 					_this.state = {
-						action: 'edit'
+						action: 'edit',
+						title: 'Edit'
 					};
 					return _this;
 				}
@@ -32553,11 +32556,13 @@ object-assign
 					value: function handleTimer() {
 						if (this.state.action === 'edit') {
 							this.setState({
-								action: 'update'
+								action: 'update',
+								title: 'Update'
 							});
 						} else {
 							this.setState({
-								action: 'edit'
+								action: 'edit',
+								title: 'Edit'
 							});
 						}
 					}
@@ -32582,7 +32587,19 @@ object-assign
 				}, {
 					key: "render",
 					value: function render() {
-						return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, this.renderElement());
+						return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "row"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "col-12"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "card shadow-sm custom-card"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+							className: "card-header py-0"
+						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_PageHeader__WEBPACK_IMPORTED_MODULE_3__["default"], {
+							title: this.state.title,
+							action: this.handleAction,
+							text: ''
+						})), this.renderElement())));
 					}
 				}]);
 
@@ -32610,12 +32627,6 @@ object-assign
 		var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 		/* harmony import */
 		var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-		/* harmony import */
-		var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-		/* harmony import */
-		var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
-		/* harmony import */
-		var _common_PageHeader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../common/PageHeader */ "./resources/js/components/admin/common/PageHeader.jsx");
 
 		function _typeof(obj) {
 			"@babel/helpers - typeof";
@@ -32715,25 +32726,13 @@ object-assign
 					key: "render",
 					value: function render() {
 						return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "row"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "col-12"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm custom-card"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card-header py-0"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_PageHeader__WEBPACK_IMPORTED_MODULE_2__["default"], {
-							title: 'Modify Sale Offer Details',
-							action: this.handleAction,
-							text: ''
-						})), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "card-body animatable"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "row"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "col-sm-6 pr-0"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated zoomIn"
+							className: "card shadow-sm border animated"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "card-body"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
@@ -32750,7 +32749,7 @@ object-assign
 						}))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "col-sm-6 mr-0"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated zoomIn"
+							className: "card shadow-sm border animated"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "card-body"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
@@ -32769,7 +32768,7 @@ object-assign
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "col-sm-6 pr-0"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated zoomIn"
+							className: "card shadow-sm border animated"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "card-body"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
@@ -32786,7 +32785,7 @@ object-assign
 						}))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "col-sm-6 mr-0"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated zoomIn"
+							className: "card shadow-sm border animated"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "card-body"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
@@ -32805,7 +32804,7 @@ object-assign
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "col-sm-6 pr-0"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated zoomIn"
+							className: "card shadow-sm border animated"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "card-body"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
@@ -32822,7 +32821,7 @@ object-assign
 						}))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "col-sm-6 mr-0"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated zoomIn"
+							className: "card shadow-sm border animated"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "card-body"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
@@ -32836,7 +32835,7 @@ object-assign
 							onClick: this.handleAction.bind(this)
 						}, "Edit\xA0\xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
 							className: "mdi mdi-arrow-right"
-						}))))))))));
+						})))))));
 					}
 				}]);
 
@@ -32966,25 +32965,13 @@ object-assign
 					key: "render",
 					value: function render() {
 						return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "row"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "col-12"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm custom-card"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card-header py-0"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_common_PageHeader__WEBPACK_IMPORTED_MODULE_2__["default"], {
-							title: 'Modify Sale Offer Details Update',
-							action: this.handleAction,
-							text: ''
-						})), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "card-body animatable"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "row"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "col-sm-6 pr-0"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated zoomIn"
+							className: "card shadow-sm border animated"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "card-body"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
@@ -33001,7 +32988,7 @@ object-assign
 						}))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "col-sm-6 mr-0"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated zoomIn"
+							className: "card shadow-sm border animated"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "card-body"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
@@ -33020,7 +33007,7 @@ object-assign
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "col-sm-6 pr-0"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated zoomIn"
+							className: "card shadow-sm border animated"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "card-body"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
@@ -33037,7 +33024,7 @@ object-assign
 						}))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "col-sm-6 mr-0"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated zoomIn"
+							className: "card shadow-sm border animated"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "card-body"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
@@ -33056,7 +33043,7 @@ object-assign
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "col-sm-6 pr-0"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated zoomIn"
+							className: "card shadow-sm border animated"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "card-body"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
@@ -33073,7 +33060,7 @@ object-assign
 						}))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "col-sm-6 mr-0"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated zoomIn"
+							className: "card shadow-sm border animated"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "card-body"
 						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
@@ -33087,7 +33074,7 @@ object-assign
 							onClick: this.handleAction.bind(this)
 						}, "Edit\xA0\xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
 							className: "mdi mdi-arrow-right"
-						}))))))))));
+						})))))));
 					}
 				}]);
 

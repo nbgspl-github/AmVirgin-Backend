@@ -1,12 +1,14 @@
 import React from 'react';
 import SaleOfferTimerEdit from "../sale-offer/SaleOfferTimerEdit";
 import SaleOfferTimerUpdate from "../sale-offer/SaleOfferTimerUpdate";
+import PageHeader from "../../common/PageHeader";
 
 export default class HomePageAppearance extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			action: 'edit'
+			action: 'edit',
+			title: 'Edit'
 		};
 	}
 
@@ -17,11 +19,13 @@ export default class HomePageAppearance extends React.Component {
 	handleTimer() {
 		if (this.state.action === 'edit') {
 			this.setState({
-				action: 'update'
+				action: 'update',
+				title: 'Update'
 			});
 		} else {
 			this.setState({
-				action: 'edit'
+				action: 'edit',
+				title: 'Edit'
 			});
 		}
 	}
@@ -44,11 +48,18 @@ export default class HomePageAppearance extends React.Component {
 
 	render() {
 		return (
-			<React.Fragment>
-				{
-					this.renderElement()
-				}
-			</React.Fragment>
+			<div className="row">
+				<div className="col-12">
+					<div className="card shadow-sm custom-card">
+						<div className="card-header py-0">
+							<PageHeader title={this.state.title} action={this.handleAction} text={''}/>
+						</div>
+						{
+							this.renderElement()
+						}
+					</div>
+				</div>
+			</div>
 		);
 	}
 }
