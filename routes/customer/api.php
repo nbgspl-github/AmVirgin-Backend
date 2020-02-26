@@ -63,6 +63,7 @@ Route::prefix('playback')->middleware([])->group(function () {
 
 Route::prefix('cart')->middleware([])->group(function () {
 	Route::post('add', [QuoteController::class, 'add']);
+	Route::put('update', [QuoteController::class, 'update']);
 	Route::post('remove', [QuoteController::class, 'remove']);
 	Route::post('destroy', [QuoteController::class, 'destroy']);
 	Route::get('retrieve', [QuoteController::class, 'retrieve']);
@@ -71,11 +72,13 @@ Route::prefix('cart')->middleware([])->group(function () {
 
 Route::prefix('wishlist')->middleware('auth:customer-api')->group(function () {
 	Route::get('/', [CustomerWishlistController::class, 'index']);
-	Route::put('cart/{productId}', [CustomerWishlistController::class, 'moveToCart']);
 	Route::put('/{productId}', [CustomerWishlistController::class, 'store']);
+	Route::delete('/{product}', [CustomerWishlistController::class, 'delete']);
 	Route::delete('/{productId}', [CustomerWishlistController::class, 'move']);
+ 	Route::put('cart/{productId}', [CustomerWishlistController::class, 'moveToCart']);
+ 
 });
 
 Route::prefix('shop-banner')->group(function () {
-	Route::get('/', [ShopBannerController::class, 'index'])->name('customer.shop-banner.index');
+	Route::get('/', [ShopBannerController::class, 'index'])->name('customer.shop-banner.index'); 
 });
