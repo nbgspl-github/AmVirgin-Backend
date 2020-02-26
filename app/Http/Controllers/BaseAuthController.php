@@ -6,7 +6,7 @@
 namespace App\Http\Controllers\App;
 
 use App\Exceptions\ResourceConflictException;
-use App\Exceptions\ResourceNotFoundException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\Auth\Seller\AuthProfileResource;
@@ -116,7 +116,7 @@ abstract class BaseAuthController extends BaseController{
 	protected function throwIfNotFound($conditions){
 		$model = $this->authTarget()::where($conditions)->first();
 		if ($model == null)
-			throw new ResourceNotFoundException();
+			throw new ModelNotFoundException();
 		else
 			return $model;
 	}
@@ -176,7 +176,7 @@ abstract class BaseAuthController extends BaseController{
 			else
 				return $this->success()->message($this->loginSuccess())->setValue('data', $this->loginPayload($seller, $token))->send();
 		}
-		catch (ResourceNotFoundException $exception) {
+		catch (ModelNotFoundException $exception) {
 			return $this->failed()->status(HttpResourceNotFound)->send();
 		}
 		catch (ValidationException $exception) {

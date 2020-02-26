@@ -11,7 +11,7 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.react('resources/js/app.js', 'public/js').styles([
+mix.react('resources/js/app.js', 'public/js/app.js').styles([
 	'resources/css/admin/all.css',
 	'resources/css/admin/animate.css',
 	'resources/css/admin/app.css',

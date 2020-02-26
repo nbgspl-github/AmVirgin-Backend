@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Base;
 
 use App\Exceptions\ResourceConflictException;
-use App\Exceptions\ResourceNotFoundException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\Attributes\AttributeCollection;
 use App\Http\Resources\Attributes\AttributeResource;
@@ -67,7 +67,7 @@ abstract class ResourceController extends BaseController{
 		if ($model != null)
 			return $model;
 		else
-			throw new ResourceNotFoundException();
+			throw new ModelNotFoundException();
 	}
 
 	protected function throwIfParentNotExists($id){
@@ -75,7 +75,7 @@ abstract class ResourceController extends BaseController{
 		if ($model != null)
 			return $model;
 		else
-			throw new ResourceNotFoundException();
+			throw new ModelNotFoundException();
 	}
 
 	protected function user(){
