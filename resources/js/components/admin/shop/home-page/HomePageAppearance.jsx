@@ -1,6 +1,6 @@
 import React from 'react';
-import SaleOfferTimerEdit from "../sale-offer/SaleOfferTimerEdit";
-import SaleOfferTimerUpdate from "../sale-offer/SaleOfferTimerUpdate";
+import Choices from "../sale-offer/Choices";
+import SaleOfferTimerModify from "../sale-offer/SaleOfferTimerModify";
 import PageHeader from "../../common/PageHeader";
 
 export default class HomePageAppearance extends React.Component {
@@ -38,11 +38,11 @@ export default class HomePageAppearance extends React.Component {
 
 	renderElement() {
 		if (this.state.action === 'edit') {
-			return <SaleOfferTimerEdit/>
+			return <Choices/>
 		} else if (this.state.action === 'update') {
-			return <SaleOfferTimerUpdate/>
+			return <SaleOfferTimerModify/>
 		} else {
-			return <SaleOfferTimerEdit/>
+			return <Choices/>
 		}
 	}
 

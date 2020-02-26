@@ -32444,9 +32444,9 @@ object-assign
 		/* harmony import */
 		var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 		/* harmony import */
-		var _sale_offer_SaleOfferTimerEdit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../sale-offer/SaleOfferTimerEdit */ "./resources/js/components/admin/shop/sale-offer/SaleOfferTimerEdit.jsx");
+		var _sale_offer_Choices__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../sale-offer/Choices */ "./resources/js/components/admin/shop/sale-offer/Choices.jsx");
 		/* harmony import */
-		var _sale_offer_SaleOfferTimerUpdate__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../sale-offer/SaleOfferTimerUpdate */ "./resources/js/components/admin/shop/sale-offer/SaleOfferTimerUpdate.jsx");
+		var _sale_offer_SaleOfferTimerModify__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../sale-offer/SaleOfferTimerModify */ "./resources/js/components/admin/shop/sale-offer/SaleOfferTimerModify.jsx");
 		/* harmony import */
 		var _common_PageHeader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../common/PageHeader */ "./resources/js/components/admin/common/PageHeader.jsx");
 
@@ -32577,11 +32577,11 @@ object-assign
 					key: "renderElement",
 					value: function renderElement() {
 						if (this.state.action === 'edit') {
-							return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_sale_offer_SaleOfferTimerEdit__WEBPACK_IMPORTED_MODULE_1__["default"], null);
+							return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_sale_offer_Choices__WEBPACK_IMPORTED_MODULE_1__["default"], null);
 						} else if (this.state.action === 'update') {
-							return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_sale_offer_SaleOfferTimerUpdate__WEBPACK_IMPORTED_MODULE_2__["default"], null);
+							return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_sale_offer_SaleOfferTimerModify__WEBPACK_IMPORTED_MODULE_2__["default"], null);
 						} else {
-							return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_sale_offer_SaleOfferTimerEdit__WEBPACK_IMPORTED_MODULE_1__["default"], null);
+							return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_sale_offer_Choices__WEBPACK_IMPORTED_MODULE_1__["default"], null);
 						}
 					}
 				}, {
@@ -32610,10 +32610,10 @@ object-assign
 		/***/
 	}),
 
-	/***/ "./resources/js/components/admin/shop/sale-offer/SaleOfferTimerEdit.jsx":
-	/*!******************************************************************************!*\
-  !*** ./resources/js/components/admin/shop/sale-offer/SaleOfferTimerEdit.jsx ***!
-  \******************************************************************************/
+	/***/ "./resources/js/components/admin/shop/sale-offer/Choices.jsx":
+	/*!*******************************************************************!*\
+  !*** ./resources/js/components/admin/shop/sale-offer/Choices.jsx ***!
+  \*******************************************************************/
 	/*! exports provided: default */
 	/***/ (function (module, __webpack_exports__, __webpack_require__) {
 
@@ -32621,7 +32621,7 @@ object-assign
 		__webpack_require__.r(__webpack_exports__);
 		/* harmony export (binding) */
 		__webpack_require__.d(__webpack_exports__, "default", function () {
-			return SaleOfferTimerEdit;
+			return Choices;
 		});
 		/* harmony import */
 		var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
@@ -32702,22 +32702,18 @@ object-assign
 		}
 
 
-		var SaleOfferTimerEdit =
+		var Choices =
 			/*#__PURE__*/
 			function (_Component) {
-				_inherits(SaleOfferTimerEdit, _Component);
+				_inherits(Choices, _Component);
 
-				function SaleOfferTimerEdit(props) {
-					var _this;
+				function Choices(props) {
+					_classCallCheck(this, Choices);
 
-					_classCallCheck(this, SaleOfferTimerEdit);
-
-					_this = _possibleConstructorReturn(this, _getPrototypeOf(SaleOfferTimerEdit).call(this, props));
-					console.log('Rendering edit');
-					return _this;
+					return _possibleConstructorReturn(this, _getPrototypeOf(Choices).call(this, props));
 				}
 
-				_createClass(SaleOfferTimerEdit, [{
+				_createClass(Choices, [{
 					key: "handleAction",
 					value: function handleAction(value) {
 						event.preventDefault();
@@ -32839,16 +32835,16 @@ object-assign
 					}
 				}]);
 
-				return SaleOfferTimerEdit;
+				return Choices;
 			}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 
 		/***/
 	}),
 
-	/***/ "./resources/js/components/admin/shop/sale-offer/SaleOfferTimerUpdate.jsx":
+	/***/ "./resources/js/components/admin/shop/sale-offer/SaleOfferTimerModify.jsx":
 	/*!********************************************************************************!*\
-  !*** ./resources/js/components/admin/shop/sale-offer/SaleOfferTimerUpdate.jsx ***!
+  !*** ./resources/js/components/admin/shop/sale-offer/SaleOfferTimerModify.jsx ***!
   \********************************************************************************/
 	/*! exports provided: default */
 	/***/ (function (module, __webpack_exports__, __webpack_require__) {
@@ -32857,18 +32853,12 @@ object-assign
 		__webpack_require__.r(__webpack_exports__);
 		/* harmony export (binding) */
 		__webpack_require__.d(__webpack_exports__, "default", function () {
-			return SaleOfferTimerUpdate;
+			return SaleOfferTimerModify;
 		});
 		/* harmony import */
 		var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 		/* harmony import */
 		var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-		/* harmony import */
-		var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-		/* harmony import */
-		var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
-		/* harmony import */
-		var _common_PageHeader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../common/PageHeader */ "./resources/js/components/admin/common/PageHeader.jsx");
 
 		function _typeof(obj) {
 			"@babel/helpers - typeof";
@@ -32944,141 +32934,32 @@ object-assign
 		}
 
 
-		var SaleOfferTimerUpdate =
+		var SaleOfferTimerModify =
 			/*#__PURE__*/
 			function (_Component) {
-				_inherits(SaleOfferTimerUpdate, _Component);
+				_inherits(SaleOfferTimerModify, _Component);
 
-				function SaleOfferTimerUpdate() {
-					_classCallCheck(this, SaleOfferTimerUpdate);
+				function SaleOfferTimerModify() {
+					_classCallCheck(this, SaleOfferTimerModify);
 
-					return _possibleConstructorReturn(this, _getPrototypeOf(SaleOfferTimerUpdate).apply(this, arguments));
+					return _possibleConstructorReturn(this, _getPrototypeOf(SaleOfferTimerModify).apply(this, arguments));
 				}
 
-				_createClass(SaleOfferTimerUpdate, [{
+				_createClass(SaleOfferTimerModify, [{
 					key: "handleAction",
 					value: function handleAction(value) {
 						event.preventDefault();
-						console.log('Rendering update');
 					}
 				}, {
 					key: "render",
 					value: function render() {
 						return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
 							className: "card-body animatable"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "row"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "col-sm-6 pr-0"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card-body"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
-							className: "card-title"
-						}, "Sliders"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-							className: "card-text"
-						}, "Choose this to update sliders which show up in the header section of shop homepage."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-							href: "",
-							className: "btn btn-primary shadow-primary",
-							"data-name": "sliders",
-							onClick: this.handleAction.bind(this, 'sliders')
-						}, "Edit\xA0\xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-							className: "mdi mdi-arrow-right"
-						}))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "col-sm-6 mr-0"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card-body"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
-							className: "card-title"
-						}, "Sale Offer Timer"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-							className: "card-text"
-						}, "Choose this to offer timer details such as displayed text, remaining time, etc."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-							href: "#!",
-							className: "btn btn-primary shadow-primary",
-							"data-name": 'saleOfferTime',
-							onClick: this.handleAction.bind(this, 'saleOfferTime')
-						}, "Edit\xA0\xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-							className: "mdi mdi-arrow-right"
-						})))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "row mt-3"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "col-sm-6 pr-0"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card-body"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
-							className: "card-title"
-						}, "Brands in Focus"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-							className: "card-text"
-						}, "Choose this to modify categories which will show up with a banner on the homepage."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-							href: "",
-							className: "btn btn-primary shadow-primary",
-							"data-name": 'brandsInFocus',
-							onClick: this.handleAction.bind(this)
-						}, "Edit\xA0\xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-							className: "mdi mdi-arrow-right"
-						}))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "col-sm-6 mr-0"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card-body"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
-							className: "card-title"
-						}, "Today's Deals"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-							className: "card-text"
-						}, "Choose this to marks products which will show up in today's hot deals."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-							href: "",
-							className: "btn btn-primary shadow-primary",
-							"data-name": 'todaysDeals',
-							onClick: this.handleAction.bind(this)
-						}, "Edit\xA0\xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-							className: "mdi mdi-arrow-right"
-						})))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "row mt-3"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "col-sm-6 pr-0"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card-body"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
-							className: "card-title"
-						}, "Popular Stuff"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-							className: "card-text"
-						}, "Choose this to update which categories will shop up in popular stuff section."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-							href: "",
-							className: "btn btn-primary shadow-primary",
-							"data-name": 'popularStuff',
-							onClick: this.handleAction.bind(this)
-						}, "Edit\xA0\xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-							className: "mdi mdi-arrow-right"
-						}))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "col-sm-6 mr-0"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card shadow-sm border animated"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-							className: "card-body"
-						}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
-							className: "card-title"
-						}, "Trending Now"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-							className: "card-text"
-						}, "Choose this to update what categories will show up in trending now section."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-							href: "",
-							className: "btn btn-primary shadow-primary",
-							"data-name": 'trendingNow',
-							onClick: this.handleAction.bind(this)
-						}, "Edit\xA0\xA0", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-							className: "mdi mdi-arrow-right"
-						})))))));
+						});
 					}
 				}]);
 
-				return SaleOfferTimerUpdate;
+				return SaleOfferTimerModify;
 			}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 

@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 
-export default class SaleOfferTimerEdit extends Component {
+export default class Choices extends Component {
 	constructor(props) {
 		super(props);
-		console.log('Rendering edit');
 	}
 
 
