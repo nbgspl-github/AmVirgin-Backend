@@ -5,10 +5,12 @@ use App\Http\Controllers\App\Seller\Attributes\AttributeValuesController;
 use App\Http\Controllers\App\Seller\AttributesController;
 use App\Http\Controllers\App\Seller\AuthController;
 use App\Http\Controllers\App\Seller\CategoriesController;
+use App\Http\Controllers\App\Seller\CitiesController;
 use App\Http\Controllers\App\Seller\CountriesController;
 use App\Http\Controllers\App\Seller\CurrenciesController;
 use App\Http\Controllers\App\Seller\ProductImagesController;
 use App\Http\Controllers\App\Seller\ProductsController;
+use App\Http\Controllers\App\Seller\StatesController;
 use App\Http\Controllers\App\Seller\TwoFactorAuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -45,4 +47,6 @@ Route::prefix('currencies')->group(function () {
 
 Route::prefix('countries')->group(function () {
 	Route::get('/', [CountriesController::class, 'index'])->name('seller.countries.index');
+	Route::get('{countryId}/states', [StatesController::class, 'index'])->name('seller.states.index');
+	Route::get('states/{stateId}/cities', [CitiesController::class, 'index'])->name('seller.states.index');
 });
