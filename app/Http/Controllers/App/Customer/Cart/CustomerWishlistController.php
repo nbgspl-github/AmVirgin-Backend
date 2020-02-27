@@ -104,10 +104,7 @@ class CustomerWishlistController extends ExtendedResourceController {
 				$cart = Cart::retrieveThrows($validated->sessionId);
 				$cartItem = new CartItem($cart, $productId);
 				if (!$cart->contains($cartItem)) {
-					CustomerWishlist::create([
-						'customerId' => $this->guard()->id(),
-						'productId' => $productId,
-					]);
+					$wishlistItem->delete();
 					$cart->addItem($cartItem);
 					$cart->save();
 					$response->status(HttpOkay)->message('Item moved to cart.');
