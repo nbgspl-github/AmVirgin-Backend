@@ -25,6 +25,7 @@ class ProductResource extends JsonResource {
 			$category = new CategoryResource($category);
 		}
 		return [
+			'key' => $this->id,
 			'name' => $this->name,
 			'category' => $category,
 			'rating' => $this->rating,
