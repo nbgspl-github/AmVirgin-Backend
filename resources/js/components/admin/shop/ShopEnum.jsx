@@ -1,3 +1,5 @@
 export default class ShopEnum {
-	static Mo
+	static Choices = 0;
+	static Sliders = 1;
+	static ModifySaleOfferTimer = 2;
 }
