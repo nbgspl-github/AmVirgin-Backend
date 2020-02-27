@@ -614,7 +614,7 @@ class Product extends Model {
 	 * @return HasMany
 	 */
 	public function attributes() {
-		return $this->hasMany('App\Models\Attribute');
+		return $this->hasMany('App\Models\ProductAttribute', 'productId');
 	}
 
 	/**

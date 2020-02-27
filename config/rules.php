@@ -92,13 +92,13 @@ return [
 				'productMode' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 				'listingType' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 				'originalPrice' => ['bail', 'required', 'numeric', 'min:1', 'max:10000000'],
-				'offerType' => ['bail', 'required', Rule::in([OfferTypes::FlatRate, OfferTypes::Percentage])], /*Since we only have two offer types for now, it's 0 and 1, later on we'll add as required.*/
+				'offerType' => ['bail', 'required', Rule::in([OfferTypes::FlatRate, OfferTypes::Percentage])],
 				'offerValue' => ['bail', 'required', 'numeric', 'min:1', 'max:10000000'],
 				'currency' => ['bail', 'nullable', 'string', 'min:2', 'max:5', 'exists:currencies,code'],
 				'taxRate' => ['bail', 'required', 'numeric', 'min:0.00', 'max:99.99'],
 				'countryId' => ['bail', 'required', 'exists:countries,id'],
-				'stateId' => ['bail', 'required', 'numeric', 'min:1', 'max:9999999'],
-				'cityId' => ['bail', 'required', 'numeric', 'min:1', RuleMaxInt],
+				'stateId' => ['bail', 'required', 'numeric', 'exists:states,id'],
+				'cityId' => ['bail', 'required', 'numeric', 'exists:cities,id'],
 				'zipCode' => ['bail', 'required', 'min:1', RuleMaxInt],
 				'address' => ['bail', 'required', 'string', 'min:2', 'max:500'],
 				'status' => ['bail', 'nullable', Rule::in([ProductStatus::DifferentStatus, ProductStatus::SomeOtherStatus, ProductStatus::SomeStatus])],
@@ -113,7 +113,9 @@ return [
 				'shortDescription' => ['bail', 'required', 'string', 'min:1', 'max:1000'],
 				'longDescription' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
 				'sku' => ['bail', 'required', 'string', 'min:1', 'max:256'],
-				'files.*' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
+//				'files.*' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
+				'attributes.*.key' => ['bail', 'required', 'exists:attributes,id'],
+				'attributes.*.values.*' => ['bail', 'required', 'exists:attribute-values,id'],
 			],
 			'update' => [
 				'productName' => ['bail', 'required', 'string', 'min:1', 'max:500'],
@@ -144,6 +146,8 @@ return [
 				'longDescription' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
 				'sku' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 				'files.*' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
+				'attributes.*.key' => ['bail', 'required', 'exists:attributes:id'],
+				'attributes.*.values.*' => ['bail', 'required', 'exists:attribute-values:id'],
 			],
 		],
 	],
@@ -170,7 +174,7 @@ return [
 		],
 		'home-banner' => [
 			'store' => [
-				'title' => ['bail', 'required', 'string', 'min:1', 'max:256'], 
+				'title' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 
 				'banner' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp'],
 				'target' => ['bail', 'required', 'url'],
@@ -178,7 +182,7 @@ return [
 				'active' => ['bail', 'required', 'boolean'],
 			],
 			'update' => [
-				'title' => ['bail', 'required', 'string', 'min:1', 'max:256'], 
+				'title' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 				'banner' => ['bail', 'nullable', 'mimes:jpg,jpeg,png,bmp'],
 				'target' => ['bail', 'required', 'url'],
 				'stars' => ['bail', 'nullable', 'numeric', 'min:0', 'max:5'],

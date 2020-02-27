@@ -5,12 +5,12 @@ namespace App\Resources\Products\Seller;
 use App\Models\Category;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductResource extends JsonResource{
-	public static function withoutWrapping(){
+class ProductResource extends JsonResource {
+	public static function withoutWrapping() {
 		return true;
 	}
 
-	public function toArray($request){
+	public function toArray($request) {
 		$category = Category::retrieve($this->categoryId);
 		if (null($category)) {
 			$category = [];
