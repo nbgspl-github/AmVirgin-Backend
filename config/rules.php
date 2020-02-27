@@ -113,7 +113,7 @@ return [
 				'shortDescription' => ['bail', 'required', 'string', 'min:1', 'max:1000'],
 				'longDescription' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
 				'sku' => ['bail', 'required', 'string', 'min:1', 'max:256'],
-//				'files.*' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
+				'files.*' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
 				'attributes.*.key' => ['bail', 'required', 'exists:attributes,id'],
 				'attributes.*.values.*' => ['bail', 'required', 'exists:attribute-values,id'],
 			],
@@ -124,7 +124,7 @@ return [
 				'productMode' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 				'listingType' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 				'originalPrice' => ['bail', 'required', 'numeric', 'min:1', 'max:10000000'],
-				'offerType' => ['bail', 'required', Rule::in([OfferTypes::FlatRate, OfferTypes::Percentage])], /*Since we only have two offer types for now, it's 0 and 1, later on we'll add as required.*/
+				'offerType' => ['bail', 'required', Rule::in([OfferTypes::FlatRate, OfferTypes::Percentage])],
 				'offerValue' => ['bail', 'required', 'numeric', 'min:1', 'max:10000000'],
 				'currency' => ['bail', 'nullable', 'string', 'min:2', 'max:5', 'exists:currencies,code'],
 				'taxRate' => ['bail', 'required', 'numeric', 'min:0.00', 'max:99.99'],
