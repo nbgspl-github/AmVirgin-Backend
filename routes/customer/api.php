@@ -86,4 +86,7 @@ Route::prefix('shop')->group(function () {
 
 Route::prefix('addresses')->middleware('auth:customer-api')->group(function () {
 	Route::get('/', [ShippingAddressesController::class, 'index']);
+	Route::post('/', [ShippingAddressesController::class, 'store']);
+	Route::put('/{id}', [ShippingAddressesController::class, 'update']);
+	Route::delete('/{id}', [ShippingAddressesController::class, 'delete']);
 });

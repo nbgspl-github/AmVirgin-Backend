@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
 class ShippingAddress extends Model {
+	use RetrieveResource;
 	protected $table = 'shipping-addresses';
 
 	public function state() {

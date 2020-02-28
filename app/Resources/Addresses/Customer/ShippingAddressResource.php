@@ -23,7 +23,6 @@ class ShippingAddressResource extends JsonResource {
 			'type' => $this->type,
 			'saturdayWorking' => $this->saturdayWorking,
 			'sundayWorking' => $this->sundayWorking,
-			'isDefault' => $this->default,
 		];
 	}
 }

@@ -25,7 +25,6 @@ class CreateShippingAddressesTable extends Migration {
 			$table->string('type', 10)->default('home');
 			$table->boolean('saturdayWorking')->default(false);
 			$table->boolean('sundayWorking')->default(false);
-			$table->boolean('default')->default(false);
 			$table->timestamps();
 		});
 	}
