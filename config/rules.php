@@ -39,6 +39,14 @@ return [
 				'password' => ['bail', 'required', 'string', 'min:4', 'max:64'],
 				'otp' => ['bail', 'required', 'numeric', 'min:1111', 'max:9999'],
 			],
+			'update' => [
+				'profile' => [
+
+				],
+				'avatar' => [
+					'avatar' => ['bail', 'required', 'image', 'min:1', 'max:4096'],
+				],
+			],
 		],
 
 		/* Customer Auth Rules*/

@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\App\Seller\Attributes\AttributeListController;
 use App\Http\Controllers\App\Seller\Attributes\AttributeValuesController;
-use App\Http\Controllers\App\Seller\AttributesController;
 use App\Http\Controllers\App\Seller\AuthController;
 use App\Http\Controllers\App\Seller\CategoriesController;
 use App\Http\Controllers\App\Seller\CitiesController;
@@ -20,6 +19,8 @@ Route::post('/login', [TwoFactorAuthController::class, 'login'])->name('seller.l
 Route::post('/register', [TwoFactorAuthController::class, 'register'])->name('seller.register');
 Route::post('/logout', [AuthController::class, 'logout'])->name('seller.logout')->middleware('auth:seller-api');
 Route::post('/profile', [AuthController::class, 'profile'])->name('seller.logout')->middleware('auth:seller-api');
+Route::post('/profile/avatar', [AuthController::class, 'updateAvatar'])->name('seller.update.avatar')->middleware('auth:seller-api');
+Route::put('/profile', [AuthController::class, 'updateProfile'])->name('seller.update.profile')->middleware('auth:seller-api');
 
 Route::prefix('categories')->group(function () {
 	Route::get('/', [CategoriesController::class, 'index'])->name('seller.categories.index');
