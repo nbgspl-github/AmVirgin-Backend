@@ -19,9 +19,9 @@ class CreateSellersTable extends Migration {
 			$table->string('description', 2000)->nullable();
 			$table->string('email')->unique()->nullable();
 			$table->string('mobile')->unique()->nullable();
-			$table->unsignedBigInteger('countryId');
-			$table->unsignedBigInteger('stateId');
-			$table->unsignedBigInteger('cityId');
+			$table->unsignedBigInteger('countryId')->nullable();
+			$table->unsignedBigInteger('stateId')->nullable();
+			$table->unsignedBigInteger('cityId')->nullable();
 			$table->float('rating', 2, 1)->default(0.0);
 			$table->integer('otp')->nullable();
 			$table->string('avatar', 4096)->nullable();
