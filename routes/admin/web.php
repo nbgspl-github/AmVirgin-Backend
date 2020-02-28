@@ -32,6 +32,10 @@ use Illuminate\Support\Facades\Storage;
 
 const SubDomainPrefix = 'admin';
 
+Route::get('/', function (){
+	return view('admin.react.container');
+});
+
 Route::prefix('admin')->group(function (){
 	Route::get('/', [HomeController::class, Methods::Index])->middleware('auth:admin')->name('admin.home');
 	Route::get('/login', [LoginController::class, Methods::auth()::LoginForm])->name('admin.login');
