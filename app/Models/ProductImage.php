@@ -6,7 +6,7 @@ use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductImage extends Model{
+class ProductImage extends Model {
 	use RetrieveResource;
 	use RetrieveCollection;
 
@@ -28,7 +28,7 @@ class ProductImage extends Model{
 	/**
 	 * @return bool
 	 */
-	public function isDeleted(): bool{
+	public function isDeleted(): bool {
 		return $this->deleted;
 	}
 }

@@ -2,7 +2,13 @@
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title">Choose duration</h5>
+				<h5 class="modal-title">
+					@if(isset($title))
+						{{$title}}
+					@else
+						Choose duration
+					@endif
+				</h5>
 			</div>
 			<div class="modal-body">
 				<div class="row">

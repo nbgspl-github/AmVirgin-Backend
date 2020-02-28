@@ -8,7 +8,7 @@ use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class VideoSource extends Model{
+class VideoSource extends Model {
 	use ActiveStatus;
 	use RetrieveResource;
 	use FluentConstructor;
@@ -38,7 +38,7 @@ class VideoSource extends Model{
 	/**
 	 * @return string
 	 */
-	public function getTitle(): string{
+	public function getTitle(): string {
 		return $this->title;
 	}
 

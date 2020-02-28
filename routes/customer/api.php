@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\App\Customer\AuthController;
+use App\Http\Controllers\App\Customer\Cart\CustomerWishlistController;
 use App\Http\Controllers\App\Customer\Cart\QuoteController;
 use App\Http\Controllers\App\Customer\Playback\PlaybackController;
 use App\Http\Controllers\App\Customer\Playback\TrailerPlayback;
 use App\Http\Controllers\App\Customer\PopularPicksController;
 use App\Http\Controllers\App\Customer\ProductsController;
+use App\Http\Controllers\App\Customer\ShippingAddressesController;
+use App\Http\Controllers\App\Customer\ShopSlidersController;
 use App\Http\Controllers\App\Customer\SlidersController;
 use App\Http\Controllers\App\Customer\TrendController;
 use App\Http\Controllers\App\Customer\TwoFactorAuthController;
@@ -61,7 +64,29 @@ Route::prefix('playback')->middleware([])->group(function () {
 
 Route::prefix('cart')->middleware([])->group(function () {
 	Route::post('add', [QuoteController::class, 'add']);
+	Route::put('update', [QuoteController::class, 'update']);
 	Route::post('remove', [QuoteController::class, 'remove']);
 	Route::post('destroy', [QuoteController::class, 'destroy']);
 	Route::get('retrieve', [QuoteController::class, 'retrieve']);
+	Route::put('wishlist/{productId}', [QuoteController::class, 'moveToWishlist']);
+});
+
+Route::prefix('wishlist')->middleware('auth:customer-api')->group(function () {
+	Route::get('/', [CustomerWishlistController::class, 'index']);
+	Route::put('/{productId}', [CustomerWishlistController::class, 'store']);
+	Route::delete('/{product}', [CustomerWishlistController::class, 'delete']);
+	Route::delete('/{productId}', [CustomerWishlistController::class, 'move']);
+	Route::put('cart/{productId}', [CustomerWishlistController::class, 'moveToCart']);
+
+});
+
+Route::prefix('shop')->group(function () {
+	Route::get('sliders', [ShopSlidersController::class, 'index'])->name('customer.shop.sliders.index');
+});
+
+Route::prefix('addresses')->middleware('auth:customer-api')->group(function () {
+	Route::get('/', [ShippingAddressesController::class, 'index']);
+	Route::post('/', [ShippingAddressesController::class, 'store']);
+	Route::put('/{id}', [ShippingAddressesController::class, 'update']);
+	Route::delete('/{id}', [ShippingAddressesController::class, 'delete']);
 });

@@ -7,7 +7,7 @@ use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class Genre extends Model implements FluentConstructor{
+class Genre extends Model implements FluentConstructor {
 	use RetrieveResource;
 	use RetrieveCollection;
 
@@ -27,7 +27,7 @@ class Genre extends Model implements FluentConstructor{
 	 *  Makes a new instance and returns it.
 	 * @return Genre
 	 */
-	public static function instance(){
+	public static function instance() {
 		return new self();
 	}
 

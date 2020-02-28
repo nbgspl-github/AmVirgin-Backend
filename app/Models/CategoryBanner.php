@@ -5,7 +5,7 @@ use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class CategoryBanner extends Model{
+class CategoryBanner extends Model {
 	use RetrieveResource;
 	use GenerateUrls;
 
@@ -16,11 +16,11 @@ class CategoryBanner extends Model{
 		'order',
 		'image',
 		'status',
-        'sectionTitle',
-        'layoutType',
-        'validFrom',
-        'validUntil',
-        'hasValidity',
+		'sectionTitle',
+		'layoutType',
+		'validFrom',
+		'validUntil',
+		'hasValidity',
 	];
 
 	protected $hidden = [

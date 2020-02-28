@@ -6,7 +6,7 @@ use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class MediaServer extends Model{
+class MediaServer extends Model {
 	use RetrieveCollection;
 	use RetrieveResource;
 
@@ -27,7 +27,7 @@ class MediaServer extends Model{
 	/**
 	 * @return string
 	 */
-	public function getName(): string{
+	public function getName(): string {
 		return $this->name;
 	}
 

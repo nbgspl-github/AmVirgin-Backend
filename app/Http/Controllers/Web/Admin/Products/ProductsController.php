@@ -8,6 +8,7 @@ class ProductsController extends ProductsBase{
 	}
 
 	public function index(){
+		die('df');
 		$products = $this->list();
 		return view('admin.products.index')->with('products', $products);
 	}

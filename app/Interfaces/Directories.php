@@ -2,7 +2,7 @@
 
 namespace App\Interfaces;
 
-interface Directories{
+interface Directories {
 	const Genre = 'genre';
 	const Sliders = 'slider';
 	const Categories = 'categories';
@@ -14,4 +14,7 @@ interface Directories{
 	const ProductImage = "product-images";
 	const VideoSnaps = 'video-snaps';
 	const Subtitles = 'subtitles';
+	const ShopBanners = 'shopbanners';
+	const SellerAvatars = 'seller-avatars';
+	const CustomerAvatars = 'customer-avatars';
 }

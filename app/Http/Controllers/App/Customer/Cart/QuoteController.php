@@ -9,6 +9,7 @@ use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Interfaces\Tables;
 use App\Models\Cart;
+use App\Models\CustomerWishlist;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
@@ -19,35 +20,37 @@ class QuoteController extends ExtendedResourceController {
 	use ValidatesRequest;
 	use ConditionallyLoadsAttributes;
 
-	protected $rules = [];
+	protected array $rules;
 
 	public function __construct() {
 		parent::__construct();
 		$this->rules = [
 			'add' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
-				'customerId' => ['bail', 'nullable', Rule::exists(Tables::Customers, 'id')],
 				'key' => ['bail', 'required', Rule::exists(Tables::Products, 'id')],
 				'attributes' => ['bail', 'required'],
 			],
 			'remove' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
-				'customerId' => ['bail', 'nullable', Rule::exists(Tables::Customers, 'id')],
 				'key' => ['bail', 'required', Rule::exists(Tables::Products, 'id')],
 			],
 			'retrieve' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
-				'customerId' => ['bail', 'nullable', Rule::exists(Tables::Customers, 'id')],
 			],
 			'update' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
-				'customerId' => ['bail', 'nullable', Rule::exists(Tables::Customers, 'id')],
 				'key' => ['bail', 'required', Rule::exists(Tables::Products, 'id')],
+				'quantity' => ['bail', 'required', 'numeric', 'min:1', 'max:10'],
 			],
 			'destroy' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
-				'customerId' => ['bail', 'nullable', Rule::exists(Tables::Customers, 'id')],
 				'key' => ['bail', 'required', Rule::exists(Tables::Products, 'id')],
+			],
+			'moveToWishlist' => [
+				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
+			],
+			'moveToCart' => [
+				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
 			],
 		];
 	}
@@ -59,7 +62,6 @@ class QuoteController extends ExtendedResourceController {
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['add']);
 			$cart = Cart::retrieveThrows($validated->sessionId);
-			$cart->customerId = $validated->customerId;
 			$cartItem = new CartItem($cart, $validated->key, $validated->attributes);
 			$cart->addItem($cartItem);
 			$cart->save();
@@ -71,7 +73,6 @@ class QuoteController extends ExtendedResourceController {
 		catch (ModelNotFoundException $exception) {
 			\App\Models\Cart::create([
 				'sessionId' => $validated->sessionId,
-				'customerId' => $validated->customerId,
 			]);
 			$cart = Cart::retrieve($validated->sessionId);
 			$cartItem = new CartItem($cart, $validated->key, $validated->attributes);
@@ -115,13 +116,21 @@ class QuoteController extends ExtendedResourceController {
 	public function update() {
 		$response = responseApp();
 		$validated = null;
+		$cart = null;
 		try {
-			$validated = (object)$this->requestValid(request(), $this->rules['remove']);
+			$validated = (object)$this->requestValid(request(), $this->rules['update']);
 			$cart = Cart::retrieveThrows($validated->sessionId);
-			$response->status(HttpOkay)->message('Cart retrieved successfully.')->setValue('data', $cart->render());
+			$cartItem = new CartItem($cart, $validated->key);
+			$cartItem->setQuantity($validated->quantity);
+			$cart->updateItem($cartItem);
+			$cart->save();
+			$response->status(HttpOkay)->message('Item added to cart successfully.')->setValue('data', $cart->render());
+		}
+		catch (MaxAllowedQuantityReachedException $exception) {
+			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage())->setValue('data', $cart->render());
 		}
 		catch (ModelNotFoundException $exception) {
-			$response->status(HttpOkay)->message('No cart was found for that session.');
+			$response->status(HttpResourceNotFound)->message('No cart found for that session');
 		}
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
@@ -141,7 +150,6 @@ class QuoteController extends ExtendedResourceController {
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['remove']);
 			$cart = Cart::retrieveThrows($validated->sessionId);
-			$cart->customerId = $validated->customerId;
 			$cartItem = new CartItem($cart, $validated->key);
 			$cart->removeItem($cartItem);
 			$cart->save();
@@ -181,6 +189,52 @@ class QuoteController extends ExtendedResourceController {
 		}
 		catch (CartItemNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message($exception->getMessage())->setValue('data', $cart->render());
+		}
+		catch (ValidationException $exception) {
+			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getTraceAsString());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+
+	public function moveToWishlist($productId) {
+		$response = responseApp();
+		$validated = null;
+		$cart = null;
+		try {
+			$validated = (object)$this->requestValid(request(), $this->rules['moveToWishlist']);
+			$wishlistItem = CustomerWishlist::where([
+				['customerId', $this->guard()->id()],
+				['productId', $productId],
+			])->first();
+			if ($wishlistItem == null) {
+				try {
+					$cart = Cart::retrieveThrows($validated->sessionId);
+					$cartItem = new CartItem($cart, $productId);
+					if ($cart->contains($cartItem)) {
+						CustomerWishlist::create([
+							'customerId' => $this->guard()->id(),
+							'productId' => $productId,
+						]);
+						$cart->destroyItem($cartItem);
+						$cart->save();
+						$response->status(HttpOkay)->message('Item moved to wishlist.');
+					}
+					else {
+						$response->status(HttpResourceNotFound)->message('Cart does not contain the item you specified.');
+					}
+				}
+				catch (ModelNotFoundException $exception) {
+					$response->status(HttpOkay)->message('No cart was found for that session.');
+				}
+			}
+			else {
+				$response->status(HttpResourceAlreadyExists)->message('Item already exists in wishlist.');
+			}
 		}
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());

@@ -57,7 +57,7 @@ class Admin extends Authenticatable implements JWTSubject{
 	/**
 	 * @inheritDoc
 	 */
-	public function getJWTIdentifier(){
+	public function getJWTIdentifier() {
 		$this->getKey();
 	}
 

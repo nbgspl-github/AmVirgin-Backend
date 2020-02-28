@@ -11,4 +11,8 @@ interface Tables {
 	const SubscriptionPlans = 'subscription-plans';
 	const Products = 'products';
 	const CartSessions = 'cart-sessions';
+	const ShopBanner = 'home_page_banner';
+	const States = 'states';
+	const Cities = 'cities';
+	const ShippingAddresses = 'shipping-addresses';
 }

@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Traits\FluentConstructor;
+use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class Attribute extends Model{
+class Attribute extends Model {
 	use FluentConstructor;
+	use RetrieveResource;
 
 	protected $table = 'attributes';
 
@@ -20,51 +22,25 @@ class Attribute extends Model{
 		'updated_at',
 	];
 
-	/**
-	 * @return int
-	 */
-	public function getCategoryId(): int{
+	public function getCategoryId(): int {
 		return $this->categoryId;
 	}
 
-	/**
-	 * @param int $categoryId
-	 * @return Attribute
-	 */
-	public function setCategoryId(int $categoryId): Attribute{
+	public function setCategoryId(int $categoryId): Attribute {
 		$this->categoryId = $categoryId;
 		return $this;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getName(): string{
+	public function getName(): string {
 		return $this->name;
 	}
 
-	/**
-	 * @param string $name
-	 * @return Attribute
-	 */
-	public function setName(string $name): Attribute{
+	public function setName(string $name): Attribute {
 		$this->name = $name;
 		return $this;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getValue(): string{
-		return $this->value;
-	}
-
-	/**
-	 * @param string $value
-	 * @return Attribute
-	 */
-	public function setValue(string $value): Attribute{
-		$this->value = $value;
-		return $this;
+	public function values() {
+		return $this->hasMany('App\Models\AttributeValue', 'attributeId');
 	}
 }

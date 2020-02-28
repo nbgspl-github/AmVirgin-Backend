@@ -9,12 +9,12 @@ class ValidationException extends Exception {
 	/**
 	 * @var string
 	 */
-	private $error;
+	private string $error;
 
 	/**
 	 * @var Validator
 	 */
-	private $validator;
+	private Validator $validator;
 
 	/**
 	 * ValidationException constructor.

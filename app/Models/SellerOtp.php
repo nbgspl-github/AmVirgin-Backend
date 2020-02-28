@@ -6,7 +6,7 @@ use App\Traits\FluentConstructor;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class SellerOtp extends Model{
+class SellerOtp extends Model {
 	use RetrieveResource;
 	use FluentConstructor;
 
@@ -18,7 +18,7 @@ class SellerOtp extends Model{
 	/**
 	 * @return string
 	 */
-	public function getMobile(): string{
+	public function getMobile(): string {
 		return $this->mobile;
 	}
 

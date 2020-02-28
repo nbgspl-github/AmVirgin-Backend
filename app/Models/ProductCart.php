@@ -8,8 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 
-class ProductCart extends Model{
-	
+class ProductCart extends Model {
 
 	protected $table = 'cart';
 
@@ -25,14 +24,13 @@ class ProductCart extends Model{
 		'deleted',
 		'created_at',
 		'updated_at',
-		
+
 	];
 
-	
 	/**
 	 * @return HasMany
 	 */
-	public function images(){
+	public function images() {
 		return $this->hasMany('\App\Models\ProductImage', 'productId');
 	}
 

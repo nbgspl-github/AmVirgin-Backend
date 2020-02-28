@@ -42,27 +42,8 @@ class CartTesterCommand extends Command {
 	 * @return mixed
 	 */
 	public function handle() {
-		$array = [
-			'a' => [
-				'id' => 'a',
-				'value' => 1,
-			],
-			'b' => [
-				'id' => 'b',
-				'value' => 2,
-			],
-			'c' => [
-				'id' => 'c',
-				'value' => 3,
-			],
-			'd' => [
-				'id' => 'd',
-				'value' => 4,
-			],
-			'e' => [
-				'id' => 'e',
-				'value' => 5,
-			],
-		];
+		collect(request()->file('abc'))->each(function ($item) {
+
+		});
 	}
 }
