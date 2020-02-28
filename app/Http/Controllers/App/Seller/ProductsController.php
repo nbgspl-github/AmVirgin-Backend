@@ -77,7 +77,6 @@ class ProductsController extends ExtendedResourceController {
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(\request(), $this->rules('store'));
-			dd($validated['attributes']);
 			$payload = (object)$validated;
 			$product = Product::create([
 				'name' => $payload->productName,
@@ -110,7 +109,7 @@ class ProductsController extends ExtendedResourceController {
 				'longDescription' => $payload->longDescription,
 				'sku' => $payload->sku,
 			]);
-			collect($validated['attributes'])->each(function ($item) use ($product) {
+			collect(jsonDecodeArray($validated['attributes']))->each(function ($item) use ($product) {
 				$attribute = Attribute::retrieve($item['key']);
 				if ($attribute != null) {
 					collect($item['values'])->each(function ($value) use ($attribute, $item, $product) {
