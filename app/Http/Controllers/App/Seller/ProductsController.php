@@ -109,6 +109,7 @@ class ProductsController extends ExtendedResourceController {
 				'longDescription' => $payload->longDescription,
 				'sku' => $payload->sku,
 			]);
+			dd($validated['attributes']);
 			collect($validated['attributes'])->each(function ($item) use ($product) {
 				$attribute = Attribute::retrieve($item['key']);
 				if ($attribute != null) {
