@@ -122,7 +122,7 @@ return [
 				'longDescription' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
 				'sku' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 				'files.*' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
-				'attributes' => ['bail', 'required'],
+				'attributes.*' => ['bail', 'required'],
 			],
 			'update' => [
 				'productName' => ['bail', 'required', 'string', 'min:1', 'max:500'],
