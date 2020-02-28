@@ -41,7 +41,7 @@ return [
 			],
 			'update' => [
 				'profile' => [
-
+					'name',
 				],
 				'avatar' => [
 					'avatar' => ['bail', 'required', 'image', 'min:1', 'max:4096'],

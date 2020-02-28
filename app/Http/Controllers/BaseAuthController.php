@@ -297,8 +297,4 @@ abstract class BaseAuthController extends BaseController {
 			return $response->send();
 		}
 	}
-
-	protected function updateProfile() {
-
-	}
 }
