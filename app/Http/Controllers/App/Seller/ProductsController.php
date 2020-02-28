@@ -127,15 +127,13 @@ class ProductsController extends ExtendedResourceController {
 					});
 				}
 			});
-			if (\request()->hasFile('files')) {
-				collect(\request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product) {
-					ProductImage::create([
-						'productId' => $product->getKey(),
-						'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile),
-						'tag' => sprintf('product-%d-images', $product->getKey()),
-					]);
-				});
-			}
+			collect(request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product) {
+				ProductImage::create([
+					'productId' => $product->getKey(),
+					'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile),
+					'tag' => sprintf('product-%d-images', $product->getKey()),
+				]);
+			});
 			$images = $product->images()->get()->transform(function (ProductImage $productImage) {
 				return [
 					'url' => SecuredDisk::access()->exists($productImage->path) ? SecuredDisk::access()->url($productImage->path) : null,
@@ -215,6 +213,24 @@ class ProductsController extends ExtendedResourceController {
 				'longDescription' => $validated['longDescription'],
 				'sku' => $validated['sku'],
 			]);
+			collect(jsonDecodeArray($validated['attributes']))->each(function ($item) use ($product) {
+				$attribute = Attribute::retrieve($item['key']);
+				if ($attribute != null) {
+					collect($item['values'])->each(function ($value) use ($attribute, $item, $product) {
+						$attributeValue = AttributeValue::where([
+							['attributeId', $attribute->getKey()],
+							['id', $value],
+						])->first();
+						if ($attributeValue != null) {
+							ProductAttribute::create([
+								'productId' => $product->id,
+								'attributeId' => $attribute->id,
+								'valueId' => $attributeValue->id,
+							]);
+						}
+					});
+				}
+			});
 			if (\request()->hasFile('files')) {
 				collect(\request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product) {
 					ProductImage::create([

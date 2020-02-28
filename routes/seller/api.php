@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\App\Seller\Attributes\AttributeListController;
 use App\Http\Controllers\App\Seller\Attributes\AttributeValuesController;
+use App\Http\Controllers\App\Seller\Attributes\ProductsAttributesController;
 use App\Http\Controllers\App\Seller\AuthController;
 use App\Http\Controllers\App\Seller\CategoriesController;
 use App\Http\Controllers\App\Seller\CitiesController;
@@ -40,6 +41,7 @@ Route::middleware('auth:seller-api')->prefix('products')->group(function () {
 	Route::post('{id}', [ProductsController::class, 'update'])->name('seller.products.update');
 	Route::delete('{id}', [ProductsController::class, 'delete'])->name('seller.products.delete');
 	Route::delete('/images/{id}', [ProductImagesController::class, 'delete'])->name('seller.products.images.delete');
+	Route::delete('/attributes/{id}', [ProductsAttributesController::class, 'delete'])->name('seller.products.attributes.delete');
 });
 
 Route::prefix('currencies')->group(function () {
