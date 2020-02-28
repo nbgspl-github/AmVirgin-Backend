@@ -55,11 +55,17 @@ class CustomerWishlistController extends ExtendedResourceController {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
 		}
 		catch (ModelNotFoundException $exception) {
-			CustomerWishlist::create([
-				'customerId' => $this->guard()->id(),
-				'productId' => $productId,
-			]);
-			$response->status(HttpOkay)->message('Item added to wishlist.');
+			try {
+				Product::retrieveThrows($productId);
+				CustomerWishlist::create([
+					'customerId' => $this->guard()->id(),
+					'productId' => $productId,
+				]);
+				$response->status(HttpOkay)->message('Item added to wishlist.');
+			}
+			catch (ModelNotFoundException $exception) {
+				$response->status(HttpResourceNotFound)->message('Could not find product for that key.');
+			}
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());

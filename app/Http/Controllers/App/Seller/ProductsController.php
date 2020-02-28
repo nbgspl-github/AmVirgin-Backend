@@ -77,38 +77,39 @@ class ProductsController extends ExtendedResourceController {
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(\request(), $this->rules('store'));
-			$payload = (object)$validated;
-			$product = Product::create([
-				'name' => $payload->productName,
-				'categoryId' => $payload->categoryId,
-				'sellerId' => $this->user()->getKey(),
-				'productType' => $payload->productType,
-				'productMode' => $payload->productMode,
-				'listingType' => $payload->listingType,
-				'originalPrice' => $payload->originalPrice,
-				'offerValue' => $payload->offerValue,
-				'offerType' => $payload->offerType,
-				'currency' => $payload->currency,
-				'taxRate' => $payload->taxRate,
-				'countryId' => $payload->countryId,
-				'stateId' => $payload->stateId,
-				'cityId' => $payload->cityId,
-				'zipCode' => $payload->zipCode,
-				'address' => $payload->address,
-				'status' => $payload->status,
-				'promoted' => $payload->promoted,
-				'promotionStart' => date('Y-m-d H:i:s', strtotime($payload->promotionStart)),
-				'promotionEnd' => date('Y-m-d H:i:s', strtotime($payload->promotionEnd)),
-				'visibility' => $payload->visibility,
-				'stock' => $payload->stock,
-				'shippingCostType' => $payload->shippingCostType,
-				'shippingCost' => $payload->shippingCost,
-				'soldOut' => request('stock') < 1,
-				'draft' => $payload->draft,
-				'shortDescription' => $payload->shortDescription,
-				'longDescription' => $payload->longDescription,
-				'sku' => $payload->sku,
-			]);
+//			$payload = (object)$validated;
+//			$product = Product::create([
+//				'name' => $payload->productName,
+//				'categoryId' => $payload->categoryId,
+//				'sellerId' => $this->user()->getKey(),
+//				'productType' => $payload->productType,
+//				'productMode' => $payload->productMode,
+//				'listingType' => $payload->listingType,
+//				'originalPrice' => $payload->originalPrice,
+//				'offerValue' => $payload->offerValue,
+//				'offerType' => $payload->offerType,
+//				'currency' => $payload->currency,
+//				'taxRate' => $payload->taxRate,
+//				'countryId' => $payload->countryId,
+//				'stateId' => $payload->stateId,
+//				'cityId' => $payload->cityId,
+//				'zipCode' => $payload->zipCode,
+//				'address' => $payload->address,
+//				'status' => $payload->status,
+//				'promoted' => $payload->promoted,
+//				'promotionStart' => date('Y-m-d H:i:s', strtotime($payload->promotionStart)),
+//				'promotionEnd' => date('Y-m-d H:i:s', strtotime($payload->promotionEnd)),
+//				'visibility' => $payload->visibility,
+//				'stock' => $payload->stock,
+//				'shippingCostType' => $payload->shippingCostType,
+//				'shippingCost' => $payload->shippingCost,
+//				'soldOut' => request('stock') < 1,
+//				'draft' => $payload->draft,
+//				'shortDescription' => $payload->shortDescription,
+//				'longDescription' => $payload->longDescription,
+//				'sku' => $payload->sku,
+//			]);
+			$product = Product::retrieve(56);
 			dd(jsonDecodeArray($validated['attributes']));
 			collect($validated['attributes'])->each(function ($item) use ($product) {
 				$attribute = Attribute::retrieve($item['key']);
@@ -128,15 +129,15 @@ class ProductsController extends ExtendedResourceController {
 					});
 				}
 			});
-			if (\request()->hasFile('files')) {
-				collect(\request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product) {
-					ProductImage::create([
-						'productId' => $product->getKey(),
-						'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile),
-						'tag' => sprintf('product-%d-images', $product->getKey()),
-					]);
-				});
-			}
+//			if (\request()->hasFile('files')) {
+//				collect(\request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product) {
+//					ProductImage::create([
+//						'productId' => $product->getKey(),
+//						'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile),
+//						'tag' => sprintf('product-%d-images', $product->getKey()),
+//					]);
+//				});
+//			}
 			$images = $product->images()->get()->transform(function (ProductImage $productImage) {
 				return [
 					'url' => SecuredDisk::access()->exists($productImage->path) ? SecuredDisk::access()->url($productImage->path) : null,
