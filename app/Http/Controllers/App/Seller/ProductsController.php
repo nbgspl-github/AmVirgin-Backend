@@ -77,6 +77,7 @@ class ProductsController extends ExtendedResourceController {
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(\request(), $this->rules('store'));
+			dd($validated);
 			$payload = (object)$validated;
 			$product = Product::create([
 				'name' => $payload->productName,
