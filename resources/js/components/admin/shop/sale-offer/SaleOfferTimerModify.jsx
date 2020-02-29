@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 export default class SaleOfferTimerModify extends Component {
-	handleAction(value) {
+	handleAction(event, value) {
 		event.preventDefault();
 	};
 

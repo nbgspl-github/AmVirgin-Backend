@@ -41,11 +41,11 @@ export default class Choices extends Component {
 		return (
 			<div className="card-body animatable">
 				<div className="row">
-					<Choices.Item action={'Edit'} title={'Sliders'} description={'Choose this to update which sliders show up in the header section of homepage.'} handleClick={() => this.handleAction(ShopEnum.Sliders)}/>
+					<Choices.Item action={'Edit'} title={'Sliders'} description={'Choose this to update which sliders show up in the header section.'} handleClick={() => this.handleAction(ShopEnum.Sliders)}/>
 					<Choices.Item action={'Edit'} title={'Sale Offer Timer'} description={'Choose this to offer timer details such as displayed text, remaining time, etc.'} handleClick={() => this.handleAction(ShopEnum.Sliders)}/>
 				</div>
 				<div className="row mt-3">
-					<Choices.Item action={'Edit'} title={'Brands in Focus'} description={'Choose this to modify categories which will show up with a banner on the homepage.'} handleClick={() => this.handleAction(ShopEnum.Sliders)}/>
+					<Choices.Item action={'Edit'} title={'Brands in Focus'} description={'Choose this to modify categories which will show up with a banner.'} handleClick={() => this.handleAction(ShopEnum.Sliders)}/>
 					<Choices.Item action={'Edit'} title={'Today\'s Deals'} description={'Choose this to marks products which will show up in today\'s hot deals.'} handleClick={() => this.handleAction(ShopEnum.Sliders)}/>
 				</div>
 				<div className="row mt-3">
