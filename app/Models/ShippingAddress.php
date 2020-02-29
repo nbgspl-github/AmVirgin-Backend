@@ -22,6 +22,10 @@ class ShippingAddress extends Model {
 		'saturdayWorking',
 		'sundayWorking',
 	];
+	protected $casts = [
+		'saturdayWorking' => 'boolean',
+		'sundayWorking' => 'boolean',
+	];
 
 	public function state() {
 		return $this->belongsTo('App\Models\State', 'stateId');
