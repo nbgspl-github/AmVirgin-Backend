@@ -2,16 +2,12 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Seller;
 use Illuminate\Console\Command;
 use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 
 class CartTesterCommand extends Command {
 	use ConditionallyLoadsAttributes;
-
-	/**
-	 * @var integer
-	 */
-	protected $x;
 
 	/**
 	 * The name and signature of the console command.
@@ -38,12 +34,9 @@ class CartTesterCommand extends Command {
 
 	/**
 	 * Execute the console command.
-	 *
 	 * @return mixed
 	 */
 	public function handle() {
-		collect(request()->file('abc'))->each(function ($item) {
 
-		});
 	}
 }

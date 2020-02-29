@@ -118,10 +118,10 @@ class Seller extends Authenticatable implements JWTSubject {
 	}
 
 	public function city() {
-		$this->belongsTo('App\Models\City', 'cityId', 'id');
+		return $this->belongsTo('App\Models\City', 'cityId', 'id');
 	}
 
 	public function state() {
-		$this->belongsTo('App\Models\State', 'stateId', 'id');
+		return $this->belongsTo('App\Models\State', 'stateId', 'id');
 	}
 }
