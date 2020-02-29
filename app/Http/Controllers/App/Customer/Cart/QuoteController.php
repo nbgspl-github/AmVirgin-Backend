@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\App\Customer\Cart;
 
 use App\Classes\Cart\CartItem;
+use App\Constants\CartStatus;
 use App\Exceptions\CartItemNotFoundException;
 use App\Exceptions\MaxAllowedQuantityReachedException;
 use App\Exceptions\ValidationException;
@@ -52,6 +53,9 @@ class QuoteController extends ExtendedResourceController {
 			'moveToCart' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
 			],
+			'submit' => [
+				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
+			],
 		];
 	}
 
@@ -73,6 +77,7 @@ class QuoteController extends ExtendedResourceController {
 		catch (ModelNotFoundException $exception) {
 			\App\Models\Cart::create([
 				'sessionId' => $validated->sessionId,
+				'status' => CartStatus::Pending,
 			]);
 			$cart = Cart::retrieve($validated->sessionId);
 			$cartItem = new CartItem($cart, $validated->key, $validated->attributes);
@@ -235,6 +240,30 @@ class QuoteController extends ExtendedResourceController {
 			else {
 				$response->status(HttpResourceAlreadyExists)->message('Item already exists in wishlist.');
 			}
+		}
+		catch (ValidationException $exception) {
+			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getTraceAsString());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+
+	public function submit() {
+		$response = responseApp();
+		$validated = null;
+		$cart = null;
+		try {
+			$validated = (object)$this->requestValid(request(), $this->rules['submit']);
+			$cart = Cart::retrieveThrows($validated->sessionId);
+			$cart->save();
+			$response->status(HttpOkay)->message('Your order was placed successfully.');
+		}
+		catch (ModelNotFoundException $exception) {
+			$response->status(HttpResourceNotFound)->message('No cart was found for that session.');
 		}
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
