@@ -72,7 +72,7 @@ class ShippingAddressesController extends ExtendedResourceController {
 					'mobile' => $validated->mobile,
 					'alternateMobile' => $validated->alternateMobile,
 					'pinCode' => $validated->pinCode,
-					'stateId' => $validated->state,
+					'stateId' => $validated->stateId,
 					'address' => $validated->address,
 					'locality' => $validated->locality,
 					'cityId' => $validated->cityId,
