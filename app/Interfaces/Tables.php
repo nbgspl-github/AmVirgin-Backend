@@ -15,4 +15,5 @@ interface Tables {
 	const States = 'states';
 	const Cities = 'cities';
 	const ShippingAddresses = 'shipping-addresses';
+	const Countries = 'countries';
 }
