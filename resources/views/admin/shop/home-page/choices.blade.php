@@ -14,7 +14,7 @@
 									<div class="card-body">
 										<h5 class="card-title">Sliders</h5>
 										<p class="card-text">Choose this to update which sliders show up in the header section of homepage.</p>
-										<a href="" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
+										<a href="javascript:void(0);" onclick="handleAddItem();" data-key="1" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
 									</div>
 								</div>
 							</div>
@@ -34,7 +34,7 @@
 									<div class="card-body">
 										<h5 class="card-title">Brands in Focus</h5>
 										<p class="card-text">Choose this to modify categories which will show up with a banner on the homepage.</p>
-										<a href="" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
+										<a href="javascript:void(0);" onclick="handleAddItem();" data-key="2" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
 									</div>
 								</div>
 							</div>
@@ -74,3 +74,62 @@
 		</div>
 	</div>
 @stop
+@section('javascript')
+	<script>
+		let chosen = [{
+			key: 1,
+			values: [1]
+		}];
+		let optionA = {
+			key: 1,
+			value: 1
+		};
+		let optionB = {
+			key: 1,
+			value: 2
+		};
+		let optionC = {
+			key: 2,
+			value: 2
+		};
+		let optionD = {
+			key: 1,
+			value: 3
+		};
+		let optionE = {
+			key: 2,
+			value: 3
+		};
+
+		window.onload = () => {
+			handleAddItem(optionA);
+			handleAddItem(optionB);
+			handleAddItem(optionC);
+			handleAddItem(optionD);
+			handleAddItem(optionE);
+			console.log(chosen);
+		};
+
+		handleAddItem = (option) => {
+			let foundKey = false;
+			let foundValue = false;
+			chosen.map((item) => {
+				if (item.key === option.key) {
+					foundKey = true;
+					item.values.forEach((v) => {
+						if (v === option.value) {
+							foundValue = true;
+						}
+					});
+					if (!foundValue)
+						item.values.push(option.value);
+				}
+			});
+			if (!foundKey)
+				chosen.push({
+					key: option.key,
+					values: [option.value]
+				});
+		};
+	</script>
+@endsection

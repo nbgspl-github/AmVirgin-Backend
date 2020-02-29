@@ -150,7 +150,7 @@ class CartItem extends stdClass implements JsonSerializable {
 		];
 	}
 
-	protected function getApplicablePrice(): float {
+	public function getApplicablePrice(): float {
 		$offerType = $this->getProduct()->getOfferType();
 		$offerValue = $this->getProduct()->getOfferValue();
 		$originalPrice = $this->getProduct()->getOriginalPrice();

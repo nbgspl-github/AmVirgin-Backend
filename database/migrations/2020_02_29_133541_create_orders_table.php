@@ -15,6 +15,7 @@ class CreateOrdersTable extends Migration {
 			$table->bigIncrements('id');
 			$table->unsignedBigInteger('customerId');
 			$table->unsignedBigInteger('addressId');
+			$table->string('orderNumber');
 			$table->integer('quantity')->default(0);
 			$table->float('subTotal')->default(0.0);
 			$table->float('tax')->default(0.0);
