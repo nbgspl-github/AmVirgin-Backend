@@ -7,6 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model {
 	protected $table = 'orders';
+	protected $fillable = [
+		'customerId',
+		'addressId',
+		'orderNumber',
+		'quantity',
+		'subTotal',
+		'tax',
+		'total',
+		'paymentMode',
+		'status',
+	];
 
 	public function setOrderNumberAttribute($value) {
 		$this->attributes['orderNumber'] = sprintf('AVG-%d-%d', time(), $this->getKey());
