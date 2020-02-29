@@ -231,15 +231,13 @@ class ProductsController extends ExtendedResourceController {
 					});
 				}
 			});
-			if (\request()->hasFile('files')) {
-				collect(\request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product) {
-					ProductImage::create([
-						'productId' => $product->getKey(),
-						'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile),
-						'tag' => sprintf('product-%d-images', $product->getKey()),
-					]);
-				});
-			}
+			collect(\request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product) {
+				ProductImage::create([
+					'productId' => $product->getKey(),
+					'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile),
+					'tag' => sprintf('product-%d-images', $product->getKey()),
+				]);
+			});
 			$response->status(HttpOkay)->message('Product details were updated successfully.');
 		}
 		catch (ModelNotFoundException $exception) {

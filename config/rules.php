@@ -33,7 +33,7 @@ return [
 				'otp' => ['bail', 'required_if:type,3', 'numeric', 'min:1111', 'max:9999'],
 			],
 			'register' => [
-				'name' => ['bail', 'required', 'string', 'min:2', 'max:100'],
+				'name' => ['bail', 'required', 'string', 'min:2', 'max:256'],
 				'email' => ['bail', 'required', 'email'],
 				'mobile' => ['bail', 'required', 'digits:10'],
 				'password' => ['bail', 'required', 'string', 'min:4', 'max:64'],
@@ -41,7 +41,12 @@ return [
 			],
 			'update' => [
 				'profile' => [
-					'name',
+					'name' => ['bail', 'required', 'string', 'min:2', 'max:256'],
+					'businessName' => ['bail', 'required', 'string', 'min:2', 'max:256'],
+					'description' => ['bail', 'nullable', 'string', 'min:1', 'max:2000'],
+					'countryId' => ['bail', 'required', Rule::exists(Tables::Countries, 'id')],
+					'stateId' => ['bail', 'required', Rule::exists(Tables::States, 'id')],
+					'cityId' => ['bail', 'required', Rule::exists(Tables::Cities, 'id')],
 				],
 				'avatar' => [
 					'avatar' => ['bail', 'required', 'image', 'min:1', 'max:4096'],

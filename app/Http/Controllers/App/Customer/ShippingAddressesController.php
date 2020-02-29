@@ -8,12 +8,13 @@ use App\Interfaces\Tables;
 use App\Models\ShippingAddress;
 use App\Resources\Addresses\Customer\ShippingAddressResource;
 use App\Traits\ExtendedRequestValidator;
+use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\Rule;
 use Throwable;
 
 class ShippingAddressesController extends ExtendedResourceController {
-	use ExtendedRequestValidator;
+	use ValidatesRequest;
 	protected array $rules;
 
 	public function __construct() {
@@ -58,8 +59,9 @@ class ShippingAddressesController extends ExtendedResourceController {
 
 	public function store() {
 		$response = responseApp();
+		$validated = null;
 		try {
-			$validated = (object)$this->validate($this->rules['store']);
+			$validated = (object)$this->requestValid(request(), $this->rules['store']);
 			try {
 				$address = ShippingAddress::where([
 					['type', $validated->type],
@@ -70,7 +72,7 @@ class ShippingAddressesController extends ExtendedResourceController {
 					'mobile' => $validated->mobile,
 					'alternateMobile' => $validated->alternateMobile,
 					'pinCode' => $validated->pinCode,
-					'stateId' => $validated->state,
+					'stateId' => $validated->stateId,
 					'address' => $validated->address,
 					'locality' => $validated->locality,
 					'cityId' => $validated->cityId,
@@ -86,7 +88,7 @@ class ShippingAddressesController extends ExtendedResourceController {
 					'mobile' => $validated->mobile,
 					'alternateMobile' => $validated->alternateMobile,
 					'pinCode' => $validated->pinCode,
-					'stateId' => $validated->state,
+					'stateId' => $validated->stateId,
 					'address' => $validated->address,
 					'locality' => $validated->locality,
 					'cityId' => $validated->cityId,
@@ -111,7 +113,7 @@ class ShippingAddressesController extends ExtendedResourceController {
 	public function update($id) {
 		$response = responseApp();
 		try {
-			$validated = (object)$this->validate($this->rules['update']);
+			$validated = (object)$this->$this->requestValid(request(), $this->rules['update']);
 			$address = ShippingAddress::where([
 				['customerId', $this->guard()->id()],
 				['id', $id],
@@ -121,7 +123,7 @@ class ShippingAddressesController extends ExtendedResourceController {
 				'mobile' => $validated->mobile,
 				'alternateMobile' => $validated->alternateMobile,
 				'pinCode' => $validated->pinCode,
-				'stateId' => $validated->state,
+				'stateId' => $validated->stateId,
 				'address' => $validated->address,
 				'locality' => $validated->locality,
 				'cityId' => $validated->cityId,

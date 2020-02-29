@@ -4,9 +4,14 @@ namespace App\Models;
 
 use App\Classes\Cart\CartItem;
 use App\Classes\Cart\CartItemCollection;
+use App\Classes\Str;
+use App\Constants\CartStatus;
+use App\Constants\OrderStatus;
+use App\Exceptions\CartAlreadySubmittedException;
 use App\Exceptions\CartItemNotFoundException;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use stdClass;
 
 class Cart extends Model {
@@ -70,6 +75,7 @@ class Cart extends Model {
 	}
 
 	public function addItem(CartItem ...$cartItems) {
+		throw_if($this->wasSubmitted(), new CartAlreadySubmittedException($this));
 		collect($cartItems)->each(function (CartItem $item) {
 			$uniqueId = $item->getUniqueId();
 			if (!$this->itemCollection->has($uniqueId))
@@ -81,6 +87,7 @@ class Cart extends Model {
 	}
 
 	public function updateItem(CartItem ...$cartItems) {
+		throw_if($this->wasSubmitted(), new CartAlreadySubmittedException($this));
 		collect($cartItems)->each(function (CartItem $item) {
 			$uniqueId = $item->getUniqueId();
 			if (!$this->itemCollection->has($uniqueId))
@@ -92,6 +99,7 @@ class Cart extends Model {
 	}
 
 	public function removeItem(CartItem ...$cartItems) {
+		throw_if($this->wasSubmitted(), new CartAlreadySubmittedException($this));
 		collect($cartItems)->each(function (CartItem $item) {
 			$uniqueId = $item->getUniqueId();
 			if ($this->itemCollection->has($uniqueId))
@@ -103,6 +111,7 @@ class Cart extends Model {
 	}
 
 	public function destroyItem(CartItem ...$cartItems) {
+		throw_if($this->wasSubmitted(), new CartAlreadySubmittedException($this));
 		collect($cartItems)->each(function (CartItem $item) {
 			$uniqueId = $item->getUniqueId();
 			if ($this->itemCollection->has($uniqueId))
@@ -145,6 +154,37 @@ class Cart extends Model {
 
 	public function save(array $options = []) {
 		return parent::save($options);
+	}
+
+	public function submit(): Order {
+		throw_if($this->wasSubmitted(), new CartAlreadySubmittedException($this));
+		$order = Order::create([
+			'customerId' => $this->customerId,
+			'addressId' => $this->addressId,
+			'quantity' => $this->quantity,
+			'subTotal' => $this->subTotal,
+			'tax' => $this->tax,
+			'total' => $this->total,
+			'paymentMode' => $this->paymentMode,
+			'status' => OrderStatus::Placed,
+		]);
+		$this->itemCollection->iterate(function (CartItem $cartItem) use ($order) {
+			$item = OrderItem::create([
+				'orderId' => $order->getKey(),
+				'productId' => $cartItem->getProduct()->getKey(),
+				'quantity' => $cartItem->getQuantity(),
+				'price' => $cartItem->getApplicablePrice(),
+				'total' => $cartItem->getItemTotal(),
+				'options' => $cartItem->getAttributes(),
+			]);
+		});
+		$this->status = CartStatus::Submitted;
+		$this->save();
+		return $order;
+	}
+
+	public function wasSubmitted() {
+		return Str::equals($this->status, CartStatus::Submitted);
 	}
 
 	protected function handleItemsUpdated() {
