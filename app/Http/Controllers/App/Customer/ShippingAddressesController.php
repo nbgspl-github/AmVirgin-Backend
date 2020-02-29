@@ -59,6 +59,7 @@ class ShippingAddressesController extends ExtendedResourceController {
 
 	public function store() {
 		$response = responseApp();
+		$validated = null;
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['store']);
 			try {
