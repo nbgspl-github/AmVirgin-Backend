@@ -12,7 +12,7 @@
 		<div class="content">
 			@include('admin.app.partials.topbar')
 			<div class="page-content-wrapper">
-				<div class="container-fluid" style="padding-top: 16px;">
+				<div class="container-fluid" style="padding-top: 16px;padding-bottom: 16px;">
 					@yield('content')
 				</div>
 			</div>
