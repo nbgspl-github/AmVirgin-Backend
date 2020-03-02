@@ -136,7 +136,7 @@
 
 @section('javascript')
 	<script>
-		var lastFile = null;
+		let lastFile = null;
 		previewImage = (event) => {
 			const reader = new FileReader();
 			reader.onload = function () {

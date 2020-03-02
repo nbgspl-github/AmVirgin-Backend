@@ -34,7 +34,7 @@
 									<div class="card-body">
 										<h5 class="card-title">Brands in Focus</h5>
 										<p class="card-text">Choose this to modify categories which will show up with a banner.</p>
-										<a href="javascript:void(0);" onclick="handleAddItem();" data-key="2" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
+										<a href="{{route('admin.shop.brands-in-focus.edit')}}" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
 									</div>
 								</div>
 							</div>

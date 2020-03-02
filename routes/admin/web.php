@@ -182,6 +182,12 @@ Route::prefix('admin')->group(function () {
 				Route::put('{id}/status', [ShopSlidersController::class, 'updateStatus'])->name('admin.shop.sliders.update.status');
 				Route::delete('{id}', [ShopSlidersController::class, 'delete'])->name('admin.shop.sliders.delete');
 			});
+
+			// Brands in Focus Route(s)
+			Route::prefix('brands-in-focus')->group(function () {
+				Route::get('', [HomePageController::class, 'editBrandsInFocus'])->name('admin.shop.brands-in-focus.edit');
+				Route::post('', [HomePageController::class, 'updateBrandsInFocus'])->name('admin.shop.brands-in-focus.update');
+			});
 		});
 
 		// Images Route(s)
