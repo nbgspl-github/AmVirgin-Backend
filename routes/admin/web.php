@@ -173,14 +173,14 @@ Route::prefix('admin')->group(function () {
 
 			// Shop Sliders' Route(s)
 			Route::prefix('sliders')->group(function () {
-				Route::get('', [ShopSlidersController::class,])->name('admin.shop.sliders.index');
-				Route::get('create', [ShopSlidersController::class, Methods::Create])->name('admin.shop.sliders.create');
-				Route::get('{id}/edit', [ShopSlidersController::class, Methods::Edit])->name('admin.shop.sliders.edit');
-				Route::get('{id}', [ShopSlidersController::class, Methods::Show])->name('admin.shop.sliders.show');
-				Route::post('', [ShopSlidersController::class, Methods::Store])->name('admin.shop.sliders.store');
-				Route::post('{id}', [ShopSlidersController::class, Methods::Update])->name('admin.shop.sliders.update');
-				Route::put('{id}/status', [ShopSlidersController::class, Methods::UpdateStatus])->name('admin.shop.sliders.update.status');
-				Route::delete('{id}', [ShopSlidersController::class, Methods::Delete])->name('admin.shop.sliders.delete');
+				Route::get('', [ShopSlidersController::class, 'index'])->name('admin.shop.sliders.index');
+				Route::get('create', [ShopSlidersController::class, 'create'])->name('admin.shop.sliders.create');
+				Route::get('{id}/edit', [ShopSlidersController::class, 'edit'])->name('admin.shop.sliders.edit');
+				Route::get('{id}', [ShopSlidersController::class, 'show'])->name('admin.shop.sliders.show');
+				Route::post('', [ShopSlidersController::class, 'store'])->name('admin.shop.sliders.store');
+				Route::post('{id}', [ShopSlidersController::class, 'update'])->name('admin.shop.sliders.update');
+				Route::put('{id}/status', [ShopSlidersController::class, 'updateStatus'])->name('admin.shop.sliders.update.status');
+				Route::delete('{id}', [ShopSlidersController::class, 'delete'])->name('admin.shop.sliders.delete');
 			});
 		});
 

@@ -183,6 +183,7 @@ return [
 				'active' => ['bail', 'required', 'boolean'],
 			],
 		],
+
 		'home-banner' => [
 			'store' => [
 				'title' => ['bail', 'required', 'string', 'min:1', 'max:256'],

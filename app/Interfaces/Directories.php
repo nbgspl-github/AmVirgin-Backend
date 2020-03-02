@@ -5,6 +5,7 @@ namespace App\Interfaces;
 interface Directories {
 	const Genre = 'genre';
 	const Sliders = 'slider';
+	const ShopSliders = 'shop-slider';
 	const Categories = 'categories';
 	const CategoriesBanner = 'categories-banner';
 	const Videos = 'videos';

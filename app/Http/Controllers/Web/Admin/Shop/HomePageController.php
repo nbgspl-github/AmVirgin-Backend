@@ -27,7 +27,7 @@ class HomePageController extends BaseController {
 	}
 
 	public function choices() {
-		return view('admin.shop.home-page.choices');
+		return view('admin.shop.choices');
 	}
 
 	public function editSaleOfferTimerDetails() {
@@ -45,7 +45,7 @@ class HomePageController extends BaseController {
 			$saleOffer = jsonDecodeArray($details);
 			$saleOffer['statements'] = implode(Str::NewLine, $saleOffer['statements']);
 		}
-		return view('admin.shop.home-page.sale-offer-timer.edit')->with('payload', (object)$saleOffer);
+		return view('admin.shop.sale-offer-timer.edit')->with('payload', (object)$saleOffer);
 	}
 
 	public function updateSaleOfferTimerDetails() {
