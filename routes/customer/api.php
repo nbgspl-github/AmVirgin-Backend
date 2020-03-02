@@ -69,6 +69,7 @@ Route::prefix('cart')->middleware([])->group(function () {
 	Route::post('destroy', [QuoteController::class, 'destroy']);
 	Route::get('retrieve', [QuoteController::class, 'retrieve']);
 	Route::put('wishlist/{productId}', [QuoteController::class, 'moveToWishlist']);
+	Route::post('submit', [QuoteController::class, 'submit']);
 });
 
 Route::prefix('wishlist')->middleware('auth:customer-api')->group(function () {
@@ -89,4 +90,10 @@ Route::prefix('addresses')->middleware('auth:customer-api')->group(function () {
 	Route::post('/', [ShippingAddressesController::class, 'store']);
 	Route::put('/{id}', [ShippingAddressesController::class, 'update']);
 	Route::delete('/{id}', [ShippingAddressesController::class, 'delete']);
+});
+
+Route::prefix('countries')->group(function () {
+	Route::get('/', [CountriesController::class, 'index'])->name('seller.countries.index');
+	Route::get('{countryId}/states', [StatesController::class, 'index'])->name('seller.states.index');
+	Route::get('states/{stateId}/cities', [CitiesController::class, 'index'])->name('seller.states.index');
 });

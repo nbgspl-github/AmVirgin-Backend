@@ -14,7 +14,7 @@
 									<div class="card-body">
 										<h5 class="card-title">Sliders</h5>
 										<p class="card-text">Choose this to update which sliders show up in the header section of homepage.</p>
-										<a href="javascript:void(0);" onclick="handleAddItem();" data-key="1" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
+										<a href="{{route('admin.shop.sliders.index')}}" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
 									</div>
 								</div>
 							</div>

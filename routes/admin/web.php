@@ -15,6 +15,7 @@ use App\Http\Controllers\Web\Admin\ServersController;
 use App\Http\Controllers\Web\Admin\SettingsController;
 use App\Http\Controllers\Web\Admin\Shop\HomePageController;
 use App\Http\Controllers\Web\Admin\SlidersController;
+use App\Http\Controllers\Web\Admin\Shop\SliderController as ShopSlidersController;
 use App\Http\Controllers\Web\Admin\SubscriptionPlansController;
 use App\Http\Controllers\Web\Admin\TvSeries\AttributesController;
 use App\Http\Controllers\Web\Admin\TvSeries\ContentController;
@@ -24,7 +25,6 @@ use App\Http\Controllers\Web\Admin\TvSeries\TvSeriesBase;
 use App\Http\Controllers\Web\Admin\Videos\VideosBase;
 use App\Models\Category;
 use App\Models\Genre;
-use App\Models\HomeBanner;
 use App\Models\Slider;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -169,7 +169,19 @@ Route::prefix('admin')->group(function () {
 		Route::prefix('shop')->middleware('auth:admin')->group(function () {
 			Route::get('choices', [HomePageController::class, 'choices'])->name('admin.shop.choices');
 			Route::get('sale-offer-timer', [HomePageController::class, 'editSaleOfferTimerDetails'])->name('admin.shop.sale-offer-timer.edit');
-			Route::post('sale-offer-timer', [HomePageController::class, 'editSaleOfferTimerDetails'])->name('admin.shop.sale-offer-timer.update');
+			Route::post('sale-offer-timer', [HomePageController::class, 'updateSaleOfferTimerDetails'])->name('admin.shop.sale-offer-timer.update');
+
+			// Shop Sliders' Route(s)
+			Route::prefix('sliders')->group(function () {
+				Route::get('', [ShopSlidersController::class,])->name('admin.shop.sliders.index');
+				Route::get('create', [ShopSlidersController::class, Methods::Create])->name('admin.shop.sliders.create');
+				Route::get('{id}/edit', [ShopSlidersController::class, Methods::Edit])->name('admin.shop.sliders.edit');
+				Route::get('{id}', [ShopSlidersController::class, Methods::Show])->name('admin.shop.sliders.show');
+				Route::post('', [ShopSlidersController::class, Methods::Store])->name('admin.shop.sliders.store');
+				Route::post('{id}', [ShopSlidersController::class, Methods::Update])->name('admin.shop.sliders.update');
+				Route::put('{id}/status', [ShopSlidersController::class, Methods::UpdateStatus])->name('admin.shop.sliders.update.status');
+				Route::delete('{id}', [ShopSlidersController::class, Methods::Delete])->name('admin.shop.sliders.delete');
+			});
 		});
 
 		// Images Route(s)
