@@ -3,6 +3,8 @@
 use App\Http\Controllers\App\Customer\AuthController;
 use App\Http\Controllers\App\Customer\Cart\CustomerWishlistController;
 use App\Http\Controllers\App\Customer\Cart\QuoteController;
+use App\Http\Controllers\App\Customer\CitiesController;
+use App\Http\Controllers\App\Customer\CountriesController;
 use App\Http\Controllers\App\Customer\Playback\PlaybackController;
 use App\Http\Controllers\App\Customer\Playback\TrailerPlayback;
 use App\Http\Controllers\App\Customer\PopularPicksController;
@@ -10,6 +12,7 @@ use App\Http\Controllers\App\Customer\ProductsController;
 use App\Http\Controllers\App\Customer\ShippingAddressesController;
 use App\Http\Controllers\App\Customer\ShopSlidersController;
 use App\Http\Controllers\App\Customer\SlidersController;
+use App\Http\Controllers\App\Customer\StatesController;
 use App\Http\Controllers\App\Customer\TrendController;
 use App\Http\Controllers\App\Customer\TwoFactorAuthController;
 use Illuminate\Support\Facades\Route;
