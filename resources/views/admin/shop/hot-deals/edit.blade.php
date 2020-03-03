@@ -70,8 +70,8 @@
 		handleStateChanged = () => {
 			const checked = event.target.checked;
 			if (checked) {
-				if (count >= 8) {
-					alertify.log('Only 4 categories are allowed.');
+				if (count >= 50) {
+					alertify.log('Only 50 products are allowed.');
 					event.target.checked = false;
 				} else {
 					count++;
