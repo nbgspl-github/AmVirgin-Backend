@@ -22,6 +22,7 @@ class ProductEditResource extends JsonResource {
 				$value = AttributeValue::find($attribute->valueId);
 				return [
 					'key' => $value->id,
+					'uniqueId' => $attribute->getKey(),
 					'value' => $value->value,
 				];
 			});
