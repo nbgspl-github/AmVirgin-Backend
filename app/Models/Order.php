@@ -20,7 +20,7 @@ class Order extends Model {
 	];
 
 	public function setOrderNumberAttribute($value) {
-		$this->attributes['orderNumber'] = sprintf('AVG-%d-%d', time(), $this->getKey());
+		$this->attributes['orderNumber'] = sprintf('AVG-%d-%d', time(), rand(1, 1000));
 	}
 
 	public function items() {

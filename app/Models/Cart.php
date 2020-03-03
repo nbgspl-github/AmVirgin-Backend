@@ -161,7 +161,7 @@ class Cart extends Model {
 		$order = Order::create([
 			'customerId' => $this->customerId,
 			'addressId' => $this->addressId,
-			'quantity' => $this->quantity,
+			'quantity' => $this->itemCount,
 			'subTotal' => $this->subTotal,
 			'tax' => $this->tax,
 			'total' => $this->total,

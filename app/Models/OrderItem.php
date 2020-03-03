@@ -14,6 +14,9 @@ class OrderItem extends Model {
 		'total',
 		'options',
 	];
+	protected $casts = [
+		'options' => 'array',
+	];
 
 	public function attributes() {
 
