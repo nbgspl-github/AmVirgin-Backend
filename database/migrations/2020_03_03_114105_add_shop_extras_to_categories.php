@@ -13,8 +13,8 @@ class AddShopExtrasToCategories extends Migration {
 	public function up() {
 		Schema::table('categories', function (Blueprint $table) {
 			$table->boolean('brandInFocus')->default(false)->after('icon');
-			$table->boolean('popularCategory')->default(false)->after('popularCategory');
-			$table->boolean('trendingNow')->default(false)->after('trendingNow');
+			$table->boolean('popularCategory')->default(false)->after('brandInFocus');
+			$table->boolean('trendingNow')->default(false)->after('popularCategory');
 		});
 	}
 
