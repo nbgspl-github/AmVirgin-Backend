@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Seller;
+use App\Models\Settings;
 use App\Models\ShopSlider;
 use Illuminate\Console\Command;
 use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
@@ -38,9 +39,9 @@ class CartTesterCommand extends Command {
 	 * @return mixed
 	 */
 	public function handle() {
-		$slider = ShopSlider::retrieve(1);
-		echo $slider->title();
-		$slider->title('MZP Dark');
-		echo $slider->title();
+		$time = Settings::get('time');
+		Settings::set('converted', strtotime($time));
+		$converted = Settings::get('converted');
+		echo date('H:i:s', $converted);
 	}
 }
