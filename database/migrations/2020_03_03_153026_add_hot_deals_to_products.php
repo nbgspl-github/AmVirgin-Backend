@@ -12,7 +12,7 @@ class AddHotDealsToProducts extends Migration {
 	 */
 	public function up() {
 		Schema::table('products', function (Blueprint $table) {
-			$table->boolean('hotDeal')->default(false);
+			$table->boolean('hotDeal')->default(false)->after('trailer');
 		});
 	}
 
