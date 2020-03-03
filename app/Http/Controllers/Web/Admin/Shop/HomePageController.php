@@ -50,7 +50,6 @@ class HomePageController extends BaseController {
 		}
 		else {
 			$saleOffer = jsonDecodeArray($details);
-			$saleOffer['countDown'] = date('H:i:s', $saleOffer['countDown']);
 			$saleOffer['statements'] = implode(Str::NewLine, $saleOffer['statements']);
 		}
 		return view('admin.shop.sale-offer-timer.edit')->with('payload', (object)$saleOffer);
@@ -63,7 +62,7 @@ class HomePageController extends BaseController {
 			$saleOffer = [
 				'title' => $validated->title,
 				'statements' => explode(Str::NewLine, $validated->statements),
-				'countDown' => strtotime($validated->countDown),
+				'countDown' => $validated->countDown,
 				'visible' => request()->has('visible'),
 			];
 			Settings::set('shopSaleOfferDetails', jsonEncode($saleOffer));
