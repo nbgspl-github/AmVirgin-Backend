@@ -6,9 +6,14 @@ use App\Classes\Str;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Models\Category;
+use App\Models\Product;
+use App\Models\Seller;
 use App\Models\Settings;
+use App\Resources\Products\Customer\CategoryResource;
 use App\Storage\SecuredDisk;
 use App\Traits\ValidatesRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Arr;
 use Throwable;
 
 class HomePageController extends BaseController {
@@ -23,9 +28,6 @@ class HomePageController extends BaseController {
 					'title' => ['bail', 'required', 'string', 'min:1', 'max:50'],
 					'countDown' => ['bail', 'required', 'date_format:H:i:s'],
 					'statements' => ['bail', 'required', 'string'],
-				],
-				'brandsInFocus' => [
-					'focus.*' => ['bail', 'required', 'distinct'],
 				],
 			],
 		];
@@ -87,6 +89,7 @@ class HomePageController extends BaseController {
 					return [
 						'id' => $inner->getKey(),
 						'name' => $inner->getName(),
+						'brandInFocus' => $inner->brandInFocus(),
 					];
 				});
 				return [
@@ -94,6 +97,7 @@ class HomePageController extends BaseController {
 					'name' => $child->getName(),
 					'hasInner' => $innerChildren->count() > 0,
 					'inner' => $innerChildren,
+					'brandInFocus' => $child->brandInFocus(),
 				];
 			});
 			return [
@@ -101,6 +105,7 @@ class HomePageController extends BaseController {
 				'name' => $topLevel->getName(),
 				'hasInner' => $children->count() > 0,
 				'inner' => $children,
+				'brandInFocus' => $topLevel->brandInFocus(),
 			];
 		});
 		return view('admin.shop.brands-in-focus.edit')->with('categories', $topLevel);
@@ -109,14 +114,228 @@ class HomePageController extends BaseController {
 	public function updateBrandsInFocus() {
 		$response = responseWeb();
 		try {
-			$validated = (object)$this->requestValid(request(), $this->rules['update']['brandsInFocus']);
-
-		}
-		catch (ValidationException $exception) {
-			$response->error('Each item must have a different category.')->data(request()->all());
+			$choices = request('choice');
+			if (count($choices) > 8) {
+				$response->error('You can select a maximum of 8 categories only.')->back();
+			}
+			else {
+				Category::all()->each(function (Category $category) use ($choices) {
+					if (in_array($category->getKey(), $choices)) {
+						$category->brandInFocus(true);
+					}
+					else {
+						$category->brandInFocus(false);
+					}
+					$category->save();
+				});
+				$response->route('admin.shop.choices')->success('Successfully updated categories for brands in focus.');
+			}
 		}
 		catch (Throwable $exception) {
 			$response->error($exception->getMessage())->data(request()->all());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+
+	public function editPopularStuff() {
+		$categories = $topLevel = Category::where('parentId', 0)->get();
+		$topLevel->transform(function (Category $topLevel) {
+			$children = $topLevel->children()->get();
+			$children = $children->transform(function (Category $child) {
+				$innerChildren = $child->children()->get();
+				$innerChildren = $innerChildren->transform(function (Category $inner) {
+					return [
+						'id' => $inner->getKey(),
+						'name' => $inner->getName(),
+						'popularCategory' => $inner->popularCategory(),
+					];
+				});
+				return [
+					'id' => $child->getKey(),
+					'name' => $child->getName(),
+					'hasInner' => $innerChildren->count() > 0,
+					'inner' => $innerChildren,
+					'popularCategory' => $child->popularCategory(),
+				];
+			});
+			return [
+				'id' => $topLevel->getKey(),
+				'name' => $topLevel->getName(),
+				'hasInner' => $children->count() > 0,
+				'inner' => $children,
+				'popularCategory' => $topLevel->popularCategory(),
+			];
+		});
+		return view('admin.shop.popular-stuff.edit')->with('categories', $topLevel);
+	}
+
+	public function updatePopularStuff() {
+		$response = responseWeb();
+		try {
+			$choices = request('choice');
+			if (count($choices) > 5) {
+				$response->error('You can select a maximum of 5 categories only.')->back();
+			}
+			else {
+				Category::all()->each(function (Category $category) use ($choices) {
+					if (in_array($category->getKey(), $choices)) {
+						$category->popularCategory(true);
+					}
+					else {
+						$category->popularCategory(false);
+					}
+					$category->save();
+				});
+				$response->route('admin.shop.choices')->success('Successfully updated categories for popular stuff.');
+			}
+		}
+		catch (Throwable $exception) {
+			$response->error($exception->getMessage())->data(request()->all());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+
+	public function editTrendingNow() {
+		$categories = $topLevel = Category::where('parentId', 0)->get();
+		$topLevel->transform(function (Category $topLevel) {
+			$children = $topLevel->children()->get();
+			$children = $children->transform(function (Category $child) {
+				$innerChildren = $child->children()->get();
+				$innerChildren = $innerChildren->transform(function (Category $inner) {
+					return [
+						'id' => $inner->getKey(),
+						'name' => $inner->getName(),
+						'trendingNow' => $inner->trendingNow(),
+					];
+				});
+				return [
+					'id' => $child->getKey(),
+					'name' => $child->getName(),
+					'hasInner' => $innerChildren->count() > 0,
+					'inner' => $innerChildren,
+					'trendingNow' => $child->trendingNow(),
+				];
+			});
+			return [
+				'id' => $topLevel->getKey(),
+				'name' => $topLevel->getName(),
+				'hasInner' => $children->count() > 0,
+				'inner' => $children,
+				'trendingNow' => $topLevel->trendingNow(),
+			];
+		});
+		return view('admin.shop.trending-now.edit')->with('categories', $topLevel);
+	}
+
+	public function updateTrendingNow() {
+		$response = responseWeb();
+		try {
+			$choices = request('choice');
+			if (count($choices) > 4) {
+				$response->error('You can select a maximum of 4 categories only.')->back();
+			}
+			else {
+				Category::all()->each(function (Category $category) use ($choices) {
+					if (in_array($category->getKey(), $choices)) {
+						$category->trendingNow(true);
+					}
+					else {
+						$category->trendingNow(false);
+					}
+					$category->save();
+				});
+				$response->route('admin.shop.choices')->success('Successfully updated categories for trending now.');
+			}
+		}
+		catch (Throwable $exception) {
+			$response->error($exception->getMessage())->data(request()->all());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+
+	public function editHotDeals() {
+		$products = Product::where([
+			['draft', false],
+			['deleted', false],
+			['visibility', true],
+		])->get();
+		$products->transform(function (Product $product) {
+			return [
+				'id' => $product->getKey(),
+				'name' => $product->getName(),
+				'hotDeal' => $product->hotDeal(),
+			];
+		});
+		return view('admin.shop.hot-deals.edit')->with('products', $products);
+	}
+
+	public function updateHotDeals() {
+		$response = responseWeb();
+		try {
+			$choices = request('choice');
+			if (count($choices) > 50) {
+				$response->error('You can select a maximum of 50 products only.')->back();
+			}
+			else {
+				Product::all()->each(function (Product $product) use ($choices) {
+					if (in_array($product->getKey(), $choices)) {
+						$product->hotDeal = true;
+					}
+					else {
+						$product->hotDeal = false;
+					}
+					$product->save();
+				});
+				$response->route('admin.shop.choices')->success('Successfully updated products for hot deals.');
+			}
+		}
+		catch (Throwable $exception) {
+			$response->error($exception->getMessage())->data(request()->all());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+
+	public function viewProductDetails($id) {
+		$response = responseApp();
+		try {
+			$product = Product::retrieveThrows($id);
+			$seller = Seller::retrieve($product->getSellerId());
+			$category = Category::retrieve($product->getCategoryId());
+			if ($seller == null) {
+				$seller = Str::Empty;
+			}
+			else {
+				$seller = sprintf('%s [%d]', $seller->getName(), $seller->getKey());
+			}
+			if ($category == null) {
+				$category = Str::Empty;
+			}
+			else {
+				$category = sprintf('%s [%d]', $category->getName(), $category->getKey());
+			}
+			$data = [
+				'name' => $product->getName(),
+				'category' => $category,
+				'seller' => $seller,
+				'price' => $product->getOriginalPrice() . ' ' . $product->getCurrency(),
+				'stock' => $product->getStock(),
+				'sku' => $product->getSku(),
+			];
+			$response->status(HttpOkay)->message('Product details retrieved successfully.')->setValue('data', $data);
+		}
+		catch (ModelNotFoundException $exception) {
+			$response->status(HttpResourceNotFound)->message($exception->getMessage());
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
 		}
 		finally {
 			return $response->send();

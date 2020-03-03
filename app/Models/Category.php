@@ -4,14 +4,15 @@ namespace App\Models;
 
 use App\Traits\FluentConstructor;
 use App\Traits\GenerateUrls;
+use App\Traits\HasAttributeMethods;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model {
 	use RetrieveResource;
-	use GenerateUrls;
 	use FluentConstructor;
+	use HasAttributeMethods;
 
 	protected $table = 'categories';
 
@@ -28,7 +29,7 @@ class Category extends Model {
 	/**
 	 * @return string
 	 */
-	public function getName(): string{
+	public function getName(): string {
 		return $this->name;
 	}
 
@@ -36,7 +37,7 @@ class Category extends Model {
 	 * @param string $name
 	 * @return Category
 	 */
-	public function setName(string $name): Category{
+	public function setName(string $name): Category {
 		$this->name = $name;
 		return $this;
 	}
@@ -44,14 +45,14 @@ class Category extends Model {
 	/**
 	 * @return int
 	 */
-	public function getParentId(): int{
+	public function getParentId(): int {
 		return $this->parentId;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getParentName(): string{
+	public function getParentName(): string {
 		if ($this->getParentId() == config('values.category.super.index'))
 			return 'Main';
 		return Category::find($this->getParentId())->getName();
@@ -61,7 +62,7 @@ class Category extends Model {
 	 * @param int $parentId
 	 * @return Category
 	 */
-	public function setParentId(int $parentId): Category{
+	public function setParentId(int $parentId): Category {
 		$this->parentId = $parentId;
 		return $this;
 	}
@@ -69,7 +70,7 @@ class Category extends Model {
 	/**
 	 * @return string|null
 	 */
-	public function getDescription(): ?string{
+	public function getDescription(): ?string {
 		return $this->description;
 	}
 
@@ -77,7 +78,7 @@ class Category extends Model {
 	 * @param string|null $description
 	 * @return Category
 	 */
-	public function setDescription(?string $description): Category{
+	public function setDescription(?string $description): Category {
 		$this->description = $description;
 		return $this;
 	}
@@ -85,7 +86,7 @@ class Category extends Model {
 	/**
 	 * @return bool
 	 */
-	public function isVisible(): bool{
+	public function isVisible(): bool {
 		return $this->visibility;
 	}
 
@@ -93,7 +94,7 @@ class Category extends Model {
 	 * @param bool $visibility
 	 * @return Category
 	 */
-	public function setVisibility(bool $visibility): Category{
+	public function setVisibility(bool $visibility): Category {
 		$this->visibility = $visibility;
 		return $this;
 	}
@@ -101,14 +102,14 @@ class Category extends Model {
 	/**
 	 * @return string|null
 	 */
-	public function getPoster(): ?string{
+	public function getPoster(): ?string {
 		return $this->poster;
 	}
 
 	/**
 	 * @return string|null
 	 */
-	public function getIcon(): ?string{
+	public function getIcon(): ?string {
 		return $this->icon;
 	}
 
@@ -117,7 +118,7 @@ class Category extends Model {
 	 * @return Category
 	 */
 
-	public function setPoster(?string $poster): Category{
+	public function setPoster(?string $poster): Category {
 		$this->poster = $poster;
 		return $this;
 	}
@@ -127,7 +128,7 @@ class Category extends Model {
 	 * @return Category
 	 */
 
-	public function setIcon(?string $icon): Category{
+	public function setIcon(?string $icon): Category {
 		$this->icon = $icon;
 		return $this;
 	}
@@ -135,11 +136,11 @@ class Category extends Model {
 	/**
 	 * @return HasMany
 	 */
-	public function attributes(){
+	public function attributes() {
 		return $this->hasMany('App\Models\Attribute', 'categoryId');
 	}
 
-	public function children(){
+	public function children() {
 		return $this->hasMany(Category::class, 'parentId');
 	}
 }

@@ -43,7 +43,7 @@
 									<div class="card-body">
 										<h5 class="card-title">Today's Deals</h5>
 										<p class="card-text">Choose this to marks products which will show up in today's hot deals.</p>
-										<a href="" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
+										<a href="{{route('admin.shop.hot-deals.edit')}}" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
 									</div>
 								</div>
 							</div>
@@ -54,7 +54,7 @@
 									<div class="card-body">
 										<h5 class="card-title">Popular Stuff</h5>
 										<p class="card-text">Choose this to update which categories will shop up in popular stuff section.</p>
-										<a href="" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
+										<a href="{{route('admin.shop.popular-category.edit')}}" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
 									</div>
 								</div>
 							</div>
@@ -62,8 +62,8 @@
 								<div class="card shadow-sm border animated slideInLeft">
 									<div class="card-body">
 										<h5 class="card-title">Trending Now</h5>
-										<p class="card-text">Choose this to update what categories will show up in trending now section.</p>
-										<a href="" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
+										<p class="card-text">Choose this to update what categories will show up in trending now.</p>
+										<a href="{{route('admin.shop.trending-now.edit')}}" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
 									</div>
 								</div>
 							</div>

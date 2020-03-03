@@ -15,6 +15,7 @@ use App\Http\Controllers\App\Customer\SlidersController;
 use App\Http\Controllers\App\Customer\StatesController;
 use App\Http\Controllers\App\Customer\TrendController;
 use App\Http\Controllers\App\Customer\TwoFactorAuthController;
+use App\Http\Controllers\App\Customer\HomePageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [TwoFactorAuthController::class, 'exists'])->name('customer.check');
@@ -85,7 +86,7 @@ Route::prefix('wishlist')->middleware('auth:customer-api')->group(function () {
 });
 
 Route::prefix('shop')->group(function () {
-	Route::get('sliders', [ShopSlidersController::class, 'index'])->name('customer.shop.sliders.index');
+	Route::get('homepage', [HomePageController::class, 'index']);
 });
 
 Route::prefix('addresses')->middleware('auth:customer-api')->group(function () {

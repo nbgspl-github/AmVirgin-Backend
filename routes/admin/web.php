@@ -188,6 +188,25 @@ Route::prefix('admin')->group(function () {
 				Route::get('', [HomePageController::class, 'editBrandsInFocus'])->name('admin.shop.brands-in-focus.edit');
 				Route::post('', [HomePageController::class, 'updateBrandsInFocus'])->name('admin.shop.brands-in-focus.update');
 			});
+
+			// Hot Deals Route(s)
+			Route::prefix('hot-deals')->group(function () {
+				Route::get('', [HomePageController::class, 'editHotDeals'])->name('admin.shop.hot-deals.edit');
+				Route::get('/{id}', [HomePageController::class, 'viewProductDetails'])->name('admin.shop.hot-deals.show');
+				Route::post('', [HomePageController::class, 'updateHotDeals'])->name('admin.shop.hot-deals.update');
+			});
+
+			// Popular Stuff Route(s)
+			Route::prefix('popular-category')->group(function () {
+				Route::get('', [HomePageController::class, 'editPopularStuff'])->name('admin.shop.popular-category.edit');
+				Route::post('', [HomePageController::class, 'updatePopularStuff'])->name('admin.shop.popular-category.update');
+			});
+
+			// Trending Now Route(s)
+			Route::prefix('trending-now')->group(function () {
+				Route::get('', [HomePageController::class, 'editTrendingNow'])->name('admin.shop.trending-now.edit');
+				Route::post('', [HomePageController::class, 'updateTrendingNow'])->name('admin.shop.trending-now.update');
+			});
 		});
 
 		// Images Route(s)
