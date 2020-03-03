@@ -25,7 +25,7 @@
 								</div>
 								<div class="form-group">
 									<label>Rating<span class="text-primary">*</span></label>
-									<select name="stars" class="form-control">
+									<select name="rating" class="form-control">
 										<option value="0">Not rated</option>
 										<option value="1">1</option>
 										<option value="2">2</option>
