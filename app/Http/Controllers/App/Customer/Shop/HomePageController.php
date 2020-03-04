@@ -54,11 +54,12 @@ class HomePageController extends ExtendedResourceController {
 		if ($offerDetails != []) {
 			$elapsed = \time();
 			$remaining = $lastUpdated - Time::toSeconds($offerDetails['countDown']);
-			$countDown = 0;
-			if ($elapsed >= $remaining) {
-				$countDown = abs($elapsed - $remaining);
-				$countDown *= 1000;
-			}
+			$difference = $elapsed - $remaining;
+			if ($difference > 0)
+				$countDown = $difference;
+			else
+				$countDown = 0;
+			$countDown *= 1000;
 			$offerDetails['countDown'] = $countDown;
 		}
 		$data['offerDetails'] = $offerDetails;
