@@ -4,6 +4,7 @@ namespace App\Http\Controllers\App\Customer;
 
 use App\Classes\Str;
 use App\Http\Controllers\Base\ResourceController;
+use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Http\Resources\Videos\VideoResource;
 use App\Interfaces\VideoTypes;
 use App\Models\Video;
@@ -15,25 +16,24 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Throwable;
 
-class VideosController extends ResourceController{
-	use FluentResponse;
+class VideosController extends ExtendedResourceController {
+	public function __construct() {
+		parent::__construct();
+	}
 
-	public function show($slug){
-		$response = $this->response();
+	public function show($id) {
+		$response = responseApp();
 		try {
-			/**
-			 * @var Video $video
-			 */
-			$video = Video::where('slug', $slug)->firstOrFail();
+			$video = Video::retrieveThrows($id);
 			$payload = new VideoResource($video);
 			$payload = $payload->jsonSerialize();
 			if ($video->getType() == VideoTypes::Series) {
-				$seasons = $video->sources()->get()->groupBy('season')->transform(function (Collection $season){
-					return $season->groupBy('episode')->transform(function (Collection $episode){
+				$seasons = $video->sources()->get()->groupBy('season')->transform(function (Collection $season) {
+					return $season->groupBy('episode')->transform(function (Collection $episode) {
 						return [
 							'title' => $episode->first()->getTitle(),
 							'description' => $episode->first()->getDescription(),
-							'options' => $episode->transform(function (VideoSource $source){
+							'options' => $episode->transform(function (VideoSource $source) {
 								return [
 									'language' => $source->language()->first()->getName(),
 									'quality' => $source->mediaQuality()->first()->getName(),
@@ -48,7 +48,7 @@ class VideosController extends ResourceController{
 					})->values();
 				})->values();
 				$season = 1;
-				$seasons = collect($seasons->toArray())->transform(function ($item) use (&$season){
+				$seasons = collect($seasons->toArray())->transform(function ($item) use (&$season) {
 					return [
 						'season' => $season++,
 						'episodes' => count($item),
@@ -70,23 +70,7 @@ class VideosController extends ResourceController{
 		}
 	}
 
-	protected function parentProvider(){
-
-	}
-
-	protected function provider(){
-
-	}
-
-	protected function resourceConverter(Model $model){
-
-	}
-
-	protected function collectionConverter(Collection $collection){
-
-	}
-
-	protected function guard(){
-
+	protected function guard() {
+		return auth('customer-api');
 	}
 }

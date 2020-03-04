@@ -52,6 +52,19 @@
 											</select>
 										</div>
 										<div class="form-group">
+											<label for="sectionId">Choose containing section<span class="text-primary">*</span></label>
+											<select id="sectionId" name="sectionId" class="form-control" required>
+												<option value="" disabled selected>Choose...</option>
+												@foreach($sections as $section)
+													@if(old('sectionId',$payload->sectionId)==$sections->getKey())
+														<option value="{{$section->id}}" selected>{{$section->title}}</option>
+													@else
+														<option value="{{$section->id}}">{{$section->title}}</option>
+													@endif
+												@endforeach
+											</select>
+										</div>
+										<div class="form-group">
 											<label for="released">@required (Release date)</label>
 											<input id="released" type="date" name="released" class="form-control" required placeholder="Choose or type release date" value="{{old('released',$payload->getReleased())}}" onkeydown="return false;"/>
 										</div>

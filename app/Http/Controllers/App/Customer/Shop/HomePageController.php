@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\App\Customer;
+namespace App\Http\Controllers\App\Customer\Shop;
 
 use App\Classes\Time;
 use App\Http\Controllers\Web\ExtendedResourceController;

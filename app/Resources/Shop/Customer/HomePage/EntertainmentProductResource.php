@@ -2,16 +2,16 @@
 
 namespace App\Resources\Shop\Customer\HomePage;
 
-use App\Storage\SecuredDisk;
+use App\Resources\Products\Customer\ProductImageResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TrendingNowResource extends JsonResource {
+class EntertainmentProductResource extends JsonResource {
 	public function toArray($request) {
 		return [
 			'id' => $this->id,
-			'title' => $this->title,
-			'description' => $this->description,
-			'poster' => SecuredDisk::existsUrl($this->poster),
+			'name' => $this->name,
+			'price' => $this->originalPrice,
+			'images' => ProductImageResource::collection($this->images),
 		];
 	}
 

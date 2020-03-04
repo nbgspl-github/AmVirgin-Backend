@@ -15,7 +15,8 @@ use App\Http\Controllers\App\Customer\SlidersController;
 use App\Http\Controllers\App\Customer\StatesController;
 use App\Http\Controllers\App\Customer\TrendController;
 use App\Http\Controllers\App\Customer\TwoFactorAuthController;
-use App\Http\Controllers\App\Customer\HomePageController;
+use App\Http\Controllers\App\Customer\Shop\HomePageController as ShopHomeController;
+use App\Http\Controllers\App\Customer\Entertainment\HomePageController as EntertainmentHomeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [TwoFactorAuthController::class, 'exists'])->name('customer.check');
@@ -38,7 +39,7 @@ Route::prefix('popular')->group(function () {
 });
 
 Route::prefix('videos')->group(function () {
-	Route::get('/{slug}', [\App\Http\Controllers\App\Customer\VideosController::class, 'show']);
+	Route::get('/{id}', [\App\Http\Controllers\App\Customer\VideosController::class, 'show']);
 });
 
 Route::prefix('categories')->group(function () {
@@ -86,7 +87,11 @@ Route::prefix('wishlist')->middleware('auth:customer-api')->group(function () {
 });
 
 Route::prefix('shop')->group(function () {
-	Route::get('homepage', [HomePageController::class, 'index']);
+	Route::get('homepage', [ShopHomeController::class, 'index']);
+});
+
+Route::prefix('entertainment')->group(function () {
+	Route::get('homepage', [EntertainmentHomeController::class, 'index']);
 });
 
 Route::prefix('addresses')->middleware('auth:customer-api')->group(function () {
