@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\App\Customer\Entertainment;
 
+use App\Classes\Str;
 use App\Classes\Time;
 use App\Constants\PageSectionType;
 use App\Http\Controllers\Web\ExtendedResourceController;
@@ -79,6 +80,9 @@ class HomePageController extends ExtendedResourceController {
 			 * Shop Products
 			 */
 			$shopProducts = Product::where([
+				['draft', false],
+				['visible', true],
+				['deleted', false],
 				['promoted', true],
 				['promotionStart', '<=', Time::mysqlStamp()],
 				['promotionEnd', '>', Time::mysqlStamp()],
@@ -107,10 +111,22 @@ class HomePageController extends ExtendedResourceController {
 		$response = responseApp();
 		try {
 			$pageSection = PageSection::retrieve($id);
-			$contents = Video::where([
-				['sectionId', $pageSection->id],
-				['pending', false],
-			])->take($pageSection->visibleItemCount())->get();
+			if (Str::equals($pageSection->type(), PageSectionType::Entertainment)) {
+				$contents = Video::where([
+					['sectionId', $pageSection->id],
+					['pending', false],
+				])->take($pageSection->visibleItemCount())->get();
+			}
+			else {
+				$contents = Product::where([
+					['draft', false],
+					['visible', true],
+					['deleted', false],
+					['promoted', true],
+					['promotionStart', '<=', Time::mysqlStamp()],
+					['promotionEnd', '>', Time::mysqlStamp()],
+				])->take($pageSection->visibleItemCount())->get();
+			}
 			$contents = TopPickResource::collection($contents);
 			$response->status(HttpOkay)->message(sprintf('Found %d items under %s.', count($contents), $pageSection->title()))
 				->setValue('data', $contents);
