@@ -70,6 +70,9 @@ Route::prefix('shop')->group(function () {
 
 Route::prefix('entertainment')->group(function () {
 	Route::get('homepage', [EntertainmentHomeController::class, 'index']);
+	Route::prefix('section')->group(function () {
+		Route::get('{id}', [EntertainmentHomeController::class, 'showAllItemsInSection']);
+	});
 });
 
 Route::prefix('addresses')->middleware('auth:customer-api')->group(function () {

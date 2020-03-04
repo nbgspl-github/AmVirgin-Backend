@@ -14,6 +14,7 @@ use App\Resources\Shop\Customer\HomePage\EntertainmentSliderResource;
 use App\Resources\Shop\Customer\HomePage\ShopSliderResource;
 use App\Resources\Shop\Customer\HomePage\TopPickResource;
 use App\Resources\Shop\Customer\HomePage\TrendingNowResource;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
 class HomePageController extends ExtendedResourceController {
@@ -99,6 +100,29 @@ class HomePageController extends ExtendedResourceController {
 		}
 		catch (Throwable $throwable) {
 			return responseApp()->status(HttpServerError)->message('Something went wrong. Please try again later.')->setValue('data')->send();
+		}
+	}
+
+	public function showAllItemsInSection($id) {
+		$response = responseApp();
+		try {
+			$pageSection = PageSection::retrieve($id);
+			$contents = Video::where([
+				['sectionId', $pageSection->id],
+				['pending', false],
+			])->take($pageSection->visibleItemCount())->get();
+			$contents = TopPickResource::collection($contents);
+			$response->status(HttpOkay)->message(sprintf('Found %d items under %s.', count($contents), $pageSection->title()))
+				->setValue('data', $contents);
+		}
+		catch (ModelNotFoundException $exception) {
+			$response->status(HttpResourceNotFound)->message('Could not find section for that key.');
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
 		}
 	}
 
