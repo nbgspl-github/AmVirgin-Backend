@@ -49,9 +49,10 @@ class HomePageController extends ExtendedResourceController {
 		 * Offer Timer
 		 */
 		$offerDetails = Settings::get('shopSaleOfferDetails', null);
+		$lastUpdated = Settings::getInt('shopSaleOfferDetailsUpdated', 0);
 		$offerDetails = $offerDetails == null ? [] : jsonDecodeArray($offerDetails);
 		if ($offerDetails != [])
-			$offerDetails['countDown'] = abs(time() - Time::toSeconds($offerDetails['countDown'])) * 1000;
+			$offerDetails['countDown'] = abs(time() - $lastUpdated - Time::toSeconds($offerDetails['countDown'])) * 1000;
 		$data['offerDetails'] = $offerDetails;
 
 		/**
