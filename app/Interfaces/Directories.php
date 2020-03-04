@@ -18,4 +18,5 @@ interface Directories {
 	const ShopBanners = 'shopbanners';
 	const SellerAvatars = 'seller-avatars';
 	const CustomerAvatars = 'customer-avatars';
+	const SubscriptionPlans = 'subscription-plans';
 }

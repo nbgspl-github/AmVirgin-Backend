@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Web\Admin;
 use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
+use App\Interfaces\Directories;
 use App\Interfaces\Tables;
 use App\Models\SubscriptionPlan;
+use App\Storage\SecuredDisk;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -14,25 +16,25 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Throwable;
 
-class SubscriptionPlansController extends BaseController{
+class SubscriptionPlansController extends BaseController {
 	use ValidatesRequest;
 	use FluentResponse;
 
-	public function __construct(){
+	public function __construct() {
 		parent::__construct();
 		$this->ruleSet->load('rules.admin.subscription-plans');
 	}
 
-	public function index(){
+	public function index() {
 		$payload = SubscriptionPlan::all();
 		return view('admin.subscription-plans.index')->with('plans', $payload);
 	}
 
-	public function create(){
+	public function create() {
 		return view('admin.subscription-plans.create');
 	}
 
-	public function edit($id){
+	public function edit($id) {
 		$response = responseWeb();
 		try {
 			$plan = SubscriptionPlan::retrieveThrows($id);
@@ -52,15 +54,16 @@ class SubscriptionPlansController extends BaseController{
 		}
 	}
 
-	public function show($id){
+	public function show($id) {
 
 	}
 
-	public function store(){
+	public function store() {
 		$response = responseWeb();
 		try {
 			$payload = $this->requestValid(request(), $this->rules('store'));
 			$payload['slug'] = Str::slug($payload['name']);
+			$payload['banner'] = SecuredDisk::access()->putFile(Directories::SubscriptionPlans, request()->file('banner'));
 			SubscriptionPlan::create($payload);
 			$response->route('admin.subscription-plans.index')->success('Subscription plan created successfully.');
 		}
@@ -75,7 +78,7 @@ class SubscriptionPlansController extends BaseController{
 		}
 	}
 
-	public function update($id){
+	public function update($id) {
 		$response = responseWeb();
 		try {
 			$plan = SubscriptionPlan::retrieveThrows($id);
@@ -85,6 +88,10 @@ class SubscriptionPlansController extends BaseController{
 			$payload = $this->requestValid(request(), $this->rules('update'), $additional);
 			$payload['slug'] = Str::slug($payload['name']);
 			$payload = collect($payload)->filter()->toArray();
+			if (request()->hasFile('banner')) {
+				SecuredDisk::deleteIfExists($plan->getBanner());
+				$payload['banner'] = SecuredDisk::access()->putFile(Directories::SubscriptionPlans, request()->file('banner'));
+			}
 			$plan->update($payload);
 			$response->route('admin.subscription-plans.index')->success('Plan details updated successfully.');
 		}
@@ -102,11 +109,11 @@ class SubscriptionPlansController extends BaseController{
 		}
 	}
 
-	public function updateStatus($id){
+	public function updateStatus($id) {
 
 	}
 
-	public function delete($id){
+	public function delete($id) {
 		$response = $this->response();
 		try {
 			$plan = SubscriptionPlan::retrieveThrows($id);
