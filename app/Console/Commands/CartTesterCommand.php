@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Classes\Time;
 use App\Models\Seller;
 use App\Models\Settings;
 use App\Models\ShopSlider;
@@ -40,12 +41,14 @@ class CartTesterCommand extends Command {
 	 */
 	public function handle() {
 		$time = Settings::get('time');
-		echo strtotime('1970-01-01 ' . $time);
-//		$split = explode(':', $time);
-//		$final = 0;
-//		$final += ($split[0] * 60 * 60);
-//		$final += ($split[1] * 60);
-//		$final += ($split[2]);
-//		echo $final * 1000;
+		$elapsed = \time();
+		$lastUpdated = Settings::getInt('shopSaleOfferDetailsUpdated', 0);
+		$remaining = $lastUpdated - Time::toSeconds($time);
+		$countDown = 0;
+		if ($elapsed >= $remaining) {
+			$countDown = abs($remaining - $elapsed);
+			$countDown *= 1000;
+		}
+		echo sprintf('Elapsed = %d, remaining = %d', $elapsed, $remaining);
 	}
 }

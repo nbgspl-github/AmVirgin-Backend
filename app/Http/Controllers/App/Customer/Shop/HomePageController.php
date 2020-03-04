@@ -56,7 +56,7 @@ class HomePageController extends ExtendedResourceController {
 			$remaining = $lastUpdated - Time::toSeconds($offerDetails['countDown']);
 			$countDown = 0;
 			if ($elapsed >= $remaining) {
-				$countDown = abs($remaining - $elapsed);
+				$countDown = abs($elapsed - $remaining);
 				$countDown *= 1000;
 			}
 			$offerDetails['countDown'] = $countDown;
