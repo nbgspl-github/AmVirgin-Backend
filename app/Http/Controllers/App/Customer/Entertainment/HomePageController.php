@@ -54,16 +54,6 @@ class HomePageController extends ExtendedResourceController {
 			$data['sliders'] = $sliders;
 
 			/**
-			 * TopPicks Sliders
-			 */
-			$topPicks = Video::where([
-				['topPick', true],
-				['pending', false],
-			])->get();
-			$topPicks = TopPickResource::collection($topPicks);
-			$data['topPick'] = $topPicks;
-
-			/**
 			 * Page Sections
 			 */
 			$sections = PageSection::where([

@@ -13,6 +13,7 @@ use App\Resources\Shop\Customer\HomePage\PopularStuffResource;
 use App\Resources\Shop\Customer\HomePage\ShopSliderResource;
 use App\Resources\Shop\Customer\HomePage\TrendingDealsResource;
 use App\Resources\Shop\Customer\HomePage\TrendingNowResource;
+use Throwable;
 
 class HomePageController extends ExtendedResourceController {
 	public function __construct() {
@@ -67,7 +68,7 @@ class HomePageController extends ExtendedResourceController {
 		 */
 		$hotDeals = Product::where([
 			['hotDeal', true],
-		])->get();
+		])->take(10)->get();
 		$hotDeals = TrendingDealsResource::collection($hotDeals);
 		$data['trendingDeals'] = $hotDeals;
 
@@ -90,6 +91,23 @@ class HomePageController extends ExtendedResourceController {
 		$data['trendingNow'] = $trendingNow;
 
 		return responseApp()->status(HttpOkay)->message('Shop homepage contents retrieved.')->setValue('data', $data)->send();
+	}
+
+	public function showAllDeals() {
+		$response = responseApp();
+		try {
+			$deals = Product::where([
+				['hotDeal', true],
+			])->get();
+			$deals = TrendingDealsResource::collection($deals);
+			$response->status(HttpOkay)->message('Listing all products marked as hot deal.')->setValue('data', $deals);
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
 	}
 
 	protected function guard() {
