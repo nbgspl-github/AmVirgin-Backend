@@ -10,7 +10,7 @@ class EntertainmentSliderResource extends JsonResource {
 		return [
 			'title' => $this->title,
 			'description' => $this->description,
-			'banner' => SecuredDisk::existsUrl($this->banner),
+			'banner' => SecuredDisk::existsUrl($this->poster),
 			'target' => $this->target,
 			'rating' => $this->stars,
 		];
