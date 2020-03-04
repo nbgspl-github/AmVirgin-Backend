@@ -73,7 +73,7 @@ class HomePageController extends ExtendedResourceController {
 				$contents = Video::where([
 					['sectionId', $pageSection->id],
 					['pending', false],
-				])->get();
+				])->take($pageSection->visibleItemCount())->get();
 				$contents = TopPickResource::collection($contents);
 				return [
 					'id' => $pageSection->getKey(),
