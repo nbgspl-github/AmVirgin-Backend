@@ -19,6 +19,7 @@ use App\Http\Controllers\App\Customer\TwoFactorAuthController;
 use App\Http\Controllers\App\Customer\Shop\HomePageController as ShopHomeController;
 use App\Http\Controllers\App\Customer\Entertainment\HomePageController as EntertainmentHomeController;
 use App\Http\Controllers\App\Customer\SubscriptionController;
+use App\Http\Controllers\App\Customer\GlobalSearchController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [TwoFactorAuthController::class, 'exists'])->name('customer.check');
@@ -95,4 +96,8 @@ Route::prefix('countries')->group(function () {
 
 Route::prefix('subscriptions')->group(function () {
 	Route::get(Str::Empty, [SubscriptionController::class, 'index']);
+});
+
+Route::prefix('search')->group(function () {
+	Route::get(Str::Empty, [GlobalSearchController::class, 'search']);
 });
