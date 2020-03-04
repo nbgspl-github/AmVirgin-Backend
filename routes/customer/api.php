@@ -66,6 +66,9 @@ Route::prefix('wishlist')->middleware('auth:customer-api')->group(function () {
 
 Route::prefix('shop')->group(function () {
 	Route::get('homepage', [ShopHomeController::class, 'index']);
+	Route::prefix('deals')->group(function () {
+		Route::get('', [ShopHomeController::class, 'showAllDeals']);
+	});
 });
 
 Route::prefix('entertainment')->group(function () {
