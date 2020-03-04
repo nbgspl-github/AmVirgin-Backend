@@ -65,6 +65,7 @@ class HomePageController extends BaseController {
 				'countDown' => $validated->countDown,
 				'visible' => request()->has('visible'),
 			];
+			Settings::set('shopSaleOfferDetailsUpdated', time());
 			Settings::set('shopSaleOfferDetails', jsonEncode($saleOffer));
 			$response->success('Sale offer timer details updated successfully.')->route('admin.shop.choices');
 		}
