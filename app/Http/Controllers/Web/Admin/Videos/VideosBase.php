@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\Admin\Videos;
 
 use App\Classes\WebResponse;
+use App\Constants\PageSectionType;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Interfaces\VideoTypes;
@@ -10,6 +11,7 @@ use App\Models\Genre;
 use App\Models\MediaLanguage;
 use App\Models\MediaQuality;
 use App\Models\MediaServer;
+use App\Models\PageSection;
 use App\Models\SubscriptionPlan;
 use App\Models\Video;
 use App\Models\VideoMeta;
@@ -19,21 +21,21 @@ use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class VideosBase extends BaseController{
+class VideosBase extends BaseController {
 	use FluentResponse;
 	use ValidatesRequest;
 
-	public function __construct(){
+	public function __construct() {
 		parent::__construct();
 		$this->ruleSet->load('rules.admin.videos');
 	}
 
-	public function index(){
+	public function index() {
 		$videos = Video::where('hasSeasons', false)->get();
 		return view('admin.videos.index')->with('videos', $videos);
 	}
 
-	public function choose($id){
+	public function choose($id) {
 		$response = responseWeb();
 		try {
 			$payload = Video::where(['id' => $id, 'hasSeasons' => false])->firstOrFail();
@@ -53,19 +55,21 @@ class VideosBase extends BaseController{
 		}
 	}
 
-	public function create(){
+	public function create() {
 		$genres = Genre::all();
 		$languages = MediaLanguage::all()->sortBy('name')->all();
 		$servers = MediaServer::all();
 		$quality = MediaQuality::retrieveAll();
+		$sections = PageSection::where('type', PageSectionType::Entertainment)->get();
 		return view('admin.videos.create')->
 		with('genres', $genres)->
 		with('languages', $languages)->
 		with('servers', $servers)->
-		with('qualities', $quality);
+		with('qualities', $quality)->
+		with('sections', $sections);
 	}
 
-	public function show($slug){
+	public function show($slug) {
 		$video = null;
 		try {
 			$video = Video::where('slug', $slug)->where('hasSeasons', true)->firstOrFail();
@@ -79,7 +83,7 @@ class VideosBase extends BaseController{
 		}
 	}
 
-	public function store(){
+	public function store() {
 		$response = $this->response();
 		try {
 			$payload = $this->requestValid(request(), $this->rules('store'));
@@ -91,6 +95,7 @@ class VideosBase extends BaseController{
 				'cast' => $payload['cast'],
 				'director' => $payload['director'],
 				'genreId' => $payload['genreId'],
+				'sectionId' => $payload['sectionId'],
 				'rating' => $payload['rating'],
 				'pgRating' => $payload['pgRating'],
 				'type' => VideoTypes::Movie,
@@ -115,17 +120,17 @@ class VideosBase extends BaseController{
 		}
 	}
 
-	public function delete($id, $subId = null){
+	public function delete($id, $subId = null) {
 		$tvSeries = null;
 		$response = $this->response();
 		try {
 			$tvSeries = Video::findOrFail($id);
 			$meta = VideoMeta::where('videoId', $tvSeries->getKey())->get();
-			$meta->each(function (VideoMeta $meta){
+			$meta->each(function (VideoMeta $meta) {
 				$meta->delete();
 			});
 			$sources = VideoSource::where('videoId', $tvSeries->getKey())->get();
-			$sources->each(function (VideoSource $videoSource){
+			$sources->each(function (VideoSource $videoSource) {
 				$videoSource->delete();
 			});
 			$tvSeries->delete();
@@ -142,7 +147,7 @@ class VideosBase extends BaseController{
 		}
 	}
 
-	protected function replaceTrending($chosenRank){
+	protected function replaceTrending($chosenRank) {
 		$ranked = Video::where('rank', $chosenRank)->first();
 		if (!null($ranked)) {
 			$ranked->rank = 0;

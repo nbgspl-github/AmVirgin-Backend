@@ -22,6 +22,7 @@ class ProductEditResource extends JsonResource {
 				$value = AttributeValue::find($attribute->valueId);
 				return [
 					'key' => $value->id,
+					'uniqueId' => $attribute->getKey(),
 					'value' => $value->value,
 				];
 			});
@@ -56,6 +57,12 @@ class ProductEditResource extends JsonResource {
 			'zipCode' => $this->zipCode,
 			'address' => $this->zipCode,
 			'rating' => $this->rating,
+			'visibility' => $this->visibility,
+			'promotionStart' => $this->promotionStart,
+			'promotionEnd' => $this->promotionEnd,
+			'sku' => $this->sku,
+			'stock' => $this->stock,
+			'draft' => $this->draft,
 			'shippingCostType' => $this->shippingCostType,
 			'shippingCost' => $this->shippingCost,
 			'shortDescription' => $this->shortDescription,

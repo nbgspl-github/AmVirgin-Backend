@@ -3,17 +3,21 @@
 namespace App\Models;
 
 use App\Traits\ActiveStatus;
+use App\Traits\HasAttributeMethods;
+use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
 class ShopSlider extends Model {
 	use ActiveStatus;
+	use RetrieveResource;
+	use HasAttributeMethods;
 	protected $table = 'shop-sliders';
 	protected $fillable = [
 		'title',
 		'description',
 		'banner',
 		'target',
-		'stars',
+		'rating',
 		'active',
 	];
 	protected $hidden = [

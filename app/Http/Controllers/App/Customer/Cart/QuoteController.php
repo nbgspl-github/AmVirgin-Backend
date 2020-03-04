@@ -57,6 +57,7 @@ class QuoteController extends ExtendedResourceController {
 			],
 			'submit' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
+				'addressId' => ['bail', 'required', Rule::exists(Tables::ShippingAddresses, 'id')],
 			],
 		];
 	}
@@ -279,6 +280,8 @@ class QuoteController extends ExtendedResourceController {
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['submit']);
 			$cart = Cart::retrieveThrows($validated->sessionId);
+			$cart->customerId = $this->guard()->id();
+			$cart->addressId = $validated->addressId;
 			$order = $cart->submit();
 			$response->status(HttpOkay)->message('Your order was placed successfully.')->setValue('orderNumber', $order->orderNumber);
 		}

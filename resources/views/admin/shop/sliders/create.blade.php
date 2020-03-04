@@ -4,12 +4,12 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Create Home Banner'])
+					@include('admin.extras.header', ['title'=>'Create Shop Slider'])
 				</div>
 				<div class="card-body">
 					<div class="row">
 						<div class="col-12 col-sm-10 col-md-10 col-lg-8 col-xl-6 mx-auto">
-							<form action="{{route('admin.shop-banner.store')}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
+							<form action="{{route('admin.shop.sliders.store')}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
 								@csrf
 								<div class="form-group">
 									<label>Title<span class="text-primary">*</span></label>
@@ -25,7 +25,7 @@
 								</div>
 								<div class="form-group">
 									<label>Rating<span class="text-primary">*</span></label>
-									<select name="stars" class="form-control">
+									<select name="rating" class="form-control">
 										<option value="0">Not rated</option>
 										<option value="1">1</option>
 										<option value="2">2</option>
@@ -42,12 +42,12 @@
 									</select>
 								</div>
 								<div class="form-group">
-									<label>Poster<span class="text-primary">*</span></label>
+									<label>Banner<span class="text-primary">*</span></label>
 									<div class="card" style="border: 1px solid #ced4da;">
 										<div class="card-header">
 											<div class="row">
 												<div class="d-none">
-													<input id="pickImage" type="file" name="banner" onclick="this.value=null;" onchange="previewImage(event);" class="form-control" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('banner')}}">
+													<input id="pickImage" type="file" name="banner" onclick="this.value=null;" onchange="previewImage(event);" class="form-control" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('poster')}}">
 												</div>
 												<div class="col-6">
 													<h3 class="my-0 header-title">Preview</h3>
@@ -73,7 +73,7 @@
 										</button>
 									</div>
 									<div class="col-6">
-										<a href="{{route("admin.sliders.index")}}" class="btn btn-secondary waves-effect btn-block shadow-sm">
+										<a href="{{route("admin.shop.sliders.index")}}" class="btn btn-secondary waves-effect btn-block shadow-sm">
 											Cancel
 										</a>
 									</div>

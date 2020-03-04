@@ -15,6 +15,7 @@ use App\Http\Controllers\Web\Admin\ServersController;
 use App\Http\Controllers\Web\Admin\SettingsController;
 use App\Http\Controllers\Web\Admin\Shop\HomePageController;
 use App\Http\Controllers\Web\Admin\SlidersController;
+use App\Http\Controllers\Web\Admin\Shop\SliderController as ShopSlidersController;
 use App\Http\Controllers\Web\Admin\SubscriptionPlansController;
 use App\Http\Controllers\Web\Admin\TvSeries\AttributesController;
 use App\Http\Controllers\Web\Admin\TvSeries\ContentController;
@@ -24,7 +25,6 @@ use App\Http\Controllers\Web\Admin\TvSeries\TvSeriesBase;
 use App\Http\Controllers\Web\Admin\Videos\VideosBase;
 use App\Models\Category;
 use App\Models\Genre;
-use App\Models\HomeBanner;
 use App\Models\Slider;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -169,7 +169,44 @@ Route::prefix('admin')->group(function () {
 		Route::prefix('shop')->middleware('auth:admin')->group(function () {
 			Route::get('choices', [HomePageController::class, 'choices'])->name('admin.shop.choices');
 			Route::get('sale-offer-timer', [HomePageController::class, 'editSaleOfferTimerDetails'])->name('admin.shop.sale-offer-timer.edit');
-			Route::post('sale-offer-timer', [HomePageController::class, 'editSaleOfferTimerDetails'])->name('admin.shop.sale-offer-timer.update');
+			Route::post('sale-offer-timer', [HomePageController::class, 'updateSaleOfferTimerDetails'])->name('admin.shop.sale-offer-timer.update');
+
+			// Shop Sliders' Route(s)
+			Route::prefix('sliders')->group(function () {
+				Route::get('', [ShopSlidersController::class, 'index'])->name('admin.shop.sliders.index');
+				Route::get('create', [ShopSlidersController::class, 'create'])->name('admin.shop.sliders.create');
+				Route::get('{id}/edit', [ShopSlidersController::class, 'edit'])->name('admin.shop.sliders.edit');
+				Route::get('{id}', [ShopSlidersController::class, 'show'])->name('admin.shop.sliders.show');
+				Route::post('', [ShopSlidersController::class, 'store'])->name('admin.shop.sliders.store');
+				Route::post('{id}', [ShopSlidersController::class, 'update'])->name('admin.shop.sliders.update');
+				Route::put('{id}/status', [ShopSlidersController::class, 'updateStatus'])->name('admin.shop.sliders.update.status');
+				Route::delete('{id}', [ShopSlidersController::class, 'delete'])->name('admin.shop.sliders.delete');
+			});
+
+			// Brands in Focus Route(s)
+			Route::prefix('brands-in-focus')->group(function () {
+				Route::get('', [HomePageController::class, 'editBrandsInFocus'])->name('admin.shop.brands-in-focus.edit');
+				Route::post('', [HomePageController::class, 'updateBrandsInFocus'])->name('admin.shop.brands-in-focus.update');
+			});
+
+			// Hot Deals Route(s)
+			Route::prefix('hot-deals')->group(function () {
+				Route::get('', [HomePageController::class, 'editHotDeals'])->name('admin.shop.hot-deals.edit');
+				Route::get('/{id}', [HomePageController::class, 'viewProductDetails'])->name('admin.shop.hot-deals.show');
+				Route::post('', [HomePageController::class, 'updateHotDeals'])->name('admin.shop.hot-deals.update');
+			});
+
+			// Popular Stuff Route(s)
+			Route::prefix('popular-category')->group(function () {
+				Route::get('', [HomePageController::class, 'editPopularStuff'])->name('admin.shop.popular-category.edit');
+				Route::post('', [HomePageController::class, 'updatePopularStuff'])->name('admin.shop.popular-category.update');
+			});
+
+			// Trending Now Route(s)
+			Route::prefix('trending-now')->group(function () {
+				Route::get('', [HomePageController::class, 'editTrendingNow'])->name('admin.shop.trending-now.edit');
+				Route::post('', [HomePageController::class, 'updateTrendingNow'])->name('admin.shop.trending-now.update');
+			});
 		});
 
 		// Images Route(s)

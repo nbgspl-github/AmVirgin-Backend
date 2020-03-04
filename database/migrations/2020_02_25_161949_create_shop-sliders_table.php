@@ -15,9 +15,9 @@ class CreateShopSlidersTable extends Migration {
 			$table->bigIncrements('id');
 			$table->string('title');
 			$table->string('description', 2048)->nullable();
-			$table->string('poster', 4096);
+			$table->string('banner', 4096);
 			$table->string('target', 2048)->nullable();
-			$table->integer('stars')->default(0);
+			$table->integer('rating')->default(0);
 			$table->boolean('active')->default(true);
 			$table->timestamps();
 		});

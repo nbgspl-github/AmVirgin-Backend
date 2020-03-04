@@ -4,7 +4,7 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Shop Sliders','action'=>['link'=>route('admin.shop-banner.create'),'text'=>'Create slider']])
+					@include('admin.extras.header', ['title'=>'Shop Sliders','action'=>['link'=>route('admin.shop.sliders.create'),'text'=>'Create slider']])
 				</div>
 				<div class="card-body animatable">
 					<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -26,15 +26,15 @@
 							<tr id="genre_row_{{$slide->getKey()}}">
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">
-									@if($slide->getShopBanner()!=null)
-										<img src="{{Storage::disk('secured')->url($slide->getShopBanner())}}" style="width: 100px; height: 60px" alt="{{$slide->getTitle()}}"/>
+									@if($slide->banner!=null)
+										<img src="{{\App\Storage\SecuredDisk::access()->url($slide->banner)}}" style="width: 100px; height: 60px" alt="{{$slide->title}}"/>
 									@else
 										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 90px"></i>
 									@endif
 								</td>
-								<td class="text-center">{{$slide->getTitle()}}</td>
-								<td class="text-center">{{__ellipsis($slide->getDescription(),50)}}</td>
-								<td class="text-center">{{__rating($slide->getStars())}}</td>
+								<td class="text-center">{{$slide->title}}</td>
+								<td class="text-center">{{__ellipsis($slide->description,50)}}</td>
+								<td class="text-center">{{__rating($slide->rating)}}</td>
 								<td class="text-center">
 									<div class="btn-group btn-group-toggle shadow-sm" data-toggle="buttons">
 										@if($slide->isActive()==true)
@@ -54,11 +54,11 @@
 										@endif
 									</div>
 								</td>
-								<td class="text-center"><a class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig" target="_blank" href="{{$slide->getTarget()}}">{{__ellipsis($slide->getTarget())}}</a></td>
+								<td class="text-center"><a class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig" target="_blank" href="{{$slide->target}}">{{__ellipsis($slide->target)}}</a></td>
 								<td class="text-center">
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group mx-auto" role="group">
-											<a class="btn btn-outline-danger" href="{{route('admin.shop-banner.edit',$slide->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
+											<a class="btn btn-outline-danger" href="{{route('admin.shop.sliders.edit',$slide->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
 											<a class="btn btn-outline-primary" href="javascript:void(0);" onclick="deleteSlide('{{$slide->getKey()}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>
 										</div>
 									</div>
@@ -91,7 +91,7 @@
 		 * @returns {string}
 		 */
 		updateStatusRoute = (id) => {
-			return 'shop-banners/' + id + '/status';
+			return 'sliders/' + id + '/status';
 		};
 
 		/**
@@ -100,7 +100,7 @@
 		 * @returns {string}
 		 */
 		deleteSlideRoute = (id) => {
-			return 'shop-banners/' + id;
+			return 'sliders/' + id;
 		};
 
 		/**
@@ -112,7 +112,7 @@
 			axios.put(updateStatusRoute(id),
 				{id: id, active: state})
 				.then(response => {
-					if (response.status === 200) {
+					if (response.data.status === 200) {
 						toastr.success(response.data.message);
 					} else {
 						toastr.error(response.data.message);
@@ -135,7 +135,7 @@
 					ev.preventDefault();
 					axios.delete(deleteSlideRoute(genreId))
 						.then(response => {
-							if (response.status === 200) {
+							if (response.data.status === 200) {
 								$('#genre_row_' + genreId).remove();
 								toastr.success(response.data.message);
 							} else {

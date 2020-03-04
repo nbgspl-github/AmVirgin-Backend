@@ -26,17 +26,13 @@
 										</div>
 										<div class="form-group">
 											<label for="statements">@required (Marquee Text (upto 3 short statements))</label>
-											<textarea id="statements" name="statements" class="form-control" required placeholder="Type short summary about the movie or video" rows="3" minlength="1" maxlength="100">
-												@foreach($payload->statements as $statement)
-													{{$statement.\App\Classes\Str::NewLine}}
-												@endforeach
-											</textarea>
+											<textarea id="statements" name="statements" class="form-control" required placeholder="Type short summary about the movie or video" rows="3" minlength="1" maxlength="100">{{$payload->statements}}</textarea>
 										</div>
 										<div class="form-group mb-0">
 											<label>Visible?</label>
 											<div>
 												<div class="custom-control custom-checkbox">
-													<input type="checkbox" class="custom-control-input" id="customCheck2" name="visible">
+													<input type="checkbox" class="custom-control-input" id="customCheck2" name="visible" @if($payload->visible) checked @endif>
 													<label class="custom-control-label stretched-link" for="customCheck2">Yes</label>
 												</div>
 											</div>
@@ -56,7 +52,7 @@
 										</button>
 									</div>
 									<div class="col-6">
-										<a href="" class="btn btn-secondary waves-effect btn-block shadow-secondary">
+										<a href="{{route('admin.shop.choices')}}" class="btn btn-secondary waves-effect btn-block shadow-secondary">
 											Cancel
 										</a>
 									</div>

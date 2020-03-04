@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\FluentConstructor;
+use App\Traits\HasAttributeMethods;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use App\Traits\Sluggable;
@@ -14,6 +15,7 @@ class Product extends Model {
 	use FluentConstructor;
 	use RetrieveResource;
 	use RetrieveCollection;
+	use HasAttributeMethods;
 	use Sluggable;
 
 	protected $table = 'products';
