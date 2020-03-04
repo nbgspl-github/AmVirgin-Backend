@@ -52,7 +52,7 @@ class HomePageController extends ExtendedResourceController {
 		$lastUpdated = Settings::getInt('shopSaleOfferDetailsUpdated', 0);
 		$offerDetails = $offerDetails == null ? [] : jsonDecodeArray($offerDetails);
 		if ($offerDetails != []) {
-			$current = \time();
+			$current = strtotime(sprintf('1970-01-01 %s', date('H:i:s')));
 			$countdown = 0;
 			$stored = Time::toSeconds($offerDetails['countDown']);
 			if ($current < $stored) {
