@@ -40,8 +40,12 @@ class CartTesterCommand extends Command {
 	 */
 	public function handle() {
 		$time = Settings::get('time');
-		Settings::set('converted', strtotime($time));
-		$converted = Settings::get('converted');
-		echo date('H:i:s', $converted);
+		echo strtotime('1970-01-01 ' . $time);
+//		$split = explode(':', $time);
+//		$final = 0;
+//		$final += ($split[0] * 60 * 60);
+//		$final += ($split[1] * 60);
+//		$final += ($split[2]);
+//		echo $final * 1000;
 	}
 }

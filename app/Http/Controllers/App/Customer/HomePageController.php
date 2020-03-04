@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\App\Customer;
 
+use App\Classes\Time;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Models\Category;
 use App\Models\Product;
@@ -49,7 +50,7 @@ class HomePageController extends ExtendedResourceController {
 		$offerDetails = Settings::get('shopSaleOfferDetails', null);
 		$offerDetails = $offerDetails == null ? [] : jsonDecodeArray($offerDetails);
 		if ($offerDetails != [])
-			$offerDetails['countDown'] = strtotime($offerDetails['countDown']) * 1000;
+			$offerDetails['countDown'] = Time::toSeconds($offerDetails['countDown']) * 1000;
 		$data['offerDetails'] = $offerDetails;
 
 		/**
