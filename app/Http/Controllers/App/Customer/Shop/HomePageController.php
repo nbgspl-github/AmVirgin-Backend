@@ -51,7 +51,7 @@ class HomePageController extends ExtendedResourceController {
 		$offerDetails = Settings::get('shopSaleOfferDetails', null);
 		$offerDetails = $offerDetails == null ? [] : jsonDecodeArray($offerDetails);
 		if ($offerDetails != [])
-			$offerDetails['countDown'] = abs(Time::toSeconds($offerDetails['countDown']) - time()) * 1000;
+			$offerDetails['countDown'] = abs(time() - Time::toSeconds($offerDetails['countDown'])) * 1000;
 		$data['offerDetails'] = $offerDetails;
 
 		/**
