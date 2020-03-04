@@ -8,6 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class PopularStuffResource extends JsonResource {
 	public function toArray($request) {
 		return [
+			'id' => $this->id,
 			'name' => $this->name,
 			'description' => $this->description,
 			'poster' => SecuredDisk::existsUrl($this->poster),
