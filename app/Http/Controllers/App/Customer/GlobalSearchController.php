@@ -35,7 +35,7 @@ class GlobalSearchController extends ExtendedResourceController {
 			$validated = (object)$this->requestValid(request(), $this->rules['search']);
 			if (Str::equals($validated->type, PageSectionType::Entertainment)) {
 				$contents = Video::where([
-					['name', 'LIKE', "%{$validated->key}%"],
+					['title', 'LIKE', "%{$validated->key}%"],
 					['pending', false],
 				])->get();
 				$contents = VideoResource::collection($contents);
