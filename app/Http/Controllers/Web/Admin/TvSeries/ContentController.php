@@ -140,8 +140,7 @@ class ContentController extends TvSeriesBase{
 		}
 
 		catch (Throwable $exception) {
-			dd($exception);
-			$response->status(HttpServerError)->message($exception->getTraceAsString());
+			$response->status(HttpServerError)->message($exception->getMessage());
 		}
 		finally {
 			event(new TvSeriesUpdated($id));

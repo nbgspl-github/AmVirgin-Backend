@@ -17,13 +17,13 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use stdClass;
 use Throwable;
 
-class ContentController extends VideosBase{
-	public function __construct(){
+class ContentController extends VideosBase {
+	public function __construct() {
 		parent::__construct();
 		$this->ruleSet->load('rules.admin.videos.content');
 	}
 
-	public function edit($id){
+	public function edit($id) {
 		$response = responseWeb();
 		try {
 			$video = Video::retrieveThrows($id);
@@ -31,7 +31,7 @@ class ContentController extends VideosBase{
 			$qualities = MediaQuality::retrieveAll();
 			$contentPayload = [];
 			$sources = $video->sources()->get();
-			$sources->transform(function (VideoSource $videoSource) use ($qualities, $languages){
+			$sources->transform(function (VideoSource $videoSource) use ($qualities, $languages) {
 				$payload = new stdClass();
 				$payload->title = $videoSource->getTitle();
 				$payload->description = $videoSource->getDescription();
@@ -65,7 +65,7 @@ class ContentController extends VideosBase{
 		}
 	}
 
-	public function update($id){
+	public function update($id) {
 		$response = $this->response();
 		try {
 			$video = Video::retrieveThrows($id);
@@ -133,7 +133,7 @@ class ContentController extends VideosBase{
 			$response->status(HttpResourceNotFound)->message('Could not find video for that key.');
 		}
 		catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getTraceAsString());
+			$response->status(HttpServerError)->message($exception->getMessage());
 		}
 		finally {
 			event(new TvSeriesUpdated($id));
@@ -141,7 +141,7 @@ class ContentController extends VideosBase{
 		}
 	}
 
-	public function delete($id, $subId = null){
+	public function delete($id, $subId = null) {
 		$response = $this->response();
 		try {
 			$videoSnap = VideoSource::retrieveThrows($subId);
