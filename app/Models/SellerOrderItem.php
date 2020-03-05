@@ -15,4 +15,8 @@ class SellerOrderItem extends Model {
 		'productId',
 		'quantity',
 	];
+	protected $hidden = [
+		'created_at',
+		'updated_at',
+	];
 }

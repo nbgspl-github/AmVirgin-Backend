@@ -158,7 +158,7 @@
 @endsection
 
 @section('javascript')
-	<script src="{{asset('admin/utils/DurationPicker.js')}}"></script>
+	<script src="{{asset('assets/admin/utils/DurationPicker.js')}}"></script>
 	<script>
 		let modal = null;
 		let submitButton = null;
