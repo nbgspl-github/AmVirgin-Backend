@@ -178,6 +178,52 @@
 				modalId: 'durationPicker',
 				durationId: 'duration'
 			});
+			MultiEntryModal.setupMultiEntryModal({
+				title: 'Cast & Crew',
+				separator: '/',
+				key: 'cast',
+				boundEditBoxId: 'cast',
+				modalId: 'cast_multiEntryModal',
+				inputClass: 'cast_input',
+				listGroupId: 'cast_listGroup',
+				addMoreButtonId: 'cast_addMoreButton',
+				doneButtonId: 'cast_doneButton',
+				deleteButtonClass: 'cast_delete-button',
+				template: `<li class="list-group-item px-0 py-1 border-0 animated slideInDown">
+								\t\t\t\t\t\t<div class="col-auto px-0">
+								\t\t\t\t\t\t\t<div class="input-group mb-2">
+								\t\t\t\t\t\t\t\t<input type="text" class="form-control cast_input" placeholder="Type here..." value=@{{value}}>
+								\t\t\t\t\t\t\t\t<div class="input-group-append">
+								\t\t\t\t\t\t\t\t\t<div class="input-group-text text-white bg-primary cast_delete-button">&times;</div>
+								\t\t\t\t\t\t\t\t</div>
+								\t\t\t\t\t\t\t</div>
+								\t\t\t\t\t\t</div>
+								\t\t\t\t\t
+							</li>`
+			});
+			MultiEntryModal.setupMultiEntryModal({
+				title: 'Director(s)',
+				separator: '/',
+				key: 'director',
+				boundEditBoxId: 'director',
+				modalId: 'director_multiEntryModal',
+				inputClass: 'director_input',
+				listGroupId: 'director_listGroup',
+				addMoreButtonId: 'director_addMoreButton',
+				doneButtonId: 'director_doneButton',
+				deleteButtonClass: 'director_delete-button',
+				template: `<li class="list-group-item px-0 py-1 border-0 animated slideInDown">
+								\t\t\t\t\t\t<div class="col-auto px-0">
+								\t\t\t\t\t\t\t<div class="input-group mb-2">
+								\t\t\t\t\t\t\t\t<input type="text" class="form-control director_input" placeholder="Type here..." value=@{{value}}>
+								\t\t\t\t\t\t\t\t<div class="input-group-append">
+								\t\t\t\t\t\t\t\t\t<div class="input-group-text text-white bg-primary director_delete-button">&times;</div>
+								\t\t\t\t\t\t\t\t</div>
+								\t\t\t\t\t\t\t</div>
+								\t\t\t\t\t\t</div>
+								\t\t\t\t\t
+							</li>`
+			});
 			$('#trending').change(function () {
 				if (this.checked) {
 					$('#trendingRank').prop("required", true);
