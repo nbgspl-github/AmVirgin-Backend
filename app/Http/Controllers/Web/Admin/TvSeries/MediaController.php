@@ -44,7 +44,6 @@ class MediaController extends TvSeriesBase{
 	}
 
 	public function update($id){
-		dd('hit');
 		$response = $this->response();
 		try {
 			$tvSeries = Video::retrieveThrows($id);
