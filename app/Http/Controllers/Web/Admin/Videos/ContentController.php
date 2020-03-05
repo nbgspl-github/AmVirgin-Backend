@@ -133,7 +133,6 @@ class ContentController extends VideosBase{
 			$response->status(HttpResourceNotFound)->message('Could not find video for that key.');
 		}
 		catch (Throwable $exception) {
-			dd($exception);
 			$response->status(HttpServerError)->message($exception->getTraceAsString());
 		}
 		finally {
