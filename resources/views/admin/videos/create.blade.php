@@ -2,6 +2,8 @@
 @section('content')
 	@include('admin.videos.actionBox')
 	@include('admin.modals.durationPicker')
+	@include('admin.modals.multiEntryModal',['key'=>'cast'])
+	@include('admin.modals.multiEntryModal',['key'=>'director'])
 	<div class="row">
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
@@ -28,11 +30,11 @@
 										</div>
 										<div class="form-group">
 											<label for="cast">Cast<span class="text-primary">*</span></label>
-											<input id="cast" type="text" name="cast" class="form-control" required placeholder="Type here the movie's cast name (separate with /)" minlength="1" maxlength="256" value="{{old('cast')}}"/>
+											<input id="cast" type="text" name="cast" class="form-control" required placeholder="Type here the series' cast(s) name (separate with /)" minlength="1" maxlength="256" value="{{old('cast')}}"/>
 										</div>
 										<div class="form-group">
 											<label for="director">Director<span class="text-primary">*</span></label>
-											<input id="director" type="text" name="director" class="form-control" required placeholder="Type here the movie's director's name (separate with /)" minlength="1" maxlength="256" value="{{old('director')}}"/>
+											<input id="director" type="text" name="director" class="form-control" required placeholder="Type here the series' director(s) name (separate with /)" minlength="1" maxlength="256" value="{{old('director')}}"/>
 										</div>
 										<div class="form-group">
 											<label for="description">Overview (Description)<span class="text-primary">*</span></label>
@@ -159,6 +161,7 @@
 
 @section('javascript')
 	<script src="{{asset('assets/admin/utils/DurationPicker.js')}}"></script>
+	<script src="{{asset('assets/admin/utils/MultiEntryModal.js')}}"></script>
 	<script>
 		let modal = null;
 		let submitButton = null;
