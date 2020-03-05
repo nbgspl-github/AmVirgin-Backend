@@ -177,6 +177,23 @@ class Cart extends Model {
 				'total' => $cartItem->getItemTotal(),
 				'options' => $cartItem->getAttributes(),
 			]);
+			$sellerOrder = SellerOrder::where([
+				['orderId', $order->getKey()],
+				['sellerId', $cartItem->getProduct()->getSellerId()],
+			])->first();
+			if ($sellerOrder == null) {
+				$sellerOrder = SellerOrder::create([
+					'sellerId' => $cartItem->getProduct()->getKey(),
+					'customerId' => $order->customerId,
+					'orderId' => $order->getKey(),
+					'orderNumber' => $order->orderNumber,
+				]);
+			}
+			SellerOrderItem::create([
+				'sellerOrderId' => $sellerOrder->getKey(),
+				'productId' => $cartItem->getProduct()->getKey(),
+				'quantity' => $cartItem->getQuantity(),
+			]);
 		});
 		$this->status = CartStatus::Submitted;
 		$this->save();

@@ -1,5 +1,6 @@
 <?php
 
+use App\Classes\Str;
 use App\Http\Controllers\App\Seller\Attributes\AttributeListController;
 use App\Http\Controllers\App\Seller\Attributes\AttributeValuesController;
 use App\Http\Controllers\App\Seller\Attributes\ProductsAttributesController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\App\Seller\ProductImagesController;
 use App\Http\Controllers\App\Seller\ProductsController;
 use App\Http\Controllers\App\Seller\StatesController;
 use App\Http\Controllers\App\Seller\TwoFactorAuthController;
+use App\Http\Controllers\App\Seller\OrdersController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [TwoFactorAuthController::class, 'exists'])->name('seller.check');
@@ -52,4 +54,8 @@ Route::prefix('countries')->group(function () {
 	Route::get('/', [CountriesController::class, 'index'])->name('seller.countries.index');
 	Route::get('{countryId}/states', [StatesController::class, 'index'])->name('seller.states.index');
 	Route::get('states/{stateId}/cities', [CitiesController::class, 'index'])->name('seller.states.index');
+});
+
+Route::prefix('orders')->middleware('auth:seller-api')->group(function () {
+	Route::get(Str::Empty, [OrdersController::class, 'index']);
 });

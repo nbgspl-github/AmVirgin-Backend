@@ -15,6 +15,7 @@ class CreateSellerOrderItemsTable extends Migration {
 			$table->bigIncrements('id');
 			$table->unsignedBigInteger('sellerOrderId');
 			$table->unsignedBigInteger('productId');
+			$table->integer('quantity')->default(0);
 			$table->timestamps();
 		});
 	}
