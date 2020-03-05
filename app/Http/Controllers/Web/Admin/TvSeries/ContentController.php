@@ -42,7 +42,6 @@ class ContentController extends TvSeriesBase{
 				return $payload;
 			});
 			$row = view('admin.tv-series.content.videoBox')->with('qualities', $qualities)->with('languages', $languages)->render();
-
 			$response = view('admin.tv-series.content.edit')->
 			with('videos', $sources->all())->
 			with('payload', $video)->
