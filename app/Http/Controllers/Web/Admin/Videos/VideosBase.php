@@ -107,6 +107,8 @@ class VideosBase extends BaseController {
 				'price' => $payload['subscriptionType'] == SubscriptionPlan::Paid ? $payload['price'] : 0,
 				'hasSeasons' => false,
 			]);
+			$video->pending = false;
+			$video->save();
 			$response->setValue('route', route('admin.videos.edit.action', $video->getKey()))->message('Video details were saved successfully.');
 		}
 		catch (ValidationException $exception) {
