@@ -127,7 +127,6 @@ class ContentController extends VideosBase {
 		}
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
-			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
 		}
 		catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('Could not find video for that key.');
