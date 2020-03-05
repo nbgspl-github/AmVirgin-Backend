@@ -110,14 +110,14 @@ class ContentController extends VideosBase {
 						if (SecuredDisk::access()->exists($source->getSubtitle())) {
 							SecuredDisk::access()->delete($source->getSubtitle());
 						}
-						$source->setSubtitle(SecuredDisk::access()->putFile(Directories::Subtitles, $subtitles[$i], 'private'));
+						$source->setSubtitle(SecuredDisk::access()->putFile(Directories::Subtitles, $subtitles[$i]));
 					}
 
 					if (isset($videos[$i])) {
 						if (SecuredDisk::access()->exists($source->getFile())) {
 							SecuredDisk::access()->delete($source->getFile());
 						}
-						$source->setFile(SecuredDisk::access()->putFile(Directories::Videos, $videos[$i], 'private'));
+						$source->setFile(SecuredDisk::access()->putFile(Directories::Videos, $videos[$i]));
 					}
 
 					$source->save();
