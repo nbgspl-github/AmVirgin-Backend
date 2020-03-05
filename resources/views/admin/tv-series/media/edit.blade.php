@@ -186,7 +186,7 @@
 				if (status !== 200) {
 					alertify.alert(response.data.message);
 				} else {
-					location.reload();
+					// location.reload();
 					toastr.success(response.data.message);
 				}
 			}).catch(error => {
