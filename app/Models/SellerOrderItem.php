@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SellerOrderItem extends Model {
 	use HasAttributeMethods, RetrieveResource, RetrieveCollection;
-	protected $table = 'seller-order-item';
+	protected $table = 'seller-order-items';
 	protected $fillable = [
 		'sellerOrderId',
 		'productId',
