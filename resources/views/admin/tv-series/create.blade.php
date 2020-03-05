@@ -170,7 +170,7 @@
 			});
 			MultiEntryModal.setupMultiEntryModal({
 				title: 'Cast & Crew',
-				separator: '-',
+				separator: '/',
 				key: 'cast',
 				boundEditBoxId: 'cast',
 				modalId: 'cast_multiEntryModal',
@@ -193,7 +193,7 @@
 			});
 			MultiEntryModal.setupMultiEntryModal({
 				title: 'Director(s)',
-				separator: '-',
+				separator: '/',
 				key: 'director',
 				boundEditBoxId: 'director',
 				modalId: 'director_multiEntryModal',
