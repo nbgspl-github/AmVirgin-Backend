@@ -9,7 +9,7 @@ class TrendingNowResource extends JsonResource {
 	public function toArray($request) {
 		return [
 			'id' => $this->id,
-			'title' => $this->name,
+			'title' => $this->title,
 			'description' => $this->description,
 			'poster' => SecuredDisk::existsUrl($this->poster),
 		];
