@@ -90,6 +90,7 @@ class TvSeriesBase extends BaseController{
 				'cast' => $validated['cast'],
 				'director' => $validated['director'],
 				'genreId' => $validated['genreId'],
+				'sectionId' => $validated['sectionId'],
 				'rating' => $validated['rating'],
 				'pgRating' => $validated['pgRating'],
 				'type' => VideoTypes::Series,
