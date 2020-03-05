@@ -183,7 +183,7 @@ class Cart extends Model {
 			])->first();
 			if ($sellerOrder == null) {
 				$sellerOrder = SellerOrder::create([
-					'sellerId' => $cartItem->getProduct()->getKey(),
+					'sellerId' => $cartItem->getProduct()->getSellerId(),
 					'customerId' => $order->customerId,
 					'orderId' => $order->getKey(),
 					'orderNumber' => $order->orderNumber,
