@@ -2,6 +2,8 @@
 @section('content')
 	@include('admin.videos.actionBox')
 	@include('admin.modals.durationPicker')
+	@include('admin.modals.multiEntryModal',['key'=>'cast'])
+	@include('admin.modals.multiEntryModal',['key'=>'director'])
 	<div class="row">
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
@@ -28,11 +30,11 @@
 										</div>
 										<div class="form-group">
 											<label for="cast">Cast<span class="text-primary">*</span></label>
-											<input id="cast" type="text" name="cast" class="form-control" required placeholder="Type here the movie's cast name (separate with /)" minlength="1" maxlength="256" value="{{old('cast')}}"/>
+											<input id="cast" type="text" name="cast" class="form-control" required placeholder="Type here the series' cast(s) name (separate with /)" minlength="1" maxlength="256" value="{{old('cast')}}"/>
 										</div>
 										<div class="form-group">
 											<label for="director">Director<span class="text-primary">*</span></label>
-											<input id="director" type="text" name="director" class="form-control" required placeholder="Type here the movie's director's name (separate with /)" minlength="1" maxlength="256" value="{{old('director')}}"/>
+											<input id="director" type="text" name="director" class="form-control" required placeholder="Type here the series' director(s) name (separate with /)" minlength="1" maxlength="256" value="{{old('director')}}"/>
 										</div>
 										<div class="form-group">
 											<label for="description">Overview (Description)<span class="text-primary">*</span></label>
@@ -158,7 +160,8 @@
 @endsection
 
 @section('javascript')
-	<script src="{{asset('admin/utils/DurationPicker.js')}}"></script>
+	<script src="{{asset('assets/admin/utils/DurationPicker.js')}}"></script>
+	<script src="{{asset('assets/admin/utils/MultiEntryModal.js')}}"></script>
 	<script>
 		let modal = null;
 		let submitButton = null;
@@ -174,6 +177,52 @@
 			setupDurationPicker({
 				modalId: 'durationPicker',
 				durationId: 'duration'
+			});
+			MultiEntryModal.setupMultiEntryModal({
+				title: 'Cast & Crew',
+				separator: '/',
+				key: 'cast',
+				boundEditBoxId: 'cast',
+				modalId: 'cast_multiEntryModal',
+				inputClass: 'cast_input',
+				listGroupId: 'cast_listGroup',
+				addMoreButtonId: 'cast_addMoreButton',
+				doneButtonId: 'cast_doneButton',
+				deleteButtonClass: 'cast_delete-button',
+				template: `<li class="list-group-item px-0 py-1 border-0 animated slideInDown">
+								\t\t\t\t\t\t<div class="col-auto px-0">
+								\t\t\t\t\t\t\t<div class="input-group mb-2">
+								\t\t\t\t\t\t\t\t<input type="text" class="form-control cast_input" placeholder="Type here..." value=@{{value}}>
+								\t\t\t\t\t\t\t\t<div class="input-group-append">
+								\t\t\t\t\t\t\t\t\t<div class="input-group-text text-white bg-primary cast_delete-button">&times;</div>
+								\t\t\t\t\t\t\t\t</div>
+								\t\t\t\t\t\t\t</div>
+								\t\t\t\t\t\t</div>
+								\t\t\t\t\t
+							</li>`
+			});
+			MultiEntryModal.setupMultiEntryModal({
+				title: 'Director(s)',
+				separator: '/',
+				key: 'director',
+				boundEditBoxId: 'director',
+				modalId: 'director_multiEntryModal',
+				inputClass: 'director_input',
+				listGroupId: 'director_listGroup',
+				addMoreButtonId: 'director_addMoreButton',
+				doneButtonId: 'director_doneButton',
+				deleteButtonClass: 'director_delete-button',
+				template: `<li class="list-group-item px-0 py-1 border-0 animated slideInDown">
+								\t\t\t\t\t\t<div class="col-auto px-0">
+								\t\t\t\t\t\t\t<div class="input-group mb-2">
+								\t\t\t\t\t\t\t\t<input type="text" class="form-control director_input" placeholder="Type here..." value=@{{value}}>
+								\t\t\t\t\t\t\t\t<div class="input-group-append">
+								\t\t\t\t\t\t\t\t\t<div class="input-group-text text-white bg-primary director_delete-button">&times;</div>
+								\t\t\t\t\t\t\t\t</div>
+								\t\t\t\t\t\t\t</div>
+								\t\t\t\t\t\t</div>
+								\t\t\t\t\t
+							</li>`
 			});
 			$('#trending').change(function () {
 				if (this.checked) {

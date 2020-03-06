@@ -52,21 +52,21 @@ class MediaController extends TvSeriesBase{
 				if (SecuredDisk::access()->exists($tvSeries->getPoster())) {
 					SecuredDisk::access()->delete($tvSeries->getPoster());
 				}
-				$tvSeries->setPoster(SecuredDisk::access()->putFile(Directories::Posters, request()->file('poster'), 'private'));
+				$tvSeries->setPoster(SecuredDisk::access()->putFile(Directories::Posters, request()->file('poster')));
 			}
 
 			if (request()->hasFile('backdrop')) {
 				if (SecuredDisk::access()->exists($tvSeries->getBackdrop())) {
 					SecuredDisk::access()->delete($tvSeries->getBackdrop());
 				}
-				$tvSeries->setBackdrop(SecuredDisk::access()->putFile(Directories::Backdrops, request()->file('backdrop'), 'private'));
+				$tvSeries->setBackdrop(SecuredDisk::access()->putFile(Directories::Backdrops, request()->file('backdrop')));
 			}
 
 			if (request()->hasFile('trailer')) {
 				if (SecuredDisk::access()->exists($tvSeries->getTrailer())) {
 					SecuredDisk::access()->delete($tvSeries->getTrailer());
 				}
-				$tvSeries->setTrailer(SecuredDisk::access()->putFile(Directories::Trailers, request()->file('trailer'), 'private'));
+				$tvSeries->setTrailer(SecuredDisk::access()->putFile(Directories::Trailers, request()->file('trailer')));
 			}
 			$tvSeries->save();
 			$response->status(HttpOkay)->message('Successfully uploaded/updated media for tv series.');
