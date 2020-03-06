@@ -34,6 +34,7 @@ class Video extends Model {
 		'poster',
 		'backdrop',
 		'genreId',
+		'sectionId',
 		'rating',
 		'pgRating',
 		'type',
