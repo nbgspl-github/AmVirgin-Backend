@@ -56,7 +56,7 @@
 											<select id="sectionId" name="sectionId" class="form-control" required>
 												<option value="" disabled selected>Choose...</option>
 												@foreach($sections as $section)
-													@if(old('sectionId',$payload->sectionId)==$sections->getKey())
+													@if(old('sectionId',$payload->sectionId)==$section->getKey())
 														<option value="{{$section->id}}" selected>{{$section->title}}</option>
 													@else
 														<option value="{{$section->id}}">{{$section->title}}</option>
