@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Throwable;
+use Illuminate\Support\Facades\Storage;
 
 class VideosController extends ExtendedResourceController {
 	public function __construct() {
@@ -25,7 +26,9 @@ class VideosController extends ExtendedResourceController {
 		$response = responseApp();
 		try {
 			$video = Video::retrieveThrows($id);
+
 			$payload = new VideoResource($video);
+
 			$payload = $payload->jsonSerialize();
 			if ($video->getType() == VideoTypes::Series) {
 				$seasons = $video->sources()->get()->groupBy('season')->transform(function (Collection $season) {
@@ -56,6 +59,10 @@ class VideosController extends ExtendedResourceController {
 					];
 				})->values();
 				$payload['content'] = $seasons;
+			}
+
+			if ($payload['trailer'] == Storage::disk('secured')->url('/')){
+				unset( $payload['trailer']);
 			}
 			$response->status(HttpOkay)->message('Success')->setValue('data', $payload);
 		}
