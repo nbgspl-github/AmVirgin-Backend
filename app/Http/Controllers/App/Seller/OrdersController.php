@@ -31,7 +31,9 @@ class OrdersController extends ExtendedResourceController {
 					'orderId' => $sellerOrder->orderId(),
 					'orderNumber' => $sellerOrder->orderNumber(),
 					'customerId' => $sellerOrder->customerId(),
+					'customer' => $sellerOrder->customer,
 					'items' => $sellerOrder->items,
+
 				];
 			});
 			$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('data', $orders);
