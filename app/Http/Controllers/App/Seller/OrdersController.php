@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\App\Seller;
 
 use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Models\Customer;
 use App\Models\SellerOrder;
 use App\Traits\ValidatesRequest;
 use Throwable;
@@ -34,6 +35,19 @@ class OrdersController extends ExtendedResourceController {
 				];
 			});
 			$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('data', $orders);
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+	public function customer($id) {
+		$response = responseApp();
+		try {
+			$customer = Customer::retrieve($id);
+			$response->status(HttpOkay)->message('Customer Details.')->setValue('data', $customer);
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
