@@ -21,6 +21,7 @@ use App\Http\Controllers\App\Customer\Entertainment\HomePageController as Entert
 use App\Http\Controllers\App\Customer\SubscriptionController;
 use App\Http\Controllers\App\Customer\GlobalSearchController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\App\Seller\OrdersController;
 
 Route::get('/', [TwoFactorAuthController::class, 'exists'])->name('customer.check');
 Route::get('/profile', [AuthController::class, 'profile'])->name('customer.profile')->middleware('auth:customer-api');
@@ -100,4 +101,8 @@ Route::prefix('subscriptions')->group(function () {
 
 Route::prefix('search')->group(function () {
 	Route::get(Str::Empty, [GlobalSearchController::class, 'search']);
+});
+
+Route::prefix('orders')->group(function () {
+	Route::get(Str::Empty, [OrdersController::class, 'getorders']);
 });

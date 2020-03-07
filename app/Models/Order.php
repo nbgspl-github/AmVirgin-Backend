@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Classes\Str;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Customer;
 
 class Order extends Model {
 	protected $table = 'orders';
@@ -26,6 +27,10 @@ class Order extends Model {
 	public function items() {
 		return $this->hasMany('App\Models\OrderItem', 'orderId');
 	}
+	public function customer() {
+		return $this->belongsTo(Customer::class, 'customerId');
+	}
+
 
 	public function save(array $options = []) {
 		$this->orderNumber = Str::Empty;

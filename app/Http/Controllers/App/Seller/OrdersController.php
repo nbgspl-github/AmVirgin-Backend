@@ -7,6 +7,8 @@ use App\Models\Customer;
 use App\Models\SellerOrder;
 use App\Traits\ValidatesRequest;
 use Throwable;
+use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 
 class OrdersController extends ExtendedResourceController {
 	use ValidatesRequest;
@@ -36,6 +38,24 @@ class OrdersController extends ExtendedResourceController {
 
 				];
 			});
+			$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('data', $orders);
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+	public function getorders() {
+		$response = responseApp();
+		$user = auth('customer-api')->user()->id;
+
+		try {
+			$orders = Order::with('customer','items')
+			->where([
+				['customerId', $user],
+			])->get();
 			$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('data', $orders);
 		}
 		catch (Throwable $exception) {
