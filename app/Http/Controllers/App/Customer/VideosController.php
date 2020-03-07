@@ -58,9 +58,9 @@ class VideosController extends ExtendedResourceController {
 				})->values();
 				$payload['content'] = $seasons;
 			}
-			if ($payload['trailer'] == Storage::disk('secured')->url('/')){
-				unset( $payload['trailer']);
-			}
+//			if ($payload['trailer'] == Storage::disk('secured')->url('/')){
+//				unset( $payload['trailer']);
+//			}
 			$response->status(HttpOkay)->message('Success')->setValue('data', $payload);
 		}
 		catch (ModelNotFoundException $exception) {
