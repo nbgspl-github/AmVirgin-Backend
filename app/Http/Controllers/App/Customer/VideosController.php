@@ -13,6 +13,7 @@ use App\Traits\FluentResponse;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class VideosController extends ResourceController{
@@ -56,6 +57,9 @@ class VideosController extends ResourceController{
 					];
 				})->values();
 				$payload['content'] = $seasons;
+			}
+			if ($payload['trailer'] == Storage::disk('secured')->url('/')){
+				unset( $payload['trailer']);
 			}
 			$response->status(HttpOkay)->message('Success')->setValue('data', $payload);
 		}
