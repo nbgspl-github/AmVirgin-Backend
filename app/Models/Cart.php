@@ -4,9 +4,15 @@ namespace App\Models;
 
 use App\Classes\Cart\CartItem;
 use App\Classes\Cart\CartItemCollection;
+use App\Classes\Str;
+use App\Constants\CartStatus;
+use App\Constants\OrderStatus;
+use App\Exceptions\CartAlreadySubmittedException;
 use App\Exceptions\CartItemNotFoundException;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use stdClass;
 
 class Cart extends Model {
 	use RetrieveResource;
@@ -23,13 +29,13 @@ class Cart extends Model {
 		'paymentMode',
 		'status',
 	];
-	protected $itemCollection;
+	protected CartItemCollection $itemCollection;
 
-	public function __construct(array $attributes = []){
+	public function __construct(array $attributes = []) {
 		parent::__construct($attributes);
 	}
 
-	public static function retrieve(string $sessionId, int $customerId = 0): self{
+	public static function retrieve(string $sessionId, int $customerId = 0): self {
 		if ($customerId == 0) {
 			$model = self::where('sessionId', $sessionId)->first();
 			$model->loadModel();
@@ -42,7 +48,7 @@ class Cart extends Model {
 		}
 	}
 
-	public static function retrieveThrows(string $sessionId, int $customerId = 0): self{
+	public static function retrieveThrows(string $sessionId, int $customerId = 0): self {
 		if ($customerId == 0) {
 			$model = self::where('sessionId', $sessionId)->firstOrFail();
 			$model->loadModel();
@@ -59,14 +65,18 @@ class Cart extends Model {
 		$decoded = jsonDecodeArray($this->items);
 		$this->itemCollection = new CartItemCollection($this);
 		$this->itemCollection->setItemsUpdatedCallback(function (array $items) {
-			$this->items = $items;
+			if (count($items) < 1)
+				$this->items = jsonDecodeArray(jsonEncode(new stdClass()));
+			else
+				$this->items = $items;
 		});
 		if (count($decoded) > 0)
 			$this->itemCollection->loadItems($decoded);
 	}
 
-	public function addItem(CartItem ...$cartItem) {
-		collect($cartItem)->each(function (CartItem $item) {
+	public function addItem(CartItem ...$cartItems) {
+		throw_if($this->wasSubmitted(), new CartAlreadySubmittedException($this));
+		collect($cartItems)->each(function (CartItem $item) {
 			$uniqueId = $item->getUniqueId();
 			if (!$this->itemCollection->has($uniqueId))
 				$this->itemCollection->setItem($uniqueId, $item)->increaseQuantity();
@@ -76,8 +86,21 @@ class Cart extends Model {
 		$this->handleItemsUpdated();
 	}
 
-	public function removeItem(CartItem ...$cartItem) {
-		collect($cartItem)->each(function (CartItem $item) {
+	public function updateItem(CartItem ...$cartItems) {
+		throw_if($this->wasSubmitted(), new CartAlreadySubmittedException($this));
+		collect($cartItems)->each(function (CartItem $item) {
+			$uniqueId = $item->getUniqueId();
+			if (!$this->itemCollection->has($uniqueId))
+				$this->itemCollection->setItem($uniqueId, $item)->setQuantity($item->getQuantity());
+			else
+				$this->itemCollection->getItem($uniqueId)->setQuantity($item->getQuantity());
+		});
+		$this->handleItemsUpdated();
+	}
+
+	public function removeItem(CartItem ...$cartItems) {
+		throw_if($this->wasSubmitted(), new CartAlreadySubmittedException($this));
+		collect($cartItems)->each(function (CartItem $item) {
 			$uniqueId = $item->getUniqueId();
 			if ($this->itemCollection->has($uniqueId))
 				$this->itemCollection->getItem($uniqueId)->decreaseQuantity();
@@ -87,8 +110,9 @@ class Cart extends Model {
 		$this->handleItemsUpdated();
 	}
 
-	public function destroyItem(CartItem ...$cartItem) {
-		collect($cartItem)->each(function (CartItem $item) {
+	public function destroyItem(CartItem ...$cartItems) {
+		throw_if($this->wasSubmitted(), new CartAlreadySubmittedException($this));
+		collect($cartItems)->each(function (CartItem $item) {
 			$uniqueId = $item->getUniqueId();
 			if ($this->itemCollection->has($uniqueId))
 				$this->itemCollection->deleteItem($uniqueId);
@@ -96,6 +120,11 @@ class Cart extends Model {
 				throw new CartItemNotFoundException($item);
 		});
 		$this->handleItemsUpdated();
+	}
+
+	public function contains(CartItem $item) {
+		$uniqueId = $item->getUniqueId();
+		return $this->itemCollection->has($uniqueId);
 	}
 
 	public function session() {
@@ -118,9 +147,61 @@ class Cart extends Model {
 				'total' => $this->total,
 				'paymentMode' => $this->paymentMode,
 				'status' => $this->status,
-				'items' => array_values($this->items),
+				'items' => gettype($this->items) == 'array' ? array_values($this->items) : jsonDecodeArray($this->items),
 			],
 		];
+	}
+
+	public function save(array $options = []) {
+		return parent::save($options);
+	}
+
+	public function submit(): Order {
+		throw_if($this->wasSubmitted(), new CartAlreadySubmittedException($this));
+		$order = Order::create([
+			'customerId' => $this->customerId,
+			'addressId' => $this->addressId,
+			'quantity' => $this->itemCount,
+			'subTotal' => $this->subTotal,
+			'tax' => $this->tax,
+			'total' => $this->total,
+			'paymentMode' => $this->paymentMode,
+			'status' => OrderStatus::Placed,
+		]);
+		$this->itemCollection->iterate(function (CartItem $cartItem) use ($order) {
+			$item = OrderItem::create([
+				'orderId' => $order->getKey(),
+				'productId' => $cartItem->getProduct()->getKey(),
+				'quantity' => $cartItem->getQuantity(),
+				'price' => $cartItem->getApplicablePrice(),
+				'total' => $cartItem->getItemTotal(),
+				'options' => $cartItem->getAttributes(),
+			]);
+			$sellerOrder = SellerOrder::where([
+				['orderId', $order->getKey()],
+				['sellerId', $cartItem->getProduct()->getSellerId()],
+			])->first();
+			if ($sellerOrder == null) {
+				$sellerOrder = SellerOrder::create([
+					'sellerId' => $cartItem->getProduct()->getSellerId(),
+					'customerId' => $order->customerId,
+					'orderId' => $order->getKey(),
+					'orderNumber' => $order->orderNumber,
+				]);
+			}
+			SellerOrderItem::create([
+				'sellerOrderId' => $sellerOrder->getKey(),
+				'productId' => $cartItem->getProduct()->getKey(),
+				'quantity' => $cartItem->getQuantity(),
+			]);
+		});
+		$this->status = CartStatus::Submitted;
+		$this->save();
+		return $order;
+	}
+
+	public function wasSubmitted() {
+		return Str::equals($this->status, CartStatus::Submitted);
 	}
 
 	protected function handleItemsUpdated() {

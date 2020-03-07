@@ -29,7 +29,10 @@ trait ValidatesRequest {
 						$rules[$key][] = $extra[0];
 				}
 
-		$validator = Validator::make($request->all(), $rules);
+		if ($request == null)
+			$validator = Validator::make(request()->all(), $rules);
+		else
+			$validator = Validator::make($request->all(), $rules);
 		if ($validator->fails()) throw new ValidationException($validator->errors()->first(), $validator);
 		else return $validator->validated();
 	}

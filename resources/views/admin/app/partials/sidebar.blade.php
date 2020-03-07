@@ -29,17 +29,16 @@
 					<a href="{{route("admin.sellers.index")}}" class="waves-effect animatableX"><i class="mdi mdi-account-circle mt-1"></i> <span>Sellers</span></a>
 				</li>
 
-				<li>
-					<a href="{{route("admin.sliders.index")}}" class="waves-effect animatableX"><i class="mdi mdi-skip-next-circle mt-1"></i> <span>Sliders</span></a>
-				</li>
-
 				<li class="menu-title text-primary animatableX">Shopping</li>
-                <li>
+				<li>
 					<a href="{{route('admin.categories-banner.index')}}" class="waves-effect animatableX">
 						<i class="mdi mdi-cards mt-1"></i> <span>Categories Banner</span></a>
 				</li>
 				<li>
 					<a href="{{route('admin.categories.index')}}" class="waves-effect animatableX"><i class="mdi mdi-cards mt-1"></i> <span>Categories</span></a>
+				</li>
+				<li>
+					<a href="{{route("admin.shop.choices")}}" class="waves-effect animatableX"><i class="mdi mdi-skip-next-circle mt-1"></i> <span>Shop Appearance</span></a>
 				</li>
 
 				<li class="has_sub animatableX">
@@ -51,6 +50,10 @@
 				</li>
 
 				<li class="menu-title text-primary animatableX">Entertainment</li>
+
+				<li>
+					<a href="{{route("admin.sliders.index")}}" class="waves-effect animatableX"><i class="mdi mdi-skip-next-circle mt-1"></i> <span>Sliders</span></a>
+				</li>
 
 				<li>
 					<a href="{{route('admin.videos.index')}}" class="waves-effect animatableX"><i class="mdi mdi-movie"></i><span> Videos </span></a>

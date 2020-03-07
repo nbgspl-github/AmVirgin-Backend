@@ -54,6 +54,15 @@
 											</select>
 										</div>
 										<div class="form-group">
+											<label for="sectionId">Choose containing section<span class="text-primary">*</span></label>
+											<select id="sectionId" name="sectionId" class="form-control" required>
+												<option value="" disabled selected>Choose...</option>
+												@foreach($sections as $section)
+													<option value="{{$section->id}}">{{$section->title}}</option>
+												@endforeach
+											</select>
+										</div>
+										<div class="form-group">
 											<label for="released">Release date<span class="text-primary">*</span></label>
 											<input id="released" type="date" name="released" class="form-control" required placeholder="Choose or type release date" onkeydown="return false;"/>
 										</div>
@@ -152,8 +161,8 @@
 @endsection
 
 @section('javascript')
-	<script src="{{asset('admin/utils/DurationPicker.js')}}"></script>
-	<script src="{{asset('admin/utils/MultiEntryModal.js')}}"></script>
+	<script src="{{asset('assets/admin/utils/DurationPicker.js')}}"></script>
+	<script src="{{asset('assets/admin/utils/MultiEntryModal.js')}}"></script>
 	<script>
 		let modal = null;
 		let submitButton = null;
@@ -170,7 +179,7 @@
 			});
 			MultiEntryModal.setupMultiEntryModal({
 				title: 'Cast & Crew',
-				separator: '-',
+				separator: '/',
 				key: 'cast',
 				boundEditBoxId: 'cast',
 				modalId: 'cast_multiEntryModal',
@@ -193,7 +202,7 @@
 			});
 			MultiEntryModal.setupMultiEntryModal({
 				title: 'Director(s)',
-				separator: '-',
+				separator: '/',
 				key: 'director',
 				boundEditBoxId: 'director',
 				modalId: 'director_multiEntryModal',

@@ -8,7 +8,7 @@
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Videos'])
 				</div>
-				<form id="uploadForm" action="{{route('admin.tv-series.update.attributes',$payload->getKey())}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
+				<form id="uploadForm" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="card-body">
 						<div class="row">
@@ -180,13 +180,13 @@
 				show: true,
 				backdrop: 'static'
 			});
-			axios.post('/admin/videos/' + videoId + '/update/media', formData, config,).then(response => {
+			axios.post('/admin/tv-series/' + videoId + '/update/media', formData, config,).then(response => {
 				const status = response.data.status;
 				modal.modal('hide');
 				if (status !== 200) {
 					alertify.alert(response.data.message);
 				} else {
-					location.reload();
+					// location.reload();
 					toastr.success(response.data.message);
 				}
 			}).catch(error => {

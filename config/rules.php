@@ -33,11 +33,24 @@ return [
 				'otp' => ['bail', 'required_if:type,3', 'numeric', 'min:1111', 'max:9999'],
 			],
 			'register' => [
-				'name' => ['bail', 'required', 'string', 'min:2', 'max:100'],
+				'name' => ['bail', 'required', 'string', 'min:2', 'max:256'],
 				'email' => ['bail', 'required', 'email'],
 				'mobile' => ['bail', 'required', 'digits:10'],
 				'password' => ['bail', 'required', 'string', 'min:4', 'max:64'],
 				'otp' => ['bail', 'required', 'numeric', 'min:1111', 'max:9999'],
+			],
+			'update' => [
+				'profile' => [
+					'name' => ['bail', 'required', 'string', 'min:2', 'max:256'],
+					'businessName' => ['bail', 'required', 'string', 'min:2', 'max:256'],
+					'description' => ['bail', 'nullable', 'string', 'min:1', 'max:2000'],
+					'countryId' => ['bail', 'required', Rule::exists(Tables::Countries, 'id')],
+					'stateId' => ['bail', 'required', Rule::exists(Tables::States, 'id')],
+					'cityId' => ['bail', 'required', Rule::exists(Tables::Cities, 'id')],
+				],
+				'avatar' => [
+					'avatar' => ['bail', 'required', 'image', 'min:1', 'max:4096'],
+				],
 			],
 		],
 
@@ -92,13 +105,13 @@ return [
 				'productMode' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 				'listingType' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 				'originalPrice' => ['bail', 'required', 'numeric', 'min:1', 'max:10000000'],
-				'offerType' => ['bail', 'required', Rule::in([OfferTypes::FlatRate, OfferTypes::Percentage])], /*Since we only have two offer types for now, it's 0 and 1, later on we'll add as required.*/
+				'offerType' => ['bail', 'required', Rule::in([OfferTypes::FlatRate, OfferTypes::Percentage])],
 				'offerValue' => ['bail', 'required', 'numeric', 'min:1', 'max:10000000'],
 				'currency' => ['bail', 'nullable', 'string', 'min:2', 'max:5', 'exists:currencies,code'],
 				'taxRate' => ['bail', 'required', 'numeric', 'min:0.00', 'max:99.99'],
 				'countryId' => ['bail', 'required', 'exists:countries,id'],
-				'stateId' => ['bail', 'required', 'numeric', 'min:1', 'max:9999999'],
-				'cityId' => ['bail', 'required', 'numeric', 'min:1', RuleMaxInt],
+				'stateId' => ['bail', 'required', 'numeric', 'exists:states,id'],
+				'cityId' => ['bail', 'required', 'numeric', 'exists:cities,id'],
 				'zipCode' => ['bail', 'required', 'min:1', RuleMaxInt],
 				'address' => ['bail', 'required', 'string', 'min:2', 'max:500'],
 				'status' => ['bail', 'nullable', Rule::in([ProductStatus::DifferentStatus, ProductStatus::SomeOtherStatus, ProductStatus::SomeStatus])],
@@ -114,6 +127,7 @@ return [
 				'longDescription' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
 				'sku' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 				'files.*' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
+				'attributes' => ['bail', 'required'],
 			],
 			'update' => [
 				'productName' => ['bail', 'required', 'string', 'min:1', 'max:500'],
@@ -122,7 +136,7 @@ return [
 				'productMode' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 				'listingType' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 				'originalPrice' => ['bail', 'required', 'numeric', 'min:1', 'max:10000000'],
-				'offerType' => ['bail', 'required', Rule::in([OfferTypes::FlatRate, OfferTypes::Percentage])], /*Since we only have two offer types for now, it's 0 and 1, later on we'll add as required.*/
+				'offerType' => ['bail', 'required', Rule::in([OfferTypes::FlatRate, OfferTypes::Percentage])],
 				'offerValue' => ['bail', 'required', 'numeric', 'min:1', 'max:10000000'],
 				'currency' => ['bail', 'nullable', 'string', 'min:2', 'max:5', 'exists:currencies,code'],
 				'taxRate' => ['bail', 'required', 'numeric', 'min:0.00', 'max:99.99'],
@@ -144,6 +158,7 @@ return [
 				'longDescription' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
 				'sku' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 				'files.*' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
+				'attributes' => ['bail', 'required'],
 			],
 		],
 	],
@@ -169,6 +184,24 @@ return [
 			],
 		],
 
+		'home-banner' => [
+			'store' => [
+				'title' => ['bail', 'required', 'string', 'min:1', 'max:256'],
+
+				'banner' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp'],
+				'target' => ['bail', 'required', 'url'],
+				'stars' => ['bail', 'nullable', 'numeric', 'min:0', 'max:5'],
+				'active' => ['bail', 'required', 'boolean'],
+			],
+			'update' => [
+				'title' => ['bail', 'required', 'string', 'min:1', 'max:256'],
+				'banner' => ['bail', 'nullable', 'mimes:jpg,jpeg,png,bmp'],
+				'target' => ['bail', 'required', 'url'],
+				'stars' => ['bail', 'nullable', 'numeric', 'min:0', 'max:5'],
+				'active' => ['bail', 'required', 'boolean'],
+			],
+		],
+
 		'videos' => [
 			'attributes' => [
 				'update' => [
@@ -179,6 +212,7 @@ return [
 					'cast' => ['bail', 'required', 'string', 'min:1', 'max:500'],
 					'director' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 					'genreId' => ['bail', 'required', 'exists:genres,id'],
+					'sectionId' => ['bail', 'required', 'exists:page-sections,id'],
 					'rating' => ['bail', 'required', 'numeric', 'min:0.00', 'max:5.00'],
 					'pgRating' => ['bail', 'required', Rule::in(['G', 'PG', 'PG-13', 'R', 'NC-17'])],
 					'subscriptionType' => ['bail', 'required', Rule::in(['free', 'paid', 'subscription'])],
@@ -194,6 +228,7 @@ return [
 				'cast' => ['bail', 'required', 'string', 'min:1', 'max:500'],
 				'director' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 				'genreId' => ['bail', 'required', 'exists:genres,id'],
+				'sectionId' => ['bail', 'required', 'exists:page-sections,id'],
 				'rating' => ['bail', 'required', 'numeric', 'min:0.00', 'max:5.00'],
 				'pgRating' => ['bail', 'required', Rule::in(['G', 'PG', 'PG-13', 'R', 'NC-17'])],
 				'subscriptionType' => ['bail', 'required', Rule::in(['free', 'paid', 'subscription'])],
@@ -247,6 +282,7 @@ return [
 				'cast' => ['bail', 'required', 'string', 'min:1', 'max:500'],
 				'director' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 				'genreId' => ['bail', 'required', 'exists:genres,id'],
+				'sectionId' => ['bail', 'required', 'exists:page-sections,id'],
 				'rating' => ['bail', 'required', 'numeric', 'min:0.00', 'max:5.00'],
 				'pgRating' => ['bail', 'required', Rule::in(['G', 'PG', 'PG-13', 'R', 'NC-17'])],
 				'subscriptionType' => ['bail', 'required', Rule::in(['free', 'paid', 'subscription'])],

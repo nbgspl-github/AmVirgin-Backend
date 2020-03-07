@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\FluentConstructor;
+use App\Traits\HasAttributeMethods;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use App\Traits\Sluggable;
@@ -10,10 +11,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Sluggable\SlugOptions;
 
-class Product extends Model{
+class Product extends Model {
 	use FluentConstructor;
 	use RetrieveResource;
 	use RetrieveCollection;
+	use HasAttributeMethods;
 	use Sluggable;
 
 	protected $table = 'products';
@@ -69,7 +71,7 @@ class Product extends Model{
 	/**
 	 * @return string
 	 */
-	public function getName(): string{
+	public function getName(): string {
 		return $this->name;
 	}
 
@@ -77,7 +79,7 @@ class Product extends Model{
 	 * @param string $name
 	 * @return Product
 	 */
-	public function setName(string $name): Product{
+	public function setName(string $name): Product {
 		$this->name = $name;
 		return $this;
 	}
@@ -85,7 +87,7 @@ class Product extends Model{
 	/**
 	 * @return string
 	 */
-	public function getSlug(): string{
+	public function getSlug(): string {
 		return $this->slug;
 	}
 
@@ -93,7 +95,7 @@ class Product extends Model{
 	 * @param string $slug
 	 * @return Product
 	 */
-	public function setSlug(string $slug): Product{
+	public function setSlug(string $slug): Product {
 		$this->slug = $slug;
 		return $this;
 	}
@@ -101,7 +103,7 @@ class Product extends Model{
 	/**
 	 * @return int
 	 */
-	public function getCategoryId(): int{
+	public function getCategoryId(): int {
 		return $this->categoryId;
 	}
 
@@ -109,7 +111,7 @@ class Product extends Model{
 	 * @param int $categoryId
 	 * @return Product
 	 */
-	public function setCategoryId(int $categoryId): Product{
+	public function setCategoryId(int $categoryId): Product {
 		$this->categoryId = $categoryId;
 		return $this;
 	}
@@ -117,7 +119,7 @@ class Product extends Model{
 	/**
 	 * @return int
 	 */
-	public function getSellerId(): int{
+	public function getSellerId(): int {
 		return $this->sellerId;
 	}
 
@@ -125,7 +127,7 @@ class Product extends Model{
 	 * @param int $sellerId
 	 * @return Product
 	 */
-	public function setSellerId(int $sellerId): Product{
+	public function setSellerId(int $sellerId): Product {
 		$this->sellerId = $sellerId;
 		return $this;
 	}
@@ -133,7 +135,7 @@ class Product extends Model{
 	/**
 	 * @return string|null
 	 */
-	public function getProductType(): ?string{
+	public function getProductType(): ?string {
 		return $this->productType;
 	}
 
@@ -141,7 +143,7 @@ class Product extends Model{
 	 * @param string|null $productType
 	 * @return Product
 	 */
-	public function setProductType(?string $productType): Product{
+	public function setProductType(?string $productType): Product {
 		$this->productType = $productType;
 		return $this;
 	}
@@ -149,7 +151,7 @@ class Product extends Model{
 	/**
 	 * @return string|null
 	 */
-	public function getProductMode(): ?string{
+	public function getProductMode(): ?string {
 		return $this->productMode;
 	}
 
@@ -157,7 +159,7 @@ class Product extends Model{
 	 * @param string|null $productMode
 	 * @return Product
 	 */
-	public function setProductMode(?string $productMode): Product{
+	public function setProductMode(?string $productMode): Product {
 		$this->productMode = $productMode;
 		return $this;
 	}
@@ -165,7 +167,7 @@ class Product extends Model{
 	/**
 	 * @return string|null
 	 */
-	public function getListingType(): ?string{
+	public function getListingType(): ?string {
 		return $this->listingType;
 	}
 
@@ -173,7 +175,7 @@ class Product extends Model{
 	 * @param string|null $listingType
 	 * @return Product
 	 */
-	public function setListingType(?string $listingType): Product{
+	public function setListingType(?string $listingType): Product {
 		$this->listingType = $listingType;
 		return $this;
 	}
@@ -181,7 +183,7 @@ class Product extends Model{
 	/**
 	 * @return int
 	 */
-	public function getOriginalPrice(): int{
+	public function getOriginalPrice(): int {
 		return $this->originalPrice;
 	}
 
@@ -189,7 +191,7 @@ class Product extends Model{
 	 * @param int $originalPrice
 	 * @return Product
 	 */
-	public function setOriginalPrice(int $originalPrice): Product{
+	public function setOriginalPrice(int $originalPrice): Product {
 		$this->originalPrice = $originalPrice;
 		return $this;
 	}
@@ -197,7 +199,7 @@ class Product extends Model{
 	/**
 	 * @return int
 	 */
-	public function getOfferValue(): int{
+	public function getOfferValue(): int {
 		return $this->offerValue;
 	}
 
@@ -205,7 +207,7 @@ class Product extends Model{
 	 * @param int $offerValue
 	 * @return Product
 	 */
-	public function setOfferValue(int $offerValue): Product{
+	public function setOfferValue(int $offerValue): Product {
 		$this->offerValue = $offerValue;
 		return $this;
 	}
@@ -213,7 +215,7 @@ class Product extends Model{
 	/**
 	 * @return int
 	 */
-	public function getOfferType(): int{
+	public function getOfferType(): int {
 		return $this->offerType;
 	}
 
@@ -221,7 +223,7 @@ class Product extends Model{
 	 * @param int $offerType
 	 * @return Product
 	 */
-	public function setOfferType(int $offerType): Product{
+	public function setOfferType(int $offerType): Product {
 		$this->offerType = $offerType;
 		return $this;
 	}
@@ -229,7 +231,7 @@ class Product extends Model{
 	/**
 	 * @return string
 	 */
-	public function getCurrency(): string{
+	public function getCurrency(): string {
 		return $this->currency;
 	}
 
@@ -237,7 +239,7 @@ class Product extends Model{
 	 * @param string $currency
 	 * @return Product
 	 */
-	public function setCurrency(string $currency): Product{
+	public function setCurrency(string $currency): Product {
 		$this->currency = $currency;
 		return $this;
 	}
@@ -245,7 +247,7 @@ class Product extends Model{
 	/**
 	 * @return int
 	 */
-	public function getTaxRate(): int{
+	public function getTaxRate(): int {
 		return $this->taxRate;
 	}
 
@@ -253,7 +255,7 @@ class Product extends Model{
 	 * @param int $taxRate
 	 * @return Product
 	 */
-	public function setTaxRate(int $taxRate): Product{
+	public function setTaxRate(int $taxRate): Product {
 		$this->taxRate = $taxRate;
 		return $this;
 	}
@@ -261,7 +263,7 @@ class Product extends Model{
 	/**
 	 * @return int
 	 */
-	public function getCountryId(): int{
+	public function getCountryId(): int {
 		return $this->countryId;
 	}
 
@@ -269,7 +271,7 @@ class Product extends Model{
 	 * @param int $countryId
 	 * @return Product
 	 */
-	public function setCountryId(int $countryId): Product{
+	public function setCountryId(int $countryId): Product {
 		$this->countryId = $countryId;
 		return $this;
 	}
@@ -277,7 +279,7 @@ class Product extends Model{
 	/**
 	 * @return int
 	 */
-	public function getStateId(): int{
+	public function getStateId(): int {
 		return $this->stateId;
 	}
 
@@ -285,7 +287,7 @@ class Product extends Model{
 	 * @param int $stateId
 	 * @return Product
 	 */
-	public function setStateId(int $stateId): Product{
+	public function setStateId(int $stateId): Product {
 		$this->stateId = $stateId;
 		return $this;
 	}
@@ -293,7 +295,7 @@ class Product extends Model{
 	/**
 	 * @return int
 	 */
-	public function getCityId(): int{
+	public function getCityId(): int {
 		return $this->cityId;
 	}
 
@@ -301,7 +303,7 @@ class Product extends Model{
 	 * @param int $cityId
 	 * @return Product
 	 */
-	public function setCityId(int $cityId): Product{
+	public function setCityId(int $cityId): Product {
 		$this->cityId = $cityId;
 		return $this;
 	}
@@ -309,7 +311,7 @@ class Product extends Model{
 	/**
 	 * @return int
 	 */
-	public function getZipCode(): int{
+	public function getZipCode(): int {
 		return $this->zipCode;
 	}
 
@@ -317,7 +319,7 @@ class Product extends Model{
 	 * @param int $zipCode
 	 * @return Product
 	 */
-	public function setZipCode(int $zipCode): Product{
+	public function setZipCode(int $zipCode): Product {
 		$this->zipCode = $zipCode;
 		return $this;
 	}
@@ -325,7 +327,7 @@ class Product extends Model{
 	/**
 	 * @return string
 	 */
-	public function getAddress(): string{
+	public function getAddress(): string {
 		return $this->address;
 	}
 
@@ -333,7 +335,7 @@ class Product extends Model{
 	 * @param string $address
 	 * @return Product
 	 */
-	public function setAddress(string $address): Product{
+	public function setAddress(string $address): Product {
 		$this->address = $address;
 		return $this;
 	}
@@ -341,7 +343,7 @@ class Product extends Model{
 	/**
 	 * @return int
 	 */
-	public function getStatus(): int{
+	public function getStatus(): int {
 		return $this->status;
 	}
 
@@ -349,7 +351,7 @@ class Product extends Model{
 	 * @param int $status
 	 * @return Product
 	 */
-	public function setStatus(int $status): Product{
+	public function setStatus(int $status): Product {
 		$this->status = $status;
 		return $this;
 	}
@@ -357,7 +359,7 @@ class Product extends Model{
 	/**
 	 * @return bool
 	 */
-	public function isPromoted(): bool{
+	public function isPromoted(): bool {
 		return $this->promoted;
 	}
 
@@ -365,7 +367,7 @@ class Product extends Model{
 	 * @param bool $promoted
 	 * @return Product
 	 */
-	public function setPromoted(bool $promoted): Product{
+	public function setPromoted(bool $promoted): Product {
 		$this->promoted = $promoted;
 		return $this;
 	}
@@ -373,7 +375,7 @@ class Product extends Model{
 	/**
 	 * @return string
 	 */
-	public function getPromotionStart(): string{
+	public function getPromotionStart(): string {
 		return $this->promotionStart;
 	}
 
@@ -381,7 +383,7 @@ class Product extends Model{
 	 * @param string $promotionStart
 	 * @return Product
 	 */
-	public function setPromotionStart(string $promotionStart): Product{
+	public function setPromotionStart(string $promotionStart): Product {
 		$this->promotionStart = $promotionStart;
 		return $this;
 	}
@@ -389,7 +391,7 @@ class Product extends Model{
 	/**
 	 * @return string
 	 */
-	public function getPromotionEnd(): string{
+	public function getPromotionEnd(): string {
 		return $this->promotionEnd;
 	}
 
@@ -397,7 +399,7 @@ class Product extends Model{
 	 * @param string $promotionEnd
 	 * @return Product
 	 */
-	public function setPromotionEnd(string $promotionEnd): Product{
+	public function setPromotionEnd(string $promotionEnd): Product {
 		$this->promotionEnd = $promotionEnd;
 		return $this;
 	}
@@ -405,7 +407,7 @@ class Product extends Model{
 	/**
 	 * @return bool
 	 */
-	public function isVisible(): bool{
+	public function isVisible(): bool {
 		return $this->visibility;
 	}
 
@@ -421,7 +423,7 @@ class Product extends Model{
 	/**
 	 * @return int
 	 */
-	public function getRating(): int{
+	public function getRating(): int {
 		return $this->rating;
 	}
 
@@ -429,7 +431,7 @@ class Product extends Model{
 	 * @param int $rating
 	 * @return Product
 	 */
-	public function setRating(int $rating): Product{
+	public function setRating(int $rating): Product {
 		$this->rating = $rating;
 		return $this;
 	}
@@ -437,7 +439,7 @@ class Product extends Model{
 	/**
 	 * @return int
 	 */
-	public function getHits(): int{
+	public function getHits(): int {
 		return $this->hits;
 	}
 
@@ -445,7 +447,7 @@ class Product extends Model{
 	 * @param int $hits
 	 * @return Product
 	 */
-	public function setHits(int $hits): Product{
+	public function setHits(int $hits): Product {
 		$this->hits = $hits;
 		return $this;
 	}
@@ -453,7 +455,7 @@ class Product extends Model{
 	/**
 	 * @return int
 	 */
-	public function getStock(): int{
+	public function getStock(): int {
 		return $this->stock;
 	}
 
@@ -461,7 +463,7 @@ class Product extends Model{
 	 * @param int $stock
 	 * @return Product
 	 */
-	public function setStock(int $stock): Product{
+	public function setStock(int $stock): Product {
 		$this->stock = $stock;
 		return $this;
 	}
@@ -469,7 +471,7 @@ class Product extends Model{
 	/**
 	 * @return string|null
 	 */
-	public function getShippingCostType(): ?string{
+	public function getShippingCostType(): ?string {
 		return $this->shippingCostType;
 	}
 
@@ -477,7 +479,7 @@ class Product extends Model{
 	 * @param string|null $shippingCostType
 	 * @return Product
 	 */
-	public function setShippingCostType(?string $shippingCostType): Product{
+	public function setShippingCostType(?string $shippingCostType): Product {
 		$this->shippingCostType = $shippingCostType;
 		return $this;
 	}
@@ -485,7 +487,7 @@ class Product extends Model{
 	/**
 	 * @return int
 	 */
-	public function getShippingCost(): int{
+	public function getShippingCost(): int {
 		return $this->shippingCost;
 	}
 
@@ -493,7 +495,7 @@ class Product extends Model{
 	 * @param int $shippingCost
 	 * @return Product
 	 */
-	public function setShippingCost(int $shippingCost): Product{
+	public function setShippingCost(int $shippingCost): Product {
 		$this->shippingCost = $shippingCost;
 		return $this;
 	}
@@ -501,7 +503,7 @@ class Product extends Model{
 	/**
 	 * @return bool
 	 */
-	public function isSoldOut(): bool{
+	public function isSoldOut(): bool {
 		return $this->soldOut;
 	}
 
@@ -509,7 +511,7 @@ class Product extends Model{
 	 * @param bool $soldOut
 	 * @return Product
 	 */
-	public function setSoldOut(bool $soldOut): Product{
+	public function setSoldOut(bool $soldOut): Product {
 		$this->soldOut = $soldOut;
 		return $this;
 	}
@@ -517,7 +519,7 @@ class Product extends Model{
 	/**
 	 * @return bool
 	 */
-	public function isDeleted(): bool{
+	public function isDeleted(): bool {
 		return $this->deleted;
 	}
 
@@ -525,7 +527,7 @@ class Product extends Model{
 	 * @param bool $deleted
 	 * @return Product
 	 */
-	public function setDeleted(bool $deleted): Product{
+	public function setDeleted(bool $deleted): Product {
 		$this->deleted = $deleted;
 		return $this;
 	}
@@ -533,7 +535,7 @@ class Product extends Model{
 	/**
 	 * @return bool
 	 */
-	public function isDraft(): bool{
+	public function isDraft(): bool {
 		return $this->draft;
 	}
 
@@ -541,7 +543,7 @@ class Product extends Model{
 	 * @param bool $draft
 	 * @return Product
 	 */
-	public function setDraft(bool $draft): Product{
+	public function setDraft(bool $draft): Product {
 		$this->draft = $draft;
 		return $this;
 	}
@@ -549,7 +551,7 @@ class Product extends Model{
 	/**
 	 * @return string
 	 */
-	public function getShortDescription(): string{
+	public function getShortDescription(): string {
 		return $this->shortDescription;
 	}
 
@@ -557,7 +559,7 @@ class Product extends Model{
 	 * @param string $shortDescription
 	 * @return Product
 	 */
-	public function setShortDescription(string $shortDescription): Product{
+	public function setShortDescription(string $shortDescription): Product {
 		$this->shortDescription = $shortDescription;
 		return $this;
 	}
@@ -565,7 +567,7 @@ class Product extends Model{
 	/**
 	 * @return string
 	 */
-	public function getLongDescription(): string{
+	public function getLongDescription(): string {
 		return $this->longDescription;
 	}
 
@@ -573,7 +575,7 @@ class Product extends Model{
 	 * @param string $longDescription
 	 * @return Product
 	 */
-	public function setLongDescription(string $longDescription): Product{
+	public function setLongDescription(string $longDescription): Product {
 		$this->longDescription = $longDescription;
 		return $this;
 	}
@@ -581,7 +583,7 @@ class Product extends Model{
 	/**
 	 * @return string
 	 */
-	public function getSku(): string{
+	public function getSku(): string {
 		return $this->sku;
 	}
 
@@ -589,7 +591,7 @@ class Product extends Model{
 	 * @param string $sku
 	 * @return Product
 	 */
-	public function setSku(string $sku): Product{
+	public function setSku(string $sku): Product {
 		$this->sku = $sku;
 		return $this;
 	}
@@ -597,7 +599,7 @@ class Product extends Model{
 	/**
 	 * @return string|null
 	 */
-	public function getTrailer(): ?string{
+	public function getTrailer(): ?string {
 		return $this->trailer;
 	}
 
@@ -605,7 +607,7 @@ class Product extends Model{
 	 * @param string $trailer
 	 * @return Product
 	 */
-	public function setTrailer(string $trailer): Product{
+	public function setTrailer(string $trailer): Product {
 		$this->trailer = $trailer;
 		return $this;
 	}
@@ -613,18 +615,18 @@ class Product extends Model{
 	/**
 	 * @return HasMany
 	 */
-	public function attributes(){
-		return $this->hasMany('App\Models\Attribute');
+	public function attributes() {
+		return $this->hasMany('App\Models\ProductAttribute', 'productId');
 	}
 
 	/**
 	 * @return HasMany
 	 */
-	public function images(){
+	public function images() {
 		return $this->hasMany('\App\Models\ProductImage', 'productId');
 	}
 
-	public function getSlugOptions(): SlugOptions{
+	public function getSlugOptions(): SlugOptions {
 		return SlugOptions::create()->saveSlugsTo('slug')->generateSlugsFrom('name');
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace App\Interfaces;
 
-interface VideoTypes{
+class VideoTypes {
 	const Movie = 'movie';
 	const Series = 'series';
 }

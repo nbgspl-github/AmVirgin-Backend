@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Traits\ActiveStatus;
 use Illuminate\Database\Eloquent\Model;
 
-class Slider extends Model{
+class Slider extends Model {
 	use ActiveStatus;
 
 	protected $table = 'sliders';
@@ -24,7 +24,7 @@ class Slider extends Model{
 		'updated_at',
 	];
 
-	protected $downloadableAttributes = [
+	protected array $downloadableAttributes = [
 		'Poster' => [
 			'method' => 'Poster',
 			'poster',
@@ -34,7 +34,7 @@ class Slider extends Model{
 	/**
 	 * @return string
 	 */
-	public function getTitle(): string{
+	public function getTitle(): string {
 		return $this->title;
 	}
 

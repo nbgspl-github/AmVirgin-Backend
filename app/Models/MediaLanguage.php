@@ -4,14 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MediaLanguage extends Model{
+class MediaLanguage extends Model {
 	public $timestamps = false;
 	protected $table = 'media-languages';
 
 	/**
 	 * @return string
 	 */
-	public function getName(): string{
+	public function getName(): string {
 		return $this->name;
 	}
 

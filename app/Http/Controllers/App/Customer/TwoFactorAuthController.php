@@ -43,11 +43,19 @@ class TwoFactorAuthController extends TwoFactorBaseAuthController{
 		return Auth::guard('customer-api');
 	}
 
-	protected function shouldVerifyOtpBeforeRegister(): bool{
+	protected function shouldVerifyOtpBeforeRegister(): bool {
 		return true;
 	}
 
-	protected function shouldVerifyOtpBeforeLogin(): bool{
+	protected function shouldVerifyOtpBeforeLogin(): bool {
 		return true;
+	}
+
+	protected function rulesUpdateProfile() {
+		// TODO: Implement rulesUpdateProfile() method.
+	}
+
+	protected function rulesUpdateAvatar() {
+		// TODO: Implement rulesUpdateAvatar() method.
 	}
 }

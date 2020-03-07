@@ -15,7 +15,7 @@ use Illuminate\Support\Collection;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Video extends Model{
+class Video extends Model {
 	use RetrieveResource;
 	use RetrieveCollection;
 	use FluentConstructor;
@@ -34,6 +34,7 @@ class Video extends Model{
 		'poster',
 		'backdrop',
 		'genreId',
+		'sectionId',
 		'rating',
 		'pgRating',
 		'type',
@@ -57,7 +58,7 @@ class Video extends Model{
 	/**
 	 * @return int
 	 */
-	public function getSeasons(): ?int{
+	public function getSeasons(): ?int {
 		return $this->seasons;
 	}
 

@@ -2,16 +2,15 @@
 
 namespace App\Console\Commands;
 
+use App\Classes\Time;
+use App\Models\Seller;
+use App\Models\Settings;
+use App\Models\ShopSlider;
 use Illuminate\Console\Command;
 use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 
 class CartTesterCommand extends Command {
 	use ConditionallyLoadsAttributes;
-
-	/**
-	 * @var integer
-	 */
-	protected $x;
 
 	/**
 	 * The name and signature of the console command.
@@ -38,31 +37,18 @@ class CartTesterCommand extends Command {
 
 	/**
 	 * Execute the console command.
-	 *
 	 * @return mixed
 	 */
 	public function handle() {
-		$array = [
-			'a' => [
-				'id' => 'a',
-				'value' => 1,
-			],
-			'b' => [
-				'id' => 'b',
-				'value' => 2,
-			],
-			'c' => [
-				'id' => 'c',
-				'value' => 3,
-			],
-			'd' => [
-				'id' => 'd',
-				'value' => 4,
-			],
-			'e' => [
-				'id' => 'e',
-				'value' => 5,
-			],
-		];
+		$time = Settings::get('time');
+		$elapsed = \time();
+		$lastUpdated = Settings::getInt('shopSaleOfferDetailsUpdated', 0);
+		$remaining = $lastUpdated - Time::toSeconds($time);
+		$countDown = 0;
+		if ($elapsed >= $remaining) {
+			$countDown = abs($remaining - $elapsed);
+			$countDown *= 1000;
+		}
+		echo sprintf('Elapsed = %d, remaining = %d', $elapsed, $remaining);
 	}
 }

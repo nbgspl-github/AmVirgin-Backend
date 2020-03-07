@@ -10,7 +10,7 @@ use App\Classes\Sorting\PriceAscending;
 use App\Classes\Sorting\PriceDescending;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Models\Product;
-use App\Resources\Products\Seller\ProductResource;
+use App\Resources\Products\Customer\ProductResource;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
@@ -18,11 +18,11 @@ use Throwable;
 class ProductsController extends ExtendedResourceController {
 	use ValidatesRequest;
 
-	protected $defaultSort = 'relevance';
+	protected string $defaultSort = 'relevance';
 
-	protected $resultsPerPage = 50;
+	protected int $resultsPerPage = 50;
 
-	protected $sortingOptions = [
+	protected array $sortingOptions = [
 		[
 			'name' => 'Relevance',
 			'key' => 'relevance',
@@ -55,7 +55,7 @@ class ProductsController extends ExtendedResourceController {
 		],
 	];
 
-	protected $rules = [
+	protected array $rules = [
 		'index' => [
 			'sortKey' => ['bail', 'nullable', 'string', 'min:1', 'max:50'],
 			'page' => ['bail', 'nullable', 'numeric', 'min:1', 'max:10000'],
