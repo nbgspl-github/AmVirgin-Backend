@@ -21,9 +21,9 @@
 							<th class="text-center">Action(s)</th>
 						</tr>
 						</thead>
-
+ 
 						<tbody>
-						@foreach($products as $product)
+						@foreach($products as $product) 
 							{{--							<tr id="content_row_{{$product->getKey()}}">--}}
 							{{--								<td class="text-center">{{$loop->index+1}}</td>--}}
 							{{--								<td class="text-center">--}}
