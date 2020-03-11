@@ -5,12 +5,14 @@ namespace App\Http\Controllers\App\Seller;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Interfaces\Directories;
+use App\Models\Attribute;
+use App\Models\AttributeValue;
 use App\Models\Product;
+use App\Models\ProductAttribute;
 use App\Models\ProductImage;
 use App\Resources\Products\Seller\ProductEditResource;
 use App\Resources\Products\Seller\ProductResource;
 use App\Storage\SecuredDisk;
-use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
@@ -18,16 +20,16 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
 
-class ProductsController extends ExtendedResourceController{
+class ProductsController extends ExtendedResourceController {
 	use ValidatesRequest;
 	use ConditionallyLoadsAttributes;
 
-	public function __construct(){
+	public function __construct() {
 		parent::__construct();
 		$this->ruleSet->load('rules.seller.product');
 	}
 
-	public function index(){
+	public function index() {
 		$response = responseApp();
 		try {
 			$products = Product::where([
@@ -37,7 +39,7 @@ class ProductsController extends ExtendedResourceController{
 				['draft', false],
 			])->get();
 			$products = ProductResource::collection($products);
-			$response->status(HttpOkay)->message(function () use ($products){
+			$response->status(HttpOkay)->message(function () use ($products) {
 				return sprintf('Found %d products by specified seller.', $products->count());
 			})->setValue('data', $products);
 		}
@@ -49,7 +51,7 @@ class ProductsController extends ExtendedResourceController{
 		}
 	}
 
-	public function edit($id){
+	public function edit($id) {
 		$response = responseApp();
 		try {
 			$product = Product::where([
@@ -61,7 +63,7 @@ class ProductsController extends ExtendedResourceController{
 			$response->status(HttpOkay)->message('Found product details for that key.')->setValue('data', $product);
 		}
 		catch (ModelNotFoundException $exception) {
-			$response->status(HttpServerError)->message('Could not find product for that key.');
+			$response->status(HttpResourceNotFound)->message('Could not find product for that key.');
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
@@ -71,51 +73,68 @@ class ProductsController extends ExtendedResourceController{
 		}
 	}
 
-	public function store(){
+	public function store() {
 		$response = responseApp();
 		try {
-			$payload = $this->requestValid(\request(), $this->rules('store'));
+			$validated = $this->requestValid(\request(), $this->rules('store'));
+			$payload = (object)$validated;
 			$product = Product::create([
-				'name' => $payload['productName'],
-				'categoryId' => $payload['categoryId'],
+				'name' => $payload->productName,
+				'categoryId' => $payload->categoryId,
 				'sellerId' => $this->user()->getKey(),
-				'productType' => $payload['productType'],
-				'productMode' => $payload['productMode'],
-				'listingType' => $payload['listingType'],
-				'originalPrice' => $payload['originalPrice'],
-				'offerValue' => $payload['offerValue'],
-				'offerType' => $payload['offerType'],
-				'currency' => $payload['currency'],
-				'taxRate' => $payload['taxRate'],
-				'countryId' => $payload['countryId'],
-				'stateId' => $payload['stateId'],
-				'cityId' => $payload['cityId'],
-				'zipCode' => $payload['zipCode'],
-				'address' => $payload['address'],
-				'status' => $payload['status'],
-				'promoted' => $payload['promoted'],
-				'promotionStart' => date('Y-m-d H:i:s', strtotime($payload['promotionStart'])),
-				'promotionEnd' => date('Y-m-d H:i:s', strtotime($payload['promotionEnd'])),
-				'visibility' => $payload['visibility'],
-				'stock' => $payload['stock'],
-				'shippingCostType' => $payload['shippingCostType'],
-				'shippingCost' => $payload['shippingCost'],
+				'productType' => $payload->productType,
+				'productMode' => $payload->productMode,
+				'listingType' => $payload->listingType,
+				'originalPrice' => $payload->originalPrice,
+				'offerValue' => $payload->offerValue,
+				'offerType' => $payload->offerType,
+				'currency' => $payload->currency,
+				'taxRate' => $payload->taxRate,
+				'countryId' => $payload->countryId,
+				'stateId' => $payload->stateId,
+				'cityId' => $payload->cityId,
+				'zipCode' => $payload->zipCode,
+				'address' => $payload->address,
+				'status' => $payload->status,
+				'promoted' => $payload->promoted,
+				'promotionStart' => date('Y-m-d H:i:s', strtotime($payload->promotionStart)),
+				'promotionEnd' => date('Y-m-d H:i:s', strtotime($payload->promotionEnd)),
+				'visibility' => $payload->visibility,
+				'stock' => $payload->stock,
+				'shippingCostType' => $payload->shippingCostType,
+				'shippingCost' => $payload->shippingCost,
 				'soldOut' => request('stock') < 1,
-				'draft' => $payload['draft'],
-				'shortDescription' => $payload['shortDescription'],
-				'longDescription' => $payload['longDescription'],
-				'sku' => $payload['sku'],
+				'draft' => $payload->draft,
+				'shortDescription' => $payload->shortDescription,
+				'longDescription' => $payload->longDescription,
+				'sku' => $payload->sku,
 			]);
-			if (\request()->hasFile('files')) {
-				collect(\request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product){
-					ProductImage::create([
-						'productId' => $product->getKey(),
-						'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile),
-						'tag' => sprintf('product-%d-images', $product->getKey()),
-					]);
-				});
-			}
-			$images = $product->images()->get()->transform(function (ProductImage $productImage){
+			collect(jsonDecodeArray($validated['attributes']))->each(function ($item) use ($product) {
+				$attribute = Attribute::retrieve($item['key']);
+				if ($attribute != null) {
+					collect($item['values'])->each(function ($value) use ($attribute, $item, $product) {
+						$attributeValue = AttributeValue::where([
+							['attributeId', $attribute->getKey()],
+							['id', $value],
+						])->first();
+						if ($attributeValue != null) {
+							ProductAttribute::create([
+								'productId' => $product->id,
+								'attributeId' => $attribute->id,
+								'valueId' => $attributeValue->id,
+							]);
+						}
+					});
+				}
+			});
+			collect(request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product) {
+				ProductImage::create([
+					'productId' => $product->getKey(),
+					'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile),
+					'tag' => sprintf('product-%d-images', $product->getKey()),
+				]);
+			});
+			$images = $product->images()->get()->transform(function (ProductImage $productImage) {
 				return [
 					'url' => SecuredDisk::access()->exists($productImage->path) ? SecuredDisk::access()->url($productImage->path) : null,
 				];
@@ -134,7 +153,7 @@ class ProductsController extends ExtendedResourceController{
 		}
 	}
 
-	public function show($id){
+	public function show($id) {
 		$response = responseApp();
 		try {
 			$product = Product::where([
@@ -158,7 +177,7 @@ class ProductsController extends ExtendedResourceController{
 		}
 	}
 
-	public function update($id){
+	public function update($id) {
 		$response = responseApp();
 		try {
 			$product = Product::retrieveThrows($id);
@@ -194,15 +213,31 @@ class ProductsController extends ExtendedResourceController{
 				'longDescription' => $validated['longDescription'],
 				'sku' => $validated['sku'],
 			]);
-			if (\request()->hasFile('files')) {
-				collect(\request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product){
-					ProductImage::create([
-						'productId' => $product->getKey(),
-						'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile),
-						'tag' => sprintf('product-%d-images', $product->getKey()),
-					]);
-				});
-			}
+			collect(jsonDecodeArray($validated['attributes']))->each(function ($item) use ($product) {
+				$attribute = Attribute::retrieve($item['key']);
+				if ($attribute != null) {
+					collect($item['values'])->each(function ($value) use ($attribute, $item, $product) {
+						$attributeValue = AttributeValue::where([
+							['attributeId', $attribute->getKey()],
+							['id', $value],
+						])->first();
+						if ($attributeValue != null) {
+							ProductAttribute::create([
+								'productId' => $product->id,
+								'attributeId' => $attribute->id,
+								'valueId' => $attributeValue->id,
+							]);
+						}
+					});
+				}
+			});
+			collect(\request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product) {
+				ProductImage::create([
+					'productId' => $product->getKey(),
+					'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile),
+					'tag' => sprintf('product-%d-images', $product->getKey()),
+				]);
+			});
 			$response->status(HttpOkay)->message('Product details were updated successfully.');
 		}
 		catch (ModelNotFoundException $exception) {
@@ -216,7 +251,7 @@ class ProductsController extends ExtendedResourceController{
 		}
 	}
 
-	public function delete($id){
+	public function delete($id) {
 		$response = responseApp();
 		try {
 			$product = Product::where([
@@ -237,7 +272,7 @@ class ProductsController extends ExtendedResourceController{
 		}
 	}
 
-	protected function guard(){
+	protected function guard() {
 		return Auth::guard('seller-api');
 	}
 }

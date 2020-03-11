@@ -3,13 +3,15 @@
 namespace App\Providers;
 
 use App\Events\Admin\TvSeries\TvSeriesUpdated;
+use App\Events\Admin\Videos\VideoUpdated;
 use App\Listeners\Admin\TvSeries\UpdateSeasonCount;
 use App\Listeners\Admin\TvSeries\UpdateVideoSlugs;
+use App\Listeners\Admin\Videos\UpdatePendingStatus;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
-class EventServiceProvider extends ServiceProvider{
+class EventServiceProvider extends ServiceProvider {
 	/**
 	 * The event listener mappings for the application.
 	 *
@@ -23,6 +25,10 @@ class EventServiceProvider extends ServiceProvider{
 			UpdateSeasonCount::class,
 			UpdateVideoSlugs::class,
 		],
+//		VideoUpdated::class => [
+//			UpdateVideoSlugs::class,
+//			UpdatePendingStatus::class,
+//		],
 	];
 
 	/**
@@ -30,7 +36,7 @@ class EventServiceProvider extends ServiceProvider{
 	 *
 	 * @return void
 	 */
-	public function boot(){
+	public function boot() {
 		parent::boot();
 
 		//

@@ -1,15 +1,19 @@
 <?php
 
+use App\Classes\Str;
 use App\Http\Controllers\App\Seller\Attributes\AttributeListController;
 use App\Http\Controllers\App\Seller\Attributes\AttributeValuesController;
-use App\Http\Controllers\App\Seller\AttributesController;
+use App\Http\Controllers\App\Seller\Attributes\ProductsAttributesController;
 use App\Http\Controllers\App\Seller\AuthController;
 use App\Http\Controllers\App\Seller\CategoriesController;
+use App\Http\Controllers\App\Seller\CitiesController;
 use App\Http\Controllers\App\Seller\CountriesController;
 use App\Http\Controllers\App\Seller\CurrenciesController;
 use App\Http\Controllers\App\Seller\ProductImagesController;
 use App\Http\Controllers\App\Seller\ProductsController;
+use App\Http\Controllers\App\Seller\StatesController;
 use App\Http\Controllers\App\Seller\TwoFactorAuthController;
+use App\Http\Controllers\App\Seller\OrdersController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [TwoFactorAuthController::class, 'exists'])->name('seller.check');
@@ -18,6 +22,8 @@ Route::post('/login', [TwoFactorAuthController::class, 'login'])->name('seller.l
 Route::post('/register', [TwoFactorAuthController::class, 'register'])->name('seller.register');
 Route::post('/logout', [AuthController::class, 'logout'])->name('seller.logout')->middleware('auth:seller-api');
 Route::post('/profile', [AuthController::class, 'profile'])->name('seller.logout')->middleware('auth:seller-api');
+Route::post('/profile/avatar', [AuthController::class, 'updateAvatar'])->name('seller.update.avatar')->middleware('auth:seller-api');
+Route::put('/profile', [AuthController::class, 'updateProfile'])->name('seller.update.profile')->middleware('auth:seller-api');
 
 Route::prefix('categories')->group(function () {
 	Route::get('/', [CategoriesController::class, 'index'])->name('seller.categories.index');
@@ -37,6 +43,7 @@ Route::middleware('auth:seller-api')->prefix('products')->group(function () {
 	Route::post('{id}', [ProductsController::class, 'update'])->name('seller.products.update');
 	Route::delete('{id}', [ProductsController::class, 'delete'])->name('seller.products.delete');
 	Route::delete('/images/{id}', [ProductImagesController::class, 'delete'])->name('seller.products.images.delete');
+	Route::delete('/attributes/{id}', [ProductsAttributesController::class, 'delete'])->name('seller.products.attributes.delete');
 });
 
 Route::prefix('currencies')->group(function () {
@@ -45,4 +52,14 @@ Route::prefix('currencies')->group(function () {
 
 Route::prefix('countries')->group(function () {
 	Route::get('/', [CountriesController::class, 'index'])->name('seller.countries.index');
+	Route::get('{countryId}/states', [StatesController::class, 'index'])->name('seller.states.index');
+	Route::get('states/{stateId}/cities', [CitiesController::class, 'index'])->name('seller.states.index');
+});
+
+Route::prefix('orders')->middleware('auth:seller-api')->group(function () {
+	Route::get(Str::Empty, [OrdersController::class, 'index']);
+});
+
+Route::prefix('customer')->middleware('auth:seller-api')->group(function () {
+	Route::get('{param}', [OrdersController::class, 'customer']);
 });

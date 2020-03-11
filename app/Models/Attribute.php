@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Traits\FluentConstructor;
+use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
 class Attribute extends Model {
 	use FluentConstructor;
+	use RetrieveResource;
 
 	protected $table = 'attributes';
 

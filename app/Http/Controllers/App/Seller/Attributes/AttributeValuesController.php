@@ -19,7 +19,10 @@ class AttributeValuesController extends ExtendedResourceController {
 			$attribute = Attribute::with('values')->where('id', $attributeId)->firstOrFail();
 			$values = $attribute->values;
 			$values->transform(function (AttributeValue $attribute) {
-				return $attribute->value;
+				return [
+					'id' => $attribute->getKey(),
+					'value' => $attribute->value,
+				];
 			});
 			$response->status(HttpOkay)->message(function () use ($values) {
 				return sprintf('Found %d values for the attribute.', $values->count());

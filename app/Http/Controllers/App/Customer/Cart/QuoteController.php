@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\App\Customer\Cart;
 
 use App\Classes\Cart\CartItem;
+use App\Constants\CartStatus;
+use App\Exceptions\CartAlreadySubmittedException;
 use App\Exceptions\CartItemNotFoundException;
 use App\Exceptions\MaxAllowedQuantityReachedException;
 use App\Exceptions\ValidationException;
@@ -10,6 +12,7 @@ use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Interfaces\Tables;
 use App\Models\Cart;
 use App\Models\CustomerWishlist;
+use App\Models\Order;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
@@ -52,6 +55,10 @@ class QuoteController extends ExtendedResourceController {
 			'moveToCart' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
 			],
+			'submit' => [
+				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
+				'addressId' => ['bail', 'required', Rule::exists(Tables::ShippingAddresses, 'id')],
+			],
 		];
 	}
 
@@ -67,12 +74,16 @@ class QuoteController extends ExtendedResourceController {
 			$cart->save();
 			$response->status(HttpOkay)->message('Item added to cart successfully.')->setValue('data', $cart->render());
 		}
+		catch (CartAlreadySubmittedException $exception) {
+			$response->status(HttpDeniedAccess)->message($exception->getMessage())->setValue('data');
+		}
 		catch (MaxAllowedQuantityReachedException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage())->setValue('data', $cart->render());
 		}
 		catch (ModelNotFoundException $exception) {
 			\App\Models\Cart::create([
 				'sessionId' => $validated->sessionId,
+				'status' => CartStatus::Pending,
 			]);
 			$cart = Cart::retrieve($validated->sessionId);
 			$cartItem = new CartItem($cart, $validated->key, $validated->attributes);
@@ -98,6 +109,9 @@ class QuoteController extends ExtendedResourceController {
 			$validated = (object)$this->requestValid(request(), $this->rules['retrieve']);
 			$cart = Cart::retrieveThrows($validated->sessionId);
 			$response->status(HttpOkay)->message('Cart retrieved successfully.')->setValue('data', $cart->render());
+		}
+		catch (CartAlreadySubmittedException $exception) {
+			$response->status(HttpDeniedAccess)->message($exception->getMessage())->setValue('data');
 		}
 		catch (ModelNotFoundException $exception) {
 			$response->status(HttpOkay)->message('No cart was found for that session.');
@@ -125,6 +139,9 @@ class QuoteController extends ExtendedResourceController {
 			$cart->updateItem($cartItem);
 			$cart->save();
 			$response->status(HttpOkay)->message('Item added to cart successfully.')->setValue('data', $cart->render());
+		}
+		catch (CartAlreadySubmittedException $exception) {
+			$response->status(HttpDeniedAccess)->message($exception->getMessage())->setValue('data');
 		}
 		catch (MaxAllowedQuantityReachedException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage())->setValue('data', $cart->render());
@@ -155,6 +172,9 @@ class QuoteController extends ExtendedResourceController {
 			$cart->save();
 			$response->status(HttpOkay)->message('Item removed from cart successfully.')->setValue('data', $cart->render());
 		}
+		catch (CartAlreadySubmittedException $exception) {
+			$response->status(HttpDeniedAccess)->message($exception->getMessage())->setValue('data');
+		}
 		catch (ModelNotFoundException $exception) {
 			$response->status(HttpOkay)->message('No cart was found for that session.')->setValue('data', $cart->render());
 		}
@@ -183,6 +203,9 @@ class QuoteController extends ExtendedResourceController {
 			$cart->destroyItem($cartItem);
 			$cart->save();
 			$response->status(HttpOkay)->message('Item destroyed from cart successfully.')->setValue('data', $cart->render());
+		}
+		catch (CartAlreadySubmittedException $exception) {
+			$response->status(HttpDeniedAccess)->message($exception->getMessage())->setValue('data');
 		}
 		catch (ModelNotFoundException $exception) {
 			$response->status(HttpOkay)->message('No cart was found for that session.')->setValue('data', $cart->render());
@@ -231,10 +254,42 @@ class QuoteController extends ExtendedResourceController {
 				catch (ModelNotFoundException $exception) {
 					$response->status(HttpOkay)->message('No cart was found for that session.');
 				}
+				catch (CartAlreadySubmittedException $exception) {
+					$response->status(HttpDeniedAccess)->message($exception->getMessage());
+				}
 			}
 			else {
 				$response->status(HttpResourceAlreadyExists)->message('Item already exists in wishlist.');
 			}
+		}
+		catch (ValidationException $exception) {
+			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getTraceAsString());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+
+	public function submit() {
+		$response = responseApp();
+		$validated = null;
+		$cart = null;
+		try {
+			$validated = (object)$this->requestValid(request(), $this->rules['submit']);
+			$cart = Cart::retrieveThrows($validated->sessionId);
+			$cart->customerId = $this->guard()->id();
+			$cart->addressId = $validated->addressId;
+			$order = $cart->submit();
+			$response->status(HttpOkay)->message('Your order was placed successfully.')->setValue('orderNumber', $order->orderNumber);
+		}
+		catch (CartAlreadySubmittedException $exception) {
+			$response->status(HttpDeniedAccess)->message($exception->getMessage());
+		}
+		catch (ModelNotFoundException $exception) {
+			$response->status(HttpResourceNotFound)->message('No cart was found for that session.');
 		}
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());

@@ -42,7 +42,6 @@ class ContentController extends TvSeriesBase{
 				return $payload;
 			});
 			$row = view('admin.tv-series.content.videoBox')->with('qualities', $qualities)->with('languages', $languages)->render();
-
 			$response = view('admin.tv-series.content.edit')->
 			with('videos', $sources->all())->
 			with('payload', $video)->
@@ -141,8 +140,7 @@ class ContentController extends TvSeriesBase{
 		}
 
 		catch (Throwable $exception) {
-			dd($exception);
-			$response->status(HttpServerError)->message($exception->getTraceAsString());
+			$response->status(HttpServerError)->message($exception->getMessage());
 		}
 		finally {
 			event(new TvSeriesUpdated($id));

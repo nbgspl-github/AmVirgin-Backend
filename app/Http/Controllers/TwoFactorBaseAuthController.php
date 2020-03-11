@@ -6,7 +6,7 @@ use App\Exceptions\OtpMismatchException;
 use App\Exceptions\OtpNotFoundException;
 use App\Exceptions\OtpPushException;
 use App\Exceptions\ResourceConflictException;
-use App\Exceptions\ResourceNotFoundException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\App\BaseAuthController;
 use App\Traits\FluentResponse;
@@ -60,7 +60,7 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController{
 		catch (OtpPushException $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
 		}
-		catch (ResourceNotFoundException $exception) {
+		catch (ModelNotFoundException $exception) {
 			if ($type == self::Type['2Factor']) {
 				try {
 					$otp = $this->sendGuestOtp($payload['mobile']);
@@ -127,7 +127,7 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController{
 		catch (OtpPushException $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
 		}
-		catch (ResourceNotFoundException $exception) {
+		catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message(__('strings.customer.not-found'));
 		}
 		catch (ValidationException $exception) {

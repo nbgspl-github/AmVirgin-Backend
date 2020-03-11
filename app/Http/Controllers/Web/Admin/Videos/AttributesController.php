@@ -3,22 +3,24 @@
 namespace App\Http\Controllers\Web\Admin\Videos;
 
 use App\Classes\WebResponse;
+use App\Constants\PageSectionType;
 use App\Exceptions\ValidationException;
 use App\Models\Genre;
 use App\Models\MediaLanguage;
 use App\Models\MediaQuality;
 use App\Models\MediaServer;
+use App\Models\PageSection;
 use App\Models\Video;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class AttributesController extends VideosBase{
-	public function __construct(){
+class AttributesController extends VideosBase {
+	public function __construct() {
 		parent::__construct();
 		$this->ruleSet->load('rules.admin.videos.attributes');
 	}
 
-	public function edit($id){
+	public function edit($id) {
 		$response = responseWeb();
 		try {
 			$payload = Video::retrieveThrows($id);
@@ -26,12 +28,14 @@ class AttributesController extends VideosBase{
 			$languagePayload = MediaLanguage::all()->sortBy('name')->all();
 			$serverPayload = MediaServer::all();
 			$qualityPayload = MediaQuality::retrieveAll();
+			$sectionsPayload = PageSection::where('type', PageSectionType::Entertainment)->get();
 			$response = view('admin.videos.attributes.edit')->
 			with('payload', $payload)->
 			with('genres', $genrePayload)->
 			with('languages', $languagePayload)->
 			with('servers', $serverPayload)->
-			with('qualities', $qualityPayload);
+			with('qualities', $qualityPayload)->
+			with('sections', $sectionsPayload);
 		}
 		catch (ModelNotFoundException $exception) {
 			$response->route('admin.videos.index')->error('Could not find video for that key.');
@@ -47,7 +51,7 @@ class AttributesController extends VideosBase{
 		}
 	}
 
-	public function update($id){
+	public function update($id) {
 		$response = responseWeb();
 		try {
 			$video = Video::retrieveThrows($id);

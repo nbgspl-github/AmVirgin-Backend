@@ -8,6 +8,8 @@ use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Interfaces\Tables;
 use App\Models\Cart;
 use App\Models\CustomerWishlist;
+use App\Models\Product;
+use App\Resources\Products\Customer\ProductResource;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\Rule;
@@ -32,7 +34,7 @@ class CustomerWishlistController extends ExtendedResourceController {
 	public function index() {
 		$wishList = CustomerWishlist::where('customerId', $this->guard()->id())->get();
 		$wishList->transform(function (CustomerWishlist $item) {
-			return $item->productId;
+			return new ProductResource(Product::retrieve($item->productId));
 		});
 		return responseApp()->status(HttpOkay)->setValue('data', $wishList)->message(function () use ($wishList) {
 			return sprintf('Found %d items in the wishlist.', $wishList->count());
@@ -53,11 +55,17 @@ class CustomerWishlistController extends ExtendedResourceController {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
 		}
 		catch (ModelNotFoundException $exception) {
-			CustomerWishlist::create([
-				'customerId' => $this->guard()->id(),
-				'productId' => $productId,
-			]);
-			$response->status(HttpOkay)->message('Item added to wishlist.');
+			try {
+				Product::retrieveThrows($productId);
+				CustomerWishlist::create([
+					'customerId' => $this->guard()->id(),
+					'productId' => $productId,
+				]);
+				$response->status(HttpOkay)->message('Item added to wishlist.');
+			}
+			catch (ModelNotFoundException $exception) {
+				$response->status(HttpResourceNotFound)->message('Could not find product for that key.');
+			}
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
@@ -102,13 +110,10 @@ class CustomerWishlistController extends ExtendedResourceController {
 				$cart = Cart::retrieveThrows($validated->sessionId);
 				$cartItem = new CartItem($cart, $productId);
 				if (!$cart->contains($cartItem)) {
-					CustomerWishlist::create([
-						'customerId' => $this->guard()->id(),
-						'productId' => $productId,
-					]);
+					$wishlistItem->delete();
 					$cart->addItem($cartItem);
 					$cart->save();
-					$response->status(HttpOkay)->message('Item moved to wishlist.');
+					$response->status(HttpOkay)->message('Item moved to cart.');
 				}
 				else {
 					$response->status(HttpResourceNotFound)->message('Cart already contains the item you specified.');
