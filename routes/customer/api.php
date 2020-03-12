@@ -80,6 +80,14 @@ Route::prefix('entertainment')->group(function () {
 	Route::prefix('section')->group(function () {
 		Route::get('{id}', [EntertainmentHomeController::class, 'showAllItemsInSection']);
 	});
+
+	Route::prefix('trending')->group(function () {
+		Route::get('/', [EntertainmentHomeController::class, 'trendingNow']);
+	});
+
+	Route::prefix('recommended')->group(function () {
+		Route::get('/', [EntertainmentHomeController::class, 'recommendedVideo']);
+	});
 });
 
 Route::prefix('addresses')->middleware('auth:customer-api')->group(function () {
