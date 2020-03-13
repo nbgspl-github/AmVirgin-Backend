@@ -9,6 +9,7 @@ use App\Traits\ValidatesRequest;
 use Throwable;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
+use DB;
 
 class OrdersController extends ExtendedResourceController {
 	use ValidatesRequest;
@@ -50,12 +51,20 @@ class OrdersController extends ExtendedResourceController {
 	public function getorders() {
 		$response = responseApp();
 		$user = auth('customer-api')->user()->id;
-
+DB::enableQueryLog(); 
 		try {
 			$orders = Order::with('customer','items')
 			->where([
 				['customerId', $user],
 			])->get();
+
+			
+
+			// $query = DB::getQueryLog();
+
+			// $query = end($query);
+
+			// print_r($query);die;
 			$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('data', $orders);
 		}
 		catch (Throwable $exception) {

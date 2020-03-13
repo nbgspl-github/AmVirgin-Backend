@@ -21,4 +21,8 @@ class OrderItem extends Model {
 	public function attributes() {
 
 	}
+
+	public function productDetails() {
+		return $this->hasMany(Product::class, 'id','productId');
+	}
 }
