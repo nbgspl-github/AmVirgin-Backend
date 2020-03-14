@@ -22,10 +22,10 @@ class AddColumnInProducts extends Migration
            $table->integer('localShippingCost')->default(0)->after('procurementSla');
            $table->integer('zonalShippingCost')->default(0)->after('localShippingCost');
            $table->integer('internationalShippingCost')->default(0)->after('zonalShippingCost');
-           $table->string('packageWeigth')->nullable()->after('internationalShippingCost');
-           $table->string('packageLength')->nullable()->after('packageWeigth');
-           $table->string('packageHeigth')->nullable()->after('packageLength');
-           $table->string('idealFor')->nullable()->after('packageHeigth');
+           $table->string('packageWeight')->nullable()->after('internationalShippingCost');
+           $table->string('packageLength')->nullable()->after('packageWeight');
+           $table->string('packageHeight')->nullable()->after('packageLength');
+           $table->string('idealFor')->nullable()->after('packageHeight');
            $table->string('videoUrl')->nullable()->after('idealFor');
         });
     }
@@ -38,7 +38,7 @@ class AddColumnInProducts extends Migration
     public function down()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn(['sellingPrice','hsn','taxCode','fullfilmentBy','procurementSla','localShippingCost','zonalShippingCost','internationalShippingCost','packageWeigth','packageLength','packageHeigth','idealFor','videoUrl']);
+            $table->dropColumn(['sellingPrice','hsn','taxCode','fullfilmentBy','procurementSla','localShippingCost','zonalShippingCost','internationalShippingCost','packageWeight','packageLength','packageHeight','idealFor','videoUrl']);
         });
     }
 }
