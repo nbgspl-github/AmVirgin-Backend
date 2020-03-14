@@ -113,4 +113,5 @@ Route::prefix('search')->group(function () {
 
 Route::prefix('orders')->group(function () {
 	Route::get(Str::Empty, [OrdersController::class, 'getorders']);
+	Route::get('{param}', [OrdersController::class, 'getorderdetails']);
 });
