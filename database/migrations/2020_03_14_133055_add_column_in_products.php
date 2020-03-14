@@ -38,7 +38,7 @@ class AddColumnInProducts extends Migration
     public function down()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn(['sellingPrice','hsn','taxCode','fullfilmentBy','procurementSla','localShippingCost','zonalShippingCost','internationalShippingCost','packageWeight','packageLenght','packageHeight','idealFor','videoUrl']);
+            $table->dropColumn(['sellingPrice','hsn','taxCode','fullfilmentBy','procurementSla','localShippingCost','zonalShippingCost','internationalShippingCost','packageWeigth','packageLength','packageHeigth','idealFor','videoUrl']);
         });
     }
 }
