@@ -10,7 +10,7 @@ use Throwable;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use DB;
-
+use App\Resources\Products\Customer\ProductImageResource;
 class OrdersController extends ExtendedResourceController {
 	use ValidatesRequest;
 
@@ -51,21 +51,17 @@ class OrdersController extends ExtendedResourceController {
 	public function getorders() {
 		$response = responseApp();
 		$user = auth('customer-api')->user()->id;
-DB::enableQueryLog(); 
+		// DB::enableQueryLog(); 
 		try {
 			$orders = Order::with('customer','items')
 			->where([
 				['customerId', $user],
-			])->get();
+			])->get();  
 
-			
-
-			// $query = DB::getQueryLog();
-
-			// $query = end($query);
-
-			// print_r($query);die;
-			$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('data', $orders);
+			// $orders = new ProductImageResource($orders);
+			// $payload = $orders->jsonSerialize();
+			// print_r($orders);die();
+			$response->status(HttpOkay)->message('Listing all orders for this Customer.')->setValue('data', $orders);
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
