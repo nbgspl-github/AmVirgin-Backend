@@ -23,9 +23,9 @@ class AddColumnInProducts extends Migration
            $table->integer('zonalShippingCost')->default(0)->after('localShippingCost');
            $table->integer('internationalShippingCost')->default(0)->after('zonalShippingCost');
            $table->string('packageWeigth')->nullable()->after('internationalShippingCost');
-           $table->string('packageLength')->nullable()->after('packageWeight');
-           $table->string('packageHeigth')->nullable()->after('packageLenght');
-           $table->string('idealFor')->nullable()->after('packageHeight');
+           $table->string('packageLength')->nullable()->after('packageWeigth');
+           $table->string('packageHeigth')->nullable()->after('packageLength');
+           $table->string('idealFor')->nullable()->after('packageHeigth');
            $table->string('videoUrl')->nullable()->after('idealFor');
         });
     }
