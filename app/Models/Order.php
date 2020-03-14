@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use App\Classes\Str;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Customer;
+use Illuminate\Database\Eloquent\Model;
 
-class Order extends Model {
+class Order extends Model{
 	protected $table = 'orders';
 	protected $fillable = [
 		'customerId',
@@ -20,19 +20,19 @@ class Order extends Model {
 		'status',
 	];
 
-	public function setOrderNumberAttribute($value) {
+	public function setOrderNumberAttribute($value){
 		$this->attributes['orderNumber'] = sprintf('AVG-%d-%d', time(), rand(1, 1000));
 	}
 
-	public function items() {
+	public function items(){
 		return $this->hasMany('App\Models\OrderItem', 'orderId');
 	}
-	public function customer() {
+
+	public function customer(){
 		return $this->belongsTo(Customer::class, 'customerId');
 	}
 
-
-	public function save(array $options = []) {
+	public function save(array $options = []){
 		$this->orderNumber = Str::Empty;
 		return parent::save($options);
 	}
