@@ -15,18 +15,18 @@ class AddColumnInProducts extends Migration
     {
         Schema::table('products', function (Blueprint $table) {
            $table->integer('sellingPrice')->default(false)->after('hotDeal');
-           $table->string('hsn')->default(false)->after('hotDeal');
-           $table->string('taxCode')->default(false)->after('hsn');
+           $table->string('hsn')->nullable()->after('hotDeal');
+           $table->string('taxCode')->nullable()->after('hsn');
            $table->boolean('fullfilmentBy')->default(false)->after('taxCode');
-           $table->string('procurementSla')->default(false)->after('fullfilmentBy');
-           $table->integer('localShippingCost')->default(false)->after('procurementSla');
-           $table->integer('zonalShippingCost')->default(false)->after('localShippingCost');
-           $table->integer('internationalShippingCost')->default(false)->after('zonalShippingCost');
-           $table->string('packageWeight')->default(false)->after('internationalShippingCost');
-           $table->string('packageLenght')->default(false)->after('packageWeight');
-           $table->string('packageHeight')->default(false)->after('packageLenght');
-           $table->string('idealFor')->default(false)->after('packageHeight');
-           $table->string('videoUrl')->default(false)->after('idealFor');
+           $table->string('procurementSla')->nullable()->after('fullfilmentBy');
+           $table->integer('localShippingCost')->default(0)->after('procurementSla');
+           $table->integer('zonalShippingCost')->default(0)->after('localShippingCost');
+           $table->integer('internationalShippingCost')->default(0)->after('zonalShippingCost');
+           $table->string('packageWeigth')->nullable()->after('internationalShippingCost');
+           $table->string('packageLength')->nullable()->after('packageWeight');
+           $table->string('packageHeigth')->nullable()->after('packageLenght');
+           $table->string('idealFor')->nullable()->after('packageHeight');
+           $table->string('videoUrl')->nullable()->after('idealFor');
         });
     }
 
