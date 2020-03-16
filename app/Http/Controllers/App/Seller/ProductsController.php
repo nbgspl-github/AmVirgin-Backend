@@ -218,7 +218,7 @@ class ProductsController extends ExtendedResourceController {
 				'zonalShippingCost' => $validated->zonalShippingCost,
 				'internationalShippingCost' => $validated->internationalShippingCost,
 				'packageWeight' => $validated->packageWeight,
-				'packageLenght' => $validated->packageLenght,
+				'packageLength' => $validated->packageLength,
 				'packageHeight' => $validated->packageHeight,
 				'idealFor' => $validated->idealFor,
 				'domesticwarranty' => $payload->domesticwarranty,
