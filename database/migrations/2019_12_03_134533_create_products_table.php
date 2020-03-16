@@ -48,7 +48,7 @@ class CreateProductsTable extends Migration{
 			$table->string('trailer', 4096)->nullable();
 			$table->boolean('hotDeal')->default(false)->after('trailer');
 			$table->integer('sellingPrice')->default(false)->after('hotDeal');
-			$table->string('hsn')->nullable()->after('hotDeal');
+			$table->string('hsn')->nullable()->after('sellingPrice');
 			$table->string('taxCode')->nullable()->after('hsn');
 			$table->boolean('fulfilmentBy')->default(false)->after('taxCode');
 			$table->string('procurementSla')->nullable()->after('fulfilmentBy');
