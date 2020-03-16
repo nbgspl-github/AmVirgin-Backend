@@ -14,6 +14,7 @@ use App\Resources\Products\Customer\ProductResource;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
+use DB;
 
 class ProductsController extends ExtendedResourceController {
 	use ValidatesRequest;
@@ -104,6 +105,7 @@ class ProductsController extends ExtendedResourceController {
 	}
 
 	public function show($id) {
+		DB::enableQueryLog();  
 		$response = responseApp();
 		try {
 			$product = Product::where([
@@ -116,6 +118,9 @@ class ProductsController extends ExtendedResourceController {
 			$response->status(HttpOkay)->message('Found product for the specified key.')->setValue('data', $product);
 		}
 		catch (ModelNotFoundException $exception) {
+			// $query = DB::getQueryLog();
+			// $query = end($query);
+			// print_r($query);die;
 			$response->status(HttpResourceNotFound)->message('Could not find the product for that key.');
 		}
 		catch (Throwable $exception) {

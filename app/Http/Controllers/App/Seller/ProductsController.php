@@ -181,7 +181,7 @@ class ProductsController extends ExtendedResourceController {
 				['soldOut', false],
 				['draft', false],
 				['id', $id],
-			])->firstOrFail();
+			])->firstOrFail(); 
 			$product = new ProductResource($product);
 			$response->status(HttpOkay)->message('Found product for the specified key.')->setValue('data', $product);
 		}
