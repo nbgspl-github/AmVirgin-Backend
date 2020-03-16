@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Customer;
 use App\Models\Product;
 use App\Models\OrderItem;
+use App\Models\ShippingAddress;
 
 class Order extends Model {
 	protected $table = 'orders';
@@ -35,6 +36,10 @@ class Order extends Model {
 
 	public function products() {
 		return $this->belongsTo(Product::class,OrderItem::class,'id', 'productId');
+	}
+
+	public function address() {
+		return $this->belongsTo(ShippingAddress::class, 'addressId')->with('city','state');
 	}
 
 
