@@ -46,6 +46,26 @@ class CreateProductsTable extends Migration{
 			$table->string('longDescription', 5000);
 			$table->string('sku');
 			$table->string('trailer', 4096)->nullable();
+			$table->boolean('hotDeal')->default(false)->after('trailer');
+			$table->integer('sellingPrice')->default(false)->after('hotDeal');
+			$table->string('hsn')->nullable()->after('hotDeal');
+			$table->string('taxCode')->nullable()->after('hsn');
+			$table->boolean('fulfilmentBy')->default(false)->after('taxCode');
+			$table->string('procurementSla')->nullable()->after('fulfilmentBy');
+			$table->integer('localShippingCost')->default(0)->after('procurementSla');
+			$table->integer('zonalShippingCost')->default(0)->after('localShippingCost');
+			$table->integer('internationalShippingCost')->default(0)->after('zonalShippingCost');
+			$table->string('packageWeight')->nullable()->after('internationalShippingCost');
+			$table->string('packageLength')->nullable()->after('packageWeight');
+			$table->string('packageHeight')->nullable()->after('packageLength');
+			$table->string('idealFor')->nullable()->after('packageHeight');
+			$table->string('videoUrl')->nullable()->after('idealFor');
+			$table->text('domesticWarranty')->nullable()->after('sellingPrice');
+			$table->text('internationalWarranty')->nullable()->after('domesticWarranty');
+			$table->text('warrantySummary')->nullable()->after('internationalWarranty');
+			$table->text('warrantyServiceType')->nullable()->after('warrantySummary');
+			$table->text('coveredInWarranty')->nullable()->after('warrantyServiceType');
+			$table->text('notCoveredInWarranty')->nullable()->after('coveredInWarranty');
 			$table->timestamps();
 		});
 	}
