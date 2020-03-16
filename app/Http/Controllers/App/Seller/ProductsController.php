@@ -20,16 +20,16 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
 
-class ProductsController extends ExtendedResourceController {
+class ProductsController extends ExtendedResourceController{
 	use ValidatesRequest;
 	use ConditionallyLoadsAttributes;
 
-	public function __construct() {
+	public function __construct(){
 		parent::__construct();
 		$this->ruleSet->load('rules.seller.product');
 	}
 
-	public function index() {
+	public function index(){
 		$response = responseApp();
 		try {
 			$products = Product::where([
@@ -39,7 +39,7 @@ class ProductsController extends ExtendedResourceController {
 				['draft', false],
 			])->get();
 			$products = ProductResource::collection($products);
-			$response->status(HttpOkay)->message(function () use ($products) {
+			$response->status(HttpOkay)->message(function () use ($products){
 				return sprintf('Found %d products by specified seller.', $products->count());
 			})->setValue('data', $products);
 		}
@@ -51,7 +51,7 @@ class ProductsController extends ExtendedResourceController {
 		}
 	}
 
-	public function edit($id) {
+	public function edit($id){
 		$response = responseApp();
 		try {
 			$product = Product::where([
@@ -73,10 +73,12 @@ class ProductsController extends ExtendedResourceController {
 		}
 	}
 
-	public function store() {
+	public function store(){
 		$response = responseApp();
 		try {
-			$validated = $this->requestValid(\request(), $this->rules('store'));
+			//TODO; Temporarily turning off validation for this. Make sure to turn it back on when going for deployment.
+//			$validated = $this->requestValid(\request(), $this->rules('store'));
+			$validated = request()->all();
 			$payload = (object)$validated;
 			$product = Product::create([
 				'name' => $payload->productName,
@@ -89,7 +91,7 @@ class ProductsController extends ExtendedResourceController {
 				'sellingPrice' => $payload->sellingPrice,
 				'hsn' => $payload->HSN,
 				'taxCode' => $payload->taxCode,
-				'fullfilmentBy' => $payload->fullfilmentBy,
+				'fulfilmentBy' => $payload->fulfilmentBy,
 				'procurementSla' => $payload->procurementSla,
 				'localShippingCost' => $payload->localShippingCost,
 				'zonalShippingCost' => $payload->zonalShippingCost,
@@ -99,7 +101,7 @@ class ProductsController extends ExtendedResourceController {
 				'packageHeight' => $payload->packageHeight,
 				'idealFor' => $payload->idealFor,
 				'videoUrl' => $payload->videoUrl,
-				'domesticwarranty' => $payload->domesticwarranty,
+				'domesticWarranty' => $payload->domesticWarranty,
 				'internationalWarranty' => $payload->internationalWarranty,
 				'warrantySummary' => $payload->warrantySummary,
 				'warrantyServiceType' => $payload->warrantyServiceType,
@@ -128,10 +130,10 @@ class ProductsController extends ExtendedResourceController {
 				'longDescription' => $payload->longDescription,
 				'sku' => $payload->sku,
 			]);
-			collect(jsonDecodeArray($validated['attributes']))->each(function ($item) use ($product) {
+			collect(jsonDecodeArray($validated['attributes']))->each(function ($item) use ($product){
 				$attribute = Attribute::retrieve($item['key']);
 				if ($attribute != null) {
-					collect($item['values'])->each(function ($value) use ($attribute, $item, $product) {
+					collect($item['values'])->each(function ($value) use ($attribute, $item, $product){
 						$attributeValue = AttributeValue::where([
 							['attributeId', $attribute->getKey()],
 							['id', $value],
@@ -146,14 +148,14 @@ class ProductsController extends ExtendedResourceController {
 					});
 				}
 			});
-			collect(request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product) {
+			collect(request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product){
 				ProductImage::create([
 					'productId' => $product->getKey(),
 					'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile),
 					'tag' => sprintf('product-%d-images', $product->getKey()),
 				]);
 			});
-			$images = $product->images()->get()->transform(function (ProductImage $productImage) {
+			$images = $product->images()->get()->transform(function (ProductImage $productImage){
 				return [
 					'url' => SecuredDisk::access()->exists($productImage->path) ? SecuredDisk::access()->url($productImage->path) : null,
 				];
@@ -172,7 +174,7 @@ class ProductsController extends ExtendedResourceController {
 		}
 	}
 
-	public function show($id) {
+	public function show($id){
 		$response = responseApp();
 		try {
 			$product = Product::where([
@@ -196,7 +198,7 @@ class ProductsController extends ExtendedResourceController {
 		}
 	}
 
-	public function update($id) {
+	public function update($id){
 		$response = responseApp();
 		try {
 			$product = Product::retrieveThrows($id);
@@ -221,7 +223,7 @@ class ProductsController extends ExtendedResourceController {
 				'packageLength' => $validated->packageLength,
 				'packageHeight' => $validated->packageHeight,
 				'idealFor' => $validated->idealFor,
-				'domesticwarranty' => $payload->domesticwarranty,
+				'domesticWarranty' => $payload->domesticWarranty,
 				'internationalWarranty' => $payload->internationalWarranty,
 				'warrantySummary' => $payload->warrantySummary,
 				'warrantyServiceType' => $payload->warrantyServiceType,
@@ -251,10 +253,10 @@ class ProductsController extends ExtendedResourceController {
 				'longDescription' => $validated['longDescription'],
 				'sku' => $validated['sku'],
 			]);
-			collect(jsonDecodeArray($validated['attributes']))->each(function ($item) use ($product) {
+			collect(jsonDecodeArray($validated['attributes']))->each(function ($item) use ($product){
 				$attribute = Attribute::retrieve($item['key']);
 				if ($attribute != null) {
-					collect($item['values'])->each(function ($value) use ($attribute, $item, $product) {
+					collect($item['values'])->each(function ($value) use ($attribute, $item, $product){
 						$attributeValue = AttributeValue::where([
 							['attributeId', $attribute->getKey()],
 							['id', $value],
@@ -269,7 +271,7 @@ class ProductsController extends ExtendedResourceController {
 					});
 				}
 			});
-			collect(\request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product) {
+			collect(\request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product){
 				ProductImage::create([
 					'productId' => $product->getKey(),
 					'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile),
@@ -289,7 +291,7 @@ class ProductsController extends ExtendedResourceController {
 		}
 	}
 
-	public function delete($id) {
+	public function delete($id){
 		$response = responseApp();
 		try {
 			$product = Product::where([
@@ -310,7 +312,7 @@ class ProductsController extends ExtendedResourceController {
 		}
 	}
 
-	protected function guard() {
+	protected function guard(){
 		return Auth::guard('seller-api');
 	}
 }
