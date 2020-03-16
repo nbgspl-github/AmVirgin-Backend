@@ -76,14 +76,11 @@ class OrdersController extends ExtendedResourceController {
 		$user = auth('customer-api')->user()->id;
 		// DB::enableQueryLog(); 
 		try {
-			$orders = Order::with('customer','items')
+			$orders = Order::with('customer','items','address')
 			->where([
 				['customerId', $user],['id', $id],
-			])->get();  
+			])->get();   
 
-			// $orders = new ProductImageResource($orders);
-			// $payload = $orders->jsonSerialize();
-			// print_r($orders);die();
 			$response->status(HttpOkay)->message('Order details for this Customer and this order id.')->setValue('data', $orders);
 		}
 		catch (Throwable $exception) {
