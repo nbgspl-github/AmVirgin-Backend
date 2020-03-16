@@ -46,6 +46,26 @@ class CreateProductsTable extends Migration{
 			$table->string('longDescription', 5000);
 			$table->string('sku');
 			$table->string('trailer', 4096)->nullable();
+			$table->boolean('hotDeal')->default(false);
+			$table->integer('sellingPrice')->default(0);
+			$table->string('hsn')->nullable();
+			$table->string('taxCode')->nullable();
+			$table->boolean('fulfilmentBy')->default(false);
+			$table->string('procurementSla')->nullable();
+			$table->integer('localShippingCost')->default(0);
+			$table->integer('zonalShippingCost')->default(0);
+			$table->integer('internationalShippingCost')->default(0);
+			$table->string('packageWeight')->nullable();
+			$table->string('packageLength')->nullable();
+			$table->string('packageHeight')->nullable();
+			$table->string('idealFor')->nullable();
+			$table->string('videoUrl')->nullable();
+			$table->text('domesticWarranty')->nullable();
+			$table->text('internationalWarranty')->nullable();
+			$table->text('warrantySummary')->nullable();
+			$table->text('warrantyServiceType')->nullable();
+			$table->text('coveredInWarranty')->nullable();
+			$table->text('notCoveredInWarranty')->nullable();
 			$table->timestamps();
 		});
 	}
