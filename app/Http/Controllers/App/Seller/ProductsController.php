@@ -79,6 +79,8 @@ class ProductsController extends ExtendedResourceController{
 			//TODO; Temporarily turning off validation for this. Make sure to turn it back on when going for deployment.
 //			$validated = $this->requestValid(\request(), $this->rules('store'));
 			$validated = request()->all();
+echo "<pre>";
+			print_r($validated);die('fine');
 			
 			$payload = (object)$validated;
 			$product = Product::create([
