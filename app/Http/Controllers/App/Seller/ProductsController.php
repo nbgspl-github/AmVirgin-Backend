@@ -93,7 +93,7 @@ class ProductsController extends ExtendedResourceController{
 				// 'productType' => $payload->productType,
 				// 'productMode' => $payload->productMode,
 				// 'listingType' => $payload->listingType,
-				// 'originalPrice' => $payload->originalPrice,
+				'originalPrice' => $payload->originalPrice,
 				'sellingPrice' => $payload->sellingPrice,
 				'hsn' => $payload->HSN,
 				'taxCode' => $payload->taxCode,
