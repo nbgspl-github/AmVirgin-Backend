@@ -137,14 +137,14 @@ class ProductsController extends ExtendedResourceController{
 				'sku' => $payload->sku,
 			]);
 
-			echo "<pre>";
-			print_r($payload);
+			// echo "<pre>";
+			// print_r($payload);
 
-			$query = DB::getQueryLog();
-			$query = end($query);
-			print_r($query);
+			// $query = DB::getQueryLog();
+			// $query = end($query);
+			// print_r($query);
 
-			die('fine');
+			// die('fine');
 
 			collect(jsonDecodeArray($validated['attributes']))->each(function ($item) use ($product){
 				$attribute = Attribute::retrieve($item['key']);
