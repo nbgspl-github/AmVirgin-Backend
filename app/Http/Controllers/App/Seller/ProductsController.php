@@ -19,6 +19,7 @@ use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
+use DB;
 
 class ProductsController extends ExtendedResourceController{
 	use ValidatesRequest;
@@ -74,15 +75,17 @@ class ProductsController extends ExtendedResourceController{
 	}
 
 	public function store(){
+		DB::enableQueryLog(); 
 		$response = responseApp();
 		try {
 			//TODO; Temporarily turning off validation for this. Make sure to turn it back on when going for deployment.
 //			$validated = $this->requestValid(\request(), $this->rules('store'));
 			$validated = request()->all();
-echo "<pre>";
-			print_r($validated);die('fine');
+
 			
 			$payload = (object)$validated;
+
+
 			$product = Product::create([
 				'name' => $payload->productName,
 				'categoryId' => $payload->categoryId,
@@ -133,6 +136,16 @@ echo "<pre>";
 				'longDescription' => $payload->longDescription,
 				'sku' => $payload->sku,
 			]);
+
+			echo "<pre>";
+			print_r($payload);
+
+			$query = DB::getQueryLog();
+			$query = end($query);
+			print_r($query);
+
+			die('fine');
+
 			collect(jsonDecodeArray($validated['attributes']))->each(function ($item) use ($product){
 				$attribute = Attribute::retrieve($item['key']);
 				if ($attribute != null) {
