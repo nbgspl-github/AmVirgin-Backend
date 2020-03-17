@@ -42,6 +42,8 @@ class ProductResource extends JsonResource {
 			'longDescription'  => $this->longDescription,
 			'images'           => ProductImageResource::collection($this->images()->get()),
 			'sellingPrice'     => $this->sellingPrice,
+			'sku'              => $this->sku,
+			'stock'            => $this->stock,
 			'hsn'              => $this->hsn,
 			'taxCode'          => $this->taxCode,
 			'fulfilmentBy'     => $this->fulfilmentBy,
