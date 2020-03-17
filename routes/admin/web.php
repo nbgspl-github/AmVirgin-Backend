@@ -274,6 +274,7 @@ Route::prefix('admin')->group(function () {
 		Route::prefix('products')->middleware('auth:admin')->group(function () {
 			Route::get('', [ProductsController::class, Methods::Index])->name('admin.products.index');
 			Route::get('/deleted', [DeletedProductsController::class, Methods::Index])->name('admin.products.deleted.index');
+			Route::get(\App\Classes\Str::Empty, [ProductsController::class, Methods::Index])->name('admin.products.index');
 		});
 
 		// Settings Route(s)

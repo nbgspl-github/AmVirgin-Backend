@@ -3,8 +3,8 @@
 namespace App\Constants;
 
 class OfferTypes {
+	const NoOffer = 0;
 	const FlatRate = 1;
-
 	const Percentage = 2;
 
 	public static function name($value = 0) {

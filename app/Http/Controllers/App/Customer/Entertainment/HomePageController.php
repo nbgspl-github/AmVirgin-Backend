@@ -146,10 +146,8 @@ class HomePageController extends ExtendedResourceController {
 		return auth('customer-api');
 	}
 
-	public function trendingNow()
-	{
-		$data = array();
-
+	public function trendingNow() {
+		$data = [];
 		try {
 			$trendingNow = Video::where([
 				['trending', true],
@@ -160,39 +158,37 @@ class HomePageController extends ExtendedResourceController {
 			if (!empty($trendingNow)) {
 				$msg = 'Successfully retrieved entertainment trending now.';
 			}
-			$data['trendingNow'] = $trendingNow; 
+			$data['trendingNow'] = $trendingNow;
 
 			return responseApp()->status(HttpOkay)->message($msg)->setValue('data', $data)->send();
-			
-		} catch (Exception $e) { 
+
+		}
+		catch (Throwable $e) {
 			return responseApp()->status(HttpServerError)->message($e)->setValue('data')->send();
-		 
+
 		}
 	}
 
-	public function recommendedVideo()
-	{
-		$data = array();
-
+	public function recommendedVideo() {
 		try {
 			$trendingNow = Video::where([
 				['trending', true],
 				['pending', false],
-			])
-			->orderBy('rating', 'DESC')
-			->limit(15)->get();
+			])->orderBy('rating', 'DESC')
+				->limit(15)->get();
 			$trendingNow = TrendingNowResource::collection($trendingNow);
 			$msg = 'No record found';
 			if (!empty($trendingNow)) {
 				$msg = 'Successfully retrieved entertainment recommended video.';
 			}
-			$data['recommended'] = $trendingNow; 
+			$data['recommended'] = $trendingNow;
 
 			return responseApp()->status(HttpOkay)->message($msg)->setValue('data', $data)->send();
-			
-		} catch (Exception $e) { 
+
+		}
+		catch (Throwable $e) {
 			return responseApp()->status(HttpServerError)->message($e)->setValue('data')->send();
-		 
+
 		}
 	}
 }
