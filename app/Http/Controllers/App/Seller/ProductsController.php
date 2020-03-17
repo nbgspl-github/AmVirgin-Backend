@@ -19,6 +19,7 @@ use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
+use DB;
 
 class ProductsController extends ExtendedResourceController{
 	use ValidatesRequest;
@@ -74,13 +75,17 @@ class ProductsController extends ExtendedResourceController{
 	}
 
 	public function store(){
+		DB::enableQueryLog(); 
 		$response = responseApp();
 		try {
 			//TODO; Temporarily turning off validation for this. Make sure to turn it back on when going for deployment.
 //			$validated = $this->requestValid(\request(), $this->rules('store'));
 			$validated = request()->all();
+
 			
 			$payload = (object)$validated;
+
+
 			$product = Product::create([
 				'name' => $payload->productName,
 				'categoryId' => $payload->categoryId,
@@ -88,7 +93,7 @@ class ProductsController extends ExtendedResourceController{
 				// 'productType' => $payload->productType,
 				// 'productMode' => $payload->productMode,
 				// 'listingType' => $payload->listingType,
-				// 'originalPrice' => $payload->originalPrice,
+				'originalPrice' => $payload->originalPrice,
 				'sellingPrice' => $payload->sellingPrice,
 				'hsn' => $payload->HSN,
 				'taxCode' => $payload->taxCode,
@@ -108,9 +113,9 @@ class ProductsController extends ExtendedResourceController{
 				'warrantyServiceType' => $payload->warrantyServiceType,
 				'coveredInWarranty' => $payload->coveredInWarranty,
 				'notCoveredInWarranty' => $payload->notCoveredInWarranty,
-				'offerValue' => $payload->offerValue,
-				'offerType' => $payload->offerType,
-				'currency' => $payload->currency,
+				// 'offerValue' => $payload->offerValue,
+				// 'offerType' => $payload->offerType,
+				// 'currency' => $payload->currency,
 				// 'taxRate' => $payload->taxRate,
 				// 'countryId' => $payload->countryId,
 				// 'stateId' => $payload->stateId,
@@ -131,6 +136,16 @@ class ProductsController extends ExtendedResourceController{
 				'longDescription' => $payload->longDescription,
 				'sku' => $payload->sku,
 			]);
+
+			// echo "<pre>";
+			// print_r($payload);
+
+			// $query = DB::getQueryLog();
+			// $query = end($query);
+			// print_r($query);
+
+			// die('fine');
+
 			collect(jsonDecodeArray($validated['attributes']))->each(function ($item) use ($product){
 				$attribute = Attribute::retrieve($item['key']);
 				if ($attribute != null) {
