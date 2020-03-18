@@ -37,5 +37,6 @@ class OrdersController extends ExtendedResourceController{
 	}
 
 	protected function guard(){
+		return auth('customer-api');
 	}
 }
