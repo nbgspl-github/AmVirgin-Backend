@@ -19,4 +19,5 @@ interface Tables {
 	const Countries = 'countries';
 	const Categories = 'categories';
 	const Currencies = 'currencies';
+	const HsnCodes = 'hsn-codes';
 }

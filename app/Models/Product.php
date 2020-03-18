@@ -87,6 +87,46 @@ class Product extends Model {
 		'Active' => 'active',
 		'Inactive' => 'inactive',
 	];
+	const FulfillmentBy = [
+		'Seller' => 'seller',
+		'SellerSmart' => 'seller-smart',
+	];
+	const ShippingCost = [
+		'Local' => [
+			'Minimum' => 0,
+			'Maximum' => 10000,
+		],
+		'Zonal' => [
+			'Minimum' => 0,
+			'Maximum' => 10000,
+		],
+		'International' => [
+			'Minimum' => 0,
+			'Maximum' => 10000,
+		],
+	];
+	const ProcurementSLA = [
+		'Minimum' => 0,
+		'Maximum' => 7,
+	];
+	const Weight = [
+		'Minimum' => 0,
+		'Maximum' => 1000,
+	];
+	const Dimensions = [
+		'Length' => [
+			'Minimum' => 0,
+			'Maximum' => 10000,
+		],
+		'Breadth' => [
+			'Minimum' => 0,
+			'Maximum' => 10000,
+		],
+		'Height' => [
+			'Minimum' => 0,
+			'Maximum' => 10000,
+		],
+	];
 
 	/**
 	 * @return HasMany
