@@ -126,8 +126,7 @@ class OrdersController extends ExtendedResourceController {
 	 	$customer = array();
 	 	$response = responseApp();
 	 	try { 
-	 		$data = Order::where('id', $id)->first(); 
-// print_r($data);
+	 		$data = Order::where('id', $id)->first();  
 		 	if(!empty($data)){
 		 		$res = Order::where('id', $id)
 				       ->update([
@@ -135,7 +134,6 @@ class OrdersController extends ExtendedResourceController {
 				]); 
 			$response->status(HttpOkay)->message('Status Updated Successfully')->setValue('data', $customer);
 		 	}else{
-		 		print_r($data);
 		 		$response->status(HttpServerError)->message('Order Not Found');
 		 	}  
 	 	} catch (Throwable $exception) {
