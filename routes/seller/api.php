@@ -9,6 +9,7 @@ use App\Http\Controllers\App\Seller\CategoriesController;
 use App\Http\Controllers\App\Seller\CitiesController;
 use App\Http\Controllers\App\Seller\CountriesController;
 use App\Http\Controllers\App\Seller\CurrenciesController;
+use App\Http\Controllers\App\Seller\HsnCodeController;
 use App\Http\Controllers\App\Seller\ProductImagesController;
 use App\Http\Controllers\App\Seller\ProductsController;
 use App\Http\Controllers\App\Seller\StatesController;
@@ -62,4 +63,8 @@ Route::prefix('orders')->middleware('auth:seller-api')->group(function () {
 
 Route::prefix('customer')->middleware('auth:seller-api')->group(function () {
 	Route::get('{param}', [OrdersController::class, 'customer']);
+});
+
+Route::prefix('hsn')->group(function () {
+	Route::get('/', [HsnCodeController::class, 'index']);
 });

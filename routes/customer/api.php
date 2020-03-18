@@ -115,3 +115,7 @@ Route::prefix('orders')->group(function () {
 	Route::get(Str::Empty, [OrdersController::class, 'getorders']);
 	Route::get('{param}', [OrdersController::class, 'getorderdetails']);
 });
+
+Route::prefix('recent')->middleware('auth:customer-api')->group(function () {
+	Route::get('/', []);
+});

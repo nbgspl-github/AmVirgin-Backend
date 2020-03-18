@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Classes\Time;
 use App\Exceptions\ValidationException;
+use App\Models\Attribute;
 use App\Models\Seller;
 use App\Models\Settings;
 use App\Models\ShopSlider;
@@ -43,6 +44,6 @@ class CartTesterCommand extends Command {
 	 * @return mixed
 	 */
 	public function handle() {
-
+		return;
 	}
 }

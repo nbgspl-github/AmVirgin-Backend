@@ -1,71 +1,55 @@
 <?php
 
+use App\Constants\Constants;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductsTable extends Migration{
+class CreateProductsTable extends Migration {
 	/**
 	 * Run the migrations.
 	 * @return void
 	 */
-	public function up(){
-		Schema::create('products', function (Blueprint $table){
+	public function up() {
+		Schema::create('products', function (Blueprint $table) {
 			$table->bigIncrements('id');
-			$table->string('name', 500);
-			$table->string('slug', 600);
-			$table->unsignedBigInteger('categoryId');
-			$table->unsignedBigInteger('sellerId');
-			$table->string('productType')->nullable();
-			$table->string('productMode')->nullable();
-			$table->string('listingType')->nullable();
-			$table->integer('originalPrice');
-			$table->integer('offerValue')->comment('When type is fixed, this will be a percentage value, else fixed amount. Ignore if 0');
-			$table->smallInteger('offerType')->comment('Either flat (fixed amount) or percentage');
-			$table->string('currency')->default('INR');
-			$table->float('taxRate')->comment('Will always be in percentage and will add up');
-			$table->integer('countryId')->nullable();
-			$table->integer('stateId')->nullable();
-			$table->integer('cityId')->nullable();
-			$table->string('zipCode', 10)->nullable();
-			$table->string('address', 500)->nullable();
-			$table->smallInteger('status')->default(1);
-			$table->boolean('promoted')->default(false);
-			$table->timestamp('promotionStart')->nullable();
-			$table->timestamp('promotionEnd')->nullable();
-			$table->boolean('visibility')->default(true);
-			$table->float('rating', 4, 2)->default(0.0);
-			$table->bigInteger('hits')->default(0);
+			$table->string('name', 500)->comment('Name or title of product.');
+			$table->string('slug', 1000)->comment('Slug title of product.');
+			$table->unsignedBigInteger('categoryId')->comment('Category under which this product falls.');
+			$table->unsignedBigInteger('sellerId')->comment('Seller to whom this product belongs.');
+			$table->enum('listingStatus', ['active', 'inactive'])->comment('Whether the product will show up in listing or not?');
+			$table->integer('originalPrice')->default(0)->comment('MRP of product.');
+			$table->integer('sellingPrice')->default(0)->comment('Actual selling price of product');
+			$table->string('fulfillmentBy')->comment('How the order is fulfilled...by seller or through external courier service?');
+			$table->string('hsn')->comment('Harmonized System of Nomenclature code as defined by rules');
+			$table->string('currency')->default('INR')->comment('Currency to be shown alongside product price.');
+			$table->integer('taxRate')->comment('Will always be in percentage and will add up.');
+			$table->boolean('promoted')->default(false)->comment('Whether is product is promoted or not?');
+			$table->timestamp('promotionStart')->nullable()->comment('Start timestamp, valid if product is promoted.');
+			$table->timestamp('promotionEnd')->nullable()->comment('End timestamp, valid if product is promoted.');
+			$table->float('rating', 4, 2)->default(0.0)->comment('Rating of product.');
+			$table->bigInteger('hits')->default(0)->comment('Number of times this product was viewed by customers.');
 			$table->bigInteger('stock')->default(0)->comment('How many units are in stock?');
-			$table->string('shippingCostType')->nullable()->comment('Type of shipping cost - either free or chargeable');
-			$table->integer('shippingCost')->default(0)->comment('If chargeable, how much will it be?');
-			$table->boolean('soldOut')->default(false)->comment('If the product has gone out od stock this will be true');
-			$table->boolean('deleted')->default(false)->comment('If the seller has deleted this product, this will be true');
-			$table->boolean('draft')->default(false)->comment('If the seller is halfway done through putting details this will be true');
-			$table->string('shortDescription', 1000);
-			$table->string('longDescription', 5000);
-			$table->string('sku');
-			$table->string('trailer', 4096)->nullable();
-			$table->boolean('hotDeal')->default(false);
-			$table->integer('sellingPrice')->default(0);
-			$table->string('hsn')->nullable();
-			$table->string('taxCode')->nullable();
-			$table->boolean('fulfilmentBy')->default(false);
-			$table->string('procurementSla')->nullable();
-			$table->integer('localShippingCost')->default(0);
-			$table->integer('zonalShippingCost')->default(0);
-			$table->integer('internationalShippingCost')->default(0);
-			$table->string('packageWeight')->nullable();
-			$table->string('packageLength')->nullable();
-			$table->string('packageHeight')->nullable();
-			$table->string('idealFor')->nullable();
-			$table->string('videoUrl')->nullable();
-			$table->text('domesticWarranty')->nullable();
-			$table->text('internationalWarranty')->nullable();
-			$table->text('warrantySummary')->nullable();
-			$table->text('warrantyServiceType')->nullable();
-			$table->text('coveredInWarranty')->nullable();
-			$table->text('notCoveredInWarranty')->nullable();
+			$table->boolean('draft')->default(false)->comment('True if the seller is midway creating this product.');
+			$table->string('shortDescription', 1000)->comment('Short description for this product.');
+			$table->text('longDescription')->comment('Long description for this product, supports HTML formatting.');
+			$table->string('sku')->comment('Stock Keeping Unit identifier, unique for each product');
+			$table->string('trailer', Constants::MaxFilePathLength)->nullable()->comment('Video path for product trailer.');
+			$table->integer('procurementSla')->nullable()->comment('Number of days required before the seller can fulfill the order.');
+			$table->integer('localShippingCost')->default(0)->comment('Shipping cost for local region.');
+			$table->integer('zonalShippingCost')->default(0)->comment('Shipping cost for zone.');
+			$table->integer('internationalShippingCost')->default(0)->comment('Cost for international shipping');
+			$table->string('packageWeight')->nullable()->comment('Weight of final package in KG.');
+			$table->string('packageLength')->nullable()->comment('Length of final package in CMS.');
+			$table->string('packageBreadth')->nullable()->comment('Breadth of final package in CMS.');
+			$table->string('packageHeight')->nullable()->comment('Height of final package in CMS.');
+			$table->integer('domesticWarranty')->default(0)->comment('Applicable domestic warranty in months.');
+			$table->integer('internationalWarranty')->default(0)->comment('Applicable international warranty in months.');
+			$table->text('warrantySummary')->nullable()->comment('Brief description of warranty details.');
+			$table->text('warrantyServiceType')->nullable()->comment('Type of warranty applicable on this product.');
+			$table->text('coveredInWarranty')->nullable()->comment('What is covered in warranty?');
+			$table->text('notCoveredInWarranty')->nullable()->comment('What does not come under warranty?');
+			$table->softDeletes()->comment('Soft deleting in this context means the product is marked for deletion by seller.');
 			$table->timestamps();
 		});
 	}
@@ -75,7 +59,7 @@ class CreateProductsTable extends Migration{
 	 *
 	 * @return void
 	 */
-	public function down(){
+	public function down() {
 		Schema::dropIfExists('products');
 	}
 }

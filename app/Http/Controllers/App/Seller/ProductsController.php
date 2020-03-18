@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\App\Seller;
 
+use App\Classes\Rule;
+use App\Constants\OfferTypes;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Interfaces\Directories;
+//use App\Interfaces\offerTypes;
+use App\Interfaces\Tables;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
 use App\Models\Product;
@@ -19,18 +23,68 @@ use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
-use DB;
 
-class ProductsController extends ExtendedResourceController{
+class ProductsController extends ExtendedResourceController {
 	use ValidatesRequest;
-	use ConditionallyLoadsAttributes;
 
-	public function __construct(){
+	protected array $rules;
+
+	public function __construct() {
 		parent::__construct();
-		$this->ruleSet->load('rules.seller.product');
+		$this->rules = [
+			'store' => [
+				'name' => ['bail', 'required', 'string', 'min:1', 'max:500'],
+				'categoryId' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)],
+				'listingType' => ['bail', 'required', 'string', Rule::in([Product::ListingStatus['Active'], Product::ListingStatus['Inactive']])],
+				'originalPrice' => ['bail', 'required', 'numeric', 'min:1', 'max:10000000'],
+				'sellingPrice' => ['bail', 'required', 'numeric', 'min:1', 'lte:originalPrice'],
+				'currency' => ['bail', 'nullable', 'string', 'min:2', 'max:5', Rule::exists(Tables::Currencies, 'code')],
+				'promoted' => ['bail', 'boolean'],
+				'promotionStart' => ['bail', 'required_with:promoted', 'date'],
+				'promotionEnd' => ['bail', 'required_with:promoted', 'date', 'after:promotionStart'],
+				'stock' => ['bail', 'required', 'numeric', 'min:0', RuleMaxStock],
+				'draft' => ['bail', 'boolean'],
+				'shortDescription' => ['bail', 'required', 'string', 'min:1', 'max:1000'],
+				'longDescription' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
+				'sku' => ['bail', 'required', 'string', 'min:1', 'max:256'],
+				'files.*' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
+				'attributes' => ['bail', 'required'],
+			],
+			'update' => [
+				'productName' => ['bail', 'required', 'string', 'min:1', 'max:500'],
+				'categoryId' => ['bail', 'required', 'exists:categories,id'],
+				'productType' => ['bail', 'required', 'string', 'min:1', 'max:256'],
+				'productMode' => ['bail', 'required', 'string', 'min:1', 'max:256'],
+				'listingType' => ['bail', 'required', 'string', 'min:1', 'max:256'],
+				'originalPrice' => ['bail', 'required', 'numeric', 'min:1', 'max:10000000'],
+				'offerType' => ['bail', 'required', Rule::in([OfferTypes::FlatRate, OfferTypes::Percentage])],
+				'offerValue' => ['bail', 'required', 'numeric', 'min:1', 'max:10000000'],
+				'currency' => ['bail', 'nullable', 'string', 'min:2', 'max:5', 'exists:currencies,code'],
+				'taxRate' => ['bail', 'required', 'numeric', 'min:0.00', 'max:99.99'],
+				'countryId' => ['bail', 'required', 'exists:countries,id'],
+				'stateId' => ['bail', 'required', 'numeric', 'min:1', 'max:9999999'],
+				'cityId' => ['bail', 'required', 'numeric', 'min:1', RuleMaxInt],
+				'zipCode' => ['bail', 'required', 'min:1', RuleMaxInt],
+				'address' => ['bail', 'required', 'string', 'min:2', 'max:500'],
+				'status' => ['bail', 'nullable', Rule::in([ProductStatus::DifferentStatus, ProductStatus::SomeOtherStatus, ProductStatus::SomeStatus])],
+				'promoted' => ['bail', 'boolean'],
+				'promotionStart' => ['bail', 'required_with:promoted', 'date'],
+				'promotionEnd' => ['bail', 'required_with:promoted', 'date', 'after:promotionStart'],
+				'visibility' => ['bail', 'boolean'],
+				'stock' => ['bail', 'required', 'numeric', 'min:0', RuleMaxStock],
+				'shippingCostType' => ['bail', 'required', Rule::in(['free', 'chargeable'])],
+				'shippingCost' => ['bail', 'required_if:shippingCostType,chargeable'],
+				'draft' => ['bail', 'boolean'],
+				'shortDescription' => ['bail', 'required', 'string', 'min:1', 'max:1000'],
+				'longDescription' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
+				'sku' => ['bail', 'required', 'string', 'min:1', 'max:256'],
+				'files.*' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
+				'attributes' => ['bail', 'required'],
+			],
+		];
 	}
 
-	public function index(){
+	public function index() {
 		$response = responseApp();
 		try {
 			$products = Product::where([
@@ -40,7 +94,7 @@ class ProductsController extends ExtendedResourceController{
 				['draft', false],
 			])->get();
 			$products = ProductResource::collection($products);
-			$response->status(HttpOkay)->message(function () use ($products){
+			$response->status(HttpOkay)->message(function () use ($products) {
 				return sprintf('Found %d products by specified seller.', $products->count());
 			})->setValue('data', $products);
 		}
@@ -52,7 +106,7 @@ class ProductsController extends ExtendedResourceController{
 		}
 	}
 
-	public function edit($id){
+	public function edit($id) {
 		$response = responseApp();
 		try {
 			$product = Product::where([
@@ -74,18 +128,13 @@ class ProductsController extends ExtendedResourceController{
 		}
 	}
 
-	public function store(){
-		DB::enableQueryLog(); 
+	public function store() {
 		$response = responseApp();
 		try {
 			//TODO; Temporarily turning off validation for this. Make sure to turn it back on when going for deployment.
 //			$validated = $this->requestValid(\request(), $this->rules('store'));
 			$validated = request()->all();
-
-			
 			$payload = (object)$validated;
-
-
 			$product = Product::create([
 				'name' => $payload->productName,
 				'categoryId' => $payload->categoryId,
@@ -136,20 +185,10 @@ class ProductsController extends ExtendedResourceController{
 				'longDescription' => $payload->longDescription,
 				'sku' => $payload->sku,
 			]);
-
-			// echo "<pre>";
-			// print_r($payload);
-
-			// $query = DB::getQueryLog();
-			// $query = end($query);
-			// print_r($query);
-
-			// die('fine');
-
-			collect(jsonDecodeArray($validated['attributes']))->each(function ($item) use ($product){
+			collect(jsonDecodeArray($validated['attributes']))->each(function ($item) use ($product) {
 				$attribute = Attribute::retrieve($item['key']);
 				if ($attribute != null) {
-					collect($item['values'])->each(function ($value) use ($attribute, $item, $product){
+					collect($item['values'])->each(function ($value) use ($attribute, $item, $product) {
 						$attributeValue = AttributeValue::where([
 							['attributeId', $attribute->getKey()],
 							['id', $value],
@@ -164,14 +203,14 @@ class ProductsController extends ExtendedResourceController{
 					});
 				}
 			});
-			collect(request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product){
+			collect(request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product) {
 				ProductImage::create([
 					'productId' => $product->getKey(),
 					'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile),
 					'tag' => sprintf('product-%d-images', $product->getKey()),
 				]);
 			});
-			$images = $product->images()->get()->transform(function (ProductImage $productImage){
+			$images = $product->images()->get()->transform(function (ProductImage $productImage) {
 				return [
 					'url' => SecuredDisk::access()->exists($productImage->path) ? SecuredDisk::access()->url($productImage->path) : null,
 				];
@@ -190,7 +229,7 @@ class ProductsController extends ExtendedResourceController{
 		}
 	}
 
-	public function show($id){
+	public function show($id) {
 		$response = responseApp();
 		try {
 			$product = Product::where([
@@ -199,7 +238,7 @@ class ProductsController extends ExtendedResourceController{
 				['soldOut', false],
 				['draft', false],
 				['id', $id],
-			])->firstOrFail(); 
+			])->firstOrFail();
 			$product = new ProductResource($product);
 			$response->status(HttpOkay)->message('Found product for the specified key.')->setValue('data', $product);
 		}
@@ -214,7 +253,7 @@ class ProductsController extends ExtendedResourceController{
 		}
 	}
 
-	public function update($id){
+	public function update($id) {
 		$response = responseApp();
 		try {
 			$product = Product::retrieveThrows($id);
@@ -269,10 +308,10 @@ class ProductsController extends ExtendedResourceController{
 				'longDescription' => $validated['longDescription'],
 				'sku' => $validated['sku'],
 			]);
-			collect(jsonDecodeArray($validated['attributes']))->each(function ($item) use ($product){
+			collect(jsonDecodeArray($validated['attributes']))->each(function ($item) use ($product) {
 				$attribute = Attribute::retrieve($item['key']);
 				if ($attribute != null) {
-					collect($item['values'])->each(function ($value) use ($attribute, $item, $product){
+					collect($item['values'])->each(function ($value) use ($attribute, $item, $product) {
 						$attributeValue = AttributeValue::where([
 							['attributeId', $attribute->getKey()],
 							['id', $value],
@@ -287,7 +326,7 @@ class ProductsController extends ExtendedResourceController{
 					});
 				}
 			});
-			collect(\request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product){
+			collect(\request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product) {
 				ProductImage::create([
 					'productId' => $product->getKey(),
 					'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile),
@@ -307,7 +346,7 @@ class ProductsController extends ExtendedResourceController{
 		}
 	}
 
-	public function delete($id){
+	public function delete($id) {
 		$response = responseApp();
 		try {
 			$product = Product::where([
@@ -328,7 +367,7 @@ class ProductsController extends ExtendedResourceController{
 		}
 	}
 
-	protected function guard(){
+	protected function guard() {
 		return Auth::guard('seller-api');
 	}
 }

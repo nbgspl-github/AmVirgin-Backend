@@ -18,4 +18,5 @@ interface Tables {
 	const ShippingAddresses = 'shipping-addresses';
 	const Countries = 'countries';
 	const Categories = 'categories';
+	const Currencies = 'currencies';
 }
