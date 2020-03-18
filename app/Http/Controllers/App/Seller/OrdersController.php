@@ -125,16 +125,14 @@ class OrdersController extends ExtendedResourceController {
 	 	DB::enableQueryLog(); 
 	 	$customer = array();
 	 	$response = responseApp();
-	 	try { 
-	 		$data = Order::where('id', $id)->first();  
-		 	if(!empty($data)){
-		 		$res = Order::where('id', $id)
-				       ->update([
-				           'status' => $status,
-				]); 
-			$response->status(HttpOkay)->message('Status Updated Successfully')->setValue('data', $customer);
+	 	try {
+	 		$data = Order::find($id);  
+		 	if($data!=null){
+		 		$data->update([
+		 			'status' => $status]); 
+			$response->status(HttpOkay)->message('Status Updated Successfully');
 		 	}else{
-		 		$response->status(HttpServerError)->message('Order Not Found');
+		 		$response->status(HttpResourceNotFound)->message('Order Not Found');
 		 	}  
 	 	} catch (Throwable $exception) {
 	 		 
