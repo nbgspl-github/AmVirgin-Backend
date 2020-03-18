@@ -11,43 +11,40 @@
 						<thead>
 						<tr>
 							<th class="text-center">No.</th>
-							<th class="text-center">Banner</th>
 							<th class="text-center">Name</th>
 							<th class="text-center">Description</th>
 							<th class="text-center">Original Price</th>
-							<th class="text-center">Offer Price</th>
-							<th class="text-center">Duration</th>
-							<th class="text-center">Active</th>
+							<th class="text-center">Offer Value</th>
+							<th class="text-center">Discount Type</th>
 							<th class="text-center">Action(s)</th>
 						</tr>
 						</thead>
- 
+
 						<tbody>
-						@foreach($products as $product) 
-							{{--							<tr id="content_row_{{$product->getKey()}}">--}}
-							{{--								<td class="text-center">{{$loop->index+1}}</td>--}}
-							{{--								<td class="text-center">--}}
-							{{--									@if($plan->getBanner()!=null&&Storage::disk('secured')->exists($product->getBanner()))--}}
-							{{--										<img src="{{Storage::disk('secured')->url($product->getBanner())}}" style="width: 100px; height: 100px" alt="{{$plan->getName()}}"/>--}}
-							{{--									@else--}}
-							{{--										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 25px"></i>--}}
-							{{--									@endif--}}
-							{{--								</td>--}}
-							{{--								<td class="text-center">{{$product->getName()}}</td>--}}
-							{{--								<td class="text-center">{{__ellipsis($product->getDescription(),40)}}</td>--}}
-							{{--								<td class="text-center">{{$product->getOriginalPrice()}}</td>--}}
-							{{--								<td class="text-center">{{$plan->getOfferPrice()}}</td>--}}
-							{{--								<td class="text-center">{{$plan->getDuration()}}</td>--}}
-							{{--								<td class="text-center">{{__boolean($plan->isActive())}}</td>--}}
-							{{--								<td class="text-center">--}}
-							{{--									<div class="btn-toolbar" role="toolbar">--}}
-							{{--										<div class="btn-group mx-auto" role="group">--}}
-							{{--											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.subscription-plans.edit',$plan->getKey())}}" @include('admin.extras.tooltip.left', ['title' => 'Edit details'])><i class="mdi mdi-table-edit"></i></a>--}}
-							{{--											<a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);" onclick="deleteResource('{{$plan->getKey()}}');" @include('admin.extras.tooltip.right', ['title' => 'Delete this plan'])><i class="mdi mdi-delete"></i></a>--}}
-							{{--										</div>--}}
-							{{--									</div>--}}
-							{{--								</td>--}}
-							{{--							</tr>--}}
+						@foreach($products as $product)
+							<tr id="content_row_{{$product->getKey()}}">
+								<td class="text-center">{{$loop->index+1}}</td>
+								<td class="text-center">{{$product->name()}}</td>
+								<td class="text-center">{{__ellipsis($product->shortDescription(),40)}}</td>
+								<td class="text-center">{{$product->originalPrice()}}</td>
+								<td class="text-center">{{$product->offerValue()}}</td>
+								<td class="text-center">
+									@if($product->offerType()==\App\Constants\OfferTypes::NoOffer)
+										{{'No offer'}}
+									@elseif ($product->offerType()==\App\Constants\OfferTypes::FlatRate)
+										{{'Fixed amount'}}
+									@elseif($product->offerType()==\App\Constants\OfferTypes::Percentage)
+										{{'Percentage off'}}
+									@endif
+								</td>
+								<td class="text-center">
+									<div class="btn-toolbar" role="toolbar">
+										<div class="btn-group mx-auto" role="group">
+											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.subscription-plans.edit',$product->getKey())}}" @include('admin.extras.tooltip.left', ['title' => 'View details'])><i class="dripicons-search"></i></a>
+										</div>
+									</div>
+								</td>
+							</tr>
 						@endforeach
 						</tbody>
 					</table>

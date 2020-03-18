@@ -3,10 +3,13 @@
 namespace App\Console\Commands;
 
 use App\Classes\Time;
+use App\Exceptions\ValidationException;
 use App\Models\Seller;
 use App\Models\Settings;
 use App\Models\ShopSlider;
+use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 
 class CartTesterCommand extends Command {
@@ -40,15 +43,6 @@ class CartTesterCommand extends Command {
 	 * @return mixed
 	 */
 	public function handle() {
-		$time = Settings::get('time');
-		$elapsed = \time();
-		$lastUpdated = Settings::getInt('shopSaleOfferDetailsUpdated', 0);
-		$remaining = $lastUpdated - Time::toSeconds($time);
-		$countDown = 0;
-		if ($elapsed >= $remaining) {
-			$countDown = abs($remaining - $elapsed);
-			$countDown *= 1000;
-		}
-		echo sprintf('Elapsed = %d, remaining = %d', $elapsed, $remaining);
+
 	}
 }
