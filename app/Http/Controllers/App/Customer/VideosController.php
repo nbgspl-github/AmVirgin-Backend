@@ -14,6 +14,7 @@ use App\Traits\FluentResponse;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 use Throwable;
 use Illuminate\Support\Facades\Storage;
 

@@ -212,6 +212,7 @@ return [
 					'cast' => ['bail', 'required', 'string', 'min:1', 'max:500'],
 					'director' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 					'genreId' => ['bail', 'required', 'exists:genres,id'],
+					'sectionId' => ['bail', 'required', 'exists:page-sections,id'],
 					'rating' => ['bail', 'required', 'numeric', 'min:0.00', 'max:5.00'],
 					'pgRating' => ['bail', 'required', Rule::in(['G', 'PG', 'PG-13', 'R', 'NC-17'])],
 					'subscriptionType' => ['bail', 'required', Rule::in(['free', 'paid', 'subscription'])],

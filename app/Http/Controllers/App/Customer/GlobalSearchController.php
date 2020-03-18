@@ -13,6 +13,8 @@ use App\Resources\Search\Customer\Entertainment\VideoResource;
 use App\Traits\ValidatesRequest;
 use Illuminate\Validation\Rule;
 use Throwable;
+use Illuminate\Http\Request;
+use DB;
 
 class GlobalSearchController extends ExtendedResourceController {
 	use ValidatesRequest;
@@ -30,6 +32,7 @@ class GlobalSearchController extends ExtendedResourceController {
 	}
 
 	public function search() {
+		DB::enableQueryLog();
 		$response = responseApp();
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['search']);
@@ -38,6 +41,7 @@ class GlobalSearchController extends ExtendedResourceController {
 					['title', 'LIKE', "%{$validated->key}%"],
 					['pending', false],
 				])->get();
+				
 				$contents = VideoResource::collection($contents);
 				$response->status(HttpOkay)->message(sprintf('Listing %d videos for your search query.', count($contents)))->setValue('data', $contents);
 			}

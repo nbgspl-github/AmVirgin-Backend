@@ -21,6 +21,7 @@ use App\Http\Controllers\App\Customer\Entertainment\HomePageController as Entert
 use App\Http\Controllers\App\Customer\SubscriptionController;
 use App\Http\Controllers\App\Customer\GlobalSearchController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\App\Seller\OrdersController;
 
 Route::get('/', [TwoFactorAuthController::class, 'exists'])->name('customer.check');
 Route::get('/profile', [AuthController::class, 'profile'])->name('customer.profile')->middleware('auth:customer-api');
@@ -79,6 +80,14 @@ Route::prefix('entertainment')->group(function () {
 	Route::prefix('section')->group(function () {
 		Route::get('{id}', [EntertainmentHomeController::class, 'showAllItemsInSection']);
 	});
+
+	Route::prefix('trending')->group(function () {
+		Route::get('/', [EntertainmentHomeController::class, 'trendingNow']);
+	});
+
+	Route::prefix('recommended')->group(function () {
+		Route::get('/', [EntertainmentHomeController::class, 'recommendedVideo']);
+	});
 });
 
 Route::prefix('addresses')->middleware('auth:customer-api')->group(function () {
@@ -100,4 +109,9 @@ Route::prefix('subscriptions')->group(function () {
 
 Route::prefix('search')->group(function () {
 	Route::get(Str::Empty, [GlobalSearchController::class, 'search']);
+});
+
+Route::prefix('orders')->group(function () {
+	Route::get(Str::Empty, [OrdersController::class, 'getorders']);
+	Route::get('{param}', [OrdersController::class, 'getorderdetails']);
 });
