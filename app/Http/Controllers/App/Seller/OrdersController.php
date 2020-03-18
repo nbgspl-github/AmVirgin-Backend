@@ -89,6 +89,26 @@ class OrdersController extends ExtendedResourceController {
 		finally {
 			return $response->send();
 		}
+	}
+
+	public function getOrdersDetails($id) {
+		$response = responseApp();
+		$user = auth('seller-api')->user()->id;
+		// DB::enableQueryLog(); 
+		try {
+			$orders = Order::with('customer','items','address')
+			->where([
+				['customerId', $user],['id', $id],
+			])->get();   
+
+			$response->status(HttpOkay)->message('Order details for this Customer and this order id.')->setValue('data', $orders);
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
 	} 
 
 	public function customer($id) {
