@@ -95,13 +95,22 @@ class OrdersController extends ExtendedResourceController {
 		$response = responseApp();
 		$user = auth('seller-api')->user()->id;
 		// DB::enableQueryLog(); 
-		try {
-			$orders = Order::with('customer','items','address')
-			->where([
-				['customerId', $user],['id', $id],
-			])->get();   
+		try { 
+			$orders = SellerOrder::where([
+				['sellerId', $this->guard()->id()],['orderId', $id],
+			])->get();
+			$orders->transform(function (SellerOrder $sellerOrder) {
+				return [
+					'orderId' => $sellerOrder->orderId(),
+					'orderNumber' => $sellerOrder->orderNumber(),
+					'customerId' => $sellerOrder->customerId(),
+					'customer' => $sellerOrder->customer,
+					'items' => $sellerOrder->items,
 
-			$response->status(HttpOkay)->message('Order details for this Customer and this order id.')->setValue('data', $orders);
+				];
+			});     
+
+			$response->status(HttpOkay)->message('Order details for this order id.')->setValue('data', $orders);
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
@@ -109,7 +118,33 @@ class OrdersController extends ExtendedResourceController {
 		finally {
 			return $response->send();
 		}
-	} 
+	}
+
+	public function updateOrderStatus($id='', $status= '')
+	 { 
+	 	DB::enableQueryLog(); 
+	 	$customer = array();
+	 	$response = responseApp();
+	 	try { 
+	 		$data = Order::where('id', $id)->first(); 
+// print_r($data);
+		 	if(!empty($data)){
+		 		$res = Order::where('id', $id)
+				       ->update([
+				           'status' => $status,
+				]); 
+			$response->status(HttpOkay)->message('Status Updated Successfully')->setValue('data', $customer);
+		 	}else{
+		 		print_r($data);
+		 		$response->status(HttpServerError)->message('Order Not Found');
+		 	}  
+	 	} catch (Throwable $exception) {
+	 		 
+	 		 $response->status(HttpServerError)->message($exception->getMessage());
+	 	}finally {
+			return $response->send();
+		}
+	 } 
 
 	public function customer($id) {
 		$response = responseApp();
