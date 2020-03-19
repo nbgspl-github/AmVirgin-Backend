@@ -37,7 +37,7 @@ class OrdersController extends ExtendedResourceController {
 					'orderNumber' => $sellerOrder->orderNumber(),
 					'customerId' => $sellerOrder->customerId(),
 					'customer' => $sellerOrder->customer,
-					'items' => $sellerOrder->items,
+					// 'items' => $sellerOrder->items,
 
 				];
 			});
@@ -98,19 +98,9 @@ class OrdersController extends ExtendedResourceController {
 		$user = auth('seller-api')->user()->id;
 		// DB::enableQueryLog(); 
 		try { 
-			$orders = SellerOrder::with('item')
+			$orders = SellerOrder::with('item','order')
 			->where([ ['sellerId', $this->guard()->id()],['orderId', $id],
-			])->first();
-			// $orders->transform(function (SellerOrder $sellerOrder) {
-			// 	return [
-			// 		'orderId' => $sellerOrder->orderId(),
-			// 		'orderNumber' => $sellerOrder->orderNumber(),
-			// 		'customerId' => $sellerOrder->customerId(),
-			// 		'customer' => $sellerOrder->customer,
-			// 		'items' => $sellerOrder->items,
-
-			// 	];
-			// });     
+			])->first(); 
 
 			$response->status(HttpOkay)->message('Order details for this order id.')->setValue('data', $orders);
 		}
