@@ -19,4 +19,8 @@ class SellerOrderItem extends Model {
 		'created_at',
 		'updated_at',
 	];
+
+	public function productDetails() {
+		return $this->hasMany(Product::class, 'id','productId')->with('images');
+	}
 }

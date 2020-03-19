@@ -29,4 +29,8 @@ class SellerOrder extends Model {
 	public function items() {
 		return $this->hasMany('App\Models\SellerOrderItem', 'sellerOrderId');
 	}
+
+	public function item() {
+		return $this->hasMany('App\Models\SellerOrderItem', 'sellerOrderId')->with('productDetails');
+	}
 }
