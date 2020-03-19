@@ -123,21 +123,22 @@ class OrdersController extends ExtendedResourceController {
 	}
 
 	public function updateOrderStatus($id='', $status= '')
-	 {   
+	{   
 	 	// DB::enableQueryLog();  
 	 	$response = responseApp();
 	 	try {
 	 		$data = Order::find($id);  
 		 	if(!empty($data)){
-		 		$order_status= Config::get('app.order_status'); 
 
+		 		$order_status = Order::getAllStatus();//Config::get('app.order_status');
+		 		  
 		 		if (in_array($status, $order_status)) {  
 			 		$data->update([
 			 			'status' => $status
 			 		]); 
 					$response->status(HttpOkay)->message('Status Updated Successfully'); 
 				}else{
-					$response->status(HttpOkay)->message('Status did Not matched in our record');
+					$response->status(HttpOkay)->message('Status did not matched in our record');
 				}
 		 	}else{
 		 		$response->status(HttpResourceNotFound)->message('Order Not Found');
@@ -169,8 +170,41 @@ class OrdersController extends ExtendedResourceController {
 	{
 		$response = responseApp(); 
 	 	try { 
-	 		$order_status= Config::get('app.order_status');
+	 		$order_status = Order::getAllStatus();
 	 		$response->status(HttpOkay)->message('Status listing for orders.')->setValue('data', $order_status);
+	 	} catch (Throwable $exception) {
+	 		$response->status(HttpServerError)->message($exception->getMessage());
+	 	}finally{
+	 		return $response->send();
+	 	}
+	}
+	public function getOrderByStatus($status)
+	{
+		$response = responseApp(); 
+	 	try { 
+	 		// $order_status= Config::get('app.order_status');
+	 		$order_status = Order::getAllStatus();
+
+	 		if (in_array($status, $order_status)) {
+	 			
+	 		$ordersData = $total = array();
+
+	 		$ordersData = Order::where(['status' => $status])
+	 						->get(); 
+	 						 
+	 		if (!empty(count($ordersData)) ) {
+		 		$total['subTotal'] = $ordersData->sum( 'subTotal' );
+		 		$total['tax']      = $ordersData->sum( 'tax' );
+	 		  	$total['total']    = $ordersData->sum( 'total' );
+
+		 		$ordersData['total'] = $total;
+	 		  }   
+
+	 		$response->status(HttpOkay)->message("Orders Listing for '$status' status")->setValue('data', $ordersData);
+	 		}else{
+	 			$response->status(HttpOkay)->message('Status did not matched in our record');
+	 		} 
+	 		
 	 	} catch (Throwable $exception) {
 	 		$response->status(HttpServerError)->message($exception->getMessage());
 	 	}finally{

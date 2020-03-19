@@ -59,11 +59,14 @@ Route::prefix('countries')->group(function () {
 Route::prefix('orders')->middleware('auth:seller-api')->group(function () {
 	Route::get(Str::Empty, [OrdersController::class, 'index']);
 	Route::get('/{param}', [OrdersController::class, 'getOrdersDetails']);
-	Route::get('/{id}/{status}', [OrdersController::class, 'updateOrderStatus']);
-	Route::get('/status', [OrdersController::class, 'getOrderStatus']);
+	Route::get('/{id}/{status}', [OrdersController::class, 'updateOrderStatus']); 
 });
 Route::prefix('order')->middleware('auth:seller-api')->group(function () {  
 	Route::get('/status', [OrdersController::class, 'getOrderStatus']);
+});
+
+Route::prefix('orders-by-status')->middleware('auth:seller-api')->group(function () {  
+	Route::get('/{param}', [OrdersController::class, 'getOrderByStatus']);
 });
 
 Route::prefix('customer')->middleware('auth:seller-api')->group(function () {
