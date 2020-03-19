@@ -222,4 +222,12 @@ return [
 		'Guid' => Sujip\Guid\Guid::class,
 	],
 
+	'order_status' => [ 
+		'Placed'           => 'placed',
+		'Dispatched'       => 'dispatched',
+		'Delivered'        => 'delivered',
+		'Cancelled'        => 'cancelled',
+		'RefundProcessing' => 'refund-processing',
+		],
+
 ];

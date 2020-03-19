@@ -11,6 +11,8 @@ use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use DB;
 use App\Resources\Products\Customer\ProductImageResource;
+use Illuminate\Support\Facades\Config;
+
 class OrdersController extends ExtendedResourceController {
 	use ValidatesRequest;
 
@@ -121,19 +123,26 @@ class OrdersController extends ExtendedResourceController {
 	}
 
 	public function updateOrderStatus($id='', $status= '')
-	 { 
-	 	DB::enableQueryLog(); 
-	 	$customer = array();
+	 {   
+	 	// DB::enableQueryLog();  
 	 	$response = responseApp();
 	 	try {
 	 		$data = Order::find($id);  
-		 	if($data!=null){
-		 		$data->update([
-		 			'status' => $status]); 
-			$response->status(HttpOkay)->message('Status Updated Successfully');
+		 	if(!empty($data)){
+		 		$order_status= Config::get('app.order_status'); 
+
+		 		if (in_array($status, $order_status)) {  
+			 		$data->update([
+			 			'status' => $status
+			 		]); 
+					$response->status(HttpOkay)->message('Status Updated Successfully'); 
+				}else{
+					$response->status(HttpOkay)->message('Status did Not matched in our record');
+				}
 		 	}else{
 		 		$response->status(HttpResourceNotFound)->message('Order Not Found');
-		 	}  
+		 	} 
+
 	 	} catch (Throwable $exception) {
 	 		 
 	 		 $response->status(HttpServerError)->message($exception->getMessage());
@@ -154,6 +163,19 @@ class OrdersController extends ExtendedResourceController {
 		finally {
 			return $response->send();
 		}
+	}
+
+	public function getOrderStatus()
+	{
+		$response = responseApp(); 
+	 	try { 
+	 		$order_status= Config::get('app.order_status');
+	 		$response->status(HttpOkay)->message('Status listing for orders.')->setValue('data', $order_status);
+	 	} catch (Throwable $exception) {
+	 		$response->status(HttpServerError)->message($exception->getMessage());
+	 	}finally{
+	 		return $response->send();
+	 	}
 	}
 
 	protected function guard() {
