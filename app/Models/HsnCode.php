@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class HsnCode extends Model {
 	use HasAttributeMethods;
 	protected $table = 'hsn-codes';
+	protected $primaryKey = 'hsnCode';
 	protected $fillable = [
 		'hsnCode',
 		'taxRate',

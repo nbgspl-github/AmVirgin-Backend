@@ -15,4 +15,16 @@ class Rule extends \Illuminate\Validation\Rule {
 	public static function existsPrimary(string $table, string $column = 'id') {
 		return self::exists($table, $column);
 	}
+
+	public static function minimum($value) {
+		return sprintf('min:%s', $value);
+	}
+
+	public static function maximum($value) {
+		return sprintf('max:%s', $value);
+	}
+
+	public static function size($value) {
+		return sprintf('size:%s', $value);
+	}
 }

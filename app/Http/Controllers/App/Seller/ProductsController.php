@@ -4,13 +4,14 @@ namespace App\Http\Controllers\App\Seller;
 
 use App\Classes\Rule;
 use App\Constants\OfferTypes;
+use App\Constants\WarrantyServiceType;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Interfaces\Directories;
-//use App\Interfaces\offerTypes;
 use App\Interfaces\Tables;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
+use App\Models\HsnCode;
 use App\Models\Product;
 use App\Models\ProductAttribute;
 use App\Models\ProductImage;
@@ -39,7 +40,7 @@ class ProductsController extends ExtendedResourceController {
 				'originalPrice' => ['bail', 'required', 'numeric', 'min:1', 'max:10000000'],
 				'sellingPrice' => ['bail', 'required', 'numeric', 'min:1', 'lte:originalPrice'],
 				'fulfillmentBy' => ['bail', 'required', Rule::in([Product::FulfillmentBy['Seller'], Product::FulfillmentBy['SellerSmart']])],
-				'hsn' => ['bail', 'required', Rule::existsPrimary(Tables::HsnCodes)],
+				'hsn' => ['bail', 'required', Rule::existsPrimary(Tables::HsnCodes, 'hsnCode')],
 				'currency' => ['bail', 'nullable', 'string', 'min:2', 'max:5', Rule::exists(Tables::Currencies, 'code')],
 				'promoted' => ['bail', 'boolean'],
 				'promotionStart' => ['bail', 'required_with:promoted', 'date'],
@@ -49,49 +50,25 @@ class ProductsController extends ExtendedResourceController {
 				'shortDescription' => ['bail', 'required', 'string', 'min:1', 'max:1000'],
 				'longDescription' => ['bail', 'required', 'string', 'min:1', 'max:100000'],
 				'sku' => ['bail', 'required', 'string', 'min:1', 'max:256', Rule::unique(Tables::Products, 'sku')],
-				'trailer' => ['bail', 'required', 'mimes:mp4', 'min:1', 'max:51200'],
-				'procurementSla' => ['bail', 'required', 'numeric', 'min:1', 'max:7'],
-				'localShippingCost' => ['bail', 'required', 'numeric', 'min:0', 'max:100000'],
-				'zonalShippingCost' => ['bail', 'required', 'numeric', 'min:0', 'max:100000'],
-				'internationalShippingCost' => ['bail', 'required', 'numeric', 'min:0', 'max:100000'],
-				'packageWeight' => ['bail', 'required', 'numeric', 'min:0', Product::Weight['Minimum'], Product::Weight['Maximum']],
-				'internationalShippingCost' => ['bail', 'required', 'numeric', 'min:0', 'max:100000'],
-				'internationalShippingCost' => ['bail', 'required', 'numeric', 'min:0', 'max:100000'],
-				'internationalShippingCost' => ['bail', 'required', 'numeric', 'min:0', 'max:100000'],
-				'internationalShippingCost' => ['bail', 'required', 'numeric', 'min:0', 'max:100000'],
+				'trailer' => ['bail', 'nullable', 'mimes:mp4', 'min:1', 'max:100000'],
+				'procurementSla' => ['bail', 'required', 'numeric', Rule::minimum(Product::ProcurementSLA['Minimum']), Rule::maximum(Product::ProcurementSLA['Maximum'])],
+				'localShippingCost' => ['bail', 'required', 'numeric', Rule::minimum(Product::ShippingCost['Local']['Minimum']), Rule::maximum(Product::ShippingCost['Local']['Maximum'])],
+				'zonalShippingCost' => ['bail', 'required', 'numeric', Rule::minimum(Product::ShippingCost['Zonal']['Minimum']), Rule::maximum(Product::ShippingCost['Zonal']['Maximum'])],
+				'internationalShippingCost' => ['bail', 'required', 'numeric', Rule::minimum(Product::ShippingCost['International']['Minimum']), Rule::maximum(Product::ShippingCost['International']['Maximum'])],
+				'packageWeight' => ['bail', 'required', 'numeric', Rule::minimum(Product::Weight['Minimum']), Rule::maximum(Product::Weight['Maximum'])],
+				'packageLength' => ['bail', 'required', 'numeric', Rule::minimum(Product::Dimensions['Length']['Minimum']), Rule::maximum(Product::Dimensions['Length']['Maximum'])],
+				'packageBreadth' => ['bail', 'required', 'numeric', Rule::minimum(Product::Dimensions['Breadth']['Minimum']), Rule::maximum(Product::Dimensions['Breadth']['Maximum'])],
+				'packageHeight' => ['bail', 'required', 'numeric', Rule::minimum(Product::Dimensions['Height']['Minimum']), Rule::maximum(Product::Dimensions['Height']['Maximum'])],
+				'domesticWarranty' => ['bail', 'required', 'numeric', Rule::minimum(Product::Warranty['Domestic']['Minimum']), Rule::maximum(Product::Warranty['Domestic']['Maximum'])],
+				'internationalWarranty' => ['bail', 'required', 'numeric', Rule::minimum(Product::Warranty['International']['Minimum']), Rule::maximum(Product::Warranty['International']['Maximum'])],
+				'warrantySummary' => ['bail', 'required', 'string', 'min:1', 'max:100000'],
+				'warrantyServiceType' => ['bail', 'required', 'string', Rule::in([WarrantyServiceType::OnSite, WarrantyServiceType::WalkIn])],
+				'coveredInWarranty' => ['bail', 'required', 'string', 'min:1', 'max:100000'],
+				'notCoveredInWarranty' => ['bail', 'required', 'string', 'min:1', 'max:100000'],
 				'files.*' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
-				'attributes' => ['bail', 'required'],
+				'attributes' => ['bail', 'nullable'],
 			],
 			'update' => [
-				'productName' => ['bail', 'required', 'string', 'min:1', 'max:500'],
-				'categoryId' => ['bail', 'required', 'exists:categories,id'],
-				'productType' => ['bail', 'required', 'string', 'min:1', 'max:256'],
-				'productMode' => ['bail', 'required', 'string', 'min:1', 'max:256'],
-				'listingType' => ['bail', 'required', 'string', 'min:1', 'max:256'],
-				'originalPrice' => ['bail', 'required', 'numeric', 'min:1', 'max:10000000'],
-				'offerType' => ['bail', 'required', Rule::in([OfferTypes::FlatRate, OfferTypes::Percentage])],
-				'offerValue' => ['bail', 'required', 'numeric', 'min:1', 'max:10000000'],
-				'currency' => ['bail', 'nullable', 'string', 'min:2', 'max:5', 'exists:currencies,code'],
-				'taxRate' => ['bail', 'required', 'numeric', 'min:0.00', 'max:99.99'],
-				'countryId' => ['bail', 'required', 'exists:countries,id'],
-				'stateId' => ['bail', 'required', 'numeric', 'min:1', 'max:9999999'],
-				'cityId' => ['bail', 'required', 'numeric', 'min:1', RuleMaxInt],
-				'zipCode' => ['bail', 'required', 'min:1', RuleMaxInt],
-				'address' => ['bail', 'required', 'string', 'min:2', 'max:500'],
-				'status' => ['bail', 'nullable', Rule::in([ProductStatus::DifferentStatus, ProductStatus::SomeOtherStatus, ProductStatus::SomeStatus])],
-				'promoted' => ['bail', 'boolean'],
-				'promotionStart' => ['bail', 'required_with:promoted', 'date'],
-				'promotionEnd' => ['bail', 'required_with:promoted', 'date', 'after:promotionStart'],
-				'visibility' => ['bail', 'boolean'],
-				'stock' => ['bail', 'required', 'numeric', 'min:0', RuleMaxStock],
-				'shippingCostType' => ['bail', 'required', Rule::in(['free', 'chargeable'])],
-				'shippingCost' => ['bail', 'required_if:shippingCostType,chargeable'],
-				'draft' => ['bail', 'boolean'],
-				'shortDescription' => ['bail', 'required', 'string', 'min:1', 'max:1000'],
-				'longDescription' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
-				'sku' => ['bail', 'required', 'string', 'min:1', 'max:256'],
-				'files.*' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
-				'attributes' => ['bail', 'required'],
 			],
 		];
 	}
@@ -143,60 +120,16 @@ class ProductsController extends ExtendedResourceController {
 	public function store() {
 		$response = responseApp();
 		try {
-			//TODO; Temporarily turning off validation for this. Make sure to turn it back on when going for deployment.
-//			$validated = $this->requestValid(\request(), $this->rules('store'));
-			$validated = request()->all();
-			$payload = (object)$validated;
-			$product = Product::create([
-				'name' => $payload->productName,
-				'categoryId' => $payload->categoryId,
-				'sellerId' => $this->user()->getKey(),
-				// 'productType' => $payload->productType,
-				// 'productMode' => $payload->productMode,
-				// 'listingType' => $payload->listingType,
-				'originalPrice' => $payload->originalPrice,
-				'sellingPrice' => $payload->sellingPrice,
-				'hsn' => $payload->HSN,
-				'taxCode' => $payload->taxCode,
-				'fulfilmentBy' => $payload->fulfilmentBy,
-				'procurementSla' => $payload->procurementSla,
-				'localShippingCost' => $payload->localShippingCost,
-				'zonalShippingCost' => $payload->zonalShippingCost,
-				'internationalShippingCost' => $payload->internationalShippingCost,
-				'packageWeight' => $payload->packageWeight,
-				'packageLength' => $payload->packageLength,
-				'packageHeight' => $payload->packageHeight,
-				'idealFor' => $payload->idealFor,
-				'videoUrl' => $payload->videoUrl,
-				'domesticWarranty' => $payload->domesticWarranty,
-				'internationalWarranty' => $payload->internationalWarranty,
-				'warrantySummary' => $payload->warrantySummary,
-				'warrantyServiceType' => $payload->warrantyServiceType,
-				'coveredInWarranty' => $payload->coveredInWarranty,
-				'notCoveredInWarranty' => $payload->notCoveredInWarranty,
-				// 'offerValue' => $payload->offerValue,
-				// 'offerType' => $payload->offerType,
-				// 'currency' => $payload->currency,
-				// 'taxRate' => $payload->taxRate,
-				// 'countryId' => $payload->countryId,
-				// 'stateId' => $payload->stateId,
-				// 'cityId' => $payload->cityId,
-				// 'zipCode' => $payload->zipCode,
-				// 'address' => $payload->address,
-				'status' => $payload->status,
-				// 'promoted' => $payload->promoted,
-				// 'promotionStart' => date('Y-m-d H:i:s', strtotime($payload->promotionStart)),
-				// 'promotionEnd' => date('Y-m-d H:i:s', strtotime($payload->promotionEnd)),
-				// 'visibility' => $payload->visibility,
-				'stock' => $payload->stock,
-				// 'shippingCostType' => $payload->shippingCostType,
-				// 'shippingCost' => $payload->shippingCost,
-				// 'soldOut' => request('stock') < 1,
-				// 'draft' => $payload->draft,
-				'shortDescription' => $payload->shortDescription,
-				'longDescription' => $payload->longDescription,
-				'sku' => $payload->sku,
-			]);
+			$validated = $this->requestValid(request(), $this->rules['store']);
+			/**
+			 * Calculating tax rate from HSN code.
+			 */
+			$validated['taxRate'] = HsnCode::find($validated['hsn'])->taxRate;
+			/**
+			 * Putting adequate seller Id read from auth.
+			 */
+			$validated['sellerId'] = $this->guard()->id();
+			$product = Product::create($validated);
 			collect(jsonDecodeArray($validated['attributes']))->each(function ($item) use ($product) {
 				$attribute = Attribute::retrieve($item['key']);
 				if ($attribute != null) {
@@ -222,11 +155,9 @@ class ProductsController extends ExtendedResourceController {
 					'tag' => sprintf('product-%d-images', $product->getKey()),
 				]);
 			});
-			$images = $product->images()->get()->transform(function (ProductImage $productImage) {
-				return [
-					'url' => SecuredDisk::access()->exists($productImage->path) ? SecuredDisk::access()->url($productImage->path) : null,
-				];
-			});
+			$images = $product->images()->get()->transform(fn(ProductImage $productImage) => [
+				'url' => SecuredDisk::access()->exists($productImage->path) ? SecuredDisk::access()->url($productImage->path) : null,
+			]);
 			$images = $images->filter()->values();
 			$response->status(HttpCreated)->setValue('data', $product)->setValue('images', $images)->message('Product details were saved successfully.');
 		}
@@ -380,6 +311,6 @@ class ProductsController extends ExtendedResourceController {
 	}
 
 	protected function guard() {
-		return Auth::guard('seller-api');
+		return auth('seller-api');
 	}
 }

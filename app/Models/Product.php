@@ -127,6 +127,20 @@ class Product extends Model {
 			'Maximum' => 10000,
 		],
 	];
+	const Warranty = [
+		'Domestic' => [
+			'Minimum' => 0,
+			'Maximum' => 300,
+		],
+		'International' => [
+			'Minimum' => 0,
+			'Maximum' => 300,
+		],
+	];
+	const WarrantyType = [
+		'OnSite' => 'on-site',
+		'WalkIn' => 'walk-in',
+	];
 
 	/**
 	 * @return HasMany
