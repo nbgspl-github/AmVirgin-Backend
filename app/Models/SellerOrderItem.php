@@ -21,6 +21,6 @@ class SellerOrderItem extends Model {
 	];
 
 	public function productDetails() {
-		return $this->hasMany(Product::class, 'id','productId')->with('images');
+		return $this->hasOne(Product::class, 'id','productId')->with('images');
 	}
 }
