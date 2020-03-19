@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
+use App\Resources\Shop\Customer\HomePage\TrendingNowResource;
 
 class VideosController extends ExtendedResourceController {
 	public function __construct() {
@@ -25,9 +26,13 @@ class VideosController extends ExtendedResourceController {
 	public function show($id) {
 		$response = responseApp();
 		try {
+			
 			$video = Video::retrieveThrows($id);
 			$payload = new VideoResource($video);
 			$payload = $payload->jsonSerialize();
+
+			$payload['content'] = $payload['recommended'] = array();
+			
 			if ($video->getType() == VideoTypes::Series) {
 				$seasons = $video->sources()->get()->groupBy('season')->transform(function (Collection $season) {
 					return $season->groupBy('episode')->transform(function (Collection $episode) {
@@ -57,7 +62,20 @@ class VideosController extends ExtendedResourceController {
 					];
 				})->values();
 				$payload['content'] = $seasons;
+			} 
+
+			if ($video->getType() == 'movie' ) {
+				$trendingNow = Video::where([
+					['trending', true],
+					['pending', false],
+					['type', 'movie'],
+					])->orderBy('rating', 'DESC')
+						->limit(15)->get();
+					$trendingNow = TrendingNowResource::collection($trendingNow); 
+					 
+					$payload['recommended'] = $trendingNow;
 			}
+
 			$response->status(HttpOkay)->message('Success')->setValue('data', $payload);
 		}
 		catch (ModelNotFoundException $exception) {
