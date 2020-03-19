@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
-use Illuminate\Support\Facades\Storage;
 
 class Video extends Model {
 	use RetrieveResource;
@@ -488,18 +487,4 @@ class Video extends Model {
 			->generateSlugsFrom('title')
 			->saveSlugsTo('slug');
 	}
-
-	public function getTrailerAttribute() { 
-        if (!empty($this->attributes['trailer']) ) {  
-            return Storage::disk('secured')->url($this->attributes['trailer']);
-        } 
-        return $this->attributes['trailer'];
-    }
-    public function getPosterAttribute() { 
-        if (!empty($this->attributes['poster']) ) {  
-            return Storage::disk('secured')->url($this->attributes['poster']);
-        } 
-        return $this->attributes['poster'];
-    }
-    
 }
