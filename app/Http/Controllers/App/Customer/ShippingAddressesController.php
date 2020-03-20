@@ -58,6 +58,7 @@ class ShippingAddressesController extends ExtendedResourceController {
 	}
 
 	public function store() {
+		print_r(request()->all());die;
 		$response = responseApp();
 		$validated = null;
 		try {
@@ -112,8 +113,8 @@ class ShippingAddressesController extends ExtendedResourceController {
 
 	public function update($id) {
 		$response = responseApp();
-		try {
-			$validated = (object)$this->$this->requestValid(request(), $this->rules['update']);
+		try { 
+			$validated = (object)$this->requestValid(request(), $this->rules['update']); 
 			$address = ShippingAddress::where([
 				['customerId', $this->guard()->id()],
 				['id', $id],
