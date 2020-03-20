@@ -32,6 +32,8 @@ class AuthController extends BaseAuthController {
 			$seller->countryId = $validated->countryId;
 			$seller->stateId = $validated->stateId;
 			$seller->cityId = $validated->cityId;
+			$seller->pinCode = $validated->pinCode;
+			$seller->address = $validated->address;
 			$seller->save();
 			$response->status(HttpOkay)->message('Seller profile was updated successfully.');
 		}
