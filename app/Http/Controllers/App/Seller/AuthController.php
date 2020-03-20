@@ -8,6 +8,7 @@ use App\Models\Seller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
+use Illuminate\Http\Request;
 
 class AuthController extends BaseAuthController {
 	protected $ruleSet;
@@ -46,6 +47,11 @@ class AuthController extends BaseAuthController {
 		finally {
 			return $response->send();
 		}
+	}
+
+	public function changePassword(Request $request)
+	{
+		echo $this->guard()->id(); die();
 	}
 
 	protected function authTarget(): string {
