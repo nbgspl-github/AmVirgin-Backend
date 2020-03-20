@@ -22,6 +22,16 @@ class Order extends Model {
 		'paymentMode',
 		'status',
 	];
+	protected $hidden = ['created_at','updated_at'];
+
+	public static $status = [ 
+		'Placed'           => 'placed',
+		'Dispatched'       => 'dispatched',
+		'Delivered'        => 'delivered',
+		'Cancelled'        => 'cancelled',
+		'RefundProcessing' => 'refund-processing',
+		 
+     ];
 
 	public function setOrderNumberAttribute($value) {
 		$this->attributes['orderNumber'] = sprintf('AVG-%d-%d', time(), rand(1, 1000));
@@ -40,6 +50,14 @@ class Order extends Model {
 
 	public function address() {
 		return $this->belongsTo(ShippingAddress::class, 'addressId')->with('city','state');
+	}
+	public function order() {
+			return $this->belongsTo(ShippingAddress::class, 'addressId')->with('city','state');
+		}
+
+	public static function getAllStatus()
+	{
+		return self::$status;
 	}
 
 

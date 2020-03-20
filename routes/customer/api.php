@@ -111,7 +111,7 @@ Route::prefix('search')->group(function () {
 	Route::get(Str::Empty, [GlobalSearchController::class, 'search']);
 });
 
-Route::prefix('orders')->group(function () {
+Route::prefix('orders')->middleware('auth:customer-api')->group(function () {
 	Route::get(Str::Empty, [OrdersController::class, 'getorders']);
 	Route::get('{param}', [OrdersController::class, 'getorderdetails']);
 });
