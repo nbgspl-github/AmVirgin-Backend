@@ -44,6 +44,8 @@ return [
 					'name' => ['bail', 'required', 'string', 'min:2', 'max:256'],
 					'businessName' => ['bail', 'required', 'string', 'min:2', 'max:256'],
 					'description' => ['bail', 'nullable', 'string', 'min:1', 'max:2000'],
+					'pinCode' => ['bail', 'nullable', 'string', 'min:1', 'max:2000'],
+					'address' => ['bail', 'nullable', 'string', 'min:1', 'max:2000'],
 					'countryId' => ['bail', 'required', Rule::exists(Tables::Countries, 'id')],
 					'stateId' => ['bail', 'required', Rule::exists(Tables::States, 'id')],
 					'cityId' => ['bail', 'required', Rule::exists(Tables::Cities, 'id')],

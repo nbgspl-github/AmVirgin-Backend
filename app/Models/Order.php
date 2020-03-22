@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\Product;
 use App\Models\OrderItem;
 use App\Models\ShippingAddress;
+use App\Models\SellerOrder;
 
 class Order extends Model {
 	protected $table = 'orders';
@@ -51,9 +52,7 @@ class Order extends Model {
 	public function address() {
 		return $this->belongsTo(ShippingAddress::class, 'addressId')->with('city','state');
 	}
-	public function order() {
-			return $this->belongsTo(ShippingAddress::class, 'addressId')->with('city','state');
-		}
+	
 
 	public static function getAllStatus()
 	{

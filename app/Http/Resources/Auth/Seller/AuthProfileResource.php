@@ -17,6 +17,8 @@ class AuthProfileResource extends JsonResource {
 			'state' => $this->state,
 			'city' => $this->city,
 			'rating' => $this->rating,
+			'address' => $this->address,
+			'pinCode' => $this->pinCode,
 			'alternateMobile' => $this->alternateMobile,
 			'avatar' => SecuredDisk::existsUrl($this->avatar),
 		];
