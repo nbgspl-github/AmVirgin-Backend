@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Web\Admin\Products\Attributes;
 
 use App\Http\Controllers\BaseController;
+use App\Models\Attribute;
 use App\Models\Category;
-use Illuminate\View\View;
 
 class AttributesController extends BaseController{
 	public function __construct(){
@@ -12,7 +12,7 @@ class AttributesController extends BaseController{
 	}
 
 	public function index(){
-
+		$attributes = Attribute::all();
 	}
 
 	public function create(){
