@@ -72,19 +72,17 @@ class AuthController extends BaseAuthController {
 	        	$seller = Seller::retrieveThrows($this->guard()->id());
 
 	            if ((Hash::check(request('old_password'), $seller->password)) == false) {
-	                // $arr = array("status" => 400, "message" => "Check your old password.", "data" => array());
+	                 
 	                $response->status(HttpUnauthorized)->message('Check your old password');
 
 	            } else if ((Hash::check(request('new_password'), $seller->password)) == true) {
 
-	            	$response->status(HttpUnauthorized)->message('Please enter a password which is not similar then current password');
-
-	                // $arr = array("status" => 400, "message" => "Please enter a password which is not similar then current password.", "data" => array());
+	            	$response->status(HttpUnauthorized)->message('Please enter a password which is not similar then current password'); 
+	                 
 	            } else {
 	                $seller->update(['password' => Hash::make($input['new_password'])]);
 	                $response->status(HttpOkay)->message('Password updated successfully');
-
-	                // $arr = array("status" => 200, "message" => "Password updated successfully.", "data" => array());
+ 
 	            }
 	        } catch (Throwable $exception){
 	        	$response->status(HttpServerError)->message($exception->getMessage());
