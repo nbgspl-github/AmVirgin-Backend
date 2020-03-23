@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends BaseAuthController {
 	protected $ruleSet;
@@ -51,8 +53,47 @@ class AuthController extends BaseAuthController {
 
 	public function changePassword(Request $request)
 	{
-		echo $this->guard()->id(); die();
-	}
+		$response = responseApp();
+
+ 		$input = $request->all();  
+
+	    $rules = array(
+	        'old_password' => 'required',
+	        'new_password' => 'required|min:6',
+	        'confirm_password' => 'required|same:new_password',
+	    );
+	    $validator = Validator::make($input, $rules);
+	    if ($validator->fails()) {
+	    	$response->status(HttpServerError)->message($validator->errors()->first())
+	        // $arr = array("status" => 400, "message" => $validator->errors()->first(), "data" => array());
+	    } else {
+	        try {
+
+	        	$seller = Seller::retrieveThrows($this->guard()->id());
+
+	            if ((Hash::check(request('old_password'), $seller->password)) == false) {
+	                // $arr = array("status" => 400, "message" => "Check your old password.", "data" => array());
+	                $response->status(HttpUnauthorized)->message('Check your old password');
+
+	            } else if ((Hash::check(request('new_password'), $seller->password)) == true) {
+
+	            	$response->status(HttpUnauthorized)->message('Please enter a password which is not similar then current password');
+
+	                // $arr = array("status" => 400, "message" => "Please enter a password which is not similar then current password.", "data" => array());
+	            } else {
+	                $seller->update(['password' => Hash::make($input['new_password'])]);
+	                $response->status(HttpOkay)->message('Password updated successfully');
+
+	                // $arr = array("status" => 200, "message" => "Password updated successfully.", "data" => array());
+	            }
+	        } catch (Throwable $exception){
+	        	$response->status(HttpServerError)->message($exception->getMessage());
+				}
+				finally {
+					return $response->send();
+				}
+			}
+	    }
 
 	protected function authTarget(): string {
 		return Seller::class;
