@@ -1,7 +1,7 @@
 <?php
 namespace App\Interfaces;
 
-interface offerTypes{
+interface OfferTypes {
 	const FlatRate = 1;
 	const Percentage = 2;
 

@@ -58,7 +58,6 @@ class ShippingAddressesController extends ExtendedResourceController {
 	}
 
 	public function store() {
-		print_r(request()->all());die;
 		$response = responseApp();
 		$validated = null;
 		try {
