@@ -64,7 +64,7 @@ class AuthController extends BaseAuthController {
 	    );
 	    $validator = Validator::make($input, $rules);
 	    if ($validator->fails()) {
-	    	$response->status(HttpServerError)->message($validator->errors()->first())
+	    	$response->status(HttpServerError)->message($validator->errors()->first());
 	        // $arr = array("status" => 400, "message" => $validator->errors()->first(), "data" => array());
 	    } else {
 	        try {
