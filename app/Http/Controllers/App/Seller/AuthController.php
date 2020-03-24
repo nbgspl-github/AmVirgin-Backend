@@ -116,15 +116,22 @@ class AuthController extends BaseAuthController {
 
 	        	$password  = $request->password;
 	        	$token     = $request->token;
+
 			    $tokenData = DB::table('password_resets')
 			    ->where('token', $token)->first();
 
-			    $seller = Seller::where('email', $tokenData->email)->first();
-			     if ( !$seller || !$tokenData){
+			    if(!empty($tokenData)){
+			    	$seller = Seller::where('email', $tokenData->email)->first();
+				    if ( !$seller){
 
-			     	$response->status(HttpResourceNotFound)->message('Invalid seller email or token.');
-			     	 return $response->send();
-			     }  //or wherever you want
+				     	$response->status(HttpResourceNotFound)->message('Invalid seller email.');
+				     	return $response->send();
+				     } 
+			    }else{
+			    	$response->status(HttpResourceNotFound)->message('Invalid token.');
+				    return $response->send();
+			    }
+			     //or wherever you want
 
 			     $seller->password = Hash::make($password);
 			     $seller->update(); //or $seller->save(); 
