@@ -120,7 +120,11 @@ class AuthController extends BaseAuthController {
 			    ->where('token', $token)->first();
 
 			    $seller = Seller::where('email', $tokenData->email)->first();
-			     if ( !$seller ) return $response->status(HttpResourceNotFound)->message('Could not find seller for that key.'); //or wherever you want
+			     if ( !$seller || !$tokenData){
+
+			     	$response->status(HttpResourceNotFound)->message('Invalid seller email or token.');
+			     	 return $response->send();
+			     }  //or wherever you want
 
 			     $seller->password = Hash::make($password);
 			     $seller->update(); //or $seller->save(); 
