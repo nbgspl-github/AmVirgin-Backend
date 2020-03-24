@@ -164,8 +164,7 @@ class AuthController extends BaseAuthController {
 	    		//create a new token to be sent to the user. 
 			    DB::table('password_resets')->insert([
 			        'email' => $request->email,
-			        'token' => str_random(60), //change 60 to any length you want
-			        'created_at' => Carbon::now()
+			        'token' => str_random(60)
 			    ]);
 
 				$tokenData = DB::table('password_resets')
