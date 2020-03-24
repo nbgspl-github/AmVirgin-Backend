@@ -161,9 +161,9 @@ class AuthController extends BaseAuthController {
 	    } else {
 
 	    	try { 
-	    		die('dsf');
+
 	    		//create a new token to be sent to the user. 
-			    DB::table('password_resets')->insert([
+			    DB::table('password_resets')->create([
 			        'email' => $request->email,
 			        'token' => str_random(60)
 			    ]);
@@ -173,7 +173,7 @@ class AuthController extends BaseAuthController {
 
 			   $dataSet['token'] = $tokenData->token;
 			   $dataSet['email'] = $request->email; // or $email = $tokenData->email; 
-
+die('dsf');
 			   $response->status(HttpOkay)->message('Password reset token')->setValue('data', $dataSet);
  
 	    	} catch (ModelNotFoundException $exception) {
