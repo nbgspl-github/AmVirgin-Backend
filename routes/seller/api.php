@@ -30,6 +30,8 @@ Route::post('/change-password', [AuthController::class, 'changePassword'])->name
 
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('seller.forgotPassword');
 
+Route::post('/reset-password-token', [AuthController::class, 'getResetPasswordToken'])->name('seller.getResetPasswordToken');
+
 Route::prefix('categories')->group(function () {
 	Route::get('/', [CategoriesController::class, 'index'])->name('seller.categories.index');
 	Route::get('/{id}/attributes', [AttributeListController::class, 'show'])->name('seller.categories.attributes.index');

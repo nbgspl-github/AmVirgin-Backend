@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Support\Facades\Password;
+use Carbon\Carbon;
+use DB;
 
 class AuthController extends BaseAuthController {
 	protected $ruleSet;
@@ -102,28 +104,28 @@ class AuthController extends BaseAuthController {
 	    $input = $request->all();
 	    $rules = array(
 	        'email' => "required|email",
+	        'token' => "required",
 	    );
 	    $validator = Validator::make($input, $rules);
 	    if ($validator->fails()) {
 	        // $arr = array("status" => 400, "message" => $validator->errors()->first());
 	        $response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
 	    } else {
-	        try {
-	            $reset_response = Password::sendResetLink($request->only('email'), function (Message $message) {
-	                $message->subject($this->getEmailSubject());
-	            });
-	            switch ($reset_response) {
-	                case Password::RESET_LINK_SENT:
-	                    // return \Response::json(array("status" => 200, "message" => trans($response), "data" => array()));
-	            	return $response->status(HttpOkay)->message(trans($reset_response));
-	                case Password::INVALID_USER:
-	                    // return \Response::json(array("status" => 400, "message" => trans($response), "data" => array()));
-	                	return $response->status(HttpOkay)->message(trans($reset_response));
-	            }
+	        try { 
 
-	        // return $response = Password::RESET_LINK_SENT
-	        //     ? response()->json(['status' => 'Success','message' => 'Reset Password Link Sent'],201)
-	        //     : response()->json(['status' => 'Fail','message' => 'Reset Link Could Not Be Sent'],401);
+	        	$password  = $request->password;
+	        	$token     = $request->token;
+			    $tokenData = DB::table('password_resets')
+			    ->where('token', $token)->first();
+
+			    $seller = Seller::where('email', $tokenData->email)->first();
+			     if ( !$seller ) return $response->status(HttpResourceNotFound)->message('Could not find seller for that key.'); //or wherever you want
+
+			     $seller->password = Hash::make($password);
+			     $seller->update(); //or $seller->save(); 
+
+			    // If the seller shouldn't reuse the token later, delete the token 
+			    DB::table('password_resets')->where('email', $seller->email)->delete();
 
 	        } catch (ModelNotFoundException $exception) {
 	            // $arr = array("status" => 400, "message" => $ex->getMessage(), "data" => []);
@@ -138,6 +140,52 @@ class AuthController extends BaseAuthController {
 	    // return \Response::json($arr);
 	    return $response->send();
 
+	}
+
+
+	public function getResetPasswordToken()
+	{
+		$response = responseApp();
+		$dataSet =array();
+		 $rules = array(
+	        'email' => "required|email",
+	    );
+	    $validator = Validator::make($input, $rules);
+
+		if ($validator->fails()) {
+			
+	        $response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
+	        return $response->send();
+
+	    } else {
+
+	    	try { 
+	    		//create a new token to be sent to the user. 
+			    DB::table('password_resets')->insert([
+			        'email' => $request->email,
+			        'token' => str_random(60), //change 60 to any length you want
+			        'created_at' => Carbon::now()
+			    ]);
+
+				$tokenData = DB::table('password_resets')
+		    	->where('email', $request->email)->first();
+
+			   $dataSet['token'] = $tokenData->token;
+			   $dataSet['email'] = $request->email; // or $email = $tokenData->email; 
+
+			   $response->status(HttpOkay)->message('Password reset token')->setValue('data', $dataSet);
+ 
+	    	} catch (ModelNotFoundException $exception) {
+	            // $arr = array("status" => 400, "message" => $ex->getMessage(), "data" => []); 
+	            $response->status(HttpResourceNotFound)->message('Could not find seller for that key.');
+
+	        } catch (EThrowable $exception) {
+	           $response->status(HttpServerError)->message($exception->getMessage());
+				
+	        }finally {
+				return $response->send();
+			} 
+		}
 	}
 
 	protected function authTarget(): string {
