@@ -132,7 +132,7 @@ class AuthController extends BaseAuthController {
 
 	            $response->status(HttpResourceNotFound)->message('Could not find seller for that key.');
 
-	        } catch (EThrowable $exception) {
+	        } catch (Throwable $exception) {
 	           $response->status(HttpServerError)->message($exception->getMessage());
 				
 	        }
@@ -146,9 +146,9 @@ class AuthController extends BaseAuthController {
 	public function getResetPasswordToken(Request $request)
 	{
 		$response = responseApp();
-		$dataSet = array();
-		$input = request()->all();
-		$rules = array(
+		$dataSet  = array();
+		$input    = request()->all();
+		$rules    = array(
 	        'email' => "required|email",
 	    );
 	    $validator = Validator::make($input, $rules);
@@ -160,10 +160,11 @@ class AuthController extends BaseAuthController {
 
 	    } else {
 
-	    	try { 
-
-	    		//create a new token to be sent to the user. 
-			    DB::table('password_resets')->create([
+	    	try {  
+	    		$user = User::where ('email', $request->email)-first();
+			    if ( !$user ) return redirect()->back()->withErrors(['error' => '404']);
+ 
+			    DB::table('password_resets')->insert([
 			        'email' => $request->email,
 			        'token' => str_random(60),
 			    ]);
@@ -175,9 +176,8 @@ class AuthController extends BaseAuthController {
 			   $dataSet['email'] = $request->email; // or $email = $tokenData->email; 
 				$response->status(HttpOkay)->message('Password reset token')->setValue('data', $dataSet);
 
-	        } catch (EThrowable $exception) {
-	        	die('fine');
-	           $response->status(HttpServerError)->message('Invalid Response');
+	        } catch (Throwable $exception) { 
+	           $response->status(HttpServerError)->message($exception->getMessage());
 				
 	        }finally {
 				return $response->send();
