@@ -146,7 +146,7 @@ class AuthController extends BaseAuthController {
 	public function getResetPasswordToken(Request $request)
 	{
 		$response = responseApp();
-		$dataSet =array();
+		$dataSet = array();
 		$input = request()->all();
 		$rules = array(
 	        'email' => "required|email",
@@ -163,17 +163,17 @@ class AuthController extends BaseAuthController {
 	    	try { 
 
 	    		//create a new token to be sent to the user. 
-			    DB::table('password_resets')->insert([
+			    DB::table('password_resets')->create([
 			        'email' => $request->email,
-			        'token' => str_random(60)
+			        'token' => str_random(60),
 			    ]);
 
 				$tokenData = DB::table('password_resets')
-		    	->where('email', $request->email)->first();
+		    				->where('email', $request->email)->first();
 
 			   $dataSet['token'] = $tokenData->token;
 			   $dataSet['email'] = $request->email; // or $email = $tokenData->email; 
-			   $response->status(HttpOkay)->message('Password reset token')->setValue('data', $dataSet);
+			$response->status(HttpOkay)->message('Password reset token')->setValue('data', $dataSet);
  
 	    	} catch (ModelNotFoundException $exception) {
 	            // $arr = array("status" => 400, "message" => $ex->getMessage(), "data" => []); 
