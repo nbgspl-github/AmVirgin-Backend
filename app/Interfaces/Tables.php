@@ -2,7 +2,7 @@
 
 namespace App\Interfaces;
 
-interface Tables {
+interface Tables{
 	const Genres = 'genres';
 	const Sliders = 'sliders';
 	const ShopSliders = 'shop-sliders';
@@ -20,4 +20,5 @@ interface Tables {
 	const Categories = 'categories';
 	const Currencies = 'currencies';
 	const HsnCodes = 'hsn-codes';
+	const Brands = 'brands';
 }

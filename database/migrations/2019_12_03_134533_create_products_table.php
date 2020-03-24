@@ -5,18 +5,19 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductsTable extends Migration {
+class CreateProductsTable extends Migration{
 	/**
 	 * Run the migrations.
 	 * @return void
 	 */
-	public function up() {
-		Schema::create('products', function (Blueprint $table) {
+	public function up(){
+		Schema::create('products', function (Blueprint $table){
 			$table->bigIncrements('id');
 			$table->string('name', 500)->comment('Name or title of product.');
 			$table->string('slug', 1000)->comment('Slug title of product.');
 			$table->unsignedBigInteger('categoryId')->comment('Category under which this product falls.');
 			$table->unsignedBigInteger('sellerId')->comment('Seller to whom this product belongs.');
+			$table->unsignedSmallInteger('brandId')->comment('Brand to which this product belongs.');
 			$table->enum('listingStatus', ['active', 'inactive'])->comment('Whether the product will show up in listing or not?');
 			$table->integer('originalPrice')->default(0)->comment('MRP of product.');
 			$table->integer('sellingPrice')->default(0)->comment('Actual selling price of product');
@@ -59,7 +60,7 @@ class CreateProductsTable extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down() {
+	public function down(){
 		Schema::dropIfExists('products');
 	}
 }

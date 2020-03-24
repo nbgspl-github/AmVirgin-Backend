@@ -4,7 +4,7 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Attributes'])
+					@include('admin.extras.header', ['title'=>'Attributes','action'=>['link'=>route('admin.products.attributes.create'),'text'=>'Create an attribute']])
 				</div>
 				<div class="card-body animatable">
 					<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -12,38 +12,26 @@
 						<tr>
 							<th class="text-center">No.</th>
 							<th class="text-center">Name</th>
-							<th class="text-center">Description</th>
-							<th class="text-center">Original Price</th>
-							<th class="text-center">Offer Value</th>
-							<th class="text-center">Discount Type</th>
-							<th class="text-center">Action(s)</th>
+							<th class="text-center">Code</th>
+							<th class="text-center">Category</th>
+							<th class="text-center">Seller Interface Type</th>
+							<th class="text-center">Customer Interface Type</th>
+							<th class="text-center">Required</th>
+							<th class="text-center">Filterable</th>
 						</tr>
 						</thead>
 
 						<tbody>
-						@foreach($products as $product)
-							<tr id="content_row_{{$product->getKey()}}">
+						@foreach($attributes as $attribute)
+							<tr>
 								<td class="text-center">{{$loop->index+1}}</td>
-								<td class="text-center">{{$product->name()}}</td>
-								<td class="text-center">{{__ellipsis($product->shortDescription(),40)}}</td>
-								<td class="text-center">{{$product->originalPrice()}}</td>
-								<td class="text-center">{{$product->offerValue()}}</td>
-								<td class="text-center">
-									@if($product->offerType()==\App\Constants\OfferTypes::NoOffer)
-										{{'No offer'}}
-									@elseif ($product->offerType()==\App\Constants\OfferTypes::FlatRate)
-										{{'Fixed amount'}}
-									@elseif($product->offerType()==\App\Constants\OfferTypes::Percentage)
-										{{'Percentage off'}}
-									@endif
-								</td>
-								<td class="text-center">
-									<div class="btn-toolbar" role="toolbar">
-										<div class="btn-group mx-auto" role="group">
-											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.subscription-plans.edit',$product->getKey())}}" @include('admin.extras.tooltip.left', ['title' => 'View details'])><i class="dripicons-search"></i></a>
-										</div>
-									</div>
-								</td>
+								<td class="text-center">{{$attribute->name()}}</td>
+								<td class="text-center">{{$attribute->code()}}</td>
+								<td class="text-center">{{$attribute->category->name}}</td>
+								<td class="text-center">{{$attribute->sellerInterfaceType}}</td>
+								<td class="text-center">{{$attribute->customerInterfaceType}}</td>
+								<td class="text-center">{{__boolean($attribute->required)}}</td>
+								<td class="text-center">{{__boolean($attribute->filterable)}}</td>
 							</tr>
 						@endforeach
 						</tbody>

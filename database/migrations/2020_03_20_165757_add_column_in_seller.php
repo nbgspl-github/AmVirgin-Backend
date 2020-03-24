@@ -24,7 +24,7 @@ class AddColumnInSeller extends Migration{
 	 */
 	public function down(){
 		Schema::table('sellers', function (Blueprint $table){
-			Schema::dropColumn(['pinCode', 'address']);
+			$table->dropColumn(['pinCode', 'address']);
 		});
 	}
 }

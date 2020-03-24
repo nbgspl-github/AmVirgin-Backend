@@ -4,16 +4,19 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductVariantsTable extends Migration{
+class CreateBrandsTable extends Migration{
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
 	public function up(){
-		Schema::create('product-variants', function (Blueprint $table){
+		Schema::create('brands', function (Blueprint $table){
 			$table->bigIncrements('id');
-
+			$table->string('name');
+			$table->string('slug', 500);
+			$table->string('logo', \App\Constants\Constants::MaxFilePathLength)->nullable();
+			$table->boolean('active')->default(false);
 			$table->timestamps();
 		});
 	}
@@ -24,6 +27,6 @@ class CreateProductVariantsTable extends Migration{
 	 * @return void
 	 */
 	public function down(){
-		Schema::dropIfExists('product-variants');
+		Schema::dropIfExists('brands');
 	}
 }

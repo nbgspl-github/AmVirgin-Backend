@@ -3,44 +3,35 @@
 namespace App\Models;
 
 use App\Traits\FluentConstructor;
+use App\Traits\HasAttributeMethods;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class Attribute extends Model {
-	use FluentConstructor;
-	use RetrieveResource;
+class Attribute extends Model{
+	use FluentConstructor, RetrieveResource, HasAttributeMethods;
 
 	protected $table = 'attributes';
-
 	protected $fillable = [
 		'name',
 		'categoryId',
+		'code',
+		'sellerInterfaceType',
+		'customerInterfaceType',
+		'code',
+		'genericType',
+		'required',
+		'filterable',
 	];
-
 	protected $hidden = [
 		'created_at',
 		'updated_at',
 	];
 
-	public function getCategoryId(): int {
-		return $this->categoryId;
-	}
-
-	public function setCategoryId(int $categoryId): Attribute {
-		$this->categoryId = $categoryId;
-		return $this;
-	}
-
-	public function getName(): string {
-		return $this->name;
-	}
-
-	public function setName(string $name): Attribute {
-		$this->name = $name;
-		return $this;
-	}
-
-	public function values() {
+	public function values(){
 		return $this->hasMany('App\Models\AttributeValue', 'attributeId');
+	}
+
+	public function category(){
+		return $this->belongsTo(Category::class, 'categoryId');
 	}
 }

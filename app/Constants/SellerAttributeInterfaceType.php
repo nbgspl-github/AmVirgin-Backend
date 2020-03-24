@@ -3,8 +3,8 @@
 namespace App\Constants;
 
 class SellerAttributeInterfaceType{
-	const DropDown = 'drop-down';
-	const InputField = 'input-field';
-	const MultiEntry = 'multi-entry';
-	const SingleChoice = 'single-choice';
+	const Select = 'select';
+	const Text = 'text';
+	const TextArea = 'text-area';
+	const Radio = 'radio';
 }

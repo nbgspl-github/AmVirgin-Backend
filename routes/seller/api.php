@@ -28,17 +28,17 @@ Route::put('/profile', [AuthController::class, 'updateProfile'])->name('seller.u
 
 Route::post('/change-password', [AuthController::class, 'changePassword'])->name('seller.changePassword')->middleware('auth:seller-api');
 
-Route::prefix('categories')->group(function () {
+Route::prefix('categories')->group(function (){
 	Route::get('/', [CategoriesController::class, 'index'])->name('seller.categories.index');
 	Route::get('/{id}/attributes', [AttributeListController::class, 'show'])->name('seller.categories.attributes.index');
 	Route::post('/{id}/attributes', [AttributeListController::class, 'store'])->name('seller.categories.attributes.store');
 });
 
-Route::prefix('attributes')->group(function () {
+Route::prefix('attributes')->group(function (){
 	Route::get('/{attributeId}/values', [AttributeValuesController::class, 'show']);
 });
 
-Route::middleware('auth:seller-api')->prefix('products')->group(function () {
+Route::middleware('auth:seller-api')->prefix('products')->group(function (){
 	Route::get('/', [ProductsController::class, 'index'])->name('seller.products.index');
 	Route::post('/', [ProductsController::class, 'store'])->name('seller.products.store');
 	Route::get('{id}', [ProductsController::class, 'show'])->name('seller.products.show');
@@ -49,33 +49,39 @@ Route::middleware('auth:seller-api')->prefix('products')->group(function () {
 	Route::delete('/attributes/{id}', [ProductsAttributesController::class, 'delete'])->name('seller.products.attributes.delete');
 });
 
-Route::prefix('currencies')->group(function () {
+Route::prefix('currencies')->group(function (){
 	Route::get('/', [CurrenciesController::class, 'index'])->name('seller.currencies.index');
 });
 
-Route::prefix('countries')->group(function () {
+Route::prefix('countries')->group(function (){
 	Route::get('/', [CountriesController::class, 'index'])->name('seller.countries.index');
 	Route::get('{countryId}/states', [StatesController::class, 'index'])->name('seller.states.index');
 	Route::get('states/{stateId}/cities', [CitiesController::class, 'index'])->name('seller.states.index');
 });
 
-Route::prefix('orders')->middleware('auth:seller-api')->group(function () {
+Route::prefix('orders')->middleware('auth:seller-api')->group(function (){
 	Route::get(Str::Empty, [OrdersController::class, 'index']);
 	Route::get('/{param}', [OrdersController::class, 'getOrdersDetails']);
-	Route::get('/{id}/{status}', [OrdersController::class, 'updateOrderStatus']); 
+	Route::get('/{id}/{status}', [OrdersController::class, 'updateOrderStatus']);
 });
-Route::prefix('order')->middleware('auth:seller-api')->group(function () {  
+Route::prefix('order')->middleware('auth:seller-api')->group(function (){
 	Route::get('/status', [OrdersController::class, 'getOrderStatus']);
 });
 
-Route::prefix('orders-by-status')->middleware('auth:seller-api')->group(function () {  
+Route::prefix('orders-by-status')->middleware('auth:seller-api')->group(function (){
 	Route::get('/{param}', [OrdersController::class, 'getOrderByStatus']);
 });
 
-Route::prefix('customer')->middleware('auth:seller-api')->group(function () {
+Route::prefix('customer')->middleware('auth:seller-api')->group(function (){
 	Route::get('{param}', [OrdersController::class, 'customer']);
 });
 
-Route::prefix('hsn')->group(function () {
+Route::prefix('hsn')->group(function (){
 	Route::get('/', [HsnCodeController::class, 'index']);
+});
+
+Route::prefix('brands')->middleware('auth:seller-api')->group(function (){
+	Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\BrandController::class, 'index']);
+	Route::get('approved', [\App\Http\Controllers\App\Seller\ApprovedBrandController::class, 'index']);
+	Route::post('approval/{id}', [\App\Http\Controllers\App\Seller\ApprovedBrandController::class, 'store']);
 });
