@@ -160,9 +160,7 @@ class AuthController extends BaseAuthController {
 
 	    } else {
 
-	    	try {  
-	    		$user = User::where ('email', $request->email)-first();
-			    if ( !$user ) return redirect()->back()->withErrors(['error' => '404']);
+	    	try {   
  
 			    DB::table('password_resets')->insert([
 			        'email' => $request->email,
