@@ -147,13 +147,14 @@ class AuthController extends BaseAuthController {
 	{
 		$response = responseApp();
 		$dataSet =array();
-		 $rules = array(
+		$input = request()->all();
+		$rules = array(
 	        'email' => "required|email",
 	    );
 	    $validator = Validator::make($input, $rules);
 
 		if ($validator->fails()) {
-			
+
 	        $response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
 	        return $response->send();
 
