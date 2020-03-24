@@ -104,7 +104,7 @@ class AuthController extends BaseAuthController {
 
 	    $input = $request->all();
 	    $rules = array(
-	        'email' => "required|email",
+	        'password' => "required",
 	        'token' => "required",
 	    );
 	    $validator = Validator::make($input, $rules);
@@ -138,6 +138,7 @@ class AuthController extends BaseAuthController {
 
 			    // If the seller shouldn't reuse the token later, delete the token 
 			    DB::table('password_resets')->where('email', $seller->email)->delete();
+			    $response->status(HttpOkay)->message('Password has been reset successfully');
 
 	        } catch (ModelNotFoundException $exception) {
 	            // $arr = array("status" => 400, "message" => $ex->getMessage(), "data" => []);
