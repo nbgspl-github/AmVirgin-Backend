@@ -15,6 +15,7 @@ use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Support\Facades\Password;
 use Carbon\Carbon;
 use DB;
+use Illuminate\Support\Str;
 
 class AuthController extends BaseAuthController {
 	protected $ruleSet;
@@ -151,7 +152,9 @@ class AuthController extends BaseAuthController {
 		$rules    = array(
 	        'email' => "required|email",
 	    );
-	    $validator = Validator::make($input, $rules);
+	    $validator = Validator::make($input, $rules); 
+
+		$token = Str::random(60);
 
 		if ($validator->fails()) {
 
@@ -164,7 +167,7 @@ class AuthController extends BaseAuthController {
  
 			    DB::table('password_resets')->insert([
 			        'email' => $request->email,
-			        'token' => str_random(60),
+			        'token' => $token,
 			    ]);
 
 				$tokenData = DB::table('password_resets')
