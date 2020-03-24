@@ -161,6 +161,7 @@ class AuthController extends BaseAuthController {
 	    } else {
 
 	    	try { 
+	    		die('dsf');
 	    		//create a new token to be sent to the user. 
 			    DB::table('password_resets')->insert([
 			        'email' => $request->email,
@@ -180,7 +181,7 @@ class AuthController extends BaseAuthController {
 	            $response->status(HttpResourceNotFound)->message('Could not find seller for that key.');
 
 	        } catch (EThrowable $exception) {
-	           $response->status(HttpServerError)->message($exception->getMessage());
+	           $response->status(HttpServerError)->message('Invalid Response');
 				
 	        }finally {
 				return $response->send();
