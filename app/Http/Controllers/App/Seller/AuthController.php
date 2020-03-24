@@ -173,13 +173,10 @@ class AuthController extends BaseAuthController {
 
 			   $dataSet['token'] = $tokenData->token;
 			   $dataSet['email'] = $request->email; // or $email = $tokenData->email; 
-			$response->status(HttpOkay)->message('Password reset token')->setValue('data', $dataSet);
- 
-	    	} catch (ModelNotFoundException $exception) {
-	            // $arr = array("status" => 400, "message" => $ex->getMessage(), "data" => []); 
-	            $response->status(HttpResourceNotFound)->message('Could not find seller for that key.');
+				$response->status(HttpOkay)->message('Password reset token')->setValue('data', $dataSet);
 
 	        } catch (EThrowable $exception) {
+	        	die('fine');
 	           $response->status(HttpServerError)->message('Invalid Response');
 				
 	        }finally {
