@@ -79,10 +79,10 @@ class HomePageController extends ExtendedResourceController {
 			/**
 			 * Shop Products
 			 */
-			// ['deleted', false],
 			$shopProducts = Product::where([
 				['draft', false],
-				['visibility', true], 
+				['visibility', true],
+				['deleted', false],
 				['promoted', true],
 				['promotionStart', '<=', Time::mysqlStamp()],
 				['promotionEnd', '>', Time::mysqlStamp()],
@@ -120,7 +120,8 @@ class HomePageController extends ExtendedResourceController {
 			else {
 				$contents = Product::where([
 					['draft', false],
-					['visibility', true], 
+					['visibility', true],
+					['deleted', false],
 					['promoted', true],
 					['promotionStart', '<=', Time::mysqlStamp()],
 					['promotionEnd', '>', Time::mysqlStamp()],
