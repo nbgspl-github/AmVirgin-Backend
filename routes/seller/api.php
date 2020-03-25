@@ -30,6 +30,10 @@ Route::post('/change-password', [AuthController::class, 'changePassword'])->name
 
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('seller.forgotPassword');
 
+Route::post('/change-email', [AuthController::class, 'changeEmail'])->name('seller.changeEmail')->middleware('auth:seller-api'); 
+
+Route::post('/change-email-token', [AuthController::class, 'getchangeEmailToken'])->name('seller.getchangeEmailToken')->middleware('auth:seller-api'); 
+
 Route::post('/reset-password-token', [AuthController::class, 'getResetPasswordToken'])->name('seller.getResetPasswordToken');
 
 Route::prefix('categories')->group(function () {

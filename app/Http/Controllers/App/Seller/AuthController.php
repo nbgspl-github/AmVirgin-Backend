@@ -108,8 +108,7 @@ class AuthController extends BaseAuthController {
 	        'token' => "required",
 	    );
 	    $validator = Validator::make($input, $rules);
-	    if ($validator->fails()) {
-	        // $arr = array("status" => 400, "message" => $validator->errors()->first());
+	    if ($validator->fails()) { 
 	        $response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
 	    } else {
 	        try { 
@@ -141,18 +140,14 @@ class AuthController extends BaseAuthController {
 			    $response->status(HttpOkay)->message('Password has been reset successfully');
 
 	        } catch (ModelNotFoundException $exception) {
-	            // $arr = array("status" => 400, "message" => $ex->getMessage(), "data" => []);
-
+	            
 	            $response->status(HttpResourceNotFound)->message('Could not find seller for that key.');
 
 	        } catch (Throwable $exception) {
-	           $response->status(HttpServerError)->message($exception->getMessage());
-				
+	           $response->status(HttpServerError)->message($exception->getMessage()); 
 	        }
-	    }
-	    // return \Response::json($arr);
-	    return $response->send();
-
+	    } 
+	    return $response->send(); 
 	}
 
 
@@ -171,12 +166,9 @@ class AuthController extends BaseAuthController {
 		if ($validator->fails()) {
 
 	        $response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
-	        return $response->send();
-
-	    } else {
-
-	    	try {   
- 
+	        return $response->send(); 
+	    } else { 
+	    	try {    
 			    DB::table('password_resets')->insert([
 			        'email' => $request->email,
 			        'token' => $token,
