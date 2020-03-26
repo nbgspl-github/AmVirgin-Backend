@@ -11,11 +11,12 @@ use Throwable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Support\Facades\Password;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendMail;       
 
 class AuthController extends BaseAuthController {
 	protected $ruleSet;
@@ -178,8 +179,28 @@ class AuthController extends BaseAuthController {
 		    				->where('email', $request->email)->first();
 
 			   $dataSet['token'] = $tokenData->token;
-			   $dataSet['email'] = $request->email; // or $email = $tokenData->email; 
-				$response->status(HttpOkay)->message('Password reset token')->setValue('data', $dataSet);
+			   $dataSet['email'] = $request->email; // or $email = $tokenData->email;
+
+			   $dataSet['title'] = "Forgot Password? Don't Worry we all forgot some time!";
+
+		        Mail::send('email.forgot_pass_template', $data, function($message) {
+
+		            $message->to($request->email, 'Seller')
+
+		                    ->subject('Reset Your Password!');
+		        });
+
+		        // if (Mail::failures()) {
+		        // 	$response->status(HttpOkay)->message('Sorry! Please try again latter');
+		        // 	return $response->send();
+		        //    // return response()->Fail('Sorry! Please try again latter');
+		        //  }else{
+		        //  	$response->status(HttpOkay)->message('Great! Please Check Your Successfully send in your mail');
+		        // 	return $response->send();
+		        //    // return response()->success('Great! Successfully send in your mail');
+		        //  }
+ 
+				$response->status(HttpOkay)->message('Great! Please Check Your Email for Password reset!')->setValue('data', $dataSet);
 
 	        } catch (Throwable $exception) { 
 	           $response->status(HttpServerError)->message($exception->getMessage());
@@ -218,7 +239,16 @@ class AuthController extends BaseAuthController {
 
 			   $dataSet['token'] = $tokenData->token;
 			   $dataSet['email'] = $request->current_email; // or $email = $tokenData->email; 
-				$response->status(HttpOkay)->message('Email change token')->setValue('data', $dataSet);
+			   $dataSet['title'] = "This mail is regarding for change you email register with AmVirgin! Ignore this main if don't request";
+
+			    Mail::send('email.email_change_template', $dataSet, function($message) {
+
+		            $message->to($request->email, 'Seller')
+
+		                    ->subject('Change Your Password!');
+		        });
+
+				$response->status(HttpOkay)->message('Great! Please check you email for change email change token')->setValue('data', $dataSet);
 
 	        } catch (Throwable $exception) { 
 	           $response->status(HttpServerError)->message($exception->getMessage());
