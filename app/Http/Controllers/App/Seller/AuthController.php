@@ -190,7 +190,7 @@ class AuthController extends BaseAuthController{
 
 				Mail::send('email.forgot_pass_template', $dataSet, function ($message){
 
-					$message->to($request->email, 'Seller')
+					$message->to($dataSet['email'], 'Seller')
 						->subject('Reset Your Password!');
 				});
 
@@ -250,7 +250,7 @@ class AuthController extends BaseAuthController{
 
 
 				Mail::send('email.email_change_template', $dataSet, function ($message){
-					$message->to($request->new_email, 'Seller')
+					$message->to('ddpwpareshan@gmail.com', 'Seller')
 						->subject('Change Your Password!');
 				});
 
