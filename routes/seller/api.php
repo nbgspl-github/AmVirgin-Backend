@@ -31,7 +31,6 @@ Route::post('/change-password', [AuthController::class, 'changePassword'])->name
 Route::prefix('categories')->group(function (){
 	Route::get('/', [CategoriesController::class, 'index'])->name('seller.categories.index');
 	Route::get('/{id}/attributes', [AttributeListController::class, 'show'])->name('seller.categories.attributes.index');
-	Route::post('/{id}/attributes', [AttributeListController::class, 'store'])->name('seller.categories.attributes.store');
 });
 
 Route::prefix('attributes')->group(function (){

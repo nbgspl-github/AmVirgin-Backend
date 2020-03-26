@@ -4,7 +4,7 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Attributes','action'=>['link'=>route('admin.products.attributes.create'),'text'=>'Create an attribute']])
+					@include('admin.extras.header', ['title'=>'Attribute Types','action'=>['link'=>route('admin.products.attributes.types.create'),'text'=>'Create a attribute type']])
 				</div>
 				<div class="card-body animatable">
 					<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -12,32 +12,34 @@
 						<tr>
 							<th class="text-center">No.</th>
 							<th class="text-center">Name</th>
-							<th class="text-center">Code</th>
-							<th class="text-center">Category</th>
-							<th class="text-center">Seller Interface Type</th>
-							<th class="text-center">Customer Interface Type</th>
-							<th class="text-center">Required</th>
-							<th class="text-center">Filterable</th>
+							<th class="text-center">Description</th>
+							<th class="text-center">Primitive Type</th>
+							<th class="text-center">Multi-value</th>
+							<th class="text-center">Max values</th>
+							<th class="text-center">Bounded</th>
+							<th class="text-center">Minimum</th>
+							<th class="text-center">Maximum</th>
 							<th class="text-center">Actions</th>
 						</tr>
 						</thead>
 
 						<tbody>
-						@foreach($attributes as $attribute)
+						@foreach($attributeTypes as $attributeType)
 							<tr>
 								<td class="text-center">{{$loop->index+1}}</td>
-								<td class="text-center">{{$attribute->name()}}</td>
-								<td class="text-center">{{$attribute->code()}}</td>
-								<td class="text-center">{{$attribute->category->name}}</td>
-								<td class="text-center">{{$attribute->sellerInterfaceType}}</td>
-								<td class="text-center">{{$attribute->customerInterfaceType}}</td>
-								<td class="text-center">{{__boolean($attribute->required)}}</td>
-								<td class="text-center">{{__boolean($attribute->filterable)}}</td>
+								<td class="text-center">{{$attributeType->name()}}</td>
+								<td class="text-center">{{$attributeType->description()}}</td>
+								<td class="text-center">{{$attributeType->primitiveType->name()}}</td>
+								<td class="text-center">{{__boolean($attributeType->multiValue())}}</td>
+								<td class="text-center">{{$attributeType->maxValues()}}</td>
+								<td class="text-center">{{__boolean($attributeType->bounded())}}</td>
+								<td class="text-center">{{intval($attributeType->minimum())}}</td>
+								<td class="text-center">{{intval($attributeType->maximum())}}</td>
 								<td class="text-center">
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group mx-auto" role="group">
-											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.videos.edit.action',$video->getKey())}}" @include('admin.extras.tooltip.left', ['title' => 'Edit attribute values'])><i class="mdi mdi-pencil"></i></a>
-											<a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);" onclick="deleteMovie('{{$video->getKey()}}');" @include('admin.extras.tooltip.right', ['title' => 'Delete this attribute'])><i class="mdi mdi-delete"></i></a>
+											<a class="btn btn-outline-danger shadow-sm" href="" @include('admin.extras.tooltip.left', ['title' => 'Edit attribute type details'])><i class="mdi mdi-pencil"></i></a>
+											<a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);" onclick="" @include('admin.extras.tooltip.right', ['title' => 'Delete this attribute'])><i class="mdi mdi-delete"></i></a>
 										</div>
 									</div>
 								</td>

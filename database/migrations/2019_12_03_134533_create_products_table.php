@@ -13,12 +13,12 @@ class CreateProductsTable extends Migration{
 	public function up(){
 		Schema::create('products', function (Blueprint $table){
 			$table->bigIncrements('id');
-			$table->string('name', 500)->comment('Name or title of product.');
+			$table->string('name', 500)->comment('Name or title of product.')->nullable();
 			$table->string('slug', 1000)->comment('Slug title of product.');
 			$table->unsignedBigInteger('categoryId')->comment('Category under which this product falls.');
 			$table->unsignedBigInteger('sellerId')->comment('Seller to whom this product belongs.');
 			$table->unsignedSmallInteger('brandId')->comment('Brand to which this product belongs.');
-			$table->enum('listingStatus', ['active', 'inactive'])->comment('Whether the product will show up in listing or not?');
+			$table->enum('listingStatus', ['active', 'inactive'])->comment('Whether the product will show up in catalog listing or not?');
 			$table->integer('originalPrice')->default(0)->comment('MRP of product.');
 			$table->integer('sellingPrice')->default(0)->comment('Actual selling price of product');
 			$table->string('fulfillmentBy')->comment('How the order is fulfilled...by seller or through external courier service?');
@@ -35,6 +35,7 @@ class CreateProductsTable extends Migration{
 			$table->string('shortDescription', 1000)->comment('Short description for this product.');
 			$table->text('longDescription')->comment('Long description for this product, supports HTML formatting.');
 			$table->string('sku')->comment('Stock Keeping Unit identifier, unique for each product');
+			$table->string('styleCode')->nullable()->comment('For variants of the same product, this will be same. Unique code which sets up relations between different variants of the same product.');
 			$table->string('trailer', Constants::MaxFilePathLength)->nullable()->comment('Video path for product trailer.');
 			$table->integer('procurementSla')->nullable()->comment('Number of days required before the seller can fulfill the order.');
 			$table->integer('localShippingCost')->default(0)->comment('Shipping cost for local region.');

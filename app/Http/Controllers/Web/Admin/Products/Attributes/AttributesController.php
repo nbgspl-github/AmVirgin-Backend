@@ -4,14 +4,13 @@ namespace App\Http\Controllers\Web\Admin\Products\Attributes;
 
 use App\Classes\Rule;
 use App\Classes\Str;
-use App\Constants\CustomerAttributeInterfaceType;
-use App\Constants\SellerAttributeInterfaceType;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Interfaces\Tables;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
 use App\Models\Category;
+use App\Models\PrimitiveType;
 use App\Traits\ValidatesRequest;
 use Throwable;
 
@@ -26,15 +25,17 @@ class AttributesController extends BaseController{
 			'store' => [
 				'category.*' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)],
 				'name' => ['bail', 'required', 'string', 'min:1', 'max:255'],
+				'description' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
 				'code' => ['bail', 'required', 'string', 'min:1', 'max:255'],
-				'sellerInterfaceType' => ['bail', 'required', Rule::in([SellerAttributeInterfaceType::Select, SellerAttributeInterfaceType::Radio, SellerAttributeInterfaceType::Text, SellerAttributeInterfaceType::TextArea])],
-				'customerInterfaceType' => ['bail', 'required', Rule::in([CustomerAttributeInterfaceType::Options, CustomerAttributeInterfaceType::Readable])],
-				'values' => ['bail', Rule::requiredIf(function (){
-					if (Str::equals(request('sellerInterfaceType'), SellerAttributeInterfaceType::Radio) || Str::equals(request('sellerInterfaceType'), SellerAttributeInterfaceType::Select))
+				'sellerInterfaceType' => ['bail', 'required', Rule::in([Attribute::SellerInterfaceType['Select'], Attribute::SellerInterfaceType['Input'], Attribute::SellerInterfaceType['TextArea'], Attribute::SellerInterfaceType['Radio']])],
+				'customerInterfaceType' => ['bail', 'required', Rule::in([Attribute::CustomerInterfaceType['Options'], Attribute::CustomerInterfaceType['Readable']])],
+				'genericType' => ['bail', Rule::requiredIf(function (){
+					if (Str::equals(request('sellerInterfaceType'), Attribute::SellerInterfaceType['Select']) || Str::equals(request('sellerInterfaceType'), Attribute::SellerInterfaceType['Radio']))
 						return true;
 					else
 						return false;
-				}), 'string', 'min:2',],
+				}), Rule::in([Attribute::GenericTypes['Number'], Attribute::GenericTypes['DecimalNumber'], Attribute::GenericTypes['Color'], Attribute::GenericTypes['MultiColor'], Attribute::GenericTypes['String'], Attribute::GenericTypes['File'], Attribute::GenericTypes['Other'],])],
+				'segmentPriority' => ['bail', 'required', 'numeric', 'min:0', 'max:10'],
 			],
 		];
 	}
@@ -46,6 +47,7 @@ class AttributesController extends BaseController{
 	}
 
 	public function create(){
+		$types = PrimitiveType::all();
 		$categories = $topLevel = Category::where('parentId', 0)->get();
 		$topLevel->transform(function (Category $topLevel){
 			$children = $topLevel->children()->get();
@@ -74,7 +76,7 @@ class AttributesController extends BaseController{
 				'popularCategory' => $topLevel->popularCategory(),
 			];
 		});
-		return view('admin.attributes.create')->with('categories', $topLevel);
+		return view('admin.attributes.create')->with('categories', $topLevel)->with('types', $types);
 	}
 
 	public function store(){
@@ -89,20 +91,21 @@ class AttributesController extends BaseController{
 				if ($attribute == null) {
 					$attribute = Attribute::create([
 						'name' => $validated->name,
+						'description' => $validated->description,
 						'categoryId' => $categoryId,
 						'sellerInterfaceType' => $validated->sellerInterfaceType,
 						'customerInterfaceType' => $validated->customerInterfaceType,
+						'genericType' => $validated->genericType,
 						'code' => $validated->code,
 						'required' => request()->has('required'),
 						'filterable' => request()->has('filterable'),
+						'productNameSegment' => request()->has('productNameSegment'),
+						'segmentPriority' => $validated->segmentPriority,
 					]);
-					$values = explode('/', $validated->values);
-					foreach ($values as $value) {
-						AttributeValue::create([
-							'attributeId' => $attribute->id,
-							'value' => $value,
-						]);
-					}
+					Attribute::where([
+						['categoryId', $categoryId],
+						['segmentPriority', $validated->segmentPriority],
+					])->update(['segmentPriority', 0]);
 				}
 			});
 			$response->success('Successfully created attribute and related values.')->route('admin.products.attributes.index');

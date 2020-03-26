@@ -21,4 +21,9 @@ interface Tables{
 	const Currencies = 'currencies';
 	const HsnCodes = 'hsn-codes';
 	const Brands = 'brands';
+	const Attributes = 'attributes';
+	const AttributeValues = 'attribute-values';
+	const AttributeTypes = 'attribute-types';
+	const AttributeTypeValues = 'attribute-type-values';
+	const PrimitiveTypes = 'primitive-types';
 }

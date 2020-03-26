@@ -4,14 +4,14 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductAttributesTable extends Migration {
+class CreateProductAttributesTable extends Migration{
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
-	public function up() {
-		Schema::create('product-attributes', function (Blueprint $table) {
+	public function up(){
+		Schema::create('product-attributes', function (Blueprint $table){
 			$table->bigIncrements('id');
 			$table->unsignedBigInteger('productId');
 			$table->unsignedBigInteger('attributeId');
@@ -25,7 +25,7 @@ class CreateProductAttributesTable extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down() {
+	public function down(){
 		Schema::dropIfExists('product-attributes');
 	}
 }

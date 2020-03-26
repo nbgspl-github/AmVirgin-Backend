@@ -1,6 +1,6 @@
 <?php
 
-use App\Constants\SellerBrandRequestStatus;
+use App\Models\SellerBrand;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,10 +15,8 @@ class CreateSellerBrandsTable extends Migration{
 		Schema::create('seller-brands', function (Blueprint $table){
 			$table->bigIncrements('id');
 			$table->unsignedBigInteger('brandId')->comment('Brand reference');
-			$table->foreign('brandId')->references('id')->on(\App\Interfaces\Tables::Brands)->onDelete('cascade');
 			$table->unsignedBigInteger('sellerId')->comment('Seller reference');
-			$table->foreign('sellerId')->references('id')->on(\App\Interfaces\Tables::Sellers)->onDelete('cascade');
-			$table->enum('status', [SellerBrandRequestStatus::Approved, SellerBrandRequestStatus::Received, SellerBrandRequestStatus::Rejected])->default(SellerBrandRequestStatus::Received)->comment('Whether the admin has approved the seller to start selling on this brand\'s name.');
+			$table->enum('status', [SellerBrand::Status['Approved'], SellerBrand::Status['Rejected'], SellerBrand::Status['Received']])->default(SellerBrand::Status['Received'])->comment('Whether the admin has approved the seller to start selling on this brand\'s name.');
 			$table->timestamps();
 		});
 	}

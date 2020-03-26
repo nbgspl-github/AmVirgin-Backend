@@ -10,4 +10,9 @@ class SellerBrand extends Model{
 	protected $table = 'seller-brands';
 	protected $fillable = ['sellerId', 'brandId'];
 	protected $casts = ['approved' => 'boolean'];
+	const Status = [
+		'Approved' => 'approved',
+		'Rejected' => 'rejected',
+		'Received' => 'received',
+	];
 }

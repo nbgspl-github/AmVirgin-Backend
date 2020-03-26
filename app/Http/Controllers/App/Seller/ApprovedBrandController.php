@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\App\Seller;
 
 use App\Classes\Str;
-use App\Constants\SellerBrandRequestStatus;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Models\Brand;
 use App\Models\SellerBrand;
@@ -19,7 +18,7 @@ class ApprovedBrandController extends ExtendedResourceController{
 	public function index(){
 		$approvedBrands = SellerBrand::where([
 			['sellerId', $this->guard()->id()],
-			['status', SellerBrandRequestStatus::Approved],
+			['status', SellerBrand::Status['Approved']],
 		])->get();
 		$approvedBrands->transform(function (SellerBrand $sellerBrand){
 			$brand = Brand::where([
@@ -49,10 +48,10 @@ class ApprovedBrandController extends ExtendedResourceController{
 					['brandId', $id],
 					['sellerId', $this->guard()->id()],
 				])->firstOrFail();
-				if (Str::equals($sellerBrand->status(), SellerBrandRequestStatus::Approved)) {
+				if (Str::equals($sellerBrand->status(), SellerBrand::Status['Approved'])) {
 					$response->status(HttpOkay)->message('You are eligible to sell under this brand.');
 				}
-				else if (Str::equals($sellerBrand->status(), SellerBrandRequestStatus::Rejected)) {
+				else if (Str::equals($sellerBrand->status(), SellerBrand::Status['Rejected'])) {
 					$response->status(HttpOkay)->message('You are not eligible to sell under this brand, and so your request was rejected.');
 				}
 				else {

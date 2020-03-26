@@ -22,8 +22,18 @@ class AttributeListController extends ExtendedResourceController{
 			$attributes = $category->attributes;
 			$attributes->transform(function (Attribute $attribute){
 				return [
-					'id' => $attribute->getKey(),
-					'name' => $attribute->getName(),
+					'id' => $attribute->id(),
+					'name' => $attribute->name(),
+					'description' => $attribute->description(),
+					'code' => $attribute->code(),
+					'sellerInterfaceType' => $attribute->sellerInterfaceType(),
+					'primitiveType' => $attribute->primitiveType->typeCode(),
+					'required' => $attribute->required(),
+					'multiValue' => $attribute->multiValue(),
+					'maxValues' => $attribute->maxValues(),
+					'bounded' => $attribute->bounded(),
+					'minimum' => $attribute->minimum(),
+					'maximum' => $attribute->maximum(),
 				];
 			});
 			$response->status(HttpOkay)->message(function () use ($attributes){
@@ -31,33 +41,7 @@ class AttributeListController extends ExtendedResourceController{
 			})->setValue('data', $attributes);
 		}
 		catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage());
-		}
-		catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
-			return $response->send();
-		}
-	}
-
-	public function store(int $categoryId){
-		$response = responseApp();
-		try {
-			$category = Category::with('attributes')->where('id', $categoryId)->firstOrFail();
-			$attributes = $category->attributes;
-			$attributes->transform(function (Attribute $attribute){
-				return [
-					'id' => $attribute->getKey(),
-					'name' => $attribute->getName(),
-				];
-			});
-			$response->status(HttpOkay)->message(function () use ($attributes){
-				return sprintf('Found %d attributes for the category.', $attributes->count());
-			})->setValue('data', $attributes);
-		}
-		catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage());
+			$response->status(HttpResourceNotFound)->message('Could not find attribute for that key.');
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());

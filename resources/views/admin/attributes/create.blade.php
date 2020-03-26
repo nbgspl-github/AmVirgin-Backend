@@ -60,26 +60,52 @@
 											</div>
 										</div>
 										<div class="form-group">
-											<label for="name">@required (Name or Key)</label>
+											<label for="name">@required (Name)</label>
 											<input id="name" type="text" name="name" class="form-control" required placeholder="Type a name" value="{{old('name')}}"/>
+										</div>
+										<div class="form-group">
+											<label for="description">@required (Description)</label>
+											<textarea id="description" name="description" class="form-control" required placeholder="Type attribute description here">{{old('description')}}</textarea>
 										</div>
 										<div class="form-group">
 											<label for="code">@required (Code)</label>
 											<input id="code" type="text" name="code" class="form-control" required placeholder="Type a code (without spaces)" value="{{old('code')}}"/>
 										</div>
-										<div class="form-group">
-											<label for="sellerInterfaceType">@required (User interface for seller panel)</label>
-											<select name="sellerInterfaceType" id="sellerInterfaceType" class="form-control" required onchange="handleSellerInterfaceTypeChanged(this.value);">
-												<option value="" selected disabled>Choose</option>
-												<option value="select">Select</option>
-												<option value="text">Text</option>
-												<option value="text-area">Text Area</option>
-												<option value="radio">Radio</option>
-											</select>
-										</div>
-										<div class="form-group" id="values-container">
-											<label for="values">@required (Valid set of values)</label>
-											<input id="values" type="text" name="values" class="form-control" required placeholder="Type here the valid set of values for this attribute" value="{{old('values')}}"/>
+										<div class="card custom-card p-3 shadow-none mb-3">
+											<div class="form-group">
+												<label for="sellerInterfaceType">@required (User interface for seller panel)</label>
+												<select name="sellerInterfaceType" id="sellerInterfaceType" class="form-control" required onchange="handleSellerInterfaceTypeChanged(this.value);">
+													<option value="" selected disabled>Choose</option>
+													<option value="select">Select</option>
+													<option value="input">Input</option>
+													<option value="text-area">Text Area</option>
+													<option value="radio">Radio</option>
+												</select>
+											</div>
+											<div class="form-group">
+												<label for="attributeType">@required (Type of value(s) for this attribute)</label>
+												<select name="attributeType" id="attributeType" class="form-control" disabled onchange="handleAttributeTypeChanged(this.value);">
+													@foreach($types as $type)
+														<option value="{{$type->getKey()}}" @include('admin.extras.tooltip.right', ['title' => $type->name()])>{{$type->name()}}</option>
+													@endforeach
+												</select>
+											</div>
+											<div class="form-group">
+												<label>Limit input range?</label>
+												<div>
+													<div class="custom-control custom-checkbox">
+														<input type="checkbox" class="custom-control-input" id="bounded" name="bounded" onchange="handleBoundStatusChanged();" disabled>
+														<label class="custom-control-label" for="bounded">Yes</label>
+													</div>
+												</div>
+											</div>
+											<div class="form-group mb-0">
+												<label>Enter upper and lower limit</label>
+												<div class="row">
+													<div class="col-6"><input type="text" id="minimum" class="form-control" placeholder="Lower limit" disabled></div>
+													<div class="col-6"><input type="text" id="maximum" class="form-control" placeholder="Upper limit" disabled></div>
+												</div>
+											</div>
 										</div>
 										<div class="form-group">
 											<label for="customerInterfaceType">@required (User interface for customer)</label>
@@ -88,6 +114,41 @@
 												<option value="readable">Text Label</option>
 												<option value="options">Options</option>
 											</select>
+										</div>
+										<div class="card custom-card p-3 shadow-none mb-3">
+											<div class="form-group">
+												<label>Should this attribute's value(s) be used to form the name of the product being associated?</label>
+												<div>
+													<div class="custom-control custom-checkbox">
+														<input type="checkbox" class="custom-control-input" id="productNameSegment" name="productNameSegment">
+														<label class="custom-control-label" for="productNameSegment">Yes</label>
+													</div>
+												</div>
+											</div>
+											<div class="form-group mb-0">
+												<label for="segmentPriority">Segment priority</label>
+												<select name="segmentPriority" id="segmentPriority" class="form-control" @include('admin.extras.tooltip.top', ['title' => 'Defines a number used to determine where in the product name, the value(s) of this attribute will appear. Ignored if 0, valid from 1 through 10.'])>
+													<option value="0" selected>0 (Ignored)</option>
+													@for($i=1;$i<=10;$i++)
+														<option value="{{$i}}">{{$i}}</option>
+													@endfor
+												</select>
+											</div>
+										</div>
+										<div class="card custom-card p-3 shadow-none mb-3">
+											<div class="form-group">
+												<label>Enable multiple value input?</label>
+												<div>
+													<div class="custom-control custom-checkbox">
+														<input type="checkbox" class="custom-control-input" id="multiValue" name="multiValue" onchange="handleMultiValueChanged();">
+														<label class="custom-control-label" for="multiValue">Yes</label>
+													</div>
+												</div>
+											</div>
+											<div class="form-group mb-0" id="maxValuesContainer">
+												<label for="">Maximum number of input values</label>
+												<input id="maxValues" type="number" name="maxValues" class="form-control" required placeholder="Type max number of values here" value="{{old('maxValues')}}" min="1" max="10000" disabled/>
+											</div>
 										</div>
 										<div class="form-group">
 											<label>Is this a required attribute?</label>
@@ -140,7 +201,6 @@
 	<script src="{{asset('assets/admin/utils/MultiEntryModal.js')}}"></script>
 	<script>
 		window.onload = () => {
-			$('#values-container').hide();
 			MultiEntryModal.setupMultiEntryModal({
 				title: 'Valid attribute values',
 				separator: '/',
@@ -167,12 +227,15 @@
 		};
 
 		handleSellerInterfaceTypeChanged = (value) => {
-			if (value === 'select' || value === 'radio') {
-				$('#values-container').show();
-				$('#values').prop('disabled', false);
+			if (value === 'input') {
+				const element = $('#attributeType');
+				element.prop('disabled', false);
 			} else {
-				$('#values-container').hide();
-				$('#values').prop('disabled', true);
+				const element = $('#attributeType');
+				element.prop('disabled', true);
+				$('#bounded').prop('disabled', true);
+				$('#minimum').prop('disabled', true);
+				$('#maximum').prop('disabled', true);
 			}
 		};
 
@@ -180,6 +243,40 @@
 			$("div[data-name]").filter((index, item) => {
 				$(item).toggle($(item).attr('data-name').toLowerCase().indexOf(value.toLowerCase()) !== -1);
 			});
+		};
+
+		handleBoundStatusChanged = () => {
+			const checked = event.target.checked;
+			if (checked) {
+				$('#minMaxContainer').show();
+			} else {
+				const element = $('#minMaxContainer');
+				element.hide();
+				element.attr('disabled', true);
+			}
+		};
+
+		handleMultiValueChanged = () => {
+			const checked = event.target.checked;
+			if (checked) {
+				const element = $('#maxValues');
+				element.prop('disabled', false);
+			} else {
+				const element = $('#maxValues');
+				element.prop('disabled', true);
+			}
+		};
+
+		handleAttributeTypeChanged = (value) => {
+			if (value === 'float' || value === 'int') {
+				$('#bounded').prop('disabled', false);
+				$('#minimum').prop('disabled', false);
+				$('#maximum').prop('disabled', false);
+			} else {
+				$('#bounded').prop('disabled', true);
+				$('#minimum').prop('disabled', true);
+				$('#maximum').prop('disabled', true);
+			}
 		};
 	</script>
 @stop
