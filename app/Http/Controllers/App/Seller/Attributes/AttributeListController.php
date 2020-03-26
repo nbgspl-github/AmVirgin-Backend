@@ -8,30 +8,40 @@ use App\Models\Category;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class AttributeListController extends ExtendedResourceController {
+class AttributeListController extends ExtendedResourceController{
 	protected array $rules;
 
-	public function __construct() {
+	public function __construct(){
 		parent::__construct();
 	}
 
-	public function show(int $categoryId) {
+	public function show(int $categoryId){
 		$response = responseApp();
 		try {
 			$category = Category::with('attributes')->where('id', $categoryId)->firstOrFail();
 			$attributes = $category->attributes;
-			$attributes->transform(function (Attribute $attribute) {
+			$attributes->transform(function (Attribute $attribute){
 				return [
-					'id' => $attribute->getKey(),
-					'name' => $attribute->getName(),
+					'id' => $attribute->id(),
+					'name' => $attribute->name(),
+					'description' => $attribute->description(),
+					'code' => $attribute->code(),
+					'sellerInterfaceType' => $attribute->sellerInterfaceType(),
+					'primitiveType' => $attribute->primitiveType->typeCode(),
+					'required' => $attribute->required(),
+					'multiValue' => $attribute->multiValue(),
+					'maxValues' => $attribute->maxValues(),
+					'bounded' => $attribute->bounded(),
+					'minimum' => $attribute->minimum(),
+					'maximum' => $attribute->maximum(),
 				];
 			});
-			$response->status(HttpOkay)->message(function () use ($attributes) {
+			$response->status(HttpOkay)->message(function () use ($attributes){
 				return sprintf('Found %d attributes for the category.', $attributes->count());
 			})->setValue('data', $attributes);
 		}
 		catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find category for that key.');
+			$response->status(HttpResourceNotFound)->message('Could not find attribute for that key.');
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
@@ -41,33 +51,7 @@ class AttributeListController extends ExtendedResourceController {
 		}
 	}
 
-	public function store(int $categoryId) {
-		$response = responseApp();
-		try {
-			$category = Category::with('attributes')->where('id', $categoryId)->firstOrFail();
-			$attributes = $category->attributes;
-			$attributes->transform(function (Attribute $attribute) {
-				return [
-					'id' => $attribute->getKey(),
-					'name' => $attribute->getName(),
-				];
-			});
-			$response->status(HttpOkay)->message(function () use ($attributes) {
-				return sprintf('Found %d attributes for the category.', $attributes->count());
-			})->setValue('data', $attributes);
-		}
-		catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find category for that key.');
-		}
-		catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
-			return $response->send();
-		}
-	}
-
-	protected function guard() {
+	protected function guard(){
 		return auth('seller-api');
 	}
 }

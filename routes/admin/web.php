@@ -280,7 +280,17 @@ Route::prefix('admin')->group(function (){
 			Route::prefix('attributes')->group(function (){
 				Route::get(Str::Empty, [\App\Http\Controllers\Web\Admin\Products\Attributes\AttributesController::class, 'index'])->name('admin.products.attributes.index');
 				Route::get('create', [\App\Http\Controllers\Web\Admin\Products\Attributes\AttributesController::class, 'create'])->name('admin.products.attributes.create');
+				Route::post(Str::Empty, [\App\Http\Controllers\Web\Admin\Products\Attributes\AttributesController::class, 'store'])->name('admin.products.attributes.store');
 			});
+		});
+
+		// Brand Route(s)
+		Route::prefix('brands')->middleware('auth:admin')->group(function (){
+			Route::get(Str::Empty, [\App\Http\Controllers\Web\Admin\BrandController::class, 'index'])->name('admin.brands.index');
+			Route::get('create', [\App\Http\Controllers\Web\Admin\BrandController::class, 'create'])->name('admin.brands.create');
+			Route::get('{id}/edit', [\App\Http\Controllers\Web\Admin\BrandController::class, 'edit'])->name('admin.brands.edit');
+			Route::post(Str::Empty, [\App\Http\Controllers\Web\Admin\BrandController::class, 'store'])->name('admin.brands.store');
+			Route::post('{id}', [\App\Http\Controllers\Web\Admin\BrandController::class, 'update'])->name('admin.brands.update');
 		});
 
 		// Settings Route(s)
