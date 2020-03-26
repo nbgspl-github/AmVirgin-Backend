@@ -243,12 +243,12 @@ class AuthController extends BaseAuthController {
 
 			    Mail::send('email.email_change_template', $dataSet, function($message) {
 
-		            $message->to($request->email, 'Seller')
+		            $message->to($request->new_email, 'Seller')
 
 		                    ->subject('Change Your Password!');
 		        });
 
-				$response->status(HttpOkay)->message('Great! Please check you email for change email change token')->setValue('data', $dataSet);
+				$response->status(HttpOkay)->message('Great! Please check you new email for change email change token')->setValue('data', $dataSet);
 
 	        } catch (Throwable $exception) { 
 	           $response->status(HttpServerError)->message($exception->getMessage());
