@@ -30,7 +30,6 @@ class CreateAttributesTable extends Migration{
 			$table->mediumInteger('maxValues')->default(0)->comment('How many values does this attribute allows entering in multi-value mode?');
 			$table->string('minimum')->nullable()->comment('Lower limit, ignored if bounded is false');
 			$table->string('maximum')->nullable('Upper limit, ignored if bounded is false');
-
 			$table->timestamps();
 		});
 	}

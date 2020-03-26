@@ -15,18 +15,22 @@ class Attribute extends Model{
 	use FluentConstructor, RetrieveResource, HasAttributeMethods;
 	protected $table = 'attributes';
 	protected $fillable = [
+		'categoryId',
 		'name',
 		'description',
-		'categoryId',
 		'code',
 		'sellerInterfaceType',
 		'customerInterfaceType',
-		'code',
-		'genericType',
+		'primitiveType',
 		'required',
 		'filterable',
 		'productNameSegment',
 		'segmentPriority',
+		'bounded',
+		'multiValue',
+		'maxValues',
+		'minimum',
+		'maximum',
 	];
 	protected $hidden = [
 		'created_at',
@@ -42,15 +46,6 @@ class Attribute extends Model{
 		'Options' => 'options',
 		'Readable' => 'readable',
 	];
-	public const GenericTypes = [
-		'Number' => 'number',
-		'DecimalNumber' => 'number-decimal',
-		'Color' => 'color',
-		'MultiColor' => 'multi-color',
-		'String' => 'text',
-		'File' => 'file',
-		'Other' => 'other',
-	];
 	public const SegmentPriority = [
 		'Minimum' => 1,
 		'Maximum' => 10,
@@ -65,7 +60,7 @@ class Attribute extends Model{
 		return $this->belongsTo(Category::class, 'categoryId');
 	}
 
-	public function attributeType(){
-		return $this->belongsTo(AttributeType::class, 'attributeTypeId');
+	public function primitiveType(){
+		return $this->belongsTo(PrimitiveType::class, 'primitiveType', 'typeCode');
 	}
 }

@@ -7,7 +7,7 @@
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Create an attribute'])
 				</div>
-				<form id="uploadForm" action="{{route('admin.products.attributes.store')}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
+				<form id="uploadForm" action="{{route('admin.products.attributes.store')}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data" onsubmit="validateChecks();">
 					@csrf
 					<div class="card-body">
 						<div class="row">
@@ -27,7 +27,7 @@
 													@foreach($categories as $topLevel)
 														<li>
 															<div class="custom-control custom-checkbox mr-sm-2" data-name="{{$topLevel['name']}}">
-																<input type="checkbox" name="category[]" class="custom-control-input" id="check_{{$topLevel['id']}}" @if($topLevel['popularCategory']) checked @endif value="{{$topLevel['id']}}">
+																<input type="checkbox" name="category[]" class="custom-control-input" id="check_{{$topLevel['id']}}" value="{{$topLevel['id']}}" onchange="countCheckboxes();">
 																<label class="custom-control-label" for="check_{{$topLevel['id']}}">{{$topLevel['name']}}</label>
 															</div>
 															@if($topLevel['hasInner']==true)
@@ -35,7 +35,7 @@
 																	@foreach($topLevel['inner'] as $inner)
 																		<li>
 																			<div class="custom-control custom-checkbox mr-sm-2" data-name="{{$inner['name']}}">
-																				<input type="checkbox" name="category[]" class="custom-control-input" id="check_{{$inner['id']}}" @if($inner['popularCategory']) checked @endif value="{{$inner['id']}}">
+																				<input type="checkbox" name="category[]" class="custom-control-input" id="check_{{$inner['id']}}" value="{{$inner['id']}}" onchange="countCheckboxes();">
 																				<label class="custom-control-label" for="check_{{$inner['id']}}">{{$inner['name']}}</label>
 																			</div>
 																			@if($inner['hasInner']==true)
@@ -43,7 +43,7 @@
 																					@foreach($inner['inner'] as $innerNext)
 																						<li>
 																							<div class="custom-control custom-checkbox mr-sm-2" data-name="{{$innerNext['name']}}">
-																								<input type="checkbox" name="category[]" class="custom-control-input" id="check_{{$innerNext['id']}}" @if($innerNext['popularCategory']) checked @endif value="{{$innerNext['id']}}">
+																								<input type="checkbox" name="category[]" class="custom-control-input" id="check_{{$innerNext['id']}}" value="{{$innerNext['id']}}" onchange="countCheckboxes();">
 																								<label class="custom-control-label" for="check_{{$innerNext['id']}}">{{$innerNext['name']}}</label>
 																							</div>
 																						</li>
@@ -67,10 +67,6 @@
 											<label for="description">@required (Description)</label>
 											<textarea id="description" name="description" class="form-control" required placeholder="Type attribute description here">{{old('description')}}</textarea>
 										</div>
-										<div class="form-group">
-											<label for="code">@required (Code)</label>
-											<input id="code" type="text" name="code" class="form-control" required placeholder="Type a code (without spaces)" value="{{old('code')}}"/>
-										</div>
 										<div class="card custom-card p-3 shadow-none mb-3">
 											<div class="form-group">
 												<label for="sellerInterfaceType">@required (User interface for seller panel)</label>
@@ -84,7 +80,7 @@
 											</div>
 											<div class="form-group">
 												<label for="attributeType">@required (Type of value(s) for this attribute)</label>
-												<select name="attributeType" id="attributeType" class="form-control" disabled onchange="handleAttributeTypeChanged(this.value);">
+												<select name="primitiveType" id="attributeType" class="form-control" disabled onchange="handleAttributeTypeChanged(this.value);">
 													@foreach($types as $type)
 														<option value="{{$type->getKey()}}" @include('admin.extras.tooltip.right', ['title' => $type->name()])>{{$type->name()}}</option>
 													@endforeach
@@ -95,15 +91,15 @@
 												<div>
 													<div class="custom-control custom-checkbox">
 														<input type="checkbox" class="custom-control-input" id="bounded" name="bounded" onchange="handleBoundStatusChanged();" disabled>
-														<label class="custom-control-label" for="bounded">Yes</label>
+														<label class="custom-control-label" for="bounded" id="ghanta">Yes</label>
 													</div>
 												</div>
 											</div>
 											<div class="form-group mb-0">
 												<label>Enter upper and lower limit</label>
 												<div class="row">
-													<div class="col-6"><input type="text" id="minimum" class="form-control" placeholder="Lower limit" disabled></div>
-													<div class="col-6"><input type="text" id="maximum" class="form-control" placeholder="Upper limit" disabled></div>
+													<div class="col-6"><input type="number" name="minimum" id="minimum" class="form-control" placeholder="Lower limit" disabled min="0" step="1" value="{{old('minimum')}}"></div>
+													<div class="col-6"><input type="number" name="maximum" id="maximum" class="form-control" placeholder="Upper limit" disabled min="0" step="1" value="{{old('maximum')}}"></div>
 												</div>
 											</div>
 										</div>
@@ -120,15 +116,15 @@
 												<label>Should this attribute's value(s) be used to form the name of the product being associated?</label>
 												<div>
 													<div class="custom-control custom-checkbox">
-														<input type="checkbox" class="custom-control-input" id="productNameSegment" name="productNameSegment">
+														<input type="checkbox" class="custom-control-input" id="productNameSegment" name="productNameSegment" onchange="handleProductSegmentChanged();">
 														<label class="custom-control-label" for="productNameSegment">Yes</label>
 													</div>
 												</div>
 											</div>
 											<div class="form-group mb-0">
 												<label for="segmentPriority">Segment priority</label>
-												<select name="segmentPriority" id="segmentPriority" class="form-control" @include('admin.extras.tooltip.top', ['title' => 'Defines a number used to determine where in the product name, the value(s) of this attribute will appear. Ignored if 0, valid from 1 through 10.'])>
-													<option value="0" selected>0 (Ignored)</option>
+												<select name="segmentPriority" id="segmentPriority" class="form-control" @include('admin.extras.tooltip.top', ['title' => 'Defines a number used to determine where in the product name, the value(s) of this attribute will appear. Valid from 1 through 10.']) disabled>
+													<option value="" selected disabled>Choose</option>
 													@for($i=1;$i<=10;$i++)
 														<option value="{{$i}}">{{$i}}</option>
 													@endfor
@@ -147,7 +143,7 @@
 											</div>
 											<div class="form-group mb-0" id="maxValuesContainer">
 												<label for="">Maximum number of input values</label>
-												<input id="maxValues" type="number" name="maxValues" class="form-control" required placeholder="Type max number of values here" value="{{old('maxValues')}}" min="1" max="10000" disabled/>
+												<input id="maxValues" type="number" name="maxValues" class="form-control" placeholder="Type a number here" value="{{old('maxValues')}}" min="2" max="10000" disabled/>
 											</div>
 										</div>
 										<div class="form-group">
@@ -198,44 +194,40 @@
 @endsection
 
 @section('javascript')
-	<script src="{{asset('assets/admin/utils/MultiEntryModal.js')}}"></script>
 	<script>
+		let elements = {
+			minimumInput: null,
+			maximumInput: null,
+			maxValueInput: null,
+			boundedCheckBox: null,
+			attributeTypeDropdown: null,
+			segmentPriority: null
+		};
+		const sellerInterfaceTypes = {
+			Input: 'input'
+		};
+		const attributeTypes = {
+			Float: 'float',
+			Integer: 'int'
+		};
+		let count = 0;
+
 		window.onload = () => {
-			MultiEntryModal.setupMultiEntryModal({
-				title: 'Valid attribute values',
-				separator: '/',
-				key: 'values',
-				boundEditBoxId: 'values',
-				modalId: 'values_multiEntryModal',
-				inputClass: 'values_input',
-				listGroupId: 'values_listGroup',
-				addMoreButtonId: 'values_addMoreButton',
-				doneButtonId: 'values_doneButton',
-				deleteButtonClass: 'values_delete-button',
-				template: `<li class="list-group-item px-0 py-1 border-0 animated slideInDown">
-								\t\t\t\t\t\t<div class="col-auto px-0">
-								\t\t\t\t\t\t\t<div class="input-group mb-2">
-								\t\t\t\t\t\t\t\t<input type="text" class="form-control values_input" placeholder="Type here..." value=@{{value}}>
-								\t\t\t\t\t\t\t\t<div class="input-group-append">
-								\t\t\t\t\t\t\t\t\t<div class="input-group-text text-white bg-primary values_delete-button">&times;</div>
-								\t\t\t\t\t\t\t\t</div>
-								\t\t\t\t\t\t\t</div>
-								\t\t\t\t\t\t</div>
-								\t\t\t\t\t
-							</li>`
-			});
+			elements = {
+				minimumInput: $('#minimum'),
+				maximumInput: $('#maximum'),
+				maxValueInput: $('#maxValues'),
+				boundedCheckBox: $('#bounded'),
+				attributeTypeDropdown: $('#attributeType'),
+				segmentPriority: $('#segmentPriority')
+			};
 		};
 
-		handleSellerInterfaceTypeChanged = (value) => {
-			if (value === 'input') {
-				const element = $('#attributeType');
-				element.prop('disabled', false);
+		countCheckboxes = () => {
+			if (event.target.checked) {
+				count++;
 			} else {
-				const element = $('#attributeType');
-				element.prop('disabled', true);
-				$('#bounded').prop('disabled', true);
-				$('#minimum').prop('disabled', true);
-				$('#maximum').prop('disabled', true);
+				count--;
 			}
 		};
 
@@ -245,38 +237,100 @@
 			});
 		};
 
-		handleBoundStatusChanged = () => {
-			const checked = event.target.checked;
-			if (checked) {
-				$('#minMaxContainer').show();
+		handleSellerInterfaceTypeChanged = (value) => {
+			if (value === sellerInterfaceTypes.Input) {
+				enable(elements.attributeTypeDropdown);
 			} else {
-				const element = $('#minMaxContainer');
-				element.hide();
-				element.attr('disabled', true);
-			}
-		};
-
-		handleMultiValueChanged = () => {
-			const checked = event.target.checked;
-			if (checked) {
-				const element = $('#maxValues');
-				element.prop('disabled', false);
-			} else {
-				const element = $('#maxValues');
-				element.prop('disabled', true);
+				elements.attributeTypeDropdown[0].selectedIndex = 0;
+				trigger(elements.attributeTypeDropdown, 'change');
+				disable(elements.attributeTypeDropdown);
 			}
 		};
 
 		handleAttributeTypeChanged = (value) => {
-			if (value === 'float' || value === 'int') {
-				$('#bounded').prop('disabled', false);
-				$('#minimum').prop('disabled', false);
-				$('#maximum').prop('disabled', false);
+			if (value === attributeTypes.Float || value === attributeTypes.Integer) {
+				enable(elements.boundedCheckBox);
 			} else {
-				$('#bounded').prop('disabled', true);
-				$('#minimum').prop('disabled', true);
-				$('#maximum').prop('disabled', true);
+				if (checked(elements.boundedCheckBox)) {
+					trigger(elements.boundedCheckBox, 'click');
+					trigger(elements.boundedCheckBox, 'change');
+				}
+				disable(elements.boundedCheckBox);
 			}
+		};
+
+		handleBoundStatusChanged = () => {
+			if (event.target.checked) {
+				enable(elements.minimumInput);
+				required(elements.minimumInput);
+				enable(elements.maximumInput);
+				required(elements.maximumInput);
+			} else {
+				disable(elements.minimumInput);
+				optional(elements.minimumInput);
+				disable(elements.maximumInput);
+				optional(elements.maximumInput);
+				clear(elements.minimumInput);
+				clear(elements.maximumInput);
+			}
+		};
+
+		handleMultiValueChanged = () => {
+			if (event.target.checked) {
+				enable(elements.maxValueInput);
+				required(elements.maxValueInput);
+			} else {
+				disable(elements.maxValueInput);
+				optional(elements.maxValueInput);
+				clear(elements.maxValueInput);
+			}
+		};
+
+		handleProductSegmentChanged = () => {
+			if (event.target.checked) {
+				enable(elements.segmentPriority);
+				required(elements.segmentPriority);
+			} else {
+				disable(elements.segmentPriority);
+				optional(elements.segmentPriority);
+				clear(elements.segmentPriority);
+			}
+		};
+
+		validateChecks = () => {
+			if (count === 0) {
+				event.preventDefault();
+				toastr.warning('You must select at-least one category.');
+				return false;
+			}
+		};
+
+		enable = (e) => {
+			e.prop('disabled', false);
+		};
+
+		disable = (e) => {
+			e.prop('disabled', true);
+		};
+
+		required = (e) => {
+			e.attr('required', true);
+		};
+
+		optional = (e) => {
+			e.prop('required', false);
+		};
+
+		trigger = (e, name) => {
+			e.trigger(name);
+		};
+
+		clear = (e) => {
+			e.parsley().reset();
+		};
+
+		checked = (e) => {
+			return e.prop('checked') === true;
 		};
 	</script>
 @stop
