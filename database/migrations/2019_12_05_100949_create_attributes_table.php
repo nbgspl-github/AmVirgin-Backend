@@ -17,7 +17,7 @@ class CreateAttributesTable extends Migration{
 			$table->integer('categoryId')->comment('The category this attribute belongs to');
 			$table->string('name')->comment('Name of this attribute (used for display purposes only');
 			$table->string('description', 5000)->comment('Appropriate description of what this attribute does (used for display purposes only)');
-			$table->string('code', 1000)->unique()->comment('A unique code to identify this attribute on the front-end.');
+			$table->string('code', 100)->unique()->comment('A unique code to identify this attribute on the front-end.');
 			$table->enum('sellerInterfaceType', [Attribute::SellerInterfaceType['Select'], Attribute::SellerInterfaceType['Input'], Attribute::SellerInterfaceType['TextArea'], Attribute::SellerInterfaceType['Radio']])->comment('What kind of UI should be shown to seller when taking this attributes\' values?');
 			$table->enum('customerInterfaceType', [Attribute::CustomerInterfaceType['Options'], Attribute::CustomerInterfaceType['Readable']])->comment('What kind of UI should be shown to the customer?')->nullable();
 			$table->string('primitiveType', 10)->comment('What type of values does this attribute holds?');
