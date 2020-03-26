@@ -195,7 +195,8 @@ class AuthController extends BaseAuthController {
 		$dataSet  = array();
 		$input    = request()->all();
 		$rules    = array(
-	        'email' => "required|email",
+	        'current_email' => "required|email",
+	        'new_email'     => "required|email",
 	    );
 	    $validator = Validator::make($input, $rules); 
 
@@ -208,15 +209,15 @@ class AuthController extends BaseAuthController {
 	    } else { 
 	    	try {    
 			    DB::table('change_emails')->insert([
-			        'email' => $request->email,
+			        'email' => $request->current_email,
 			        'token' => $token,
 			    ]);
 
 				$tokenData = DB::table('change_emails')
-		    				->where('email', $request->email)->first();
+		    				->where('email', $request->current_email)->first();
 
 			   $dataSet['token'] = $tokenData->token;
-			   $dataSet['email'] = $request->email; // or $email = $tokenData->email; 
+			   $dataSet['email'] = $request->current_email; // or $email = $tokenData->email; 
 				$response->status(HttpOkay)->message('Email change token')->setValue('data', $dataSet);
 
 	        } catch (Throwable $exception) { 
