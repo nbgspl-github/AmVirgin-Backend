@@ -188,7 +188,7 @@ class AuthController extends BaseAuthController{
 
 				$dataSet['title'] = "Forgot Password? Don't Worry we all forgot some time!";
 
-				Mail::send('email.forgot_pass_template', $data, function ($message){
+				Mail::send('email.forgot_pass_template', $dataSet, function ($message){
 
 					$message->to($request->email, 'Seller')
 						->subject('Reset Your Password!');
