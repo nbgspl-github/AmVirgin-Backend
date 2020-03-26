@@ -234,7 +234,7 @@ class AuthController extends BaseAuthController {
 
 	    $input = $request->all();
 	    $rules = array(
-	        'old_email' => "required|email",
+	        'current_email' => "required|email",
 	        'new_email' => "required|email",
 	        'token' => "required",
 	    );
@@ -245,7 +245,7 @@ class AuthController extends BaseAuthController {
 	        try { 
 
 	        	$newEmail  = $request->new_email;
-	        	$oldEmail  = $request->old_email;
+	        	$oldEmail  = $request->current_email;
 	        	$token     = $request->token;
 
 			    $tokenData = DB::table('change_emails')
@@ -254,11 +254,11 @@ class AuthController extends BaseAuthController {
 			    if(!empty($tokenData)){
 			    	$seller = Seller::where('email', $tokenData->email)->first();
 				    if ( !$seller){ 
-				     	$response->status(HttpResourceNotFound)->message('Invalid seller email.');
+				     	$response->status(HttpResourceNotFound)->message('Invalid seller current email.');
 				     	return $response->send();
 				     } 
 			    }else{
-			    	$response->status(HttpResourceNotFound)->message('Invalid token or email.');
+			    	$response->status(HttpResourceNotFound)->message('Invalid token or Current Email.');
 				    return $response->send();
 			    }
 			     //or wherever you want
