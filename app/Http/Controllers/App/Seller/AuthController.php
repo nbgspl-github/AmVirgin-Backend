@@ -246,7 +246,7 @@ class AuthController extends BaseAuthController{
 
 				$dataSet['token'] = $tokenData->token;
 				$dataSet['email'] = $request->current_email; // or $email = $tokenData->email;
-				$dataSet['title'] = "This mail is regarding for change you email register with AmVirgin! Ignore this main if don't request";
+				$dataSet['title'] = "This mail is regarding for change you email register with AmVirgin!.";
 
 
 				// Mail::send('email.email_change_template', $dataSet, function ($message){
@@ -254,7 +254,7 @@ class AuthController extends BaseAuthController{
 				// 		->subject('Change Your Password!');
 				// });
 
-				$response->status(HttpOkay)->message('Great! Please check you new email for change email change token')->setValue('data', $dataSet);
+				$response->status(HttpOkay)->message('Great! Please check you new email for change email')->setValue('data', $dataSet);
 
 			}
 			catch (Throwable $exception) {
