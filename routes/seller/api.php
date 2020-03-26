@@ -28,7 +28,15 @@ Route::put('/profile', [AuthController::class, 'updateProfile'])->name('seller.u
 
 Route::post('/change-password', [AuthController::class, 'changePassword'])->name('seller.changePassword')->middleware('auth:seller-api');
 
-Route::prefix('categories')->group(function (){
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('seller.forgotPassword');
+
+Route::post('/change-email', [AuthController::class, 'changeEmail'])->name('seller.changeEmail')->middleware('auth:seller-api')->middleware('auth:seller-api');
+
+Route::post('/change-email-token', [AuthController::class, 'getChangeEmailToken'])->name('seller.getChangeEmailToken')->middleware('auth:seller-api');
+
+Route::post('/reset-password-token', [AuthController::class, 'getResetPasswordToken'])->name('seller.getResetPasswordToken');
+
+Route::prefix('categories')->group(function () {
 	Route::get('/', [CategoriesController::class, 'index'])->name('seller.categories.index');
 	Route::get('/{id}/attributes', [AttributeListController::class, 'show'])->name('seller.categories.attributes.index');
 });

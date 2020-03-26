@@ -103,7 +103,7 @@ class HomePageController extends ExtendedResourceController {
 			return responseApp()->status(HttpOkay)->message('Successfully retrieved entertainment homepage resources.')->setValue('data', $data)->send();
 		}
 		catch (Throwable $throwable) {
-			return responseApp()->status(HttpServerError)->message('Something went wrong. Please try again later.')->setValue('data')->send();
+			return responseApp()->status(HttpServerError)->message($throwable)->setValue('data')->send();
 		}
 	}
 
