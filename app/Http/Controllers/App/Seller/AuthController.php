@@ -13,24 +13,24 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Carbon\Carbon;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\SendMail;       
+use App\Mail\SendMail;
 
-class AuthController extends BaseAuthController {
+class AuthController extends BaseAuthController{
 	protected $ruleSet;
 
-	public function __construct() {
+	public function __construct(){
 		parent::__construct();
 		$this->ruleSet = config('rules.auth.seller');
 	}
 
-	public function profile() {
+	public function profile(){
 		return new AuthProfileResource($this->guard()->user());
 	}
 
-	public function updateProfile() {
+	public function updateProfile(){
 		$response = responseApp();
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rulesUpdateProfile());
@@ -57,291 +57,301 @@ class AuthController extends BaseAuthController {
 		}
 	}
 
-	public function changePassword(Request $request)
-	{
+	public function changePassword(Request $request){
 		$response = responseApp();
 
- 		$input = $request->all();  
+		$input = $request->all();
 
-	    $rules = array(
-	        'old_password' => 'required',
-	        'new_password' => 'required|min:6',
-	        'confirm_password' => 'required|same:new_password',
-	    );
-	    $validator = Validator::make($input, $rules);
-	    if ($validator->fails()) {
-	    	$response->status(HttpServerError)->message($validator->errors()->first());
-	        return $response->send();
-	    } else {
-	        try {
+		$rules = [
+			'old_password' => 'required',
+			'new_password' => 'required|min:6',
+			'confirm_password' => 'required|same:new_password',
+		];
+		$validator = Validator::make($input, $rules);
+		if ($validator->fails()) {
+			$response->status(HttpServerError)->message($validator->errors()->first());
+			return $response->send();
+		}
+		else {
+			try {
 
-	        	$seller = Seller::retrieveThrows($this->guard()->id());
+				$seller = Seller::retrieveThrows($this->guard()->id());
 
-	            if ((Hash::check(request('old_password'), $seller->password)) == false) {
-	                 
-	                $response->status(HttpUnauthorized)->message('Check your old password');
+				if ((Hash::check(request('old_password'), $seller->password)) == false) {
 
-	            } else if ((Hash::check(request('new_password'), $seller->password)) == true) {
+					$response->status(HttpUnauthorized)->message('Check your old password');
 
-	            	$response->status(HttpUnauthorized)->message('Please enter a password which is not similar then current password'); 
-	                 
-	            } else {
-	                $seller->update(['password' => Hash::make($input['new_password'])]);
-	                $response->status(HttpOkay)->message('Password updated successfully');
- 
-	            }
-	        } catch (Throwable $exception){
-	        	$response->status(HttpServerError)->message($exception->getMessage());
 				}
-				finally {
-					return $response->send();
+				else if ((Hash::check(request('new_password'), $seller->password)) == true) {
+
+					$response->status(HttpUnauthorized)->message('Please enter a password which is not similar then current password');
+
+				}
+				else {
+					$seller->update(['password' => Hash::make($input['new_password'])]);
+					$response->status(HttpOkay)->message('Password updated successfully');
+
 				}
 			}
-	    }
-
-	public function forgotPassword(Request $request)
-	{
-		$response = responseApp();
-
-	    $input = $request->all();
-	    $rules = array(
-	        'password' => "required",
-	        'token' => "required",
-	    );
-	    $validator = Validator::make($input, $rules);
-	    if ($validator->fails()) { 
-	        $response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
-	    } else {
-	        try { 
-
-	        	$password  = $request->password;
-	        	$token     = $request->token;
-
-			    $tokenData = DB::table('password_resets')
-			    			->where('token', $token)->first();
-
-			    if(!empty($tokenData)){
-			    	$seller = Seller::where('email', $tokenData->email)->first();
-				    if ( !$seller){
-
-				     	$response->status(HttpResourceNotFound)->message('Invalid seller email.');
-				     	return $response->send();
-				     } 
-			    }else{
-			    	$response->status(HttpResourceNotFound)->message('Invalid token.');
-				    return $response->send();
-			    }
-			     //or wherever you want
-
-			     $seller->password = Hash::make($password);
-			     $seller->update(); //or $seller->save(); 
-
-			    // If the seller shouldn't reuse the token later, delete the token 
-			    DB::table('password_resets')->where('email', $seller->email)->delete();
-			    $response->status(HttpOkay)->message('Password has been reset successfully');
-
-	        } catch (ModelNotFoundException $exception) {
-	            
-	            $response->status(HttpResourceNotFound)->message('Could not find seller for that key.');
-
-	        } catch (Throwable $exception) {
-	           $response->status(HttpServerError)->message($exception->getMessage()); 
-	        }
-	    } 
-	    return $response->send(); 
+			catch (Throwable $exception) {
+				$response->status(HttpServerError)->message($exception->getMessage());
+			}
+			finally {
+				return $response->send();
+			}
+		}
 	}
 
-
-	public function getResetPasswordToken(Request $request)
-	{
+	public function forgotPassword(Request $request){
 		$response = responseApp();
-		$dataSet  = array();
-		$input    = request()->all();
-		$rules    = array(
-	        'email' => "required|email",
-	    );
-	    $validator = Validator::make($input, $rules); 
+
+		$input = $request->all();
+		$rules = [
+			'password' => "required",
+			'token' => "required",
+		];
+		$validator = Validator::make($input, $rules);
+		if ($validator->fails()) {
+			$response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
+		}
+		else {
+			try {
+
+				$password = $request->password;
+				$token = $request->token;
+
+				$tokenData = DB::table('password-resets')
+					->where('token', $token)->first();
+
+				if (!empty($tokenData)) {
+					$seller = Seller::where('email', $tokenData->email)->first();
+					if (!$seller) {
+
+						$response->status(HttpResourceNotFound)->message('Invalid seller email.');
+						return $response->send();
+					}
+				}
+				else {
+					$response->status(HttpResourceNotFound)->message('Invalid token.');
+					return $response->send();
+				}
+				//or wherever you want
+
+				$seller->password = Hash::make($password);
+				$seller->update(); //or $seller->save();
+
+				// If the seller shouldn't reuse the token later, delete the token
+				DB::table('password-resets')->where('email', $seller->email)->delete();
+				$response->status(HttpOkay)->message('Password has been reset successfully');
+
+			}
+			catch (ModelNotFoundException $exception) {
+
+				$response->status(HttpResourceNotFound)->message('Could not find seller for that key.');
+
+			}
+			catch (Throwable $exception) {
+				$response->status(HttpServerError)->message($exception->getMessage());
+			}
+		}
+		return $response->send();
+	}
+
+	public function getResetPasswordToken(Request $request){
+		$response = responseApp();
+		$dataSet = [];
+		$input = request()->all();
+		$rules = [
+			'email' => "required|email",
+		];
+		$validator = Validator::make($input, $rules);
 
 		$token = Str::random(60);
 
 		if ($validator->fails()) {
 
-	        $response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
-	        return $response->send(); 
-	    } else { 
-	    	try {    
-			    DB::table('password_resets')->insert([
-			        'email' => $request->email,
-			        'token' => $token,
-			    ]);
+			$response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
+			return $response->send();
+		}
+		else {
+			try {
+				DB::table('password-resets')->insert([
+					'email' => $request->email,
+					'token' => $token,
+				]);
 
-				$tokenData = DB::table('password_resets')
-		    				->where('email', $request->email)->first();
+				$tokenData = DB::table('password-resets')
+					->where('email', $request->email)->first();
 
-			   $dataSet['token'] = $tokenData->token;
-			   $dataSet['email'] = $request->email; // or $email = $tokenData->email;
+				$dataSet['token'] = $tokenData->token;
+				$dataSet['email'] = $request->email; // or $email = $tokenData->email;
 
-			   $dataSet['title'] = "Forgot Password? Don't Worry we all forgot some time!";
+				$dataSet['title'] = "Forgot Password? Don't Worry we all forgot some time!";
 
-		        Mail::send('email.forgot_pass_template', $data, function($message) {
+				Mail::send('email.forgot_pass_template', $data, function ($message){
 
-		            $message->to($request->email, 'Seller')
+					$message->to($request->email, 'Seller')
+						->subject('Reset Your Password!');
+				});
 
-		                    ->subject('Reset Your Password!');
-		        });
+				// if (Mail::failures()) {
+				// 	$response->status(HttpOkay)->message('Sorry! Please try again latter');
+				// 	return $response->send();
+				//    // return response()->Fail('Sorry! Please try again latter');
+				//  }else{
+				//  	$response->status(HttpOkay)->message('Great! Please Check Your Successfully send in your mail');
+				// 	return $response->send();
+				//    // return response()->success('Great! Successfully send in your mail');
+				//  }
 
-		        // if (Mail::failures()) {
-		        // 	$response->status(HttpOkay)->message('Sorry! Please try again latter');
-		        // 	return $response->send();
-		        //    // return response()->Fail('Sorry! Please try again latter');
-		        //  }else{
-		        //  	$response->status(HttpOkay)->message('Great! Please Check Your Successfully send in your mail');
-		        // 	return $response->send();
-		        //    // return response()->success('Great! Successfully send in your mail');
-		        //  }
- 
 				$response->status(HttpOkay)->message('Great! Please Check Your Email for Password reset!')->setValue('data', $dataSet);
 
-	        } catch (Throwable $exception) { 
-	           $response->status(HttpServerError)->message($exception->getMessage());
-				
-	        }finally {
+			}
+			catch (Throwable $exception) {
+				$response->status(HttpServerError)->message($exception->getMessage());
+
+			}
+			finally {
 				return $response->send();
-			} 
+			}
 		}
 	}
-	public function getChangeEmailToken(Request $request)
-	{
+
+	public function getChangeEmailToken(Request $request){
 		$response = responseApp();
-		$dataSet  = array();
-		$input    = request()->all();
-		$rules    = array(
-	        'current_email' => "required|email",
-	        'new_email'     => "required|email",
-	    );
-	    $validator = Validator::make($input, $rules); 
+		$dataSet = [];
+		$input = request()->all();
+		$rules = [
+			'current_email' => "required|email",
+			'new_email' => "required|email",
+		];
+		$validator = Validator::make($input, $rules);
 
 		$token = Str::random(80);
 
 		if ($validator->fails()) {
 
-	        $response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
-	        return $response->send(); 
-	    } else { 
-	    	try {    
-			    DB::table('change_emails')->insert([
-			        'email' => $request->current_email,
-			        'token' => $token,
-			    ]);
+			$response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
+			return $response->send();
+		}
+		else {
+			try {
+				DB::table('change-emails')->insert([
+					'email' => $request->current_email,
+					'token' => $token,
+				]);
 
-				$tokenData = DB::table('change_emails')
-		    				->where('email', $request->current_email)->first();
+				$tokenData = DB::table('change-emails')
+					->where('email', $request->current_email)->first();
 
-			   $dataSet['token'] = $tokenData->token;
-			   $dataSet['email'] = $request->current_email; // or $email = $tokenData->email; 
-			   $dataSet['title'] = "This mail is regarding for change you email register with AmVirgin! Ignore this main if don't request";
+				$dataSet['token'] = $tokenData->token;
+				$dataSet['email'] = $request->current_email; // or $email = $tokenData->email;
+				$dataSet['title'] = "This mail is regarding for change you email register with AmVirgin! Ignore this main if don't request";
 
-			    Mail::send('email.email_change_template', $dataSet, function($message) {
+				Mail::send('email.email_change_template', $dataSet, function ($message){
 
-		            $message->to($request->email, 'Seller')
-
-		                    ->subject('Change Your Password!');
-		        });
+					$message->to($request->email, 'Seller')
+						->subject('Change Your Password!');
+				});
 
 				$response->status(HttpOkay)->message('Great! Please check you email for change email change token')->setValue('data', $dataSet);
 
-	        } catch (Throwable $exception) { 
-	           $response->status(HttpServerError)->message($exception->getMessage());
-				
-	        }finally {
+			}
+			catch (Throwable $exception) {
+				$response->status(HttpServerError)->message($exception->getMessage());
+
+			}
+			finally {
 				return $response->send();
-			} 
+			}
 		}
 	}
 
-	public function changeEmail(Request $request)
-	{
+	public function changeEmail(Request $request){
 		$response = responseApp();
 
-	    $input = $request->all();
-	    $rules = array(
-	        'current_email' => "required|email",
-	        'new_email' => "required|email",
-	        'token' => "required",
-	    );
-	    $validator = Validator::make($input, $rules);
-	    if ($validator->fails()) { 
-	        $response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
-	    } else {
-	        try { 
+		$input = $request->all();
+		$rules = [
+			'current_email' => "required|email",
+			'new_email' => "required|email",
+			'token' => "required",
+		];
+		$validator = Validator::make($input, $rules);
+		if ($validator->fails()) {
+			$response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
+		}
+		else {
+			try {
 
-	        	$newEmail  = $request->new_email;
-	        	$oldEmail  = $request->current_email;
-	        	$token     = $request->token;
+				$newEmail = $request->new_email;
+				$oldEmail = $request->current_email;
+				$token = $request->token;
 
-			    $tokenData = DB::table('change_emails')
-			    			->where(['token'=> $token,'email' => $oldEmail])->first();
+				$tokenData = DB::table('change-emails')
+					->where(['token' => $token, 'email' => $oldEmail])->first();
 
-			    if(!empty($tokenData)){
-			    	$seller = Seller::where('email', $tokenData->email)->first();
-				    if ( !$seller){ 
-				     	$response->status(HttpResourceNotFound)->message('Invalid seller current email.');
-				     	return $response->send();
-				     } 
-			    }else{
-			    	$response->status(HttpResourceNotFound)->message('Invalid token or Current Email.');
-				    return $response->send();
-			    }
-			     //or wherever you want
+				if (!empty($tokenData)) {
+					$seller = Seller::where('email', $tokenData->email)->first();
+					if (!$seller) {
+						$response->status(HttpResourceNotFound)->message('Invalid seller current email.');
+						return $response->send();
+					}
+				}
+				else {
+					$response->status(HttpResourceNotFound)->message('Invalid token or Current Email.');
+					return $response->send();
+				}
+				//or wherever you want
 
-			     $seller->email = $newEmail;
-			     $seller->update(); //or $seller->save(); 
+				$seller->email = $newEmail;
+				$seller->update(); //or $seller->save();
 
-			    // If the seller shouldn't reuse the token later, delete the token 
-			    DB::table('change_emails')->where('email', $oldEmail)->delete();
-			    $response->status(HttpOkay)->message('Email has been changed successfully');
+				// If the seller shouldn't reuse the token later, delete the token
+				DB::table('change-emails')->where('email', $oldEmail)->delete();
+				$response->status(HttpOkay)->message('Email has been changed successfully');
 
-	        } catch (ModelNotFoundException $exception) {
-	            
-	            $response->status(HttpResourceNotFound)->message('Could not find seller for that key.');
+			}
+			catch (ModelNotFoundException $exception) {
 
-	        } catch (Throwable $exception) {
-	           $response->status(HttpServerError)->message($exception->getMessage()); 
-	        }
-	    } 
-	    return $response->send(); 
+				$response->status(HttpResourceNotFound)->message('Could not find seller for that key.');
+
+			}
+			catch (Throwable $exception) {
+				$response->status(HttpServerError)->message($exception->getMessage());
+			}
+		}
+		return $response->send();
 	}
 
-
-	protected function authTarget(): string {
+	protected function authTarget(): string{
 		return Seller::class;
 	}
 
-	protected function rulesExists() {
+	protected function rulesExists(){
 		return $this->ruleSet['exists'];
 	}
 
-	protected function rulesLogin() {
+	protected function rulesLogin(){
 		return $this->ruleSet['login'];
 	}
 
-	protected function rulesRegister() {
+	protected function rulesRegister(){
 		return $this->ruleSet['register'];
 	}
 
-	protected function rulesUpdateAvatar() {
+	protected function rulesUpdateAvatar(){
 		return $this->ruleSet['update']['avatar'];
 	}
 
-	protected function rulesUpdateProfile() {
+	protected function rulesUpdateProfile(){
 		return $this->ruleSet['update']['profile'];
 	}
 
-	protected function guard() {
+	protected function guard(){
 		return Auth::guard('seller-api');
 	}
 
-	protected function shouldAllowOnlyActiveUsers(): bool {
+	protected function shouldAllowOnlyActiveUsers(): bool{
 		return true;
 	}
 }
