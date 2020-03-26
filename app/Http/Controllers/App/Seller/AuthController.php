@@ -117,7 +117,7 @@ class AuthController extends BaseAuthController {
 	        	$token     = $request->token;
 
 			    $tokenData = DB::table('password_resets')
-			    ->where('token', $token)->first();
+			    			->where('token', $token)->first();
 
 			    if(!empty($tokenData)){
 			    	$seller = Seller::where('email', $tokenData->email)->first();
@@ -189,6 +189,98 @@ class AuthController extends BaseAuthController {
 			} 
 		}
 	}
+	public function getChangeEmailToken(Request $request)
+	{
+		$response = responseApp();
+		$dataSet  = array();
+		$input    = request()->all();
+		$rules    = array(
+	        'email' => "required|email",
+	    );
+	    $validator = Validator::make($input, $rules); 
+
+		$token = Str::random(80);
+
+		if ($validator->fails()) {
+
+	        $response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
+	        return $response->send(); 
+	    } else { 
+	    	try {    
+			    DB::table('change_emails')->insert([
+			        'email' => $request->email,
+			        'token' => $token,
+			    ]);
+
+				$tokenData = DB::table('change_emails')
+		    				->where('email', $request->email)->first();
+
+			   $dataSet['token'] = $tokenData->token;
+			   $dataSet['email'] = $request->email; // or $email = $tokenData->email; 
+				$response->status(HttpOkay)->message('Email change token')->setValue('data', $dataSet);
+
+	        } catch (Throwable $exception) { 
+	           $response->status(HttpServerError)->message($exception->getMessage());
+				
+	        }finally {
+				return $response->send();
+			} 
+		}
+	}
+
+	public function changeEmail(Request $request)
+	{
+		$response = responseApp();
+
+	    $input = $request->all();
+	    $rules = array(
+	        'old_email' => "required|email",
+	        'new_email' => "required|email",
+	        'token' => "required",
+	    );
+	    $validator = Validator::make($input, $rules);
+	    if ($validator->fails()) { 
+	        $response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
+	    } else {
+	        try { 
+
+	        	$newEmail  = $request->new_email;
+	        	$oldEmail  = $request->old_email;
+	        	$token     = $request->token;
+
+			    $tokenData = DB::table('change_emails')
+			    			->where(['token'=> $token,'email' => $oldEmail])->first();
+
+			    if(!empty($tokenData)){
+			    	$seller = Seller::where('email', $tokenData->email)->first();
+				    if ( !$seller){ 
+				     	$response->status(HttpResourceNotFound)->message('Invalid seller email.');
+				     	return $response->send();
+				     } 
+			    }else{
+			    	$response->status(HttpResourceNotFound)->message('Invalid token or email.');
+				    return $response->send();
+			    }
+			     //or wherever you want
+
+			     $seller->email = $newEmail;
+			     $seller->update(); //or $seller->save(); 
+
+			    // If the seller shouldn't reuse the token later, delete the token 
+			    DB::table('change_emails')->where('email', $oldEmail)->delete();
+			    $response->status(HttpOkay)->message('Email has been changed successfully');
+
+	        } catch (ModelNotFoundException $exception) {
+	            
+	            $response->status(HttpResourceNotFound)->message('Could not find seller for that key.');
+
+	        } catch (Throwable $exception) {
+	           $response->status(HttpServerError)->message($exception->getMessage()); 
+	        }
+	    } 
+	    return $response->send(); 
+	}
+
 
 	protected function authTarget(): string {
 		return Seller::class;
