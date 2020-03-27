@@ -489,7 +489,7 @@ class Video extends Model {
 			->saveSlugsTo('slug');
 	}
 
-	public function getTrailersAttribute()
+	public function getTrailerAttribute()
 	{
 	    if ( $this->attributes['trailer']) {  
             return Storage::disk('secured')->url($this->attributes['trailer']);
