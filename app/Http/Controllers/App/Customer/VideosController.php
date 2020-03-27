@@ -169,6 +169,7 @@ class VideosController extends ExtendedResourceController {
 
 	public function getWatchLaterVideo()
 	{
+		$response = responseApp(); 
 		try {
 
 			$cId = $this->guard()->id(); 
