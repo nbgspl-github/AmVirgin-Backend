@@ -167,6 +167,26 @@ class VideosController extends ExtendedResourceController {
 		 
 	}
 
+	public function getWatchLaterVideo()
+	{
+		try {
+
+			$cId = $this->guard()->id(); 
+			$dataSet = WatchLaterVideo::with('video')
+										->where(['customer_id' => $cId])
+										->get();
+
+			$response->status(HttpOkay)->message($exception->getMessage())->setValue('data',$dataSet);
+			
+		} catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
+
+	}
+
 	protected function guard() {
 		return auth('customer-api');
 	}

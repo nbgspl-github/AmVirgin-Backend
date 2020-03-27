@@ -19,11 +19,8 @@ class WatchLaterVideo extends Model {
 	];
 	 
 
-	// public function state() {
-	// 	return $this->belongsTo('App\Models\State', 'stateId');
-	// }
-
-	// public function city() {
-	// 	return $this->belongsTo('App\Models\City', 'cityId');
-	// }
+	public function video() {
+		return $this->belongsTo('App\Models\Video', 'video_id');
+	} 
+	 
 }
