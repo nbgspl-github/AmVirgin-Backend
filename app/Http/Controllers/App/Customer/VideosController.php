@@ -116,6 +116,7 @@ class VideosController extends ExtendedResourceController {
 				$dataSet['customer_ip'] = !empty($request->customer_ip) ? $request->customer_ip:'';
 				$dataSet['customer_user_agent'] = !empty($request->customer_user_agent) ? $request->customer_user_agent:'';
 				$dataSet['video_type'] = !empty($request->video_type) ? $request->video_type:'';
+				$dataSet['video_count'] = 1;
 
 				$videoData = WatchLaterVideo::where(['customer_id'=> $id, 'video_id' => $videoId])->first();
 
