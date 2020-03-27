@@ -26,24 +26,24 @@
 												<ul style="list-style-type: none; max-height: 300px!important; overflow-y: scroll;" class="px-1 py-0 mb-0 " id="list">
 													@foreach($categories as $topLevel)
 														<li>
-															<div class="custom-control custom-checkbox mr-sm-2" data-name="{{$topLevel['name']}}">
-																<input type="checkbox" name="category[]" class="custom-control-input" id="check_{{$topLevel['id']}}" value="{{$topLevel['id']}}" onchange="countCheckboxes();">
+															<div class="custom-control custom-radio mr-sm-2" data-name="{{$topLevel['name']}}">
+																<input type="radio" name="category[]" class="custom-control-input" id="check_{{$topLevel['id']}}" value="{{$topLevel['id']}}" onchange="countCheckboxes();">
 																<label class="custom-control-label" for="check_{{$topLevel['id']}}">{{$topLevel['name']}}</label>
 															</div>
 															@if($topLevel['hasInner']==true)
 																<ul style="list-style-type: none;">
 																	@foreach($topLevel['inner'] as $inner)
 																		<li>
-																			<div class="custom-control custom-checkbox mr-sm-2" data-name="{{$inner['name']}}">
-																				<input type="checkbox" name="category[]" class="custom-control-input" id="check_{{$inner['id']}}" value="{{$inner['id']}}" onchange="countCheckboxes();">
+																			<div class="custom-control custom-radio mr-sm-2" data-name="{{$inner['name']}}">
+																				<input type="radio" name="category[]" class="custom-control-input" id="check_{{$inner['id']}}" value="{{$inner['id']}}" onchange="countCheckboxes();">
 																				<label class="custom-control-label" for="check_{{$inner['id']}}">{{$inner['name']}}</label>
 																			</div>
 																			@if($inner['hasInner']==true)
 																				<ul style="list-style-type: none;">
 																					@foreach($inner['inner'] as $innerNext)
 																						<li>
-																							<div class="custom-control custom-checkbox mr-sm-2" data-name="{{$innerNext['name']}}">
-																								<input type="checkbox" name="category[]" class="custom-control-input" id="check_{{$innerNext['id']}}" value="{{$innerNext['id']}}" onchange="countCheckboxes();">
+																							<div class="custom-control custom-radio mr-sm-2" data-name="{{$innerNext['name']}}">
+																								<input type="radio" name="category[]" class="custom-control-input" id="check_{{$innerNext['id']}}" value="{{$innerNext['id']}}" onchange="countCheckboxes();">
 																								<label class="custom-control-label" for="check_{{$innerNext['id']}}">{{$innerNext['name']}}</label>
 																							</div>
 																						</li>
