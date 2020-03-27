@@ -120,11 +120,11 @@ class VideosController extends ExtendedResourceController {
 				$videoData = WatchLaterVideo::where(['customer_id'=> $id, 'video_id' => $videoId])->first();
 
 				if (!empty($videoData)) {
-					$response->status(HttpResourceNotFound)->message('OPPS! This video is already added in list');
+					$response->status(HttpOkay)->message('OPPS! This video is already added in list');
 					return $response->send();
 				}else{
 					$res = WatchLaterVideo::create($dataSet);
-					$response->status(HttpResourceNotFound)->message('Successfully added in list');
+					$response->status(HttpOkay)->message('Successfully added in list');
 					return $response->send();
 				} 
 				
@@ -149,8 +149,8 @@ class VideosController extends ExtendedResourceController {
 
 			if (!empty($videoData)) {
 				$videoData->delete();
-				
-				$response->status(HttpResourceNotFound)->message('Successfully removed from list');
+
+				$response->status(HttpOkay)->message('Successfully removed from list');
 				return $response->send();
 			}else{
 				 
