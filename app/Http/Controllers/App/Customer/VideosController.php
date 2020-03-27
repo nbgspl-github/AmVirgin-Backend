@@ -177,7 +177,7 @@ class VideosController extends ExtendedResourceController {
 										->where(['customer_id' => $cId])
 										->get();
 
-			$response->status(HttpOkay)->message($exception->getMessage())->setValue('data',$dataSet);
+			$response->status(HttpOkay)->message('Success')->setValue('data',$dataSet);
 			
 		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
