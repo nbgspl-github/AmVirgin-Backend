@@ -183,27 +183,25 @@ class AuthController extends BaseAuthController{
 				$tokenData = DB::table('password-resets')
 					->where('email', $request->email)->first();
 
-				$dataSet['token'] = $tokenData->token;
+				$dataSet['token'] = $token;
 				$dataSet['email'] = $request->email; // or $email = $tokenData->email;
+// 				{
+//     "status": 500,
+//     "message": "Expected response code 250 but got code \"530\", with message \"530 5.7.0 Must issue a STARTTLS command first. mu15sm2841118pjb.30 - gsmtp\r\n\""
+// }
+				if (!empty($request->send_email)) {
+					
+					$dataSet['title'] = "Forgot Password? Don't Worry we all forgot some time!";
 
-				$dataSet['title'] = "Forgot Password? Don't Worry we all forgot some time!";
-
-				// Mail::send('email.forgot_pass_template', $dataSet, function ($message){
-
-				// 	$message->to($dataSet['email'], 'Seller')
-				// 		->subject('Reset Your Password!');
-				// });
-
+					Mail::to($request->email)->send(new SendMail($dataSet));
+				} 
+				 
 				// if (Mail::failures()) {
-				// 	$response->status(HttpOkay)->message('Sorry! Please try again latter');
-				// 	return $response->send();
-				//    // return response()->Fail('Sorry! Please try again latter');
+				
 				//  }else{
-				//  	$response->status(HttpOkay)->message('Great! Please Check Your Successfully send in your mail');
-				// 	return $response->send();
-				//    // return response()->success('Great! Successfully send in your mail');
-				//  }
-
+				//  	
+			
+				//  } 
 				$response->status(HttpOkay)->message('Great! Please Check Your Email for Password reset!')->setValue('data', $dataSet);
 
 			}
@@ -246,7 +244,7 @@ class AuthController extends BaseAuthController{
 
 				$dataSet['token'] = $tokenData->token;
 				$dataSet['email'] = $request->current_email; // or $email = $tokenData->email;
-				$dataSet['title'] = "This mail is regarding for change you email register with AmVirgin!.";
+				// $dataSet['title'] = "This mail is regarding for change your email register with AmVirgin!.";
 
 
 				// Mail::send('email.email_change_template', $dataSet, function ($message){
@@ -254,7 +252,7 @@ class AuthController extends BaseAuthController{
 				// 		->subject('Change Your Password!');
 				// });
 
-				$response->status(HttpOkay)->message('Great! Please check you new email for change email')->setValue('data', $dataSet);
+				$response->status(HttpOkay)->message('Great! Please check your new email for change email')->setValue('data', $dataSet);
 
 			}
 			catch (Throwable $exception) {

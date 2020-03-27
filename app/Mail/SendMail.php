@@ -10,15 +10,16 @@ use Illuminate\Queue\SerializesModels;
 class SendMail extends Mailable
 {
     use Queueable, SerializesModels;
+    public $dataSet;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($dataSet)
     {
-        //
+        $this->dataSet = $dataSet;
     }
 
     /**
@@ -28,6 +29,7 @@ class SendMail extends Mailable
      */
     public function build()
     {
-        return $this->view('email.email_change_template');
+        return $this->subject('Forgot your password')
+                    ->view('email.forgot_pass_template');
     }
 }

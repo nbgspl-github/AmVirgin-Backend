@@ -17,6 +17,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 use App\Resources\Shop\Customer\HomePage\TrendingNowResource;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use App\Models\WatchLaterVideo;
 
 class VideosController extends ExtendedResourceController {
 	public function __construct() {
@@ -87,6 +90,103 @@ class VideosController extends ExtendedResourceController {
 		finally {
 			return $response->send();
 		}
+	}
+
+
+	public function addInWatchLater(Request $request)
+	{
+		$response = responseApp();
+		$dataSet  = array();
+		$input    = request()->all();
+		$rules = [ 
+			'video_id' => "required",
+		];
+		$validator = Validator::make($input, $rules); 
+
+		if ($validator->fails()) {
+
+			$response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
+			return $response->send();
+		}else{
+
+			try {
+
+				$dataSet['customer_id']= $id = $this->guard()->id();
+				$dataSet['video_id'] = $videoId = !empty($request->video_id) ? $request->video_id:'';
+				$dataSet['customer_ip'] = !empty($request->customer_ip) ? $request->customer_ip:'';
+				$dataSet['customer_user_agent'] = !empty($request->customer_user_agent) ? $request->customer_user_agent:'';
+				$dataSet['video_type'] = !empty($request->video_type) ? $request->video_type:'';
+				$dataSet['video_count'] = 1;
+
+				$videoData = WatchLaterVideo::where(['customer_id'=> $id, 'video_id' => $videoId])->first();
+
+				if (!empty($videoData)) {
+					$response->status(HttpOkay)->message('OPPS! This video is already added in list');
+					return $response->send();
+				}else{
+					$res = WatchLaterVideo::create($dataSet);
+					$response->status(HttpOkay)->message('Successfully added in list');
+					return $response->send();
+				} 
+				
+			} catch (Throwable $exception) {
+				$response->status(HttpServerError)->message($exception->getMessage());
+			}
+			finally {
+				return $response->send();
+			}
+			
+		}
+		 
+	}
+	public function removeWatchLater($id)
+	{
+		$response = responseApp();
+		 
+		try {
+
+			$cId = $this->guard()->id();  
+			$videoData = WatchLaterVideo::where(['customer_id'=> $cId, 'video_id' => $id])->first();
+
+			if (!empty($videoData)) {
+				$videoData->delete();
+
+				$response->status(HttpOkay)->message('Successfully removed from list');
+				return $response->send();
+			}else{
+				 
+				$response->status(HttpResourceNotFound)->message('OPPS! This video is not added in list');
+				return $response->send();
+			} 
+			
+		} catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		} 
+		 
+	}
+
+	public function getWatchLaterVideo()
+	{
+		$response = responseApp(); 
+		try {
+
+			$cId = $this->guard()->id(); 
+			$dataSet = WatchLaterVideo::with('video')
+										->where(['customer_id' => $cId])
+										->get();
+
+			$response->status(HttpOkay)->message('Success')->setValue('data',$dataSet);
+			
+		} catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
+
 	}
 
 	protected function guard() {
