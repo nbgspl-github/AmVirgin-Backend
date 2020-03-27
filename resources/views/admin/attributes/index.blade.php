@@ -36,8 +36,8 @@
 								<td class="text-center">
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group mx-auto" role="group">
-											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.videos.edit.action',$video->getKey())}}" @include('admin.extras.tooltip.left', ['title' => 'Edit attribute values'])><i class="mdi mdi-pencil"></i></a>
-											<a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);" onclick="deleteMovie('{{$video->getKey()}}');" @include('admin.extras.tooltip.right', ['title' => 'Delete this attribute'])><i class="mdi mdi-delete"></i></a>
+											<a class="btn btn-outline-danger shadow-sm" href="" @include('admin.extras.tooltip.left', ['title' => 'Edit attribute values'])><i class="mdi mdi-pencil"></i></a>
+											<a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);" onclick="deleteMovie('');" @include('admin.extras.tooltip.right', ['title' => 'Delete this attribute'])><i class="mdi mdi-delete"></i></a>
 										</div>
 									</div>
 								</td>

@@ -12,6 +12,7 @@ use App\Models\AttributeValue;
 use App\Models\Category;
 use App\Models\PrimitiveType;
 use App\Traits\ValidatesRequest;
+use Sujip\Guid\Facades\Guid;
 use Throwable;
 
 class AttributesController extends BaseController{
@@ -26,16 +27,18 @@ class AttributesController extends BaseController{
 				'category.*' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)],
 				'name' => ['bail', 'required', 'string', 'min:1', 'max:255'],
 				'description' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
-				'code' => ['bail', 'required', 'string', 'min:1', 'max:255'],
 				'sellerInterfaceType' => ['bail', 'required', Rule::in([Attribute::SellerInterfaceType['Select'], Attribute::SellerInterfaceType['Input'], Attribute::SellerInterfaceType['TextArea'], Attribute::SellerInterfaceType['Radio']])],
 				'customerInterfaceType' => ['bail', 'required', Rule::in([Attribute::CustomerInterfaceType['Options'], Attribute::CustomerInterfaceType['Readable']])],
-				'genericType' => ['bail', Rule::requiredIf(function (){
+				'primitiveType' => ['bail', Rule::requiredIf(function (){
 					if (Str::equals(request('sellerInterfaceType'), Attribute::SellerInterfaceType['Select']) || Str::equals(request('sellerInterfaceType'), Attribute::SellerInterfaceType['Radio']))
 						return true;
 					else
 						return false;
-				}), Rule::in([Attribute::GenericTypes['Number'], Attribute::GenericTypes['DecimalNumber'], Attribute::GenericTypes['Color'], Attribute::GenericTypes['MultiColor'], Attribute::GenericTypes['String'], Attribute::GenericTypes['File'], Attribute::GenericTypes['Other'],])],
-				'segmentPriority' => ['bail', 'required', 'numeric', 'min:0', 'max:10'],
+				}), Rule::existsPrimary(Tables::PrimitiveTypes, 'typeCode')],
+				'segmentPriority' => ['bail', 'required_with:productNameSegment,on', 'numeric', 'min:0', 'max:10'],
+				'maxValues' => ['bail', 'required_with:multiValue,on', 'numeric', 'min:2', 'max:10000'],
+				'minimum' => ['bail', 'required_with:bounded,on', 'numeric', 'lt:maximum'],
+				'maximum' => ['bail', 'required_with:bounded,on', 'numeric', 'gt:minimum'],
 			],
 		];
 	}
@@ -57,7 +60,6 @@ class AttributesController extends BaseController{
 					return [
 						'id' => $inner->getKey(),
 						'name' => $inner->getName(),
-						'popularCategory' => $inner->popularCategory(),
 					];
 				});
 				return [
@@ -65,7 +67,6 @@ class AttributesController extends BaseController{
 					'name' => $child->getName(),
 					'hasInner' => $innerChildren->count() > 0,
 					'inner' => $innerChildren,
-					'popularCategory' => $child->popularCategory(),
 				];
 			});
 			return [
@@ -73,7 +74,6 @@ class AttributesController extends BaseController{
 				'name' => $topLevel->getName(),
 				'hasInner' => $children->count() > 0,
 				'inner' => $children,
-				'popularCategory' => $topLevel->popularCategory(),
 			];
 		});
 		return view('admin.attributes.create')->with('categories', $topLevel)->with('types', $types);
@@ -86,7 +86,7 @@ class AttributesController extends BaseController{
 			collect($validated->category)->each(function ($categoryId) use ($validated){
 				$attribute = Attribute::where([
 					['categoryId', $categoryId],
-					['code', $validated->code],
+					['code', sprintf('%d-%s', $categoryId, Str::slug($validated->name))],
 				])->first();
 				if ($attribute == null) {
 					$attribute = Attribute::create([
@@ -95,17 +95,23 @@ class AttributesController extends BaseController{
 						'categoryId' => $categoryId,
 						'sellerInterfaceType' => $validated->sellerInterfaceType,
 						'customerInterfaceType' => $validated->customerInterfaceType,
-						'genericType' => $validated->genericType,
-						'code' => $validated->code,
+						'primitiveType' => $validated->primitiveType,
+						'code' => sprintf('%d-%s', $categoryId, Str::slug($validated->name)),
 						'required' => request()->has('required'),
 						'filterable' => request()->has('filterable'),
 						'productNameSegment' => request()->has('productNameSegment'),
 						'segmentPriority' => $validated->segmentPriority,
+						'bounded' => request()->has('bounded'),
+						'multiValue' => request()->has('multiValue'),
+						'maxValues' => $validated->maxValues,
+						'minimum' => $validated->minimum,
+						'maximum' => $validated->maximum,
 					]);
-					Attribute::where([
+					$conflict = Attribute::where([
 						['categoryId', $categoryId],
 						['segmentPriority', $validated->segmentPriority],
-					])->update(['segmentPriority', 0]);
+					])->first();
+					if (!empty($conflict)) $conflict->update(['segmentPriority', 0]);
 				}
 			});
 			$response->success('Successfully created attribute and related values.')->route('admin.products.attributes.index');
