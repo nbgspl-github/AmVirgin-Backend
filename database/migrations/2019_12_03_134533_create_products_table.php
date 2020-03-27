@@ -51,6 +51,7 @@ class CreateProductsTable extends Migration{
 			$table->text('warrantyServiceType')->nullable()->comment('Type of warranty applicable on this product.');
 			$table->text('coveredInWarranty')->nullable()->comment('What is covered in warranty?');
 			$table->text('notCoveredInWarranty')->nullable()->comment('What does not come under warranty?');
+			$table->string('primaryImage', Constants::MaxFilePathLength)->nullable()->comment('Primary or main image for the product');
 			$table->softDeletes()->comment('Soft deleting in this context means the product is marked for deletion by seller.');
 			$table->timestamps();
 		});

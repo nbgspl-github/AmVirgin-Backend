@@ -6,9 +6,11 @@ use App\Classes\Time;
 use App\Exceptions\ValidationException;
 use App\Models\Attribute;
 use App\Models\Category;
+use App\Models\ProductImage;
 use App\Models\Seller;
 use App\Models\Settings;
 use App\Models\ShopSlider;
+use App\Storage\SecuredDisk;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -79,7 +81,6 @@ class CartTesterCommand extends Command{
 //    'notCoveredInWarranty': 'Laces'
 //}";
 //		dd(json_decode($json));
-		echo Category::retrieve(5)->parent->parent->name;
 		return;
 	}
 }

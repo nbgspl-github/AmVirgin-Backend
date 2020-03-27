@@ -13,9 +13,8 @@ class CreateProductImagesTable extends Migration{
 	public function up(){
 		Schema::create('product-images', function (Blueprint $table){
 			$table->bigIncrements('id');
-			$table->unsignedBigInteger('productId');
-			$table->string('path', 4096);
-			$table->string('tag')->nullable();
+			$table->unsignedBigInteger('productId')->comment('Product to which these images belong');
+			$table->string('path', \App\Constants\Constants::MaxFilePathLength);
 			$table->timestamps();
 		});
 	}

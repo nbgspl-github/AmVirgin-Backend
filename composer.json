@@ -10,6 +10,7 @@
 	"require": {
 		"php": "7.4.*",
 		"ext-json": "*",
+		"binary-cats/laravel-sku": "^0.2.0",
 		"fideloper/proxy": "^4.0",
 		"jeremeamia/superclosure": "^2.4",
 		"laravel/framework": "^6.2",

@@ -2,24 +2,25 @@
 
 namespace App\Models;
 
+use App\Classes\Str;
+use App\Traits\HasAttributeMethods;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 use App\Storage\SecuredDisk;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ProductImage extends Model {
-	use RetrieveResource;
-	use RetrieveCollection;
-
+/**
+ * Refers to one or more images associated with a product.
+ * @package App\Models
+ */
+class ProductImage extends Model{
+	use RetrieveResource, RetrieveCollection, HasAttributeMethods;
 	protected $table = 'product-images';
-
 	protected $fillable = [
 		'productId',
 		'path',
-		'tag',
 	];
-
 	protected $hidden = [
 		'id',
 		'productId',
@@ -27,17 +28,11 @@ class ProductImage extends Model {
 		'updated_at',
 	];
 
-	/**
-	 * @return bool
-	 */
-	public function isDeleted(): bool {
-		return $this->deleted;
+	public function product(): BelongsTo{
+		return $this->belongsTo(Product::class, 'productId');
 	}
 
-	public function getPathAttribute() { 
-        if ( $this->attributes['path']) {  
-            return Storage::disk('secured')->url($this->attributes['path']);
-        } 
-        return $this->attributes['path'];
-    }
+	public function getPathAttribute(): string{
+		return $this->attributes['path'] ? SecuredDisk::existsUrl($this->attributes['path']) : Str::Empty;
+	}
 }

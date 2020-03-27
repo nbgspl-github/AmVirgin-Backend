@@ -7,6 +7,7 @@ use App\Traits\HasAttributeMethods;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use App\Traits\Sluggable;
+use BinaryCats\Sku\HasSku;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -16,8 +17,8 @@ use Spatie\Sluggable\SlugOptions;
  * Product is an entity that can be sold, purchased, created, updated and deleted.
  * @package App\Models
  */
-class Product extends Model {
-	use FluentConstructor, RetrieveResource, RetrieveCollection, HasAttributeMethods, Sluggable, SoftDeletes;
+class Product extends Model{
+	use FluentConstructor, RetrieveResource, RetrieveCollection, HasAttributeMethods, Sluggable, SoftDeletes, HasSku;
 	protected $table = 'products';
 	protected $fillable = [
 		'name',
@@ -83,15 +84,15 @@ class Product extends Model {
 		'draft' => 'bool',
 		'soldOut' => 'bool',
 	];
-	const ListingStatus = [
+	public const ListingStatus = [
 		'Active' => 'active',
 		'Inactive' => 'inactive',
 	];
-	const FulfillmentBy = [
+	public const FulfillmentBy = [
 		'Seller' => 'seller',
 		'SellerSmart' => 'seller-smart',
 	];
-	const ShippingCost = [
+	public const ShippingCost = [
 		'Local' => [
 			'Minimum' => 0,
 			'Maximum' => 10000,
@@ -105,15 +106,15 @@ class Product extends Model {
 			'Maximum' => 10000,
 		],
 	];
-	const ProcurementSLA = [
+	public const ProcurementSLA = [
 		'Minimum' => 0,
 		'Maximum' => 7,
 	];
-	const Weight = [
+	public const Weight = [
 		'Minimum' => 0,
 		'Maximum' => 1000,
 	];
-	const Dimensions = [
+	public const Dimensions = [
 		'Length' => [
 			'Minimum' => 0,
 			'Maximum' => 10000,
@@ -127,7 +128,7 @@ class Product extends Model {
 			'Maximum' => 10000,
 		],
 	];
-	const Warranty = [
+	public const Warranty = [
 		'Domestic' => [
 			'Minimum' => 0,
 			'Maximum' => 300,
@@ -137,29 +138,20 @@ class Product extends Model {
 			'Maximum' => 300,
 		],
 	];
-	const WarrantyType = [
+	public const WarrantyType = [
 		'OnSite' => 'on-site',
 		'WalkIn' => 'walk-in',
 	];
 
-	/**
-	 * @return HasMany
-	 */
-	public function attributes() {
+	public function attributes(): HasMany{
 		return $this->hasMany('App\Models\ProductAttribute', 'productId');
 	}
 
-	/**
-	 * @return HasMany
-	 */
-	public function images() {
+	public function images(): HasMany{
 		return $this->hasMany('\App\Models\ProductImage', 'productId');
 	}
 
-	/**
-	 * @return SlugOptions
-	 */
-	public function getSlugOptions(): SlugOptions {
+	public function getSlugOptions(): SlugOptions{
 		return SlugOptions::create()->saveSlugsTo('slug')->generateSlugsFrom('name');
 	}
 }
