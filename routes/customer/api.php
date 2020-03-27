@@ -123,3 +123,10 @@ Route::prefix('recent')->middleware('auth:customer-api')->group(function (){
 Route::prefix('brands')->group(function (){
 	Route::get('{id}', [\App\Http\Controllers\App\Customer\Shop\BrandController::class, 'show']);
 });
+
+
+
+
+Route::prefix('watch-later')->group(function (){
+	Route::post(Str::Empty, [VideosController::class, 'addInWatchLater'])->name('customer.addInWatchLater')->middleware('auth:customer-api');
+});

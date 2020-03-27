@@ -194,22 +194,13 @@ class AuthController extends BaseAuthController{
 
 				// Mail::to('ddpwpareshan@gmail.com')->send(new SendMail($dataSet));
 
-				// Mail::send('email.forgot_pass_template', $dataSet, function ($message){
-
-				// 	$message->to($dataSet['email'], 'Seller')
-				// 		->subject('Reset Your Password!');
-				// });
-
+				 
 				// if (Mail::failures()) {
-				// 	$response->status(HttpOkay)->message('Sorry! Please try again latter');
-				// 	return $response->send();
-				//    // return response()->Fail('Sorry! Please try again latter');
+				
 				//  }else{
-				//  	$response->status(HttpOkay)->message('Great! Please Check Your Successfully send in your mail');
-				// 	return $response->send();
-				//    // return response()->success('Great! Successfully send in your mail');
-				//  }
-
+				//  	
+			
+				//  } 
 				$response->status(HttpOkay)->message('Great! Please Check Your Email for Password reset!')->setValue('data', $dataSet);
 
 			}
@@ -260,7 +251,7 @@ class AuthController extends BaseAuthController{
 				// 		->subject('Change Your Password!');
 				// });
 
-				$response->status(HttpOkay)->message('Great! Please check you new email for change email')->setValue('data', $dataSet);
+				$response->status(HttpOkay)->message('Great! Please check your new email for change email')->setValue('data', $dataSet);
 
 			}
 			catch (Throwable $exception) {
