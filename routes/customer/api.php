@@ -130,5 +130,5 @@ Route::prefix('brands')->group(function (){
 Route::prefix('watch-later')->group(function (){
 	Route::post(Str::Empty, [\App\Http\Controllers\App\Customer\VideosController::class, 'addInWatchLater'])->name('customer.addInWatchLater')->middleware('auth:customer-api');
 
-	Route::post('/remove/{id}', [\App\Http\Controllers\App\Customer\VideosController::class, 'removeWatchLater'])->name('customer.removeWatchLater')->middleware('auth:customer-api');
+	Route::delete('/remove/{id}', [\App\Http\Controllers\App\Customer\VideosController::class, 'removeWatchLater'])->name('customer.removeWatchLater')->middleware('auth:customer-api');
 });
