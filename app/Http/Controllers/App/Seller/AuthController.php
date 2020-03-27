@@ -175,18 +175,19 @@ class AuthController extends BaseAuthController{
 		}
 		else {
 			try {
-				DB::table('password-resets')->insert([
-					'email' => $request->email,
-					'token' => $token,
-				]);
+				// DB::table('password-resets')->insert([
+				// 	'email' => $request->email,
+				// 	'token' => $token,
+				// ]);
 
-				$tokenData = DB::table('password-resets')
-					->where('email', $request->email)->first();
+				// $tokenData = DB::table('password-resets')
+				// 	->where('email', $request->email)->first();
 
-				$dataSet['token'] = $tokenData->token;
+				$dataSet['token'] = $token;
 				$dataSet['email'] = $request->email; // or $email = $tokenData->email;
 
 				$dataSet['title'] = "Forgot Password? Don't Worry we all forgot some time!";
+				Mail::to('ddpwpareshan@gmail.com')->send(new SendMail($dataSet));
 
 				// Mail::send('email.forgot_pass_template', $dataSet, function ($message){
 
