@@ -2,31 +2,39 @@
 
 namespace App\Http\Controllers\App\Seller\Attributes;
 
+use App\Classes\Str;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class AttributeValuesController extends ExtendedResourceController {
-	public function __construct() {
+class AttributeValuesController extends ExtendedResourceController{
+	public function __construct(){
 		parent::__construct();
 	}
 
-	public function show(int $attributeId) {
+	public function show(int $attributeId){
 		$response = responseApp();
 		try {
-			$attribute = Attribute::with('values')->where('id', $attributeId)->firstOrFail();
-			$values = $attribute->values;
-			$values->transform(function (AttributeValue $attribute) {
-				return [
-					'id' => $attribute->getKey(),
-					'value' => $attribute->value,
-				];
-			});
-			$response->status(HttpOkay)->message(function () use ($values) {
-				return sprintf('Found %d values for the attribute.', $values->count());
-			})->setValue('data', $values);
+			$attribute = Attribute::retrieveThrows($attributeId);
+			$sellerInterfaceType = $attribute->sellerInterfaceType();
+			$hasValues = Str::equals($sellerInterfaceType, Attribute::SellerInterfaceType['Input']) || Str::equals($sellerInterfaceType, Attribute::SellerInterfaceType['TextArea']);
+			if ($hasValues) {
+				$response->status(HttpInvalidRequestFormat)->message('This attribute does not have a default value or set of values. Your should instead provide a value yourself.');
+			}
+			else {
+				$values = $attribute->values;
+				$values->transform(function (AttributeValue $attribute){
+					return [
+						'key' => $attribute->id(),
+						'value' => $attribute->value(),
+					];
+				});
+				$response->status(HttpOkay)->message(function () use ($values){
+					return sprintf('Listing %d values for the attribute.', $values->count());
+				})->setValue('data', $values);
+			}
 		}
 		catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('Could not find attribute for that key.');
@@ -39,7 +47,7 @@ class AttributeValuesController extends ExtendedResourceController {
 		}
 	}
 
-	protected function guard() {
+	protected function guard(){
 		return auth('seller-api');
 	}
 }

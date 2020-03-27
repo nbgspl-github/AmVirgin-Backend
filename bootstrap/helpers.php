@@ -148,3 +148,22 @@ function subDomain(string $prefix){
 function throwIf($condition, $exception, ...$parameters){
 	return throw_if($condition, $exception, $parameters);
 }
+
+function __cast($value, $type){
+	switch ($type) {
+		case 'string':
+			return strval($value);
+
+		case 'float':
+			return floatval($value);
+
+		case 'int':
+			return intval($value);
+
+		case 'bool':
+			return boolval($value);
+
+		default:
+			return $value;
+	}
+}

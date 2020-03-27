@@ -36,6 +36,7 @@ class Attribute extends Model{
 		'created_at',
 		'updated_at',
 	];
+	protected $casts = ['required' => 'boolean', 'filterable' => 'boolean', 'bounded' => 'boolean', 'multiValue' => 'boolean', 'maxValues' => 'integer', 'minimum' => 'float', 'maximum' => 'float'];
 	public const SellerInterfaceType = [
 		'Select' => 'select',
 		'Input' => 'input',
