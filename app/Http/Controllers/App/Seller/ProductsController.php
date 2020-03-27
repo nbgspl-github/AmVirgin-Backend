@@ -3,14 +3,18 @@
 namespace App\Http\Controllers\App\Seller;
 
 use App\Classes\Rule;
+use App\Classes\Str;
 use App\Constants\OfferTypes;
 use App\Constants\WarrantyServiceType;
+use App\Exceptions\InvalidCategoryException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Interfaces\Directories;
 use App\Interfaces\Tables;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
+use App\Models\Brand;
+use App\Models\Category;
 use App\Models\HsnCode;
 use App\Models\Product;
 use App\Models\ProductAttribute;
@@ -25,31 +29,42 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
 
-class ProductsController extends ExtendedResourceController {
+class ProductsController extends ExtendedResourceController{
 	use ValidatesRequest;
 
 	protected array $rules;
 
-	public function __construct() {
+	public const attributeFormat = [
+		[
+			'key' => 1,
+			'value' => 'L',
+		],
+		[
+			'key' => 2,
+			'value' => 'Black',
+		],
+		[
+			'key' => 3,
+			'value' => 'Solid',
+		],
+	];
+
+	public function __construct(){
 		parent::__construct();
 		$this->rules = [
 			'store' => [
-				'name' => ['bail', 'required', 'string', 'min:1', 'max:500'],
 				'categoryId' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)],
+				'brandId' => ['bail', 'required', Rule::existsPrimary(Tables::Brands), Rule::exists(Tables::SellerBrands, 'brandId')->where('status', 'approved')],
 				'listingStatus' => ['bail', 'required', 'string', Rule::in([Product::ListingStatus['Active'], Product::ListingStatus['Inactive']])],
+				'styleCode' => ['bail', 'required', 'string', 'min:8', 'max:255'],
 				'originalPrice' => ['bail', 'required', 'numeric', 'min:1', 'max:10000000'],
 				'sellingPrice' => ['bail', 'required', 'numeric', 'min:1', 'lte:originalPrice'],
 				'fulfillmentBy' => ['bail', 'required', Rule::in([Product::FulfillmentBy['Seller'], Product::FulfillmentBy['SellerSmart']])],
 				'hsn' => ['bail', 'required', Rule::existsPrimary(Tables::HsnCodes, 'hsnCode')],
 				'currency' => ['bail', 'nullable', 'string', 'min:2', 'max:5', Rule::exists(Tables::Currencies, 'code')],
-				'promoted' => ['bail', 'boolean'],
-				'promotionStart' => ['bail', 'required_with:promoted', 'date'],
-				'promotionEnd' => ['bail', 'required_with:promoted', 'date', 'after:promotionStart'],
 				'stock' => ['bail', 'required', 'numeric', 'min:0', RuleMaxStock],
-				'draft' => ['bail', 'boolean'],
 				'shortDescription' => ['bail', 'required', 'string', 'min:1', 'max:1000'],
 				'longDescription' => ['bail', 'required', 'string', 'min:1', 'max:100000'],
-				'sku' => ['bail', 'required', 'string', 'min:1', 'max:256', Rule::unique(Tables::Products, 'sku')],
 				'trailer' => ['bail', 'nullable', 'mimes:mp4', 'min:1', 'max:100000'],
 				'procurementSla' => ['bail', 'required', 'numeric', Rule::minimum(Product::ProcurementSLA['Minimum']), Rule::maximum(Product::ProcurementSLA['Maximum'])],
 				'localShippingCost' => ['bail', 'required', 'numeric', Rule::minimum(Product::ShippingCost['Local']['Minimum']), Rule::maximum(Product::ShippingCost['Local']['Maximum'])],
@@ -65,15 +80,15 @@ class ProductsController extends ExtendedResourceController {
 				'warrantyServiceType' => ['bail', 'required', 'string', Rule::in([WarrantyServiceType::OnSite, WarrantyServiceType::WalkIn])],
 				'coveredInWarranty' => ['bail', 'required', 'string', 'min:1', 'max:100000'],
 				'notCoveredInWarranty' => ['bail', 'required', 'string', 'min:1', 'max:100000'],
-				'files.*' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
-				'attributes' => ['bail', 'nullable'],
+				'files.*' => ['bail', 'nullable', 'mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
+				'attributes' => ['bail', 'required'],
 			],
 			'update' => [
 			],
 		];
 	}
 
-	public function index() {
+	public function index(){
 		$response = responseApp();
 		try {
 			$products = Product::where([
@@ -83,7 +98,7 @@ class ProductsController extends ExtendedResourceController {
 				['draft', false],
 			])->get();
 			$products = ProductResource::collection($products);
-			$response->status(HttpOkay)->message(function () use ($products) {
+			$response->status(HttpOkay)->message(function () use ($products){
 				return sprintf('Found %d products by specified seller.', $products->count());
 			})->setValue('data', $products);
 		}
@@ -95,7 +110,7 @@ class ProductsController extends ExtendedResourceController {
 		}
 	}
 
-	public function edit($id) {
+	public function edit($id){
 		$response = responseApp();
 		try {
 			$product = Product::where([
@@ -117,52 +132,90 @@ class ProductsController extends ExtendedResourceController {
 		}
 	}
 
-	public function store() {
+	public function store(){
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules['store']);
 			/**
+			 * Verify that this category has no children.
+			 */
+			$category = Category::retrieve($validated['categoryId']);
+			if ($category->children()->count() > 0)
+				throw new InvalidCategoryException();
+
+			/**
 			 * Calculating tax rate from HSN code.
 			 */
-			$validated['taxRate'] = HsnCode::find($validated['hsn'])->taxRate;
+			$validated['taxRate'] = HsnCode::find($validated['hsn'])->taxRate();
 			/**
 			 * Putting adequate seller Id read from auth.
 			 */
 			$validated['sellerId'] = $this->guard()->id();
+			/**
+			 * Create product with no name initially.
+			 */
 			$product = Product::create($validated);
-			collect(jsonDecodeArray($validated['attributes']))->each(function ($item) use ($product) {
+
+			/**
+			 * Generating Product Name
+			 * 1.) Collect all attribute models using attribute keys coming in the request.
+			 * 2.) Filter out the ones having productNameSegment as false
+			 * 3.) Sort the filtered collection in ascending order of segmentPriority
+			 * 4.) Append value of each attribute in this order while also checking for the ones having multiValue true
+			 * 5.) If any attribute has multiValue enabled, we simply append all their values at parent's index
+			 * 6.) Prepend this string with the name of brand
+			 */
+
+			$segments = array_fill(0, 12, Str::Empty);
+			$segments[0] = Brand::retrieve($validated['brandId'])->name();
+			$segments[11] = $category->name();
+			collect($validated['attributes'])->each(function ($item) use ($product, &$segments){
 				$attribute = Attribute::retrieve($item['key']);
 				if ($attribute != null) {
-					collect($item['values'])->each(function ($value) use ($attribute, $item, $product) {
-						$attributeValue = AttributeValue::where([
-							['attributeId', $attribute->getKey()],
-							['id', $value],
-						])->first();
-						if ($attributeValue != null) {
-							ProductAttribute::create([
-								'productId' => $product->id,
-								'attributeId' => $attribute->id,
-								'valueId' => $attributeValue->id,
-							]);
+					$sellerInterfaceType = $attribute->sellerInterfaceType();
+					$hasValues = Str::equals($sellerInterfaceType, Attribute::SellerInterfaceType['DropDown']) || Str::equals($sellerInterfaceType, Attribute::SellerInterfaceType['Radio']);
+					if (!$hasValues) ProductAttribute::create([
+						'productId' => 10,
+						'attributeId' => $attribute->id(),
+						'value' => $item['data']['value'],
+					]);
+					else ProductAttribute::create([
+						'productId' => 10,
+						'attributeId' => $attribute->id(),
+						'valueId' => $item['data']['key'],
+						'value' => $item['data']['value'],
+					]);
+
+					if ($attribute->productNameSegment() && $attribute->segmentPriority() != 0) {
+						$finalValue = $item['data']['value'];
+						$separated = Str::split('/', $finalValue);
+						if ($attribute->multiValue() && count($separated) > 1) {
+							$finalValue = Str::join(Str::WhiteSpace, $separated);
 						}
-					});
+						$segments[$attribute->segmentPriority()] = $finalValue;
+					}
 				}
 			});
-			collect(request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product) {
-				ProductImage::create([
-					'productId' => $product->getKey(),
-					'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile),
-					'tag' => sprintf('product-%d-images', $product->getKey()),
-				]);
-			});
-			$images = $product->images()->get()->transform(fn(ProductImage $productImage) => [
-				'url' => SecuredDisk::access()->exists($productImage->path) ? SecuredDisk::access()->url($productImage->path) : null,
-			]);
-			$images = $images->filter()->values();
-			$response->status(HttpCreated)->setValue('data', $product)->setValue('images', $images)->message('Product details were saved successfully.');
+			$product->update(['name' => Str::trimExtraWhiteSpaces(Str::join(Str::WhiteSpace, $segments))]);
+//			collect(request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product){
+//				ProductImage::create([
+//					'productId' => $product->getKey(),
+//					'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile),
+//					'tag' => sprintf('product-%d-images', $product->getKey()),
+//				]);
+//			});
+//			$images = $product->images()->get()->transform(fn(ProductImage $productImage) => [
+//				'url' => SecuredDisk::access()->exists($productImage->path) ? SecuredDisk::access()->url($productImage->path) : null,
+//			]);
+//			$images = $images->filter()->values();
+//			$response->status(HttpCreated)->setValue('data', $product)->setValue('images', $images)->message('Product details were saved successfully.');
+			$response->status(HttpOkay)->message('Saved');
 		}
 		catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+		}
+		catch (InvalidCategoryException $exception) {
+			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
@@ -172,7 +225,7 @@ class ProductsController extends ExtendedResourceController {
 		}
 	}
 
-	public function show($id) {
+	public function show($id){
 		$response = responseApp();
 		try {
 			$product = Product::where([
@@ -196,7 +249,7 @@ class ProductsController extends ExtendedResourceController {
 		}
 	}
 
-	public function update($id) {
+	public function update($id){
 		$response = responseApp();
 		try {
 			$product = Product::retrieveThrows($id);
@@ -251,10 +304,10 @@ class ProductsController extends ExtendedResourceController {
 				'longDescription' => $validated['longDescription'],
 				'sku' => $validated['sku'],
 			]);
-			collect(jsonDecodeArray($validated['attributes']))->each(function ($item) use ($product) {
+			collect(jsonDecodeArray($validated['attributes']))->each(function ($item) use ($product){
 				$attribute = Attribute::retrieve($item['key']);
 				if ($attribute != null) {
-					collect($item['values'])->each(function ($value) use ($attribute, $item, $product) {
+					collect($item['values'])->each(function ($value) use ($attribute, $item, $product){
 						$attributeValue = AttributeValue::where([
 							['attributeId', $attribute->getKey()],
 							['id', $value],
@@ -269,7 +322,7 @@ class ProductsController extends ExtendedResourceController {
 					});
 				}
 			});
-			collect(\request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product) {
+			collect(\request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product){
 				ProductImage::create([
 					'productId' => $product->getKey(),
 					'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile),
@@ -289,7 +342,7 @@ class ProductsController extends ExtendedResourceController {
 		}
 	}
 
-	public function delete($id) {
+	public function delete($id){
 		$response = responseApp();
 		try {
 			$product = Product::where([
@@ -310,7 +363,7 @@ class ProductsController extends ExtendedResourceController {
 		}
 	}
 
-	protected function guard() {
+	protected function guard(){
 		return auth('seller-api');
 	}
 }

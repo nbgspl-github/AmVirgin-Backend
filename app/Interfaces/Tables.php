@@ -26,4 +26,5 @@ interface Tables{
 	const AttributeTypes = 'attribute-types';
 	const AttributeTypeValues = 'attribute-type-values';
 	const PrimitiveTypes = 'primitive-types';
+	const SellerBrands = 'seller-brands';
 }
