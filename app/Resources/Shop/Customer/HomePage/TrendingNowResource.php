@@ -11,7 +11,7 @@ class TrendingNowResource extends JsonResource {
 		return [
 			'id' => $this->id,
 			'title' => $this->title,
-			'title' => $this->title,
+			'description' => $this->description,
 			'slug' => $this->slug,
 			'type' => $this->type,
 			'duration' => $this->duration,
