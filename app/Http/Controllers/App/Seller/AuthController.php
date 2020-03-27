@@ -175,19 +175,24 @@ class AuthController extends BaseAuthController{
 		}
 		else {
 			try {
-				// DB::table('password-resets')->insert([
-				// 	'email' => $request->email,
-				// 	'token' => $token,
-				// ]);
+				DB::table('password-resets')->insert([
+					'email' => $request->email,
+					'token' => $token,
+				]);
 
-				// $tokenData = DB::table('password-resets')
-				// 	->where('email', $request->email)->first();
+				$tokenData = DB::table('password-resets')
+					->where('email', $request->email)->first();
 
 				$dataSet['token'] = $token;
 				$dataSet['email'] = $request->email; // or $email = $tokenData->email;
+// 				{
+//     "status": 500,
+//     "message": "Expected response code 250 but got code \"530\", with message \"530 5.7.0 Must issue a STARTTLS command first. mu15sm2841118pjb.30 - gsmtp\r\n\""
+// }
 
-				$dataSet['title'] = "Forgot Password? Don't Worry we all forgot some time!";
-				Mail::to('ddpwpareshan@gmail.com')->send(new SendMail($dataSet));
+				// $dataSet['title'] = "Forgot Password? Don't Worry we all forgot some time!";
+
+				// Mail::to('ddpwpareshan@gmail.com')->send(new SendMail($dataSet));
 
 				// Mail::send('email.forgot_pass_template', $dataSet, function ($message){
 
@@ -247,7 +252,7 @@ class AuthController extends BaseAuthController{
 
 				$dataSet['token'] = $tokenData->token;
 				$dataSet['email'] = $request->current_email; // or $email = $tokenData->email;
-				$dataSet['title'] = "This mail is regarding for change you email register with AmVirgin!.";
+				// $dataSet['title'] = "This mail is regarding for change your email register with AmVirgin!.";
 
 
 				// Mail::send('email.email_change_template', $dataSet, function ($message){
