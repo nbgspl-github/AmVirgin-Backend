@@ -29,6 +29,8 @@
 <!-- Alertify js -->
 <script src="{{asset('assets/admin/plugins/alertify/js/alertify.js')}}"></script>
 
+<script src="{{asset('assets/admin/js/Notyf.js')}}"></script>
+
 <!-- jQuery Peity -->
 <script src="{{asset('assets/admin/js/circle-progress.js')}}"></script>
 

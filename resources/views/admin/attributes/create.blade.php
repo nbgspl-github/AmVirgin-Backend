@@ -72,9 +72,9 @@
 												<label for="sellerInterfaceType">@required (User interface for seller panel)</label>
 												<select name="sellerInterfaceType" id="sellerInterfaceType" class="form-control" required onchange="handleSellerInterfaceTypeChanged(this.value);">
 													<option value="" selected disabled>Choose</option>
-													<option value="select">Select</option>
+													<option value="dropdown">DropDown</option>
 													<option value="input">Input</option>
-													<option value="text-area">Text Area</option>
+													<option value="text">Text</option>
 													<option value="radio">Radio</option>
 												</select>
 											</div>
@@ -136,7 +136,7 @@
 												<label>Enable multiple value input?</label>
 												<div>
 													<div class="custom-control custom-checkbox">
-														<input type="checkbox" class="custom-control-input" id="multiValue" name="multiValue" onchange="handleMultiValueChanged();">
+														<input type="checkbox" class="custom-control-input" id="multiValue" name="multiValue" onchange="handleMultiValueChanged();" disabled>
 														<label class="custom-control-label" for="multiValue">Yes</label>
 													</div>
 												</div>
@@ -200,6 +200,7 @@
 			maximumInput: null,
 			maxValueInput: null,
 			boundedCheckBox: null,
+			multiValueCheckBox: null,
 			attributeTypeDropdown: null,
 			segmentPriority: null
 		};
@@ -218,6 +219,7 @@
 				maximumInput: $('#maximum'),
 				maxValueInput: $('#maxValues'),
 				boundedCheckBox: $('#bounded'),
+				multiValueCheckBox: $('#multiValue'),
 				attributeTypeDropdown: $('#attributeType'),
 				segmentPriority: $('#segmentPriority')
 			};

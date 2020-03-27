@@ -23,6 +23,16 @@ const HttpUnauthorized = 401;
 
 const HttpDeniedAccess = 403;
 
+/**
+ * App is in production stage and is deployed to production servers.
+ */
+const AppEnvironmentProduction = 'production';
+
+/**
+ * App is in development and is only available on development machines and test servers.
+ */
+const AppEnvironmentLocal = 'local';
+
 function __status($status){
 	if ($status == 1)
 		return 'Active';
@@ -166,4 +176,16 @@ function __cast($value, $type){
 		default:
 			return $value;
 	}
+}
+
+/**
+ * Returns current app environment or matches it with the given string.
+ * @param null $match Env string to match against
+ * @return string|null
+ */
+function appEnvironment($match = null): ?string{
+	if ($match == null)
+		return env('APP_ENV');
+	else
+		return \App\Classes\Str::equals($match, env('APP_ENV'));
 }

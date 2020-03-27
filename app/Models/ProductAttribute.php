@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\HasAttributeMethods;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Defines a value for a particular trait of a product.
@@ -20,11 +21,11 @@ class ProductAttribute extends Model{
 		'value',
 	];
 
-	public function product(){
+	public function product(): BelongsTo{
 		return $this->belongsTo(Product::class, 'productId');
 	}
 
-	public function attribute(){
+	public function attribute(): BelongsTo{
 		return $this->belongsTo(Attribute::class, 'attributeId');
 	}
 }

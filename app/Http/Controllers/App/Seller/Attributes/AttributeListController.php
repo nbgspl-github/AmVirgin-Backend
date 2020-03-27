@@ -23,12 +23,8 @@ class AttributeListController extends ExtendedResourceController{
 			$attributes = $category->attributes;
 			$attributes->transform(function (Attribute $attribute){
 				$sellerInterfaceType = $attribute->sellerInterfaceType();
-				$notInputType =
-					Str::equals($sellerInterfaceType, Attribute::SellerInterfaceType['Select'])
-					|| Str::equals($sellerInterfaceType, Attribute::SellerInterfaceType['Radio']
-						|| Str::equals($sellerInterfaceType, Attribute::SellerInterfaceType['TextArea']));
 				$hasValues =
-					Str::equals($sellerInterfaceType, Attribute::SellerInterfaceType['Select'])
+					Str::equals($sellerInterfaceType, Attribute::SellerInterfaceType['DropDown'])
 					|| Str::equals($sellerInterfaceType, Attribute::SellerInterfaceType['Radio']);
 
 				return [
@@ -41,11 +37,11 @@ class AttributeListController extends ExtendedResourceController{
 					'multiValue' => $attribute->multiValue(),
 					'maxValues' => $attribute->maxValues(),
 					'bounded' => $attribute->bounded(),
-					'minimum' => $attribute->bounded() && !$notInputType ? __cast($attribute->minimum(), $attribute->primitiveType) : $attribute->minimum(),
-					'maximum' => $attribute->bounded() && !$notInputType ? __cast($attribute->maximum(), $attribute->primitiveType) : $attribute->maximum(),
+					'minimum' => $attribute->bounded() && !$hasValues ? __cast($attribute->minimum(), $attribute->primitiveType) : $attribute->minimum(),
+					'maximum' => $attribute->bounded() && !$hasValues ? __cast($attribute->maximum(), $attribute->primitiveType) : $attribute->maximum(),
 					'hasValues' => $hasValues,
-					'hasType' => !$notInputType,
-					'type' => !$notInputType ? $attribute->primitiveType : null,
+					'hasType' => !$hasValues,
+					'type' => !$hasValues ? $attribute->primitiveType : null,
 				];
 			});
 			$status = $attributes->count() == 0 ? HttpNoContent : HttpOkay;

@@ -14,8 +14,12 @@ class CreateProductImagesTable extends Migration{
 		Schema::create('product-images', function (Blueprint $table){
 			$table->bigIncrements('id');
 			$table->unsignedBigInteger('productId')->comment('Product to which these images belong');
-			$table->string('path', \App\Constants\Constants::MaxFilePathLength);
+			$table->string('path', \App\Constants\Constants::MaxFilePathLength)->comment('Relative path of the file on the specified disk');
 			$table->timestamps();
+
+			if (appEnvironment(AppEnvironmentProduction)) {
+				$table->foreign('productId')->references('id')->on(\App\Interfaces\Tables::Products)->onDelete('cascade');
+			}
 		});
 	}
 
@@ -25,6 +29,8 @@ class CreateProductImagesTable extends Migration{
 	 * @return void
 	 */
 	public function down(){
+		Schema::disableForeignKeyConstraints();
 		Schema::dropIfExists('product-images');
+		Schema::enableForeignKeyConstraints();
 	}
 }

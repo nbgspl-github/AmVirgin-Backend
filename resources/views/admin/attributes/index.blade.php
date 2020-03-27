@@ -62,6 +62,7 @@
 					$('#datatable_wrapper').addClass('px-0 mx-0');
 				}
 			});
+			notyf.error('You must fill out the form before moving forward');
 		});
 
 		/**

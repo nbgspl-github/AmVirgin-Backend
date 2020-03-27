@@ -17,6 +17,11 @@ class CreateAttributeValuesTable extends Migration{
 			$table->unsignedBigInteger('categoryId')->comment('Since an attribute can have multiple distinct type values across several categories, we use this to find a set of values valid for a particular category');
 			$table->string('value', '10000')->comment('Value of attribute');
 			$table->timestamps();
+
+			if (appEnvironment(AppEnvironmentProduction)) {
+				$table->foreign('attributeId')->references('id')->on(\App\Interfaces\Tables::Attributes)->onDelete('cascade');
+				$table->foreign('categoryId')->references('id')->on(\App\Interfaces\Tables::Categories)->onDelete('cascade');
+			}
 		});
 	}
 
@@ -26,6 +31,8 @@ class CreateAttributeValuesTable extends Migration{
 	 * @return void
 	 */
 	public function down(){
+		Schema::disableForeignKeyConstraints();
 		Schema::dropIfExists('attribute-values');
+		Schema::enableForeignKeyConstraints();
 	}
 }

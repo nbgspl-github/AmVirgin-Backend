@@ -54,6 +54,11 @@ class CreateProductsTable extends Migration{
 			$table->string('primaryImage', Constants::MaxFilePathLength)->nullable()->comment('Primary or main image for the product');
 			$table->softDeletes()->comment('Soft deleting in this context means the product is marked for deletion by seller.');
 			$table->timestamps();
+
+			if (appEnvironment(AppEnvironmentProduction)) {
+				$table->foreign('categoryId')->references('id')->on(\App\Interfaces\Tables::Categories)->onDelete('cascade');
+				$table->foreign('hsn')->references('hsnCode')->on(\App\Interfaces\Tables::HsnCodes)->onDelete('cascade');
+			}
 		});
 	}
 
@@ -63,6 +68,8 @@ class CreateProductsTable extends Migration{
 	 * @return void
 	 */
 	public function down(){
+		Schema::disableForeignKeyConstraints();
 		Schema::dropIfExists('products');
+		Schema::enableForeignKeyConstraints();
 	}
 }

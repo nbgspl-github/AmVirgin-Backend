@@ -27,10 +27,10 @@ class AttributesController extends BaseController{
 				'category.*' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)],
 				'name' => ['bail', 'required', 'string', 'min:1', 'max:255'],
 				'description' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
-				'sellerInterfaceType' => ['bail', 'required', Rule::in([Attribute::SellerInterfaceType['Select'], Attribute::SellerInterfaceType['Input'], Attribute::SellerInterfaceType['TextArea'], Attribute::SellerInterfaceType['Radio']])],
+				'sellerInterfaceType' => ['bail', 'required', Rule::in([Attribute::SellerInterfaceType['DropDown'], Attribute::SellerInterfaceType['Input'], Attribute::SellerInterfaceType['Text'], Attribute::SellerInterfaceType['Radio']])],
 				'customerInterfaceType' => ['bail', 'required', Rule::in([Attribute::CustomerInterfaceType['Options'], Attribute::CustomerInterfaceType['Readable']])],
 				'primitiveType' => ['bail', Rule::requiredIf(function (){
-					if (Str::equals(request('sellerInterfaceType'), Attribute::SellerInterfaceType['Select']) || Str::equals(request('sellerInterfaceType'), Attribute::SellerInterfaceType['Radio']))
+					if (Str::equals(request('sellerInterfaceType'), Attribute::SellerInterfaceType['DropDown']) || Str::equals(request('sellerInterfaceType'), Attribute::SellerInterfaceType['Radio']))
 						return false;
 					else
 						return true;

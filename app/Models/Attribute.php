@@ -38,9 +38,9 @@ class Attribute extends Model{
 	];
 	protected $casts = ['required' => 'boolean', 'filterable' => 'boolean', 'bounded' => 'boolean', 'multiValue' => 'boolean', 'maxValues' => 'integer', 'minimum' => 'float', 'maximum' => 'float'];
 	public const SellerInterfaceType = [
-		'Select' => 'select',
+		'DropDown' => 'dropdown',
 		'Input' => 'input',
-		'TextArea' => 'text-area',
+		'Text' => 'text',
 		'Radio' => 'radio',
 	];
 	public const CustomerInterfaceType = [

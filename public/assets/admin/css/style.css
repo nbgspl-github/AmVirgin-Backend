@@ -2976,3 +2976,8 @@ table.focus-on tbody tr.focused td {
 .toast {
     opacity: 1 !important;
 }
+
+.form-frost {
+    transition: .3s;
+    filter: grayscale(100%);
+}

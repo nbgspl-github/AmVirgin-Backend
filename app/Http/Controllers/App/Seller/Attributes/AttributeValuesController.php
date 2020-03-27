@@ -19,7 +19,7 @@ class AttributeValuesController extends ExtendedResourceController{
 		try {
 			$attribute = Attribute::retrieveThrows($attributeId);
 			$sellerInterfaceType = $attribute->sellerInterfaceType();
-			$hasValues = Str::equals($sellerInterfaceType, Attribute::SellerInterfaceType['Input']) || Str::equals($sellerInterfaceType, Attribute::SellerInterfaceType['TextArea']);
+			$hasValues = Str::equals($sellerInterfaceType, Attribute::SellerInterfaceType['Input']) || Str::equals($sellerInterfaceType, Attribute::SellerInterfaceType['Text']);
 			if ($hasValues) {
 				$response->status(HttpInvalidRequestFormat)->message('This attribute does not have a default value or set of values. Your should instead provide a value yourself.');
 			}
