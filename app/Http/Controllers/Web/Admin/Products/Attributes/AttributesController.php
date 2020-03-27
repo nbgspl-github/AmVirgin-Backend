@@ -114,7 +114,7 @@ class AttributesController extends BaseController{
 					if (!empty($conflict)) $conflict->update(['segmentPriority', 0]);
 				}
 			});
-			$response->success('Successfully created attribute and related values.')->route('admin.products.attributes.index');
+			$response->success('Successfully created attribute.')->route('admin.products.attributes.index');
 		}
 		catch (ValidationException $exception) {
 			$response->error($exception->getMessage())->data(request()->all())->back();
