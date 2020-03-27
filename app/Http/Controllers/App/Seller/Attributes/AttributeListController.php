@@ -18,7 +18,7 @@ class AttributeListController extends ExtendedResourceController{
 	public function show(int $categoryId){
 		$response = responseApp();
 		try {
-			$category = Category::with('attributes')->where('id', $categoryId)->firstOrFail();
+			$category = Category::retrieveThrows($categoryId);
 			$attributes = $category->attributes;
 			$attributes->transform(function (Attribute $attribute){
 				return [

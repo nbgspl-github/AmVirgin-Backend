@@ -31,9 +31,9 @@ class AttributesController extends BaseController{
 				'customerInterfaceType' => ['bail', 'required', Rule::in([Attribute::CustomerInterfaceType['Options'], Attribute::CustomerInterfaceType['Readable']])],
 				'primitiveType' => ['bail', Rule::requiredIf(function (){
 					if (Str::equals(request('sellerInterfaceType'), Attribute::SellerInterfaceType['Select']) || Str::equals(request('sellerInterfaceType'), Attribute::SellerInterfaceType['Radio']))
-						return true;
-					else
 						return false;
+					else
+						return true;
 				}), Rule::existsPrimary(Tables::PrimitiveTypes, 'typeCode')],
 				'segmentPriority' => ['bail', 'required_with:productNameSegment,on', 'numeric', 'min:0', 'max:10'],
 				'maxValues' => ['bail', 'required_with:multiValue,on', 'numeric', 'min:2', 'max:10000'],
@@ -95,7 +95,7 @@ class AttributesController extends BaseController{
 						'categoryId' => $categoryId,
 						'sellerInterfaceType' => $validated->sellerInterfaceType,
 						'customerInterfaceType' => $validated->customerInterfaceType,
-						'primitiveType' => $validated->primitiveType,
+						'primitiveType' => $validated->primitiveType ?? Str::Empty,
 						'code' => sprintf('%d-%s', $categoryId, Str::slug($validated->name)),
 						'required' => request()->has('required'),
 						'filterable' => request()->has('filterable'),
@@ -103,9 +103,9 @@ class AttributesController extends BaseController{
 						'segmentPriority' => $validated->segmentPriority,
 						'bounded' => request()->has('bounded'),
 						'multiValue' => request()->has('multiValue'),
-						'maxValues' => $validated->maxValues,
-						'minimum' => $validated->minimum,
-						'maximum' => $validated->maximum,
+						'maxValues' => request()->has('multiValue') ? $validated->maxValues : 0,
+						'minimum' => request()->has('bounded') ? $validated->minimum : 0,
+						'maximum' => request()->has('bounded') ? $validated->maximum : 0,
 					]);
 					$conflict = Attribute::where([
 						['categoryId', $categoryId],

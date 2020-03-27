@@ -2972,3 +2972,7 @@ table.focus-on tbody tr.focused td {
     border-color: #444b53;
     box-shadow: unset !important;
 }
+
+.toast {
+    opacity: 1 !important;
+}

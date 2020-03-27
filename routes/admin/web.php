@@ -281,6 +281,11 @@ Route::prefix('admin')->group(function (){
 				Route::get(Str::Empty, [\App\Http\Controllers\Web\Admin\Products\Attributes\AttributesController::class, 'index'])->name('admin.products.attributes.index');
 				Route::get('create', [\App\Http\Controllers\Web\Admin\Products\Attributes\AttributesController::class, 'create'])->name('admin.products.attributes.create');
 				Route::post(Str::Empty, [\App\Http\Controllers\Web\Admin\Products\Attributes\AttributesController::class, 'store'])->name('admin.products.attributes.store');
+
+				Route::prefix('values')->group(function (){
+					Route::get('{attributeId}/edit', [\App\Http\Controllers\Web\Admin\Products\Attributes\AttributeValuesController::class, 'edit'])->name('admin.products.attributes.values.edit');
+					Route::post('{attributeId}', [\App\Http\Controllers\Web\Admin\Products\Attributes\AttributeValuesController::class, 'store'])->name('admin.products.attributes.values.store');
+				});
 			});
 		});
 
