@@ -138,6 +138,34 @@ class VideosController extends ExtendedResourceController {
 		}
 		 
 	}
+	public function removeWatchLater($id)
+	{
+		$response = responseApp();
+		 
+		try {
+
+			$cId = $this->guard()->id();  
+			$videoData = WatchLaterVideo::where(['customer_id'=> $cId, 'video_id' => $id])->first();
+
+			if (!empty($videoData)) {
+				$videoData->delete();
+				
+				$response->status(HttpResourceNotFound)->message('Successfully removed from list');
+				return $response->send();
+			}else{
+				 
+				$response->status(HttpResourceNotFound)->message('OPPS! This video is not added in list');
+				return $response->send();
+			} 
+			
+		} catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		} 
+		 
+	}
 
 	protected function guard() {
 		return auth('customer-api');
