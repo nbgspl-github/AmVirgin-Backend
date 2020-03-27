@@ -189,11 +189,12 @@ class AuthController extends BaseAuthController{
 //     "status": 500,
 //     "message": "Expected response code 250 but got code \"530\", with message \"530 5.7.0 Must issue a STARTTLS command first. mu15sm2841118pjb.30 - gsmtp\r\n\""
 // }
+				if (!empty($request->send_email)) {
+					
+					$dataSet['title'] = "Forgot Password? Don't Worry we all forgot some time!";
 
-				$dataSet['title'] = "Forgot Password? Don't Worry we all forgot some time!";
-
-				Mail::to($request->email)->send(new SendMail($dataSet));
-
+					Mail::to($request->email)->send(new SendMail($dataSet));
+				} 
 				 
 				// if (Mail::failures()) {
 				
