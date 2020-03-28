@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class ProductQuery implements QueryProvider{
 	protected $model = Product::class;
-	private ?Builder $query;
+	private ?Builder $query = null;
 
 	public static function new(){
 		return new self();
