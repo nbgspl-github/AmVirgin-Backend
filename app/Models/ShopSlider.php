@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Queries\ShopSliderQuery;
 use App\Traits\ActiveStatus;
 use App\Traits\HasAttributeMethods;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class ShopSlider extends Model {
+class ShopSlider extends Model{
 	use ActiveStatus;
 	use RetrieveResource;
 	use HasAttributeMethods;
@@ -25,4 +26,8 @@ class ShopSlider extends Model {
 		'created_at',
 		'updated_at',
 	];
+
+	public static function whereQuery(): ShopSliderQuery{
+		return ShopSliderQuery::begin();
+	}
 }

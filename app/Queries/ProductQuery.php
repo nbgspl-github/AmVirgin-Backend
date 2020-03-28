@@ -6,27 +6,17 @@ use App\Classes\Time;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Builder;
 
-class ProductQuery extends QueryProvider{
-	protected $model = Product::class;
-	private ?Builder $query = null;
-
-	public static function new(){
+class ProductQuery extends BaseQuery{
+	public static function begin(){
 		return new self();
 	}
 
-	private function initializeIfNull(){
-		if ($this->query == null)
-			$this->query = $this->model::query();
-	}
-
 	public function displayable(): self{
-		$this->initializeIfNull();
 		$this->query->where('draft', false);
 		return $this;
 	}
 
 	public function promoted(): self{
-		$this->initializeIfNull();
 		$this->query->where([
 			['promoted', true],
 			['promotionStart', '<=', Time::mysqlStamp()],
@@ -36,8 +26,12 @@ class ProductQuery extends QueryProvider{
 	}
 
 	public function notPromoted(): self{
-		$this->initializeIfNull();
 		$this->query->where('promoted', false);
+		return $this;
+	}
+
+	public function hotDeal(){
+		$this->query->where('specials->hotDeal', true);
 		return $this;
 	}
 
@@ -51,5 +45,9 @@ class ProductQuery extends QueryProvider{
 
 	public function get(){
 		return $this->query->get();
+	}
+
+	protected function model(): string{
+		return Product::class;
 	}
 }

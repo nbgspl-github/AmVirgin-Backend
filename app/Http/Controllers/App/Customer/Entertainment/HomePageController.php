@@ -50,7 +50,7 @@ class HomePageController extends ExtendedResourceController{
 			/**
 			 * Entertainment Sliders
 			 */
-			$sliders = Slider::select()->displayable()->get();
+			$sliders = Slider::whereQuery()->displayable()->get();
 			$sliders = EntertainmentSliderResource::collection($sliders);
 			$data['sliders'] = $sliders;
 
@@ -73,7 +73,7 @@ class HomePageController extends ExtendedResourceController{
 			/**
 			 * Shop Products
 			 */
-			$shopProducts = Product::select()->displayable()->promoted()->get();
+			$shopProducts = Product::whereQuery()->displayable()->promoted()->get();
 			$shopProducts = EntertainmentProductResource::collection($shopProducts);
 			$data['products'] = $shopProducts;
 

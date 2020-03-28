@@ -37,7 +37,7 @@ class Slider extends Model{
 		return SecuredDisk::existsUrl($this->attributes['banner']);
 	}
 
-	public static function select(): SliderQuery{
+	public static function whereQuery(): SliderQuery{
 		return SliderQuery::new();
 	}
 }

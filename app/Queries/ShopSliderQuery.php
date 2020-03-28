@@ -4,10 +4,11 @@ namespace App\Queries;
 
 use App\Classes\Time;
 use App\Models\Product;
+use App\Models\ShopSlider;
 use App\Models\Slider;
 use Illuminate\Database\Eloquent\Builder;
 
-class SliderQuery extends BaseQuery{
+class ShopSliderQuery extends BaseQuery{
 	public static function begin(){
 		return new self();
 	}
@@ -30,6 +31,6 @@ class SliderQuery extends BaseQuery{
 	}
 
 	protected function model(): string{
-		return Slider::class;
+		return ShopSlider::class;
 	}
 }

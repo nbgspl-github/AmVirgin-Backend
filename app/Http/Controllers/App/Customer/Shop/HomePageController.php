@@ -15,12 +15,12 @@ use App\Resources\Shop\Customer\HomePage\TrendingDealsResource;
 use App\Resources\Shop\Customer\HomePage\TrendingNowResource;
 use Throwable;
 
-class HomePageController extends ExtendedResourceController {
-	public function __construct() {
+class HomePageController extends ExtendedResourceController{
+	public function __construct(){
 		parent::__construct();
 	}
 
-	public function index() {
+	public function index(){
 		/**
 		 * We need to send the following stuff for the homepage.
 		 * 1.) Sliders
@@ -39,9 +39,7 @@ class HomePageController extends ExtendedResourceController {
 		/**
 		 * Shop Sliders
 		 */
-		$shopSlider = ShopSlider::where([
-			['active', true],
-		])->get();
+		$shopSlider = ShopSlider::whereQuery()->displayable()->get();
 		$shopSlider = ShopSliderResource::collection($shopSlider);
 		$data['shopSliders'] = $shopSlider;
 
@@ -78,9 +76,7 @@ class HomePageController extends ExtendedResourceController {
 		/**
 		 * Today's Deals
 		 */
-		$hotDeals = Product::where([
-			['hotDeal', true],
-		])->take(10)->get();
+		$hotDeals = Product::whereQuery()->hotDeal()->take(10)->get();
 		$hotDeals = TrendingDealsResource::collection($hotDeals);
 		$data['trendingDeals'] = $hotDeals;
 
@@ -105,12 +101,10 @@ class HomePageController extends ExtendedResourceController {
 		return responseApp()->status(HttpOkay)->message('Shop homepage contents retrieved.')->setValue('data', $data)->send();
 	}
 
-	public function showAllDeals() {
+	public function showAllDeals(){
 		$response = responseApp();
 		try {
-			$deals = Product::where([
-				['hotDeal', true],
-			])->get();
+			$deals = Product::whereQuery()->hotDeal()->get();
 			$deals = TrendingDealsResource::collection($deals);
 			$response->status(HttpOkay)->message('Listing all products marked as hot deal.')->setValue('data', $deals);
 		}
@@ -122,7 +116,7 @@ class HomePageController extends ExtendedResourceController {
 		}
 	}
 
-	protected function guard() {
+	protected function guard(){
 		return auth('customer-api');
 	}
 }

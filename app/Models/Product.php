@@ -142,7 +142,7 @@ class Product extends Model{
 		return SlugOptions::create()->saveSlugsTo('slug')->generateSlugsFrom('name');
 	}
 
-	public static function select(): ProductQuery{
-		return ProductQuery::new();
+	public static function whereQuery(): ProductQuery{
+		return ProductQuery::begin();
 	}
 }
