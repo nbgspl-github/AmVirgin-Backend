@@ -18,12 +18,12 @@ use App\Resources\Shop\Customer\HomePage\TrendingNowResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class HomePageController extends ExtendedResourceController {
-	public function __construct() {
+class HomePageController extends ExtendedResourceController{
+	public function __construct(){
 		parent::__construct();
 	}
 
-	public function index() {
+	public function index(){
 		/**
 		 * We need to send the following stuff for the homepage.
 		 * 1.) Sliders
@@ -61,7 +61,7 @@ class HomePageController extends ExtendedResourceController {
 			$sections = PageSection::where([
 				['type', PageSectionType::Entertainment],
 			])->get();
-			$sections->transform(function (PageSection $pageSection) {
+			$sections->transform(function (PageSection $pageSection){
 				$contents = Video::where([
 					['sectionId', $pageSection->id],
 					['pending', false],
@@ -81,8 +81,6 @@ class HomePageController extends ExtendedResourceController {
 			 */
 			$shopProducts = Product::where([
 				['draft', false],
-				['visibility', true],
-				['deleted', false],
 				['promoted', true],
 				['promotionStart', '<=', Time::mysqlStamp()],
 				['promotionEnd', '>', Time::mysqlStamp()],
@@ -107,7 +105,7 @@ class HomePageController extends ExtendedResourceController {
 		}
 	}
 
-	public function showAllItemsInSection($id) {
+	public function showAllItemsInSection($id){
 		$response = responseApp();
 		try {
 			$pageSection = PageSection::retrieve($id);
@@ -142,11 +140,11 @@ class HomePageController extends ExtendedResourceController {
 		}
 	}
 
-	protected function guard() {
+	protected function guard(){
 		return auth('customer-api');
 	}
 
-	public function trendingNow() {
+	public function trendingNow(){
 		$data = [];
 		try {
 			$trendingNow = Video::where([
@@ -169,7 +167,7 @@ class HomePageController extends ExtendedResourceController {
 		}
 	}
 
-	public function recommendedVideo() {
+	public function recommendedVideo(){
 		try {
 			$trendingNow = Video::where([
 				['trending', true],
