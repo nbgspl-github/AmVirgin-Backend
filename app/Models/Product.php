@@ -20,7 +20,7 @@ use Spatie\Sluggable\SlugOptions;
  * Product is an entity that can be sold, purchased, created, updated and deleted.
  * @package App\Models
  */
-class Product extends Model implements DisplayableModel{
+class Product extends Model{
 	use FluentConstructor, RetrieveResource, RetrieveCollection, HasAttributeMethods, Sluggable, SoftDeletes, HasSku;
 	protected $table = 'products';
 	protected $fillable = [
@@ -142,11 +142,7 @@ class Product extends Model implements DisplayableModel{
 		return SlugOptions::create()->saveSlugsTo('slug')->generateSlugsFrom('name');
 	}
 
-	public static function displayable(): Builder{
-		return self::where('draft', false);
-	}
-
-	public static function query(): ProductQuery{
+	public static function select(): ProductQuery{
 		return ProductQuery::new();
 	}
 }

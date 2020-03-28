@@ -7,7 +7,7 @@ use App\Models\Product;
 use App\Models\Slider;
 use Illuminate\Database\Eloquent\Builder;
 
-class SliderQuery{
+class SliderQuery extends QueryProvider{
 	protected $model = Slider::class;
 	private ?Builder $query = null;
 

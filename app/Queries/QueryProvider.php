@@ -2,6 +2,6 @@
 
 namespace App\Queries;
 
-class QueryProvider{
-	protected $model;
+interface QueryProvider{
+
 }

@@ -6,9 +6,9 @@ use App\Classes\Time;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Builder;
 
-class ProductQuery{
+class ProductQuery implements QueryProvider{
 	protected $model = Product::class;
-	private Builder $query;
+	private ?Builder $query;
 
 	public static function new(){
 		return new self();

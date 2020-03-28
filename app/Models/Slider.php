@@ -12,7 +12,7 @@ use App\Traits\HasAttributeMethods;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class Slider extends Model implements DisplayableModel{
+class Slider extends Model{
 	use HasAttributeMethods;
 	protected $table = 'sliders';
 	protected $fillable = [
@@ -37,11 +37,7 @@ class Slider extends Model implements DisplayableModel{
 		return SecuredDisk::existsUrl($this->attributes['banner']);
 	}
 
-	public static function displayable(): Builder{
-		return self::where('active', true);
-	}
-
-	public static function query(): SliderQuery{
+	public static function select(): SliderQuery{
 		return SliderQuery::new();
 	}
 }
