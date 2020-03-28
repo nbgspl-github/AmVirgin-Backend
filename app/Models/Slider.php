@@ -4,13 +4,15 @@ namespace App\Models;
 
 use App\Classes\Arrays;
 use App\Constants\Constants;
+use App\Contracts\DisplayableModel;
+use App\Queries\SliderQuery;
 use App\Storage\SecuredDisk;
 use App\Traits\ActiveStatus;
 use App\Traits\HasAttributeMethods;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class Slider extends Model{
+class Slider extends Model implements DisplayableModel{
 	use HasAttributeMethods;
 	protected $table = 'sliders';
 	protected $fillable = [
@@ -31,11 +33,15 @@ class Slider extends Model{
 		'VideoKey' => 'video-key',
 	];
 
-	public static function active(): Builder{
+	public function getBannerAttribute(): string{
+		return SecuredDisk::existsUrl($this->attributes['banner']);
+	}
+
+	public static function displayable(): Builder{
 		return self::where('active', true);
 	}
 
-	public function getBannerAttribute(): string{
-		return SecuredDisk::existsUrl($this->attributes['banner']);
+	public static function query(): SliderQuery{
+		return SliderQuery::new();
 	}
 }

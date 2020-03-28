@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\DisplayableModel;
 use App\Http\Controllers\App\Customer\Playback\TrailerPlayback;
 use App\Traits\ActiveStatus;
 use App\Traits\FluentConstructor;
@@ -9,6 +10,7 @@ use App\Traits\HasAttributeMethods;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use App\Traits\Sluggable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -16,7 +18,7 @@ use Illuminate\Support\Collection;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Video extends Model{
+class Video extends Model implements DisplayableModel{
 	use RetrieveResource, HasAttributeMethods;
 	use RetrieveCollection;
 	use FluentConstructor;
@@ -487,5 +489,12 @@ class Video extends Model{
 		return SlugOptions::create()
 			->generateSlugsFrom('title')
 			->saveSlugsTo('slug');
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function displayable(): Builder{
+		return self::where('pending', false);
 	}
 }

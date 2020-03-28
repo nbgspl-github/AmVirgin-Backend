@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Contracts\DisplayableModel;
+use App\Queries\ProductQuery;
 use App\Traits\FluentConstructor;
 use App\Traits\HasAttributeMethods;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use App\Traits\Sluggable;
 use BinaryCats\Sku\HasSku;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -17,7 +20,7 @@ use Spatie\Sluggable\SlugOptions;
  * Product is an entity that can be sold, purchased, created, updated and deleted.
  * @package App\Models
  */
-class Product extends Model{
+class Product extends Model implements DisplayableModel{
 	use FluentConstructor, RetrieveResource, RetrieveCollection, HasAttributeMethods, Sluggable, SoftDeletes, HasSku;
 	protected $table = 'products';
 	protected $fillable = [
@@ -137,5 +140,13 @@ class Product extends Model{
 
 	public function getSlugOptions(): SlugOptions{
 		return SlugOptions::create()->saveSlugsTo('slug')->generateSlugsFrom('name');
+	}
+
+	public static function displayable(): Builder{
+		return self::where('draft', false);
+	}
+
+	public static function query(): ProductQuery{
+		return ProductQuery::new();
 	}
 }

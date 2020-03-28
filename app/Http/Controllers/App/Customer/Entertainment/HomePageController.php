@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\App\Customer\Entertainment;
 
+use App\Classes\Arrays;
 use App\Classes\Str;
 use App\Classes\Time;
 use App\Constants\PageSectionType;
@@ -43,33 +44,25 @@ class HomePageController extends ExtendedResourceController{
 		/**
 		 * Final data array
 		 */
-		$data = [];
+		$data = Arrays::Empty;
 
 		try {
 			/**
 			 * Entertainment Sliders
 			 */
-//			$sliders = Slider::where([
-//				['active', true],
-//			])->get();
-			$sliders = Slider::active()->get();
+			$sliders = Slider::query()->displayable()->get();
 			$sliders = EntertainmentSliderResource::collection($sliders);
 			$data['sliders'] = $sliders;
 
 			/**
 			 * Page Sections
 			 */
-			$sections = PageSection::where([
-				['type', PageSectionType::Entertainment],
-			])->get();
+			$sections = PageSection::entertainment()->get();
 			$sections->transform(function (PageSection $pageSection){
-				$contents = Video::where([
-					['sectionId', $pageSection->id],
-					['pending', false],
-				])->take($pageSection->visibleItemCount())->get();
+				$contents = Video::displayable()->where('sectionId', $pageSection->id())->take($pageSection->visibleItemCount())->get();
 				$contents = TopPickResource::collection($contents);
 				return [
-					'id' => $pageSection->getKey(),
+					'id' => $pageSection->id(),
 					'title' => $pageSection->title(),
 					'visibleItemCount' => $pageSection->visibleItemCount(),
 					'items' => $contents,
@@ -80,22 +73,19 @@ class HomePageController extends ExtendedResourceController{
 			/**
 			 * Shop Products
 			 */
-			$shopProducts = Product::where([
-				['draft', false],
+			$shopProducts = Product::displayable()->where([
 				['promoted', true],
 				['promotionStart', '<=', Time::mysqlStamp()],
 				['promotionEnd', '>', Time::mysqlStamp()],
 			])->get();
+			$products = Product::query()->displayable()->promoted()->get();
 			$shopProducts = EntertainmentProductResource::collection($shopProducts);
 			$data['products'] = $shopProducts;
 
 			/**
 			 * Trending Now
 			 */
-			$trendingNow = Video::where([
-				['trending', true],
-				['pending', false],
-			])->get();
+			$trendingNow = Video::displayable()->where('trending', true)->get();
 			$trendingNow = TrendingNowResource::collection($trendingNow);
 			$data['trendingNow'] = $trendingNow;
 
@@ -111,10 +101,7 @@ class HomePageController extends ExtendedResourceController{
 		try {
 			$pageSection = PageSection::retrieve($id);
 			if (Str::equals($pageSection->type(), PageSectionType::Entertainment)) {
-				$contents = Video::where([
-					['sectionId', $pageSection->id],
-					['pending', false],
-				])->take($pageSection->visibleItemCount())->get();
+				$contents = Video::displayable()->where('sectionId', $pageSection->id())->take($pageSection->visibleItemCount())->get();
 			}
 			else {
 				$contents = Product::where([
