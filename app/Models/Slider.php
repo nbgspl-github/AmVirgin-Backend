@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Classes\Arrays;
 use App\Constants\Constants;
+use App\Storage\SecuredDisk;
 use App\Traits\ActiveStatus;
 use App\Traits\HasAttributeMethods;
 use Illuminate\Database\Eloquent\Model;
@@ -27,4 +29,8 @@ class Slider extends Model{
 		'ExternalLink' => 'external-link',
 		'VideoKey' => 'video-key',
 	];
+
+	public function getBannerAttribute(): string{
+		return SecuredDisk::existsUrl($this->attributes['target']);
+	}
 }

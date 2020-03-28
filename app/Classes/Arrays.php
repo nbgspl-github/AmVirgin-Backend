@@ -16,4 +16,8 @@ class Arrays extends \Illuminate\Support\Arr{
 	public static function push(array &$array, ...$item): int{
 		return array_push($array, $item);
 	}
+
+	public static function keyExists($key, array $array): bool{
+		return array_key_exists($key, $array);
+	}
 }
