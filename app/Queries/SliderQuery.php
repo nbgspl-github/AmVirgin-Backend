@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class SliderQuery{
 	protected $model = Slider::class;
-	private Builder $query;
+	private ?Builder $query = null;
 
 	public static function new(){
 		return new self();
