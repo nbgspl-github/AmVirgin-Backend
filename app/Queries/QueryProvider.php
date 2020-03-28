@@ -2,6 +2,6 @@
 
 namespace App\Queries;
 
-interface QueryProvider{
+abstract class QueryProvider{
 
 }

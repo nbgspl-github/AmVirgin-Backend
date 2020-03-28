@@ -6,7 +6,7 @@ use App\Classes\Time;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Builder;
 
-class ProductQuery implements QueryProvider{
+class ProductQuery extends QueryProvider{
 	protected $model = Product::class;
 	private ?Builder $query = null;
 
