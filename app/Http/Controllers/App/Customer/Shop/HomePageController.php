@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\App\Customer\Shop;
 
+use App\Classes\Arrays;
 use App\Classes\Time;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Models\Category;
@@ -34,7 +35,7 @@ class HomePageController extends ExtendedResourceController{
 		/**
 		 * Final data array
 		 */
-		$data = [];
+		$data = Arrays::Empty;
 
 		/**
 		 * Shop Sliders
