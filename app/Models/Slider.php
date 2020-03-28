@@ -36,6 +36,6 @@ class Slider extends Model{
 	}
 
 	public function getBannerAttribute(): string{
-		return SecuredDisk::existsUrl($this->attributes['target']);
+		return SecuredDisk::existsUrl($this->attributes['banner']);
 	}
 }
