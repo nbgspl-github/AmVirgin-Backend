@@ -49,9 +49,10 @@ class HomePageController extends ExtendedResourceController{
 			/**
 			 * Entertainment Sliders
 			 */
-			$sliders = Slider::where([
-				['active', true],
-			])->get();
+//			$sliders = Slider::where([
+//				['active', true],
+//			])->get();
+			$sliders = Slider::active()->get();
 			$sliders = EntertainmentSliderResource::collection($sliders);
 			$data['sliders'] = $sliders;
 
