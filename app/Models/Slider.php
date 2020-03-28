@@ -7,8 +7,8 @@ use App\Constants\Constants;
 use App\Storage\SecuredDisk;
 use App\Traits\ActiveStatus;
 use App\Traits\HasAttributeMethods;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder;
 
 class Slider extends Model{
 	use HasAttributeMethods;
