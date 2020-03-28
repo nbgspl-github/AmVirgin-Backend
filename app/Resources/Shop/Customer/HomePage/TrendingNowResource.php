@@ -21,7 +21,6 @@ class TrendingNowResource extends JsonResource {
 			'rating' => $this->rating,
 			'poster' => Storage::disk('secured')->url($this->poster),
 			'pgRating' => $this->pgRating,
-			'type' => $this->type,
 			'subscriptionType' => $this->subscriptionType,
 			'hasSeasons' => boolval($this->hasSeasons),
 			'price' => $this->price,

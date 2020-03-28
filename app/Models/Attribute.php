@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Queries\AttributeQuery;
+use App\Queries\CategoryAttributeQuery;
 use App\Traits\FluentConstructor;
 use App\Traits\HasAttributeMethods;
 use App\Traits\RetrieveResource;
@@ -63,5 +65,9 @@ class Attribute extends Model{
 
 	public function primitiveType(){
 		return $this->belongsTo(PrimitiveType::class, 'primitiveType', 'typeCode');
+	}
+
+	public static function whereQuery(): AttributeQuery{
+		return AttributeQuery::begin();
 	}
 }

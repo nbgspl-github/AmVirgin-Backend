@@ -2,7 +2,7 @@
 
 namespace App\Contracts;
 
-use App\Queries\BaseQuery;
+use App\Queries\AbstractQuery;
 use Illuminate\Database\Eloquent\Builder;
 
 interface DisplayableModel{

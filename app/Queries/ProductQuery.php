@@ -6,8 +6,8 @@ use App\Classes\Time;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Builder;
 
-class ProductQuery extends BaseQuery{
-	public static function begin(){
+class ProductQuery extends AbstractQuery{
+	public static function begin(): self{
 		return new self();
 	}
 
@@ -33,18 +33,6 @@ class ProductQuery extends BaseQuery{
 	public function hotDeal(){
 		$this->query->where('specials->hotDeal', true);
 		return $this;
-	}
-
-	public function first(){
-		return $this->query->first();
-	}
-
-	public function firstOrFail(){
-		return $this->query->firstOrFail();
-	}
-
-	public function get(){
-		return $this->query->get();
 	}
 
 	protected function model(): string{

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\BaseController;
-use App\Queries\BaseQuery;
+use App\Queries\AbstractQuery;
 use App\Traits\FluentResponse;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -26,7 +26,7 @@ abstract class ExtendedResourceController extends BaseController{
 	}
 
 	protected function query(){
-		return BaseQuery::class;
+		return AbstractQuery::class;
 	}
 
 	protected abstract function guard();

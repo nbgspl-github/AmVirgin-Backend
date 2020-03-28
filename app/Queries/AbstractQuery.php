@@ -4,7 +4,7 @@ namespace App\Queries;
 
 use Illuminate\Database\Eloquent\Builder;
 
-abstract class BaseQuery{
+abstract class AbstractQuery{
 	protected ?Builder $query = null;
 
 	protected function __construct(){
@@ -17,6 +17,8 @@ abstract class BaseQuery{
 
 	protected abstract function model(): string;
 
+	public static abstract function begin(): self;
+
 	protected function active(): self{
 		$this->query->where('active', true);
 		return $this;
@@ -25,5 +27,17 @@ abstract class BaseQuery{
 	public function take(int $limit): self{
 		$this->query->take($limit);
 		return $this;
+	}
+
+	public function first(){
+		return $this->query->first();
+	}
+
+	public function firstOrFail(){
+		return $this->query->firstOrFail();
+	}
+
+	public function get(){
+		return $this->query->get();
 	}
 }

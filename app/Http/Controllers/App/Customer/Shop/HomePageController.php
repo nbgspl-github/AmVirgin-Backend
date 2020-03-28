@@ -35,14 +35,14 @@ class HomePageController extends ExtendedResourceController{
 		/**
 		 * Final data array
 		 */
-		$data = Arrays::Empty;
+		$container = Arrays::Empty;
 
 		/**
 		 * Shop Sliders
 		 */
 		$shopSlider = ShopSlider::whereQuery()->displayable()->get();
 		$shopSlider = ShopSliderResource::collection($shopSlider);
-		$data['shopSliders'] = $shopSlider;
+		$container['shopSliders'] = $shopSlider;
 
 		/**
 		 * Offer Timer
@@ -63,7 +63,7 @@ class HomePageController extends ExtendedResourceController{
 			$countdown *= 1000;
 			$offerDetails['countDown'] = $countdown;
 		}
-		$data['offerDetails'] = $offerDetails;
+		$container['offerDetails'] = $offerDetails;
 
 		/**
 		 * Brands in Focus
@@ -72,14 +72,14 @@ class HomePageController extends ExtendedResourceController{
 			['brandInFocus', true],
 		])->get();
 		$brandsInFocus = BrandsInFocusResource::collection($brandsInFocus);
-		$data['brandsInFocus'] = $brandsInFocus;
+		$container['brandsInFocus'] = $brandsInFocus;
 
 		/**
 		 * Today's Deals
 		 */
 		$hotDeals = Product::whereQuery()->hotDeal()->take(10)->get();
 		$hotDeals = TrendingDealsResource::collection($hotDeals);
-		$data['trendingDeals'] = $hotDeals;
+		$container['trendingDeals'] = $hotDeals;
 
 		/**
 		 * Popular Stuff
@@ -88,7 +88,7 @@ class HomePageController extends ExtendedResourceController{
 			['popularCategory', true],
 		])->get();
 		$popularStuff = PopularStuffResource::collection($popularStuff);
-		$data['popularStuff'] = $popularStuff;
+		$container['popularStuff'] = $popularStuff;
 
 		/**
 		 * Trending Now
@@ -97,9 +97,9 @@ class HomePageController extends ExtendedResourceController{
 			['trendingNow', true],
 		])->get();
 		$trendingNow = TrendingNowResource::collection($trendingNow);
-		$data['trendingNow'] = $trendingNow;
+		$container['trendingNow'] = $trendingNow;
 
-		return responseApp()->status(HttpOkay)->message('Shop homepage contents retrieved.')->setValue('data', $data)->send();
+		return responseApp()->status(HttpOkay)->message('Shop homepage contents retrieved.')->setValue('data', $container)->send();
 	}
 
 	public function showAllDeals(){

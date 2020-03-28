@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web\Admin\Products\Attributes;
 
+use App\Classes\Arrays;
 use App\Classes\Rule;
 use App\Classes\Str;
 use App\Exceptions\ValidationException;
@@ -10,12 +11,13 @@ use App\Interfaces\Tables;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
 use App\Models\Category;
+use App\Models\CategoryAttribute;
 use App\Models\PrimitiveType;
 use App\Traits\ValidatesRequest;
 use Sujip\Guid\Facades\Guid;
 use Throwable;
 
-class AttributesController extends BaseController{
+class AttributeController extends BaseController{
 	use ValidatesRequest;
 
 	protected array $rules;
@@ -24,7 +26,7 @@ class AttributesController extends BaseController{
 		parent::__construct();
 		$this->rules = [
 			'store' => [
-				'category.*' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)],
+				'categoryId.*' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)],
 				'name' => ['bail', 'required', 'string', 'min:1', 'max:255'],
 				'description' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
 				'sellerInterfaceType' => ['bail', 'required', Rule::in([Attribute::SellerInterfaceType['DropDown'], Attribute::SellerInterfaceType['Input'], Attribute::SellerInterfaceType['Text'], Attribute::SellerInterfaceType['Radio']])],
@@ -83,37 +85,28 @@ class AttributesController extends BaseController{
 		$response = responseWeb();
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['store']);
-			collect($validated->category)->each(function ($categoryId) use ($validated){
-				$attribute = Attribute::where([
-					['categoryId', $categoryId],
-					['code', sprintf('%d-%s', $categoryId, Str::slug($validated->name))],
-				])->first();
-				if ($attribute == null) {
-					$attribute = Attribute::create([
-						'name' => $validated->name,
-						'description' => $validated->description,
-						'categoryId' => $categoryId,
-						'sellerInterfaceType' => $validated->sellerInterfaceType,
-						'customerInterfaceType' => $validated->customerInterfaceType,
-						'primitiveType' => $validated->primitiveType ?? Str::Empty,
-						'code' => sprintf('%d-%s', $categoryId, Str::slug($validated->name)),
-						'required' => request()->has('required'),
-						'filterable' => request()->has('filterable'),
-						'productNameSegment' => request()->has('productNameSegment'),
-						'segmentPriority' => $validated->segmentPriority,
-						'bounded' => request()->has('bounded'),
-						'multiValue' => request()->has('multiValue'),
-						'maxValues' => request()->has('multiValue') ? $validated->maxValues : 0,
-						'minimum' => request()->has('bounded') ? $validated->minimum : 0,
-						'maximum' => request()->has('bounded') ? $validated->maximum : 0,
-					]);
-					$conflict = Attribute::where([
-						['categoryId', $categoryId],
-						['segmentPriority', $validated->segmentPriority],
-					])->first();
-					if (!empty($conflict)) $conflict->update(['segmentPriority', 0]);
-				}
-			});
+			$attribute = Attribute::whereQuery()->code(Str::slug($validated->name))->first();
+			if ($attribute == null) {
+				$attribute = Attribute::create([
+					'name' => $validated->name,
+					'description' => $validated->description,
+					'sellerInterfaceType' => $validated->sellerInterfaceType,
+					'customerInterfaceType' => $validated->customerInterfaceType,
+					'primitiveType' => $validated->primitiveType ?? Str::Empty,
+					'code' => sprintf('%s', Str::slug($validated->name)),
+					'required' => request()->has('required'),
+					'filterable' => request()->has('filterable'),
+					'productNameSegment' => request()->has('productNameSegment'),
+					'segmentPriority' => $validated->segmentPriority,
+					'bounded' => request()->has('bounded'),
+					'multiValue' => request()->has('multiValue'),
+					'maxValues' => request()->has('multiValue') ? $validated->maxValues : 0,
+					'minimum' => request()->has('bounded') ? $validated->minimum : 0,
+					'maximum' => request()->has('bounded') ? $validated->maximum : 0,
+				]);
+				$conflict = Attribute::whereQuery()->segmentPriority($validated->segmentPriority)->first();
+				if (!empty($conflict)) $conflict->update(['segmentPriority', 0]);
+			}
 			$response->success('Successfully created attribute.')->route('admin.products.attributes.index');
 		}
 		catch (ValidationException $exception) {

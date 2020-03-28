@@ -14,7 +14,6 @@ class CreateAttributesTable extends Migration{
 	public function up(){
 		Schema::create('attributes', function (Blueprint $table){
 			$table->bigIncrements('id');
-			$table->unsignedBigInteger('categoryId')->comment('The category this attribute belongs to');
 			$table->string('name')->comment('Name of this attribute (used for display purposes only');
 			$table->string('description', 5000)->comment('Appropriate description of what this attribute does (used for display purposes only)');
 			$table->string('code', 100)->unique()->comment('A unique code to identify this attribute on the front-end.');
@@ -33,7 +32,6 @@ class CreateAttributesTable extends Migration{
 			$table->timestamps();
 
 			if (appEnvironment(AppEnvironmentProduction)) {
-				$table->foreign('categoryId')->references('id')->on(\App\Interfaces\Tables::Categories)->onDelete('cascade');
 				$table->foreign('primitiveType')->references('typeCode')->on(\App\Interfaces\Tables::PrimitiveTypes)->onDelete('cascade');
 			}
 		});
