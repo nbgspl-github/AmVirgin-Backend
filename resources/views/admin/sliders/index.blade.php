@@ -11,55 +11,63 @@
 						<thead>
 						<tr>
 							<th class="text-center">No.</th>
-							<th class="text-center">Poster</th>
+							<th class="text-center">Banner</th>
 							<th class="text-center">Title</th>
 							<th class="text-center">Description</th>
 							<th class="text-center">Rating</th>
 							<th class="text-center">Active</th>
-							<th class="text-center">Target Link</th>
+							<th class="text-center">Type</th>
+							<th class="text-center">Target</th>
 							<th class="text-center">Action(s)</th>
 						</tr>
 						</thead>
 
 						<tbody>
 						@foreach($slides as $slide)
-							<tr id="genre_row_{{$slide->getKey()}}">
+							<tr id="genre_row_{{$slide->id()}}">
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">
-									@if($slide->getPoster()!=null)
-										<img src="{{Storage::disk('secured')->url($slide->getPoster())}}" style="width: 100px; height: 60px" alt="{{$slide->getTitle()}}"/>
+									@if($slide->banner()!=null)
+										<img src="{{\Illuminate\Support\Facades\Storage::disk('secured')->url($slide->banner())}}" style="width: 100px; height: 60px" alt="{{$slide->title()}}"/>
 									@else
 										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 90px"></i>
 									@endif
 								</td>
-								<td class="text-center">{{$slide->getTitle()}}</td>
-								<td class="text-center">{{__ellipsis($slide->getDescription(),50)}}</td>
-								<td class="text-center">{{__rating($slide->getStars())}}</td>
+								<td class="text-center">{{$slide->title()}}</td>
+								<td class="text-center">{{__ellipsis($slide->description(),50)}}</td>
+								<td class="text-center">{{__rating($slide->rating())}}</td>
 								<td class="text-center">
 									<div class="btn-group btn-group-toggle shadow-sm" data-toggle="buttons">
-										@if($slide->isActive()==true)
+										@if($slide->active()==true)
 											<label class="btn btn-outline-danger active" @include('admin.extras.tooltip.left', ['title' => 'Set slider active'])>
-												<input type="radio" name="options" id="optionOn_{{$slide->getKey()}}" onchange="toggleStatus('{{$slide->getKey()}}',1);"/> On
+												<input type="radio" name="options" id="optionOn_{{$slide->id()}}" onchange="toggleStatus('{{$slide->id()}}',1);"/> On
 											</label>
 											<label class="btn btn-outline-primary" @include('admin.extras.tooltip.right', ['title' => 'Set slider inactive'])>
-												<input type="radio" name="options" id="optionOff_{{$slide->getKey()}}" onchange="toggleStatus('{{$slide->getKey()}}',0);"/> Off
+												<input type="radio" name="options" id="optionOff_{{$slide->id()}}" onchange="toggleStatus('{{$slide->id()}}',0);"/> Off
 											</label>
 										@else
 											<label class="btn btn-outline-danger" @include('admin.extras.tooltip.left', ['title' => 'Set slider active'])>
-												<input type="radio" name="options" id="optionOn_{{$slide->getKey()}}" onchange="toggleStatus('{{$slide->getKey()}}',1);"/> On
+												<input type="radio" name="options" id="optionOn_{{$slide->id()}}" onchange="toggleStatus('{{$slide->id()}}',1);"/> On
 											</label>
 											<label class="btn btn-outline-primary active" @include('admin.extras.tooltip.right', ['title' => 'Set slider inactive'])>
-												<input type="radio" name="options" id="optionOff_{{$slide->getKey()}}" onchange="toggleStatus('{{$slide->getKey()}}',0);"/> Off
+												<input type="radio" name="options" id="optionOff_{{$slide->id()}}" onchange="toggleStatus('{{$slide->id()}}',0);"/> Off
 											</label>
 										@endif
 									</div>
 								</td>
-								<td class="text-center"><a class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig" target="_blank" href="{{$slide->getTarget()}}">{{__ellipsis($slide->getTarget())}}</a></td>
+								<td class="text-center">{{$slide->type()}}</td>
+								@if($slide->type()==\App\Models\Slider::TargetType['ExternalLink'])
+									<td class="text-center"><a class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig" target="_blank" href="{{$slide->target()}}">{{__ellipsis($slide->target())}}</a></td>
+								@else
+									<td class="text-center">
+										<button class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig">{{\App\Models\Video::retrieve($slide->target())->title()}}</button>
+									</td>
+								@endif
 								<td class="text-center">
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group mx-auto" role="group">
-											<a class="btn btn-outline-danger" href="{{route('admin.sliders.edit',$slide->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
-											<a class="btn btn-outline-primary" href="javascript:void(0);" onclick="deleteSlide('{{$slide->getKey()}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>
+											<a class="btn btn-outline-danger" href="{{route('admin.sliders.edit',$slide->id())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
+											<a class="btn btn-outline-primary" href="javascript:void(0);" onclick="deleteSlide('{{$slide->id()}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>
 										</div>
 									</div>
 								</td>

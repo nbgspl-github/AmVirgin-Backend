@@ -2,28 +2,51 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
+use App\Classes\Rule;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Interfaces\Directories;
 use App\Interfaces\Tables;
 use App\Models\Slider;
+use App\Models\Video;
+use App\Storage\SecuredDisk;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 class SlidersController extends BaseController{
 	use ValidatesRequest;
 	use FluentResponse;
 
-	protected $ruleSet;
+	protected array $rules;
 
 	public function __construct(){
 		parent::__construct();
-		$this->ruleSet = config('rules.admin.sliders');
+		$this->rules = [
+			'store' => [
+				'title' => ['bail', 'required', 'string', 'min:1', 'max:256'],
+				'description' => ['bail', 'required', 'string', 'min:1', 'max:2048'],
+				'banner' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp'],
+				'type' => ['bail', 'required', Rule::in([Slider::TargetType['ExternalLink'], Slider::TargetType['VideoKey']])],
+				'targetLink' => ['bail', 'required_if:type,external-link', 'url'],
+				'targetKey' => ['bail', 'required_if:type,video-key', Rule::existsPrimary(Tables::Videos)->where('pending', false)],
+				'rating' => ['bail', 'nullable', 'numeric', 'min:0', 'max:5'],
+				'active' => ['bail', 'required', 'boolean'],
+			],
+			'update' => [
+				'title' => ['bail', 'required', 'string', 'min:1', 'max:256'],
+				'description' => ['bail', 'required', 'string', 'min:1', 'max:2048'],
+				'banner' => ['bail', 'nullable', 'mimes:jpg,jpeg,png,bmp'],
+				'type' => ['bail', 'required', Rule::in([Slider::TargetType['ExternalLink'], Slider::TargetType['VideoKey']])],
+				'targetLink' => ['bail', 'required_if:type,external-link', 'url'],
+				'targetKey' => ['bail', 'required_if:type,video-key', Rule::existsPrimary(Tables::Videos)->where('pending', false)],
+				'rating' => ['bail', 'required', 'numeric', 'min:0', 'max:5'],
+				'active' => ['bail', 'required', 'boolean'],
+			],
+		];
 	}
 
 	public function index(){
@@ -32,13 +55,15 @@ class SlidersController extends BaseController{
 	}
 
 	public function create(){
-		return view('admin.sliders.create');
+		$videos = Video::where('pending', false)->get(['id', 'title']);
+		return view('admin.sliders.create')->with('videos', $videos);
 	}
 
 	public function edit($id){
+		$videos = Video::where('pending', false)->get(['id', 'title']);
 		$slider = Slider::find($id);
 		if ($slider != null) {
-			return view('admin.sliders.edit')->with('slide', $slider);
+			return view('admin.sliders.edit')->with('slide', $slider)->with('videos', $videos);
 		}
 		else {
 			return responseWeb()->
@@ -49,34 +74,23 @@ class SlidersController extends BaseController{
 	}
 
 	public function store(Request $request){
-		$response = null;
+		$response = responseWeb();
 		try {
-			$payload = $this->requestValid($request, $this->ruleSet['store']);
-			$payload['poster'] = \request()->hasFile('poster') ? Storage::disk('secured')->putFile(Directories::Sliders, $request->file('poster'), 'public') : null;
-			Slider::create($payload);
-			$response = responseWeb()->
-			route('admin.sliders.index')->
-			success('Slider created successfully.');
+			$validated = $this->requestValid($request, $this->rules['store']);
+			$validated['target'] = $validated['type'] == Slider::TargetType['ExternalLink'] ? $validated['targetLink'] : $validated['targetKey'];
+			$validated['banner'] = request()->hasFile('banner') ? SecuredDisk::access()->putFile(Directories::Sliders, $request->file('banner')) : null;
+			Slider::create($validated);
+			$response->route('admin.sliders.index')->success('Slider created successfully.');
 		}
 		catch (ValidationException $exception) {
-			$response = responseWeb()->
-			back()->
-			error($exception->getError())->
-			data($request->all());
+			$response->back()->error($exception->getError())->data($request->all());
 		}
-		catch (Exception $exception) {
-			$response = responseWeb()->
-			back()->
-			error($exception->getMessage())->
-			data($request->all());
+		catch (\Throwable $exception) {
+			$response->back()->error($exception->getMessage())->data($request->all());
 		}
 		finally {
 			return $response->send();
 		}
-	}
-
-	public function show($id){
-
 	}
 
 	public function delete($id){
@@ -97,37 +111,30 @@ class SlidersController extends BaseController{
 	}
 
 	public function update(Request $request){
-		$response = null;
-		$poster = null;
+		$response = responseWeb();
+		$banner = null;
 		try {
-			$this->requestValid($request, $this->ruleSet['update']);
+			$validated = $this->requestValid($request, $this->rules['update']);
 			$slide = Slider::find($request->id);
 			$slide->update([
-				'title' => $request->title,
-				'description' => $request->description,
-				'target' => $request->target,
-				'stars' => $request->stars,
-				'active' => $request->active,
+				'title' => $validated['title'],
+				'description' => $validated['description'],
+				'type' => $validated['type'],
+				'target' => $validated['target'],
+				'rating' => $validated['rating'],
+				'active' => $validated['active'],
 			]);
-			if ($request->hasFile('poster')) {
-				$poster = Storage::disk('secured')->putFile(Directories::Sliders, $request->file('poster'), 'public');
-				$slide->setPoster($poster)->save();
+			if ($request->hasFile('banner')) {
+				$banner = SecuredDisk::access()->putFile(Directories::Sliders, $request->file('banner'));
+				$slide->update(['banner' => $banner]);
 			}
-			$response = responseWeb()->
-			route('admin.sliders.index')->
-			success('Slider updated successfully.');
+			$response->route('admin.sliders.index')->success('Slider updated successfully.');
 		}
 		catch (ValidationException $exception) {
-			$response = responseWeb()->
-			back()->
-			error($exception->getError())->
-			data($request->all());
+			$response->back()->error($exception->getError())->data($request->all());
 		}
-		catch (Exception $exception) {
-			$response = responseWeb()->
-			back()->
-			error($exception->getMessage())->
-			data($request->all());
+		catch (\Throwable $exception) {
+			$response->back()->error($exception->getMessage())->data($request->all());
 		}
 		finally {
 			return $response->send();

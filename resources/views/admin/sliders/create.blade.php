@@ -20,12 +20,27 @@
 									<input type="text" name="description" class="form-control" placeholder="Type description here" value="{{old('description')}}"/>
 								</div>
 								<div class="form-group">
-									<label>Target<span class="text-primary">*</span></label>
-									<input type="text" name="target" class="form-control" placeholder="Type target url here" value="{{old('target')}}"/>
+									<label>@required(Type)</label>
+									<select name="type" class="form-control" onchange="handleTypeChanged(this.value);">
+										<option value="{{\App\Models\Slider::TargetType['ExternalLink']}}">External Link</option>
+										<option value="{{\App\Models\Slider::TargetType['VideoKey']}}">Video</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<label>Target link<span class="text-primary">*</span></label>
+									<input type="text" name="targetLink" id="targetLink" class="form-control" placeholder="Type target url here" value="{{old('target')}}"/>
+								</div>
+								<div class="form-group">
+									<label>Choose video<span class="text-primary">*</span></label>
+									<select name="targetKey" id="targetKey" disabled class="form-control">
+										@foreach($videos as $video)
+											<option value="{{$video->id()}}">{{$video->title()}}</option>
+										@endforeach
+									</select>
 								</div>
 								<div class="form-group">
 									<label>Rating<span class="text-primary">*</span></label>
-									<select name="stars" class="form-control">
+									<select name="rating" class="form-control">
 										<option value="0">Not rated</option>
 										<option value="1">1</option>
 										<option value="2">2</option>
@@ -42,12 +57,12 @@
 									</select>
 								</div>
 								<div class="form-group">
-									<label>Poster<span class="text-primary">*</span></label>
+									<label>Banner<span class="text-primary">*</span></label>
 									<div class="card" style="border: 1px solid #ced4da;">
 										<div class="card-header">
 											<div class="row">
 												<div class="d-none">
-													<input id="pickImage" type="file" name="poster" onclick="this.value=null;" onchange="previewImage(event);" class="form-control" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('poster')}}">
+													<input id="pickImage" type="file" name="banner" onclick="this.value=null;" onchange="previewImage(event);" class="form-control" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('banner')}}">
 												</div>
 												<div class="col-6">
 													<h3 class="my-0 header-title">Preview</h3>
@@ -89,7 +104,22 @@
 
 @section('javascript')
 	<script>
-		var lastFile = null;
+		let lastFile = null;
+		let targetTypes = {
+			ExternalLink: '{{\App\Models\Slider::TargetType['ExternalLink']}}',
+			VideoKey: '{{\App\Models\Slider::TargetType['VideoKey']}}'
+		};
+		let elements = {
+			targetKey: null,
+			targetLink: null
+		};
+
+		window.onload = () => {
+			elements = {
+				targetKey: $('#targetKey'),
+				targetLink: $('#targetLink'),
+			};
+		};
 		previewImage = (event) => {
 			const reader = new FileReader();
 			reader.onload = function () {
@@ -102,6 +132,24 @@
 
 		openImagePicker = () => {
 			$('#pickImage').trigger('click');
-		}
+		};
+
+		handleTypeChanged = (value) => {
+			if (value === targetTypes.ExternalLink) {
+				disable(elements.targetKey);
+				enable(elements.targetLink);
+			} else {
+				enable(elements.targetKey);
+				disable(elements.targetLink);
+			}
+		};
+
+		enable = (e) => {
+			e.prop('disabled', false);
+		};
+
+		disable = (e) => {
+			e.prop('disabled', true);
+		};
 	</script>
 @stop

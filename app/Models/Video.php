@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Http\Controllers\App\Customer\Playback\TrailerPlayback;
 use App\Traits\ActiveStatus;
 use App\Traits\FluentConstructor;
+use App\Traits\HasAttributeMethods;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use App\Traits\Sluggable;
@@ -15,8 +16,8 @@ use Illuminate\Support\Collection;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Video extends Model {
-	use RetrieveResource;
+class Video extends Model{
+	use RetrieveResource, HasAttributeMethods;
 	use RetrieveCollection;
 	use FluentConstructor;
 	use ActiveStatus;
@@ -58,7 +59,7 @@ class Video extends Model {
 	/**
 	 * @return int
 	 */
-	public function getSeasons(): ?int {
+	public function getSeasons(): ?int{
 		return $this->seasons;
 	}
 

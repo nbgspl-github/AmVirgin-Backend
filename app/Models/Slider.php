@@ -13,9 +13,10 @@ class Slider extends Model{
 	protected $fillable = [
 		'title',
 		'description',
-		'poster',
+		'banner',
+		'type',
 		'target',
-		'stars',
+		'rating',
 		'active',
 	];
 	protected $hidden = [
