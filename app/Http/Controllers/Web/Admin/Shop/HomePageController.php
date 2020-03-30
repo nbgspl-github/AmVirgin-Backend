@@ -16,11 +16,11 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
 use Throwable;
 
-class HomePageController extends BaseController {
+class HomePageController extends BaseController{
 	use ValidatesRequest;
 	protected array $rules;
 
-	public function __construct() {
+	public function __construct(){
 		parent::__construct();
 		$this->rules = [
 			'update' => [
@@ -33,11 +33,11 @@ class HomePageController extends BaseController {
 		];
 	}
 
-	public function choices() {
+	public function choices(){
 		return view('admin.shop.choices');
 	}
 
-	public function editSaleOfferTimerDetails() {
+	public function editSaleOfferTimerDetails(){
 		$details = Settings::get('shopSaleOfferDetails', null);
 		$saleOffer = null;
 		if ($details == null) {
@@ -55,7 +55,7 @@ class HomePageController extends BaseController {
 		return view('admin.shop.sale-offer-timer.edit')->with('payload', (object)$saleOffer);
 	}
 
-	public function updateSaleOfferTimerDetails() {
+	public function updateSaleOfferTimerDetails(){
 		$response = responseWeb();
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['update']['saleOfferTime']);
@@ -80,30 +80,30 @@ class HomePageController extends BaseController {
 		}
 	}
 
-	public function editBrandsInFocus() {
-		$categories = $topLevel = Category::where('parentId', 0)->get();
-		$topLevel->transform(function (Category $topLevel) {
+	public function editBrandsInFocus(){
+		$categories = $topLevel = Category::whereQuery()->isCategory()->get();
+		$topLevel->transform(function (Category $topLevel){
 			$children = $topLevel->children()->get();
-			$children = $children->transform(function (Category $child) {
+			$children = $children->transform(function (Category $child){
 				$innerChildren = $child->children()->get();
-				$innerChildren = $innerChildren->transform(function (Category $inner) {
+				$innerChildren = $innerChildren->transform(function (Category $inner){
 					return [
-						'id' => $inner->getKey(),
-						'name' => $inner->getName(),
+						'id' => $inner->id(),
+						'name' => $inner->name(),
 						'brandInFocus' => $inner->brandInFocus(),
 					];
 				});
 				return [
-					'id' => $child->getKey(),
-					'name' => $child->getName(),
+					'id' => $child->id(),
+					'name' => $child->name(),
 					'hasInner' => $innerChildren->count() > 0,
 					'inner' => $innerChildren,
 					'brandInFocus' => $child->brandInFocus(),
 				];
 			});
 			return [
-				'id' => $topLevel->getKey(),
-				'name' => $topLevel->getName(),
+				'id' => $topLevel->id(),
+				'name' => $topLevel->name(),
 				'hasInner' => $children->count() > 0,
 				'inner' => $children,
 				'brandInFocus' => $topLevel->brandInFocus(),
@@ -112,7 +112,7 @@ class HomePageController extends BaseController {
 		return view('admin.shop.brands-in-focus.edit')->with('categories', $topLevel);
 	}
 
-	public function updateBrandsInFocus() {
+	public function updateBrandsInFocus(){
 		$response = responseWeb();
 		try {
 			$choices = request('choice');
@@ -120,8 +120,8 @@ class HomePageController extends BaseController {
 				$response->error('You can select a maximum of 8 categories only.')->back();
 			}
 			else {
-				Category::all()->each(function (Category $category) use ($choices) {
-					if (in_array($category->getKey(), $choices)) {
+				Category::all()->each(function (Category $category) use ($choices){
+					if (in_array($category->id(), $choices)) {
 						$category->brandInFocus(true);
 					}
 					else {
@@ -140,30 +140,30 @@ class HomePageController extends BaseController {
 		}
 	}
 
-	public function editPopularStuff() {
-		$categories = $topLevel = Category::where('parentId', 0)->get();
-		$topLevel->transform(function (Category $topLevel) {
+	public function editPopularStuff(){
+		$categories = $topLevel = Category::whereQuery()->isCategory()->get();
+		$topLevel->transform(function (Category $topLevel){
 			$children = $topLevel->children()->get();
-			$children = $children->transform(function (Category $child) {
+			$children = $children->transform(function (Category $child){
 				$innerChildren = $child->children()->get();
-				$innerChildren = $innerChildren->transform(function (Category $inner) {
+				$innerChildren = $innerChildren->transform(function (Category $inner){
 					return [
-						'id' => $inner->getKey(),
-						'name' => $inner->getName(),
+						'id' => $inner->id(),
+						'name' => $inner->name(),
 						'popularCategory' => $inner->popularCategory(),
 					];
 				});
 				return [
-					'id' => $child->getKey(),
-					'name' => $child->getName(),
+					'id' => $child->id(),
+					'name' => $child->name(),
 					'hasInner' => $innerChildren->count() > 0,
 					'inner' => $innerChildren,
 					'popularCategory' => $child->popularCategory(),
 				];
 			});
 			return [
-				'id' => $topLevel->getKey(),
-				'name' => $topLevel->getName(),
+				'id' => $topLevel->id(),
+				'name' => $topLevel->name(),
 				'hasInner' => $children->count() > 0,
 				'inner' => $children,
 				'popularCategory' => $topLevel->popularCategory(),
@@ -172,7 +172,7 @@ class HomePageController extends BaseController {
 		return view('admin.shop.popular-stuff.edit')->with('categories', $topLevel);
 	}
 
-	public function updatePopularStuff() {
+	public function updatePopularStuff(){
 		$response = responseWeb();
 		try {
 			$choices = request('choice');
@@ -180,8 +180,8 @@ class HomePageController extends BaseController {
 				$response->error('You can select a maximum of 5 categories only.')->back();
 			}
 			else {
-				Category::all()->each(function (Category $category) use ($choices) {
-					if (in_array($category->getKey(), $choices)) {
+				Category::all()->each(function (Category $category) use ($choices){
+					if (in_array($category->id(), $choices)) {
 						$category->popularCategory(true);
 					}
 					else {
@@ -200,30 +200,30 @@ class HomePageController extends BaseController {
 		}
 	}
 
-	public function editTrendingNow() {
-		$categories = $topLevel = Category::where('parentId', 0)->get();
-		$topLevel->transform(function (Category $topLevel) {
+	public function editTrendingNow(){
+		$categories = $topLevel = Category::whereQuery()->isCategory()->get();
+		$topLevel->transform(function (Category $topLevel){
 			$children = $topLevel->children()->get();
-			$children = $children->transform(function (Category $child) {
+			$children = $children->transform(function (Category $child){
 				$innerChildren = $child->children()->get();
-				$innerChildren = $innerChildren->transform(function (Category $inner) {
+				$innerChildren = $innerChildren->transform(function (Category $inner){
 					return [
-						'id' => $inner->getKey(),
-						'name' => $inner->getName(),
+						'id' => $inner->id(),
+						'name' => $inner->name(),
 						'trendingNow' => $inner->trendingNow(),
 					];
 				});
 				return [
-					'id' => $child->getKey(),
-					'name' => $child->getName(),
+					'id' => $child->id(),
+					'name' => $child->name(),
 					'hasInner' => $innerChildren->count() > 0,
 					'inner' => $innerChildren,
 					'trendingNow' => $child->trendingNow(),
 				];
 			});
 			return [
-				'id' => $topLevel->getKey(),
-				'name' => $topLevel->getName(),
+				'id' => $topLevel->id(),
+				'name' => $topLevel->name(),
 				'hasInner' => $children->count() > 0,
 				'inner' => $children,
 				'trendingNow' => $topLevel->trendingNow(),
@@ -232,7 +232,7 @@ class HomePageController extends BaseController {
 		return view('admin.shop.trending-now.edit')->with('categories', $topLevel);
 	}
 
-	public function updateTrendingNow() {
+	public function updateTrendingNow(){
 		$response = responseWeb();
 		try {
 			$choices = request('choice');
@@ -240,8 +240,8 @@ class HomePageController extends BaseController {
 				$response->error('You can select a maximum of 4 categories only.')->back();
 			}
 			else {
-				Category::all()->each(function (Category $category) use ($choices) {
-					if (in_array($category->getKey(), $choices)) {
+				Category::all()->each(function (Category $category) use ($choices){
+					if (in_array($category->id(), $choices)) {
 						$category->trendingNow(true);
 					}
 					else {
@@ -260,23 +260,19 @@ class HomePageController extends BaseController {
 		}
 	}
 
-	public function editHotDeals() {
-		$products = Product::where([
-			['draft', false],
-			['deleted', false],
-			['visibility', true],
-		])->get();
-		$products->transform(function (Product $product) {
+	public function editHotDeals(){
+		$products = Product::whereQuery()->displayable()->get();
+		$products->transform(function (Product $product){
 			return [
-				'id' => $product->getKey(),
-				'name' => $product->getName(),
+				'id' => $product->id(),
+				'name' => $product->name(),
 				'hotDeal' => $product->hotDeal(),
 			];
 		});
 		return view('admin.shop.hot-deals.edit')->with('products', $products);
 	}
 
-	public function updateHotDeals() {
+	public function updateHotDeals(){
 		$response = responseWeb();
 		try {
 			$choices = request('choice');
@@ -284,13 +280,8 @@ class HomePageController extends BaseController {
 				$response->error('You can select a maximum of 50 products only.')->back();
 			}
 			else {
-				Product::all()->each(function (Product $product) use ($choices) {
-					if (in_array($product->getKey(), $choices)) {
-						$product->hotDeal = true;
-					}
-					else {
-						$product->hotDeal = false;
-					}
+				Product::all()->each(function (Product $product) use ($choices){
+					$product->hotDeal(in_array($product->id(), $choices));
 					$product->save();
 				});
 				$response->route('admin.shop.choices')->success('Successfully updated products for hot deals.');
@@ -304,12 +295,12 @@ class HomePageController extends BaseController {
 		}
 	}
 
-	public function viewProductDetails($id) {
+	public function viewProductDetails($id){
 		$response = responseApp();
 		try {
 			$product = Product::retrieveThrows($id);
-			$seller = Seller::retrieve($product->getSellerId());
-			$category = Category::retrieve($product->getCategoryId());
+			$seller = $product->seller;
+			$category = $product->category;
 			if ($seller == null) {
 				$seller = Str::Empty;
 			}
@@ -323,7 +314,7 @@ class HomePageController extends BaseController {
 				$category = sprintf('%s [%d]', $category->getName(), $category->getKey());
 			}
 			$data = [
-				'name' => $product->getName(),
+				'name' => $product->name(),
 				'category' => $category,
 				'seller' => $seller,
 				'price' => $product->getOriginalPrice() . ' ' . $product->getCurrency(),

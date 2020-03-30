@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use App\Queries\AttributeQuery;
-use App\Queries\CategoryAttributeQuery;
 use App\Traits\FluentConstructor;
-use App\Traits\HasAttributeMethods;
+use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @package App\Models
  */
 class Attribute extends Model{
-	use FluentConstructor, RetrieveResource, HasAttributeMethods;
+	use FluentConstructor, RetrieveResource, DynamicAttributeNamedMethods;
 	protected $table = 'attributes';
 	protected $fillable = [
 		'categoryId',

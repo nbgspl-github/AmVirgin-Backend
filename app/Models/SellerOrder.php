@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-use App\Traits\HasAttributeMethods;
+use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Customer;
 use App\Models\Order;
 
-class SellerOrder extends Model {
-	use HasAttributeMethods, RetrieveResource, RetrieveCollection;
+class SellerOrder extends Model{
+	use DynamicAttributeNamedMethods, RetrieveResource, RetrieveCollection;
 	protected $table = 'seller-orders';
 	protected $fillable = [
 		'sellerId',
@@ -19,7 +19,7 @@ class SellerOrder extends Model {
 		'orderNumber',
 	];
 
-	public function seller() {
+	public function seller(){
 		return $this->belongsTo('App\Models\Seller', 'sellerId');
 	}
 	public function customer() {

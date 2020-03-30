@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Classes\Str;
-use App\Traits\HasAttributeMethods;
+use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @package App\Models
  */
 class ProductImage extends Model{
-	use RetrieveResource, RetrieveCollection, HasAttributeMethods;
+	use RetrieveResource, RetrieveCollection, DynamicAttributeNamedMethods;
 	protected $table = 'product-images';
 	protected $fillable = [
 		'productId',

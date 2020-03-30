@@ -32,4 +32,13 @@ class Arrays extends \Illuminate\Support\Arr{
 			call_user_func($callback, $key, $value);
 		}
 	}
+
+	public static function containsValueIndexed(array $array, $value){
+		foreach ($array as $item) {
+			if ($item == $value) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

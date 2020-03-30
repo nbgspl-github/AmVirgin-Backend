@@ -17,39 +17,44 @@ class CategoriesController extends BaseController{
 	}
 
 	public function index(){
-		$topLevel = Category::where('parentId', 0)->get();
-		$topLevel->transform(function (Category $topLevel){
-			$children = $topLevel->children()->get();
-			$children = $children->transform(function (Category $child){
-				$innerChildren = $child->children()->get();
-				$innerChildren = $innerChildren->transform(function (Category $inner){
+		$category = Category::whereQuery()->isCategory()->get();
+		$category->transform(function (Category $category){
+			$children = $category->children()->get();
+			$children = $children->transform(function (Category $subCategory){
+				$innerChildren = $subCategory->children()->get();
+				$innerChildren = $innerChildren->transform(function (Category $vertical){
 					return [
-						'id' => $inner->getKey(),
-						'name' => $inner->getName(),
-						'hasIcon' => SecuredDisk::access()->exists($inner->getIcon()),
-						'icon' => SecuredDisk::access()->exists($inner->getIcon()) ? SecuredDisk::access()->url($inner->getIcon()) : Str::Empty,
+						'id' => $vertical->id(),
+						'name' => $vertical->name(),
+						'hasIcon' => false,
+						'icon' => Str::Empty,
+						'type' => $vertical->type(),
 					];
 				});
 				return [
-					'id' => $child->getKey(),
-					'name' => $child->getName(),
-					'hasIcon' => SecuredDisk::access()->exists($child->getIcon()),
-					'icon' => SecuredDisk::access()->exists($child->getIcon()) ? SecuredDisk::access()->url($child->getIcon()) : Str::Empty,
+					'id' => $subCategory->id(),
+					'name' => $subCategory->name(),
+					'hasIcon' => false,
+					'icon' => Str::Empty,
+					'type' => $subCategory->type(),
 					'hasInner' => $innerChildren->count() > 0,
+					'count' => $innerChildren->count(),
 					'inner' => $innerChildren,
 				];
 			});
 			return [
-				'id' => $topLevel->getKey(),
-				'name' => $topLevel->getName(),
-				'hasIcon' => SecuredDisk::access()->exists($topLevel->getIcon()),
-				'icon' => SecuredDisk::access()->exists($topLevel->getIcon()) ? SecuredDisk::access()->url($topLevel->getIcon()) : Str::Empty,
+				'id' => $category->id(),
+				'name' => $category->name(),
+				'hasIcon' => false,
+				'icon' => Str::Empty,
+				'type' => $category->type(),
 				'hasInner' => $children->count() > 0,
+				'count' => $children->count(),
 				'inner' => $children,
 			];
 		});
-		return $this->response()->status(HttpOkay)->setValue('data', $topLevel)->message(function () use ($topLevel){
-			return sprintf('Found %d categories.', $topLevel->count());
+		return $this->response()->status(HttpOkay)->setValue('data', $category)->message(function () use ($category){
+			return sprintf('Found %d categories.', $category->count());
 		})->send();
 	}
 }

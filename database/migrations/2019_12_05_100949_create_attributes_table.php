@@ -15,7 +15,7 @@ class CreateAttributesTable extends Migration{
 		Schema::create('attributes', function (Blueprint $table){
 			$table->bigIncrements('id');
 			$table->string('name')->comment('Name of this attribute (used for display purposes only');
-			$table->string('description', 5000)->comment('Appropriate description of what this attribute does (used for display purposes only)');
+			$table->string('description', 5000)->nullable()->comment('Appropriate description of what this attribute does (used for display purposes only)');
 			$table->string('code', 100)->unique()->comment('A unique code to identify this attribute on the front-end.');
 			$table->enum('sellerInterfaceType', [Attribute::SellerInterfaceType['DropDown'], Attribute::SellerInterfaceType['Input'], Attribute::SellerInterfaceType['Text'], Attribute::SellerInterfaceType['Radio']])->comment('What kind of UI should be shown to seller when taking this attributes\' values?');
 			$table->enum('customerInterfaceType', [Attribute::CustomerInterfaceType['Options'], Attribute::CustomerInterfaceType['Readable']])->comment('What kind of UI should be shown to the customer?')->nullable();

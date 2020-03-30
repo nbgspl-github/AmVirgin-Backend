@@ -17,7 +17,7 @@ class CategorySeeder extends Command{
 		'AmVirgin' => [
 
 		],
-		'Men+' => [
+		'Men' => [
 			'FootWear' => [
 				'Casual',
 				'Slippers',
@@ -49,7 +49,7 @@ class CategorySeeder extends Command{
 				'Sunglasses',
 			],
 		],
-		'Women+' => [
+		'Women' => [
 			'FootWear' => [
 				'Casual',
 				'Slippers',
@@ -71,7 +71,7 @@ class CategorySeeder extends Command{
 			'TopWear' => [
 				'Shirt',
 				'T-shirt',
-				'Kurtas',
+				'Salwars',
 				'Suits & Blazers',
 			],
 			'Personal care' => [
@@ -100,25 +100,39 @@ class CategorySeeder extends Command{
 	}
 
 	public function handle(){
+		$root = Category::query()->updateOrCreate([
+			'name' => 'Root',
+		], [
+			'name' => 'Root',
+			'parentId' => 1,
+			'description' => 'This is the super-parent category.',
+			'type' => Category::Types['Root'],
+		]);
 		foreach ($this->categories as $key => $value) {
 			$category = Category::newObject();
-			$category->setName($key);
-			$category->setParentId(0);
-			$category->setDescription(sprintf('%s is a really cool trend. There\'s a whole lot more inside so be sure to follow.', $key));
+			$category->name = $key;
+			$category->description = sprintf('%s is a really cool trend. There\'s a whole lot more inside so be sure to follow.', $key);
+			$category->parentId = $root->id();
+			$category->type = Category::Types['Category'];
+			$category->specials = ['brandInFocus' => false, 'popularCategory' => false, 'trendingNow' => false];
 			$category->save();
 			if (is_array($value) && count($value) > 0) {
 				foreach ($value as $innerCategory => $innerValue) {
 					$inner = Category::newObject();
-					$inner->setName($innerCategory);
-					$inner->setParentId($category->getKey());
-					$inner->setDescription(sprintf('%s is a really cool trend. There\'s a whole lot more inside so be sure to follow.', $innerCategory));
+					$inner->name = $innerCategory;
+					$inner->description = sprintf('%s is a really cool trend. There\'s a whole lot more inside so be sure to follow.', $innerCategory);
+					$inner->parentId = $category->id();
+					$inner->type = Category::Types['SubCategory'];
+					$inner->specials = ['brandInFocus' => false, 'popularCategory' => false, 'trendingNow' => false];
 					$inner->save();
 					if (is_array($innerValue) && count($innerValue) > 0) {
 						foreach ($innerValue as $subInnerCategory => $subInnerValue) {
 							$subInner = Category::newObject();
-							$subInner->setName($subInnerValue);
-							$subInner->setParentId($inner->getKey());
-							$subInner->setDescription(sprintf('%s is a really cool trend. There\'s a whole lot more inside so be sure to follow.', $subInnerValue));
+							$subInner->name = $subInnerValue;
+							$subInner->description = sprintf('%s is a really cool trend. There\'s a whole lot more inside so be sure to follow.', $subInnerValue);
+							$subInner->parentId = $inner->id();
+							$subInner->type = Category::Types['Vertical'];
+							$subInner->specials = ['brandInFocus' => false, 'popularCategory' => false, 'trendingNow' => false];
 							$subInner->save();
 						}
 					}

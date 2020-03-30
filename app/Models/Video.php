@@ -6,7 +6,7 @@ use App\Contracts\DisplayableModel;
 use App\Http\Controllers\App\Customer\Playback\TrailerPlayback;
 use App\Traits\ActiveStatus;
 use App\Traits\FluentConstructor;
-use App\Traits\HasAttributeMethods;
+use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use App\Traits\Sluggable;
@@ -19,7 +19,7 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 class Video extends Model implements DisplayableModel{
-	use RetrieveResource, HasAttributeMethods;
+	use RetrieveResource, DynamicAttributeNamedMethods;
 	use RetrieveCollection;
 	use FluentConstructor;
 	use ActiveStatus;

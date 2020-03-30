@@ -3,14 +3,14 @@
 namespace App\Models;
 
 use App\Constants\PageSectionType;
-use App\Traits\HasAttributeMethods;
+use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class PageSection extends Model{
-	use RetrieveResource, RetrieveCollection, HasAttributeMethods;
+	use RetrieveResource, RetrieveCollection, DynamicAttributeNamedMethods;
 	protected $table = 'page-sections';
 	protected $fillable = [
 		'title',

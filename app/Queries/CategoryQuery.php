@@ -5,7 +5,7 @@ namespace App\Queries;
 use App\Models\Category;
 
 class CategoryQuery extends AbstractQuery{
-	public static function begin(): AbstractQuery{
+	public static function begin(): CategoryQuery{
 		return new self();
 	}
 
@@ -13,18 +13,38 @@ class CategoryQuery extends AbstractQuery{
 		return Category::class;
 	}
 
-	public function brandInFocus(){
-		$this->query->where('specials->brandInFocus', true);
+	public function brandInFocus($invert = false){
+		$this->query->where('specials->brandInFocus', !$invert);
 		return $this;
 	}
 
-	public function popularCategory(){
-		$this->query->where('specials->popularCategory', true);
+	public function popularCategory($invert = false){
+		$this->query->where('specials->popularCategory', !$invert);
 		return $this;
 	}
 
-	public function trendingNow(){
-		$this->query->where('specials->trendingNow', true);
+	public function trendingNow($invert = false){
+		$this->query->where('specials->trendingNow', !$invert);
+		return $this;
+	}
+
+	public function isRoot(){
+		$this->query->where('type', Category::Types['Root']);
+		return $this;
+	}
+
+	public function isCategory(){
+		$this->query->where('type', Category::Types['Category']);
+		return $this;
+	}
+
+	public function isSubCategory(){
+		$this->query->where('type', Category::Types['SubCategory']);
+		return $this;
+	}
+
+	public function isVertical(){
+		$this->query->where('type', Category::Types['Vertical']);
 		return $this;
 	}
 }

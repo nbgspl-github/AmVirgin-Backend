@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use App\Traits\HasAttributeMethods;
+use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class SellerOrderItem extends Model {
-	use HasAttributeMethods, RetrieveResource, RetrieveCollection;
+class SellerOrderItem extends Model{
+	use DynamicAttributeNamedMethods, RetrieveResource, RetrieveCollection;
 	protected $table = 'seller-order-items';
 	protected $fillable = [
 		'sellerOrderId',

@@ -12,7 +12,7 @@ class Settings extends Model {
 	public $timestamps = false;
 
 	public static function get($key, $default = null) {
-		$setting = Settings::find($key);
+		$setting = self::find($key);
 		if ($setting != null)
 			return $setting->value;
 		else
@@ -27,12 +27,13 @@ class Settings extends Model {
 		return boolval(self::get($key, $default));
 	}
 
-	public static function set($key, $value) {
-		$setting = Settings::find($key);
+	public static function set($key, $value){
+		$setting = self::find($key);
 		if ($setting != null) {
 			$setting->value = $value;
 			$setting->save();
-		} else {
+		}
+		else {
 			$setting = new Settings();
 			$setting->key = $key;
 			$setting->value = $value;

@@ -5,13 +5,15 @@ namespace App\Models;
 use App\Contracts\DisplayableModel;
 use App\Queries\ProductQuery;
 use App\Traits\FluentConstructor;
-use App\Traits\HasAttributeMethods;
+use App\Traits\DynamicAttributeNamedMethods;
+use App\Traits\HasSpecialAttributes;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use App\Traits\Sluggable;
 use BinaryCats\Sku\HasSku;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Sluggable\SlugOptions;
@@ -21,7 +23,7 @@ use Spatie\Sluggable\SlugOptions;
  * @package App\Models
  */
 class Product extends Model{
-	use FluentConstructor, RetrieveResource, RetrieveCollection, HasAttributeMethods, Sluggable, SoftDeletes, HasSku;
+	use FluentConstructor, RetrieveResource, RetrieveCollection, DynamicAttributeNamedMethods, HasSpecialAttributes, Sluggable, SoftDeletes, HasSku;
 	protected $table = 'products';
 	protected $fillable = [
 		'name',
@@ -131,11 +133,30 @@ class Product extends Model{
 	];
 
 	public function attributes(): HasMany{
-		return $this->hasMany('App\Models\ProductAttribute', 'productId');
+		return $this->hasMany(ProductAttribute::class, 'productId');
+	}
+
+	public function brand(): BelongsTo{
+		return $this->belongsTo(Brand::class, 'brandId');
+	}
+
+	public function category(): BelongsTo{
+		return $this->belongsTo(Category::class, 'categoryId');
 	}
 
 	public function images(): HasMany{
-		return $this->hasMany('\App\Models\ProductImage', 'productId');
+		return $this->hasMany(ProductImage::class, 'productId');
+	}
+
+	public function seller(): BelongsTo{
+		return $this->belongsTo(Seller::class, 'sellerId');
+	}
+
+	public function hotDeal(?bool $yes = null): bool{
+		if (!is_null($yes)) {
+			$this->setSpecialAttribute('hotDeal', $yes);
+		}
+		return $this->getSpecialAttribute('hotDeal', false);
 	}
 
 	public function getSlugOptions(): SlugOptions{

@@ -4,7 +4,7 @@ namespace App\Classes;
 
 class Str extends \Illuminate\Support\Str{
 	const Empty = '';
-
+	const Null = null;
 	const NewLine = "\r\n";
 	const WhiteSpace = ' ';
 

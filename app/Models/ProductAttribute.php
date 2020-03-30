@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Traits\HasAttributeMethods;
+use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @package App\Models
  */
 class ProductAttribute extends Model{
-	use RetrieveResource, HasAttributeMethods;
+	use RetrieveResource, DynamicAttributeNamedMethods;
 	protected $table = 'product-attributes';
 	protected $fillable = [
 		'productId',

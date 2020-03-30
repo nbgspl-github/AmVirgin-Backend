@@ -2,149 +2,71 @@
 
 namespace App\Models;
 
+use App\Classes\Arrays;
+use App\Queries\CategoryQuery;
 use App\Traits\FluentConstructor;
 use App\Traits\GenerateUrls;
-use App\Traits\HasAttributeMethods;
+use App\Traits\DynamicAttributeNamedMethods;
+use App\Traits\HasSpecialAttributes;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * Category defines a logical grouping of products which share similar traits.
+ * @package App\Models
+ */
 class Category extends Model{
-	use RetrieveResource;
-	use FluentConstructor;
-	use HasAttributeMethods;
-
+	use RetrieveResource, FluentConstructor, HasSpecialAttributes, DynamicAttributeNamedMethods;
 	protected $table = 'categories';
-
-	protected $fillable = [
-		'name',
-		'parentId',
-		'description',
-		'visibility',
-		'icon',
-		'poster',
-
+	protected $fillable = ['name', 'parentId', 'description', 'type', 'order', 'icon', 'listingStatus', 'specials',];
+	protected $casts = ['specials' => 'array', 'order' => 'int'];
+	public const Types = [
+		'Root' => 'root',
+		'Category' => 'category',
+		'SubCategory' => 'sub-category',
+		'Vertical' => 'vertical',
+	];
+	public const ListingStatus = [
+		'Active' => 'active',
+		'Inactive' => 'in-active',
 	];
 
-	/**
-	 * @return string
-	 */
-	public function getName(): string{
-		return $this->name;
-	}
-
-	/**
-	 * @param string $name
-	 * @return Category
-	 */
-	public function setName(string $name): Category{
-		$this->name = $name;
-		return $this;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getParentId(): int{
-		return $this->parentId;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getParentName(): string{
-		if ($this->getParentId() == config('values.category.super.index'))
-			return 'Main';
-		return Category::find($this->getParentId())->getName();
-	}
-
-	/**
-	 * @param int $parentId
-	 * @return Category
-	 */
-	public function setParentId(int $parentId): Category{
-		$this->parentId = $parentId;
-		return $this;
-	}
-
-	/**
-	 * @return string|null
-	 */
-	public function getDescription(): ?string{
-		return $this->description;
-	}
-
-	/**
-	 * @param string|null $description
-	 * @return Category
-	 */
-	public function setDescription(?string $description): Category{
-		$this->description = $description;
-		return $this;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function isVisible(): bool{
-		return $this->visibility;
-	}
-
-	/**
-	 * @param bool $visibility
-	 * @return Category
-	 */
-	public function setVisibility(bool $visibility): Category{
-		$this->visibility = $visibility;
-		return $this;
-	}
-
-	/**
-	 * @return string|null
-	 */
-	public function getPoster(): ?string{
-		return $this->poster;
-	}
-
-	/**
-	 * @return string|null
-	 */
-	public function getIcon(): ?string{
-		return $this->icon;
-	}
-
-	/**
-	 * @param string|null $poster
-	 * @return Category
-	 */
-
-	public function setPoster(?string $poster): Category{
-		$this->poster = $poster;
-		return $this;
-	}
-
-	/**
-	 * @param string|null $Icon
-	 * @return Category
-	 */
-
-	public function setIcon(?string $icon): Category{
-		$this->icon = $icon;
-		return $this;
-	}
-
-	/**
-	 * @return HasMany
-	 */
-	public function attributes(){
+	public function attributes(): HasMany{
 		return $this->hasMany('App\Models\Attribute', 'categoryId');
 	}
 
-	public function children(){
+	public function children(): HasMany{
 		return $this->hasMany(Category::class, 'parentId');
 	}
 
-	public function parent(){
+	public function parent(): BelongsTo{
 		return $this->belongsTo(Category::class, 'parentId');
+	}
+
+	public function brandInFocus(?bool $yes = null): bool{
+		if (!is_null($yes)) {
+			$this->setSpecialAttribute('brandInFocus', $yes);
+		}
+		return $this->getSpecialAttribute('brandInFocus', false);
+	}
+
+	public function popularCategory(?bool $yes = null): bool{
+		if (!is_null($yes)) {
+			$this->setSpecialAttribute('popularCategory', $yes);
+		}
+		return $this->getSpecialAttribute('popularCategory', false);
+	}
+
+	public function trendingNow(?bool $yes = null): bool{
+		if (!is_null($yes)) {
+			$this->setSpecialAttribute('trendingNow', $yes);
+		}
+		return $this->getSpecialAttribute('trendingNow', false);
+	}
+
+	public static function whereQuery(): CategoryQuery{
+		return CategoryQuery::begin();
 	}
 }

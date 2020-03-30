@@ -4,14 +4,14 @@ namespace App\Models;
 
 use App\Queries\ShopSliderQuery;
 use App\Traits\ActiveStatus;
-use App\Traits\HasAttributeMethods;
+use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
 class ShopSlider extends Model{
 	use ActiveStatus;
 	use RetrieveResource;
-	use HasAttributeMethods;
+	use DynamicAttributeNamedMethods;
 	protected $table = 'shop-sliders';
 	protected $fillable = [
 		'title',

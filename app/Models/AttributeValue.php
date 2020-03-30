@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use App\Traits\HasAttributeMethods;
+use App\Traits\DynamicAttributeNamedMethods;
 use Illuminate\Database\Eloquent\Model;
 
 class AttributeValue extends Model{
-	use HasAttributeMethods;
+	use DynamicAttributeNamedMethods;
 	protected $table = 'attribute-values';
 	protected $fillable = ['attributeId', 'categoryId', 'value'];
 }

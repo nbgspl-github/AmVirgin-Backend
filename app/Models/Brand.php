@@ -3,19 +3,19 @@
 namespace App\Models;
 
 use App\Classes\Str;
-use App\Traits\HasAttributeMethods;
+use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
 class Brand extends Model{
-	use HasAttributeMethods, RetrieveResource;
+	use DynamicAttributeNamedMethods, RetrieveResource;
 	protected $table = 'brands';
 	protected $fillable = ['name', 'slug', 'logo', 'active'];
 	protected $casts = [
 		'active' => 'bool',
 	];
-	protected $hidden=[
-		'created_at','updated_at','id'
+	protected $hidden = [
+		'created_at', 'updated_at', 'id',
 	];
 
 	public function setNameAttribute($value){

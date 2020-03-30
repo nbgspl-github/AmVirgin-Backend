@@ -8,12 +8,12 @@ use App\Contracts\DisplayableModel;
 use App\Queries\SliderQuery;
 use App\Storage\SecuredDisk;
 use App\Traits\ActiveStatus;
-use App\Traits\HasAttributeMethods;
+use App\Traits\DynamicAttributeNamedMethods;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Slider extends Model{
-	use HasAttributeMethods;
+	use DynamicAttributeNamedMethods;
 	protected $table = 'sliders';
 	protected $fillable = [
 		'title',
