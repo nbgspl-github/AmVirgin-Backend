@@ -14,6 +14,7 @@ use App\Resources\Shop\Customer\HomePage\PopularStuffResource;
 use App\Resources\Shop\Customer\HomePage\ShopSliderResource;
 use App\Resources\Shop\Customer\HomePage\TrendingDealsResource;
 use App\Resources\Shop\Customer\HomePage\TrendingNowResource;
+use Illuminate\Http\JsonResponse;
 use Throwable;
 
 class HomePageController extends ExtendedResourceController{
@@ -21,7 +22,7 @@ class HomePageController extends ExtendedResourceController{
 		parent::__construct();
 	}
 
-	public function index(){
+	public function index(): JsonResponse{
 		/**
 		 * We need to send the following stuff for the homepage.
 		 * 1.) Sliders
@@ -32,9 +33,6 @@ class HomePageController extends ExtendedResourceController{
 		 * 6.) Trending Now
 		 */
 
-		/**
-		 * Final data array
-		 */
 		$container = Arrays::Empty;
 
 		/**
@@ -42,7 +40,7 @@ class HomePageController extends ExtendedResourceController{
 		 */
 		$shopSlider = ShopSlider::whereQuery()->displayable()->get();
 		$shopSlider = ShopSliderResource::collection($shopSlider);
-		$container['shopSliders'] = $shopSlider;
+		Arrays::set($container, 'shopSliders', $shopSlider);
 
 		/**
 		 * Offer Timer
@@ -63,43 +61,37 @@ class HomePageController extends ExtendedResourceController{
 			$countdown *= 1000;
 			$offerDetails['countDown'] = $countdown;
 		}
-		$container['offerDetails'] = $offerDetails;
+		Arrays::set($container, 'offerDetails', $offerDetails);
 
 		/**
 		 * Brands in Focus
 		 */
-		$brandsInFocus = Category::where([
-			['brandInFocus', true],
-		])->get();
+		$brandsInFocus = Category::whereQuery()->brandInFocus()->get();
 		$brandsInFocus = BrandsInFocusResource::collection($brandsInFocus);
-		$container['brandsInFocus'] = $brandsInFocus;
+		Arrays::set($container, 'brandInFocus', $brandsInFocus);
 
 		/**
 		 * Today's Deals
 		 */
-		$hotDeals = Product::whereQuery()->hotDeal()->take(10)->get();
-		$hotDeals = TrendingDealsResource::collection($hotDeals);
-		$container['trendingDeals'] = $hotDeals;
+		$trendingDeals = Product::whereQuery()->hotDeal()->take(10)->get();
+		$trendingDeals = TrendingDealsResource::collection($trendingDeals);
+		Arrays::set($container, 'trendingDeals', $trendingDeals);
 
 		/**
 		 * Popular Stuff
 		 */
-		$popularStuff = Category::where([
-			['popularCategory', true],
-		])->get();
+		$popularStuff = Category::whereQuery()->popularCategory()->get();
 		$popularStuff = PopularStuffResource::collection($popularStuff);
-		$container['popularStuff'] = $popularStuff;
+		Arrays::set($container, 'popularStuff', $popularStuff);
 
 		/**
 		 * Trending Now
 		 */
-		$trendingNow = Category::where([
-			['trendingNow', true],
-		])->get();
+		$trendingNow = Category::whereQuery()->trendingNow()->get();
 		$trendingNow = TrendingNowResource::collection($trendingNow);
-		$container['trendingNow'] = $trendingNow;
+		Arrays::set($container, 'trendingNow', $trendingNow);
 
-		return responseApp()->status(HttpOkay)->message('Shop homepage contents retrieved.')->setValue('data', $container)->send();
+		return responseApp()->status(HttpOkay)->message('Listing shop-homepage contents.')->setValue('data', $container)->send();
 	}
 
 	public function showAllDeals(){
