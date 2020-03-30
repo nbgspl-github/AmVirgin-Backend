@@ -4,57 +4,74 @@ namespace App\Http\Controllers\App\Seller;
 
 use App\Classes\Str;
 use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Models\Category;
 use App\Storage\SecuredDisk;
 use App\Traits\FluentResponse;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Sujip\Guid\Facades\Guid;
 
-class CategoriesController extends BaseController{
-	use FluentResponse;
+class CategoriesController extends ExtendedResourceController{
 
 	public function __construct(){
 		parent::__construct();
 	}
 
-	public function index(){
+	public function index(): JsonResponse{
 		$category = Category::whereQuery()->isCategory()->get();
 		$category->transform(function (Category $category){
-			$children = $category->children()->get();
-			$children = $children->transform(function (Category $subCategory){
-				$innerChildren = $subCategory->children()->get();
-				$innerChildren = $innerChildren->transform(function (Category $vertical){
+			$subCategory = $category->children()->get();
+			$subCategory = $subCategory->transform(function (Category $subCategory){
+				$vertical = $subCategory->children()->get();
+				$vertical = $vertical->transform(function (Category $vertical){
 					return [
-						'id' => $vertical->id(),
+						'key' => $vertical->id(),
+						'slug' => $vertical->slug(),
 						'name' => $vertical->name(),
-						'hasIcon' => false,
-						'icon' => Str::Empty,
 						'type' => $vertical->type(),
+						'icon' => [
+							'exists' => false,
+							'url' => Str::Empty,
+						],
 					];
 				});
 				return [
-					'id' => $subCategory->id(),
+					'key' => $subCategory->id(),
+					'slug' => $subCategory->slug(),
 					'name' => $subCategory->name(),
-					'hasIcon' => false,
-					'icon' => Str::Empty,
 					'type' => $subCategory->type(),
-					'hasInner' => $innerChildren->count() > 0,
-					'count' => $innerChildren->count(),
-					'inner' => $innerChildren,
+					'icon' => [
+						'exists' => false,
+						'url' => Str::Empty,
+					],
+					'children' => [
+						'available' => $vertical->count() > 0,
+						'count' => $vertical->count(),
+						'items' => $vertical,
+					],
 				];
 			});
 			return [
-				'id' => $category->id(),
+				'key' => $category->id(),
+				'slug' => $category->slug(),
 				'name' => $category->name(),
-				'hasIcon' => false,
-				'icon' => Str::Empty,
 				'type' => $category->type(),
-				'hasInner' => $children->count() > 0,
-				'count' => $children->count(),
-				'inner' => $children,
+				'icon' => [
+					'exists' => false,
+					'url' => Str::Empty,
+				],
+				'children' => [
+					'available' => $subCategory->count() > 0,
+					'count' => $subCategory->count(),
+					'items' => $subCategory,
+				],
 			];
 		});
-		return $this->response()->status(HttpOkay)->setValue('data', $category)->message(function () use ($category){
-			return sprintf('Found %d categories.', $category->count());
-		})->send();
+		return responseApp()->status($category->count() > 0 ? HttpOkay : HttpNoContent)->setValue('data', $category)->message('Listing all available categories.')->send();
+	}
+
+	protected function guard(){
+		return auth('seller-api');
 	}
 }

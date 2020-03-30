@@ -9,19 +9,22 @@ use App\Traits\GenerateUrls;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\HasSpecialAttributes;
 use App\Traits\RetrieveResource;
+use App\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Sluggable\SlugOptions;
 
 /**
  * Category defines a logical grouping of products which share similar traits.
  * @package App\Models
  */
 class Category extends Model{
-	use RetrieveResource, FluentConstructor, HasSpecialAttributes, DynamicAttributeNamedMethods;
+	use RetrieveResource, FluentConstructor, HasSpecialAttributes, DynamicAttributeNamedMethods, Sluggable;
 	protected $table = 'categories';
 	protected $fillable = ['name', 'parentId', 'description', 'type', 'order', 'icon', 'listingStatus', 'specials',];
 	protected $casts = ['specials' => 'array', 'order' => 'int'];
+	protected $hidden = ['created_at', 'updated_at'];
 	public const Types = [
 		'Root' => 'root',
 		'Category' => 'category',
@@ -68,5 +71,9 @@ class Category extends Model{
 
 	public static function whereQuery(): CategoryQuery{
 		return CategoryQuery::begin();
+	}
+
+	public function getSlugOptions(): SlugOptions{
+		return SlugOptions::create()->saveSlugsTo('slug')->generateSlugsFrom('name');
 	}
 }

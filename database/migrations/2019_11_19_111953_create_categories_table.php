@@ -16,6 +16,7 @@ class CreateCategoriesTable extends Migration{
 		Schema::create('categories', function (Blueprint $table){
 			$table->bigIncrements('id');
 			$table->string('name')->comment('Name or title of category');
+			$table->string('slug', 500)->comment('Slug title of category');
 			$table->string('description', 2048)->nullable()->comment('Description for this category');
 			$table->unsignedBigInteger('parentId')->comment('Parent of this child category, available only if this is a child category');
 			$table->enum('type', [Category::Types['Root'], Category::Types['Category'], Category::Types['SubCategory'], Category::Types['Vertical']])->comment('Defines the type of category and inheritance level');
