@@ -10,7 +10,7 @@ use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\Auth\Seller\AuthProfileResource;
 use App\Interfaces\Directories;
-use App\Models\Seller;
+use App\Models\Auth\Seller;
 use App\Storage\SecuredDisk;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;

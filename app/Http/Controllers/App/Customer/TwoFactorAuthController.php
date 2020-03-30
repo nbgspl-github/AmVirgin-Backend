@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\App\Customer;
 
 use App\Http\Controllers\TwoFactorBaseAuthController;
-use App\Models\Customer;
+use App\Models\Auth\Customer;
 use App\Models\CustomerOtp;
 use Illuminate\Support\Facades\Auth;
 

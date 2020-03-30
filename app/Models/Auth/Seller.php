@@ -1,55 +1,39 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Auth;
 
+use App\Models\Brand;
+use App\Models\City;
+use App\Models\Product;
+use App\Models\SellerBrand;
+use App\Models\State;
 use App\Traits\ActiveStatus;
 use App\Traits\BroadcastPushNotifications;
+use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\FluentConstructor;
+use App\Traits\JWTAuthDefaultSetup;
 use App\Traits\OtpVerificationSupport;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Seller extends Authenticatable implements JWTSubject{
-	use Notifiable;
-	use BroadcastPushNotifications;
-	use FluentConstructor;
-	use ActiveStatus;
-	use RetrieveResource;
-	use RetrieveCollection;
-	use OtpVerificationSupport;
-
-	/**
-	 * The attributes that are mass assignable.
-	 *
-	 * @var array
-	 */
+	use Notifiable, BroadcastPushNotifications, FluentConstructor, ActiveStatus, RetrieveResource, RetrieveCollection, OtpVerificationSupport, JWTAuthDefaultSetup, DynamicAttributeNamedMethods;
 	protected $fillable = [
 		'name',
 		'email',
 		'password',
 		'mobile',
 	];
-
-	/**
-	 * The attributes that should be hidden for arrays.
-	 *
-	 * @var array
-	 */
 	protected $hidden = [
 		'password',
 		'remember_token',
 	];
-
-	/**
-	 * The attributes that should be cast to native types.
-	 *
-	 * @var array
-	 */
 	protected $casts = [
 		'id' => 'integer',
 		'name' => 'string',
@@ -57,77 +41,19 @@ class Seller extends Authenticatable implements JWTSubject{
 		'email_verified_at' => 'datetime',
 	];
 
-	/**
-	 * @return string
-	 */
-	public function getName(): string{
-		return $this->name;
-	}
-
-	/**
-	 * @param string $name
-	 * @return Seller
-	 */
-	public function setName(string $name): Seller{
-		$this->name = $name;
-		return $this;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getEmail(): string{
-		return $this->email;
-	}
-
-	/**
-	 * @param string $email
-	 * @return Seller
-	 */
-	public function setEmail(string $email): Seller{
-		$this->email = $email;
-		return $this;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getMobile(): string{
-		return $this->mobile;
-	}
-
-	/**
-	 * @param string $mobile
-	 * @return Seller
-	 */
-	public function setMobile(string $mobile): Seller{
-		$this->mobile = $mobile;
-		return $this;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getJWTIdentifier(){
-		return $this->getKey();
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getJWTCustomClaims(){
-		return [];
+	public function approvedBrands(): HasManyThrough{
+		return $this->hasManyThrough(Brand::class, SellerBrand::class);
 	}
 
 	public function city(): BelongsTo{
 		return $this->belongsTo(City::class, 'cityId');
 	}
 
-	public function state(): BelongsTo{
-		return $this->belongsTo(State::class, 'stateId');
+	public function products(): HasMany{
+		return $this->hasMany(Product::class, 'sellerId');
 	}
 
-	public function approvedBrands(): HasManyThrough{
-		return $this->hasManyThrough(Brand::class, SellerBrand::class);
+	public function state(): BelongsTo{
+		return $this->belongsTo(State::class, 'stateId');
 	}
 }

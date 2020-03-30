@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\App\Seller;
 
 use App\Http\Controllers\TwoFactorBaseAuthController;
-use App\Models\Customer;
+use App\Models\Auth\Customer;
 use App\Models\CustomerOtp;
-use App\Models\Seller;
+use App\Models\Auth\Seller;
 use App\Models\SellerOtp;
 use Illuminate\Support\Facades\Auth;
 

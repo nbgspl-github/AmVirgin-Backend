@@ -4,7 +4,7 @@ namespace App\Http\Controllers\App\Customer;
 
 use App\Http\Controllers\App\BaseAuthController;
 use App\Http\Resources\Auth\Customer\AuthProfileResource;
-use App\Models\Customer;
+use App\Models\Auth\Customer;
 use Illuminate\Support\Facades\Auth;
 
 /**

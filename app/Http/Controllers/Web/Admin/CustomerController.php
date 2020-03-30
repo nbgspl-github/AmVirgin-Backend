@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Web\Admin;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Interfaces\Tables;
-use App\Models\Customer;
+use App\Models\Auth\Customer;
 use App\Traits\ValidatesRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

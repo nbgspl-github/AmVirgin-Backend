@@ -4,7 +4,7 @@ namespace App\Http\Controllers\App\Seller;
 
 use App\Http\Controllers\App\BaseAuthController;
 use App\Http\Resources\Auth\Seller\AuthProfileResource;
-use App\Models\Seller;
+use App\Models\Auth\Seller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Throwable;

@@ -1,32 +1,26 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Auth;
 
+use App\Models\CustomerWishlist;
+use App\Models\Order;
+use App\Models\ShippingAddress;
 use App\Traits\ActiveStatus;
 use App\Traits\BroadcastPushNotifications;
+use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\FluentConstructor;
+use App\Traits\JWTAuthDefaultSetup;
 use App\Traits\OtpVerificationSupport;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Customer extends Authenticatable implements JWTSubject {
-	use Notifiable;
-	use BroadcastPushNotifications;
-	use RetrieveResource;
-	use RetrieveCollection;
-	use FluentConstructor;
-	use ActiveStatus;
-	use OtpVerificationSupport;
-
-	/**
-	 * The attributes that are mass assignable.
-	 *
-	 * @var array
-	 */
+class Customer extends Authenticatable implements JWTSubject{
+	use Notifiable, BroadcastPushNotifications, RetrieveResource, RetrieveCollection, FluentConstructor, ActiveStatus, OtpVerificationSupport, DynamicAttributeNamedMethods, JWTAuthDefaultSetup;
 	protected $fillable = [
 		'name',
 		'email',
@@ -34,12 +28,6 @@ class Customer extends Authenticatable implements JWTSubject {
 		'mobile',
 		'active',
 	];
-
-	/**
-	 * The attributes that should be hidden for arrays.
-	 *
-	 * @var array
-	 */
 	protected $hidden = [
 		'password',
 		'remember_token',
@@ -49,12 +37,6 @@ class Customer extends Authenticatable implements JWTSubject {
 		'active',
 		'otp',
 	];
-
-	/**
-	 * The attributes that should be cast to native types.
-	 *
-	 * @var array
-	 */
 	protected $casts = [
 		'id' => 'integer',
 		'name' => 'string',
@@ -62,74 +44,23 @@ class Customer extends Authenticatable implements JWTSubject {
 		'email_verified_at' => 'datetime',
 	];
 
-	/**
-	 * @param string|null $password
-	 * @return Customer
-	 */
-	public function setPassword(?string $password): Customer {
-		$this->password = Hash::make($password);
-		return $this;
+	public function addresses(): HasMany{
+		return $this->hasMany(ShippingAddress::class, 'customerId');
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getName(): string {
-		return $this->name;
+	public function orders(): HasMany{
+		return $this->hasMany(Order::class, 'customerId');
 	}
 
-	/**
-	 * @param string $name
-	 * @return Customer
-	 */
-	public function setName(string $name): Customer {
-		$this->name = $name;
-		return $this;
+	public function wishList(): HasMany{
+		return $this->hasMany(CustomerWishlist::class, 'customerId');
 	}
 
-	/**
-	 * @return string|null
-	 */
-	public function getEmail(): ?string {
-		return $this->email;
+	public function watchList(): ?HasMany{
+		return null;
 	}
 
-	/**
-	 * @param string|null $email
-	 * @return Customer
-	 */
-	public function setEmail(?string $email): Customer {
-		$this->email = $email;
-		return $this;
-	}
-
-	/**
-	 * @return string|null
-	 */
-	public function getMobile(): ?string {
-		return $this->mobile;
-	}
-
-	/**
-	 * @param string|null $mobile
-	 * @return Customer
-	 */
-	public function setMobile(?string $mobile): Customer {
-		$this->mobile = $mobile;
-		return $this;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getJWTIdentifier() {
-		return $this->getKey();
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getJWTCustomClaims() {
-		return [];
+	public function watchLaterList(): ?HasMany{
+		return null;
 	}
 }

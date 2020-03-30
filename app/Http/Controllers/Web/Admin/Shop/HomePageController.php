@@ -7,7 +7,7 @@ use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\Seller;
+use App\Models\Auth\Seller;
 use App\Models\Settings;
 use App\Resources\Products\Customer\CategoryResource;
 use App\Storage\SecuredDisk;

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\App\Seller;
 
 use App\Http\Controllers\Web\ExtendedResourceController;
-use App\Models\Customer;
+use App\Models\Auth\Customer;
 use App\Models\SellerOrder;
 use App\Traits\ValidatesRequest;
 use Throwable;

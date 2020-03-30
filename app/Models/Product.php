@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\DisplayableModel;
+use App\Models\Auth\Seller;
 use App\Queries\ProductQuery;
 use App\Traits\FluentConstructor;
 use App\Traits\DynamicAttributeNamedMethods;

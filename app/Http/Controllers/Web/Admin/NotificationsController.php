@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Web\Admin;
 
 use App\Http\Controllers\BaseController;
 use App\Interfaces\Roles;
-use App\Models\Customer;
+use App\Models\Auth\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 

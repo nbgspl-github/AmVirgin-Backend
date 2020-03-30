@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Classes\Str;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Customer;
+use App\Models\Auth\Customer;
 use App\Models\Product;
 use App\Models\OrderItem;
 use App\Models\ShippingAddress;

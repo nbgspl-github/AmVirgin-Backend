@@ -9,6 +9,7 @@ use App\Constants\CartStatus;
 use App\Constants\OrderStatus;
 use App\Exceptions\CartAlreadySubmittedException;
 use App\Exceptions\CartItemNotFoundException;
+use App\Models\Auth\Customer;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;

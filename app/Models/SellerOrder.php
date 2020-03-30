@@ -6,7 +6,7 @@ use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Customer;
+use App\Models\Auth\Customer;
 use App\Models\Order;
 
 class SellerOrder extends Model{
@@ -20,10 +20,10 @@ class SellerOrder extends Model{
 	];
 
 	public function seller(){
-		return $this->belongsTo('App\Models\Seller', 'sellerId');
+		return $this->belongsTo('App\Models\Auth\Seller', 'sellerId');
 	}
-	public function customer() {
-		return $this->belongsTo(Customer::class, 'customerId');
+	public function customer(){
+		return $this->belongsTo(Auth\Customer::class, 'customerId');
 	}
 
 

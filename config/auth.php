@@ -1,8 +1,8 @@
 <?php
 
 use App\Models\Auth\Admin;
-use App\Models\Customer;
-use App\Models\Seller;
+use App\Models\Auth\Customer;
+use App\Models\Auth\Seller;
 
 return [
 
@@ -162,5 +162,4 @@ return [
 	*/
 
 	'password_timeout' => 10800,
-
 ];

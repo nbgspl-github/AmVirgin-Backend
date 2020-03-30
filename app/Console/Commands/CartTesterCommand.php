@@ -8,7 +8,7 @@ use App\Exceptions\ValidationException;
 use App\Models\Attribute;
 use App\Models\Category;
 use App\Models\ProductImage;
-use App\Models\Seller;
+use App\Models\Auth\Seller;
 use App\Models\Settings;
 use App\Models\ShopSlider;
 use App\Storage\SecuredDisk;
