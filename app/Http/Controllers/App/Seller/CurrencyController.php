@@ -6,7 +6,7 @@ use App\Http\Controllers\BaseController;
 use App\Models\Currency;
 use App\Traits\FluentResponse;
 
-class CurrenciesController extends BaseController{
+class CurrencyController extends BaseController{
 	use FluentResponse;
 
 	public function __construct(){

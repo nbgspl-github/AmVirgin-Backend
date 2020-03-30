@@ -1,6 +1,8 @@
 <?php
 
 use App\Constants\Constants;
+use App\Interfaces\Tables;
+use App\Models\Product;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,6 +21,7 @@ class CreateProductsTable extends Migration{
 			$table->unsignedBigInteger('sellerId')->comment('Seller to whom this product belongs.');
 			$table->unsignedSmallInteger('brandId')->comment('Brand to which this product belongs.');
 			$table->enum('listingStatus', ['active', 'inactive'])->comment('Whether the product will show up in catalog listing or not?');
+			$table->enum('type', [Product::Type['Singular'], Product::Type['Group']]);
 			$table->integer('originalPrice')->default(0)->comment('MRP of product.');
 			$table->integer('sellingPrice')->default(0)->comment('Actual selling price of product');
 			$table->string('fulfillmentBy')->comment('How the order is fulfilled...by seller or through external courier service?');
@@ -57,8 +60,8 @@ class CreateProductsTable extends Migration{
 			$table->timestamps();
 
 			if (appEnvironment(AppEnvironmentProduction)) {
-				$table->foreign('categoryId')->references('id')->on(\App\Interfaces\Tables::Categories)->onDelete('cascade');
-				$table->foreign('hsn')->references('hsnCode')->on(\App\Interfaces\Tables::HsnCodes)->onDelete('cascade');
+				$table->foreign('categoryId')->references('id')->on(Tables::Categories)->onDelete('cascade');
+				$table->foreign('hsn')->references('hsnCode')->on(Tables::HsnCodes)->onDelete('cascade');
 			}
 		});
 	}

@@ -23,6 +23,7 @@ class CreateCategoriesTable extends Migration{
 			$table->tinyInteger('order')->default(0)->comment('Defines a order in which this category would appear in listing');
 			$table->string('icon', Constants::MaxFilePathLength)->nullable()->comment('An SVG or PNG file to be used as icon for this category in mobile apps');
 			$table->enum('listingStatus', [Category::ListingStatus['Active'], Category::ListingStatus['Inactive']])->default(Category::ListingStatus['Active'])->comment('Whether this category will show up in listing');
+			$table->integer('productCount')->default(0)->comment('What number of products fall under this category');
 			$table->json('specials')->default('{}')->comment('Special attributes that may be temporary and do not fit anywhere else fall under this');
 			$table->timestamps();
 

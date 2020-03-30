@@ -12,8 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Sujip\Guid\Facades\Guid;
 
-class CategoriesController extends ExtendedResourceController{
-
+class CategoryController extends ExtendedResourceController{
 	public function __construct(){
 		parent::__construct();
 	}

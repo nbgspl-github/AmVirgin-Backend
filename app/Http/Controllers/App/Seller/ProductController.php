@@ -30,7 +30,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
 
-class ProductsController extends ExtendedResourceController{
+class ProductController extends ExtendedResourceController{
 	use ValidatesRequest;
 
 	protected array $rules;

@@ -9,7 +9,7 @@ use App\Models\Category;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class AttributeListController extends ExtendedResourceController{
+class ListController extends ExtendedResourceController{
 	protected array $rules;
 
 	public function __construct(){

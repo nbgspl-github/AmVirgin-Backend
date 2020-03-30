@@ -13,12 +13,12 @@ use DB;
 use App\Resources\Products\Customer\ProductImageResource;
 use Illuminate\Support\Facades\Config;
 
-class OrdersController extends ExtendedResourceController {
+class OrderController extends ExtendedResourceController{
 	use ValidatesRequest;
 
 	protected array $rules;
 
-	public function __construct() {
+	public function __construct(){
 		parent::__construct();
 		$this->rules = [
 

@@ -8,7 +8,7 @@ use App\Storage\SecuredDisk;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class ProductImagesController extends ExtendedResourceController{
+class ProductImageController extends ExtendedResourceController{
 	public function delete($id){
 		$response = $this->response();
 		try {

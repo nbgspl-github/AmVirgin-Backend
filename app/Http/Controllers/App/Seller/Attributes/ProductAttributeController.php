@@ -7,12 +7,12 @@ use App\Models\ProductAttribute;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class ProductsAttributesController extends ExtendedResourceController {
-	public function __construct() {
+class ProductAttributeController extends ExtendedResourceController{
+	public function __construct(){
 		parent::__construct();
 	}
 
-	public function delete($id) {
+	public function delete($id){
 		$response = responseApp();
 		try {
 			$productAttribute = ProductAttribute::retrieveThrows($id);

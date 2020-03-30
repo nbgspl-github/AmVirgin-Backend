@@ -9,7 +9,7 @@ use App\Models\AttributeValue;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class AttributeValuesController extends ExtendedResourceController{
+class ValueController extends ExtendedResourceController{
 	public function __construct(){
 		parent::__construct();
 	}

@@ -131,6 +131,10 @@ class Product extends Model{
 		'OnSite' => 'on-site',
 		'WalkIn' => 'walk-in',
 	];
+	public const Type = [
+		'Singular' => 'singular',
+		'Group' => 'group',
+	];
 
 	public function attributes(): HasMany{
 		return $this->hasMany(ProductAttribute::class, 'productId');

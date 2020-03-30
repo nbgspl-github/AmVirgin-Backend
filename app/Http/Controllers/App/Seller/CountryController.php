@@ -6,7 +6,7 @@ use App\Http\Controllers\BaseController;
 use App\Models\Country;
 use App\Traits\FluentResponse;
 
-class CountriesController extends BaseController{
+class CountryController extends BaseController{
 	use FluentResponse;
 
 	public function __construct(){
