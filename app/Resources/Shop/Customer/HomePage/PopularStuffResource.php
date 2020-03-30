@@ -2,20 +2,26 @@
 
 namespace App\Resources\Shop\Customer\HomePage;
 
+use App\Classes\Str;
 use App\Storage\SecuredDisk;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PopularStuffResource extends JsonResource {
-	public function toArray($request) {
+class PopularStuffResource extends JsonResource{
+	public function toArray($request){
 		return [
-			'id' => $this->id,
-			'name' => $this->name,
-			'description' => $this->description,
-			'poster' => SecuredDisk::existsUrl($this->poster),
+			'key' => $this->id(),
+			'slug' => $this->slug(),
+			'name' => $this->name(),
+			'description' => $this->description(),
+			'products' => $this->productCount(),
+			'icon' => [
+				'exists' => false,
+				'url' => Str::Empty,
+			],
 		];
 	}
 
-	public static function withoutWrapping() {
+	public static function withoutWrapping(){
 		return true;
 	}
 }

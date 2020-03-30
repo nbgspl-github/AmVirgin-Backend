@@ -11,33 +11,99 @@
 						<div class="col-md-6 mx-auto">
 							<form action="{{route('admin.categories.store')}}" method="POST" data-parsley-validate="true" enctype="multipart/form-data">
 								@csrf
-								<div class="form-group">
-									<label>Name</label>
-									<input type="text" name="name" class="form-control" required placeholder="Type category name" minlength="1" maxlength="100" value="{{old('name')}}"/>
+								<div class="jumbotron py-1 px-3">
+									<h6 class="display-6">Important!</h6>
+									<hr class="my-2">
+									<ul class="px-3">
+										<li><p>There are 4 nesting levels or types for categories.</p></li>
+										<li><p>Main<br>Main ► Category<br>Main ► Category ► Sub-Category<br>Main ► Category ► Sub-Category ► Vertical</p></li>
+										<li>
+											<p>Products can only be added to categories having type as
+												<mark>Vertical</mark>
+												.
+											</p>
+										</li>
+										<li><p>You can add as many categories as you need.</p></li>
+										<li>
+											<p>To make a category eligible for product addition, set its type to
+												<mark>Vertical</mark>
+												.
+											</p>
+										</li>
+										<li>
+											<p>You may additionally set any category to inherit attributes of its parent. For example - if you are creating verticals named
+												<mark>Casual Shoes</mark>
+												, and
+												<mark>Sports Shoes</mark>
+												under
+												<mark>Footwear</mark>
+												, it is only logical to enable attribute inheritance for both of them since they both share attributes such as
+												<mark>Color</mark>
+												and
+												<mark>Size</mark>
+												, and
+												<mark>Footwear</mark>
+												as a parent can have both of these attributes.
+											</p>
+										</li>
+									</ul>
 								</div>
 								<div class="form-group">
-									<label>Parent category</label>
-									<select name="parentId" class="form-control" required>
-										@foreach($all as $item)
-											<optgroup label="{{$item->name}}">
-												<option value="{{$item->id}}">{{$item->name}}</option>
-												@foreach($item->subItems as $subItem)
-													<option value="{{ $subItem->id }}">{{$subItem->name}}</option>
+									<label>@required(Name)</label>
+									<input type="text" name="name" class="form-control" required placeholder="Type category name" minlength="1" maxlength="255" value="{{old('name')}}"/>
+								</div>
+								<div class="form-group">
+									<label>@required(Parent)</label>
+									<select name="parentId" class="form-control" id="parentId" required onchange="handleTypeChanged(this.value,document.getElementById('option-item-'+this.value).getAttribute('data-type'));">
+										<option value="" disabled selected>Choose</option>
+										@foreach($roots as $root)
+											<option value="{{$root['key']}}" data-type="{{$root['type']}}" id="option-item-{{$root['key']}}">{{$root['name']}}</option>
+											@foreach($root['children']['items'] as $category)
+												<option value="{{ $category['key'] }}" data-type="{{$category['type']}}" id="option-item-{{$category['key']}}">{{$root['name']}} ► {{$category['name']}}</option>
+												@foreach($category['children']['items'] as $subCategory)
+													<option value="{{ $subCategory['key'] }}" data-type="{{$subCategory['type']}}" id="option-item-{{$subCategory['key'] }}">{{$root['name']}} ► {{$category['name']}} ► {{$subCategory['name']}}</option>
 												@endforeach
-											</optgroup>
+											@endforeach
 										@endforeach
 									</select>
 								</div>
 								<div class="form-group">
-									<label>Description</label>
+									<label for="">@required(Type)</label>
+									<select name="type" id="type" class="form-control">
+										<option value="" disabled selected>Choose</option>
+										<option value="{{\App\Models\Category::Types['Category']}}">Category</option>
+										<option value="{{\App\Models\Category::Types['SubCategory']}}">Sub-Category</option>
+										<option value="{{\App\Models\Category::Types['Vertical']}}">Vertical</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<label>@required(Description)</label>
 									<textarea type="text" name="description" class="form-control" required placeholder="Describe your category">{{old('description')}}</textarea>
 								</div>
 								<div class="form-group">
-									<label>Visibility</label>
-									<select name="visibility" class="form-control">
-										<option value="1" selected>Visible</option>
-										<option value="0">Hidden</option>
+									<label>Listing Status</label>
+									<select name="listingStatus" class="form-control">
+										<option value="{{\App\Models\Category::ListingStatus['Active']}}" selected>Active</option>
+										<option value="{{\App\Models\Category::ListingStatus['Inactive']}}">Inactive</option>
 									</select>
+								</div>
+								<div class="form-group">
+									<label>Listing Order</label>
+									<select name="order" class="form-control">
+										<option value="0">0</option>
+										@for($i=1;$i<=255;$i++)
+											<option value="{{$i}}">{{$i}}</option>
+										@endfor
+									</select>
+								</div>
+								<div class="form-group">
+									<label>Inherit Parent Attributes?</label>
+									<div>
+										<div class="custom-control custom-checkbox">
+											<input type="checkbox" class="custom-control-input" id="inheritParentAttributes" name="inheritParentAttributes" onchange="handleMultiValueChanged();">
+											<label class="custom-control-label" for="inheritParentAttributes">Yes</label>
+										</div>
+									</div>
 								</div>
 								<div class="form-group">
 									<label>Icon</label>
@@ -59,32 +125,6 @@
 											<div class="row">
 												<div class="col-12 text-center">
 													<img id="posterPreview1" class="img-fluid" style="max-height: 400px!important;"/>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<div class="form-group">
-									<label>Poster</label>
-									<div class="card" style="border: 1px solid #ced4da;">
-										<div class="card-header">
-											<div class="row">
-												<div class="d-none">
-													<input id="pickImage" type="file" name="poster" onclick="this.value=null;" onchange="previewImage(event);" class="form-control" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('poster')}}">
-												</div>
-												<div class="col-6">
-													<h3 class="my-0 header-title">Preview</h3>
-												</div>
-												<div class="col-6">
-													<button type="button" class="btn btn-outline-primary rounded shadow-sm float-right" onclick="openImagePicker();">Choose Image</button>
-												</div>
-											</div>
-										</div>
-										<div class="card-body p-0 rounded">
-											<div class="row">
-												<div class="col-12 text-center">
-													<img id="posterPreview" class="img-fluid" style="max-height: 400px!important;"/>
 												</div>
 											</div>
 										</div>
@@ -116,6 +156,10 @@
 @section('javascript')
 	<script>
 		var lastFile = null;
+		window.onload = () => {
+
+		};
+
 		previewImage = (event) => {
 			const reader = new FileReader();
 			reader.onload = function () {
@@ -143,6 +187,28 @@
 
 		openImagePicker1 = () => {
 			$('#pickImage1').trigger('click');
-		}
+		};
+
+		handleTypeChanged = (value, type) => {
+			console.log(type);
+			if (type === 'root') {
+				$("select option[value=category]").prop('disabled', false);
+				$("#type").val('category');
+				$("select option[value=sub-category]").prop('disabled', true);
+				$("select option[value=vertical]").prop('disabled', true);
+			} else if (type === 'category') {
+				$("select option[value=category]").prop('disabled', true);
+				$("select option[value=sub-category]").prop('disabled', false);
+				$("#type").val('sub-category');
+				$("select option[value=vertical]").prop('disabled', true);
+			} else if (type === 'sub-category') {
+				$("select option[value=category]").prop('disabled', true);
+				$("select option[value=sub-category]").prop('disabled', true);
+				$("select option[value=vertical]").prop('disabled', false);
+				$("#type").val('vertical');
+			} else {
+
+			}
+		};
 	</script>
 @stop

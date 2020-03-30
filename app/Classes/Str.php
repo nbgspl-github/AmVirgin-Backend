@@ -23,4 +23,8 @@ class Str extends \Illuminate\Support\Str{
 	public static function trimExtraWhiteSpaces($string){
 		return preg_replace('/\s+/', ' ', $string);
 	}
+
+	public static function ellipsis(string $value, $threshold = 50){
+		return strlen($value) > $threshold ? substr($value, 0, $threshold) . "..." : $value;
+	}
 }

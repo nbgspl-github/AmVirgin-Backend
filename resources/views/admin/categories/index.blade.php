@@ -12,12 +12,13 @@
 							<thead>
 							<tr>
 								<th>No.</th>
-								<th>Poster</th>
-								<th>Icon</th>
 								<th>Name</th>
-								<th>Parent Category</th>
 								<th>Description</th>
-								<th>Visibility</th>
+								<th>Parent</th>
+								<th>Type</th>
+								<th>Order</th>
+								<th>Listing Status</th>
+								<th>Products</th>
 								<th>Action(s)</th>
 							</tr>
 							</thead>
@@ -25,30 +26,18 @@
 							@foreach ($categories as $category)
 								<tr id="{{'category_row_'.$category->getKey()}}">
 									<td>{{$loop->index+1}}</td>
-									<td class="text-center">
-										@if($category->getPoster()!=null)
-											<img src="{{Storage::disk('secured')->url($category->getPoster())}}" style="width: 100px; height: 100px" alt="{{$category->getName()}}" @include('admin.extras.tooltip.right', ['title' => $category->getName()])/>
-										@else
-											<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 25px"></i>
-										@endif
-									</td>
-									<td class="text-center">
-										@if($category->geticon()!=null)
-											<a href="{{Storage::disk('secured')->url($category->geticon())}}">Click to view Icon</a>
-
-										@else
-											<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 25px"></i>
-										@endif
-									</td>
-									<td>{{$category->getName()}}</td>
-									<td>{{__blank($category->getParentName())}}</td>
-									<td>{{$category->getDescription()}}</td>
-									<td>{{__visibility($category->isVisible())}}</td>
+									<td class="text-center">{{$category->name()}}</td>
+									<td class="text-center">{{\App\Classes\Str::ellipsis($category->description(),50)}}</td>
+									<td class="text-center">{{\App\Models\Category::parents($category)}}</td>
+									<td class="text-center">{{$category->type()}}</td>
+									<td class="text-center">{{$category->order()}}</td>
+									<td class="text-center">{{$category->listingStatus()}}</td>
+									<td class="text-center">{{$category->productCount()}}</td>
 									<td class="text-center">
 										<div class="btn-toolbar" role="toolbar">
 											<div class="btn-group mx-auto" role="group">
-												<a class="btn btn-outline-danger" href="{{route('admin.categories.edit',$category->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
-												<a class="btn btn-outline-primary" href="javascript:void(0);" onclick="deleteCategory('{{$category->getKey()}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>
+												<a class="btn btn-outline-danger" href="{{route('admin.categories.edit',$category->id())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
+												<a class="btn btn-outline-primary" href="javascript:void(0);" onclick="deleteCategory('{{$category->id()}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>
 											</div>
 										</div>
 									</td>

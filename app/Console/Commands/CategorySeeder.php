@@ -103,10 +103,11 @@ class CategorySeeder extends Command{
 		$root = Category::query()->updateOrCreate([
 			'name' => 'Root',
 		], [
-			'name' => 'Root',
-			'parentId' => 1,
+			'name' => 'Main',
+			'parentId' => null,
 			'description' => 'This is the super-parent category.',
 			'type' => Category::Types['Root'],
+			'specials' => [],
 		]);
 		foreach ($this->categories as $key => $value) {
 			$category = Category::newObject();
@@ -115,6 +116,7 @@ class CategorySeeder extends Command{
 			$category->parentId = $root->id();
 			$category->type = Category::Types['Category'];
 			$category->specials = ['brandInFocus' => false, 'popularCategory' => false, 'trendingNow' => false];
+			$category->inheritParentAttributes = false;
 			$category->save();
 			if (is_array($value) && count($value) > 0) {
 				foreach ($value as $innerCategory => $innerValue) {
@@ -124,6 +126,7 @@ class CategorySeeder extends Command{
 					$inner->parentId = $category->id();
 					$inner->type = Category::Types['SubCategory'];
 					$inner->specials = ['brandInFocus' => false, 'popularCategory' => false, 'trendingNow' => false];
+					$inner->inheritParentAttributes = true;
 					$inner->save();
 					if (is_array($innerValue) && count($innerValue) > 0) {
 						foreach ($innerValue as $subInnerCategory => $subInnerValue) {
@@ -133,6 +136,7 @@ class CategorySeeder extends Command{
 							$subInner->parentId = $inner->id();
 							$subInner->type = Category::Types['Vertical'];
 							$subInner->specials = ['brandInFocus' => false, 'popularCategory' => false, 'trendingNow' => false];
+							$subInner->inheritParentAttributes = true;
 							$subInner->save();
 						}
 					}

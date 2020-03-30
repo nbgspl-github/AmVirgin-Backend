@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Classes\Arrays;
+use App\Classes\Str;
 use App\Queries\CategoryQuery;
 use App\Traits\FluentConstructor;
 use App\Traits\GenerateUrls;
@@ -71,6 +72,18 @@ class Category extends Model{
 
 	public static function whereQuery(): CategoryQuery{
 		return CategoryQuery::begin();
+	}
+
+	public static function parents(Category $category): ?string{
+		$parents = Arrays::Empty;
+		$parent = $category;
+		while (($parent = $parent->parent()->where('type', '!=', Category::Types['Root'])->first()) != null) {
+			$parents[] = $parent->name;
+		}
+		$parents[] = 'Main';
+		$parents = Arrays::reverse($parents);
+		$parents = Str::join(' ► ', $parents);
+		return $parents;
 	}
 
 	public function getSlugOptions(): SlugOptions{

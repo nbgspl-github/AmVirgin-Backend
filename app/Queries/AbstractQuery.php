@@ -29,6 +29,16 @@ abstract class AbstractQuery{
 		return $this;
 	}
 
+	public function orderByAscending(string $column): self{
+		$this->query->orderBy($column, 'asc');
+		return $this;
+	}
+
+	public function orderByDescending(string $column): self{
+		$this->query->orderBy($column, 'desc');
+		return $this;
+	}
+
 	public function first(){
 		return $this->query->first();
 	}

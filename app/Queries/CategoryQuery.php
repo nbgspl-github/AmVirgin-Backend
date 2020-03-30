@@ -28,8 +28,11 @@ class CategoryQuery extends AbstractQuery{
 		return $this;
 	}
 
-	public function isRoot(){
-		$this->query->where('type', Category::Types['Root']);
+	public function isRoot(bool $yes = true){
+		if (!$yes)
+			$this->query->where('type', '!=', Category::Types['Root']);
+		else
+			$this->query->where('type', Category::Types['Root']);
 		return $this;
 	}
 

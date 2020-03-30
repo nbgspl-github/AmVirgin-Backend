@@ -4,7 +4,7 @@ use App\Classes\Methods;
 use App\Classes\Str;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Web\Admin\CategoriesBanner;
-use App\Http\Controllers\Web\Admin\CategoriesController;
+use App\Http\Controllers\Web\Admin\CategoryController;
 use App\Http\Controllers\Web\Admin\CustomerController;
 use App\Http\Controllers\Web\Admin\GenresController;
 use App\Http\Controllers\Web\Admin\HomeController;
@@ -76,12 +76,12 @@ Route::prefix('admin')->group(function (){
 
 		// Categories Route(s)
 		Route::prefix('categories')->middleware('auth:admin')->group(function (){
-			Route::get('', [CategoriesController::class, Methods::Index])->name('admin.categories.index');
-			Route::get('create', [CategoriesController::class, Methods::Create])->name('admin.categories.create');
-			Route::get('{id}/edit', [CategoriesController::class, Methods::Edit])->name('admin.categories.edit');
-			Route::post('store', [CategoriesController::class, Methods::Store])->name('admin.categories.store');
-			Route::post('{id}', [CategoriesController::class, Methods::Update])->name('admin.categories.update');
-			Route::delete('{id}', [CategoriesController::class, Methods::Delete])->name('admin.categories.delete');
+			Route::get('', [CategoryController::class, Methods::Index])->name('admin.categories.index');
+			Route::get('create', [CategoryController::class, Methods::Create])->name('admin.categories.create');
+			Route::get('{id}/edit', [CategoryController::class, Methods::Edit])->name('admin.categories.edit');
+			Route::post('store', [CategoryController::class, Methods::Store])->name('admin.categories.store');
+			Route::post('{id}', [CategoryController::class, Methods::Update])->name('admin.categories.update');
+			Route::delete('{id}', [CategoryController::class, Methods::Delete])->name('admin.categories.delete');
 		});
 
 		// Videos Route(s)

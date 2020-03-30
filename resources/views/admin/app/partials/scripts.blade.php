@@ -52,6 +52,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.1.0/mustache.js"></script>
 
 <script src="{{asset('assets/admin/js/duration-picker.js')}}"></script>
+<script src="{{asset('assets/admin/js/Selectize.js')}}"></script>
 
 {{--<!-- App js -->--}}
 <script src="{{asset("assets/admin/js/app.js")}}"></script>
