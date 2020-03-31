@@ -5,6 +5,8 @@ namespace App\Http\Controllers\App\Seller\Attributes;
 use App\Classes\Str;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Models\Attribute;
+use App\Models\AttributeSet;
+use App\Models\AttributeSetItem;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
@@ -20,32 +22,25 @@ class ListController extends ExtendedResourceController{
 		$response = responseApp();
 		try {
 			$category = Category::retrieveThrows($categoryId);
-			$attributes = $category->attributes;
-			$attributes->transform(function (Attribute $attribute){
-				$sellerInterfaceType = $attribute->sellerInterfaceType();
-				$hasValues =
-					Str::equals($sellerInterfaceType, Attribute::SellerInterfaceType['DropDown'])
-					|| Str::equals($sellerInterfaceType, Attribute::SellerInterfaceType['Radio']);
-
+			$attributeSetItems = $category->attributeSet->items;
+			$attributeSetItems->transform(function (AttributeSetItem $attributeSetItem){
+				$attribute = $attributeSetItem->attribute;
 				return [
 					'key' => $attribute->id(),
-					'name' => $attribute->name(),
+					'label' => $attribute->name(),
 					'description' => $attribute->description(),
 					'code' => $attribute->code(),
-					'sellerInterfaceType' => $attribute->sellerInterfaceType(),
 					'required' => $attribute->required(),
+					'predefined' => $attribute->predefined(),
+					'useToCreateVariants' => $attribute->useToCreateVariants(),
 					'multiValue' => $attribute->multiValue(),
+					'minValues' => $attribute->minValues(),
 					'maxValues' => $attribute->maxValues(),
-					'bounded' => $attribute->bounded(),
-					'minimum' => $attribute->bounded() && !$hasValues ? __cast($attribute->minimum(), $attribute->primitiveType) : $attribute->minimum(),
-					'maximum' => $attribute->bounded() && !$hasValues ? __cast($attribute->maximum(), $attribute->primitiveType) : $attribute->maximum(),
-					'hasValues' => $hasValues,
-					'hasType' => !$hasValues,
-					'type' => !$hasValues ? $attribute->primitiveType : null,
+					'values' => $attribute->values(),
 				];
 			});
-			$status = $attributes->count() == 0 ? HttpNoContent : HttpOkay;
-			$response->status($status)->message('Listing all attributes for the category.')->setValue('data', $attributes);
+			$status = $attributeSetItems->count() == 0 ? HttpNoContent : HttpOkay;
+			$response->status($status)->message('Listing all attributes for the category.')->setValue('data', $attributeSetItems);
 		}
 		catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('Could not find attribute for that key.');

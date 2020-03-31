@@ -24,7 +24,7 @@
 				<!--Catalog Section-->
 				<li class="menu-title text-primary animatableX">Catalog</li>
 				<li><a href="{{route('admin.products.attributes.index')}}" class="waves-effect animatableX"><i class="mdi mdi-view-dashboard"></i><span> Attributes </span></a></li>
-				<li><a href="" class="waves-effect animatableX"><i class="mdi mdi-view-dashboard"></i><span> Attribute Sets </span></a></li>
+				<li><a href="{{route('admin.attributes.sets.create')}}" class="waves-effect animatableX"><i class="mdi mdi-view-dashboard"></i><span> Attribute Sets </span></a></li>
 				<li><a href="{{route('admin.brands.index')}}" class="waves-effect animatableX"><i class="mdi mdi-tag mt-1"></i> <span>Brands </span></a></li>
 				<li><a href="" class="waves-effect animatableX"><i class="mdi mdi-view-dashboard"></i><span> Categories </span></a></li>
 				<li><a href="{{route('admin.categories-banner.index')}}" class="waves-effect animatableX"><i class="mdi mdi-cards mt-1"></i> <span>Category Banners</span></a></li>

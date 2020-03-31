@@ -7,7 +7,7 @@
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Create an attribute'])
 				</div>
-				<form id="uploadForm" action="{{route('admin.products.attributes.store')}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data" onsubmit="validateChecks();">
+				<form id="uploadForm" action="{{route('admin.products.attributes.store')}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="card-body">
 						<div class="row">
@@ -30,77 +30,17 @@
 										</div>
 										<div class="card custom-card p-3 shadow-none mb-3">
 											<div class="form-group">
-												<label for="sellerInterfaceType">@required (User interface for seller panel)</label>
-												<select name="sellerInterfaceType" id="sellerInterfaceType" class="form-control" required onchange="handleSellerInterfaceTypeChanged(this.value);">
-													<option value="" selected disabled>Choose</option>
-													<option value="dropdown">DropDown</option>
-													<option value="input">Input</option>
-													<option value="text">Text</option>
-													<option value="radio">Radio</option>
-												</select>
-											</div>
-											<div class="form-group">
-												<label for="attributeType">@required (Type of value(s) for this attribute)</label>
-												<select name="primitiveType" id="attributeType" class="form-control" disabled onchange="handleAttributeTypeChanged(this.value);">
-													@foreach($types as $type)
-														<option value="{{$type->getKey()}}" @include('admin.extras.tooltip.right', ['title' => $type->name()])>{{$type->name()}}</option>
-													@endforeach
-												</select>
-											</div>
-											<div class="form-group">
-												<label>Limit input range?</label>
+												<label>Allow entering multiple values?</label>
 												<div>
 													<div class="custom-control custom-checkbox">
-														<input type="checkbox" class="custom-control-input" id="bounded" name="bounded" onchange="handleBoundStatusChanged();" disabled>
-														<label class="custom-control-label" for="bounded" id="ghanta">Yes</label>
-													</div>
-												</div>
-											</div>
-											<div class="form-group mb-0">
-												<label>Enter upper and lower limit</label>
-												<div class="row">
-													<div class="col-6"><input type="number" name="minimum" id="minimum" class="form-control" placeholder="Lower limit" disabled min="0" step="1" value="{{old('minimum')}}"></div>
-													<div class="col-6"><input type="number" name="maximum" id="maximum" class="form-control" placeholder="Upper limit" disabled min="0" step="1" value="{{old('maximum')}}"></div>
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label for="customerInterfaceType">@required (User interface for customer)</label>
-											<select name="customerInterfaceType" id="customerInterfaceType" class="form-control" required>
-												<option value="" selected disabled>Choose</option>
-												<option value="readable">Text Label</option>
-												<option value="options">Options</option>
-											</select>
-										</div>
-										<div class="card custom-card p-3 shadow-none mb-3">
-											<div class="form-group">
-												<label>Should this attribute's value(s) be used to form the name of the product being associated?</label>
-												<div>
-													<div class="custom-control custom-checkbox">
-														<input type="checkbox" class="custom-control-input" id="productNameSegment" name="productNameSegment" onchange="handleProductSegmentChanged();">
-														<label class="custom-control-label" for="productNameSegment">Yes</label>
-													</div>
-												</div>
-											</div>
-											<div class="form-group mb-0">
-												<label for="segmentPriority">Segment priority</label>
-												<select name="segmentPriority" id="segmentPriority" class="form-control" @include('admin.extras.tooltip.top', ['title' => 'Defines a number used to determine where in the product name, the value(s) of this attribute will appear. Valid from 1 through 10.']) disabled>
-													<option value="" selected disabled>Choose</option>
-													@for($i=1;$i<=10;$i++)
-														<option value="{{$i}}">{{$i}}</option>
-													@endfor
-												</select>
-											</div>
-										</div>
-										<div class="card custom-card p-3 shadow-none mb-3">
-											<div class="form-group">
-												<label>Enable multiple value input?</label>
-												<div>
-													<div class="custom-control custom-checkbox">
-														<input type="checkbox" class="custom-control-input" id="multiValue" name="multiValue" onchange="handleMultiValueChanged();" disabled>
+														<input type="checkbox" class="custom-control-input" id="multiValue" name="multiValue" onchange="handleMultiValueChanged();">
 														<label class="custom-control-label" for="multiValue">Yes</label>
 													</div>
 												</div>
+											</div>
+											<div class="form-group" id="maxValuesContainer">
+												<label for="">Minimum number of input values</label>
+												<input id="minValues" type="number" name="minValues" class="form-control" placeholder="Type a number here" value="{{old('minValues')}}" min="2" max="10000" disabled/>
 											</div>
 											<div class="form-group mb-0" id="maxValuesContainer">
 												<label for="">Maximum number of input values</label>
@@ -108,7 +48,7 @@
 											</div>
 										</div>
 										<div class="form-group">
-											<label>Is this a required attribute?</label>
+											<label>Attribute is required?</label>
 											<div>
 												<div class="custom-control custom-checkbox">
 													<input type="checkbox" class="custom-control-input" id="required" name="required">
@@ -116,13 +56,37 @@
 												</div>
 											</div>
 										</div>
-										<div class="form-group mb-0">
-											<label>Should this be visible as a candidate in available filters?</label>
+										<div class="form-group">
+											<label>Use attribute in layered navigation?</label>
 											<div>
 												<div class="custom-control custom-checkbox">
-													<input type="checkbox" class="custom-control-input" id="filterable" name="filterable">
-													<label class="custom-control-label" for="filterable">Yes</label>
+													<input type="checkbox" class="custom-control-input" id="useInLayeredNavigation" name="useInLayeredNavigation">
+													<label class="custom-control-label" for="useInLayeredNavigation">Yes</label>
 												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<label>Use attribute to create product variations?</label>
+											<div>
+												<div class="custom-control custom-checkbox">
+													<input type="checkbox" class="custom-control-input" id="useToCreateVariants" name="useToCreateVariants">
+													<label class="custom-control-label" for="useToCreateVariants">Yes</label>
+												</div>
+											</div>
+										</div>
+										<div class="card custom-card p-3 shadow-none mb-3">
+											<div class="form-group">
+												<label>Attribute has predefined values?</label>
+												<div>
+													<div class="custom-control custom-checkbox">
+														<input type="checkbox" class="custom-control-input" id="predefined" name="predefined" onchange="handlePredefinedChanged();">
+														<label class="custom-control-label" for="predefined">Yes</label>
+													</div>
+												</div>
+											</div>
+											<div class="form-group mb-0">
+												<label for="values">Values</label>
+												<input id="values" type="text" name="values" class="form-control bg-white" required placeholder="Click to provide values" value="{{old('values')}}" readonly disabled/>
 											</div>
 										</div>
 									</div>
@@ -155,15 +119,18 @@
 @endsection
 
 @section('javascript')
+	<script src="{{asset('assets/admin/utils/MultiEntryModal.js')}}"></script>
 	<script>
 		let elements = {
 			minimumInput: null,
 			maximumInput: null,
+			minValueInput: null,
 			maxValueInput: null,
 			boundedCheckBox: null,
 			multiValueCheckBox: null,
 			attributeTypeDropdown: null,
-			segmentPriority: null
+			segmentPriority: null,
+			valuesInput: null
 		};
 		const sellerInterfaceTypes = {
 			Input: 'input'
@@ -178,12 +145,37 @@
 			elements = {
 				minimumInput: $('#minimum'),
 				maximumInput: $('#maximum'),
+				minValueInput: $('#minValues'),
 				maxValueInput: $('#maxValues'),
 				boundedCheckBox: $('#bounded'),
 				multiValueCheckBox: $('#multiValue'),
 				attributeTypeDropdown: $('#attributeType'),
-				segmentPriority: $('#segmentPriority')
+				segmentPriority: $('#segmentPriority'),
+				valuesInput: $('#values')
 			};
+			MultiEntryModal.setupMultiEntryModal({
+				title: 'Attribute values',
+				separator: ';',
+				key: 'values',
+				boundEditBoxId: 'values',
+				modalId: 'values_multiEntryModal',
+				inputClass: 'values_input',
+				listGroupId: 'values_listGroup',
+				addMoreButtonId: 'values_addMoreButton',
+				doneButtonId: 'values_doneButton',
+				deleteButtonClass: 'values_delete-button',
+				template: `<li class="list-group-item px-0 py-1 border-0 animated slideInDown">
+								\t\t\t\t\t\t<div class="col-auto px-0">
+								\t\t\t\t\t\t\t<div class="input-group mb-2">
+								\t\t\t\t\t\t\t\t<input type="text" class="form-control values_input" placeholder="Type here..." value=@{{value}}>
+								\t\t\t\t\t\t\t\t<div class="input-group-append">
+								\t\t\t\t\t\t\t\t\t<div class="input-group-text text-white bg-primary values_delete-button">&times;</div>
+								\t\t\t\t\t\t\t\t</div>
+								\t\t\t\t\t\t\t</div>
+								\t\t\t\t\t\t</div>
+								\t\t\t\t\t
+							</li>`
+			});
 		};
 
 		countCheckboxes = () => {
@@ -241,11 +233,16 @@
 		handleMultiValueChanged = () => {
 			if (event.target.checked) {
 				enable(elements.maxValueInput);
+				enable(elements.minValueInput);
 				required(elements.maxValueInput);
+				required(elements.minValueInput);
 			} else {
 				disable(elements.maxValueInput);
+				disable(elements.minValueInput);
 				optional(elements.maxValueInput);
+				optional(elements.minValueInput);
 				clear(elements.maxValueInput);
+				clear(elements.minValueInput);
 			}
 		};
 
@@ -260,11 +257,14 @@
 			}
 		};
 
-		validateChecks = () => {
-			if (count === 0) {
-				event.preventDefault();
-				toastr.warning('You must select at-least one category.');
-				return false;
+		handlePredefinedChanged = () => {
+			if (event.target.checked) {
+				enable(elements.valuesInput);
+				required(elements.valuesInput);
+			} else {
+				disable(elements.valuesInput);
+				optional(elements.valuesInput);
+				clear(elements.valuesInput);
 			}
 		};
 

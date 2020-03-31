@@ -45,4 +45,14 @@ class Arrays extends \Illuminate\Support\Arr{
 	public static function reverse(array $array): array{
 		return array_reverse($array);
 	}
+
+	public static function length(array $array): int{
+		return count($array);
+	}
+
+	public static function replaceValues(array &$destination, array $source){
+		foreach ($source as $key => $value) {
+			$destination[$key] = $value;
+		}
+	}
 }

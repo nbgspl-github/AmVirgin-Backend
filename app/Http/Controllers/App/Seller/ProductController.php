@@ -54,9 +54,11 @@ class ProductController extends ExtendedResourceController{
 		parent::__construct();
 		$this->rules = [
 			'store' => [
+				'name' => ['bail', 'required', 'string', Rule::minimum(1), Rule::maximum(500)],
 				'categoryId' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)],
 				'brandId' => ['bail', 'required', Rule::existsPrimary(Tables::Brands), Rule::exists(Tables::SellerBrands, 'brandId')->where('status', 'approved')],
 				'listingStatus' => ['bail', 'required', 'string', Rule::in([Product::ListingStatus['Active'], Product::ListingStatus['Inactive']])],
+				'type' => ['bail', 'required', 'string', Rule::in([Product::Type['Simple'], Product::Type['Variant']])],
 				'styleCode' => ['bail', 'required', 'string', 'min:8', 'max:255'],
 				'originalPrice' => ['bail', 'required', 'numeric', 'min:1', 'max:10000000'],
 				'sellingPrice' => ['bail', 'required', 'numeric', 'min:1', 'lte:originalPrice'],
@@ -64,8 +66,8 @@ class ProductController extends ExtendedResourceController{
 				'hsn' => ['bail', 'required', Rule::existsPrimary(Tables::HsnCodes, 'hsnCode')],
 				'currency' => ['bail', 'nullable', 'string', 'min:2', 'max:5', Rule::exists(Tables::Currencies, 'code')],
 				'stock' => ['bail', 'required', 'numeric', 'min:0', RuleMaxStock],
-				'shortDescription' => ['bail', 'required', 'string', 'min:1', 'max:1000'],
-				'longDescription' => ['bail', 'required', 'string', 'min:1', 'max:100000'],
+				'description' => ['bail', 'required', 'string', 'min:1', 'max:2000'],
+				'sku' => ['bail', 'required', 'string', 'min:8', 'max:100'],
 				'trailer' => ['bail', 'nullable', 'mimes:mp4', 'min:1', 'max:100000'],
 				'procurementSla' => ['bail', 'required', 'numeric', Rule::minimum(Product::ProcurementSLA['Minimum']), Rule::maximum(Product::ProcurementSLA['Maximum'])],
 				'localShippingCost' => ['bail', 'required', 'numeric', Rule::minimum(Product::ShippingCost['Local']['Minimum']), Rule::maximum(Product::ShippingCost['Local']['Maximum'])],
@@ -81,10 +83,12 @@ class ProductController extends ExtendedResourceController{
 				'warrantyServiceType' => ['bail', 'required', 'string', Rule::in([WarrantyServiceType::OnSite, WarrantyServiceType::WalkIn])],
 				'coveredInWarranty' => ['bail', 'required', 'string', 'min:1', 'max:100000'],
 				'notCoveredInWarranty' => ['bail', 'required', 'string', 'min:1', 'max:100000'],
+				'maxQuantityPerOrder' => ['bail', 'required', 'numeric', 'min:1', 'max:1000'],
 				'primaryImageIndex' => ['bail', 'required', 'numeric', Rule::minimum(0), Rule::maximum(8)],
 				'files' => ['bail', 'nullable', 'min:1', 'max:8'],
 				'files.*' => ['bail', 'nullable', 'mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
 				'attributes' => ['bail', 'required'],
+				'variants' => ['bail', 'required_if:type,variant'],
 			],
 			'update' => [
 			],
@@ -156,9 +160,6 @@ class ProductController extends ExtendedResourceController{
 			 */
 			$validated['sellerId'] = $this->guard()->id();
 
-			/**
-			 * Create product with no name initially.
-			 */
 			$product = Product::create($validated);
 
 			/**
@@ -170,11 +171,40 @@ class ProductController extends ExtendedResourceController{
 			 * 5.) If any attribute has multiValue enabled, we simply append all their values at parent's index
 			 * 6.) Prepend this string with the name of brand
 			 */
-			$segments = Arrays::fill(0, 12, Str::Empty);
-			$segments[0] = Brand::retrieve($validated['brandId'])->name();
-			$segments[11] = $category->name();
+
 			$attributes = Arrays::isArray($validated['attributes']) ? $validated['attributes'] : jsonDecodeArray($validated['attributes']);
-			collect($attributes)->each(function ($item) use ($product, &$segments){
+			Arrays::each($attributes, function ($attribute) use ($product){
+				$attribute = Attribute::retrieve($attribute['key']);
+				if ($attribute != null) {
+					ProductAttribute::create([
+						'productId' => $product->id(),
+						'attributeId' => $attribute['key'],
+						'value' => Arrays::isArray($attribute['value']) ? Str::join('::', $attribute['value']) : $attribute['value'],
+					]);
+				}
+			});
+
+			$variants = Arrays::isArray($validated['variants']) ? $validated['variants'] : jsonDecodeArray($validated['variants']);
+			$inherited = $validated;
+			Arrays::each($variants, function ($variant) use (&$inherited, $product, $attributes){
+				Arrays::replaceValues($inherited, [
+					'parentId' => $product->id(),
+					'name' => $variant['name'],
+					'stock' => $variant['stock'],
+					'sellingPrice' => $variant['sellingPrice'],
+					'sku' => $variant['sku'],
+				]);
+				$variantProduct = Product::create($inherited);
+				Arrays::each($attributes, function ($attribute) use ($variantProduct){
+					ProductAttribute::create([
+						'productId' => $variantProduct->id(),
+						'attributeId' => $attribute['key'],
+						'value' => Arrays::isArray($attribute['value']) ? Str::join('::', $attribute['value']) : $attribute['value'],
+					]);
+				});
+			});
+
+			collect($attributes)->each(function ($item) use ($product){
 				$attribute = Attribute::retrieve($item['key']);
 				if ($attribute != null) {
 					$sellerInterfaceType = $attribute->sellerInterfaceType();
@@ -201,11 +231,6 @@ class ProductController extends ExtendedResourceController{
 					}
 				}
 			});
-
-			/**
-			 * Setting Product Name on Model
-			 */
-			$product->update(['name' => Str::trimExtraWhiteSpaces(Str::join(Str::WhiteSpace, $segments))]);
 
 			/**
 			 * Storing Product Images and Response Collection of Images

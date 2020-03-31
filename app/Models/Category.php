@@ -15,6 +15,7 @@ use App\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Spatie\Sluggable\SlugOptions;
 
 /**
@@ -40,6 +41,10 @@ class Category extends Model{
 
 	public function attributes(): HasMany{
 		return $this->hasMany('App\Models\Attribute', 'categoryId');
+	}
+
+	public function attributeSet(): HasOne{
+		return $this->hasOne(AttributeSet::class, 'categoryId');
 	}
 
 	public function children(): HasMany{

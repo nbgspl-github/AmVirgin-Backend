@@ -17,61 +17,38 @@ class Attribute extends Model{
 	use FluentConstructor, RetrieveResource, DynamicAttributeNamedMethods, QueryProvider;
 	protected $table = 'attributes';
 	protected $fillable = [
-		'categoryId',
 		'name',
 		'description',
 		'code',
-		'sellerInterfaceType',
-		'customerInterfaceType',
-		'primitiveType',
 		'required',
-		'filterable',
-		'productNameSegment',
-		'segmentPriority',
-		'bounded',
+		'useToCreateVariants',
+		'useInLayeredNavigation',
+		'predefined',
 		'multiValue',
+		'minValues',
 		'maxValues',
-		'minimum',
-		'maximum',
+		'values',
 	];
 	protected $hidden = [
 		'created_at',
 		'updated_at',
 	];
-	protected $casts = ['required' => 'boolean', 'filterable' => 'boolean', 'bounded' => 'boolean', 'multiValue' => 'boolean', 'maxValues' => 'integer', 'minimum' => 'float', 'maximum' => 'float'];
+	protected $casts = [
+		'required' => 'boolean',
+		'predefined' => 'boolean',
+		'useInLayeredNavigation' => 'boolean',
+		'useToCreateVariations' => 'boolean',
+		'multiValue' => 'boolean',
+		'minValues' => 'integer',
+		'maxValues' => 'integer',
+		'values' => 'array',
+	];
 	public const SellerInterfaceType = [
 		'DropDown' => 'dropdown',
 		'Input' => 'input',
 		'Text' => 'text',
 		'Radio' => 'radio',
 	];
-	public const CustomerInterfaceType = [
-		'Options' => 'options',
-		'Readable' => 'readable',
-	];
-	public const SegmentPriority = [
-		'Minimum' => 1,
-		'Maximum' => 10,
-		'Overlook' => 0,
-	];
-	public const Types = [
-		'Variant' => 'variant',
-		'Specification' => 'specification',
-		'Checkout' => 'check-out',
-		'Simple' => 'simple',
-	];
-
-	public function values(){
-		return $this->hasMany(AttributeValue::class, 'attributeId');
-	}
-
-	public function category(){
-		return $this->belongsTo(Category::class, 'categoryId');
-	}
-
-	public function primitiveType(){
-		return $this->belongsTo(PrimitiveType::class, 'primitiveType', 'typeCode');
-	}
 
 	public static function startQuery(): AttributeQuery{
 		return AttributeQuery::begin();

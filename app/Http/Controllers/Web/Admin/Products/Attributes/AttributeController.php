@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Admin\Products\Attributes;
 use App\Classes\Arrays;
 use App\Classes\Rule;
 use App\Classes\Str;
+use App\Exceptions\AttributeNameConflictException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Interfaces\Tables;
@@ -15,6 +16,7 @@ use App\Models\PrimitiveType;
 use App\Traits\ValidatesRequest;
 use Sujip\Guid\Facades\Guid;
 use Throwable;
+use function foo\func;
 
 class AttributeController extends BaseController{
 	use ValidatesRequest;
@@ -25,12 +27,20 @@ class AttributeController extends BaseController{
 		parent::__construct();
 		$this->rules = [
 			'store' => [
-				'categoryId.*' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)],
 				'name' => ['bail', 'required', 'string', 'min:1', 'max:255'],
 				'description' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
-				'maxValues' => ['bail', 'required_with:multiValue,on', 'numeric', 'min:2', 'max:10000'],
-				'minimum' => ['bail', 'required_with:bounded,on', 'numeric', 'lt:maximum'],
-				'maximum' => ['bail', 'required_with:bounded,on', 'numeric', 'gt:minimum'],
+				'minValues' => ['bail', 'required_with:multiValue,on', 'numeric', 'min:2', 'max:10000'],
+				'maxValues' => ['bail', 'required_with:multiValue,on', 'numeric', 'min:2', 'max:10000', 'gte:minValues'],
+				'values' => ['bail', 'required_with:multiValue,on',
+					function ($attribute, $value, $fail){
+						if (request()->has('predefined')) {
+							$values = Str::split(';', $value);
+							if (Arrays::length($values) < 1) {
+								$fail('Minimum 1 value is required when predefined values are given.');
+							}
+						}
+					},
+				],
 			],
 		];
 	}
@@ -88,26 +98,23 @@ class AttributeController extends BaseController{
 				$attribute = Attribute::create([
 					'name' => $validated->name,
 					'description' => $validated->description,
-					'sellerInterfaceType' => $validated->sellerInterfaceType,
-					'customerInterfaceType' => $validated->customerInterfaceType,
-					'primitiveType' => $validated->primitiveType ?? Str::Empty,
 					'code' => sprintf('%s', Str::slug($validated->name)),
 					'required' => request()->has('required'),
-					'filterable' => request()->has('filterable'),
-					'productNameSegment' => request()->has('productNameSegment'),
-					'segmentPriority' => $validated->segmentPriority,
-					'bounded' => request()->has('bounded'),
+					'useToCreateVariants' => request()->has('useToCreateVariants'),
+					'useInLayeredNavigation' => request()->has('useInLayeredNavigation'),
+					'predefined' => request()->has('predefined'),
 					'multiValue' => request()->has('multiValue'),
+					'minValues' => request()->has('multiValue') ? $validated->minValues : 0,
 					'maxValues' => request()->has('multiValue') ? $validated->maxValues : 0,
-					'minimum' => request()->has('bounded') ? $validated->minimum : 0,
-					'maximum' => request()->has('bounded') ? $validated->maximum : 0,
+					'values' => Str::split(';', $validated->values),
 				]);
-				$conflict = Attribute::startQuery()->segmentPriority($validated->segmentPriority)->first();
-				if (!empty($conflict)) $conflict->update(['segmentPriority', 0]);
+			}
+			else {
+				throw new AttributeNameConflictException();
 			}
 			$response->success('Successfully created attribute.')->route('admin.products.attributes.index');
 		}
-		catch (ValidationException $exception) {
+		catch (ValidationException | AttributeNameConflictException $exception) {
 			$response->error($exception->getMessage())->data(request()->all())->back();
 		}
 		catch (Throwable $exception) {
