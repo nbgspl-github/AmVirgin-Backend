@@ -11,7 +11,6 @@ use App\Interfaces\Tables;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
 use App\Models\Category;
-use App\Models\CategoryAttribute;
 use App\Models\PrimitiveType;
 use App\Traits\ValidatesRequest;
 use Sujip\Guid\Facades\Guid;
@@ -82,6 +81,14 @@ class AttributeController extends BaseController{
 	}
 
 	public function store(){
+		/**
+		 * Guidelines to deal with attribute inheritance and how to handle values of such attributes.
+		 * 1.) Let us suppose two categories Footwear and Casual.
+		 * 2.) Footwear is the parent and Casual is child.
+		 * 3.) Casual inherits all attributes of Footwear [Size and Color].
+		 * 4.) If Size and Color have predefined set of values and Casual does not provide its own set of values,
+		 *      we'll use the values of the parent category
+		 */
 		$response = responseWeb();
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['store']);

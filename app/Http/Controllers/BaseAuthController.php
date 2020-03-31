@@ -207,18 +207,18 @@ abstract class BaseAuthController extends BaseController {
 
 	protected function loginPayload(Model $user, string $token) {
 		return [
-			'name' => $user->getName(),
-			'email' => $user->getEmail(),
-			'mobile' => $user->getMobile(),
+			'name' => $user->name(),
+			'email' => $user->email(),
+			'mobile' => $user->mobile(),
 			'token' => $token,
 		];
 	}
 
 	protected function registerPayload(Model $user, string $token) {
 		return [
-			'name' => $user->getName(),
-			'email' => $user->getEmail(),
-			'mobile' => $user->getMobile(),
+			'name' => $user->name(),
+			'email' => $user->email(),
+			'mobile' => $user->mobile(),
 			'token' => $token,
 		];
 	}

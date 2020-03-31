@@ -3,7 +3,8 @@
 <head>
 	<title>{{config("app.name","AmVirgin Dashboard")}}</title>
 	@include('admin.app.partials.head')
-	@include('admin.app.partials.styles')@notify_css
+	@include('admin.app.partials.styles')
+	@notify_css
 </head>
 
 <body class="fixed-left">

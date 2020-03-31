@@ -12,6 +12,7 @@
 	<link href="{{asset("assets/admin/css/bootstrap.min.css")}}" rel="stylesheet" type="text/css">
 	<link href="{{asset("assets/admin/css/icons.css")}}" rel="stylesheet" type="text/css">
 	<link href="{{asset("assets/admin/css/style.css")}}" rel="stylesheet" type="text/css">
+	@notify_css
 </head>
 
 <body class="fixed-left">
@@ -102,4 +103,5 @@
 @include('admin.app.partials.scripts')
 
 </body>
+@notify_render
 </html>

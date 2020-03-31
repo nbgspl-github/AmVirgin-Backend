@@ -1,6 +1,9 @@
 <?php
 
+use App\Classes\Time;
+use App\Models\Auth\Admin;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class AdminSeeder extends Seeder{
 	/**
@@ -9,12 +12,13 @@ class AdminSeeder extends Seeder{
 	 * @return void
 	 */
 	public function run(){
-		\App\Models\Auth\Admin::createOrUpdate(['email' => 'super.admin@amvirgin.com'], [
+		Admin::truncate();
+		Admin::updateOrCreate(['email' => 'super.admin@amvirgin.com'], [
 			'name' => 'Super Admin',
 			'email' => 'super.admin@amvirgin.com',
-			'password' => '$2y$12$aK6f8nhxWSl6rNxX/CdJ..94rfFTq9PdcPmQZdKJM/1WSDwqWiw8G',
+			'password' => '1234567890',
 			'mobile' => mt_rand(6000000000, 9000000000),
-			'email_verified_at' => \App\Classes\Time::mysqlStamp(),
+			'email_verified_at' => Time::mysqlStamp(),
 			'super' => true,
 		]);
 	}

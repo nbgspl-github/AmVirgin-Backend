@@ -1,5 +1,7 @@
 <?php
 
+use App\Classes\Time;
+use App\Models\Auth\Customer;
 use Illuminate\Database\Seeder;
 
 class CustomerSeeder extends Seeder{
@@ -9,12 +11,13 @@ class CustomerSeeder extends Seeder{
 	 * @return void
 	 */
 	public function run(){
-		\App\Models\Auth\Customer::createOrUpdate(['email' => 'customer@amvirgin.com'], [
+		Customer::truncate();
+		Customer::updateOrCreate(['email' => 'customer@amvirgin.com'], [
 			'name' => 'Customer',
 			'email' => 'customer@amvirgin.com',
-			'password' => '$2y$10$9.1vQbzkT.yfk3e5ttvkTOJ.U9HKlaez8mJzknnq1lm2uu0QCx7uy',
+			'password' => '12345678',
 			'mobile' => mt_rand(6000000000, 9000000000),
-			'email_verified_at' => \App\Classes\Time::mysqlStamp(),
+			'email_verified_at' => Time::mysqlStamp(),
 			'otp' => 1234,
 		]);
 	}

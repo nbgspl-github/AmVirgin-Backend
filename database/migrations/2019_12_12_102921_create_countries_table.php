@@ -13,9 +13,9 @@ class CreateCountriesTable extends Migration{
 	public function up(){
 		Schema::create('countries', function (Blueprint $table){
 			$table->increments('id');
-			$table->string('initials', 5);
-			$table->string('name');
-			$table->integer('phoneCode');
+			$table->string('initials', 5)->comment('Initials of country name');
+			$table->string('name')->comment('Name of country');
+			$table->integer('phoneCode')->comment('International Phone Code');
 		});
 	}
 
@@ -25,6 +25,8 @@ class CreateCountriesTable extends Migration{
 	 * @return void
 	 */
 	public function down(){
+		Schema::disableForeignKeyConstraints();
 		Schema::dropIfExists('countries');
+		Schema::enableForeignKeyConstraints();
 	}
 }

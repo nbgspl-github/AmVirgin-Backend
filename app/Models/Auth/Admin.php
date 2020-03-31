@@ -15,8 +15,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Admin extends Authenticatable implements JWTSubject{
-	use Notifiable, BroadcastPushNotifications, RetrieveResource, FluentConstructor, HashPasswords, ActiveStatus, JWTAuthDefaultSetup, DynamicAttributeNamedMethods;
+class Admin extends Authenticatable{
+	use Notifiable, BroadcastPushNotifications, RetrieveResource, FluentConstructor, HashPasswords, DynamicAttributeNamedMethods;
 	protected $fillable = [
 		'name',
 		'email',

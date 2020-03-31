@@ -6,6 +6,7 @@ use App\Http\Controllers\BaseController;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class LoginController extends BaseController{
 	use AuthenticatesUsers;
@@ -19,8 +20,9 @@ class LoginController extends BaseController{
 	}
 
 	public function showLoginForm(){
-		if ($this->guard()->user() == null)
+		if ($this->guard()->user() == null) {
 			return view('admin.auth.login');
+		}
 		else
 			return redirect(route('admin.home'));
 	}
@@ -32,18 +34,19 @@ class LoginController extends BaseController{
 		]);
 		$success = Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], boolval($request->remember));
 		if (!$success) {
-			notify()->error('Login failed');
-			return redirect(route('admin.login'))->withInput($request->all());
+			return responseWeb()->data(\request()->except('password'))->error('Your login credentials are invalid!')->send();
 		}
 		else {
-			notify()->success('Logged in successfully');
-			return redirect($this->redirectTo);
+			notify()->success('Welcome ' . \auth('admin')->user()->name() . '!');
+			return redirect()->intended('/admin');
 		}
 	}
 
 	public function logout(Request $request){
+		$name = \auth('admin')->user()->name();
 		$this->guard()->logout();
 		$request->session()->invalidate();
+		notify()->success('Goodbye ' . $name . '!');
 		return redirect(route('admin.login'));
 	}
 

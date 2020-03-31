@@ -9,6 +9,7 @@ use App\Traits\ActiveStatus;
 use App\Traits\BroadcastPushNotifications;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\FluentConstructor;
+use App\Traits\HashPasswords;
 use App\Traits\JWTAuthDefaultSetup;
 use App\Traits\OtpVerificationSupport;
 use App\Traits\RetrieveCollection;
@@ -20,7 +21,7 @@ use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Customer extends Authenticatable implements JWTSubject{
-	use Notifiable, BroadcastPushNotifications, RetrieveResource, RetrieveCollection, FluentConstructor, ActiveStatus, OtpVerificationSupport, DynamicAttributeNamedMethods, JWTAuthDefaultSetup;
+	use Notifiable, BroadcastPushNotifications, HashPasswords, RetrieveResource, RetrieveCollection, FluentConstructor, ActiveStatus, OtpVerificationSupport, DynamicAttributeNamedMethods, JWTAuthDefaultSetup;
 	protected $fillable = [
 		'name',
 		'email',
