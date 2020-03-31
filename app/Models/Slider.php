@@ -38,6 +38,6 @@ class Slider extends Model{
 	}
 
 	public static function whereQuery(): SliderQuery{
-		return SliderQuery::new();
+		return SliderQuery::begin();
 	}
 }
