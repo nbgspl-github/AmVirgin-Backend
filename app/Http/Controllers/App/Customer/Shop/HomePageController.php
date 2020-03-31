@@ -66,28 +66,28 @@ class HomePageController extends ExtendedResourceController{
 		/**
 		 * Brands in Focus
 		 */
-		$brandsInFocus = Category::whereQuery()->brandInFocus()->get();
+		$brandsInFocus = Category::startQuery()->brandInFocus()->get();
 		$brandsInFocus = BrandsInFocusResource::collection($brandsInFocus);
 		Arrays::set($container, 'brandInFocus', $brandsInFocus);
 
 		/**
 		 * Today's Deals
 		 */
-		$trendingDeals = Product::whereQuery()->hotDeal()->take(10)->get();
+		$trendingDeals = Product::startQuery()->hotDeal()->take(10)->get();
 		$trendingDeals = TrendingDealsResource::collection($trendingDeals);
 		Arrays::set($container, 'trendingDeals', $trendingDeals);
 
 		/**
 		 * Popular Stuff
 		 */
-		$popularStuff = Category::whereQuery()->popularCategory()->get();
+		$popularStuff = Category::startQuery()->popularCategory()->get();
 		$popularStuff = PopularStuffResource::collection($popularStuff);
 		Arrays::set($container, 'popularStuff', $popularStuff);
 
 		/**
 		 * Trending Now
 		 */
-		$trendingNow = Category::whereQuery()->trendingNow()->get();
+		$trendingNow = Category::startQuery()->trendingNow()->get();
 		$trendingNow = TrendingNowResource::collection($trendingNow);
 		Arrays::set($container, 'trendingNow', $trendingNow);
 
@@ -97,7 +97,7 @@ class HomePageController extends ExtendedResourceController{
 	public function showAllDeals(){
 		$response = responseApp();
 		try {
-			$deals = Product::whereQuery()->hotDeal()->get();
+			$deals = Product::startQuery()->hotDeal()->get();
 			$deals = TrendingDealsResource::collection($deals);
 			$response->status(HttpOkay)->message('Listing all products marked as hot deal.')->setValue('data', $deals);
 		}

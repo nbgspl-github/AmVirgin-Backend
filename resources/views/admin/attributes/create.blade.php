@@ -21,50 +21,11 @@
 									</div>
 									<div class="card-body">
 										<div class="form-group">
-											<label for="name">@required (Category)</label>
-											<div class="form-control p-0" style="min-height: 302px;">
-												<ul style="list-style-type: none; max-height: 300px!important; overflow-y: scroll;" class="px-1 py-0 mb-0 " id="list">
-													@foreach($categories as $topLevel)
-														<li>
-															<div class="custom-control custom-radio mr-sm-2" data-name="{{$topLevel['name']}}">
-																<input type="radio" name="category[]" class="custom-control-input" id="check_{{$topLevel['id']}}" value="{{$topLevel['id']}}" onchange="countCheckboxes();">
-																<label class="custom-control-label" for="check_{{$topLevel['id']}}">{{$topLevel['name']}}</label>
-															</div>
-															@if($topLevel['hasInner']==true)
-																<ul style="list-style-type: none;">
-																	@foreach($topLevel['inner'] as $inner)
-																		<li>
-																			<div class="custom-control custom-radio mr-sm-2" data-name="{{$inner['name']}}">
-																				<input type="radio" name="category[]" class="custom-control-input" id="check_{{$inner['id']}}" value="{{$inner['id']}}" onchange="countCheckboxes();">
-																				<label class="custom-control-label" for="check_{{$inner['id']}}">{{$inner['name']}}</label>
-																			</div>
-																			@if($inner['hasInner']==true)
-																				<ul style="list-style-type: none;">
-																					@foreach($inner['inner'] as $innerNext)
-																						<li>
-																							<div class="custom-control custom-radio mr-sm-2" data-name="{{$innerNext['name']}}">
-																								<input type="radio" name="category[]" class="custom-control-input" id="check_{{$innerNext['id']}}" value="{{$innerNext['id']}}" onchange="countCheckboxes();">
-																								<label class="custom-control-label" for="check_{{$innerNext['id']}}">{{$innerNext['name']}}</label>
-																							</div>
-																						</li>
-																					@endforeach
-																				</ul>
-																			@endif
-																		</li>
-																	@endforeach
-																</ul>
-															@endif
-														</li>
-													@endforeach
-												</ul>
-											</div>
-										</div>
-										<div class="form-group">
-											<label for="name">@required (Name)</label>
+											<label for="name">@required (Label) <i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Attribute label or name as will appear to admin, seller and customer'])></i></label>
 											<input id="name" type="text" name="name" class="form-control" required placeholder="Type a name" value="{{old('name')}}"/>
 										</div>
 										<div class="form-group">
-											<label for="description">@required (Description)</label>
+											<label for="description">@required (Description) <i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Attribute description or name as will appear to admin, seller and customer'])></i></label>
 											<textarea id="description" name="description" class="form-control" required placeholder="Type attribute description here">{{old('description')}}</textarea>
 										</div>
 										<div class="card custom-card p-3 shadow-none mb-3">

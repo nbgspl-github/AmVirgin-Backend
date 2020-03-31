@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Queries\AttributeQuery;
 use App\Traits\FluentConstructor;
 use App\Traits\DynamicAttributeNamedMethods;
+use App\Traits\QueryProvider;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @package App\Models
  */
 class Attribute extends Model{
-	use FluentConstructor, RetrieveResource, DynamicAttributeNamedMethods;
+	use FluentConstructor, RetrieveResource, DynamicAttributeNamedMethods, QueryProvider;
 	protected $table = 'attributes';
 	protected $fillable = [
 		'categoryId',
@@ -72,7 +73,7 @@ class Attribute extends Model{
 		return $this->belongsTo(PrimitiveType::class, 'primitiveType', 'typeCode');
 	}
 
-	public static function whereQuery(): AttributeQuery{
+	public static function startQuery(): AttributeQuery{
 		return AttributeQuery::begin();
 	}
 }

@@ -81,7 +81,7 @@ class HomePageController extends BaseController{
 	}
 
 	public function editBrandsInFocus(){
-		$categories = $topLevel = Category::whereQuery()->isCategory()->get();
+		$categories = $topLevel = Category::startQuery()->isCategory()->get();
 		$topLevel->transform(function (Category $topLevel){
 			$children = $topLevel->children()->get();
 			$children = $children->transform(function (Category $child){
@@ -141,7 +141,7 @@ class HomePageController extends BaseController{
 	}
 
 	public function editPopularStuff(){
-		$categories = $topLevel = Category::whereQuery()->isCategory()->get();
+		$categories = $topLevel = Category::startQuery()->isCategory()->get();
 		$topLevel->transform(function (Category $topLevel){
 			$children = $topLevel->children()->get();
 			$children = $children->transform(function (Category $child){
@@ -201,7 +201,7 @@ class HomePageController extends BaseController{
 	}
 
 	public function editTrendingNow(){
-		$categories = $topLevel = Category::whereQuery()->isCategory()->get();
+		$categories = $topLevel = Category::startQuery()->isCategory()->get();
 		$topLevel->transform(function (Category $topLevel){
 			$children = $topLevel->children()->get();
 			$children = $children->transform(function (Category $child){
@@ -261,7 +261,7 @@ class HomePageController extends BaseController{
 	}
 
 	public function editHotDeals(){
-		$products = Product::whereQuery()->displayable()->get();
+		$products = Product::startQuery()->displayable()->get();
 		$products->transform(function (Product $product){
 			return [
 				'id' => $product->id(),

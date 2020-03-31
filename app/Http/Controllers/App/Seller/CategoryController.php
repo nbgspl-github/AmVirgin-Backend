@@ -18,7 +18,7 @@ class CategoryController extends ExtendedResourceController{
 	}
 
 	public function index(): JsonResponse{
-		$category = Category::whereQuery()->isCategory()->get();
+		$category = Category::startQuery()->isCategory()->get();
 		$category->transform(function (Category $category){
 			$subCategory = $category->children()->get();
 			$subCategory = $subCategory->transform(function (Category $subCategory){

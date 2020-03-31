@@ -12,7 +12,7 @@ class ProductQuery extends AbstractQuery{
 	}
 
 	public function displayable(): self{
-		$this->query->where('draft', false);
+		$this->query->where('draft', false)->where('approved', true)->whereNotNull('approvedBy');
 		return $this;
 	}
 

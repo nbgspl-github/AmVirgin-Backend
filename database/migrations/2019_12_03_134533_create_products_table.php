@@ -19,11 +19,12 @@ class CreateProductsTable extends Migration{
 			$table->string('slug', 1000)->comment('Slug title of product.');
 			$table->unsignedBigInteger('categoryId')->comment('Category under which this product falls.');
 			$table->unsignedBigInteger('sellerId')->comment('Seller to whom this product belongs.');
-			$table->unsignedSmallInteger('brandId')->comment('Brand to which this product belongs.');
-			$table->enum('listingStatus', ['active', 'inactive'])->comment('Whether the product will show up in catalog listing or not?');
-			$table->enum('type', [Product::Type['Singular'], Product::Type['Group']]);
-			$table->integer('originalPrice')->default(0)->comment('MRP of product.');
-			$table->integer('sellingPrice')->default(0)->comment('Actual selling price of product');
+			$table->unsignedBigInteger('brandId')->comment('Brand to which this product belongs.');
+			$table->unsignedBigInteger('parentId')->comment('Product to which this is a child, null if this is the parent');
+			$table->enum('listingStatus', [Product::ListingStatus['Active'], Product::ListingStatus['Inactive']])->comment('Whether the product will show up in catalog listing or not?');
+			$table->enum('type', [Product::Type['Simple'], Product::Type['Variant']])->comment('What type of product is this?');
+			$table->float('originalPrice', 10, 2)->default(0)->comment('MRP of product.');
+			$table->float('sellingPrice', 10, 2)->default(0)->comment('Actual selling price of product');
 			$table->string('fulfillmentBy')->comment('How the order is fulfilled...by seller or through external courier service?');
 			$table->string('hsn')->comment('Harmonized System of Nomenclature code as defined by rules');
 			$table->string('currency')->default('INR')->comment('Currency to be shown alongside product price.');
@@ -35,12 +36,11 @@ class CreateProductsTable extends Migration{
 			$table->bigInteger('hits')->default(0)->comment('Number of times this product was viewed by customers.');
 			$table->bigInteger('stock')->default(0)->comment('How many units are in stock?');
 			$table->boolean('draft')->default(false)->comment('True if the seller is midway creating this product.');
-			$table->string('shortDescription', 1000)->comment('Short description for this product.');
-			$table->text('longDescription')->comment('Long description for this product, supports HTML formatting.');
+			$table->string('description', 2000)->comment('Short description for this product.');
 			$table->string('sku')->comment('Stock Keeping Unit identifier, unique for each product');
 			$table->string('styleCode')->nullable()->comment('For variants of the same product, this will be same. Unique code which sets up relations between different variants of the same product.');
 			$table->string('trailer', Constants::MaxFilePathLength)->nullable()->comment('Video path for product trailer.');
-			$table->integer('procurementSla')->nullable()->comment('Number of days required before the seller can fulfill the order.');
+			$table->tinyInteger('procurementSla')->nullable()->comment('Number of days required before the seller can fulfill the order.');
 			$table->integer('localShippingCost')->default(0)->comment('Shipping cost for local region.');
 			$table->integer('zonalShippingCost')->default(0)->comment('Shipping cost for zone.');
 			$table->integer('internationalShippingCost')->default(0)->comment('Cost for international shipping');
@@ -54,13 +54,21 @@ class CreateProductsTable extends Migration{
 			$table->text('warrantyServiceType')->nullable()->comment('Type of warranty applicable on this product.');
 			$table->text('coveredInWarranty')->nullable()->comment('What is covered in warranty?');
 			$table->text('notCoveredInWarranty')->nullable()->comment('What does not come under warranty?');
+			$table->integer('maxQuantityPerOrder')->default(10)->comment('How many units of this product can be ordered in a single order');
+			$table->boolean('approved')->default(false)->comment('Whether this product has been approved for selling by an admin');
+			$table->unsignedBigInteger('approvedBy')->nullable()->comment('Id of admin who has approved this product');
+			$table->timestamp('approvedAt')->nullable()->comment('When was this product approved by an admin');
 			$table->string('primaryImage', Constants::MaxFilePathLength)->nullable()->comment('Primary or main image for the product');
 			$table->json('specials')->nullable()->comment('Any special attributes that are temporary will come under this');
-			$table->softDeletes()->comment('Soft deleting in this context means the product is marked for deletion by seller.');
-			$table->timestamps();
+			$table->softDeletes('deletedAt')->comment('Soft deleting in this context means the product is marked for deletion by seller.');
+			$table->timestamp('createdAt')->nullable();
+			$table->timestamp('updatedAt')->nullable();
 
 			if (appEnvironment(AppEnvironmentProduction)) {
 				$table->foreign('categoryId')->references('id')->on(Tables::Categories)->onDelete('cascade');
+				$table->foreign('sellerId')->references('id')->on(Tables::Sellers)->onDelete('cascade');
+				$table->foreign('brandId')->references('id')->on(Tables::Brands)->onDelete('cascade');
+				$table->foreign('parentId')->references('id')->on(Tables::Products)->onDelete('cascade');
 				$table->foreign('hsn')->references('hsnCode')->on(Tables::HsnCodes)->onDelete('cascade');
 			}
 		});

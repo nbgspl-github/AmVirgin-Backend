@@ -9,6 +9,7 @@ use App\Traits\FluentConstructor;
 use App\Traits\GenerateUrls;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\HasSpecialAttributes;
+use App\Traits\QueryProvider;
 use App\Traits\RetrieveResource;
 use App\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +22,7 @@ use Spatie\Sluggable\SlugOptions;
  * @package App\Models
  */
 class Category extends Model{
-	use RetrieveResource, FluentConstructor, HasSpecialAttributes, DynamicAttributeNamedMethods, Sluggable;
+	use RetrieveResource, FluentConstructor, HasSpecialAttributes, DynamicAttributeNamedMethods, Sluggable, QueryProvider;
 	protected $table = 'categories';
 	protected $fillable = ['name', 'parentId', 'description', 'type', 'order', 'icon', 'listingStatus', 'specials',];
 	protected $casts = ['specials' => 'array', 'order' => 'int'];
@@ -70,7 +71,7 @@ class Category extends Model{
 		return $this->getSpecialAttribute('trendingNow', false);
 	}
 
-	public static function whereQuery(): CategoryQuery{
+	public static function startQuery(): CategoryQuery{
 		return CategoryQuery::begin();
 	}
 

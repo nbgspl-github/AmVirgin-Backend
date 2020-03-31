@@ -28,15 +28,6 @@ class AttributeController extends BaseController{
 				'categoryId.*' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)],
 				'name' => ['bail', 'required', 'string', 'min:1', 'max:255'],
 				'description' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
-				'sellerInterfaceType' => ['bail', 'required', Rule::in([Attribute::SellerInterfaceType['DropDown'], Attribute::SellerInterfaceType['Input'], Attribute::SellerInterfaceType['Text'], Attribute::SellerInterfaceType['Radio']])],
-				'customerInterfaceType' => ['bail', 'required', Rule::in([Attribute::CustomerInterfaceType['Options'], Attribute::CustomerInterfaceType['Readable']])],
-				'primitiveType' => ['bail', Rule::requiredIf(function (){
-					if (Str::equals(request('sellerInterfaceType'), Attribute::SellerInterfaceType['DropDown']) || Str::equals(request('sellerInterfaceType'), Attribute::SellerInterfaceType['Radio']))
-						return false;
-					else
-						return true;
-				}), Rule::existsPrimary(Tables::PrimitiveTypes, 'typeCode')],
-				'segmentPriority' => ['bail', 'required_with:productNameSegment,on', 'numeric', 'min:0', 'max:10'],
 				'maxValues' => ['bail', 'required_with:multiValue,on', 'numeric', 'min:2', 'max:10000'],
 				'minimum' => ['bail', 'required_with:bounded,on', 'numeric', 'lt:maximum'],
 				'maximum' => ['bail', 'required_with:bounded,on', 'numeric', 'gt:minimum'],
@@ -92,7 +83,7 @@ class AttributeController extends BaseController{
 		$response = responseWeb();
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['store']);
-			$attribute = Attribute::whereQuery()->code(Str::slug($validated->name))->first();
+			$attribute = Attribute::startQuery()->code(Str::slug($validated->name))->first();
 			if ($attribute == null) {
 				$attribute = Attribute::create([
 					'name' => $validated->name,
@@ -111,7 +102,7 @@ class AttributeController extends BaseController{
 					'minimum' => request()->has('bounded') ? $validated->minimum : 0,
 					'maximum' => request()->has('bounded') ? $validated->maximum : 0,
 				]);
-				$conflict = Attribute::whereQuery()->segmentPriority($validated->segmentPriority)->first();
+				$conflict = Attribute::startQuery()->segmentPriority($validated->segmentPriority)->first();
 				if (!empty($conflict)) $conflict->update(['segmentPriority', 0]);
 			}
 			$response->success('Successfully created attribute.')->route('admin.products.attributes.index');

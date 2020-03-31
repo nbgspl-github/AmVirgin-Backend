@@ -8,6 +8,7 @@ use App\Queries\ProductQuery;
 use App\Traits\FluentConstructor;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\HasSpecialAttributes;
+use App\Traits\QueryProvider;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use App\Traits\Sluggable;
@@ -24,7 +25,7 @@ use Spatie\Sluggable\SlugOptions;
  * @package App\Models
  */
 class Product extends Model{
-	use FluentConstructor, RetrieveResource, RetrieveCollection, DynamicAttributeNamedMethods, HasSpecialAttributes, Sluggable, SoftDeletes, HasSku;
+	use FluentConstructor, RetrieveResource, RetrieveCollection, DynamicAttributeNamedMethods, HasSpecialAttributes, Sluggable, SoftDeletes, HasSku, QueryProvider;
 	protected $table = 'products';
 	protected $fillable = [
 		'name',
@@ -74,6 +75,9 @@ class Product extends Model{
 	protected $casts = [
 		'draft' => 'bool',
 	];
+	public const CREATED_AT = 'createdAt';
+	public const UPDATED_AT = 'updatedAt';
+	public const DELETED_AT = 'deletedAt';
 	public const ListingStatus = [
 		'Active' => 'active',
 		'Inactive' => 'inactive',
@@ -128,13 +132,9 @@ class Product extends Model{
 			'Maximum' => 300,
 		],
 	];
-	public const WarrantyType = [
-		'OnSite' => 'on-site',
-		'WalkIn' => 'walk-in',
-	];
 	public const Type = [
-		'Singular' => 'singular',
-		'Group' => 'group',
+		'Simple' => 'simple',
+		'Variant' => 'variant',
 	];
 
 	public function attributes(): HasMany{
@@ -168,7 +168,7 @@ class Product extends Model{
 		return SlugOptions::create()->saveSlugsTo('slug')->generateSlugsFrom('name');
 	}
 
-	public static function whereQuery(): ProductQuery{
+	public static function startQuery(): ProductQuery{
 		return ProductQuery::begin();
 	}
 }

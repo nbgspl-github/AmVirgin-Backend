@@ -49,12 +49,12 @@ class CategoryController extends BaseController{
 	}
 
 	public function index(){
-		$categories = Category::whereQuery()->isRoot(false)->orderByAscending('parentId')->get();
+		$categories = Category::startQuery()->isRoot(false)->orderByAscending('parentId')->get();
 		return view('admin.categories.index')->with('categories', $categories);
 	}
 
 	public function create(){
-		$roots = Category::whereQuery()->isRoot()->get();
+		$roots = Category::startQuery()->isRoot()->get();
 		$roots->transform(function (Category $root){
 			$category = $root->children()->get();
 			$category = $category->transform(function (Category $category){
@@ -106,7 +106,7 @@ class CategoryController extends BaseController{
 
 	public function edit($id){
 		$category = Category::retrieve($id);
-		$roots = Category::whereQuery()->isRoot()->get();
+		$roots = Category::startQuery()->isRoot()->get();
 		$roots->transform(function (Category $root){
 			$category = $root->children()->get();
 			$category = $category->transform(function (Category $category){
