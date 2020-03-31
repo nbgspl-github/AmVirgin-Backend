@@ -53,6 +53,12 @@ class Attribute extends Model{
 		'Maximum' => 10,
 		'Overlook' => 0,
 	];
+	public const Types = [
+		'Variant' => 'variant',
+		'Specification' => 'specification',
+		'Checkout' => 'check-out',
+		'Simple' => 'simple',
+	];
 
 	public function values(){
 		return $this->hasMany(AttributeValue::class, 'attributeId');

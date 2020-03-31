@@ -5,18 +5,28 @@ namespace App\Resources\Shop\Customer\HomePage;
 use App\Storage\SecuredDisk;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TrendingNowVideoResource extends JsonResource {
-	public function toArray($request) {
+class TrendingNowVideoResource extends JsonResource{
+	public function toArray($request){
 		return [
 			'id' => $this->id,
 			'title' => $this->title,
 			'description' => $this->description,
-			'poster' => SecuredDisk::existsUrl($this->poster),
+			'slug' => $this->slug,
 			'type' => $this->type,
+			'duration' => $this->duration,
+			'released' => $this->released,
+			'director' => $this->director,
+			'trailer' => SecuredDisk::existsUrl($this->trailer),
+			'rating' => $this->rating,
+			'poster' => SecuredDisk::existsUrl($this->poster),
+			'pgRating' => $this->pgRating,
+			'subscriptionType' => $this->subscriptionType,
+			'hasSeasons' => boolval($this->hasSeasons),
+			'price' => $this->price,
 		];
 	}
 
-	public static function withoutWrapping() {
+	public static function withoutWrapping(){
 		return true;
 	}
 }
