@@ -19,6 +19,7 @@ class SellerController extends BaseController{
 	protected $ruleSet;
 
 	public function __construct(){
+		parent::__construct();
 		$this->ruleSet = config('rules.admin.sellers');
 	}
 
@@ -49,7 +50,7 @@ class SellerController extends BaseController{
 			$response = responseWeb()->route('admin.sellers.index')->success(__('strings.sellers.store.success'));
 		}
 		catch (ValidationException $exception) {
-			$response = responseWeb()->back()->data($request->all())->error($exception->getError());
+			$response = responseWeb()->back()->data($request->all())->error($exception->getMessage());
 		}
 		catch (Exception $exception) {
 			$response = responseWeb()->back()->data($request->all())->error($exception->getMessage());

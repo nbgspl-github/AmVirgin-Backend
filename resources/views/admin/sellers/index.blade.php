@@ -22,14 +22,14 @@
 						@foreach ($sellers as $seller)
 							<tr>
 								<td>{{$loop->index+1}}</td>
-								<td>{{$seller->getName()}}</td>
-								<td>{{$seller->getMobile()}}</td>
-								<td>{{$seller->getEmail()}}</td>
-								<td>{{__status($seller->isActive())}}</td>
+								<td>{{$seller->name()}}</td>
+								<td>{{$seller->mobile()}}</td>
+								<td>{{$seller->email()}}</td>
+								<td>{{__status($seller->active())}}</td>
 								<td>
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group mx-auto" role="group">
-											<a class="btn btn-outline-danger" href="{{route('admin.sellers.edit',$seller->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit seller details'])><i class="mdi mdi-pencil"></i></a>
+											<a class="btn btn-outline-danger" href="{{route('admin.sellers.edit',$seller->id())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit seller details'])><i class="mdi mdi-pencil"></i></a>
 										</div>
 									</div>
 								</td>

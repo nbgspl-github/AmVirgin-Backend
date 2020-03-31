@@ -9,6 +9,7 @@ use App\Http\Resources\Videos\VideoResource;
 use App\Interfaces\VideoTypes;
 use App\Models\Video;
 use App\Models\VideoSource;
+use App\Resources\Shop\Customer\HomePage\TrendingNowVideoResource;
 use App\Storage\SecuredDisk;
 use App\Traits\FluentResponse;
 use Illuminate\Database\Eloquent\Model;
@@ -72,11 +73,11 @@ class VideosController extends ExtendedResourceController {
 					['trending', true],
 					['pending', false],
 					['type', 'movie'],
-					])->orderBy('rating', 'DESC')
-						->limit(15)->get();
-					$trendingNow = TrendingNowResource::collection($trendingNow); 
-					 
-					$payload['recommended'] = $trendingNow;
+				])->orderBy('rating', 'DESC')
+					->limit(15)->get();
+				$trendingNow = TrendingNowVideoResource::collection($trendingNow);
+
+				$payload['recommended'] = $trendingNow;
 			}
 
 			$response->status(HttpOkay)->message('Success')->setValue('data', $payload);
