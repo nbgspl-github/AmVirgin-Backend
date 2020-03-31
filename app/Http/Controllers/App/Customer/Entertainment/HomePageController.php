@@ -16,6 +16,7 @@ use App\Resources\Shop\Customer\HomePage\EntertainmentSliderResource;
 use App\Resources\Shop\Customer\HomePage\ShopSliderResource;
 use App\Resources\Shop\Customer\HomePage\TopPickResource;
 use App\Resources\Shop\Customer\HomePage\TrendingNowResource;
+use App\Resources\Shop\Customer\HomePage\TrendingNowVideoResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
@@ -81,7 +82,7 @@ class HomePageController extends ExtendedResourceController{
 			 * Trending Now
 			 */
 			$trendingNow = Video::displayable()->where('trending', true)->get();
-			$trendingNow = TrendingNowResource::collection($trendingNow);
+			$trendingNow = TrendingNowVideoResource::collection($trendingNow);
 			$data['trendingNow'] = $trendingNow;
 
 			return responseApp()->status(HttpOkay)->message('Successfully retrieved entertainment homepage resources.')->setValue('data', $data)->send();
@@ -134,7 +135,7 @@ class HomePageController extends ExtendedResourceController{
 				['trending', true],
 				['pending', false],
 			])->get();
-			$trendingNow = TrendingNowResource::collection($trendingNow);
+			$trendingNow = TrendingNowVideoResource::collection($trendingNow);
 			$msg = 'No record found';
 			if (!empty($trendingNow)) {
 				$msg = 'Successfully retrieved entertainment trending now.';
@@ -157,7 +158,7 @@ class HomePageController extends ExtendedResourceController{
 				['pending', false],
 			])->orderBy('rating', 'DESC')
 				->limit(15)->get();
-			$trendingNow = TrendingNowResource::collection($trendingNow);
+			$trendingNow = TrendingNowVideoResource::collection($trendingNow);
 			$msg = 'No record found';
 			if (!empty($trendingNow)) {
 				$msg = 'Successfully retrieved entertainment recommended video.';
