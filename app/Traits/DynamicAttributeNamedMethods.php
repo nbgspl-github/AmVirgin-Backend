@@ -9,7 +9,7 @@ trait DynamicAttributeNamedMethods{
 	protected $methods = Arrays::Empty;
 
 	public function __call($name, $arguments){
-		if (!isset($this->attributes[$name])) {
+		if (!Arrays::has($this->attributes, $name)) {
 			return parent::__call($name, $arguments);
 		}
 		if (count($arguments) == 0) {

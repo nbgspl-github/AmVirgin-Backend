@@ -5,22 +5,42 @@ namespace App\Http\Resources\Auth\Seller;
 use App\Storage\SecuredDisk;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AuthProfileResource extends JsonResource {
-	public function toArray($request) {
+class AuthProfileResource extends JsonResource{
+	protected ?string $token;
+
+	public function toArray($request){
 		return [
-			'key' => $this->id,
-			'name' => $this->name,
-			'businessName' => $this->businessName,
-			'description' => $this->description,
-			'email' => $this->email,
-			'mobile' => $this->mobile,
+			'key' => $this->id(),
+			'name' => $this->name(),
+			'businessName' => $this->businessName(),
+			'description' => $this->description(),
+			'email' => $this->email(),
+			'mobile' => $this->mobile(),
 			'state' => $this->state,
 			'city' => $this->city,
-			'rating' => $this->rating,
-			'address' => $this->address,
-			'pinCode' => $this->pinCode,
-			'alternateMobile' => $this->alternateMobile,
-			'avatar' => SecuredDisk::existsUrl($this->avatar),
+			'rating' => $this->rating(),
+			'address' => $this->address(),
+			'pinCode' => $this->pinCode(),
+			'avatar' => SecuredDisk::existsUrl($this->avatar()),
+			'statistics' => [
+				'products' => [
+					'total' => $this->productsAdded(),
+					'sold' => $this->productsSold(),
+				],
+				'sales' => [
+					'total' => mt_rand(400000, 500000),
+					'today' => mt_rand(10000, 100000),
+					'lastWeek' => mt_rand(100000, 200000),
+					'lastMonth' => mt_rand(200000, 300000),
+					'lastYear' => mt_rand(9000000, 10000000),
+				],
+			],
+			'token' => $this->when(!empty($this->token), $this->token),
 		];
+	}
+
+	public function token(?string $token){
+		$this->token = $token;
+		return $this;
 	}
 }
