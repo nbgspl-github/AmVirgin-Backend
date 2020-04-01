@@ -204,34 +204,6 @@ class ProductController extends ExtendedResourceController{
 				});
 			});
 
-			collect($attributes)->each(function ($item) use ($product){
-				$attribute = Attribute::retrieve($item['key']);
-				if ($attribute != null) {
-					$sellerInterfaceType = $attribute->sellerInterfaceType();
-					$hasValues = Str::equals($sellerInterfaceType, Attribute::SellerInterfaceType['DropDown']) || Str::equals($sellerInterfaceType, Attribute::SellerInterfaceType['Radio']);
-					if (!$hasValues) ProductAttribute::create([
-						'productId' => 10,
-						'attributeId' => $attribute->id(),
-						'value' => $item['data']['value'],
-					]);
-					else ProductAttribute::create([
-						'productId' => 10,
-						'attributeId' => $attribute->id(),
-						'valueId' => $item['data']['key'],
-						'value' => $item['data']['value'],
-					]);
-
-					if ($attribute->productNameSegment() && $attribute->segmentPriority() != 0) {
-						$finalValue = $item['data']['value'];
-						$separated = Str::split('/', $finalValue);
-						if ($attribute->multiValue() && count($separated) > 1) {
-							$finalValue = Str::join(Str::WhiteSpace, $separated);
-						}
-						$segments[$attribute->segmentPriority()] = $finalValue;
-					}
-				}
-			});
-
 			/**
 			 * Storing Product Images and Response Collection of Images
 			 */

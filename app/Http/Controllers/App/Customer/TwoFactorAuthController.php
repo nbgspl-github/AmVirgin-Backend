@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\App\Customer;
 
 use App\Http\Controllers\TwoFactorBaseAuthController;
+use App\Http\Resources\Auth\Customer\AuthProfileResource;
 use App\Models\Auth\Customer;
 use App\Models\CustomerOtp;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -43,19 +45,27 @@ class TwoFactorAuthController extends TwoFactorBaseAuthController{
 		return Auth::guard('customer-api');
 	}
 
-	protected function shouldVerifyOtpBeforeRegister(): bool {
+	protected function shouldVerifyOtpBeforeRegister(): bool{
 		return true;
 	}
 
-	protected function shouldVerifyOtpBeforeLogin(): bool {
+	protected function shouldVerifyOtpBeforeLogin(): bool{
 		return true;
 	}
 
-	protected function rulesUpdateProfile() {
+	protected function rulesUpdateProfile(){
 		// TODO: Implement rulesUpdateProfile() method.
 	}
 
-	protected function rulesUpdateAvatar() {
+	protected function rulesUpdateAvatar(){
 		// TODO: Implement rulesUpdateAvatar() method.
+	}
+
+	protected function loginPayload(Model $user, string $token){
+		return (new AuthProfileResource($user))->token($token);
+	}
+
+	protected function registerPayload(Model $user, string $token){
+		return (new AuthProfileResource($user))->token($token);
 	}
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\App\Customer;
 use App\Http\Controllers\App\BaseAuthController;
 use App\Http\Resources\Auth\Customer\AuthProfileResource;
 use App\Models\Auth\Customer;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -31,23 +32,23 @@ class AuthController extends BaseAuthController{
 		return $this->ruleSet['login'];
 	}
 
-	protected function rulesRegister() {
+	protected function rulesRegister(){
 		return $this->ruleSet['register'];
 	}
 
-	protected function guard() {
+	protected function guard(){
 		return Auth::guard('customer-api');
 	}
 
-	public function profile() {
+	public function profile(){
 		return new AuthProfileResource($this->guard()->user());
 	}
 
-	protected function rulesUpdateProfile() {
+	protected function rulesUpdateProfile(){
 		// TODO: Implement rulesUpdateProfile() method.
 	}
 
-	protected function rulesUpdateAvatar() {
+	protected function rulesUpdateAvatar(){
 		// TODO: Implement rulesUpdateAvatar() method.
 	}
 }
