@@ -104,15 +104,15 @@ Route::prefix('countries')->group(function (){
 });
 
 Route::prefix('subscriptions')->group(function (){
-	Route::get(Str::Empty, [SubscriptionController::class, 'index']);
+	Route::get(\App\Classes\Str::Empty, [SubscriptionController::class, 'index']);
 });
 
 Route::prefix('search')->group(function (){
-	Route::get(Str::Empty, [GlobalSearchController::class, 'search']);
+	Route::get(\App\Classes\Str::Empty, [GlobalSearchController::class, 'search']);
 });
 
 Route::prefix('orders')->middleware('auth:customer-api')->group(function (){
-	Route::get(Str::Empty, [OrderController::class, 'getorders']);
+	Route::get(\App\Classes\Str::Empty, [OrderController::class, 'getorders']);
 	Route::get('{param}', [OrderController::class, 'getorderdetails']);
 });
 
@@ -125,9 +125,9 @@ Route::prefix('brands')->group(function (){
 });
 
 Route::prefix('watch-later')->group(function (){
-	Route::post(Str::Empty, [\App\Http\Controllers\App\Customer\VideosController::class, 'addInWatchLater'])->name('customer.addInWatchLater')->middleware('auth:customer-api');
+	Route::post(\App\Classes\Str::Empty, [\App\Http\Controllers\App\Customer\VideosController::class, 'addInWatchLater'])->name('customer.addInWatchLater')->middleware('auth:customer-api');
 
 	Route::delete('/remove/{id}', [\App\Http\Controllers\App\Customer\VideosController::class, 'removeWatchLater'])->name('customer.removeWatchLater')->middleware('auth:customer-api');
 
-	Route::get(Str::Empty, [\App\Http\Controllers\App\Customer\VideosController::class, 'getWatchLaterVideo'])->name('customer.getWatchLaterVideo')->middleware('auth:customer-api');
+	Route::get(\App\Classes\Str::Empty, [\App\Http\Controllers\App\Customer\VideosController::class, 'getWatchLaterVideo'])->name('customer.getWatchLaterVideo')->middleware('auth:customer-api');
 });

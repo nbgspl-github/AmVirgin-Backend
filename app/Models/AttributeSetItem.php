@@ -11,7 +11,8 @@ class AttributeSetItem extends Model{
 	protected $table = 'attribute-set-items';
 	protected $fillable = [
 		'attributeSetId',
-		'categoryId',
+		'attributeId',
+		'group',
 	];
 
 	public function attribute(): BelongsTo{

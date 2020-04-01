@@ -15,6 +15,7 @@ class CreateAttributeSetItemsTable extends Migration{
 			$table->bigIncrements('id');
 			$table->unsignedBigInteger('attributeSetId');
 			$table->unsignedBigInteger('attributeId');
+			$table->string('group');
 			$table->timestamps();
 		});
 	}

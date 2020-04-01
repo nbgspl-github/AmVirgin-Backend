@@ -16,6 +16,11 @@ class AttributeSet extends Model{
 		'name',
 		'categoryId',
 	];
+	public const Groups = [
+		'Size & Fit',
+		'Material & Care',
+		'Specifications',
+	];
 
 	public function items(): HasMany{
 		return $this->hasMany(AttributeSetItem::class, 'attributeSetId');

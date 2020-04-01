@@ -31,7 +31,7 @@ class AttributeController extends BaseController{
 				'description' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
 				'minValues' => ['bail', 'required_with:multiValue,on', 'numeric', 'min:2', 'max:10000'],
 				'maxValues' => ['bail', 'required_with:multiValue,on', 'numeric', 'min:2', 'max:10000', 'gte:minValues'],
-				'values' => ['bail', 'required_with:multiValue,on',
+				'values' => ['bail', 'required_with:predefined,on',
 					function ($attribute, $value, $fail){
 						if (request()->has('predefined')) {
 							$values = Str::split(';', $value);
@@ -106,7 +106,7 @@ class AttributeController extends BaseController{
 					'multiValue' => request()->has('multiValue'),
 					'minValues' => request()->has('multiValue') ? $validated->minValues : 0,
 					'maxValues' => request()->has('multiValue') ? $validated->maxValues : 0,
-					'values' => Str::split(';', $validated->values),
+					'values' => request()->has('predefined') ? Str::split(';', $validated->values) : [],
 				]);
 			}
 			else {

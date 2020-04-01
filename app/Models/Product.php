@@ -34,6 +34,7 @@ class Product extends Model{
 		'sellerId',
 		'brandId',
 		'listingStatus',
+		'type',
 		'originalPrice',
 		'sellingPrice',
 		'fulfillmentBy',
@@ -46,8 +47,8 @@ class Product extends Model{
 		'rating',
 		'stock',
 		'draft',
-		'shortDescription',
-		'longDescription',
+		'parentId',
+		'description',
 		'sku',
 		'styleCode',
 		'trailer',
@@ -65,11 +66,15 @@ class Product extends Model{
 		'warrantyServiceType',
 		'coveredInWarranty',
 		'notCoveredInWarranty',
+		'maxAllowedQuantityPerOrder',
+		'primaryImage',
+		'specials',
 	];
 	protected $hidden = [
-		'deleted',
-		'created_at',
-		'updated_at',
+		'id',
+		'deletedAt',
+		'createdAt',
+		'updatedAt',
 		'sellerId',
 	];
 	protected $casts = [

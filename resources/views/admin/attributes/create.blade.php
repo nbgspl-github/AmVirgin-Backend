@@ -13,24 +13,19 @@
 						<div class="row">
 							<div class="col-sm-12 col-md-8 mx-auto">
 								<div class="card shadow-none" style="border: 1px solid rgba(180,185,191,0.4);">
-									<div class="card-header text-white bg-secondary">
-										<div class="row">
-											<div class="col-8 my-auto">Attributes help categorizing variants of the same product.</div>
-											<div class="col-4"><input type="text" class="form-control" name="" id="" placeholder="Search for a category" onkeyup="handleSearch(this.value);"></div>
-										</div>
-									</div>
+									<div class="card-header text-white bg-secondary">Attributes help categorizing variants of the same product.</div>
 									<div class="card-body">
 										<div class="form-group">
 											<label for="name">@required (Label) <i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Attribute label or name as will appear to admin, seller and customer'])></i></label>
 											<input id="name" type="text" name="name" class="form-control" required placeholder="Type a name" value="{{old('name')}}"/>
 										</div>
 										<div class="form-group">
-											<label for="description">@required (Description) <i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Attribute description or name as will appear to admin, seller and customer'])></i></label>
+											<label for="description">@required (Description) <i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Attribute description as will appear to seller'])></i></label>
 											<textarea id="description" name="description" class="form-control" required placeholder="Type attribute description here">{{old('description')}}</textarea>
 										</div>
 										<div class="card custom-card p-3 shadow-none mb-3">
 											<div class="form-group">
-												<label>Allow entering multiple values?</label>
+												<label>Allow entering multiple values? <i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Allow the seller to enter more than one value for this attribute for example - color for color-blocked t shirts.'])></i></label>
 												<div>
 													<div class="custom-control custom-checkbox">
 														<input type="checkbox" class="custom-control-input" id="multiValue" name="multiValue" onchange="handleMultiValueChanged();">
@@ -48,7 +43,7 @@
 											</div>
 										</div>
 										<div class="form-group">
-											<label>Attribute is required?</label>
+											<label>Attribute is required? <i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Seller must fill or choose a value for this attribute, blank is not allowed.'])></i></label>
 											<div>
 												<div class="custom-control custom-checkbox">
 													<input type="checkbox" class="custom-control-input" id="required" name="required">
@@ -57,7 +52,7 @@
 											</div>
 										</div>
 										<div class="form-group">
-											<label>Use attribute in layered navigation?</label>
+											<label>Use attribute in layered navigation? <i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Enable showing this attribute and corresponding values as a filter in catalog listing.'])></i></label>
 											<div>
 												<div class="custom-control custom-checkbox">
 													<input type="checkbox" class="custom-control-input" id="useInLayeredNavigation" name="useInLayeredNavigation">
@@ -66,7 +61,7 @@
 											</div>
 										</div>
 										<div class="form-group">
-											<label>Use attribute to create product variations?</label>
+											<label>Use attribute to create product variations? <i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Use this attribute\'s value to create variations of product.'])></i></label>
 											<div>
 												<div class="custom-control custom-checkbox">
 													<input type="checkbox" class="custom-control-input" id="useToCreateVariants" name="useToCreateVariants">
@@ -74,9 +69,9 @@
 												</div>
 											</div>
 										</div>
-										<div class="card custom-card p-3 shadow-none mb-3">
+										<div class="card custom-card p-3 shadow-none mb-0">
 											<div class="form-group">
-												<label>Attribute has predefined values?</label>
+												<label>Attribute has predefined values? <i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Predefine a set of values that the seller must choose from such as size (L, M, S) etc.'])></i></label>
 												<div>
 													<div class="custom-control custom-checkbox">
 														<input type="checkbox" class="custom-control-input" id="predefined" name="predefined" onchange="handlePredefinedChanged();">
@@ -86,7 +81,7 @@
 											</div>
 											<div class="form-group mb-0">
 												<label for="values">Values</label>
-												<input id="values" type="text" name="values" class="form-control bg-white" required placeholder="Click to provide values" value="{{old('values')}}" readonly disabled/>
+												<input id="values" type="text" name="values" class="form-control" placeholder="Click to provide values" value="{{old('values')}}" readonly disabled/>
 											</div>
 										</div>
 									</div>
@@ -122,35 +117,17 @@
 	<script src="{{asset('assets/admin/utils/MultiEntryModal.js')}}"></script>
 	<script>
 		let elements = {
-			minimumInput: null,
-			maximumInput: null,
 			minValueInput: null,
 			maxValueInput: null,
-			boundedCheckBox: null,
 			multiValueCheckBox: null,
-			attributeTypeDropdown: null,
-			segmentPriority: null,
 			valuesInput: null
 		};
-		const sellerInterfaceTypes = {
-			Input: 'input'
-		};
-		const attributeTypes = {
-			Float: 'float',
-			Integer: 'int'
-		};
-		let count = 0;
 
 		window.onload = () => {
 			elements = {
-				minimumInput: $('#minimum'),
-				maximumInput: $('#maximum'),
 				minValueInput: $('#minValues'),
 				maxValueInput: $('#maxValues'),
-				boundedCheckBox: $('#bounded'),
 				multiValueCheckBox: $('#multiValue'),
-				attributeTypeDropdown: $('#attributeType'),
-				segmentPriority: $('#segmentPriority'),
 				valuesInput: $('#values')
 			};
 			MultiEntryModal.setupMultiEntryModal({
@@ -178,58 +155,6 @@
 			});
 		};
 
-		countCheckboxes = () => {
-			if (event.target.checked) {
-				count++;
-			} else {
-				count--;
-			}
-		};
-
-		handleSearch = (value) => {
-			$("div[data-name]").filter((index, item) => {
-				$(item).toggle($(item).attr('data-name').toLowerCase().indexOf(value.toLowerCase()) !== -1);
-			});
-		};
-
-		handleSellerInterfaceTypeChanged = (value) => {
-			if (value === sellerInterfaceTypes.Input) {
-				enable(elements.attributeTypeDropdown);
-			} else {
-				elements.attributeTypeDropdown[0].selectedIndex = 0;
-				trigger(elements.attributeTypeDropdown, 'change');
-				disable(elements.attributeTypeDropdown);
-			}
-		};
-
-		handleAttributeTypeChanged = (value) => {
-			if (value === attributeTypes.Float || value === attributeTypes.Integer) {
-				enable(elements.boundedCheckBox);
-			} else {
-				if (checked(elements.boundedCheckBox)) {
-					trigger(elements.boundedCheckBox, 'click');
-					trigger(elements.boundedCheckBox, 'change');
-				}
-				disable(elements.boundedCheckBox);
-			}
-		};
-
-		handleBoundStatusChanged = () => {
-			if (event.target.checked) {
-				enable(elements.minimumInput);
-				required(elements.minimumInput);
-				enable(elements.maximumInput);
-				required(elements.maximumInput);
-			} else {
-				disable(elements.minimumInput);
-				optional(elements.minimumInput);
-				disable(elements.maximumInput);
-				optional(elements.maximumInput);
-				clear(elements.minimumInput);
-				clear(elements.maximumInput);
-			}
-		};
-
 		handleMultiValueChanged = () => {
 			if (event.target.checked) {
 				enable(elements.maxValueInput);
@@ -243,17 +168,6 @@
 				optional(elements.minValueInput);
 				clear(elements.maxValueInput);
 				clear(elements.minValueInput);
-			}
-		};
-
-		handleProductSegmentChanged = () => {
-			if (event.target.checked) {
-				enable(elements.segmentPriority);
-				required(elements.segmentPriority);
-			} else {
-				disable(elements.segmentPriority);
-				optional(elements.segmentPriority);
-				clear(elements.segmentPriority);
 			}
 		};
 

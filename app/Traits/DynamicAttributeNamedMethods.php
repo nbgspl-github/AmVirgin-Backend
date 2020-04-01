@@ -6,8 +6,6 @@ use App\Classes\Arrays;
 use App\Classes\Str;
 
 trait DynamicAttributeNamedMethods{
-	protected $methods = Arrays::Empty;
-
 	public function __call($name, $arguments){
 		if (!Arrays::has($this->attributes, $name)) {
 			return parent::__call($name, $arguments);

@@ -5,7 +5,7 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Create an attribute'])
+					@include('admin.extras.header', ['title'=>'Create an attribute set'])
 				</div>
 				<form id="uploadForm" action="{{route('admin.attributes.sets.store')}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
 					@csrf
@@ -20,6 +20,36 @@
 										</div>
 									</div>
 									<div class="card-body">
+										<div class="jumbotron py-1 px-3">
+											<h6 class="display-6">Important!</h6>
+											<hr class="my-2">
+											<ul class="px-3">
+												<li><p>Use attribute sets to define all characteristics of a product, such as Color, Size, Machine Washable, Material, Texture, Capacity, Pattern etc.</p></li>
+												<li>
+													<p>You can have one attribute set per category because a particular type of category will only categorize products having the same characteristics. For example - A category named
+														<mark>T Shirt</mark>
+														will only contain products which quality for a T Shirt and not something like a
+														<mark>Mobile Phone</mark>
+														or
+														<mark>Shoe</mark>
+														.
+													</p>
+												</li>
+												<li><p>You can choose all the attributes that you find eligible for a particular category and which you see fit to describe a particular product entirely, and add them to a set.</p></li>
+												<li>
+													<p>Once a set is created and bound to a category, it will automatically be retrieved for the seller once he chooses the category he wishes to add a product into.</p>
+												</li>
+												<li>
+													<p>During the process of product creation, the seller will be required to fill or select values for all attributes marked as required.</p>
+												</li>
+												<li>
+													<p>All attributes within a set which are marked to be used to create variants, their values will be used to create all possible combinations of the product.</p>
+												</li>
+												<li>
+													<p>Other attributes which are not marked to be used to create variants will form the product description and specification.</p>
+												</li>
+											</ul>
+										</div>
 										<div class="form-group">
 											<label for="name">@required (Name) <i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Attribute label or name as will appear to admin, seller and customer'])></i></label>
 											<input id="name" type="text" name="name" class="form-control" required placeholder="Type a name" value="{{old('name')}}"/>
@@ -42,24 +72,44 @@
 											</select>
 										</div>
 										<div class="form-group mb-0">
-											<label for="exampleFormControlSelect2">Select attributes to build a set</label>
-											<ul class="list-group">
-												@foreach($attributes as $attribute)
-													<li class="list-group-item" data-name="{{$attribute->name()}}">
-														<div class="row">
-															<div class="col-6">
+											<label for="exampleFormControlSelect2">@required(Select attributes to add to this set)</label>
+											<div class="table-responsive" style="border: 1px solid lightgray; border-radius: 4px!important;">
+												<table class="table table-hover mb-0" style="padding-right: -1px">
+													<thead class="thead-light">
+													<tr>
+														<th scope="col" class="text-center">Mark</th>
+														<th scope="col">Label</th>
+														<th scope="col">Code</th>
+														<th scope="col">Values</th>
+														<th scope="col">Group</th>
+													</tr>
+													</thead>
+													<tbody>
+													@foreach($attributes as $attribute)
+														<tr data-name="{{$attribute->name()}}">
+															<td class="text-center">
 																<div>
 																	<div class="custom-control custom-checkbox">
-																		<input type="checkbox" class="custom-control-input" id="attribute-{{$attribute->id()}}" name="selected[]" value="{{$attribute->id()}}">
-																		<label class="custom-control-label" for="attribute-{{$attribute->id()}}">{{$attribute->name()}} <span class="badge badge-light font-14">{{$attribute->code()}}</span></label>
+																		<input type="checkbox" class="custom-control-input" id="attribute-{{$attribute->id()}}" name="selected[]" value="{{$attribute->id()}}" onchange="handleMarkChanged({{$attribute->id()}});">
+																		<label class="custom-control-label" for="attribute-{{$attribute->id()}}">&nbsp;</label>
 																	</div>
 																</div>
-															</div>
-															<div class="col-6"><span class="badge badge-secondary float-right font-14">{{\App\Classes\Str::join(', ',$attribute->values())}}</span></div>
-														</div>
-													</li>
-												@endforeach
-											</ul>
+															</td>
+															<td>{{$attribute->name()}}</td>
+															<td>{{$attribute->code()}}</td>
+															<td><span class="badge badge-secondary font-14">{{\App\Classes\Str::join(', ',$attribute->values())}}</span></td>
+															<td>
+																<select name="groups[]" id="{{$attribute->id()}}" class="form-control" disabled>
+																	@foreach(\App\Models\AttributeSet::Groups as $group)
+																		<option value="{{$group}}">{{$group}}</option>
+																	@endforeach
+																</select>
+															</td>
+														</tr>
+													@endforeach
+													</tbody>
+												</table>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -101,9 +151,17 @@
 		};
 
 		handleSearch = (value) => {
-			$("li[data-name]").filter((index, item) => {
+			$("tr[data-name]").filter((index, item) => {
 				$(item).toggle($(item).attr('data-name').toLowerCase().indexOf(value.toLowerCase()) !== -1);
 			});
+		};
+
+		handleMarkChanged = (code) => {
+			if (event.target.checked) {
+				$('#' + code).prop('disabled', false);
+			} else {
+				$('#' + code).prop('disabled', true);
+			}
 		};
 	</script>
 @stop

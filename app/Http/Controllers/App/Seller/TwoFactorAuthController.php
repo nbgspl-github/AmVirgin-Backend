@@ -64,7 +64,6 @@ class TwoFactorAuthController extends TwoFactorBaseAuthController{
 	}
 
 	protected function loginPayload(Model $user, string $token){
-//		dd($user);
 		return (new AuthProfileResource($user))->token($token);
 	}
 

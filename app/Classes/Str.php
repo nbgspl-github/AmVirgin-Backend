@@ -27,4 +27,9 @@ class Str extends \Illuminate\Support\Str{
 	public static function ellipsis(string $value, $threshold = 50){
 		return strlen($value) > $threshold ? substr($value, 0, $threshold) . "..." : $value;
 	}
+
+	public static function trans(string $key, $default = Str::Empty){
+		$value = __($key);
+		return Str::equals($value, $key) ? $default : $value;
+	}
 }

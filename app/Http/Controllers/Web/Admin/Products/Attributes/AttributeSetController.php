@@ -25,6 +25,7 @@ class AttributeSetController extends BaseController{
 				'name' => ['bail', 'required', 'string', 'min:1', 'max:255'],
 				'categoryId' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)],
 				'selected' => ['bail', 'required'],
+				'groups' => ['bail', 'required'],
 			],
 		];
 	}
@@ -35,14 +36,14 @@ class AttributeSetController extends BaseController{
 	}
 
 	public function create(){
-		$attributes = Attribute::all();
+		$attributes = Attribute::startQuery()->orderByAscending('name')->get();
 		$roots = Category::startQuery()->isRoot()->get();
 		$roots->transform(function (Category $root){
-			$category = $root->children()->get();
+			$category = $root->children()->orderBy('name')->get();
 			$category = $category->transform(function (Category $category){
-				$subCategory = $category->children()->get();
+				$subCategory = $category->children()->orderBy('name')->get();
 				$subCategory = $subCategory->transform(function (Category $subCategory){
-					$vertical = $subCategory->children()->get();
+					$vertical = $subCategory->children()->orderBy('name')->get();
 					$vertical->transform(function (Category $vertical){
 						return [
 							'key' => $vertical->id(),
@@ -94,7 +95,8 @@ class AttributeSetController extends BaseController{
 				'name' => $validated->name,
 				'categoryId' => $validated->categoryId,
 			]);
-			Arrays::each($validated->selected, function ($attributeId) use ($attributeSet){
+			$index = 0;
+			Arrays::each($validated->selected, function ($attributeId) use ($attributeSet, $validated, &$index){
 				AttributeSetItem::updateOrCreate(
 					[
 						'attributeSetId' => $attributeSet->id(),
@@ -103,6 +105,7 @@ class AttributeSetController extends BaseController{
 					[
 						'attributeSetId' => $attributeSet->id(),
 						'attributeId' => $attributeId,
+						'group' => $validated->groups[$index++],
 					]
 				);
 			});

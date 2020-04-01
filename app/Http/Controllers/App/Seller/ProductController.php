@@ -143,84 +143,76 @@ class ProductController extends ExtendedResourceController{
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules['store']);
-			/**
-			 * Verify that this category has no children.
-			 */
 			$category = Category::retrieve($validated['categoryId']);
-			if ($category->children()->count() > 0)
+			if (!Str::equals($category->type(), Category::Types['Vertical']))
 				throw new InvalidCategoryException();
 
-			/**
-			 * Calculating tax rate from HSN code.
-			 */
 			$validated['taxRate'] = HsnCode::find($validated['hsn'])->taxRate();
-
-			/**
-			 * Putting adequate seller Id read from auth.
-			 */
 			$validated['sellerId'] = $this->guard()->id();
-
 			$product = Product::create($validated);
 
-			/**
-			 * Generating Product Name
-			 * 1.) Collect all attribute models using attribute keys coming in the request.
-			 * 2.) Filter out the ones having productNameSegment as false
-			 * 3.) Sort the filtered collection in ascending order of segmentPriority
-			 * 4.) Append value of each attribute in this order while also checking for the ones having multiValue true
-			 * 5.) If any attribute has multiValue enabled, we simply append all their values at parent's index
-			 * 6.) Prepend this string with the name of brand
-			 */
-
-			$attributes = Arrays::isArray($validated['attributes']) ? $validated['attributes'] : jsonDecodeArray($validated['attributes']);
-			Arrays::each($attributes, function ($attribute) use ($product){
-				$attribute = Attribute::retrieve($attribute['key']);
+			// Creating attributes for the base product.
+			$baseAttributes = Arrays::isArray($validated['attributes']) ? $validated['attributes'] : jsonDecodeArray($validated['attributes']);
+			Arrays::each($baseAttributes, function ($baseAttribute) use ($product){
+				$attribute = Attribute::retrieve($baseAttribute['key']);
 				if ($attribute != null) {
 					ProductAttribute::create([
 						'productId' => $product->id(),
-						'attributeId' => $attribute['key'],
-						'value' => Arrays::isArray($attribute['value']) ? Str::join('::', $attribute['value']) : $attribute['value'],
+						'attributeId' => $attribute->id(),
+						'value' => Arrays::isArray($baseAttribute['value']) ? Str::join('::', $baseAttribute['value']) : $baseAttribute['value'],
 					]);
 				}
 			});
 
+			// Creating variants if there are any.
 			$variants = Arrays::isArray($validated['variants']) ? $validated['variants'] : jsonDecodeArray($validated['variants']);
 			$inherited = $validated;
-			Arrays::each($variants, function ($variant) use (&$inherited, $product, $attributes){
+			Arrays::each($variants, function ($variant) use (&$inherited, $product, $baseAttributes){
 				Arrays::replaceValues($inherited, [
 					'parentId' => $product->id(),
 					'name' => $variant['name'],
+					'type' => Product::Type['Simple'],
 					'stock' => $variant['stock'],
 					'sellingPrice' => $variant['sellingPrice'],
 					'sku' => $variant['sku'],
 				]);
 				$variantProduct = Product::create($inherited);
-				Arrays::each($attributes, function ($attribute) use ($variantProduct){
-					ProductAttribute::create([
-						'productId' => $variantProduct->id(),
-						'attributeId' => $attribute['key'],
-						'value' => Arrays::isArray($attribute['value']) ? Str::join('::', $attribute['value']) : $attribute['value'],
-					]);
+				Arrays::each($baseAttributes, function ($variantAttribute) use ($variantProduct){
+					$attribute = Attribute::retrieve($variantAttribute['key']);
+					if ($attribute != null) {
+						ProductAttribute::create([
+							'productId' => $variantProduct->id(),
+							'attributeId' => $attribute->id(),
+							'value' => Arrays::isArray($variantAttribute['value']) ? Str::join('::', $variantAttribute['value']) : $variantAttribute['value'],
+						]);
+					}
+				});
+				Arrays::each($variant['attributes'], function ($variantAttribute) use ($variantProduct){
+					$attribute = Attribute::retrieve($variantAttribute['key']);
+					if ($attribute != null) {
+						ProductAttribute::create([
+							'productId' => $variantProduct->id(),
+							'attributeId' => $attribute->id(),
+							'value' => Arrays::isArray($variantAttribute['value']) ? Str::join('::', $variantAttribute['value']) : $variantAttribute['value'],
+						]);
+					}
 				});
 			});
 
-			/**
-			 * Storing Product Images and Response Collection of Images
-			 */
-			$images = Arrays::Empty;
-			$count = 0;
-			collect(request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product, &$images, &$count, $validated){
-				$path = SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile);
-				ProductImage::create(['productId' => $product->id(), 'path' => $path]);
-				Arrays::push($images, $path);
-				if ($count++ == $validated['primaryImageIndex']) {
-					$product->update([
-						'primaryImage' => $path,
-					]);
-				}
-			});
+//			$images = Arrays::Empty;
+//			$count = 0;
+//			collect(request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product, &$images, &$count, $validated){
+//				$path = SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile);
+//				ProductImage::create(['productId' => $product->id(), 'path' => $path]);
+//				Arrays::push($images, $path);
+//				if ($count++ == $validated['primaryImageIndex']) {
+//					$product->update([
+//						'primaryImage' => $path,
+//					]);
+//				}
+//			});
 
-			$response->status(HttpCreated)->setValue('data', $product)->setValue('images', $images)->message('Product details were saved successfully.');
+			$response->status(HttpCreated)->setValue('data', $product)->message('Product details were saved successfully.');
 		}
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
@@ -229,11 +221,13 @@ class ProductController extends ExtendedResourceController{
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
 		}
 		catch (Throwable $exception) {
+			dd($exception);
 			$response->status(HttpServerError)->message($exception->getMessage());
 		}
-		finally {
-			return $response->send();
-		}
+//		finally {
+//			return $response->send();
+//		}
+		return $response->send();
 	}
 
 	public function show($id){

@@ -4,7 +4,7 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Attributes','action'=>['link'=>route('admin.products.attributes.create'),'text'=>'Create an attribute']])
+					@include('admin.extras.header', ['title'=>'Attribute Sets','action'=>['link'=>route('admin.attributes.sets.create'),'text'=>'Create an attribute set']])
 				</div>
 				<div class="card-body animatable">
 					<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">

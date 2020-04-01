@@ -20,7 +20,7 @@ class CreateProductsTable extends Migration{
 			$table->unsignedBigInteger('categoryId')->comment('Category under which this product falls.');
 			$table->unsignedBigInteger('sellerId')->comment('Seller to whom this product belongs.');
 			$table->unsignedBigInteger('brandId')->comment('Brand to which this product belongs.');
-			$table->unsignedBigInteger('parentId')->comment('Product to which this is a child, null if this is the parent');
+			$table->unsignedBigInteger('parentId')->nullable()->comment('Product to which this is a child, null if this is the parent');
 			$table->enum('listingStatus', [Product::ListingStatus['Active'], Product::ListingStatus['Inactive']])->comment('Whether the product will show up in catalog listing or not?');
 			$table->enum('type', [Product::Type['Simple'], Product::Type['Variant']])->comment('What type of product is this?');
 			$table->float('originalPrice', 10, 2)->default(0)->comment('MRP of product.');

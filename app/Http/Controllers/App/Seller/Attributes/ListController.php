@@ -29,6 +29,7 @@ class ListController extends ExtendedResourceController{
 					'key' => $attribute->id(),
 					'label' => $attribute->name(),
 					'description' => $attribute->description(),
+					'group' => $attributeSetItem->group(),
 					'code' => $attribute->code(),
 					'required' => $attribute->required(),
 					'predefined' => $attribute->predefined(),
