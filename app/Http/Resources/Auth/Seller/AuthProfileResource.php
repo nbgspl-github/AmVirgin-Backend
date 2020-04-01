@@ -23,6 +23,11 @@ class AuthProfileResource extends JsonResource{
 			'pinCode' => $this->pinCode(),
 			'avatar' => SecuredDisk::existsUrl($this->avatar()),
 			'statistics' => [
+				'brands' => [
+					'approved' => 1,
+					'requested' => 3,
+					'rejected' => 2,
+				],
 				'products' => [
 					'total' => $this->productsAdded(),
 					'sold' => $this->productsSold(),
