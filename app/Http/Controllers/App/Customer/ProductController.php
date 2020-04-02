@@ -81,7 +81,7 @@ class ProductController extends ExtendedResourceController{
 			$totalInCategory = $products->count('id');
 			$products = $products->orderBy($algorithm[0], $algorithm[1])->paginate(50);
 			$products = ProductResource::collection($products);
-			$response->status(HttpOkay)->message('Listing available')->setValue('meta', ['total' => $totalInCategory, 'pageCount' => countRequiredPages($totalInCategory, self::ItemsPerPage)])->setValue('data', $products);
+			$response->status(HttpOkay)->message('Listing available products for given category.')->setValue('meta', ['total' => $totalInCategory, 'pageCount' => countRequiredPages($totalInCategory, self::ItemsPerPage)])->setValue('data', $products);
 		}
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
