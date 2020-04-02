@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class ShippingAddress extends Model {
-	use RetrieveResource;
+class ShippingAddress extends Model{
+	use RetrieveResource, DynamicAttributeNamedMethods;
 	protected $table = 'shipping-addresses';
 	protected $fillable = [
 		'customerId',
@@ -27,11 +28,11 @@ class ShippingAddress extends Model {
 		'sundayWorking' => 'boolean',
 	];
 
-	public function state() {
+	public function state(){
 		return $this->belongsTo('App\Models\State', 'stateId');
 	}
 
-	public function city() {
+	public function city(){
 		return $this->belongsTo('App\Models\City', 'cityId');
 	}
 }
