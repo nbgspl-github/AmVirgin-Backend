@@ -19,8 +19,8 @@ use Throwable;
 class ProductController extends ExtendedResourceController{
 	use ValidatesRequest;
 	protected const DefaultSort = 'relevance';
-	protected int $itemsPerPage = 50;
-	protected array $sortingOptions = [
+	protected const ItemsPerPage = 50;
+	protected const SortingOptions = [
 		[
 			'name' => 'Relevance',
 			'key' => 'relevance',
@@ -65,7 +65,7 @@ class ProductController extends ExtendedResourceController{
 			$validated = $this->requestValid(request(), $this->rules['index']);
 			if (!isset($validated['page'])) $validated['page'] = 0;
 			if (!isset($validated['sortKey'])) $validated['sortKey'] = self::DefaultSort;
-			$sorts = collect($this->sortingOptions);
+			$sorts = collect(self::SortingOptions);
 			$chosenSort = $sorts->firstWhere('key', $validated['sortKey']);
 			$algorithm = $chosenSort['algorithm']::obtain();
 			$products = Product::startQuery()->displayable()->categoryOrDescendant(request('categoryId'));
@@ -74,7 +74,7 @@ class ProductController extends ExtendedResourceController{
 			$products = ProductResource::collection($products);
 			$response->status(HttpOkay)->message(function () use ($totalInCategory){
 				return sprintf('Found %d products under that category.', $totalInCategory);
-			})->setValue('meta', ['total' => $totalInCategory, 'pageCount' => countRequiredPages($totalInCategory, $this->itemsPerPage)])->setValue('data', $products);
+			})->setValue('meta', ['total' => $totalInCategory, 'pageCount' => countRequiredPages($totalInCategory, self::ItemsPerPage)])->setValue('data', $products);
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
@@ -85,7 +85,7 @@ class ProductController extends ExtendedResourceController{
 	}
 
 	public function sortsIndex(){
-		$sorts = collect($this->sortingOptions);
+		$sorts = collect(self::SortingOptions);
 		$sorts->transform(function ($item){
 			unset($item['algorithm']);
 			return $item;

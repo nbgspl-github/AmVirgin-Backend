@@ -25,7 +25,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
  * @package App\Models
  */
 class Category extends Model{
-	use RetrieveResource, FluentConstructor, HasSpecialAttributes, DynamicAttributeNamedMethods, Sluggable, QueryProvider, HasRecursiveRelationships;
+	use RetrieveResource, FluentConstructor, HasSpecialAttributes, DynamicAttributeNamedMethods, Sluggable, QueryProvider;
 	protected $table = 'categories';
 	protected $fillable = ['name', 'parentId', 'description', 'type', 'order', 'icon', 'listingStatus', 'specials',];
 	protected $casts = ['specials' => 'array', 'order' => 'int'];
@@ -94,11 +94,14 @@ class Category extends Model{
 		return $parents;
 	}
 
-	public function descendants(): Collection{
+	public function descendants(bool $includeSelf = false): Collection{
 		$descendants = new Collection();
+		if ($includeSelf)
+			$descendants->push($this);
+
 		foreach ($this->children as $innerChildren) {
 			$descendants->push($innerChildren);
-			$descendants = $descendants->merge($innerChildren->descendants);
+			$descendants = $descendants->merge($innerChildren->descendants());
 		}
 		return $descendants;
 	}

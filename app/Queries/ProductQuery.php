@@ -20,7 +20,7 @@ class ProductQuery extends AbstractQuery{
 
 	public function categoryOrDescendant(int $categoryId){
 		$category = Category::retrieve($categoryId);
-		$descendants = $category->descendants()->push($category)->pluck('id');
+		$descendants = $category->descendants(true)->pluck('id')->toArray();
 		$this->query->whereIn('categoryId', $descendants);
 		return $this;
 	}
