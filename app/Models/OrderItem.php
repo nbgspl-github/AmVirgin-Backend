@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\DynamicAttributeNamedMethods;
+use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class OrderItem extends Model {
+class OrderItem extends Model{
+	use DynamicAttributeNamedMethods, RetrieveResource;
 	protected $table = 'order-items';
 	protected $fillable = [
 		'orderId',
