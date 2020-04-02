@@ -190,17 +190,17 @@ class AuthController extends BaseAuthController{
 //     "message": "Expected response code 250 but got code \"530\", with message \"530 5.7.0 Must issue a STARTTLS command first. mu15sm2841118pjb.30 - gsmtp\r\n\""
 // }
 				if (!empty($request->send_email)) {
-					
+
 					$dataSet['title'] = "Forgot Password? Don't Worry we all forgot some time!";
 
 					Mail::to($request->email)->send(new SendMail($dataSet));
-				} 
-				 
+				}
+
 				// if (Mail::failures()) {
-				
+
 				//  }else{
 				//  	
-			
+
 				//  } 
 				$response->status(HttpOkay)->message('Great! Please Check Your Email for Password reset!')->setValue('data', $dataSet);
 
@@ -245,7 +245,6 @@ class AuthController extends BaseAuthController{
 				$dataSet['token'] = $tokenData->token;
 				$dataSet['email'] = $request->current_email; // or $email = $tokenData->email;
 				// $dataSet['title'] = "This mail is regarding for change your email register with AmVirgin!.";
-
 
 				// Mail::send('email.email_change_template', $dataSet, function ($message){
 				// 	$message->to('ddpwpareshan@gmail.com', 'Seller')

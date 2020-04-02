@@ -6,7 +6,7 @@ use App\Storage\SecuredDisk;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AuthProfileResource extends JsonResource{
-	protected ?string $token;
+	protected ?string $token = null;
 
 	public function toArray($request){
 		return [
