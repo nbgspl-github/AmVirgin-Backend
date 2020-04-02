@@ -15,7 +15,7 @@ use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class ProductsController extends ExtendedResourceController {
+class ProductsController extends ExtendedResourceController{
 	use ValidatesRequest;
 
 	protected string $defaultSort = 'relevance';
@@ -62,7 +62,7 @@ class ProductsController extends ExtendedResourceController {
 		],
 	];
 
-	public function index() {
+	public function index(){
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules['index']);
@@ -71,16 +71,11 @@ class ProductsController extends ExtendedResourceController {
 			$sorts = collect($this->sortingOptions);
 			$chosenSort = $sorts->firstWhere('key', $validated['sortKey']);
 			$algorithm = $chosenSort['algorithm']::obtain();
-			$products = Product::where([
-				['categoryId', request('categoryId')],
-				['draft', false],
-				['deleted', false],
-				['visibility', true],
-			]);
+			$products = Product::startQuery()->displayable();
 			$totalInCategory = $products->count('id');
 			$products = $products->orderBy($algorithm[0], $algorithm[1])->paginate(50);
 			$products = ProductResource::collection($products);
-			$response->status(HttpOkay)->message(function () use ($totalInCategory) {
+			$response->status(HttpOkay)->message(function () use ($totalInCategory){
 				return sprintf('Found %d products under that category.', $totalInCategory);
 			})->setValue('meta', ['total' => $totalInCategory, 'pageCount' => $this->countRequiredPages($totalInCategory, $this->resultsPerPage)])->setValue('data', $products);
 		}
@@ -92,18 +87,18 @@ class ProductsController extends ExtendedResourceController {
 		}
 	}
 
-	public function sortsIndex() {
+	public function sortsIndex(){
 		$sorts = collect($this->sortingOptions);
-		$sorts->transform(function ($item) {
+		$sorts->transform(function ($item){
 			unset($item['algorithm']);
 			return $item;
 		});
-		return responseApp()->status(HttpOkay)->message(function () use ($sorts) {
+		return responseApp()->status(HttpOkay)->message(function () use ($sorts){
 			return sprintf('There are a total of %d sorting options available.', $sorts->count());
 		})->setValue('data', $sorts)->send();
 	}
 
-	public function show($id) {
+	public function show($id){
 		$response = responseApp();
 		try {
 			$product = Product::where([
@@ -126,11 +121,11 @@ class ProductsController extends ExtendedResourceController {
 		}
 	}
 
-	protected function guard() {
+	protected function guard(){
 		return auth('customer-api');
 	}
 
-	protected function countRequiredPages(int $total, int $perPage) {
+	protected function countRequiredPages(int $total, int $perPage){
 		if ($total <= $perPage)
 			return 1;
 
