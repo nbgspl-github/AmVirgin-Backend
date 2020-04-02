@@ -22,29 +22,35 @@ class ListController extends ExtendedResourceController{
 		$response = responseApp();
 		try {
 			$category = Category::retrieveThrows($categoryId);
-			$attributeSetItems = $category->attributeSet->items;
-			$attributeSetItems->transform(function (AttributeSetItem $attributeSetItem){
-				$attribute = $attributeSetItem->attribute;
-				return [
-					'key' => $attribute->id(),
-					'label' => $attribute->name(),
-					'description' => $attribute->description(),
-					'group' => $attributeSetItem->group(),
-					'code' => $attribute->code(),
-					'required' => $attribute->required(),
-					'predefined' => $attribute->predefined(),
-					'useToCreateVariants' => $attribute->useToCreateVariants(),
-					'multiValue' => $attribute->multiValue(),
-					'minValues' => $attribute->minValues(),
-					'maxValues' => $attribute->maxValues(),
-					'values' => $attribute->values(),
-				];
-			});
-			$status = $attributeSetItems->count() == 0 ? HttpNoContent : HttpOkay;
-			$response->status($status)->message('Listing all attributes for the category.')->setValue('data', $attributeSetItems);
+			$attributeSet = $category->attributeSet;
+			if ($attributeSet != null) {
+				$attributeSetItems = $attributeSet->items;
+				$attributeSetItems->transform(function (AttributeSetItem $attributeSetItem){
+					$attribute = $attributeSetItem->attribute;
+					return [
+						'key' => $attribute->id(),
+						'label' => $attribute->name(),
+						'description' => $attribute->description(),
+						'group' => $attributeSetItem->group(),
+						'code' => $attribute->code(),
+						'required' => $attribute->required(),
+						'predefined' => $attribute->predefined(),
+						'useToCreateVariants' => $attribute->useToCreateVariants(),
+						'multiValue' => $attribute->multiValue(),
+						'minValues' => $attribute->minValues(),
+						'maxValues' => $attribute->maxValues(),
+						'values' => $attribute->values(),
+					];
+				});
+				$status = $attributeSetItems->count() == 0 ? HttpNoContent : HttpOkay;
+				$response->status($status)->message('Listing all attributes for the category.')->setValue('data', $attributeSetItems);
+			}
+			else {
+				$response->status(HttpNoContent)->message('There are no attribute sets defined for that category.')->setValue('data', []);
+			}
 		}
 		catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find attribute for that key.');
+			$response->status(HttpResourceNotFound)->message($exception->getMessage());
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());

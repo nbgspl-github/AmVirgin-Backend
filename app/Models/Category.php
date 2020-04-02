@@ -92,6 +92,19 @@ class Category extends Model{
 		return $parents;
 	}
 
+	public static function descendants(Category $category): array{
+		$descendants = Arrays::Empty;
+		$category->children->transform(function (Category $category) use (&$descendants){
+			$category->children->transform(function (Category $category) use (&$descendants){
+				$category->children->transform(function (Category $category) use (&$descendants){
+					$category->children->transform(function (Category $category) use (&$descendants){
+						return $category->id();
+					});
+				});
+			});
+		});
+	}
+
 	public function getSlugOptions(): SlugOptions{
 		return SlugOptions::create()->saveSlugsTo('slug')->generateSlugsFrom('name');
 	}
