@@ -7,6 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class OrderResource extends JsonResource{
 	public function toArray($request){
 		return [
+			'key' => $this->id(),
 			'address' => new OrderAddressResource($this->address),
 			'orderNumber' => $this->orderNumber(),
 			'quantity' => $this->quantity(),
