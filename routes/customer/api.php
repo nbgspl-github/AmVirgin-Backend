@@ -113,6 +113,7 @@ Route::prefix('search')->group(function (){
 Route::prefix('orders')->middleware('auth:customer-api')->group(function (){
 	Route::get(\App\Classes\Str::Empty, [\App\Http\Controllers\App\Customer\OrderController::class, 'index']);
 	Route::get('{id}', [\App\Http\Controllers\App\Customer\OrderController::class, 'show']);
+	Route::get('{id}/track', [\App\Http\Controllers\App\Customer\OrderController::class, 'track']);
 });
 
 Route::prefix('recent')->middleware('auth:customer-api')->group(function (){

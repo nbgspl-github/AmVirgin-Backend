@@ -6,6 +6,7 @@ use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Models\Order;
 use App\Models\SellerOrder;
 use App\Resources\Orders\Customer\OrderResource;
+use App\Resources\Orders\Customer\OrderTrackingResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
@@ -35,6 +36,24 @@ class OrderController extends ExtendedResourceController{
 			$order = Order::retrieveThrows($id);
 			$order = new OrderResource($order);
 			$response->status(HttpOkay)->message('Order details retrieved successfully.')->setValue('data', $order);
+		}
+		catch (ModelNotFoundException $exception) {
+			$response->status(HttpResourceNotFound)->message($exception->getMessage());
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+
+	public function track($id){
+		$response = responseApp();
+		try {
+			$order = Order::retrieveThrows($id);
+			$order = new OrderTrackingResource($order);
+			$response->status(HttpOkay)->message('Tracking details retrieved successfully.')->setValue('data', $order);
 		}
 		catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message($exception->getMessage());
