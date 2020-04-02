@@ -27,6 +27,7 @@ class ShippingAddress extends Model{
 	protected $casts = [
 		'saturdayWorking' => 'boolean',
 		'sundayWorking' => 'boolean',
+		'pinCode' => 'int',
 	];
 
 	public function state(): BelongsTo{
