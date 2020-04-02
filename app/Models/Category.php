@@ -17,13 +17,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Spatie\Sluggable\SlugOptions;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 /**
  * Category defines a logical grouping of products which share similar traits.
  * @package App\Models
  */
 class Category extends Model{
-	use RetrieveResource, FluentConstructor, HasSpecialAttributes, DynamicAttributeNamedMethods, Sluggable, QueryProvider;
+	use RetrieveResource, FluentConstructor, HasSpecialAttributes, DynamicAttributeNamedMethods, Sluggable, QueryProvider, HasRecursiveRelationships;
 	protected $table = 'categories';
 	protected $fillable = ['name', 'parentId', 'description', 'type', 'order', 'icon', 'listingStatus', 'specials',];
 	protected $casts = ['specials' => 'array', 'order' => 'int'];
@@ -92,20 +93,15 @@ class Category extends Model{
 		return $parents;
 	}
 
-	public static function descendants(Category $category): array{
-		$descendants = Arrays::Empty;
-		$category->children->transform(function (Category $category) use (&$descendants){
-			$category->children->transform(function (Category $category) use (&$descendants){
-				$category->children->transform(function (Category $category) use (&$descendants){
-					$category->children->transform(function (Category $category) use (&$descendants){
-						return $category->id();
-					});
-				});
-			});
-		});
+	public static function descendants(Category $category): \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants{
+		return $category->descendantsAndSelf();
 	}
 
 	public function getSlugOptions(): SlugOptions{
 		return SlugOptions::create()->saveSlugsTo('slug')->generateSlugsFrom('name');
+	}
+
+	public function getParentKeyName(){
+		return 'parentId';
 	}
 }

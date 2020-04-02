@@ -18,11 +18,12 @@ class ProductQuery extends AbstractQuery{
 		return $this;
 	}
 
-//	public function categoryOrDescendant(int $categoryId){
-//		$descendants = Arrays::Empty;
-//		$category = Category::retrieve($categoryId);
-//		$category->c
-//	}
+	public function categoryOrDescendant(int $categoryId){
+		$category = Category::retrieve($categoryId);
+		$descendants = $category->descendantsAndSelf()->get()->transform(fn(Category $category) => $category->id())->values()->toArray();
+		$this->query->whereIn('categoryId', $descendants);
+		return $this;
+	}
 
 	public function promoted(): self{
 		$this->query->where([

@@ -71,7 +71,7 @@ class ProductsController extends ExtendedResourceController{
 			$sorts = collect($this->sortingOptions);
 			$chosenSort = $sorts->firstWhere('key', $validated['sortKey']);
 			$algorithm = $chosenSort['algorithm']::obtain();
-			$products = Product::startQuery()->displayable();
+			$products = Product::startQuery()->displayable()->categoryOrDescendant(request('categoryId'));
 			$totalInCategory = $products->count('id');
 			$products = $products->orderBy($algorithm[0], $algorithm[1])->paginate(50);
 			$products = ProductResource::collection($products);

@@ -1,92 +1,92 @@
 {
-	"_readme": [
+	"_readme" : [
 		"This file locks the dependencies of your project to a known state",
 		"Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
 		"This file is @generated automatically"
 	],
-	"content-hash": "9e64c15eee9e39c3d7b522e7ea5f7f50",
-	"packages": [
+	"content-hash" : "2ce93d821be50f8d17e949784546de02",
+	"packages" : [
 		{
-			"name": "binary-cats/laravel-sku",
-			"version": "0.2.0",
-			"source": {
-				"type": "git",
-				"url": "https://github.com/binary-cats/laravel-sku.git",
-				"reference": "ef76b5a4fb7c19e0e2b5e2de2df5eb0c05ae4d37"
+			"name" : "binary-cats/laravel-sku",
+			"version" : "0.2.0",
+			"source" : {
+				"type" : "git",
+				"url" : "https://github.com/binary-cats/laravel-sku.git",
+				"reference" : "ef76b5a4fb7c19e0e2b5e2de2df5eb0c05ae4d37"
 			},
-			"dist": {
-				"type": "zip",
-				"url": "https://api.github.com/repos/binary-cats/laravel-sku/zipball/ef76b5a4fb7c19e0e2b5e2de2df5eb0c05ae4d37",
-				"reference": "ef76b5a4fb7c19e0e2b5e2de2df5eb0c05ae4d37",
-				"shasum": ""
+			"dist" : {
+				"type" : "zip",
+				"url" : "https://api.github.com/repos/binary-cats/laravel-sku/zipball/ef76b5a4fb7c19e0e2b5e2de2df5eb0c05ae4d37",
+				"reference" : "ef76b5a4fb7c19e0e2b5e2de2df5eb0c05ae4d37",
+				"shasum" : ""
 			},
-			"require": {
-				"illuminate/support": "~5.6|^6.0|^7.0",
-				"php": "^7.2"
+			"require" : {
+				"illuminate/support" : "~5.6|^6.0|^7.0",
+				"php" : "^7.2"
 			},
-			"require-dev": {
-				"orchestra/testbench": "^3.6|^4.0|^5.0",
-				"phpunit/phpunit": "^7.0|^8.2|^9.0"
+			"require-dev" : {
+				"orchestra/testbench" : "^3.6|^4.0|^5.0",
+				"phpunit/phpunit" : "^7.0|^8.2|^9.0"
 			},
-			"suggest": {
-				"binary-cats/laravel-mailgun-webhooks": "Handle Mailgun webhooks in your Laravel application"
+			"suggest" : {
+				"binary-cats/laravel-mailgun-webhooks" : "Handle Mailgun webhooks in your Laravel application"
 			},
-			"type": "library",
-			"extra": {
-				"laravel": {
-					"providers": [
+			"type" : "library",
+			"extra" : {
+				"laravel" : {
+					"providers" : [
 						"BinaryCats\\Sku\\SkuServiceProvider"
 					]
 				}
 			},
-			"autoload": {
-				"psr-4": {
-					"BinaryCats\\Sku\\": "src"
+			"autoload" : {
+				"psr-4" : {
+					"BinaryCats\\Sku\\" : "src"
 				}
 			},
-			"notification-url": "https://packagist.org/downloads/",
-			"license": [
+			"notification-url" : "https://packagist.org/downloads/",
+			"license" : [
 				"MIT"
 			],
-			"authors": [
+			"authors" : [
 				{
-					"name": "Cyrill Kalita",
-					"email": "cyrill.kalita@gmail.com",
-					"homepage": "https://github.com/binary-cats",
-					"role": "Developer"
+					"name" : "Cyrill Kalita",
+					"email" : "cyrill.kalita@gmail.com",
+					"homepage" : "https://github.com/binary-cats",
+					"role" : "Developer"
 				}
 			],
-			"description": "Generate SKUs for Eloquent models",
-			"homepage": "https://github.com/binary-cats/laravel-sku",
-			"keywords": [
+			"description" : "Generate SKUs for Eloquent models",
+			"homepage" : "https://github.com/binary-cats/laravel-sku",
+			"keywords" : [
 				"binary-cats",
 				"eloquent",
 				"laravel",
 				"sku"
 			],
-			"time": "2020-03-05T07:24:31+00:00"
+			"time" : "2020-03-05T07:24:31+00:00"
 		},
 		{
-			"name": "dnoegel/php-xdg-base-dir",
-			"version": "v0.1.1",
-			"source": {
-				"type": "git",
-				"url": "https://github.com/dnoegel/php-xdg-base-dir.git",
-				"reference": "8f8a6e48c5ecb0f991c2fdcf5f154a47d85f9ffd"
+			"name" : "dnoegel/php-xdg-base-dir",
+			"version" : "v0.1.1",
+			"source" : {
+				"type" : "git",
+				"url" : "https://github.com/dnoegel/php-xdg-base-dir.git",
+				"reference" : "8f8a6e48c5ecb0f991c2fdcf5f154a47d85f9ffd"
 			},
-			"dist": {
-				"type": "zip",
-				"url": "https://api.github.com/repos/dnoegel/php-xdg-base-dir/zipball/8f8a6e48c5ecb0f991c2fdcf5f154a47d85f9ffd",
-                "reference": "8f8a6e48c5ecb0f991c2fdcf5f154a47d85f9ffd",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.2"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~7.0|~6.0|~5.0|~4.8.35"
-            },
-            "type": "library",
+			"dist" : {
+				"type" : "zip",
+				"url" : "https://api.github.com/repos/dnoegel/php-xdg-base-dir/zipball/8f8a6e48c5ecb0f991c2fdcf5f154a47d85f9ffd",
+				"reference" : "8f8a6e48c5ecb0f991c2fdcf5f154a47d85f9ffd",
+				"shasum" : ""
+			},
+			"require" : {
+				"php" : ">=5.3.2"
+			},
+			"require-dev" : {
+				"phpunit/phpunit" : "~7.0|~6.0|~5.0|~4.8.35"
+			},
+			"type" : "library",
             "autoload": {
                 "psr-4": {
                     "XdgBaseDir\\": "src/"
@@ -528,17 +528,18 @@
                 }
             ],
             "description": "Serialize Closure objects, including their context and binding",
-            "homepage": "https://github.com/jeremeamia/super_closure",
-            "keywords": [
-                "closure",
-                "function",
-                "lambda",
-                "parser",
-                "serializable",
-                "serialize",
-                "tokenizer"
-            ],
-            "time": "2018-03-21T22:21:57+00:00"
+	        "homepage" : "https://github.com/jeremeamia/super_closure",
+	        "keywords" : [
+		        "closure",
+		        "function",
+		        "lambda",
+		        "parser",
+		        "serializable",
+		        "serialize",
+		        "tokenizer"
+	        ],
+	        "abandoned" : "opis/closure",
+	        "time" : "2018-03-21T22:21:57+00:00"
         },
         {
             "name": "laravel/framework",
@@ -1734,25 +1735,115 @@
                     "role": "Developer"
                 }
             ],
-            "description": "Generate slugs when saving Eloquent models",
-            "homepage": "https://github.com/spatie/laravel-sluggable",
-            "keywords": [
-                "laravel-sluggable",
-                "spatie"
-            ],
-            "time": "2019-12-06T10:02:18+00:00"
+	        "description" : "Generate slugs when saving Eloquent models",
+	        "homepage" : "https://github.com/spatie/laravel-sluggable",
+	        "keywords" : [
+		        "laravel-sluggable",
+		        "spatie"
+	        ],
+	        "time" : "2019-12-06T10:02:18+00:00"
         },
-        {
-            "name": "sudiptpa/guid",
-            "version": "1.0.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sudiptpa/guid.git",
-                "reference": "fcf568932d7342ab23c19eb94f7a2020a569ec86"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sudiptpa/guid/zipball/fcf568932d7342ab23c19eb94f7a2020a569ec86",
+		{
+			"name" : "staudenmeir/laravel-adjacency-list",
+			"version" : "v1.3",
+			"source" : {
+				"type" : "git",
+				"url" : "https://github.com/staudenmeir/laravel-adjacency-list.git",
+				"reference" : "321beb9002f32eebc5f7e58e707ee339751aa1cf"
+			},
+			"dist" : {
+				"type" : "zip",
+				"url" : "https://api.github.com/repos/staudenmeir/laravel-adjacency-list/zipball/321beb9002f32eebc5f7e58e707ee339751aa1cf",
+				"reference" : "321beb9002f32eebc5f7e58e707ee339751aa1cf",
+				"shasum" : ""
+			},
+			"require" : {
+				"illuminate/database" : "^6.0",
+				"php" : "^7.2",
+				"staudenmeir/laravel-cte" : "^1.2"
+			},
+			"require-dev" : {
+				"laravel/homestead" : "^9.0",
+				"phpunit/phpunit" : "^8.0"
+			},
+			"type" : "library",
+			"autoload" : {
+				"psr-4" : {
+					"Staudenmeir\\LaravelAdjacencyList\\" : "src/"
+				}
+			},
+			"notification-url" : "https://packagist.org/downloads/",
+			"license" : [
+				"MIT"
+			],
+			"authors" : [
+				{
+					"name" : "Jonas Staudenmeir",
+					"email" : "mail@jonas-staudenmeir.de"
+				}
+			],
+			"description" : "Recursive Laravel Eloquent relationships with CTEs",
+			"time" : "2020-01-21T20:52:52+00:00"
+		},
+		{
+			"name" : "staudenmeir/laravel-cte",
+			"version" : "v1.2.2",
+			"source" : {
+				"type" : "git",
+				"url" : "https://github.com/staudenmeir/laravel-cte.git",
+				"reference" : "a42f657eed201270cf58ec99c162e9c0aeb3361f"
+			},
+			"dist" : {
+				"type" : "zip",
+				"url" : "https://api.github.com/repos/staudenmeir/laravel-cte/zipball/a42f657eed201270cf58ec99c162e9c0aeb3361f",
+				"reference" : "a42f657eed201270cf58ec99c162e9c0aeb3361f",
+				"shasum" : ""
+			},
+			"require" : {
+				"illuminate/database" : "^6.0",
+				"php" : "^7.2"
+			},
+			"require-dev" : {
+				"laravel/homestead" : "^9.0",
+				"orchestra/testbench" : "^4.0.1"
+			},
+			"type" : "library",
+			"extra" : {
+				"laravel" : {
+					"providers" : [
+						"Staudenmeir\\LaravelCte\\DatabaseServiceProvider"
+					]
+				}
+			},
+			"autoload" : {
+				"psr-4" : {
+					"Staudenmeir\\LaravelCte\\" : "src/"
+				}
+			},
+			"notification-url" : "https://packagist.org/downloads/",
+			"license" : [
+				"MIT"
+			],
+			"authors" : [
+				{
+					"name" : "Jonas Staudenmeir",
+					"email" : "mail@jonas-staudenmeir.de"
+				}
+			],
+			"description" : "Laravel queries with common table expressions",
+			"time" : "2020-01-26T07:21:35+00:00"
+		},
+		{
+			"name" : "sudiptpa/guid",
+			"version" : "1.0.4",
+			"source" : {
+				"type" : "git",
+				"url" : "https://github.com/sudiptpa/guid.git",
+				"reference" : "fcf568932d7342ab23c19eb94f7a2020a569ec86"
+			},
+			"dist" : {
+				"type" : "zip",
+				"url" : "https://api.github.com/repos/sudiptpa/guid/zipball/fcf568932d7342ab23c19eb94f7a2020a569ec86",
                 "reference": "fcf568932d7342ab23c19eb94f7a2020a569ec86",
                 "shasum": ""
             },
