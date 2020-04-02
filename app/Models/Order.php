@@ -42,7 +42,7 @@ class Order extends Model{
 	}
 
 	public function items(){
-		return $this->hasMany('App\Models\OrderItem', 'orderId')->with('productDetails');
+		return $this->hasMany(OrderItem::class, 'orderId')->with('product');
 	}
 
 	public function customer(){
