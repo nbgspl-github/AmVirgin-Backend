@@ -39,6 +39,11 @@ abstract class AbstractQuery{
 		return $this;
 	}
 
+	public function orderBy(string $column, string $direction = 'asc'): self{
+		$this->query->orderBy($column, $direction);
+		return $this;
+	}
+
 	public function count(string $column = 'id'): int{
 		return $this->query->count($column);
 	}
