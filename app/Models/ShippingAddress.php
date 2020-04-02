@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ShippingAddress extends Model{
 	use RetrieveResource, DynamicAttributeNamedMethods;
@@ -28,11 +29,11 @@ class ShippingAddress extends Model{
 		'sundayWorking' => 'boolean',
 	];
 
-	public function state(){
+	public function state(): BelongsTo{
 		return $this->belongsTo('App\Models\State', 'stateId');
 	}
 
-	public function city(){
+	public function city(): BelongsTo{
 		return $this->belongsTo('App\Models\City', 'cityId');
 	}
 }
