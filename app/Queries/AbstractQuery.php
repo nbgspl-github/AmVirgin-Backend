@@ -39,6 +39,14 @@ abstract class AbstractQuery{
 		return $this;
 	}
 
+	public function count(string $column = 'id'): int{
+		return $this->query->count($column);
+	}
+
+	public function paginate(int $page): \Illuminate\Contracts\Pagination\LengthAwarePaginator{
+		return $this->query->paginate($page);
+	}
+
 	public function first(){
 		return $this->query->first();
 	}
