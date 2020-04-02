@@ -9,17 +9,17 @@ use App\Models\Category;
 use App\Models\ProductAttribute;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductResource extends JsonResource {
-	public static function withoutWrapping() {
+class SimpleProductResource extends JsonResource{
+	public static function withoutWrapping(){
 		return true;
 	}
 
-	public function toArray($request) {
+	public function toArray($request){
 		$category = Category::retrieve($this->categoryId);
 		$attributes = $this->attributes;
 		$distinctIds = $attributes->unique('attributeId')->values();
-		$distinctIds->transform(function ($id) {
-			$values = ProductAttribute::where('productId', $this->id)->where('attributeId', $id->attributeId)->get()->transform(function (ProductAttribute $attribute) {
+		$distinctIds->transform(function ($id){
+			$values = ProductAttribute::where('productId', $this->id)->where('attributeId', $id->attributeId)->get()->transform(function (ProductAttribute $attribute){
 				$value = AttributeValue::find($attribute->valueId);
 				return [
 					'key' => $value->id,
@@ -52,7 +52,7 @@ class ProductResource extends JsonResource {
 			'price' => $this->originalPrice,
 			'discount' => $discount,
 			'shortDescription' => $this->shortDescription,
-			'images' => ProductImageResource::collection($this->images),
+			'images' => ImageResource::collection($this->images),
 			'attributes' => $distinctIds,
 		];
 	}

@@ -52,6 +52,14 @@ abstract class AbstractQuery{
 		return $this->query->paginate($page);
 	}
 
+	public function min(string $column): int{
+		return $this->query->min($column);
+	}
+
+	public function max(string $column): int{
+		return $this->query->max($column);
+	}
+
 	public function first(){
 		return $this->query->first();
 	}

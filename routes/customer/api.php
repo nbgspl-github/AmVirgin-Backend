@@ -9,7 +9,7 @@ use App\Http\Controllers\App\Customer\CountriesController;
 use App\Http\Controllers\App\Customer\Playback\PlaybackController;
 use App\Http\Controllers\App\Customer\Playback\TrailerPlayback;
 use App\Http\Controllers\App\Customer\PopularPicksController;
-use App\Http\Controllers\App\Customer\ProductController;
+use App\Http\Controllers\App\Customer\CatalogController;
 use App\Http\Controllers\App\Customer\ShippingAddressesController;
 use App\Http\Controllers\App\Customer\SlidersController;
 use App\Http\Controllers\App\Customer\StatesController;
@@ -42,9 +42,9 @@ Route::prefix('sessions')->group(function (){
 });
 
 Route::prefix('products')->group(function (){
-	Route::get('/', [ProductController::class, 'index']);
-	Route::get('/sorts', [ProductController::class, 'sortsIndex']);
-	Route::get('{id}', [ProductController::class, 'show'])->name('seller.products.show');
+	Route::get('/', [CatalogController::class, 'index']);
+	Route::get('/sorts', [CatalogController::class, 'sorts']);
+	Route::get('{id}', [CatalogController::class, 'show'])->name('seller.products.show');
 });
 
 Route::prefix('cart')->middleware([])->group(function (){

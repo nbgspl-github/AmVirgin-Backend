@@ -9,7 +9,7 @@ use App\Interfaces\Tables;
 use App\Models\Cart;
 use App\Models\CustomerWishlist;
 use App\Models\Product;
-use App\Resources\Products\Customer\ProductResource;
+use App\Resources\Products\Customer\SimpleProductResource;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\Rule;
@@ -33,8 +33,8 @@ class CustomerWishlistController extends ExtendedResourceController {
 
 	public function index() {
 		$wishList = CustomerWishlist::where('customerId', $this->guard()->id())->get();
-		$wishList->transform(function (CustomerWishlist $item) {
-			return new ProductResource(Product::retrieve($item->productId));
+		$wishList->transform(function (CustomerWishlist $item){
+			return new SimpleProductResource(Product::retrieve($item->productId));
 		});
 		return responseApp()->status(HttpOkay)->setValue('data', $wishList)->message(function () use ($wishList) {
 			return sprintf('Found %d items in the wishlist.', $wishList->count());

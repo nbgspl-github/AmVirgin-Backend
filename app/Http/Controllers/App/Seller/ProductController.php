@@ -32,23 +32,7 @@ use Throwable;
 
 class ProductController extends ExtendedResourceController{
 	use ValidatesRequest;
-
 	protected array $rules;
-
-	public const attributeFormat = [
-		[
-			'key' => 1,
-			'value' => 'L',
-		],
-		[
-			'key' => 2,
-			'value' => 'Black',
-		],
-		[
-			'key' => 3,
-			'value' => 'Solid',
-		],
-	];
 
 	public function __construct(){
 		parent::__construct();
@@ -66,6 +50,7 @@ class ProductController extends ExtendedResourceController{
 				'hsn' => ['bail', 'required', Rule::existsPrimary(Tables::HsnCodes, 'hsnCode')],
 				'currency' => ['bail', 'nullable', 'string', 'min:2', 'max:5', Rule::exists(Tables::Currencies, 'code')],
 				'stock' => ['bail', 'required', 'numeric', 'min:0', RuleMaxStock],
+				'lowStockThreshold' => ['bail', 'nullable', 'numeric', 'min:0', 'lt:stock'],
 				'description' => ['bail', 'required', 'string', 'min:1', 'max:2000'],
 				'sku' => ['bail', 'required', 'string', 'min:8', 'max:100'],
 				'trailer' => ['bail', 'nullable', 'mimes:mp4', 'min:1', 'max:100000'],
@@ -155,11 +140,16 @@ class ProductController extends ExtendedResourceController{
 			$baseAttributes = Arrays::isArray($validated['attributes']) ? $validated['attributes'] : jsonDecodeArray($validated['attributes']);
 			Arrays::each($baseAttributes, function ($baseAttribute) use ($product){
 				$attribute = Attribute::retrieve($baseAttribute['key']);
+				$multiValue = Arrays::isArray($baseAttribute['value']);
 				if ($attribute != null) {
 					ProductAttribute::create([
 						'productId' => $product->id(),
 						'attributeId' => $attribute->id(),
-						'value' => Arrays::isArray($baseAttribute['value']) ? Str::join('::', $baseAttribute['value']) : $baseAttribute['value'],
+						'multiValue' => $multiValue,
+						'label' => $attribute->name(),
+						'group' => $baseAttribute['group'],
+						'value' => !$multiValue ? $baseAttribute['value'] : null,
+						'values' => $multiValue ? $baseAttribute['value'] : [],
 					]);
 				}
 			});
@@ -179,21 +169,31 @@ class ProductController extends ExtendedResourceController{
 				$variantProduct = Product::create($inherited);
 				Arrays::each($baseAttributes, function ($variantAttribute) use ($variantProduct){
 					$attribute = Attribute::retrieve($variantAttribute['key']);
+					$multiValue = Arrays::isArray($variantAttribute['value']);
 					if ($attribute != null) {
 						ProductAttribute::create([
 							'productId' => $variantProduct->id(),
 							'attributeId' => $attribute->id(),
-							'value' => Arrays::isArray($variantAttribute['value']) ? Str::join('::', $variantAttribute['value']) : $variantAttribute['value'],
+							'multiValue' => $multiValue,
+							'label' => $attribute->name(),
+							'group' => $variantAttribute['group'],
+							'value' => !$multiValue ? $variantAttribute['value'] : null,
+							'values' => $multiValue ? $variantAttribute['value'] : [],
 						]);
 					}
 				});
 				Arrays::each($variant['attributes'], function ($variantAttribute) use ($variantProduct){
 					$attribute = Attribute::retrieve($variantAttribute['key']);
+					$multiValue = Arrays::isArray($variantAttribute['value']);
 					if ($attribute != null) {
 						ProductAttribute::create([
 							'productId' => $variantProduct->id(),
 							'attributeId' => $attribute->id(),
-							'value' => Arrays::isArray($variantAttribute['value']) ? Str::join('::', $variantAttribute['value']) : $variantAttribute['value'],
+							'multiValue' => $multiValue,
+							'label' => $attribute->name(),
+							'group' => $variantAttribute['group'],
+							'value' => !$multiValue ? $variantAttribute['value'] : null,
+							'values' => $multiValue ? $variantAttribute['value'] : [],
 						]);
 					}
 				});

@@ -2,7 +2,7 @@
 
 namespace App\Resources\Shop\Customer\HomePage;
 
-use App\Resources\Products\Customer\ProductImageResource;
+use App\Resources\Products\Customer\ImageResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class EntertainmentProductResource extends JsonResource {
@@ -11,7 +11,7 @@ class EntertainmentProductResource extends JsonResource {
 			'id' => $this->id,
 			'name' => $this->name,
 			'price' => $this->originalPrice,
-			'images' => ProductImageResource::collection($this->images),
+			'images' => ImageResource::collection($this->images),
 		];
 	}
 

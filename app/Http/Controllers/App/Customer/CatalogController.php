@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\App\Customer;
 
+use App\Classes\Arrays;
 use App\Classes\Rule;
 use App\Classes\Sorting\DiscountDescending;
 use App\Classes\Sorting\Natural;
@@ -15,14 +16,15 @@ use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Interfaces\Tables;
 use App\Models\Category;
 use App\Models\Product;
-use App\Resources\Products\Customer\ProductResource;
-use App\Resources\Products\Customer\ProductWithVariantsResource;
+use App\Resources\Products\Customer\SimpleProductResource;
+use App\Resources\Products\Customer\VariantProductResource;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Collection;
 use Throwable;
 
-class ProductController extends ExtendedResourceController{
+class CatalogController extends ExtendedResourceController{
 	use ValidatesRequest;
 	protected const DefaultSort = 'relevance';
 	protected const ItemsPerPage = 50;
@@ -58,6 +60,18 @@ class ProductController extends ExtendedResourceController{
 			'algorithm' => DiscountDescending::class,
 		],
 	];
+	protected const PriceBreakpoints = [
+		1000 => 2,
+		5000 => 2,
+		10000 => 2,
+		15000 => 2,
+		20000 => 2,
+		25000 => 3,
+		30000 => 3,
+		35000 => 3,
+		40000 => 4,
+		50000 => 5,
+	];
 	protected array $rules = [];
 
 	public function __construct(){
@@ -83,9 +97,13 @@ class ProductController extends ExtendedResourceController{
 			$products = Product::startQuery()->displayable()->categoryOrDescendant(request('categoryId'));
 			$totalInCategory = $products->count('id');
 			$products = $products->orderBy($algorithm[0], $algorithm[1])->paginate(50);
-			$products = ProductResource::collection($products);
-			$response->status(HttpOkay)->message('Listing available products for given category.')->
-			setValue('meta', ['total' => $totalInCategory, 'pageCount' => countRequiredPages($totalInCategory, self::ItemsPerPage)])->setValue('data', $products);
+			$products = SimpleProductResource::collection($products);
+			$meta = ['total' => $totalInCategory, 'pageCount' => countRequiredPages($totalInCategory, self::ItemsPerPage)];
+			$filters = $this->filters($validated['categoryId']);
+			$response->status(HttpOkay)->message('Listing available products for given category.')
+				->setValue('meta', $meta)
+				->setValue('filters', $filters)
+				->setValue('data', $products);
 		}
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
@@ -98,26 +116,15 @@ class ProductController extends ExtendedResourceController{
 		}
 	}
 
-	public function sortsIndex(){
-		$sorts = collect(self::SortingOptions);
-		$sorts->transform(function ($item){
-			unset($item['algorithm']);
-			return $item;
-		});
-		return responseApp()->status(HttpOkay)->message(function () use ($sorts){
-			return sprintf('There are a total of %d sorting options available.', $sorts->count());
-		})->setValue('data', $sorts)->send();
-	}
-
-	public function show($id){
+	public function show($id): JsonResponse{
 		$response = responseApp();
 		try {
 			$product = Product::startQuery()->displayable()->key($id)->firstOrFail();
 			if (Str::equals($product->type(), Product::Type['Variant'])) {
-				$product = new ProductWithVariantsResource($product);
+				$product = new VariantProductResource($product);
 			}
 			else {
-				$product = new ProductResource($product);
+				$product = new SimpleProductResource($product);
 			}
 			$response->status(HttpOkay)->message('Found product for the specified key.')->setValue('data', $product);
 		}
@@ -130,6 +137,31 @@ class ProductController extends ExtendedResourceController{
 		finally {
 			return $response->send();
 		}
+	}
+
+	public function sorts(): JsonResponse{
+		$sorts = collect(self::SortingOptions);
+		$sorts->transform(function ($item){
+			unset($item['algorithm']);
+			return $item;
+		});
+		return responseApp()->status(HttpOkay)->message(function () use ($sorts){
+			return sprintf('There are a total of %d sorting options available.', $sorts->count());
+		})->setValue('data', $sorts)->send();
+	}
+
+	public function filters(int $categoryId): array{
+		$filters = new Collection();
+
+		/**
+		 * Generating price segment based on categories' min and max priced product.
+		 */
+		$segments = Arrays::Empty;
+		$query = Product::startQuery()->categoryOrDescendant($categoryId);
+		$min = $query->min('originalPrice');
+		$max = $query->max('originalPrice');
+
+		return [];
 	}
 
 	protected function guard(){

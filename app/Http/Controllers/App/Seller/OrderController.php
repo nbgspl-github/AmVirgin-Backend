@@ -10,7 +10,7 @@ use Throwable;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use DB;
-use App\Resources\Products\Customer\ProductImageResource;
+use App\Resources\Products\Customer\ImageResource;
 use Illuminate\Support\Facades\Config;
 
 class OrderController extends ExtendedResourceController{

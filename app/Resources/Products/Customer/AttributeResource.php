@@ -4,11 +4,11 @@ namespace App\Resources\Products\Customer;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductCategoryResource extends JsonResource{
+class AttributeResource extends JsonResource{
 	public function toArray($request){
 		return [
-			'key' => $this->id(),
-			'name' => $this->name(),
+			'label' => $this->name(),
+			'value' => $this->values(),
 		];
 	}
 }

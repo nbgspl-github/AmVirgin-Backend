@@ -2,7 +2,7 @@
 
 namespace App\Resources\Search\Customer\Entertainment;
 
-use App\Resources\Products\Customer\ProductImageResource;
+use App\Resources\Products\Customer\ImageResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductResource extends JsonResource {
@@ -10,7 +10,7 @@ class ProductResource extends JsonResource {
 		return [
 			'key' => $this->id,
 			'name' => $this->name,
-			'images' => ProductImageResource::collection($this->images),
+			'images' => ImageResource::collection($this->images),
 		];
 	}
 

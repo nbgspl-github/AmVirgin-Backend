@@ -44,9 +44,29 @@ class ProductQuery extends AbstractQuery{
 		return $this;
 	}
 
-	public function hotDeal(){
+	public function hotDeal(): self{
 		$this->query->where('specials->hotDeal', true);
 		return $this;
+	}
+
+	public function priceRange(int $start, int $end): self{
+
+	}
+
+	public function category(...$categories): self{
+
+	}
+
+	public function brand(...$brands): self{
+
+	}
+
+	public function color(...$colors): self{
+
+	}
+
+	public function idealFor(string $gender): self{
+
 	}
 
 	protected function model(): string{

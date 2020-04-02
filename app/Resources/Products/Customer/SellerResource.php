@@ -5,7 +5,7 @@ namespace App\Resources\Products\Customer;
 use App\Storage\SecuredDisk;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductSellerResource extends JsonResource{
+class SellerResource extends JsonResource{
 	public function toArray($request){
 		return [
 			'name' => $this->businessName(),

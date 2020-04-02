@@ -148,17 +148,6 @@ function subDomain(string $prefix){
 	return sprintf('%s.%s', $prefix, hostName());
 }
 
-/**
- * @param $condition
- * @param $exception string|Throwable
- * @param $parameters array
- * @return mixed
- * @throws Throwable
- */
-function throwIf($condition, $exception, ...$parameters){
-	return throw_if($condition, $exception, $parameters);
-}
-
 function __cast($value, $type){
 	switch ($type) {
 		case 'string':

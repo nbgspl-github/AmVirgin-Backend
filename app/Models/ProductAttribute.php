@@ -14,10 +14,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ProductAttribute extends Model{
 	use RetrieveResource, DynamicAttributeNamedMethods;
 	protected $table = 'product-attributes';
+	protected $attributes = [
+		'values' => [],
+	];
 	protected $fillable = [
 		'productId',
 		'attributeId',
 		'value',
+	];
+	protected $casts = [
+		'values' => 'array',
+		'multiValue' => 'bool',
 	];
 
 	public function product(): BelongsTo{

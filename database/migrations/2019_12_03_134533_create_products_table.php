@@ -23,6 +23,7 @@ class CreateProductsTable extends Migration{
 			$table->unsignedBigInteger('parentId')->nullable()->comment('Product to which this is a child, null if this is the parent');
 			$table->enum('listingStatus', [Product::ListingStatus['Active'], Product::ListingStatus['Inactive']])->comment('Whether the product will show up in catalog listing or not?');
 			$table->enum('type', [Product::Type['Simple'], Product::Type['Variant']])->comment('What type of product is this?');
+			$table->enum('idealFor', [Product::IdealFor['Men'], Product::IdealFor['Women'], Product::IdealFor['Boys'], Product::IdealFor['Girls']])->comment('What gender would the product be most suitable for?');
 			$table->float('originalPrice', 10, 2)->default(0)->comment('MRP of product.');
 			$table->float('sellingPrice', 10, 2)->default(0)->comment('Actual selling price of product');
 			$table->string('fulfillmentBy')->comment('How the order is fulfilled...by seller or through external courier service?');

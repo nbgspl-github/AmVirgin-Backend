@@ -69,7 +69,9 @@ class CategoryController extends ExtendedResourceController{
 				],
 			];
 		});
-		return responseApp()->status($category->count() > 0 ? HttpOkay : HttpNoContent)->setValue('data', $category)->message('Listing all available categories.')->send();
+		return responseApp()->status($category->count() > 0 ? HttpOkay : HttpNoContent)
+			->setValue('data', $category)->message('Listing all available categories.')
+			->send();
 	}
 
 	protected function guard(){

@@ -5,7 +5,7 @@ namespace App\Resources\Products\Customer;
 use App\Storage\SecuredDisk;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductBrandResource extends JsonResource{
+class BrandResource extends JsonResource{
 	public function toArray($request){
 		return [
 			'key' => $this->id(),

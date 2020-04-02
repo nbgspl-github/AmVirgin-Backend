@@ -137,9 +137,19 @@ class Product extends Model{
 			'Maximum' => 300,
 		],
 	];
+	public const WarrantyServiceType = [
+		'Walk In' => 'walk-in',
+		'On Site' => 'on-site',
+	];
 	public const Type = [
 		'Simple' => 'simple',
 		'Variant' => 'variant',
+	];
+	public const IdealFor = [
+		'Men' => 'men',
+		'Women' => 'women',
+		'Boys' => 'boys',
+		'Girls' => 'girls',
 	];
 
 	public function attributes(): HasMany{
@@ -160,6 +170,10 @@ class Product extends Model{
 
 	public function seller(): BelongsTo{
 		return $this->belongsTo(Seller::class, 'sellerId');
+	}
+
+	public function variants(): HasMany{
+		return $this->hasMany(self::class, 'parentId');
 	}
 
 	public function hotDeal(?bool $yes = null): bool{
