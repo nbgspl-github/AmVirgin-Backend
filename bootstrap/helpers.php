@@ -189,3 +189,15 @@ function appEnvironment($match = null): ?string{
 	else
 		return \App\Classes\Str::equals($match, env('APP_ENV'));
 }
+
+function countRequiredPages(int $total, int $perPage){
+	if ($total <= $perPage)
+		return 1;
+
+	$result = $total / $perPage;
+	$remainder = $total % $perPage;
+	if ($remainder > 0 && $remainder <= $perPage) {
+		$result += 1;
+	}
+	return $result;
+}

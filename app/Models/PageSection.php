@@ -21,6 +21,10 @@ class PageSection extends Model{
 		'created_at',
 		'updated_at',
 	];
+	public const Type = [
+		'Entertainment' => 'entertainment',
+		'Shop' => 'shop',
+	];
 
 	public static function entertainment(): Builder{
 		return self::where('type', PageSectionType::Entertainment);

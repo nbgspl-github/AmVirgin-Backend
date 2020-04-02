@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Collection;
 use Spatie\Sluggable\SlugOptions;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
@@ -93,8 +94,13 @@ class Category extends Model{
 		return $parents;
 	}
 
-	public static function descendants(Category $category): \Staudenmeir\LaravelAdjacencyList\Eloquent\Relations\Descendants{
-		return $category->descendantsAndSelf();
+	public function descendants(): Collection{
+		$descendants = new Collection();
+		foreach ($this->children as $innerChildren) {
+			$descendants->push($innerChildren);
+			$descendants = $descendants->merge($innerChildren->descendants);
+		}
+		return $descendants;
 	}
 
 	public function getSlugOptions(): SlugOptions{

@@ -13,6 +13,7 @@ use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\QueryProvider;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Slider extends Model{
 	use DynamicAttributeNamedMethods, QueryProvider;
@@ -27,16 +28,30 @@ class Slider extends Model{
 		'active',
 	];
 	protected $hidden = [
+		'id',
 		'created_at',
 		'updated_at',
+	];
+	protected $casts = [
+		'rating' => 'int',
+		'active' => 'bool',
 	];
 	public const TargetType = [
 		'ExternalLink' => 'external-link',
 		'VideoKey' => 'video-key',
+		'ProductKey' => 'product-key',
 	];
 
 	public function getBannerAttribute(): string{
 		return SecuredDisk::existsUrl($this->attributes['banner']);
+	}
+
+	public function video(): HasOne{
+		return $this->hasOne(Video::class, 'target');
+	}
+
+	public function product(): HasOne{
+		return $this->hasOne(Product::class, 'target');
 	}
 
 	public static function startQuery(): SliderQuery{

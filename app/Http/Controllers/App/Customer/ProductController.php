@@ -13,15 +13,13 @@ use App\Models\Product;
 use App\Resources\Products\Customer\ProductResource;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Throwable;
 
-class ProductsController extends ExtendedResourceController{
+class ProductController extends ExtendedResourceController{
 	use ValidatesRequest;
-
-	protected string $defaultSort = 'relevance';
-
-	protected int $resultsPerPage = 50;
-
+	protected const DefaultSort = 'relevance';
+	protected int $itemsPerPage = 50;
 	protected array $sortingOptions = [
 		[
 			'name' => 'Relevance',
@@ -54,7 +52,6 @@ class ProductsController extends ExtendedResourceController{
 			'algorithm' => DiscountDescending::class,
 		],
 	];
-
 	protected array $rules = [
 		'index' => [
 			'sortKey' => ['bail', 'nullable', 'string', 'min:1', 'max:50'],
@@ -62,12 +59,12 @@ class ProductsController extends ExtendedResourceController{
 		],
 	];
 
-	public function index(){
+	public function index(): JsonResponse{
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules['index']);
 			if (!isset($validated['page'])) $validated['page'] = 0;
-			if (!isset($validated['sortKey'])) $validated['sortKey'] = $this->defaultSort;
+			if (!isset($validated['sortKey'])) $validated['sortKey'] = self::DefaultSort;
 			$sorts = collect($this->sortingOptions);
 			$chosenSort = $sorts->firstWhere('key', $validated['sortKey']);
 			$algorithm = $chosenSort['algorithm']::obtain();
@@ -77,7 +74,7 @@ class ProductsController extends ExtendedResourceController{
 			$products = ProductResource::collection($products);
 			$response->status(HttpOkay)->message(function () use ($totalInCategory){
 				return sprintf('Found %d products under that category.', $totalInCategory);
-			})->setValue('meta', ['total' => $totalInCategory, 'pageCount' => $this->countRequiredPages($totalInCategory, $this->resultsPerPage)])->setValue('data', $products);
+			})->setValue('meta', ['total' => $totalInCategory, 'pageCount' => countRequiredPages($totalInCategory, $this->itemsPerPage)])->setValue('data', $products);
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
@@ -123,17 +120,5 @@ class ProductsController extends ExtendedResourceController{
 
 	protected function guard(){
 		return auth('customer-api');
-	}
-
-	protected function countRequiredPages(int $total, int $perPage){
-		if ($total <= $perPage)
-			return 1;
-
-		$result = $total / $perPage;
-		$remainder = $total % $perPage;
-		if ($remainder > 0 && $remainder <= $perPage) {
-			$result += 1;
-		}
-		return $result;
 	}
 }

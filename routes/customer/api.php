@@ -9,9 +9,8 @@ use App\Http\Controllers\App\Customer\CountriesController;
 use App\Http\Controllers\App\Customer\Playback\PlaybackController;
 use App\Http\Controllers\App\Customer\Playback\TrailerPlayback;
 use App\Http\Controllers\App\Customer\PopularPicksController;
-use App\Http\Controllers\App\Customer\ProductsController;
+use App\Http\Controllers\App\Customer\ProductController;
 use App\Http\Controllers\App\Customer\ShippingAddressesController;
-use App\Http\Controllers\App\Customer\ShopSlidersController;
 use App\Http\Controllers\App\Customer\SlidersController;
 use App\Http\Controllers\App\Customer\StatesController;
 use App\Http\Controllers\App\Customer\TrendController;
@@ -43,9 +42,9 @@ Route::prefix('sessions')->group(function (){
 });
 
 Route::prefix('products')->group(function (){
-	Route::get('/', [ProductsController::class, 'index']);
-	Route::get('/sorts', [ProductsController::class, 'sortsIndex']);
-	Route::get('{id}', [ProductsController::class, 'show'])->name('seller.products.show');
+	Route::get('/', [ProductController::class, 'index']);
+	Route::get('/sorts', [ProductController::class, 'sortsIndex']);
+	Route::get('{id}', [ProductController::class, 'show'])->name('seller.products.show');
 });
 
 Route::prefix('cart')->middleware([])->group(function (){

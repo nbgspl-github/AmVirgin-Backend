@@ -12,7 +12,7 @@ class ShopSliderResource extends JsonResource {
 
 	public function toArray($request) {
 		return [
-			'title' => $this->title,
+			'title' => $this->title(),
 			'description' => $this->description,
 			'poster' => SecuredDisk::existsUrl($this->poster),
 			'target' => $this->target,

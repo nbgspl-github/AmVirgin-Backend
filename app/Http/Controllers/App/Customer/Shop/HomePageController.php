@@ -9,11 +9,13 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Settings;
 use App\Models\ShopSlider;
+use App\Models\Slider;
 use App\Resources\Shop\Customer\HomePage\BrandsInFocusResource;
 use App\Resources\Shop\Customer\HomePage\PopularStuffResource;
 use App\Resources\Shop\Customer\HomePage\ShopSliderResource;
 use App\Resources\Shop\Customer\HomePage\TrendingDealsResource;
 use App\Resources\Shop\Customer\HomePage\TrendingNowResource;
+use App\Resources\Sliders\SliderResource;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 
@@ -38,9 +40,9 @@ class HomePageController extends ExtendedResourceController{
 		/**
 		 * Shop Sliders
 		 */
-		$shopSlider = ShopSlider::whereQuery()->displayable()->get();
-		$shopSlider = ShopSliderResource::collection($shopSlider);
-		Arrays::set($container, 'shopSliders', $shopSlider);
+		$slider = Slider::startQuery()->displayable()->shopSection()->get();
+		$slider = SliderResource::collection($slider);
+		Arrays::set($container, 'shopSliders', $slider);
 
 		/**
 		 * Offer Timer
@@ -91,15 +93,15 @@ class HomePageController extends ExtendedResourceController{
 		$trendingNow = TrendingNowResource::collection($trendingNow);
 		Arrays::set($container, 'trendingNow', $trendingNow);
 
-		return responseApp()->status(HttpOkay)->message('Listing shop-homepage contents.')->setValue('data', $container)->send();
+		return responseApp()->status(HttpOkay)->message('Listing shop homepage contents.')->setValue('data', $container)->send();
 	}
 
-	public function showAllDeals(){
+	public function showAllDeals(): JsonResponse{
 		$response = responseApp();
 		try {
 			$deals = Product::startQuery()->hotDeal()->get();
 			$deals = TrendingDealsResource::collection($deals);
-			$response->status(HttpOkay)->message('Listing all products marked as hot deal.')->setValue('data', $deals);
+			$response->status(HttpOkay)->message('Listing all trending deal.')->setValue('data', $deals);
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
