@@ -18,13 +18,7 @@ class OrderController extends ExtendedResourceController{
 		$response = responseApp();
 		try {
 			$orders = $this->guard()->user()->orders;
-			$orders->transform(function (Order $order){
-				return [
-					'orderId' => $order->orderId(),
-					'orderNumber' => $order->orderNumber(),
-					'items' => $order->items,
-				];
-			});
+			$orders = OrderResource::collection($orders);
 			$response->status($orders->count() > 0 ? HttpOkay : HttpNoContent)->message('Listing all orders for this customer.')->setValue('data', $orders);
 		}
 		catch (Throwable $exception) {
