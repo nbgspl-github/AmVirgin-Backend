@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\App\Customer;
 
+use App\Classes\Rule;
 use App\Classes\Sorting\DiscountDescending;
 use App\Classes\Sorting\Natural;
 use App\Classes\Sorting\NewlyAdded;
 use App\Classes\Sorting\Popularity;
 use App\Classes\Sorting\PriceAscending;
 use App\Classes\Sorting\PriceDescending;
+use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Interfaces\Tables;
 use App\Models\Product;
 use App\Resources\Products\Customer\ProductResource;
 use App\Traits\ValidatesRequest;
@@ -52,12 +55,18 @@ class ProductController extends ExtendedResourceController{
 			'algorithm' => DiscountDescending::class,
 		],
 	];
-	protected array $rules = [
-		'index' => [
-			'sortKey' => ['bail', 'nullable', 'string', 'min:1', 'max:50'],
-			'page' => ['bail', 'nullable', 'numeric', 'min:1', 'max:10000'],
-		],
-	];
+	protected array $rules = [];
+
+	public function __construct(){
+		parent::__construct();
+		$this->rules = [
+			'index' => [
+				'categoryId' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)],
+				'sortKey' => ['bail', 'nullable', 'string', 'min:1', 'max:50'],
+				'page' => ['bail', 'nullable', 'numeric', 'min:1', 'max:10000'],
+			],
+		];
+	}
 
 	public function index(): JsonResponse{
 		$response = responseApp();
@@ -72,9 +81,10 @@ class ProductController extends ExtendedResourceController{
 			$totalInCategory = $products->count('id');
 			$products = $products->orderBy($algorithm[0], $algorithm[1])->paginate(50);
 			$products = ProductResource::collection($products);
-			$response->status(HttpOkay)->message(function () use ($totalInCategory){
-				return sprintf('Found %d products under that category.', $totalInCategory);
-			})->setValue('meta', ['total' => $totalInCategory, 'pageCount' => countRequiredPages($totalInCategory, self::ItemsPerPage)])->setValue('data', $products);
+			$response->status(HttpOkay)->message('Listing available')->setValue('meta', ['total' => $totalInCategory, 'pageCount' => countRequiredPages($totalInCategory, self::ItemsPerPage)])->setValue('data', $products);
+		}
+		catch (ValidationException $exception) {
+			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
