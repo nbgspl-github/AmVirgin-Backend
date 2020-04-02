@@ -18,11 +18,7 @@ class OrderItem extends Model {
 		'options' => 'array',
 	];
 
-	public function attributes() {
-
-	}
-
-	public function productDetails() {
-		return $this->hasMany(Product::class, 'id','productId')->with('images');
+	public function product(){
+		return $this->hasMany(Product::class, 'id', 'productId')->with('images');
 	}
 }
