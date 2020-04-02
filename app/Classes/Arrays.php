@@ -55,4 +55,8 @@ class Arrays extends \Illuminate\Support\Arr{
 			$destination[$key] = $value;
 		}
 	}
+
+	public static function search($value, array $array){
+		return array_search($value, $array);
+	}
 }

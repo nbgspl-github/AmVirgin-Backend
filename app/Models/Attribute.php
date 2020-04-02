@@ -37,7 +37,7 @@ class Attribute extends Model{
 		'required' => 'boolean',
 		'predefined' => 'boolean',
 		'useInLayeredNavigation' => 'boolean',
-		'useToCreateVariations' => 'boolean',
+		'useToCreateVariants' => 'boolean',
 		'multiValue' => 'boolean',
 		'minValues' => 'integer',
 		'maxValues' => 'integer',

@@ -25,6 +25,11 @@ class ProductQuery extends AbstractQuery{
 		return $this;
 	}
 
+	public function key(int $productId){
+		$this->query->where('id', $productId);
+		return $this;
+	}
+
 	public function promoted(): self{
 		$this->query->where([
 			['promoted', true],

@@ -34,7 +34,8 @@ class CreateProductsTable extends Migration{
 			$table->timestamp('promotionEnd')->nullable()->comment('End timestamp, valid if product is promoted.');
 			$table->float('rating', 4, 2)->default(0.0)->comment('Rating of product.');
 			$table->bigInteger('hits')->default(0)->comment('Number of times this product was viewed by customers.');
-			$table->bigInteger('stock')->default(0)->comment('How many units are in stock?');
+			$table->integer('stock')->default(0)->comment('How many units are in stock?');
+			$table->integer('lowStockThreshold')->default(0)->comment('When should a particular product be shown as low in stock to customer? (0 means disabled)');
 			$table->boolean('draft')->default(false)->comment('True if the seller is midway creating this product.');
 			$table->string('description', 2000)->comment('Short description for this product.');
 			$table->string('sku')->comment('Stock Keeping Unit identifier, unique for each product');

@@ -9,11 +9,14 @@ use App\Classes\Sorting\NewlyAdded;
 use App\Classes\Sorting\Popularity;
 use App\Classes\Sorting\PriceAscending;
 use App\Classes\Sorting\PriceDescending;
+use App\Classes\Str;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Interfaces\Tables;
+use App\Models\Category;
 use App\Models\Product;
 use App\Resources\Products\Customer\ProductResource;
+use App\Resources\Products\Customer\ProductWithVariantsResource;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -61,7 +64,7 @@ class ProductController extends ExtendedResourceController{
 		parent::__construct();
 		$this->rules = [
 			'index' => [
-				'categoryId' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)],
+				'categoryId' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)->whereNot('type', Category::Types['Root'])],
 				'sortKey' => ['bail', 'nullable', 'string', 'min:1', 'max:50'],
 				'page' => ['bail', 'nullable', 'numeric', 'min:1', 'max:10000'],
 			],
@@ -81,7 +84,8 @@ class ProductController extends ExtendedResourceController{
 			$totalInCategory = $products->count('id');
 			$products = $products->orderBy($algorithm[0], $algorithm[1])->paginate(50);
 			$products = ProductResource::collection($products);
-			$response->status(HttpOkay)->message('Listing available products for given category.')->setValue('meta', ['total' => $totalInCategory, 'pageCount' => countRequiredPages($totalInCategory, self::ItemsPerPage)])->setValue('data', $products);
+			$response->status(HttpOkay)->message('Listing available products for given category.')->
+			setValue('meta', ['total' => $totalInCategory, 'pageCount' => countRequiredPages($totalInCategory, self::ItemsPerPage)])->setValue('data', $products);
 		}
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
@@ -108,13 +112,13 @@ class ProductController extends ExtendedResourceController{
 	public function show($id){
 		$response = responseApp();
 		try {
-			$product = Product::where([
-				['deleted', false],
-				['soldOut', false],
-				['draft', false],
-				['id', $id],
-			])->firstOrFail();
-			$product = new ProductResource($product);
+			$product = Product::startQuery()->displayable()->key($id)->firstOrFail();
+			if (Str::equals($product->type(), Product::Type['Variant'])) {
+				$product = new ProductWithVariantsResource($product);
+			}
+			else {
+				$product = new ProductResource($product);
+			}
 			$response->status(HttpOkay)->message('Found product for the specified key.')->setValue('data', $product);
 		}
 		catch (ModelNotFoundException $exception) {
