@@ -37,4 +37,8 @@ class ShippingAddress extends Model{
 	public function city(): BelongsTo{
 		return $this->belongsTo('App\Models\City', 'cityId');
 	}
+
+	public function country(): BelongsTo{
+		return Country::where('initials', 'IN')->first();
+	}
 }
