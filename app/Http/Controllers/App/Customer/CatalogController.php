@@ -61,17 +61,20 @@ class CatalogController extends ExtendedResourceController{
 		],
 	];
 	protected const PriceBreakpoints = [
-		1000 => 2,
-		5000 => 2,
-		10000 => 2,
-		15000 => 2,
-		20000 => 2,
-		25000 => 3,
-		30000 => 3,
-		35000 => 3,
-		40000 => 4,
-		50000 => 5,
+		[0, 1000, 1],
+		[1000, 5000, 2],
+		[5000, 10000, 2],
+		[10000, 15000, 2],
+		[15000, 20000, 2],
+		[20000, 25000, 3],
+		[30000, 35000, 3],
+		[35000, 40000, 4],
+		[40000, 50000, 5],
+		[40000, 50000, 5],
 	];
+	protected const MinimumIndex = 0;
+	protected const MaximumIndex = 1;
+	protected const DivisionsIndex = 2;
 	protected array $rules = [];
 
 	public function __construct(){
@@ -160,8 +163,31 @@ class CatalogController extends ExtendedResourceController{
 		$query = Product::startQuery()->categoryOrDescendant($categoryId);
 		$min = $query->min('originalPrice');
 		$max = $query->max('originalPrice');
-
+		$divisions = 1;
+		foreach (self::PriceBreakpoints as $breakpoint) {
+			if ($min >= $breakpoint[0] && $max < $breakpoint[1]) {
+				$divisions = $breakpoint[2];
+				break;
+			}
+		}
 		return [];
+	}
+
+	public static function segments(int $min, int $max, array $breakpoint): array{
+		$segments = Arrays::Empty;
+		$actualMin = $min;
+		$actualMax = $max;
+		$divisions = $breakpoint[self::DivisionsIndex];
+		$difference = $actualMax - $actualMin;
+		$median = round((float)$difference / (float)$divisions);
+		for ($count = 0; $count < $divisions; $count++) {
+			$segments[] = [
+				'start' => $actualMin,
+				'end' => $actualMin + $median,
+			];
+			$actualMin += $median;
+		}
+		return $segments;
 	}
 
 	protected function guard(){

@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Classes\Str;
 use App\Classes\Time;
 use App\Exceptions\ValidationException;
+use App\Http\Controllers\App\Customer\CatalogController;
 use App\Models\Attribute;
 use App\Models\Category;
 use App\Models\ProductImage;
@@ -49,10 +50,7 @@ class CartTesterCommand extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		$seller = Seller::retrieve(1);
-		foreach ($seller->approvedBrands as $brand) {
-			echo $brand->name . PHP_EOL;
-		}
+		dd(CatalogController::segments(1324, 9765, [1000, 10000, 4]));
 		return;
 	}
 }
