@@ -18,7 +18,7 @@ class ShippingAddressResource extends JsonResource{
 			'pinCode' => $this->pinCode(),
 			'city' => new CityResource($this->city),
 			'state' => new StateResource($this->state),
-			'country' => null,
+			'country' => new CountryResource($this->country),
 			'address' => $this->address(),
 			'locality' => $this->locality(),
 			'type' => $this->type(),
