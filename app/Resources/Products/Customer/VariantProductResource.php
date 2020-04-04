@@ -10,16 +10,16 @@ use App\Storage\SecuredDisk;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class VariantProductResource extends AbstractProductResource{
-	protected CategoryResource $categoryResource;
-	protected SellerResource $sellerResource;
-	protected BrandResource $brandResource;
+	protected ?CategoryResource $categoryResource;
+	protected ?SellerResource $sellerResource;
+	protected ?BrandResource $brandResource;
 	protected array $warranty;
 
 	public function __construct($resource){
 		parent::__construct($resource);
-		$this->categoryResource = new CategoryResource($this->categoryResource);
-		$this->sellerResource = new SellerResource($this->sellerResource);
-		$this->brandResource = new BrandResource($this->brandResource);
+		$this->categoryResource = new CategoryResource($this->category);
+		$this->sellerResource = new SellerResource($this->seller);
+		$this->brandResource = new BrandResource($this->brand);
 		$this->warranty = [
 			'domestic' => $this->domesticWarranty(),
 			'international' => $this->internationalWarranty(),
@@ -33,8 +33,10 @@ class VariantProductResource extends AbstractProductResource{
 
 	public function toArray($request){
 		return [
+			'key' => $this->id(),
 			'name' => $this->name(),
 			'description' => $this->description(),
+			'type' => $this->type(),
 			'category' => $this->categoryResource,
 			'seller' => $this->sellerResource,
 			'brand' => $this->brandResource,
@@ -43,10 +45,10 @@ class VariantProductResource extends AbstractProductResource{
 				'selling' => $this->sellingPrice(),
 				'discount' => [
 					'has' => $this->hasDiscount(),
-					'value' => $this->calculateDiscount(),
+					'value' => $this->discount(),
 				],
 			],
-			'fulfillmentBy' => $this->fulfilledBy(),
+			'fulfillmentBy' => $this->fulfillmentBy(),
 			'currency' => $this->currency(),
 			'rating' => $this->rating(),
 			'stock' => [
@@ -62,7 +64,8 @@ class VariantProductResource extends AbstractProductResource{
 				],
 				'gallery' => ImageResource::collection($this->images),
 			],
-			'variants' => [],
+			'details' => [],
+			'variants' => VariantItemResource::collection($this->variants),
 		];
 	}
 

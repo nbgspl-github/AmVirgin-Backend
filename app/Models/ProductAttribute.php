@@ -15,15 +15,17 @@ class ProductAttribute extends Model{
 	use RetrieveResource, DynamicAttributeNamedMethods;
 	protected $table = 'product-attributes';
 	protected $attributes = [
-		'values' => [],
+
 	];
 	protected $fillable = [
 		'productId',
 		'attributeId',
+		'label',
+		'group',
+		'variantAttribute',
 		'value',
 	];
 	protected $casts = [
-		'values' => 'array',
 		'multiValue' => 'bool',
 	];
 

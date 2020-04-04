@@ -67,6 +67,8 @@ class Product extends Model{
 		'coveredInWarranty',
 		'notCoveredInWarranty',
 		'maxAllowedQuantityPerOrder',
+		'lowStockThreshold',
+		'discount',
 		'primaryImage',
 		'specials',
 	];
@@ -80,9 +82,6 @@ class Product extends Model{
 	protected $casts = [
 		'draft' => 'bool',
 	];
-	public const CREATED_AT = 'createdAt';
-	public const UPDATED_AT = 'updatedAt';
-	public const DELETED_AT = 'deletedAt';
 	public const ListingStatus = [
 		'Active' => 'active',
 		'Inactive' => 'inactive',
@@ -173,7 +172,7 @@ class Product extends Model{
 	}
 
 	public function variants(): HasMany{
-		return $this->hasMany(self::class, 'parentId');
+		return $this->hasMany(self::class, 'group', 'group')->where('id', '!=', $this->id());
 	}
 
 	public function hotDeal(?bool $yes = null): bool{

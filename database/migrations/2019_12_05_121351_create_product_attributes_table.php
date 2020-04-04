@@ -15,11 +15,10 @@ class CreateProductAttributesTable extends Migration{
 			$table->bigIncrements('id');
 			$table->unsignedBigInteger('productId')->comment('Product to which this attribute belongs');
 			$table->unsignedBigInteger('attributeId')->comment('Reference to original attribute');
-			$table->boolean('multiValue')->default(false)->comment('If there are more than one values stored in values');
+			$table->boolean('variantAttribute')->default(false)->comment('Whether the attribute these values belong to is a variant attribute?');
 			$table->string('label')->comment('Label of attribute');
 			$table->string('group')->comment('Group name of attribute');
 			$table->string('value', 10000)->nullable()->comment('Value(s) of attribute');
-			$table->json('values')->comment('Value(s) of attribute');
 			$table->timestamps();
 
 			if (appEnvironment(AppEnvironmentProduction)) {

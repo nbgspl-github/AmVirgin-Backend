@@ -1,11 +1,13 @@
 <?php
 
+use App\Classes\Arrays;
 use App\Constants\Constants;
 use App\Interfaces\Tables;
 use App\Models\Product;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Sujip\Guid\Facades\Guid;
 
 class CreateProductsTable extends Migration{
 	/**
@@ -20,16 +22,17 @@ class CreateProductsTable extends Migration{
 			$table->unsignedBigInteger('categoryId')->comment('Category under which this product falls.');
 			$table->unsignedBigInteger('sellerId')->comment('Seller to whom this product belongs.');
 			$table->unsignedBigInteger('brandId')->comment('Brand to which this product belongs.');
-			$table->unsignedBigInteger('parentId')->nullable()->comment('Product to which this is a child, null if this is the parent');
+			$table->uuid('group')->default(Guid::create())->comment('Unique identifier to identify variations of same product. For variations, this will be same for all.');
 			$table->enum('listingStatus', [Product::ListingStatus['Active'], Product::ListingStatus['Inactive']])->comment('Whether the product will show up in catalog listing or not?');
-			$table->enum('type', [Product::Type['Simple'], Product::Type['Variant']])->comment('What type of product is this?');
-			$table->enum('idealFor', [Product::IdealFor['Men'], Product::IdealFor['Women'], Product::IdealFor['Boys'], Product::IdealFor['Girls']])->comment('What gender would the product be most suitable for?');
+			$table->enum('type', Arrays::values(Product::Type))->comment('What type of product is this?');
+			$table->enum('idealFor', Arrays::values(Product::IdealFor))->nullable()->comment('What gender would the product be most suitable for?');
 			$table->float('originalPrice', 10, 2)->default(0)->comment('MRP of product.');
 			$table->float('sellingPrice', 10, 2)->default(0)->comment('Actual selling price of product');
 			$table->string('fulfillmentBy')->comment('How the order is fulfilled...by seller or through external courier service?');
 			$table->string('hsn')->comment('Harmonized System of Nomenclature code as defined by rules');
 			$table->string('currency')->default('INR')->comment('Currency to be shown alongside product price.');
 			$table->integer('taxRate')->comment('Will always be in percentage and will add up.');
+			$table->integer('discount')->default(0)->comment('Auto calculated discount percentage stored here for easy access. Update this column whenever prices change');
 			$table->boolean('promoted')->default(false)->comment('Whether is product is promoted or not?');
 			$table->timestamp('promotionStart')->nullable()->comment('Start timestamp, valid if product is promoted.');
 			$table->timestamp('promotionEnd')->nullable()->comment('End timestamp, valid if product is promoted.');
@@ -62,15 +65,13 @@ class CreateProductsTable extends Migration{
 			$table->timestamp('approvedAt')->nullable()->comment('When was this product approved by an admin');
 			$table->string('primaryImage', Constants::MaxFilePathLength)->nullable()->comment('Primary or main image for the product');
 			$table->json('specials')->nullable()->comment('Any special attributes that are temporary will come under this');
-			$table->softDeletes('deletedAt')->comment('Soft deleting in this context means the product is marked for deletion by seller.');
-			$table->timestamp('createdAt')->nullable();
-			$table->timestamp('updatedAt')->nullable();
+			$table->softDeletes()->comment('Soft deleting in this context means the product is marked for deletion by seller.');
+			$table->timestamps();
 
 			if (appEnvironment(AppEnvironmentProduction)) {
 				$table->foreign('categoryId')->references('id')->on(Tables::Categories)->onDelete('cascade');
 				$table->foreign('sellerId')->references('id')->on(Tables::Sellers)->onDelete('cascade');
 				$table->foreign('brandId')->references('id')->on(Tables::Brands)->onDelete('cascade');
-				$table->foreign('parentId')->references('id')->on(Tables::Products)->onDelete('cascade');
 				$table->foreign('hsn')->references('hsnCode')->on(Tables::HsnCodes)->onDelete('cascade');
 			}
 		});

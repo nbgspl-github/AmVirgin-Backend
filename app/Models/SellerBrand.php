@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Queries\SellerBrandQuery;
 use App\Traits\DynamicAttributeNamedMethods;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,4 +16,8 @@ class SellerBrand extends Model{
 		'Rejected' => 'rejected',
 		'Received' => 'received',
 	];
+
+	public static function startQuery(): SellerBrandQuery{
+		return SellerBrandQuery::begin();
+	}
 }

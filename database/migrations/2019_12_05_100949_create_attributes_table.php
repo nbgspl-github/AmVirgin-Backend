@@ -1,5 +1,6 @@
 <?php
 
+use App\Classes\Arrays;
 use App\Models\Attribute;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -24,6 +25,7 @@ class CreateAttributesTable extends Migration{
 			$table->boolean('multiValue')->default(false)->comment('Whether this attribute allows multiple values to be entered.');
 			$table->mediumInteger('minValues')->default(0)->comment('Minimum required values for this attribute in multi-value mode.');
 			$table->mediumInteger('maxValues')->default(0)->comment('Maximum number of values allowed for this attribute');
+			$table->enum('interface', Arrays::values(Attribute::Interface))->default(Attribute::Interface['TextLabel'])->comment('What type of interface will be shown to user to select value for this attribute?');
 			$table->json('values')->comment('Values for this attribute');
 			$table->timestamps();
 		});

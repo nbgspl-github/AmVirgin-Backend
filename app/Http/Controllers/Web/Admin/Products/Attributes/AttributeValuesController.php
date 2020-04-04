@@ -33,7 +33,7 @@ class AttributeValuesController extends BaseController{
 		$response = responseWeb();
 		try {
 			$attribute = Attribute::retrieveThrows($attributeId);
-			if (Str::equals($attribute->sellerInterfaceType(), Attribute::SellerInterfaceType['DropDown']) || Str::equals($attribute->sellerInterfaceType(), Attribute::SellerInterfaceType['Radio'])) {
+			if ($attribute->predefined()) {
 				$parents = [];
 				$parent = $attribute->category;
 				$parents[] = $parent->name;

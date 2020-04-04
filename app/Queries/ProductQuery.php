@@ -5,24 +5,29 @@ namespace App\Queries;
 use App\Classes\Arrays;
 use App\Classes\Time;
 use App\Filters\BrandFilter;
+use App\Filters\CategoryFilter;
+use App\Filters\DiscountFilter;
 use App\Filters\GenderFilter;
 use App\Filters\PriceRangeFilter;
+use App\Models\CatalogFilter;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Builder;
 
 class ProductQuery extends AbstractQuery{
-	use PriceRangeFilter, BrandFilter, GenderFilter;
-
-	protected const PriceColumnKey = 'originalPrice';
-	protected const BrandColumnKey = 'brandId';
-	protected const GenderColumnKey = 'idealFor';
+	use PriceRangeFilter, BrandFilter, GenderFilter, CategoryFilter, DiscountFilter;
 
 	protected function __construct(){
 		parent::__construct();
 
+		// To make sure we don't mistakenly apply wrong filter to wrong
+		// category we first get the list of available filters, and check if the
+		// incoming filter exists in that list, only then we can apply if.
+
 		// Call required filters specified in request.
-		if (request()->has(''))
+		if (request()->has('filters') && request()->has('categoryId')) {
+			$availableCatalogFilters = CatalogFilter::startQuery()->category(request('categoryId'))->builtIn()->get();
+		}
 	}
 
 	public static function begin(): self{
@@ -30,7 +35,12 @@ class ProductQuery extends AbstractQuery{
 	}
 
 	public function displayable(): self{
-		$this->query->where('draft', false)->where('approved', true)->whereNotNull('approvedBy')->whereNull('parentId');
+//		$this->query->where('draft', false)->where('approved', true)->whereNotNull('approvedBy');
+		return $this;
+	}
+
+	public function singleVariantMode(): self{
+		$this->query->groupBy('group');
 		return $this;
 	}
 
@@ -58,26 +68,6 @@ class ProductQuery extends AbstractQuery{
 	public function hotDeal(): self{
 		$this->query->where('specials->hotDeal', true);
 		return $this;
-	}
-
-	public function priceRange(int $start, int $end): self{
-
-	}
-
-	public function category(...$categories): self{
-
-	}
-
-	public function brand(...$brands): self{
-
-	}
-
-	public function color(...$colors): self{
-
-	}
-
-	public function idealFor(string $gender): self{
-
 	}
 
 	protected function model(): string{

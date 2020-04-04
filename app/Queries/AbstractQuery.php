@@ -75,7 +75,7 @@ abstract class AbstractQuery{
 		return $this->query->firstOrFail();
 	}
 
-	public function get(){
-		return $this->query->get();
+	public function get($columns = ['*']){
+		return $this->query->get($columns);
 	}
 }

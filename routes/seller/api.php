@@ -47,7 +47,7 @@ Route::prefix('attributes')->group(function (){
 
 Route::middleware('auth:seller-api')->prefix('products')->group(function (){
 	Route::get('/', [ProductController::class, 'index'])->name('seller.products.index');
-	Route::post('/', [ProductController::class, 'store'])->name('seller.products.store');
+	Route::post(Str::Empty, [ProductController::class, 'store'])->name('seller.products.store');
 	Route::get('{id}', [ProductController::class, 'show'])->name('seller.products.show');
 	Route::get('edit/{id}', [ProductController::class, 'edit'])->name('seller.products.edit');
 	Route::post('{id}', [ProductController::class, 'update'])->name('seller.products.update');

@@ -73,4 +73,10 @@ class Arrays extends \Illuminate\Support\Arr{
 		}
 		return $count;
 	}
+
+	public static function loopFor($final, callable $callback, bool $inclusive = false, $initial = 0){
+		for ($i = $initial; $inclusive ? $i <= $final : $i < $final; $final >= $initial ? $i++ : $i--) {
+			call_user_func($callback);
+		}
+	}
 }

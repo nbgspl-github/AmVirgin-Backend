@@ -14,10 +14,19 @@ use App\Classes\Str;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Interfaces\Tables;
+use App\Models\CatalogFilter;
 use App\Models\Category;
 use App\Models\Product;
+use App\Queries\ProductQuery;
 use App\Resources\Products\Customer\SimpleProductResource;
 use App\Resources\Products\Customer\VariantProductResource;
+use App\Resources\Shop\Customer\Catalog\Filters\AbstractBuiltInResource;
+use App\Resources\Shop\Customer\Catalog\Filters\BrandResource;
+use App\Resources\Shop\Customer\Catalog\Filters\CategoryResource;
+use App\Resources\Shop\Customer\Catalog\Filters\DiscountResource;
+use App\Resources\Shop\Customer\Catalog\Filters\FilterResource;
+use App\Resources\Shop\Customer\Catalog\Filters\GenderResource;
+use App\Resources\Shop\Customer\Catalog\Filters\PriceRangeResource;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -60,21 +69,6 @@ class CatalogController extends ExtendedResourceController{
 			'algorithm' => DiscountDescending::class,
 		],
 	];
-	protected const PriceBreakpoints = [
-		[0, 1000, 1],
-		[1000, 5000, 2],
-		[5000, 10000, 2],
-		[10000, 15000, 2],
-		[15000, 20000, 2],
-		[20000, 25000, 3],
-		[30000, 35000, 3],
-		[35000, 40000, 4],
-		[40000, 50000, 5],
-		[40000, 50000, 5],
-	];
-	protected const MinimumIndex = 0;
-	protected const MaximumIndex = 1;
-	protected const DivisionsIndex = 2;
 	protected array $rules = [];
 
 	public function __construct(){
@@ -97,21 +91,27 @@ class CatalogController extends ExtendedResourceController{
 			$sorts = collect(self::SortingOptions);
 			$chosenSort = $sorts->firstWhere('key', $validated['sortKey']);
 			$algorithm = $chosenSort['algorithm']::obtain();
-			$products = Product::startQuery()->displayable()->categoryOrDescendant(request('categoryId'));
-			$totalInCategory = $products->count('id');
+			$products = Product::startQuery()->displayable()->categoryOrDescendant($validated['categoryId'])->singleVariantMode();
+			$filters = $this->filters($validated['categoryId'], $products);
+			$total = $products->count('id');
 			$products = $products->orderBy($algorithm[0], $algorithm[1])->paginate(self::ItemsPerPage);
-			$products = SimpleProductResource::collection($products);
-			$meta = ['total' => $totalInCategory, 'pageCount' => countRequiredPages($totalInCategory, self::ItemsPerPage)];
-			$filters = $this->filters($validated['categoryId']);
+			$products = VariantProductResource::collection($products);
+			$meta = [
+				'pages' => [
+					'total' => $total,
+					'count' => countRequiredPages($total, self::ItemsPerPage),
+				],
+				'filters' => $filters,
+			];
 			$response->status(HttpOkay)->message('Listing available products for given category.')
 				->setValue('meta', $meta)
-				->setValue('filters', $filters)
 				->setValue('data', $products);
 		}
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
 		}
 		catch (Throwable $exception) {
+			dd($exception);
 			$response->status(HttpServerError)->message($exception->getMessage());
 		}
 		finally {
@@ -153,41 +153,35 @@ class CatalogController extends ExtendedResourceController{
 		})->setValue('data', $sorts)->send();
 	}
 
-	public function filters(int $categoryId): array{
-		$filters = new Collection();
+	public function filters(int $categoryId, ProductQuery $products): Collection{
+		$filters = CatalogFilter::startQuery()->category($categoryId)->get();
 
-		/**
-		 * Generating price segment based on categories' min and max priced product.
-		 */
-		$segments = Arrays::Empty;
-		$query = Product::startQuery()->categoryOrDescendant($categoryId);
-		$min = $query->min('originalPrice');
-		$max = $query->max('originalPrice');
-		$divisions = 1;
-		foreach (self::PriceBreakpoints as $breakpoint) {
-			if ($min >= $breakpoint[0] && $max < $breakpoint[1]) {
-				$divisions = $breakpoint[2];
-				break;
-			}
-		}
-		return [];
+		// Get all required columns.
+		$requiredColumns = collect([
+			PriceRangeResource::RequiredColumn,
+			BrandResource::RequiredColumn,
+			GenderResource::RequiredColumn,
+			CategoryResource::RequiredColumn,
+			DiscountResource::RequiredColumn,
+		])->flatten()->values()->toArray();
+
+		// Pre-fetch all values from all essential columns for built-in filters.
+		$requiredColumnValues = $products->get($requiredColumns);
+
+		// Transform each available filters, excluding inbuilt ones by send them to a new function.
+		$filters->transform(function (CatalogFilter $catalogFilter) use ($requiredColumnValues){
+			return $catalogFilter->builtIn() ? $this->builtInFilter($catalogFilter, $requiredColumnValues) : new FilterResource($catalogFilter);
+		});
+		return $filters;
 	}
 
-	public static function segments(int $min, int $max, array $breakpoint): array{
-		$segments = Arrays::Empty;
-		$actualMin = $min;
-		$actualMax = $max;
-		$divisions = $breakpoint[self::DivisionsIndex];
-		$difference = $actualMax - $actualMin;
-		$median = round((float)$difference / (float)$divisions);
-		for ($count = 0; $count < $divisions; $count++) {
-			$segments[] = [
-				'start' => $actualMin,
-				'end' => $actualMin + $median,
-			];
-			$actualMin += $median;
-		}
-		return $segments;
+	public function builtInFilter(CatalogFilter $catalogFilter, Collection $columnValues): AbstractBuiltInResource{
+		// Retrieve the appropriate Resource class for built in filter.
+		$resourceClass = CatalogFilter::BuiltInFilterResourceMapping[$catalogFilter->builtInType()];
+		// Get column values as per the requirements of resource class.
+		$values = $columnValues->pluck($resourceClass::RequiredColumn);
+		// Convert the resource to array instance.
+		return (new $resourceClass($catalogFilter))->withValues($values);
 	}
 
 	protected function guard(){

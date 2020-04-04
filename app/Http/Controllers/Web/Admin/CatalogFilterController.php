@@ -100,7 +100,7 @@ class CatalogFilterController extends BaseController{
 				'builtInType' => request()->has('builtIn') ? $validated['builtInType'] : null,
 				'attributeId' => !request()->has('builtIn') ? $validated['attributeId'] : null,
 				'categoryId' => $validated['categoryId'],
-				'allowMultiValue' => request()->has('allowMultiValue'),
+				'allowMultiValue' => !request()->has('builtIn') ? request()->has('allowMultiValue') : CatalogFilter::AllowMultiValueDefault[$validated['builtInType']],
 			]);
 			$response->success('Catalog filter created successfully.')->route('admin.filters.catalog.index');
 		}

@@ -43,11 +43,9 @@ class Attribute extends Model{
 		'maxValues' => 'integer',
 		'values' => 'array',
 	];
-	public const SellerInterfaceType = [
-		'DropDown' => 'dropdown',
-		'Input' => 'input',
-		'Text' => 'text',
-		'Radio' => 'radio',
+	public const Interface = [
+		'TextLabel' => 'text-label',
+		'Image' => 'image',
 	];
 
 	public static function startQuery(): AttributeQuery{

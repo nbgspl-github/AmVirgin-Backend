@@ -8,7 +8,9 @@ use App\Classes\Time;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\App\Customer\CatalogController;
 use App\Models\Attribute;
+use App\Models\AttributeSet;
 use App\Models\Category;
+use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\Auth\Seller;
 use App\Models\Settings;
@@ -51,12 +53,13 @@ class CartTesterCommand extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		dd($this->createRange([120, 190, 5000, 5100, 6889, 10000, 23456, 52000, 110789]));
+		$product = Product::retrieve(4);
+		dd($product->variants()->get('name')->toArray());
 		return;
 	}
 
 	private function createRange($array){
-		$priceCollection = collect([120, 400, 639, 4000, 4092, 7896, 10001, 17567, 22000]);
+		$priceCollection = collect($array);
 		$minimumPrice = $priceCollection->min();
 		$maximumPrice = $priceCollection->max();
 		$itemCount = $priceCollection->count();
@@ -81,19 +84,19 @@ class CartTesterCommand extends Command{
 		$neutralizer = 0;
 		$diff = $maximumPrice - $minimumPrice;
 		self::even($diff) && self::even($divisions) ? $neutralizer = 0 : $neutralizer = 1;
-		$median = $diff / $divisions;
+		$median = (int)($diff / $divisions);
 
-		$ranges = Arrays::Empty;
+		$sections = Arrays::Empty;
 		for ($i = 0; $i < $divisions; $i++) {
 			$lastMinimum = $minimumPrice;
 			$minimumPrice = $minimumPrice + $median + $neutralizer;
-			$ranges[] = [
+			Arrays::push($sections, [
 				'start' => $lastMinimum,
 				'end' => $minimumPrice,
 				'count' => $priceCollection->whereBetween(null, [$lastMinimum, $minimumPrice])->count(),
-			];
+			]);
 		}
-		dd($ranges);
+		return $sections;
 	}
 
 	protected static function even(int $number){

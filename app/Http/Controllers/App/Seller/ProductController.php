@@ -7,8 +7,10 @@ use App\Classes\Rule;
 use App\Classes\Str;
 use App\Constants\OfferTypes;
 use App\Constants\WarrantyServiceType;
+use App\Exceptions\BrandNotApprovedForSellerException;
 use App\Exceptions\InvalidCategoryException;
 use App\Exceptions\ValidationException;
+use App\Http\Controllers\App\Seller\Products\AbstractProductController;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Interfaces\Directories;
 use App\Interfaces\Tables;
@@ -30,195 +32,78 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
 
-class ProductController extends ExtendedResourceController{
-	use ValidatesRequest;
-	protected array $rules;
-
+class ProductController extends AbstractProductController{
 	public function __construct(){
 		parent::__construct();
-		$this->rules = [
-			'store' => [
-				'name' => ['bail', 'required', 'string', Rule::minimum(1), Rule::maximum(500)],
-				'categoryId' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)],
-				'brandId' => ['bail', 'required', Rule::existsPrimary(Tables::Brands), Rule::exists(Tables::SellerBrands, 'brandId')->where('status', 'approved')],
-				'listingStatus' => ['bail', 'required', 'string', Rule::in([Product::ListingStatus['Active'], Product::ListingStatus['Inactive']])],
-				'type' => ['bail', 'required', 'string', Rule::in([Product::Type['Simple'], Product::Type['Variant']])],
-				'styleCode' => ['bail', 'required', 'string', 'min:8', 'max:255'],
-				'originalPrice' => ['bail', 'required', 'numeric', 'min:1', 'max:10000000'],
-				'sellingPrice' => ['bail', 'required', 'numeric', 'min:1', 'lte:originalPrice'],
-				'fulfillmentBy' => ['bail', 'required', Rule::in([Product::FulfillmentBy['Seller'], Product::FulfillmentBy['SellerSmart']])],
-				'hsn' => ['bail', 'required', Rule::existsPrimary(Tables::HsnCodes, 'hsnCode')],
-				'currency' => ['bail', 'nullable', 'string', 'min:2', 'max:5', Rule::exists(Tables::Currencies, 'code')],
-				'stock' => ['bail', 'required', 'numeric', 'min:0', RuleMaxStock],
-				'lowStockThreshold' => ['bail', 'nullable', 'numeric', 'min:0', 'lt:stock'],
-				'description' => ['bail', 'required', 'string', 'min:1', 'max:2000'],
-				'sku' => ['bail', 'required', 'string', 'min:8', 'max:100'],
-				'trailer' => ['bail', 'nullable', 'mimes:mp4', 'min:1', 'max:100000'],
-				'procurementSla' => ['bail', 'required', 'numeric', Rule::minimum(Product::ProcurementSLA['Minimum']), Rule::maximum(Product::ProcurementSLA['Maximum'])],
-				'localShippingCost' => ['bail', 'required', 'numeric', Rule::minimum(Product::ShippingCost['Local']['Minimum']), Rule::maximum(Product::ShippingCost['Local']['Maximum'])],
-				'zonalShippingCost' => ['bail', 'required', 'numeric', Rule::minimum(Product::ShippingCost['Zonal']['Minimum']), Rule::maximum(Product::ShippingCost['Zonal']['Maximum'])],
-				'internationalShippingCost' => ['bail', 'required', 'numeric', Rule::minimum(Product::ShippingCost['International']['Minimum']), Rule::maximum(Product::ShippingCost['International']['Maximum'])],
-				'packageWeight' => ['bail', 'required', 'numeric', Rule::minimum(Product::Weight['Minimum']), Rule::maximum(Product::Weight['Maximum'])],
-				'packageLength' => ['bail', 'required', 'numeric', Rule::minimum(Product::Dimensions['Length']['Minimum']), Rule::maximum(Product::Dimensions['Length']['Maximum'])],
-				'packageBreadth' => ['bail', 'required', 'numeric', Rule::minimum(Product::Dimensions['Breadth']['Minimum']), Rule::maximum(Product::Dimensions['Breadth']['Maximum'])],
-				'packageHeight' => ['bail', 'required', 'numeric', Rule::minimum(Product::Dimensions['Height']['Minimum']), Rule::maximum(Product::Dimensions['Height']['Maximum'])],
-				'domesticWarranty' => ['bail', 'required', 'numeric', Rule::minimum(Product::Warranty['Domestic']['Minimum']), Rule::maximum(Product::Warranty['Domestic']['Maximum'])],
-				'internationalWarranty' => ['bail', 'required', 'numeric', Rule::minimum(Product::Warranty['International']['Minimum']), Rule::maximum(Product::Warranty['International']['Maximum'])],
-				'warrantySummary' => ['bail', 'required', 'string', 'min:1', 'max:100000'],
-				'warrantyServiceType' => ['bail', 'required', 'string', Rule::in([WarrantyServiceType::OnSite, WarrantyServiceType::WalkIn])],
-				'coveredInWarranty' => ['bail', 'required', 'string', 'min:1', 'max:100000'],
-				'notCoveredInWarranty' => ['bail', 'required', 'string', 'min:1', 'max:100000'],
-				'maxQuantityPerOrder' => ['bail', 'required', 'numeric', 'min:1', 'max:1000'],
-				'primaryImageIndex' => ['bail', 'required', 'numeric', Rule::minimum(0), Rule::maximum(8)],
-				'files' => ['bail', 'nullable', 'min:1', 'max:8'],
-				'files.*' => ['bail', 'nullable', 'mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
-				'attributes' => ['bail', 'required'],
-				'variants' => ['bail', 'required_if:type,variant'],
-			],
-			'update' => [
-			],
-		];
-	}
-
-	public function index(){
-		$response = responseApp();
-		try {
-			$products = Product::where([
-				['sellerId', $this->user()->getKey()],
-				['deleted', false],
-				['soldOut', false],
-				['draft', false],
-			])->get();
-			$products = ProductResource::collection($products);
-			$response->status(HttpOkay)->message(function () use ($products){
-				return sprintf('Found %d products by specified seller.', $products->count());
-			})->setValue('data', $products);
-		}
-		catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
-			return $response->send();
-		}
-	}
-
-	public function edit($id){
-		$response = responseApp();
-		try {
-			$product = Product::where([
-				['sellerId', $this->user()->getKey()],
-				['deleted', false],
-				['id', $id],
-			])->firstOrFail();
-			$product = new ProductEditResource($product);
-			$response->status(HttpOkay)->message('Found product details for that key.')->setValue('data', $product);
-		}
-		catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find product for that key.');
-		}
-		catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
-			return $response->send();
-		}
 	}
 
 	public function store(){
 		$response = responseApp();
 		try {
-			$validated = $this->requestValid(request(), $this->rules['store']);
-			$category = Category::retrieve($validated['categoryId']);
-			if (!Str::equals($category->type(), Category::Types['Vertical']))
+			$outer = $this->validateOuter();
+			$category = $this->category();
+			$brand = $this->brand();
+			if ($this->isInvalidCategory($category)) {
 				throw new InvalidCategoryException();
+			}
+			if (!$this->isBrandApprovedForSeller($brand)) {
+				throw new BrandNotApprovedForSellerException();
+			}
+			$trailer = $this->trailerFilePath();
 
-			$validated['taxRate'] = HsnCode::find($validated['hsn'])->taxRate();
-			$validated['sellerId'] = $this->guard()->id();
-			$product = Product::create($validated);
-
-			// Creating attributes for the base product.
-			$baseAttributes = Arrays::isArray($validated['attributes']) ? $validated['attributes'] : jsonDecodeArray($validated['attributes']);
-			Arrays::each($baseAttributes, function ($baseAttribute) use ($product){
-				$attribute = Attribute::retrieve($baseAttribute['key']);
-				$multiValue = Arrays::isArray($baseAttribute['value']);
-				if ($attribute != null) {
-					ProductAttribute::create([
-						'productId' => $product->id(),
-						'attributeId' => $attribute->id(),
-						'multiValue' => $multiValue,
-						'label' => $attribute->name(),
-						'group' => $baseAttribute['group'],
-						'value' => !$multiValue ? $baseAttribute['value'] : null,
-						'values' => $multiValue ? $baseAttribute['value'] : [],
+			if ($this->isVariantType()) {
+				foreach ($outer['payload'] as $payload) {
+					$productPayload = $payload;
+					Arrays::replaceValues($productPayload, [
+						'categoryId' => $category->id(),
+						'brandId' => $brand->id(),
+						'sellerId' => $this->guard()->id(),
+						'type' => Product::Type['Variant'],
+						'currency' => $outer['currency'],
+						'description' => $outer['description'],
+						'taxRate' => HsnCode::find($productPayload['hsn'])->taxRate(),
+						'trailer' => $trailer,
+						'group' => $this->sessionUuid(),
+						'discount' => $this->calculateDiscount($productPayload['originalPrice'], $productPayload['sellingPrice']),
+						'primaryImage' => Str::Empty,
 					]);
+					$product = $this->storeProduct($productPayload);
+					foreach ($payload['attributes'] as $attributePayload) {
+						$this->storeAttribute($product, $attributePayload);
+					}
 				}
-			});
-
-			// Creating variants if there are any.
-			$variants = Arrays::isArray($validated['variants']) ? $validated['variants'] : jsonDecodeArray($validated['variants']);
-			$inherited = $validated;
-			Arrays::each($variants, function ($variant) use (&$inherited, $product, $baseAttributes){
-				Arrays::replaceValues($inherited, [
-					'parentId' => $product->id(),
-					'name' => $variant['name'],
-					'type' => Product::Type['Simple'],
-					'stock' => $variant['stock'],
-					'sellingPrice' => $variant['sellingPrice'],
-					'sku' => $variant['sku'],
+			}
+			else {
+				$productPayload = $outer['payload'];
+				Arrays::replaceValues($productPayload, [
+					'categoryId' => $category->id(),
+					'brandId' => $brand->id(),
+					'sellerId' => $this->guard()->id(),
+					'type' => Product::Type['Variant'],
+					'currency' => $outer['currency'],
+					'description' => $outer['description'],
+					'taxRate' => HsnCode::find($productPayload['hsn'])->taxRate(),
+					'trailer' => $trailer,
+					'group' => $this->sessionUuid(),
+					'discount' => $this->calculateDiscount($productPayload['originalPrice'], $productPayload['sellingPrice']),
+					'primaryImage' => Str::Empty,
 				]);
-				$variantProduct = Product::create($inherited);
-				Arrays::each($baseAttributes, function ($variantAttribute) use ($variantProduct){
-					$attribute = Attribute::retrieve($variantAttribute['key']);
-					$multiValue = Arrays::isArray($variantAttribute['value']);
-					if ($attribute != null) {
-						ProductAttribute::create([
-							'productId' => $variantProduct->id(),
-							'attributeId' => $attribute->id(),
-							'multiValue' => $multiValue,
-							'label' => $attribute->name(),
-							'group' => $variantAttribute['group'],
-							'value' => !$multiValue ? $variantAttribute['value'] : null,
-							'values' => $multiValue ? $variantAttribute['value'] : [],
-						]);
-					}
-				});
-				Arrays::each($variant['attributes'], function ($variantAttribute) use ($variantProduct){
-					$attribute = Attribute::retrieve($variantAttribute['key']);
-					$multiValue = Arrays::isArray($variantAttribute['value']);
-					if ($attribute != null) {
-						ProductAttribute::create([
-							'productId' => $variantProduct->id(),
-							'attributeId' => $attribute->id(),
-							'multiValue' => $multiValue,
-							'label' => $attribute->name(),
-							'group' => $variantAttribute['group'],
-							'value' => !$multiValue ? $variantAttribute['value'] : null,
-							'values' => $multiValue ? $variantAttribute['value'] : [],
-						]);
-					}
-				});
-			});
+				$product = $this->storeProduct($productPayload);
+				foreach ($productPayload['attributes'] as $attributePayload) {
+					$this->storeAttribute($product, $attributePayload);
+				}
+			}
 
-//			$images = Arrays::Empty;
-//			$count = 0;
-//			collect(request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product, &$images, &$count, $validated){
-//				$path = SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile);
-//				ProductImage::create(['productId' => $product->id(), 'path' => $path]);
-//				Arrays::push($images, $path);
-//				if ($count++ == $validated['primaryImageIndex']) {
-//					$product->update([
-//						'primaryImage' => $path,
-//					]);
-//				}
-//			});
-
-			$response->status(HttpCreated)->setValue('data', $product)->message('Product details were saved successfully.');
+			$response->status(HttpCreated)->message('Product details were saved successfully.');
 		}
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
 		}
 		catch (InvalidCategoryException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+		}
+		catch (BrandNotApprovedForSellerException $exception) {
+			$response->status(HttpDeniedAccess)->message($exception->getMessage());
 		}
 		catch (Throwable $exception) {
 			dd($exception);
@@ -228,147 +113,5 @@ class ProductController extends ExtendedResourceController{
 //			return $response->send();
 //		}
 		return $response->send();
-	}
-
-	public function show($id){
-		$response = responseApp();
-		try {
-			$product = Product::where([
-				['sellerId', $this->user()->getKey()],
-				['deleted', false],
-				['soldOut', false],
-				['draft', false],
-				['id', $id],
-			])->firstOrFail();
-			$product = new ProductResource($product);
-			$response->status(HttpOkay)->message('Found product for the specified key.')->setValue('data', $product);
-		}
-		catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find the product for that key.');
-		}
-		catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
-			return $response->send();
-		}
-	}
-
-	public function update($id){
-		$response = responseApp();
-		try {
-			$product = Product::retrieveThrows($id);
-			$validated = $this->requestValid(request(), $this->rules('update'));
-			$product->update([
-				'name' => $validated['productName'],
-				'categoryId' => $validated['categoryId'],
-				'sellerId' => $this->user()->getKey(),
-				'productType' => $validated['productType'],
-				'productMode' => $validated['productMode'],
-				'listingType' => $validated['listingType'],
-				'originalPrice' => $validated['originalPrice'],
-				'sellingPrice' => $validated->sellingPrice,
-				'hsn' => $validated->HSN,
-				'taxCode' => $validated->taxCode,
-				'fullfilmentBy' => $validated->fullfilmentBy,
-				'procurementSla' => $validated->procurementSla,
-				'localShippingCost' => $validated->localShippingCost,
-				'zonalShippingCost' => $validated->zonalShippingCost,
-				'internationalShippingCost' => $validated->internationalShippingCost,
-				'packageWeight' => $validated->packageWeight,
-				'packageLength' => $validated->packageLength,
-				'packageHeight' => $validated->packageHeight,
-				'idealFor' => $validated->idealFor,
-				'domesticWarranty' => $payload->domesticWarranty,
-				'internationalWarranty' => $payload->internationalWarranty,
-				'warrantySummary' => $payload->warrantySummary,
-				'warrantyServiceType' => $payload->warrantyServiceType,
-				'coveredInWarranty' => $payload->coveredInWarranty,
-				'notCoveredInWarranty' => $payload->notCoveredInWarranty,
-				'videoUrl' => $validated->videoUrl,
-				'offerValue' => $validated['offerValue'],
-				'offerType' => $validated['offerType'],
-				'currency' => $validated['currency'],
-				'taxRate' => $validated['taxRate'],
-				'countryId' => $validated['countryId'],
-				'stateId' => $validated['stateId'],
-				'cityId' => $validated['cityId'],
-				'zipCode' => $validated['zipCode'],
-				'address' => $validated['address'],
-				'status' => $validated['status'],
-				'promoted' => $validated['promoted'],
-				'promotionStart' => date('Y-m-d H:i:s', strtotime($validated['promotionStart'])),
-				'promotionEnd' => date('Y-m-d H:i:s', strtotime($validated['promotionEnd'])),
-				'visibility' => $validated['visibility'],
-				'stock' => $validated['stock'],
-				'shippingCostType' => $validated['shippingCostType'],
-				'shippingCost' => $validated['shippingCost'],
-				'soldOut' => \request('stock') < 1,
-				'draft' => $validated['draft'],
-				'shortDescription' => $validated['shortDescription'],
-				'longDescription' => $validated['longDescription'],
-				'sku' => $validated['sku'],
-			]);
-			collect(jsonDecodeArray($validated['attributes']))->each(function ($item) use ($product){
-				$attribute = Attribute::retrieve($item['key']);
-				if ($attribute != null) {
-					collect($item['values'])->each(function ($value) use ($attribute, $item, $product){
-						$attributeValue = AttributeValue::where([
-							['attributeId', $attribute->getKey()],
-							['id', $value],
-						])->first();
-						if ($attributeValue != null) {
-							ProductAttribute::create([
-								'productId' => $product->id,
-								'attributeId' => $attribute->id,
-								'valueId' => $attributeValue->id,
-							]);
-						}
-					});
-				}
-			});
-			collect(\request()->file('files'))->each(function (UploadedFile $uploadedFile) use ($product){
-				ProductImage::create([
-					'productId' => $product->getKey(),
-					'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $uploadedFile),
-					'tag' => sprintf('product-%d-images', $product->getKey()),
-				]);
-			});
-			$response->status(HttpOkay)->message('Product details were updated successfully.');
-		}
-		catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find product for that key.');
-		}
-		catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
-			return $response->send();
-		}
-	}
-
-	public function delete($id){
-		$response = responseApp();
-		try {
-			$product = Product::where([
-				['deleted', false],
-				['id', $id],
-			])->firstOrFail();
-			$product->setDeleted(true)->save();
-			$response->status(HttpOkay)->message('Product deleted successfully.');
-		}
-		catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find product for that key.');
-		}
-		catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
-			return $response->send();
-		}
-	}
-
-	protected function guard(){
-		return auth('seller-api');
 	}
 }
