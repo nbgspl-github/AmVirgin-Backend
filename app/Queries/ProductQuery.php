@@ -4,11 +4,27 @@ namespace App\Queries;
 
 use App\Classes\Arrays;
 use App\Classes\Time;
+use App\Filters\BrandFilter;
+use App\Filters\GenderFilter;
+use App\Filters\PriceRangeFilter;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Builder;
 
 class ProductQuery extends AbstractQuery{
+	use PriceRangeFilter, BrandFilter, GenderFilter;
+
+	protected const PriceColumnKey = 'originalPrice';
+	protected const BrandColumnKey = 'brandId';
+	protected const GenderColumnKey = 'idealFor';
+
+	protected function __construct(){
+		parent::__construct();
+
+		// Call required filters specified in request.
+		if (request()->has(''))
+	}
+
 	public static function begin(): self{
 		return new self();
 	}
@@ -22,11 +38,6 @@ class ProductQuery extends AbstractQuery{
 		$category = Category::retrieve($categoryId);
 		$descendants = $category->descendants(true)->pluck('id')->toArray();
 		$this->query->whereIn('categoryId', $descendants);
-		return $this;
-	}
-
-	public function key(int $productId){
-		$this->query->where('id', $productId);
 		return $this;
 	}
 

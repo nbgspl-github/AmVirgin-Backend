@@ -15,8 +15,8 @@ use App\Http\Controllers\Web\Admin\SellerController;
 use App\Http\Controllers\Web\Admin\ServersController;
 use App\Http\Controllers\Web\Admin\SettingsController;
 use App\Http\Controllers\Web\Admin\Shop\HomePageController;
-use App\Http\Controllers\Web\Admin\SlidersController;
-use App\Http\Controllers\Web\Admin\Shop\SliderController as ShopSlidersController;
+use App\Http\Controllers\Web\Admin\SliderController;
+use App\Http\Controllers\Web\Admin\Shop\SliderController as ShopSliderController;
 use App\Http\Controllers\Web\Admin\SubscriptionPlansController;
 use App\Http\Controllers\Web\Admin\TvSeries\AttributesController;
 use App\Http\Controllers\Web\Admin\TvSeries\ContentController;
@@ -156,14 +156,14 @@ Route::prefix('admin')->group(function (){
 
 		// Sliders Route(s)
 		Route::prefix('sliders')->middleware('auth:admin')->group(function (){
-			Route::get('', [SlidersController::class, Methods::Index])->name('admin.sliders.index');
-			Route::get('create', [SlidersController::class, Methods::Create])->name('admin.sliders.create');
-			Route::get('{id}/edit', [SlidersController::class, Methods::Edit])->name('admin.sliders.edit');
-			Route::get('{id}', [SlidersController::class, Methods::Show])->name('admin.sliders.show');
-			Route::post('', [SlidersController::class, Methods::Store])->name('admin.sliders.store');
-			Route::post('{id}', [SlidersController::class, Methods::Update])->name('admin.sliders.update');
-			Route::put('{id}/status', [SlidersController::class, Methods::UpdateStatus])->name('admin.sliders.update.status');
-			Route::delete('{id}', [SlidersController::class, Methods::Delete])->name('admin.sliders.delete');
+			Route::get('', [SliderController::class, Methods::Index])->name('admin.sliders.index');
+			Route::get('create', [SliderController::class, Methods::Create])->name('admin.sliders.create');
+			Route::get('{id}/edit', [SliderController::class, Methods::Edit])->name('admin.sliders.edit');
+			Route::get('{id}', [SliderController::class, Methods::Show])->name('admin.sliders.show');
+			Route::post('', [SliderController::class, Methods::Store])->name('admin.sliders.store');
+			Route::post('{id}', [SliderController::class, Methods::Update])->name('admin.sliders.update');
+			Route::put('{id}/status', [SliderController::class, Methods::UpdateStatus])->name('admin.sliders.update.status');
+			Route::delete('{id}', [SliderController::class, Methods::Delete])->name('admin.sliders.delete');
 		});
 
 		// Shop Home-page Route(s)
@@ -174,14 +174,14 @@ Route::prefix('admin')->group(function (){
 
 			// Shop Sliders' Route(s)
 			Route::prefix('sliders')->group(function (){
-				Route::get('', [ShopSlidersController::class, 'index'])->name('admin.shop.sliders.index');
-				Route::get('create', [ShopSlidersController::class, 'create'])->name('admin.shop.sliders.create');
-				Route::get('{id}/edit', [ShopSlidersController::class, 'edit'])->name('admin.shop.sliders.edit');
-				Route::get('{id}', [ShopSlidersController::class, 'show'])->name('admin.shop.sliders.show');
-				Route::post('', [ShopSlidersController::class, 'store'])->name('admin.shop.sliders.store');
-				Route::post('{id}', [ShopSlidersController::class, 'update'])->name('admin.shop.sliders.update');
-				Route::put('{id}/status', [ShopSlidersController::class, 'updateStatus'])->name('admin.shop.sliders.update.status');
-				Route::delete('{id}', [ShopSlidersController::class, 'delete'])->name('admin.shop.sliders.delete');
+				Route::get('', [ShopSliderController::class, 'index'])->name('admin.shop.sliders.index');
+				Route::get('create', [ShopSliderController::class, 'create'])->name('admin.shop.sliders.create');
+				Route::get('{id}/edit', [ShopSliderController::class, 'edit'])->name('admin.shop.sliders.edit');
+				Route::get('{id}', [ShopSliderController::class, 'show'])->name('admin.shop.sliders.show');
+				Route::post('', [ShopSliderController::class, 'store'])->name('admin.shop.sliders.store');
+				Route::post('{id}', [ShopSliderController::class, 'update'])->name('admin.shop.sliders.update');
+				Route::put('{id}/status', [ShopSliderController::class, 'updateStatus'])->name('admin.shop.sliders.update.status');
+				Route::delete('{id}', [ShopSliderController::class, 'delete'])->name('admin.shop.sliders.delete');
 			});
 
 			// Brands in Focus Route(s)
@@ -308,6 +308,16 @@ Route::prefix('admin')->group(function (){
 		// Settings Route(s)
 		Route::prefix('settings')->middleware('auth:admin')->group(function (){
 			Route::get('', [SettingsController::class, Methods::Index])->name('admin.settings.index');
+		});
+
+		// Filters Route(s)
+		Route::prefix('filters')->middleware('auth:admin')->group(function (){
+			Route::prefix('catalog')->group(function (){
+				Route::get(Str::Empty, [\App\Http\Controllers\Web\Admin\CatalogFilterController::class, 'index'])->name('admin.filters.catalog.index');
+				Route::get('create', [\App\Http\Controllers\Web\Admin\CatalogFilterController::class, 'create'])->name('admin.filters.catalog.create');
+				Route::get('category/{id}/attributes', [\App\Http\Controllers\Web\Admin\CatalogFilterController::class, 'attributes'])->name('admin.filters.catalog.category.attributes');
+				Route::post(Str::Empty, [\App\Http\Controllers\Web\Admin\CatalogFilterController::class, 'store'])->name('admin.filters.catalog.store');
+			});
 		});
 	});
 });

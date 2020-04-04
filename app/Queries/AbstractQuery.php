@@ -19,6 +19,8 @@ abstract class AbstractQuery{
 
 	public static abstract function begin(): self;
 
+	public abstract function displayable(): self;
+
 	protected function active(): self{
 		$this->query->where('active', true);
 		return $this;
@@ -58,6 +60,11 @@ abstract class AbstractQuery{
 
 	public function max(string $column): int{
 		return $this->query->max($column);
+	}
+
+	public function key(int $id, string $primaryKey = 'id'){
+		$this->query->where($primaryKey, $id);
+		return $this;
 	}
 
 	public function first(){

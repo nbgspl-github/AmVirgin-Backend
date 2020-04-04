@@ -56,3 +56,9 @@
 
 {{--<!-- App js -->--}}
 <script src="{{asset("assets/admin/js/app.js")}}"></script>
+
+<script>
+	window.onload = () => {
+		window.onInitialize();
+	};
+</script>

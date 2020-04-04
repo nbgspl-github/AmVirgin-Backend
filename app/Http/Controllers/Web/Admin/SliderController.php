@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
-class SlidersController extends BaseController{
+class SliderController extends BaseController{
 	use ValidatesRequest;
 	use FluentResponse;
 

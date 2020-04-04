@@ -56,7 +56,21 @@ class Arrays extends \Illuminate\Support\Arr{
 		}
 	}
 
-	public static function search($value, array $array){
-		return array_search($value, $array);
+	public static function search($value, array $array, $default = null){
+		$key = array_search($value, $array);
+		return $key == false ? $default : $key;
+	}
+
+	public static function values(array $array): array{
+		return array_values($array);
+	}
+
+	public static function countBetween(array $array, int $min, int $max): int{
+		$count = 0;
+		foreach ($array as $value) {
+			if ($value >= $min && $value < $max)
+				$count++;
+		}
+		return $count;
 	}
 }

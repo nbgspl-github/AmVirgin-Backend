@@ -99,7 +99,7 @@ class CatalogController extends ExtendedResourceController{
 			$algorithm = $chosenSort['algorithm']::obtain();
 			$products = Product::startQuery()->displayable()->categoryOrDescendant(request('categoryId'));
 			$totalInCategory = $products->count('id');
-			$products = $products->orderBy($algorithm[0], $algorithm[1])->paginate(50);
+			$products = $products->orderBy($algorithm[0], $algorithm[1])->paginate(self::ItemsPerPage);
 			$products = SimpleProductResource::collection($products);
 			$meta = ['total' => $totalInCategory, 'pageCount' => countRequiredPages($totalInCategory, self::ItemsPerPage)];
 			$filters = $this->filters($validated['categoryId']);

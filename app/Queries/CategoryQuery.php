@@ -50,4 +50,8 @@ class CategoryQuery extends AbstractQuery{
 		$this->query->where('type', Category::Types['Vertical']);
 		return $this;
 	}
+
+	public function displayable(): AbstractQuery{
+		return $this;
+	}
 }

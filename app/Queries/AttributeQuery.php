@@ -27,4 +27,8 @@ class AttributeQuery extends AbstractQuery{
 		$this->query->where('productNameSegment', true);
 		return $this;
 	}
+
+	public function displayable(): AbstractQuery{
+		return $this;
+	}
 }
