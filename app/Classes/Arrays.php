@@ -13,8 +13,8 @@ class Arrays extends \Illuminate\Support\Arr{
 		return is_array($array);
 	}
 
-	public static function push(array &$array, $item): int{
-		return array_push($array, $item);
+	public static function push(array &$array, ...$item): int{
+		return array_push($array, count($item) < 2 ? $item[0] : $item);
 	}
 
 	public static function keyExists($key, array $array): bool{
