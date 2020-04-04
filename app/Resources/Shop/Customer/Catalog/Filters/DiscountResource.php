@@ -25,9 +25,10 @@ class DiscountResource extends AbstractBuiltInResource{
 
 	private function discountDivisions(Collection $values): array{
 		$discountCollection = $values;
+		$maxDiscount = $values->max();
 		$divisions = Arrays::Empty;
-		for ($tenths = 10; $tenths <= 90; $tenths++) {
-			$itemsInRange = $discountCollection->where(static::RequiredColumn, '>=', $tenths)->count();
+		for ($tenths = 10; $tenths <= 90; $tenths += 10) {
+			$itemsInRange = $discountCollection->whereBetween(null, [$tenths, $maxDiscount])->count();
 			if ($itemsInRange > 0) {
 				Arrays::push($divisions, $tenths);
 			}

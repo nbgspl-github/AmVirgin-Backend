@@ -25,11 +25,11 @@ class PriceRangeResource extends AbstractBuiltInResource{
 		$itemCount = $priceCollection->count();
 		if ($itemCount == 0) {
 			// If there are no products, just create a 0 - 0 range filter.
-			return [[
+			return [
 				'upper' => 0,
 				'lower' => 0,
 				'count' => 0,
-			]];
+			];
 		}
 		$boundaries = config('filters.price.boundaries');
 		$divisions = -1;

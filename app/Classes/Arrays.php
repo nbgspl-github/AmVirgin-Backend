@@ -13,7 +13,7 @@ class Arrays extends \Illuminate\Support\Arr{
 		return is_array($array);
 	}
 
-	public static function push(array &$array, ...$item): int{
+	public static function push(array &$array, $item): int{
 		return array_push($array, $item);
 	}
 
