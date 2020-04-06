@@ -29,6 +29,7 @@ use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
 
@@ -41,6 +42,7 @@ class ProductController extends AbstractProductController{
 		$response = responseApp();
 		try {
 			$outer = $this->validateOuter();
+			$trailer = $this->trailerFilePath();
 			$category = $this->category();
 			$brand = $this->brand();
 			if ($this->isInvalidCategory($category)) {
@@ -49,51 +51,76 @@ class ProductController extends AbstractProductController{
 			if (!$this->isBrandApprovedForSeller($brand)) {
 				throw new BrandNotApprovedForSellerException();
 			}
-			$trailer = $this->trailerFilePath();
 
+			$productsPayloadCollection = new Collection();
 			if ($this->isVariantType()) {
-				foreach ($outer['payload'] as $payload) {
-					$productPayload = $payload;
-					Arrays::replaceValues($productPayload, [
+				collect($outer['payload'])->each(function ($variant) use (&$productsPayloadCollection, $category, $brand, $trailer, $outer){
+					$variant = $this->validateProductPayload($variant);
+					Arrays::replaceValues($variant, [
 						'categoryId' => $category->id(),
 						'brandId' => $brand->id(),
 						'sellerId' => $this->guard()->id(),
 						'type' => Product::Type['Variant'],
 						'currency' => $outer['currency'],
 						'description' => $outer['description'],
-						'taxRate' => HsnCode::find($productPayload['hsn'])->taxRate(),
+						'taxRate' => HsnCode::find($variant['hsn'])->taxRate(),
 						'trailer' => $trailer,
 						'group' => $this->sessionUuid(),
-						'discount' => $this->calculateDiscount($productPayload['originalPrice'], $productPayload['sellingPrice']),
-						'primaryImage' => Str::Empty,
+						'discount' => $this->calculateDiscount($variant['originalPrice'], $variant['sellingPrice']),
 					]);
-					$product = $this->storeProduct($productPayload);
-					foreach ($payload['attributes'] as $attributePayload) {
-						$this->storeAttribute($product, $attributePayload);
-					}
-				}
+					$attributes = $variant['attributes'];
+					$primaryIndex = $variant['primaryImageIndex'];
+					$currentIndex = 0;
+					$images = collect(isset($variant['files']) ? $variant['files'] : [])->transform(function (UploadedFile $file) use (&$currentIndex, $primaryIndex, &$variant){
+						$file = SecuredDisk::access()->putFile(Directories::ProductImage, $file);
+						if ($currentIndex++ == $primaryIndex) {
+							$variant['primaryImage'] = $file;
+						}
+						return $file;
+					})->toArray();
+					$productsPayloadCollection->push([
+						'product' => $variant,
+						'attributes' => $attributes,
+						'images' => $images,
+					]);
+				});
 			}
 			else {
-				$productPayload = $outer['payload'];
-				Arrays::replaceValues($productPayload, [
+				$variant = $this->validateProductPayload($outer['payload']);
+				Arrays::replaceValues($variant, [
 					'categoryId' => $category->id(),
 					'brandId' => $brand->id(),
 					'sellerId' => $this->guard()->id(),
 					'type' => Product::Type['Variant'],
 					'currency' => $outer['currency'],
 					'description' => $outer['description'],
-					'taxRate' => HsnCode::find($productPayload['hsn'])->taxRate(),
+					'taxRate' => HsnCode::find($variant['hsn'])->taxRate(),
 					'trailer' => $trailer,
 					'group' => $this->sessionUuid(),
-					'discount' => $this->calculateDiscount($productPayload['originalPrice'], $productPayload['sellingPrice']),
-					'primaryImage' => Str::Empty,
+					'discount' => $this->calculateDiscount($variant['originalPrice'], $variant['sellingPrice']),
 				]);
-				$product = $this->storeProduct($productPayload);
-				foreach ($productPayload['attributes'] as $attributePayload) {
-					$this->storeAttribute($product, $attributePayload);
-				}
+				$attributes = $variant['attributes'];
+				$primaryIndex = $variant['primaryImageIndex'];
+				$currentIndex = 0;
+				$images = collect($variant['files'])->transform(function (UploadedFile $file) use (&$currentIndex, $primaryIndex, &$variant){
+					$file = SecuredDisk::access()->putFile(Directories::ProductImage, $file);
+					if ($currentIndex++ == $primaryIndex) {
+						$variant['primaryImage'] = $file;
+					}
+					return $file;
+				})->toArray();
+				$productsPayloadCollection->push([
+					'product' => $variant,
+					'attributes' => $attributes,
+					'images' => $images,
+				]);
 			}
 
+			$productsPayloadCollection->each(function ($payload){
+				$product = $this->storeProduct($payload['product']);
+				$this->storeAttribute($product, $payload['attributes']);
+				$this->storeImages($product, $payload['images']);
+			});
 			$response->status(HttpCreated)->message('Product details were saved successfully.');
 		}
 		catch (ValidationException $exception) {
@@ -109,9 +136,8 @@ class ProductController extends AbstractProductController{
 			dd($exception);
 			$response->status(HttpServerError)->message($exception->getMessage());
 		}
-//		finally {
-//			return $response->send();
-//		}
-		return $response->send();
+		finally {
+			return $response->send();
+		}
 	}
 }

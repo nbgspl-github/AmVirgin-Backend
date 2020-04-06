@@ -16,7 +16,7 @@ trait ValidatesRequest{
 		],
 	];
 
-	public function requestValid(Request $request, array $rules, array $additional = []){
+	public function requestValid(Request $request, array $rules, array $additional = [], array $messages = []){
 		// Check if there are any injected rules, if so inject them into main array.
 		if (count($additional) > 0)
 			foreach ($rules as $key => $value)
@@ -30,14 +30,14 @@ trait ValidatesRequest{
 				}
 
 		if ($request == null)
-			$validator = Validator::make(request()->all(), $rules);
+			$validator = Validator::make(request()->all(), $rules, $messages);
 		else
-			$validator = Validator::make($request->all(), $rules);
+			$validator = Validator::make($request->all(), $rules, $messages);
 		if ($validator->fails()) throw new ValidationException($validator->errors()->first(), $validator);
 		else return $validator->validated();
 	}
 
-	public function arrayValid(array $payload = [], array $rules = [], array $additional = []){
+	public function arrayValid(array $payload = [], array $rules = [], array $additional = [], array $messages = []){
 		// Check if there are any injected rules, if so inject them into main array.
 		if (count($additional) > 0)
 			foreach ($rules as $key => $value)
@@ -50,7 +50,7 @@ trait ValidatesRequest{
 						$rules[$key][] = $extra[0];
 				}
 
-		$validator = Validator::make($payload, $rules);
+		$validator = Validator::make($payload, $rules, $messages);
 		if ($validator->fails()) throw new ValidationException($validator->errors()->first(), $validator);
 		else return $validator->validated();
 	}

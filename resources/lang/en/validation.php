@@ -150,6 +150,8 @@ return [
 		'mobile' => 'mobile number',
 		'email' => 'email address',
 		'attributeName' => 'attribute name',
+		'attributes.*.key' => 'attribute key for an item',
+		'attributes.*.value' => 'attribute value for an item',
 	],
 
 ];

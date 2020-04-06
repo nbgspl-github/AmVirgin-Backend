@@ -103,11 +103,13 @@ class AttributeController extends BaseController{
 					'useToCreateVariants' => request()->has('useToCreateVariants'),
 					'showInCatalogListing' => request()->has('showInCatalogListing'),
 					'useInLayeredNavigation' => request()->has('useInLayeredNavigation'),
+					'combineMultipleValues' => request()->has('combineMultipleValues'),
+					'visibleToCustomers' => request()->has('visibleToCustomers'),
 					'predefined' => request()->has('predefined'),
 					'multiValue' => request()->has('multiValue'),
 					'minValues' => request()->has('multiValue') ? $validated->minValues : 0,
 					'maxValues' => request()->has('multiValue') ? $validated->maxValues : 0,
-					'values' => request()->has('predefined') ? Str::split(';', $validated->values) : [],
+					'values' => request()->has('predefined') ? Str::split('|', $validated->values) : [],
 				]);
 			}
 			else {

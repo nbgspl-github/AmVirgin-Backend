@@ -30,7 +30,10 @@ class DiscountResource extends AbstractBuiltInResource{
 		for ($tenths = 10; $tenths <= 90; $tenths += 10) {
 			$itemsInRange = $discountCollection->whereBetween(null, [$tenths, $maxDiscount])->count();
 			if ($itemsInRange > 0) {
-				Arrays::push($divisions, $tenths);
+				Arrays::push($divisions, [
+					'limit' => $tenths,
+					'count' => $itemsInRange,
+				]);
 			}
 		}
 		return $divisions;

@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Schema;
 class CreateProductAttributesTable extends Migration{
 	/**
 	 * Run the migrations.
-	 *
 	 * @return void
 	 */
 	public function up(){
@@ -17,6 +16,7 @@ class CreateProductAttributesTable extends Migration{
 			$table->unsignedBigInteger('attributeId')->comment('Reference to original attribute');
 			$table->boolean('variantAttribute')->default(false)->comment('Whether the attribute these values belong to is a variant attribute?');
 			$table->boolean('showInCatalogListing')->default(false)->comment('Whether this attribute and its values will be shown in catalog listing?');
+			$table->boolean('visibleToCustomers')->comment('Whether this attribute and its value be visible to customer?');
 			$table->string('interface')->default(\App\Models\Attribute::Interface['TextLabel'])->comment('What kind of interface will be shown for attribute\'s value(s)?');
 			$table->string('label')->comment('Label of attribute');
 			$table->string('group')->comment('Group name of attribute');
@@ -32,7 +32,6 @@ class CreateProductAttributesTable extends Migration{
 
 	/**
 	 * Reverse the migrations.
-	 *
 	 * @return void
 	 */
 	public function down(){

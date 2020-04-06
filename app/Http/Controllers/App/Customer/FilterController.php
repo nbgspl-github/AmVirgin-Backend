@@ -44,8 +44,8 @@ class FilterController extends ExtendedResourceController{
 
 		// Prepare and send response.
 		return responseApp()
-			->status(HttpOkay)->setValue('data', $filters)
-			->message('Listing all available filters for category.')->send();
+			->status(HttpOkay)->setValue('payload', $filters)
+			->message('Listing available filters for category.')->send();
 	}
 
 	public function transform(CatalogFilter $catalogFilter, Collection $columnValues): AbstractBuiltInResource{

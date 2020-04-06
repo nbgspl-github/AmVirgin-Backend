@@ -18,7 +18,7 @@ class ProductAttribute extends Model{
 	use RetrieveResource, DynamicAttributeNamedMethods;
 	protected $table = 'product-attributes';
 	protected $attributes = [
-		'value' => [],
+
 	];
 	protected $fillable = [
 		'productId',
@@ -27,11 +27,14 @@ class ProductAttribute extends Model{
 		'group',
 		'variantAttribute',
 		'showInCatalogListing',
+		'visibleToCustomers',
 		'value',
 	];
 	protected $casts = [
 		'multiValue' => 'bool',
 		'variantAttribute' => 'bool',
+		'showInCatalogListing' => 'bool',
+		'visibleToCustomers' => 'bool',
 		'value' => 'array',
 	];
 

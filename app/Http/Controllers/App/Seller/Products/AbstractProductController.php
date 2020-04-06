@@ -41,7 +41,6 @@ class AbstractProductController extends ExtendedResourceController{
 					'categoryId' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)],
 					'brandId' => ['bail', 'required', Rule::existsPrimary(Tables::Brands), Rule::exists(Tables::SellerBrands, 'brandId')->where('status', 'approved')],
 					'type' => ['bail', 'required', 'string', Rule::in([Product::Type['Simple'], Product::Type['Variant']])],
-					'count' => ['bail', 'required', 'numeric', Rule::minimum(1), Rule::maximum(25)],
 					'currency' => ['bail', 'nullable', 'string', 'min:2', 'max:5', Rule::exists(Tables::Currencies, 'code')],
 					'description' => ['bail', 'required', 'string', 'min:1', 'max:2000'],
 					'trailer' => ['bail', 'nullable', 'mimes:mp4', 'min:1', 'max:100000'],
@@ -76,10 +75,9 @@ class AbstractProductController extends ExtendedResourceController{
 					'primaryImageIndex' => ['bail', 'required', 'numeric', Rule::minimum(0), Rule::maximum(8)],
 					'files' => ['bail', 'nullable', 'min:1', 'max:8'],
 					'files.*' => ['bail', 'nullable', 'mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
-				],
-				'attribute' => [
-					'key' => ['bail', 'required', Rule::existsPrimary(Tables::Attributes)],
-					'value' => ['bail', 'required'],
+					'attributes' => ['bail', 'required'],
+					'attributes.*.key' => ['bail', 'required', 'exists:attributes,id'],
+					'attributes.*.value' => ['bail', 'required'],
 				],
 			],
 		];
@@ -90,33 +88,52 @@ class AbstractProductController extends ExtendedResourceController{
 		return Product::create($payload);
 	}
 
-	protected function storeAttribute(Product $product, array $payload): Model{
+	protected function storeAttribute(Product $product, array $payload): Collection{
 		if (!$this->items) {
 			$this->items = $product->category->attributeSet->items;
 		}
-		$attribute = Attribute::retrieve($payload['key']);
-		$group = $this->items->where('attributeId', $attribute->id())->pluck('group')->first();
-		$value = $payload['value'];
-		$created = null;
-		if (Arrays::isArray($value)) {
-			$created = $product->attributes()->create([
-				'attributeId' => $attribute->id(),
-				'variantAttribute' => $attribute->useToCreateVariants(),
-				'label' => $attribute->name(),
-				'group' => $group,
-				'value' => $attribute->useToCreateVariants() ? Str::join(Str::WhiteSpace, $value) : Str::join(Str::NewLine, $value),
-			]);
+		$attributesCollection = new Collection();
+		collect($payload)->each(function ($payload) use ($product, $attributesCollection){
+			$attribute = Attribute::retrieve($payload['key']);
+			$group = $this->items->where('attributeId', $attribute->id())->pluck('group')->first();
+			$value = $payload['value'];
+			$created = null;
+			if (Arrays::isArray($value)) {
+				$created = $product->attributes()->create([
+					'attributeId' => $attribute->id(),
+					'variantAttribute' => $attribute->useToCreateVariants(),
+					'showInCatalogListing' => $attribute->showInCatalogListing(),
+					'visibleToCustomers' => $attribute->visibleToCustomers(),
+					'label' => $attribute->name(),
+					'group' => $group,
+					'value' => $attribute->combineMultipleValues() ? Str::join(Str::WhiteSpace, $value) : $value,
+				]);
+			}
+			else {
+				$created = $product->attributes()->create([
+					'attributeId' => $attribute->id(),
+					'variantAttribute' => $attribute->useToCreateVariants(),
+					'showInCatalogListing' => $attribute->showInCatalogListing(),
+					'visibleToCustomers' => $attribute->visibleToCustomers(),
+					'label' => $attribute->name(),
+					'group' => $group,
+					'value' => $value,
+				]);
+			}
+			$attributesCollection->push($created);
+		});
+		return $attributesCollection;
+	}
+
+	protected function storeImages(Product $product, array $payload): Collection{
+		$images = new Collection();
+		foreach ($payload as $image) {
+			$images->push($product->images()->create([
+				'path' => $image,
+				'tag' => $product->sku(),
+			]));
 		}
-		else {
-			$created = $product->attributes()->create([
-				'attributeId' => $attribute->id(),
-				'variantAttribute' => $attribute->useToCreateVariants(),
-				'label' => $attribute->name(),
-				'group' => $group,
-				'value' => $value,
-			]);
-		}
-		return $created;
+		return $images;
 	}
 
 	protected function category(): Category{

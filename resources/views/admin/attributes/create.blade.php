@@ -88,6 +88,15 @@
 												</div>
 											</div>
 										</div>
+										<div class="form-group">
+											<label>Will this attribute and its values be visible to customer (front-end)?</label>
+											<div>
+												<div class="custom-control custom-checkbox">
+													<input type="checkbox" class="custom-control-input" id="visibleToCustomers" name="visibleToCustomers" checked>
+													<label class="custom-control-label" for="visibleToCustomers">Yes</label>
+												</div>
+											</div>
+										</div>
 										<div class="card custom-card p-3 shadow-none mb-0">
 											<div class="form-group">
 												<label>Attribute has predefined values? <i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Predefine a set of values that the seller must choose from such as size (L, M, S) etc.'])></i></label>
@@ -151,7 +160,7 @@
 			};
 			MultiEntryModal.setupMultiEntryModal({
 				title: 'Attribute values',
-				separator: ';',
+				separator: '|',
 				key: 'values',
 				boundEditBoxId: 'values',
 				modalId: 'values_multiEntryModal',
