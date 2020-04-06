@@ -53,8 +53,8 @@ class CartTesterCommand extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		$product = Product::retrieve(4);
-		dd($product->variants()->get('name')->toArray());
+		$class = 'App\Classes\Sorting\DiscountDescending';
+		class_('App\Classes\Sorting\DiscountDescending')->yeah();
 		return;
 	}
 

@@ -12,6 +12,8 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 abstract class ExtendedResourceController extends BaseController{
 	use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 	use FluentResponse;
+	protected const CustomerAPI = 'customer-api';
+	protected const SellerAPI = 'seller-api';
 
 	protected function user(){
 		return $this->guard()->user();

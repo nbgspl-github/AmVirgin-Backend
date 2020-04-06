@@ -2,8 +2,10 @@
 
 namespace App\Classes\Sorting;
 
-class PriceDescending implements SortingAlgorithm {
-	public static function obtain() {
-		return ['originalPrice', 'desc'];
+use App\Queries\ProductQuery;
+
+class PriceDescending implements Sorts{
+	public static function sort(ProductQuery $query): ProductQuery{
+		return $query->orderByDescending('originalPrice');
 	}
 }

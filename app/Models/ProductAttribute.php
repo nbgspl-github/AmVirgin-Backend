@@ -27,6 +27,7 @@ class ProductAttribute extends Model{
 	];
 	protected $casts = [
 		'multiValue' => 'bool',
+		'variantAttribute' => 'bool',
 	];
 
 	public function product(): BelongsTo{

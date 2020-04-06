@@ -9,21 +9,7 @@ class VariantItemResource extends AbstractProductResource{
 		return [
 			'key' => $this->id(),
 			'name' => $this->name(),
-			'price' => [
-				'original' => $this->originalPrice(),
-				'selling' => $this->sellingPrice(),
-				'discount' => [
-					'has' => $this->hasDiscount(),
-					'value' => $this->calculateDiscount(),
-				],
-			],
-			'stock' => [
-				'isLowInStock' => $this->isLowInStock(),
-				'available' => $this->inStock(),
-			],
-			'options' => [
-
-			],
+			'options' => OptionResource::collection($this->options),
 		];
 	}
 }

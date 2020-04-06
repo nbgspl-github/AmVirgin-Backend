@@ -78,4 +78,13 @@ abstract class AbstractQuery{
 	public function get($columns = ['*']){
 		return $this->query->get($columns);
 	}
+
+	public function custom(AbstractQuery $query): self{
+		return $this;
+	}
+
+	public function latest($column = 'created_at'): self{
+		$this->query->latest($column);
+		return $this;
+	}
 }

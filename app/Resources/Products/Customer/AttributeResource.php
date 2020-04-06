@@ -7,8 +7,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class AttributeResource extends JsonResource{
 	public function toArray($request){
 		return [
-			'label' => $this->name(),
-			'value' => $this->values(),
+			'label' => $this->label(),
+			'interface' => $this->interface(),
+			'group' => $this->group(),
+			'value' => $this->value(),
 		];
 	}
 }

@@ -155,6 +155,14 @@ class Product extends Model{
 		return $this->hasMany(ProductAttribute::class, 'productId');
 	}
 
+	public function options(): HasMany{
+		return $this->hasMany(ProductAttribute::class, 'productId')->where('variantAttribute', true);
+	}
+
+	public function specs(): HasMany{
+		return $this->hasMany(ProductAttribute::class, 'productId')->where('variantAttribute', false);
+	}
+
 	public function brand(): BelongsTo{
 		return $this->belongsTo(Brand::class, 'brandId');
 	}

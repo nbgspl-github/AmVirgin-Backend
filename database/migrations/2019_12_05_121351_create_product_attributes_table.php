@@ -16,6 +16,7 @@ class CreateProductAttributesTable extends Migration{
 			$table->unsignedBigInteger('productId')->comment('Product to which this attribute belongs');
 			$table->unsignedBigInteger('attributeId')->comment('Reference to original attribute');
 			$table->boolean('variantAttribute')->default(false)->comment('Whether the attribute these values belong to is a variant attribute?');
+			$table->string('interface')->default(\App\Models\Attribute::Interface['TextLabel'])->comment('What kind of interface will be shown for attribute\'s value(s)?');
 			$table->string('label')->comment('Label of attribute');
 			$table->string('group')->comment('Group name of attribute');
 			$table->string('value', 10000)->nullable()->comment('Value(s) of attribute');

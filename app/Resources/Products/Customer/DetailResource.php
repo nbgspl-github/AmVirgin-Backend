@@ -9,6 +9,7 @@ class DetailResource extends JsonResource{
 		return [
 			'label' => $this->label(),
 			'group' => $this->group(),
+			'value' => $this->value(),
 		];
 	}
 }

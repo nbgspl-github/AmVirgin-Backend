@@ -1,5 +1,6 @@
 <?php
 
+use App\Classes\Sorting\DiscountDescending;
 use App\Exceptions\ValidationException;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\ExtendedRequestValidator;
@@ -189,4 +190,9 @@ function countRequiredPages(int $total, int $perPage){
 		$result += 1;
 	}
 	return $result;
+}
+
+function class_(string $slug): object{
+	$class = new ReflectionClass($slug);
+	return $class->newInstanceWithoutConstructor();
 }

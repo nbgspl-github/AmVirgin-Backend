@@ -59,11 +59,14 @@ class PriceRangeResource extends AbstractBuiltInResource{
 		for ($i = 0; $i < $divisions; $i++) {
 			$lastMinimum = $minimumPrice;
 			$minimumPrice = $minimumPrice + $median + $neutralizer;
-			Arrays::push($sections, [
-				'upper' => $lastMinimum,
-				'lower' => $minimumPrice,
-				'count' => $priceCollection->whereBetween(null, [$lastMinimum, $minimumPrice])->count(),
-			]);
+			$productCount = $priceCollection->whereBetween(null, [$lastMinimum, $minimumPrice])->count();
+			if ($productCount > 0) {
+				Arrays::push($sections, [
+					'upper' => $lastMinimum,
+					'lower' => $minimumPrice,
+					'count' => $productCount,
+				]);
+			}
 		}
 		return $sections;
 	}
@@ -76,7 +79,6 @@ class PriceRangeResource extends AbstractBuiltInResource{
 		return [
 			'key' => $this->id(),
 			'label' => $this->label(),
-			'builtIn' => $this->builtIn(),
 			'type' => $this->builtInType(),
 			'mode' => $this->mode(),
 			'options' => $this->values,

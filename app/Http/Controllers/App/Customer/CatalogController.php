@@ -4,9 +4,11 @@ namespace App\Http\Controllers\App\Customer;
 
 use App\Classes\Arrays;
 use App\Classes\Rule;
+use App\Classes\Sorting\AbstractSorts;
 use App\Classes\Sorting\DiscountDescending;
-use App\Classes\Sorting\Natural;
-use App\Classes\Sorting\NewlyAdded;
+use App\Classes\Sorting\Relevance;
+use App\Classes\Sorting\Sorts;
+use App\Classes\Sorting\WhatIsNew;
 use App\Classes\Sorting\Popularity;
 use App\Classes\Sorting\PriceAscending;
 use App\Classes\Sorting\PriceDescending;
@@ -37,46 +39,14 @@ class CatalogController extends ExtendedResourceController{
 	use ValidatesRequest;
 	protected const DefaultSort = 'relevance';
 	protected const ItemsPerPage = 50;
-	protected const SortingOptions = [
-		[
-			'name' => 'Relevance',
-			'key' => 'relevance',
-			'algorithm' => Natural::class,
-		],
-		[
-			'name' => 'Price: High to Low',
-			'key' => 'price-high-to-low',
-			'algorithm' => PriceDescending::class,
-		],
-		[
-			'name' => 'Price: Low to High',
-			'key' => 'price-low-to-high',
-			'algorithm' => PriceAscending::class,
-		],
-		[
-			'name' => 'Popularity',
-			'key' => 'popularity',
-			'algorithm' => Popularity::class,
-		],
-		[
-			'name' => 'What\'s new?',
-			'key' => 'whats-new',
-			'algorithm' => NewlyAdded::class,
-		],
-		[
-			'name' => 'Better Discount',
-			'key' => 'better-discount',
-			'algorithm' => DiscountDescending::class,
-		],
-	];
 	protected array $rules = [];
 
 	public function __construct(){
 		parent::__construct();
 		$this->rules = [
 			'index' => [
-				'categoryId' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)->whereNot('type', Category::Types['Root'])],
-				'sortKey' => ['bail', 'nullable', 'string', 'min:1', 'max:50'],
+				'category' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)->whereNot('type', Category::Types['Root'])],
+				'sortBy' => ['bail', 'nullable', Rule::in(collect(config('sorts.shop'))->keys()->toArray())],
 				'page' => ['bail', 'nullable', 'numeric', 'min:1', 'max:10000'],
 			],
 		];
@@ -86,22 +56,28 @@ class CatalogController extends ExtendedResourceController{
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules['index']);
+			$itemsPerPage = config('shop.catalog.defaults.listing.perPage', 50);
 			if (!isset($validated['page'])) $validated['page'] = 0;
-			if (!isset($validated['sortKey'])) $validated['sortKey'] = self::DefaultSort;
-			$sorts = collect(self::SortingOptions);
-			$chosenSort = $sorts->firstWhere('key', $validated['sortKey']);
-			$algorithm = $chosenSort['algorithm']::obtain();
-			$products = Product::startQuery()->displayable()->categoryOrDescendant($validated['categoryId'])->singleVariantMode();
-			$filters = $this->filters($validated['categoryId'], $products);
-			$total = $products->count('id');
-			$products = $products->orderBy($algorithm[0], $algorithm[1])->paginate(self::ItemsPerPage);
+			if (!isset($validated['sortBy'])) $validated['sortBy'] = config('shop.catalog.defaults.sort', 'relevance');
+
+			// Grab the sorting algorithm.
+			$sort = AbstractSorts::take(config('sorts.shop')[$validated['sortBy']]['class']);
+
+			// Collect all viable products.
+			$products = Product::startQuery()->displayable()->categoryOrDescendant($validated['category'])->singleVariantMode();
+
+			// Apply any incoming sort request, or just go with the default one.
+			$sort::sort($products);
+
+			// Paginate to first 50 results for page.
+			$total = $products->count();
+			$products = $products->paginate($itemsPerPage);
 			$products = VariantProductResource::collection($products);
 			$meta = [
-				'pages' => [
-					'total' => $total,
-					'count' => countRequiredPages($total, self::ItemsPerPage),
+				'pagination' => [
+					'pages' => countRequiredPages($total, $itemsPerPage),
+					'items' => ['total' => $total, 'chunk' => $itemsPerPage],
 				],
-				'filters' => $filters,
 			];
 			$response->status(HttpOkay)->message('Listing available products for given category.')
 				->setValue('meta', $meta)
@@ -111,7 +87,6 @@ class CatalogController extends ExtendedResourceController{
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
 		}
 		catch (Throwable $exception) {
-			dd($exception);
 			$response->status(HttpServerError)->message($exception->getMessage());
 		}
 		finally {
@@ -140,51 +115,5 @@ class CatalogController extends ExtendedResourceController{
 		finally {
 			return $response->send();
 		}
-	}
-
-	public function sorts(): JsonResponse{
-		$sorts = collect(self::SortingOptions);
-		$sorts->transform(function ($item){
-			unset($item['algorithm']);
-			return $item;
-		});
-		return responseApp()->status(HttpOkay)->message(function () use ($sorts){
-			return sprintf('There are a total of %d sorting options available.', $sorts->count());
-		})->setValue('data', $sorts)->send();
-	}
-
-	public function filters(int $categoryId, ProductQuery $products): Collection{
-		$filters = CatalogFilter::startQuery()->category($categoryId)->get();
-
-		// Get all required columns.
-		$requiredColumns = collect([
-			PriceRangeResource::RequiredColumn,
-			BrandResource::RequiredColumn,
-			GenderResource::RequiredColumn,
-			CategoryResource::RequiredColumn,
-			DiscountResource::RequiredColumn,
-		])->flatten()->values()->toArray();
-
-		// Pre-fetch all values from all essential columns for built-in filters.
-		$requiredColumnValues = $products->get($requiredColumns);
-
-		// Transform each available filters, excluding inbuilt ones by send them to a new function.
-		$filters->transform(function (CatalogFilter $catalogFilter) use ($requiredColumnValues){
-			return $catalogFilter->builtIn() ? $this->builtInFilter($catalogFilter, $requiredColumnValues) : new FilterResource($catalogFilter);
-		});
-		return $filters;
-	}
-
-	public function builtInFilter(CatalogFilter $catalogFilter, Collection $columnValues): AbstractBuiltInResource{
-		// Retrieve the appropriate Resource class for built in filter.
-		$resourceClass = CatalogFilter::BuiltInFilterResourceMapping[$catalogFilter->builtInType()];
-		// Get column values as per the requirements of resource class.
-		$values = $columnValues->pluck($resourceClass::RequiredColumn);
-		// Convert the resource to array instance.
-		return (new $resourceClass($catalogFilter))->withValues($values);
-	}
-
-	protected function guard(){
-		return auth('customer-api');
 	}
 }

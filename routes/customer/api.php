@@ -34,6 +34,7 @@ Route::prefix('videos')->group(function (){
 
 Route::prefix('categories')->group(function (){
 	Route::get('/', [\App\Http\Controllers\App\Customer\CategoryController::class, 'index']);
+	Route::get('{id}/filters', [\App\Http\Controllers\App\Customer\FilterController::class, 'show']);
 });
 
 Route::prefix('sessions')->group(function (){
@@ -43,7 +44,7 @@ Route::prefix('sessions')->group(function (){
 
 Route::prefix('products')->group(function (){
 	Route::get('/', [CatalogController::class, 'index']);
-	Route::get('/sorts', [CatalogController::class, 'sorts']);
+	Route::get('/sorts', [\App\Http\Controllers\App\Customer\SortController::class, 'sorts']);
 	Route::get('{id}', [CatalogController::class, 'show'])->name('seller.products.show');
 });
 

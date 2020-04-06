@@ -27,6 +27,7 @@ class Attribute extends Model{
 		'multiValue',
 		'minValues',
 		'maxValues',
+		'interface',
 		'values',
 	];
 	protected $hidden = [

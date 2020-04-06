@@ -18,6 +18,6 @@ class SecuredDisk extends BaseStorage {
 		if (self::access()->exists($path))
 			return self::access()->url($path);
 		else
-			return Str::Empty;
+			return null;
 	}
 }

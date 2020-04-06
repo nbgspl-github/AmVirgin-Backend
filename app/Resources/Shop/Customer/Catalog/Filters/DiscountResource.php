@@ -10,8 +10,8 @@ class DiscountResource extends AbstractBuiltInResource{
 
 	public function toArray($request){
 		return [
+			'key' => $this->id(),
 			'label' => $this->label(),
-			'builtIn' => $this->builtIn(),
 			'type' => $this->builtInType(),
 			'mode' => $this->mode(),
 			'options' => $this->values,

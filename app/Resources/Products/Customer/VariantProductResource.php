@@ -23,7 +23,7 @@ class VariantProductResource extends AbstractProductResource{
 		$this->warranty = [
 			'domestic' => $this->domesticWarranty(),
 			'international' => $this->internationalWarranty(),
-			'unit' => 'days',
+			'unit' => 'Days',
 			'summary' => $this->warrantySummary(),
 			'serviceType' => $this->serviceType(),
 			'covered' => $this->coveredInWarranty(),
@@ -43,28 +43,22 @@ class VariantProductResource extends AbstractProductResource{
 			'price' => [
 				'original' => $this->originalPrice(),
 				'selling' => $this->sellingPrice(),
-				'discount' => [
-					'has' => $this->hasDiscount(),
-					'value' => $this->discount(),
-				],
 			],
 			'fulfillmentBy' => $this->fulfillmentBy(),
 			'currency' => $this->currency(),
 			'rating' => $this->rating(),
 			'stock' => [
-				'isLowInStock' => $this->isLowInStock(),
-				'available' => $this->inStock(),
+				'isLow' => $this->isLowInStock(),
+				'remaining' => $this->inStock(),
 			],
 			'warranty' => $this->warranty,
 			'maxQuantity' => $this->maxQuantityPerOrder(),
 			'media' => [
-				'trailer' => [
-					'has' => SecuredDisk::access()->exists($this->trailer()),
-					'link' => SecuredDisk::existsUrl($this->trailer()),
-				],
+				'trailer' => SecuredDisk::existsUrl($this->trailer()),
 				'gallery' => ImageResource::collection($this->images),
 			],
-			'details' => [],
+			'details' => DetailResource::collection($this->specs),
+			'options' => OptionResource::collection($this->options),
 			'variants' => VariantItemResource::collection($this->variants),
 		];
 	}
