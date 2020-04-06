@@ -22,6 +22,7 @@ class CreateAttributesTable extends Migration{
 			$table->boolean('useToCreateVariants')->default(false)->comment('Whether this attribute and its values be used to create product variants?');
 			$table->boolean('useInLayeredNavigation')->default(false)->comment('Whether this attribute will appear as a filterable candidate in catalog listing?');
 			$table->boolean('showInCatalogListing')->default(false)->comment('Whether this attribute and its values will be shown in catalog listing?');
+			$table->boolean('combineMultipleValues')->default(false)->comment('Whether multiple values for this attribute should be treated as one single value?');
 			$table->boolean('predefined')->default(false)->comment('Whether this attribute has a predefined set of values.');
 			$table->boolean('multiValue')->default(false)->comment('Whether this attribute allows multiple values to be entered.');
 			$table->mediumInteger('minValues')->default(0)->comment('Minimum required values for this attribute in multi-value mode.');

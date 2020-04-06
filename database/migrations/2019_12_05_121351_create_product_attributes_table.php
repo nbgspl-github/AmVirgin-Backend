@@ -20,7 +20,7 @@ class CreateProductAttributesTable extends Migration{
 			$table->string('interface')->default(\App\Models\Attribute::Interface['TextLabel'])->comment('What kind of interface will be shown for attribute\'s value(s)?');
 			$table->string('label')->comment('Label of attribute');
 			$table->string('group')->comment('Group name of attribute');
-			$table->string('value', 10000)->nullable()->comment('Value(s) of attribute');
+			$table->json('value')->comment('Value(s) of attribute');
 			$table->timestamps();
 
 			if (appEnvironment(AppEnvironmentProduction)) {

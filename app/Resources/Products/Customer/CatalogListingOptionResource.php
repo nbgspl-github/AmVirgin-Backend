@@ -8,7 +8,7 @@ class CatalogListingOptionResource extends JsonResource{
 	public function toArray($request){
 		return [
 			'label' => $this->label(),
-			'value' => $this->value()->pluck('value'),
+			'value' => $this->value,
 		];
 	}
 }
