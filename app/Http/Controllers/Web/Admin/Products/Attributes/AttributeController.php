@@ -101,6 +101,7 @@ class AttributeController extends BaseController{
 					'code' => sprintf('%s', Str::slug($validated->name)),
 					'required' => request()->has('required'),
 					'useToCreateVariants' => request()->has('useToCreateVariants'),
+					'showInCatalogListing' => request()->has('showInCatalogListing'),
 					'useInLayeredNavigation' => request()->has('useInLayeredNavigation'),
 					'predefined' => request()->has('predefined'),
 					'multiValue' => request()->has('multiValue'),

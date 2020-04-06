@@ -103,6 +103,7 @@ class AbstractProductController extends ExtendedResourceController{
 				$created = $product->attributes()->create([
 					'attributeId' => $attribute->id(),
 					'variantAttribute' => $attribute->useToCreateVariants(),
+					'showInCatalogListing' => $attribute->showInCatalogListing(),
 					'label' => $attribute->name(),
 					'group' => $group,
 					'value' => $val,
