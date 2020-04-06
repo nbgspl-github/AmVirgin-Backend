@@ -18,6 +18,7 @@ class AttributeSet extends Model{
 		'categoryId',
 	];
 	public const Groups = [
+		'Main',
 		'Size & Fit',
 		'Material & Care',
 		'Specifications',
