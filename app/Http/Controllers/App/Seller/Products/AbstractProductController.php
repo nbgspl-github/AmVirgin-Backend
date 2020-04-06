@@ -99,16 +99,13 @@ class AbstractProductController extends ExtendedResourceController{
 		$value = $payload['value'];
 		$created = null;
 		if (Arrays::isArray($value)) {
-			foreach ($value as $val) {
-				$created = $product->attributes()->create([
-					'attributeId' => $attribute->id(),
-					'variantAttribute' => $attribute->useToCreateVariants(),
-					'showInCatalogListing' => $attribute->showInCatalogListing(),
-					'label' => $attribute->name(),
-					'group' => $group,
-					'value' => $val,
-				]);
-			}
+			$created = $product->attributes()->create([
+				'attributeId' => $attribute->id(),
+				'variantAttribute' => $attribute->useToCreateVariants(),
+				'label' => $attribute->name(),
+				'group' => $group,
+				'value' => Str::join(Str::NewLine, $value),
+			]);
 		}
 		else {
 			$created = $product->attributes()->create([

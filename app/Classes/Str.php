@@ -5,7 +5,7 @@ namespace App\Classes;
 class Str extends \Illuminate\Support\Str{
 	const Empty = '';
 	const Null = null;
-	const NewLine = "\r\n";
+	const NewLine = PHP_EOL;
 	const WhiteSpace = ' ';
 
 	public static function equals(string $first = null, string $second = null){
