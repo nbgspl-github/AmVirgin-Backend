@@ -19,17 +19,16 @@ class CategoryResource extends AbstractBuiltInResource{
 	}
 
 	public function withValues(Collection $values): self{
-		$this->values = $this->descendants($values->first());
+		$this->values = $this->descendants(request('category'));
 		return $this;
 	}
 
 	public function descendants(int $categoryId): array{
 		$category = Category::retrieve($categoryId);
-		$descendants = $category->descendants();
-		dd($category->name());
+		$descendants = $category->descendants()->where('type', 'vertical');
 		return $descendants->transform(function ($item){
 			return [
-				'key' => $item['categoryId'],
+				'key' => $item['id'],
 				'name' => $item['name'],
 			];
 		})->toArray();

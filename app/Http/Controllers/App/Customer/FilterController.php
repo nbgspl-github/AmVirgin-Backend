@@ -21,7 +21,8 @@ class FilterController extends ExtendedResourceController{
 		parent::__construct();
 	}
 
-	public function show($id): JsonResponse{
+	public function show(): JsonResponse{
+		$id = request('category');
 		$filters = CatalogFilter::startQuery()->category($id)->get();
 		$products = Product::startQuery()->displayable()->categoryOrDescendant($id);
 
