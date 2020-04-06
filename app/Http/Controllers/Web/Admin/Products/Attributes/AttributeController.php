@@ -29,7 +29,7 @@ class AttributeController extends BaseController{
 			'store' => [
 				'name' => ['bail', 'required', 'string', 'min:1', 'max:255'],
 				'description' => ['bail', 'required', 'string', 'min:1', 'max:5000'],
-				'minValues' => ['bail', 'required_with:multiValue,on', 'numeric', 'min:2', 'max:10000'],
+				'minValues' => ['bail', 'required_with:multiValue,on', 'numeric', 'min:1', 'max:9999'],
 				'maxValues' => ['bail', 'required_with:multiValue,on', 'numeric', 'min:2', 'max:10000', 'gte:minValues'],
 				'values' => ['bail', 'required_with:predefined,on',
 					function ($attribute, $value, $fail){

@@ -35,7 +35,7 @@
 											</div>
 											<div class="form-group" id="maxValuesContainer">
 												<label for="">Minimum number of input values</label>
-												<input id="minValues" type="number" name="minValues" class="form-control" placeholder="Type a number here" value="{{old('minValues')}}" min="2" max="10000" disabled/>
+												<input id="minValues" type="number" name="minValues" class="form-control" placeholder="Type a number here" value="{{old('minValues')}}" min="1" max="9999" disabled/>
 											</div>
 											<div class="form-group mb-0" id="maxValuesContainer">
 												<label for="">Maximum number of input values</label>
