@@ -104,7 +104,7 @@ class AbstractProductController extends ExtendedResourceController{
 				'variantAttribute' => $attribute->useToCreateVariants(),
 				'label' => $attribute->name(),
 				'group' => $group,
-				'value' => Str::join(Str::NewLine, $value),
+				'value' => $attribute->useToCreateVariants() ? Str::join(Str::WhiteSpace, $value) : Str::join(Str::NewLine, $value),
 			]);
 		}
 		else {
