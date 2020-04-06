@@ -10,12 +10,17 @@ class VideoQuery extends AbstractQuery{
 		return Video::class;
 	}
 
-	public static function begin(): AbstractQuery{
+	public static function begin(): self{
 		return new self();
 	}
 
 	public function displayable(): self{
 		$this->query->where('pending', false);
+		return $this;
+	}
+
+	public function genre(int $genreId): self{
+		$this->query->where('genreId', $genreId);
 		return $this;
 	}
 }

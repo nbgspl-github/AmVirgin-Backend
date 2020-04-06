@@ -149,7 +149,8 @@ class ResponseBuilder{
 	public function send(){
 		$response = [];
 		$response['status'] = $this->statusCode;
-		$response['message'] = $this->message;
+		if (isset($this->message) && strlen($this->message) > 0)
+			$response['message'] = $this->message;
 		foreach ($this->items as $key => $value) {
 			$response[$key] = $value;
 		}

@@ -11,6 +11,7 @@ use App\Models\Attribute;
 use App\Models\AttributeSet;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductAttribute;
 use App\Models\ProductImage;
 use App\Models\Auth\Seller;
 use App\Models\Settings;
@@ -53,9 +54,8 @@ class CartTesterCommand extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		$class = 'App\Classes\Sorting\DiscountDescending';
-		class_('App\Classes\Sorting\DiscountDescending')->yeah();
-		return;
+		$a = ProductAttribute::retrieve(4);
+		dd($a->values()->pluck('value'));
 	}
 
 	private function createRange($array){

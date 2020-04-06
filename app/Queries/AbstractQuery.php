@@ -87,4 +87,14 @@ abstract class AbstractQuery{
 		$this->query->latest($column);
 		return $this;
 	}
+
+	public function withRelations(string ...$relation): self{
+		$this->query->with($relation);
+		return $this;
+	}
+
+	public function search(string $keywords, string $column = 'name'): self{
+		$this->query->where($column, 'LIKE', "%{$keywords}%");
+		return $this;
+	}
 }

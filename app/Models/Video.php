@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Contracts\DisplayableModel;
 use App\Http\Controllers\App\Customer\Playback\TrailerPlayback;
+use App\Queries\VideoQuery;
 use App\Traits\ActiveStatus;
 use App\Traits\FluentConstructor;
 use App\Traits\DynamicAttributeNamedMethods;
@@ -18,7 +19,7 @@ use Illuminate\Support\Collection;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Video extends Model implements DisplayableModel{
+class Video extends Model{
 	use RetrieveResource, DynamicAttributeNamedMethods;
 	use RetrieveCollection;
 	use FluentConstructor;
@@ -491,10 +492,7 @@ class Video extends Model implements DisplayableModel{
 			->saveSlugsTo('slug');
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public static function displayable(): Builder{
-		return self::where('pending', false);
+	public static function startQuery(): VideoQuery{
+		return VideoQuery::begin();
 	}
 }

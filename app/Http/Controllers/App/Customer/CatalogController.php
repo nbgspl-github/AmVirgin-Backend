@@ -20,6 +20,7 @@ use App\Models\CatalogFilter;
 use App\Models\Category;
 use App\Models\Product;
 use App\Queries\ProductQuery;
+use App\Resources\Products\Customer\CatalogListResource;
 use App\Resources\Products\Customer\SimpleProductResource;
 use App\Resources\Products\Customer\VariantProductResource;
 use App\Resources\Shop\Customer\Catalog\Filters\AbstractBuiltInResource;
@@ -66,22 +67,25 @@ class CatalogController extends ExtendedResourceController{
 			// Collect all viable products.
 			$products = Product::startQuery()->displayable()->categoryOrDescendant($validated['category'])->singleVariantMode();
 
+			// Preload all relations that we'll need in this call.
+			$products->withRelations('options', 'brand');
+
 			// Apply any incoming sort request, or just go with the default one.
 			$sort::sort($products);
 
 			// Paginate to first 50 results for page.
 			$total = $products->count();
 			$products = $products->paginate($itemsPerPage);
-			$products = VariantProductResource::collection($products);
+			$products = CatalogListResource::collection($products);
 			$meta = [
 				'pagination' => [
 					'pages' => countRequiredPages($total, $itemsPerPage),
 					'items' => ['total' => $total, 'chunk' => $itemsPerPage],
 				],
 			];
-			$response->status(HttpOkay)->message('Listing available products for given category.')
+			$response->status(HttpOkay)->message('Listing products for given category.')
 				->setValue('meta', $meta)
-				->setValue('data', $products);
+				->setValue('payload', $products);
 		}
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
@@ -115,5 +119,9 @@ class CatalogController extends ExtendedResourceController{
 		finally {
 			return $response->send();
 		}
+	}
+
+	protected function guard(){
+		return auth(self::CustomerAPI);
 	}
 }

@@ -6,6 +6,7 @@ use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Collection;
 
 /**
  * Defines a value for a particular trait of a product.
@@ -29,6 +30,10 @@ class ProductAttribute extends Model{
 		'multiValue' => 'bool',
 		'variantAttribute' => 'bool',
 	];
+
+	public function value(): Collection{
+		return collect([$this, ...$this->hasMany(ProductAttribute::class, 'parentId')->get('value')]);
+	}
 
 	public function product(): BelongsTo{
 		return $this->belongsTo(Product::class, 'productId');
