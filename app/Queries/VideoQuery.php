@@ -19,6 +19,11 @@ class VideoQuery extends AbstractQuery{
 		return $this;
 	}
 
+	public function trending(bool $yes = true): self{
+		$this->query->where('trending', $yes);
+		return $this;
+	}
+
 	public function genre(int $genreId): self{
 		$this->query->where('genreId', $genreId);
 		return $this;

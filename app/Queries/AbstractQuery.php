@@ -31,6 +31,11 @@ abstract class AbstractQuery{
 		return $this;
 	}
 
+	public function limit(int $limit): self{
+		$this->query->limit($limit);
+		return $this;
+	}
+
 	public function orderByAscending(string $column): self{
 		$this->query->orderBy($column, 'asc');
 		return $this;

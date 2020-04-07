@@ -81,7 +81,7 @@ class HomePageController extends ExtendedResourceController{
 			/**
 			 * Trending Now
 			 */
-			$trendingNow = Video::displayable()->where('trending', true)->get();
+			$trendingNow = Video::startQuery()->displayable()->trending()->get();
 			$trendingNow = TrendingNowVideoResource::collection($trendingNow);
 			$data['trendingNow'] = $trendingNow;
 
@@ -100,14 +100,7 @@ class HomePageController extends ExtendedResourceController{
 				$contents = Video::displayable()->where('sectionId', $pageSection->id())->take($pageSection->visibleItemCount())->get();
 			}
 			else {
-				$contents = Product::where([
-					['draft', false],
-					['visibility', true],
-					['deleted', false],
-					['promoted', true],
-					['promotionStart', '<=', Time::mysqlStamp()],
-					['promotionEnd', '>', Time::mysqlStamp()],
-				])->take($pageSection->visibleItemCount())->get();
+				$contents = Product::startQuery()->displayable()->promoted()->take($pageSection->visibleItemCount())->get();
 			}
 			$contents = TopPickResource::collection($contents);
 			$response->status(HttpOkay)->message(sprintf('Found %d items under %s.', count($contents), $pageSection->title()))
@@ -131,10 +124,7 @@ class HomePageController extends ExtendedResourceController{
 	public function trendingNow(){
 		$data = [];
 		try {
-			$trendingNow = Video::where([
-				['trending', true],
-				['pending', false],
-			])->get();
+			$trendingNow = Video::startQuery()->displayable()->trending()->get();
 			$trendingNow = TrendingNowVideoResource::collection($trendingNow);
 			$msg = 'No record found';
 			if (!empty($trendingNow)) {
@@ -153,11 +143,7 @@ class HomePageController extends ExtendedResourceController{
 
 	public function recommendedVideo(){
 		try {
-			$trendingNow = Video::where([
-				['trending', true],
-				['pending', false],
-			])->orderBy('rating', 'DESC')
-				->limit(15)->get();
+			$trendingNow = Video::startQuery()->displayable()->orderByDescending('rating')->limit(15)->get();
 			$trendingNow = TrendingNowVideoResource::collection($trendingNow);
 			$msg = 'No record found';
 			if (!empty($trendingNow)) {
