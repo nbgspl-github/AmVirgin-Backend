@@ -16,6 +16,13 @@ class CreateBrandsTable extends Migration{
 			$table->string('name');
 			$table->string('slug', 500);
 			$table->string('logo', \App\Constants\Constants::MaxFilePathLength)->nullable();
+			$table->string('website', 2048)->nullable();
+			$table->string('productSaleMarketPlace')->nullable();
+			$table->string('sampleMRPTagImage', \App\Constants\Constants::MaxFilePathLength)->nullable();
+			$table->boolean('isBrandOwner')->default(false);
+			$table->string('documentProof', \App\Constants\Constants::MaxFilePathLength)->nullable();
+			$table->string('documentType')->nullable();
+			$table->enum('status', [\App\Models\Brand::Status]);
 			$table->boolean('active')->default(false);
 			$table->timestamps();
 		});
