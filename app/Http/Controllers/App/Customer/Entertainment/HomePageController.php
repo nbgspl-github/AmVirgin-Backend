@@ -60,7 +60,7 @@ class HomePageController extends ExtendedResourceController{
 			 */
 			$sections = PageSection::entertainment()->get();
 			$sections->transform(function (PageSection $pageSection){
-				$contents = Video::displayable()->where('sectionId', $pageSection->id())->take($pageSection->visibleItemCount())->get();
+				$contents = Video::startQuery()->displayable()->section($pageSection->id())->take($pageSection->visibleItemCount())->get();
 				$contents = TopPickResource::collection($contents);
 				return [
 					'id' => $pageSection->id(),
@@ -97,7 +97,7 @@ class HomePageController extends ExtendedResourceController{
 		try {
 			$pageSection = PageSection::retrieve($id);
 			if (Str::equals($pageSection->type(), PageSectionType::Entertainment)) {
-				$contents = Video::displayable()->where('sectionId', $pageSection->id())->take($pageSection->visibleItemCount())->get();
+				$contents = Video::startQuery()->displayable()->section($pageSection->id())->take($pageSection->visibleItemCount())->get();
 			}
 			else {
 				$contents = Product::startQuery()->displayable()->promoted()->take($pageSection->visibleItemCount())->get();

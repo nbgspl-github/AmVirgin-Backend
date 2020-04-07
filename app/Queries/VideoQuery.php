@@ -28,4 +28,9 @@ class VideoQuery extends AbstractQuery{
 		$this->query->where('genreId', $genreId);
 		return $this;
 	}
+
+	public function section(int $sectionId): self{
+		$this->query->where('sectionId', $sectionId);
+		return $this;
+	}
 }
