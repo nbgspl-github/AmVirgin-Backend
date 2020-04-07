@@ -74,7 +74,7 @@ class CatalogController extends ExtendedResourceController{
 			$sort::sort($products);
 
 			// Paginate to first 50 results for page.
-			$total = $products->count();
+			$total = $products->get('name')->count();
 			$products = $products->paginate($itemsPerPage);
 			$products = CatalogListResource::collection($products);
 			$meta = [
