@@ -108,7 +108,7 @@ class CatalogController extends ExtendedResourceController{
 			else {
 				$product = new SimpleProductResource($product);
 			}
-			$response->status(HttpOkay)->message('Found product for the specified key.')->setValue('data', $product);
+			$response->status(HttpOkay)->message('Listing details of product.')->setValue('payload', $product);
 		}
 		catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('Could not find the product for that key.');
