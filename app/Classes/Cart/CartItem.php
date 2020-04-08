@@ -26,9 +26,7 @@ class CartItem extends stdClass implements JsonSerializable {
 
 	protected \App\Models\Cart $cart;
 
-	protected array $attributes;
-
-	public function __construct(\App\Models\Cart $cart, int $key, $attributes = []) {
+	public function __construct(\App\Models\Cart $cart, int $key){
 		$this->setMinAllowedQuantity(1);
 		$this->setMaxAllowedQuantity(10);
 		$this->setKey($key);
@@ -36,10 +34,9 @@ class CartItem extends stdClass implements JsonSerializable {
 		$this->setCart($cart);
 		$this->setQuantity(0);
 		$this->setUniqueId(sprintf('%s-%d', $cart->sessionId, $key));
-		$this->setAttributes($attributes);
 	}
 
-	public function getMaxAllowedQuantity(): int {
+	public function getMaxAllowedQuantity(): int{
 		return $this->maxAllowedQuantity;
 	}
 
@@ -112,15 +109,6 @@ class CartItem extends stdClass implements JsonSerializable {
 		return $this;
 	}
 
-	public function getAttributes(): array {
-		return $this->attributes;
-	}
-
-	public function setAttributes(array $attributes): CartItem {
-		$this->attributes = $attributes;
-		return $this;
-	}
-
 	public function increaseQuantity(int $incrementBy = 1) {
 		if ($this->getQuantity() < $this->maxAllowedQuantity) {
 			if ($incrementBy > 1 && ($this->getQuantity() + $incrementBy) > $this->maxAllowedQuantity) $incrementBy = 1;
@@ -146,37 +134,11 @@ class CartItem extends stdClass implements JsonSerializable {
 			'quantity' => $this->getQuantity(),
 			'uniqueId' => $this->getUniqueId(),
 			'itemTotal' => $this->getItemTotal(),
-			'attributes' => $this->getAttributes(),
 		];
 	}
 
-	public function getApplicablePrice(): float {
-		$offerType = $this->getProduct()->getOfferType();
-		$offerValue = $this->getProduct()->getOfferValue();
-		$originalPrice = $this->getProduct()->getOriginalPrice();
-		if ($offerValue > 0) {
-			if ($offerType == OfferTypes::FlatRate) {
-				if ($originalPrice > $offerValue) {
-					return $originalPrice - $offerValue;
-				}
-				else {
-					return 0;
-				}
-			}
-			else if ($offerType == OfferTypes::Percentage) {
-				$amount = ($offerValue / 100.0) * $originalPrice;
-				if ($originalPrice > $amount) {
-					return $originalPrice - $amount;
-				}
-				else {
-					return 0;
-				}
-			}
-			else {
-				return $this->product->getOriginalPrice();
-			}
-		}
-		return $this->product->getOriginalPrice();
+	public function getApplicablePrice(): float{
+		return $this->product->sellingPrice();
 	}
 
 	protected function removeSelf() {

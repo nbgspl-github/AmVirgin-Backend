@@ -91,7 +91,7 @@ class ProductController extends AbstractProductController{
 					'categoryId' => $category->id(),
 					'brandId' => $brand->id(),
 					'sellerId' => $this->guard()->id(),
-					'type' => Product::Type['Variant'],
+					'type' => Product::Type['Simple'],
 					'currency' => $outer['currency'],
 					'description' => $outer['description'],
 					'taxRate' => HsnCode::find($variant['hsn'])->taxRate(),

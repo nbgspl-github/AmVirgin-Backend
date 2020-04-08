@@ -15,7 +15,7 @@ class BrandRegistrationController extends ExtendedResourceController{
 		parent::__construct();
 		$this->rules = [
 			'store' => [
-				'name' => ['bail', 'required', 'string', 'min:2', 'max:255', 'unique:brands,name'],
+				'name' => ['bail', 'required', 'string', 'min:2', 'max:255'],
 				'logo' => ['bail', 'nullable', 'image', 'min:1', 'max:5124'],
 				'website' => ['bail', 'nullable', 'url'],
 				'productSaleMarketPlace' => ['bail', 'nullable', 'string', 'min:2', 'max:255'],
@@ -29,11 +29,8 @@ class BrandRegistrationController extends ExtendedResourceController{
 
 	public function store(){
 		try {
-			$payload = $this->requestValid(request(), $this->rules['store'], [], [
-				'name' => [
-					'unique' => 'The brand name you are trying to register for is already taken.',
-				],
-			]);
+			$payload = $this->requestValid(request(), $this->rules['store']);
+			$brandAlreadyExists = BrandQ
 		}
 		catch (ValidationException $exception) {
 

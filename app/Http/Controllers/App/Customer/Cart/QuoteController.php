@@ -31,7 +31,6 @@ class QuoteController extends ExtendedResourceController {
 			'add' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
 				'key' => ['bail', 'required', Rule::exists(Tables::Products, 'id')],
-				'attributes' => ['bail', 'required'],
 			],
 			'remove' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
@@ -69,7 +68,7 @@ class QuoteController extends ExtendedResourceController {
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['add']);
 			$cart = Cart::retrieveThrows($validated->sessionId);
-			$cartItem = new CartItem($cart, $validated->key, $validated->attributes);
+			$cartItem = new CartItem($cart, $validated->key);
 			$cart->addItem($cartItem);
 			$cart->save();
 			$response->status(HttpOkay)->message('Item added to cart successfully.')->setValue('data', $cart->render());
@@ -86,15 +85,17 @@ class QuoteController extends ExtendedResourceController {
 				'status' => CartStatus::Pending,
 			]);
 			$cart = Cart::retrieve($validated->sessionId);
-			$cartItem = new CartItem($cart, $validated->key, $validated->attributes);
+			$cartItem = new CartItem($cart, $validated->key);
 			$cart->addItem($cartItem);
 			$cart->save();
 			$response->status(HttpOkay)->message('Cart initialized and item added to cart successfully.')->setValue('data', $cart->render());
 		}
 		catch (ValidationException $exception) {
+			dd($exception);
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
 		}
 		catch (Throwable $exception) {
+			dd($exception);
 			$response->status(HttpServerError)->message($exception->getTraceAsString());
 		}
 		finally {

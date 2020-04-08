@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use stdClass;
 
-class Cart extends Model {
+class Cart extends Model{
 	use RetrieveResource;
 	const TaxRate = 0.25;
 	protected $table = 'carts';
@@ -32,11 +32,11 @@ class Cart extends Model {
 	];
 	protected CartItemCollection $itemCollection;
 
-	public function __construct(array $attributes = []) {
+	public function __construct(array $attributes = []){
 		parent::__construct($attributes);
 	}
 
-	public static function retrieve(string $sessionId, int $customerId = 0): self {
+	public static function retrieve(string $sessionId, int $customerId = 0): self{
 		if ($customerId == 0) {
 			$model = self::where('sessionId', $sessionId)->first();
 			$model->loadModel();
@@ -49,7 +49,7 @@ class Cart extends Model {
 		}
 	}
 
-	public static function retrieveThrows(string $sessionId, int $customerId = 0): self {
+	public static function retrieveThrows(string $sessionId, int $customerId = 0): self{
 		if ($customerId == 0) {
 			$model = self::where('sessionId', $sessionId)->firstOrFail();
 			$model->loadModel();
@@ -62,10 +62,10 @@ class Cart extends Model {
 		}
 	}
 
-	public function loadModel() {
+	public function loadModel(){
 		$decoded = jsonDecodeArray($this->items);
 		$this->itemCollection = new CartItemCollection($this);
-		$this->itemCollection->setItemsUpdatedCallback(function (array $items) {
+		$this->itemCollection->setItemsUpdatedCallback(function (array $items){
 			if (count($items) < 1)
 				$this->items = jsonDecodeArray(jsonEncode(new stdClass()));
 			else
@@ -75,9 +75,11 @@ class Cart extends Model {
 			$this->itemCollection->loadItems($decoded);
 	}
 
-	public function addItem(CartItem ...$cartItems) {
-		throw_if($this->wasSubmitted(), new CartAlreadySubmittedException($this));
-		collect($cartItems)->each(function (CartItem $item) {
+	public function addItem(CartItem ...$cartItems){
+		if ($this->wasSubmitted()) {
+			throw new CartAlreadySubmittedException($this);
+		}
+		collect($cartItems)->each(function (CartItem $item){
 			$uniqueId = $item->getUniqueId();
 			if (!$this->itemCollection->has($uniqueId))
 				$this->itemCollection->setItem($uniqueId, $item)->increaseQuantity();
@@ -87,9 +89,11 @@ class Cart extends Model {
 		$this->handleItemsUpdated();
 	}
 
-	public function updateItem(CartItem ...$cartItems) {
-		throw_if($this->wasSubmitted(), new CartAlreadySubmittedException($this));
-		collect($cartItems)->each(function (CartItem $item) {
+	public function updateItem(CartItem ...$cartItems){
+		if ($this->wasSubmitted()) {
+			throw new CartAlreadySubmittedException($this);
+		}
+		collect($cartItems)->each(function (CartItem $item){
 			$uniqueId = $item->getUniqueId();
 			if (!$this->itemCollection->has($uniqueId))
 				$this->itemCollection->setItem($uniqueId, $item)->setQuantity($item->getQuantity());
@@ -99,9 +103,11 @@ class Cart extends Model {
 		$this->handleItemsUpdated();
 	}
 
-	public function removeItem(CartItem ...$cartItems) {
-		throw_if($this->wasSubmitted(), new CartAlreadySubmittedException($this));
-		collect($cartItems)->each(function (CartItem $item) {
+	public function removeItem(CartItem ...$cartItems){
+		if ($this->wasSubmitted()) {
+			throw new CartAlreadySubmittedException($this);
+		}
+		collect($cartItems)->each(function (CartItem $item){
 			$uniqueId = $item->getUniqueId();
 			if ($this->itemCollection->has($uniqueId))
 				$this->itemCollection->getItem($uniqueId)->decreaseQuantity();
@@ -111,9 +117,11 @@ class Cart extends Model {
 		$this->handleItemsUpdated();
 	}
 
-	public function destroyItem(CartItem ...$cartItems) {
-		throw_if($this->wasSubmitted(), new CartAlreadySubmittedException($this));
-		collect($cartItems)->each(function (CartItem $item) {
+	public function destroyItem(CartItem ...$cartItems){
+		if ($this->wasSubmitted()) {
+			throw new CartAlreadySubmittedException($this);
+		}
+		collect($cartItems)->each(function (CartItem $item){
 			$uniqueId = $item->getUniqueId();
 			if ($this->itemCollection->has($uniqueId))
 				$this->itemCollection->deleteItem($uniqueId);
@@ -123,20 +131,20 @@ class Cart extends Model {
 		$this->handleItemsUpdated();
 	}
 
-	public function contains(CartItem $item) {
+	public function contains(CartItem $item){
 		$uniqueId = $item->getUniqueId();
 		return $this->itemCollection->has($uniqueId);
 	}
 
-	public function session() {
+	public function session(){
 		return $this->hasOne(CartSession::class, 'sessionId', 'sessionId');
 	}
 
-	public function customer() {
+	public function customer(){
 		return $this->hasOne(Customer::class, 'id', 'customerId');
 	}
 
-	public function render() {
+	public function render(){
 		return [
 			'cart' => [
 				'session' => $this->session->sessionId,
@@ -153,12 +161,14 @@ class Cart extends Model {
 		];
 	}
 
-	public function save(array $options = []) {
+	public function save(array $options = []){
 		return parent::save($options);
 	}
 
-	public function submit(): Order {
-		throw_if($this->wasSubmitted(), new CartAlreadySubmittedException($this));
+	public function submit(): Order{
+		if ($this->wasSubmitted()) {
+			throw new CartAlreadySubmittedException($this);
+		}
 		$order = Order::create([
 			'customerId' => $this->customerId,
 			'addressId' => $this->addressId,
@@ -169,14 +179,13 @@ class Cart extends Model {
 			'paymentMode' => $this->paymentMode,
 			'status' => OrderStatus::Placed,
 		]);
-		$this->itemCollection->iterate(function (CartItem $cartItem) use ($order) {
+		$this->itemCollection->iterate(function (CartItem $cartItem) use ($order){
 			$item = OrderItem::create([
 				'orderId' => $order->getKey(),
 				'productId' => $cartItem->getProduct()->getKey(),
 				'quantity' => $cartItem->getQuantity(),
 				'price' => $cartItem->getApplicablePrice(),
 				'total' => $cartItem->getItemTotal(),
-				'options' => $cartItem->getAttributes(),
 			]);
 			$sellerOrder = SellerOrder::where([
 				['orderId', $order->getKey()],
@@ -201,13 +210,13 @@ class Cart extends Model {
 		return $order;
 	}
 
-	public function wasSubmitted() {
+	public function wasSubmitted(){
 		return Str::equals($this->status, CartStatus::Submitted);
 	}
 
-	protected function handleItemsUpdated() {
+	protected function handleItemsUpdated(){
 		$this->resetCalculations();
-		$this->itemCollection->iterate(function (CartItem $cartItem) {
+		$this->itemCollection->iterate(function (CartItem $cartItem){
 			$this->addToTotalQuantity($cartItem);
 			$this->calculateSubtotals($cartItem);
 		});
@@ -215,22 +224,22 @@ class Cart extends Model {
 		$this->save();
 	}
 
-	protected function resetCalculations() {
+	protected function resetCalculations(){
 		$this->tax = 0.0;
 		$this->itemCount = 0;
 		$this->subTotal = 0.0;
 		$this->total = 0;
 	}
 
-	protected function addToTotalQuantity(CartItem $cartItem) {
+	protected function addToTotalQuantity(CartItem $cartItem){
 		$this->itemCount += $cartItem->getQuantity();
 	}
 
-	protected function calculateSubtotals(CartItem $cartItem) {
+	protected function calculateSubtotals(CartItem $cartItem){
 		$this->subTotal += $cartItem->getItemTotal();
 	}
 
-	protected function calculateGrandTotalsAndTax() {
+	protected function calculateGrandTotalsAndTax(){
 		$this->tax = (float)(self::TaxRate * $this->subTotal);
 		$this->total = $this->tax + $this->subTotal;
 	}
