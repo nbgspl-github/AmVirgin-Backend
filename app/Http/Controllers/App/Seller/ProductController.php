@@ -103,7 +103,7 @@ class ProductController extends AbstractProductController{
 				$attributes = $variant['attributes'];
 				$primaryIndex = $variant['primaryImageIndex'];
 				$currentIndex = 0;
-				$images = collect($variant['files'])->transform(function (UploadedFile $file) use (&$currentIndex, $primaryIndex, &$variant){
+				$images = collect(isset($variant['files']) ? $variant['files'] : [])->transform(function (UploadedFile $file) use (&$currentIndex, $primaryIndex, &$variant){
 					$file = SecuredDisk::access()->putFile(Directories::ProductImage, $file);
 					if ($currentIndex++ == $primaryIndex) {
 						$variant['primaryImage'] = $file;
