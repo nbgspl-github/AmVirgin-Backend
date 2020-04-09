@@ -36,6 +36,7 @@ class ListController extends ExtendedResourceController{
 						'required' => $attribute->required(),
 						'predefined' => $attribute->predefined(),
 						'useToCreateVariants' => $attribute->useToCreateVariants(),
+						'combineMultipleValues' => $attribute->combineMultipleValues(),
 						'multiValue' => $attribute->multiValue(),
 						'minValues' => $attribute->minValues(),
 						'maxValues' => $attribute->maxValues(),
