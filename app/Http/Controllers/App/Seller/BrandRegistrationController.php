@@ -4,6 +4,7 @@ namespace App\Http\Controllers\App\Seller;
 
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Models\Brand;
 use App\Traits\ValidatesRequest;
 use Throwable;
 
@@ -30,7 +31,7 @@ class BrandRegistrationController extends ExtendedResourceController{
 	public function store(){
 		try {
 			$payload = $this->requestValid(request(), $this->rules['store']);
-			$brandAlreadyExists = BrandQ
+//			$brandAlreadyExists = Brand::startQuery
 		}
 		catch (ValidationException $exception) {
 

@@ -9,7 +9,7 @@ use App\Models\Product;
 use App\Storage\SecuredDisk;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class VariantProductResource extends AbstractProductResource{
+class ProductResource extends AbstractProductResource{
 	protected ?CategoryResource $categoryResource;
 	protected ?SellerResource $sellerResource;
 	protected ?BrandResource $brandResource;
@@ -59,7 +59,7 @@ class VariantProductResource extends AbstractProductResource{
 			],
 			'details' => DetailResource::collection($this->specs),
 			'options' => OptionResource::collection($this->options),
-			'variants' => VariantItemResource::collection($this->variants),
+			'variants' => $this->when($this->type() == Product::Type['Variant'], VariantItemResource::collection($this->variants)),
 		];
 	}
 

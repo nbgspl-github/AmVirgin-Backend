@@ -112,7 +112,7 @@ class Cart extends Model{
 			if ($this->itemCollection->has($uniqueId))
 				$this->itemCollection->getItem($uniqueId)->decreaseQuantity();
 			else
-				throw new CartItemNotFoundException($item);
+				throw new CartItemNotFoundException();
 		});
 		$this->handleItemsUpdated();
 	}
@@ -126,7 +126,7 @@ class Cart extends Model{
 			if ($this->itemCollection->has($uniqueId))
 				$this->itemCollection->deleteItem($uniqueId);
 			else
-				throw new CartItemNotFoundException($item);
+				throw new CartItemNotFoundException();
 		});
 		$this->handleItemsUpdated();
 	}

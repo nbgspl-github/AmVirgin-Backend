@@ -22,7 +22,7 @@ use App\Models\Product;
 use App\Queries\ProductQuery;
 use App\Resources\Products\Customer\CatalogListResource;
 use App\Resources\Products\Customer\SimpleProductResource;
-use App\Resources\Products\Customer\VariantProductResource;
+use App\Resources\Products\Customer\ProductResource;
 use App\Resources\Shop\Customer\Catalog\Filters\AbstractBuiltInResource;
 use App\Resources\Shop\Customer\Catalog\Filters\BrandResource;
 use App\Resources\Shop\Customer\Catalog\Filters\CategoryResource;
@@ -102,12 +102,7 @@ class CatalogController extends ExtendedResourceController{
 		$response = responseApp();
 		try {
 			$product = Product::startQuery()->displayable()->key($id)->firstOrFail();
-			if (Str::equals($product->type(), Product::Type['Variant'])) {
-				$product = new VariantProductResource($product);
-			}
-			else {
-				$product = new SimpleProductResource($product);
-			}
+			$product = new ProductResource($product);
 			$response->status(HttpOkay)->message('Listing details of product.')->setValue('payload', $product);
 		}
 		catch (ModelNotFoundException $exception) {

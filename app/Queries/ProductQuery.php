@@ -70,6 +70,11 @@ class ProductQuery extends AbstractQuery{
 		return $this;
 	}
 
+	public function seller(int $sellerId){
+		$this->query->where('sellerId', $sellerId);
+		return $this;
+	}
+
 	protected function model(): string{
 		return Product::class;
 	}

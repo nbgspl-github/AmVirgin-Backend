@@ -10,7 +10,7 @@ use App\Resources\Products\Customer\SimpleProductResource;
 use JsonSerializable;
 use stdClass;
 
-class CartItem extends stdClass implements JsonSerializable {
+class CartItem extends stdClass implements JsonSerializable{
 	protected int $maxAllowedQuantity;
 
 	protected int $minAllowedQuantity;
@@ -28,10 +28,10 @@ class CartItem extends stdClass implements JsonSerializable {
 	protected \App\Models\Cart $cart;
 
 	public function __construct(\App\Models\Cart $cart, int $key){
-		$this->setMinAllowedQuantity(1);
-		$this->setMaxAllowedQuantity(10);
 		$this->setKey($key);
 		$this->setProduct(Product::retrieve($this->getKey()));
+		$this->setMinAllowedQuantity(1);
+		$this->setMaxAllowedQuantity($this->getProduct()->maxQuantityPerOrder());
 		$this->setCart($cart);
 		$this->setQuantity(0);
 		$this->setUniqueId(sprintf('%s-%d', $cart->sessionId, $key));
@@ -41,76 +41,76 @@ class CartItem extends stdClass implements JsonSerializable {
 		return $this->maxAllowedQuantity;
 	}
 
-	protected function setMaxAllowedQuantity(int $maxAllowedQuantity): CartItem {
+	protected function setMaxAllowedQuantity(int $maxAllowedQuantity): CartItem{
 		$this->maxAllowedQuantity = $maxAllowedQuantity;
 		return $this;
 	}
 
-	public function getMinAllowedQuantity(): int {
+	public function getMinAllowedQuantity(): int{
 		return $this->minAllowedQuantity;
 	}
 
-	protected function setMinAllowedQuantity(int $minAllowedQuantity): CartItem {
+	protected function setMinAllowedQuantity(int $minAllowedQuantity): CartItem{
 		$this->minAllowedQuantity = $minAllowedQuantity;
 		return $this;
 	}
 
-	public function getItemTotal(): int {
+	public function getItemTotal(): int{
 		return $this->itemTotal;
 	}
 
-	protected function setItemTotal(float $itemTotal): CartItem {
+	protected function setItemTotal(float $itemTotal): CartItem{
 		$this->itemTotal = $itemTotal;
 		return $this;
 	}
 
-	public function getKey(): int {
+	public function getKey(): int{
 		return $this->key;
 	}
 
-	public function setKey(int $key): CartItem {
+	public function setKey(int $key): CartItem{
 		$this->key = $key;
 		return $this;
 	}
 
-	public function getUniqueId(): string {
+	public function getUniqueId(): string{
 		return $this->uniqueId;
 	}
 
-	public function setUniqueId(string $uniqueId): CartItem {
+	public function setUniqueId(string $uniqueId): CartItem{
 		$this->uniqueId = $uniqueId;
 		return $this;
 	}
 
-	public function getQuantity(): int {
+	public function getQuantity(): int{
 		return $this->quantity;
 	}
 
-	public function setQuantity(int $quantity): CartItem {
+	public function setQuantity(int $quantity): CartItem{
 		$this->quantity = $quantity;
 		$this->itemTotal = $this->getApplicablePrice() * $this->getQuantity();
 		return $this;
 	}
 
-	public function getProduct(): Product {
+	public function getProduct(): Product{
 		return $this->product;
 	}
 
-	public function setProduct(Product $product): CartItem {
+	public function setProduct(Product $product): CartItem{
 		$this->product = $product;
 		return $this;
 	}
 
-	public function getCart(): \App\Models\Cart {
+	public function getCart(): \App\Models\Cart{
 		return $this->cart;
 	}
 
-	public function setCart(\App\Models\Cart $cart): CartItem {
+	public function setCart(\App\Models\Cart $cart): CartItem{
 		$this->cart = $cart;
 		return $this;
 	}
 
-	public function increaseQuantity(int $incrementBy = 1) {
+	public function increaseQuantity(int $incrementBy = 1){
 		if ($this->getQuantity() < $this->maxAllowedQuantity) {
 			if ($incrementBy > 1 && ($this->getQuantity() + $incrementBy) > $this->maxAllowedQuantity) $incrementBy = 1;
 			$this->setQuantity($this->getQuantity() + 1);
@@ -120,7 +120,7 @@ class CartItem extends stdClass implements JsonSerializable {
 		}
 	}
 
-	public function decreaseQuantity() {
+	public function decreaseQuantity(){
 		if ($this->getQuantity() > $this->minAllowedQuantity)
 			$this->setQuantity($this->getQuantity() - 1);
 		else {
@@ -128,7 +128,7 @@ class CartItem extends stdClass implements JsonSerializable {
 		}
 	}
 
-	public function jsonSerialize() {
+	public function jsonSerialize(){
 		return [
 			'key' => $this->getKey(),
 			'product' => new CartItemResource($this->getProduct()),
@@ -142,7 +142,7 @@ class CartItem extends stdClass implements JsonSerializable {
 		return $this->product->sellingPrice();
 	}
 
-	protected function removeSelf() {
+	protected function removeSelf(){
 		$this->cart->destroyItem($this);
 	}
 }

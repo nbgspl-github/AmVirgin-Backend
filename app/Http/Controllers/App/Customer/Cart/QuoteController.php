@@ -30,23 +30,23 @@ class QuoteController extends ExtendedResourceController{
 		$this->rules = [
 			'add' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
-				'key' => ['bail', 'required', Rule::existsPrimary(Tables::Products)],
+				'key' => ['bail', 'required', Rule::existsPrimary(Tables::Products)->whereNull('deleted_at')],
 			],
 			'remove' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
-				'key' => ['bail', 'required', Rule::existsPrimary(Tables::Products)],
+				'key' => ['bail', 'required', Rule::existsPrimary(Tables::Products)->whereNull('deleted_at')],
 			],
 			'retrieve' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
 			],
 			'update' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
-				'key' => ['bail', 'required', Rule::existsPrimary(Tables::Products)],
+				'key' => ['bail', 'required', Rule::existsPrimary(Tables::Products)->whereNull('deleted_at')],
 				'quantity' => ['bail', 'required', 'numeric', 'min:1', 'max:10'],
 			],
 			'destroy' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
-				'key' => ['bail', 'required', Rule::existsPrimary(Tables::Products)],
+				'key' => ['bail', 'required', Rule::existsPrimary(Tables::Products)->whereNull('deleted_at')],
 			],
 			'moveToWishlist' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
@@ -91,7 +91,6 @@ class QuoteController extends ExtendedResourceController{
 			$response->status(HttpOkay)->message('Cart initialized and item added to cart successfully.')->setValue('data', $cart->render());
 		}
 		catch (ValidationException $exception) {
-			dd($exception);
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
 		}
 		catch (Throwable $exception) {
@@ -186,6 +185,7 @@ class QuoteController extends ExtendedResourceController{
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
 		}
 		catch (Throwable $exception) {
+			dd($exception);
 			$response->status(HttpServerError)->message($exception->getTraceAsString());
 		}
 		finally {
@@ -267,6 +267,7 @@ class QuoteController extends ExtendedResourceController{
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
 		}
 		catch (Throwable $exception) {
+			dd($exception);
 			$response->status(HttpServerError)->message($exception->getTraceAsString());
 		}
 		finally {
