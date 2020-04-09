@@ -45,6 +45,7 @@ class ProductController extends AbstractProductController{
 			$trailer = $this->trailerFilePath();
 			$category = $this->category();
 			$brand = $this->brand();
+			$sessionUid = $this->sessionUuid();
 			if ($this->isInvalidCategory($category)) {
 				throw new InvalidCategoryException();
 			}
@@ -54,7 +55,7 @@ class ProductController extends AbstractProductController{
 
 			$productsPayloadCollection = new Collection();
 			if ($this->isVariantType()) {
-				collect($outer['payload'])->each(function ($variant) use (&$productsPayloadCollection, $category, $brand, $trailer, $outer){
+				collect($outer['payload'])->each(function ($variant) use (&$productsPayloadCollection, $category, $brand, $trailer, $outer, $sessionUid){
 					$variant = $this->validateProductPayload($variant);
 					Arrays::replaceValues($variant, [
 						'categoryId' => $category->id(),
@@ -65,7 +66,7 @@ class ProductController extends AbstractProductController{
 						'description' => $outer['description'],
 						'taxRate' => HsnCode::find($variant['hsn'])->taxRate(),
 						'trailer' => $trailer,
-						'group' => $this->sessionUuid(),
+						'group' => $sessionUid,
 						'discount' => $this->calculateDiscount($variant['originalPrice'], $variant['sellingPrice']),
 					]);
 					$attributes = $variant['attributes'];
@@ -96,7 +97,7 @@ class ProductController extends AbstractProductController{
 					'description' => $outer['description'],
 					'taxRate' => HsnCode::find($variant['hsn'])->taxRate(),
 					'trailer' => $trailer,
-					'group' => $this->sessionUuid(),
+					'group' => $sessionUid,
 					'discount' => $this->calculateDiscount($variant['originalPrice'], $variant['sellingPrice']),
 				]);
 				$attributes = $variant['attributes'];

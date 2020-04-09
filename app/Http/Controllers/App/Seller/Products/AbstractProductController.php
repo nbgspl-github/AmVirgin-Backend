@@ -31,7 +31,6 @@ class AbstractProductController extends ExtendedResourceController{
 	use ValidatesRequest;
 	protected ?Collection $items = null;
 	protected array $rules;
-	private string $sessionUuid;
 
 	public function __construct(){
 		parent::__construct();
@@ -81,7 +80,6 @@ class AbstractProductController extends ExtendedResourceController{
 				],
 			],
 		];
-		$this->sessionUuid = Guid::create();
 	}
 
 	protected function storeProduct(array $payload): Product{
@@ -187,7 +185,7 @@ class AbstractProductController extends ExtendedResourceController{
 	}
 
 	protected function sessionUuid(): string{
-		return $this->sessionUuid;
+		return Guid::create();
 	}
 
 	protected function guard(){
