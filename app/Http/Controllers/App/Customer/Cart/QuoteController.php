@@ -16,37 +16,37 @@ use App\Models\Order;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
-use Illuminate\Validation\Rule;
+use App\Classes\Rule;
 use Throwable;
 
-class QuoteController extends ExtendedResourceController {
+class QuoteController extends ExtendedResourceController{
 	use ValidatesRequest;
 	use ConditionallyLoadsAttributes;
 
 	protected array $rules;
 
-	public function __construct() {
+	public function __construct(){
 		parent::__construct();
 		$this->rules = [
 			'add' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
-				'key' => ['bail', 'required', Rule::exists(Tables::Products, 'id')],
+				'key' => ['bail', 'required', Rule::existsPrimary(Tables::Products)],
 			],
 			'remove' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
-				'key' => ['bail', 'required', Rule::exists(Tables::Products, 'id')],
+				'key' => ['bail', 'required', Rule::existsPrimary(Tables::Products)],
 			],
 			'retrieve' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
 			],
 			'update' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
-				'key' => ['bail', 'required', Rule::exists(Tables::Products, 'id')],
+				'key' => ['bail', 'required', Rule::existsPrimary(Tables::Products)],
 				'quantity' => ['bail', 'required', 'numeric', 'min:1', 'max:10'],
 			],
 			'destroy' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
-				'key' => ['bail', 'required', Rule::exists(Tables::Products, 'id')],
+				'key' => ['bail', 'required', Rule::existsPrimary(Tables::Products)],
 			],
 			'moveToWishlist' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
@@ -61,7 +61,7 @@ class QuoteController extends ExtendedResourceController {
 		];
 	}
 
-	public function add() {
+	public function add(){
 		$response = responseApp();
 		$validated = null;
 		$cart = null;
@@ -103,7 +103,7 @@ class QuoteController extends ExtendedResourceController {
 		}
 	}
 
-	public function retrieve() {
+	public function retrieve(){
 		$response = responseApp();
 		$validated = null;
 		try {
@@ -128,7 +128,7 @@ class QuoteController extends ExtendedResourceController {
 		}
 	}
 
-	public function update() {
+	public function update(){
 		$response = responseApp();
 		$validated = null;
 		$cart = null;
@@ -161,7 +161,7 @@ class QuoteController extends ExtendedResourceController {
 		}
 	}
 
-	public function remove() {
+	public function remove(){
 		$response = responseApp();
 		$validated = null;
 		$cart = null;
@@ -193,7 +193,7 @@ class QuoteController extends ExtendedResourceController {
 		}
 	}
 
-	public function destroy() {
+	public function destroy(){
 		$response = responseApp();
 		$validated = null;
 		$cart = null;
@@ -225,7 +225,7 @@ class QuoteController extends ExtendedResourceController {
 		}
 	}
 
-	public function moveToWishlist($productId) {
+	public function moveToWishlist($productId){
 		$response = responseApp();
 		$validated = null;
 		$cart = null;
@@ -274,7 +274,7 @@ class QuoteController extends ExtendedResourceController {
 		}
 	}
 
-	public function submit() {
+	public function submit(){
 		$response = responseApp();
 		$validated = null;
 		$cart = null;
@@ -303,7 +303,7 @@ class QuoteController extends ExtendedResourceController {
 		}
 	}
 
-	protected function guard() {
+	protected function guard(){
 		return auth('customer-api');
 	}
 }

@@ -15,7 +15,7 @@ class CartItemResource extends JsonResource {
 			'uid' => $this->uniqueId,
 			'quantity' => $this->uniqueId,
 			'total' => $this->itemTotal,
-			'attributes' => jsonDecodeArray($this->options),
+			'options' => jsonDecodeArray($this->options),
 		];
 	}
 }

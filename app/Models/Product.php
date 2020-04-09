@@ -38,6 +38,7 @@ class Product extends Model{
 		'originalPrice',
 		'sellingPrice',
 		'fulfillmentBy',
+		'group',
 		'hsn',
 		'currency',
 		'taxRate',
