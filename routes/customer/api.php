@@ -55,7 +55,7 @@ Route::prefix('cart')->middleware([])->group(function (){
 	Route::post('destroy', [QuoteController::class, 'destroy']);
 	Route::get('retrieve', [QuoteController::class, 'retrieve']);
 	Route::put('wishlist/{productId}', [QuoteController::class, 'moveToWishlist'])->middleware('auth:customer-api');
-	Route::post('submit', [QuoteController::class, 'submit']);
+	Route::post('submit', [QuoteController::class, 'submit'])->middleware('auth:customer-api');
 });
 
 Route::prefix('wishlist')->middleware('auth:customer-api')->group(function (){
