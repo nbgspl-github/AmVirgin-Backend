@@ -182,18 +182,18 @@ class Cart extends Model{
 		$this->itemCollection->iterate(function (CartItem $cartItem) use ($order){
 			$item = OrderItem::create([
 				'orderId' => $order->getKey(),
-				'productId' => $cartItem->getProduct()->getKey(),
+				'productId' => $cartItem->getProduct()->id(),
 				'quantity' => $cartItem->getQuantity(),
 				'price' => $cartItem->getApplicablePrice(),
 				'total' => $cartItem->getItemTotal(),
 			]);
 			$sellerOrder = SellerOrder::where([
 				['orderId', $order->getKey()],
-				['sellerId', $cartItem->getProduct()->getSellerId()],
+				['sellerId', $cartItem->getProduct()->seller->id()],
 			])->first();
 			if ($sellerOrder == null) {
 				$sellerOrder = SellerOrder::create([
-					'sellerId' => $cartItem->getProduct()->getSellerId(),
+					'sellerId' => $cartItem->getProduct()->seller->id(),
 					'customerId' => $order->customerId,
 					'orderId' => $order->getKey(),
 					'orderNumber' => $order->orderNumber,
@@ -201,7 +201,7 @@ class Cart extends Model{
 			}
 			SellerOrderItem::create([
 				'sellerOrderId' => $sellerOrder->getKey(),
-				'productId' => $cartItem->getProduct()->getKey(),
+				'productId' => $cartItem->getProduct()->id(),
 				'quantity' => $cartItem->getQuantity(),
 			]);
 		});
