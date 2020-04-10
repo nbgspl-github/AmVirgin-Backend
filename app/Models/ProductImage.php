@@ -31,8 +31,4 @@ class ProductImage extends Model{
 	public function product(): BelongsTo{
 		return $this->belongsTo(Product::class, 'productId');
 	}
-
-	public function getPathAttribute(): string{
-		return $this->attributes['path'] ? SecuredDisk::existsUrl($this->attributes['path']) : Str::Empty;
-	}
 }
