@@ -12,7 +12,7 @@ class ImageResource extends JsonResource{
 
 	public function toArray($request){
 		return [
-			'link' => SecuredDisk::existsUrl($this->path),
+			'link' => SecuredDisk::access()->url($this->path),
 		];
 	}
 }
