@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\App\Customer;
 
 use App\Http\Controllers\App\BaseAuthController;
-use App\Http\Resources\Auth\Customer\AuthProfileResource;
+use App\Resources\Auth\Customer\AuthProfileResource;
 use App\Models\Auth\Customer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;

@@ -41,8 +41,8 @@ class Seller extends Authenticatable implements JWTSubject{
 		'email_verified_at' => 'datetime',
 	];
 
-	public function approvedBrands(): HasManyThrough{
-		return $this->hasManyThrough(Brand::class, SellerBrand::class);
+	public function approvedBrands(): HasMany{
+		return $this->hasMany(Brand::class, 'createdBy', 'id');
 	}
 
 	public function city(): BelongsTo{

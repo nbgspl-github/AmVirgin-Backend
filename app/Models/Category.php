@@ -11,7 +11,7 @@ use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\HasSpecialAttributes;
 use App\Traits\QueryProvider;
 use App\Traits\RetrieveResource;
-use App\Traits\Sluggable;
+use App\Traits\GenerateSlugs;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -25,7 +25,7 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
  * @package App\Models
  */
 class Category extends Model{
-	use RetrieveResource, FluentConstructor, HasSpecialAttributes, DynamicAttributeNamedMethods, Sluggable, QueryProvider;
+	use RetrieveResource, FluentConstructor, HasSpecialAttributes, DynamicAttributeNamedMethods, GenerateSlugs, QueryProvider;
 	protected $table = 'categories';
 	protected $fillable = ['name', 'parentId', 'description', 'type', 'order', 'icon', 'listingStatus', 'specials',];
 	protected $casts = ['specials' => 'array', 'order' => 'int'];

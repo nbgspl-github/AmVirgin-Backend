@@ -3,12 +3,15 @@
 namespace App\Models;
 
 use App\Classes\Str;
+use App\Queries\BrandQuery;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\RetrieveResource;
+use App\Traits\GenerateSlugs;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Sluggable\SlugOptions;
 
 class Brand extends Model{
-	use DynamicAttributeNamedMethods, RetrieveResource;
+	use DynamicAttributeNamedMethods, RetrieveResource, GenerateSlugs;
 	protected $table = 'brands';
 	protected $fillable = [
 		'name',
@@ -19,6 +22,8 @@ class Brand extends Model{
 		'sampleMRPTagImage',
 		'isBrandOwner',
 		'documentProof',
+		'categoryId',
+		'createdBy',
 		'status',
 		'active',
 	];
@@ -35,8 +40,7 @@ class Brand extends Model{
 		'Pending' => 'pending',
 	];
 
-	public function setNameAttribute($value){
-		$this->attributes['name'] = $value;
-		$this->attributes['slug'] = Str::slug($value);
+	public static function startQuery(): BrandQuery{
+		return BrandQuery::begin();
 	}
 }

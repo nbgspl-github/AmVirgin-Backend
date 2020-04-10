@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\App\Seller;
 
+use App\Classes\Arrays;
+use App\Classes\Rule;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Interfaces\Tables;
 use App\Models\Brand;
+use App\Models\Category;
 use App\Traits\ValidatesRequest;
 use Throwable;
 
@@ -24,24 +28,9 @@ class BrandRegistrationController extends ExtendedResourceController{
 				'isBrandOwner' => ['bail', 'nullable', 'boolean'],
 				'documentProof' => ['bail', 'nullable', 'mimes:pdf', 'max:5120'],
 				'documentType' => ['bail', 'nullable', 'string', 'min:2', 'max:255'],
+				'categoryId' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)->where('type', Category::Types['Vertical'])],
 			],
 		];
-	}
-
-	public function store(){
-		try {
-			$payload = $this->requestValid(request(), $this->rules['store']);
-//			$brandAlreadyExists = Brand::startQuery
-		}
-		catch (ValidationException $exception) {
-
-		}
-		catch (Throwable $exception) {
-
-		}
-		finally {
-
-		}
 	}
 
 	protected function guard(){

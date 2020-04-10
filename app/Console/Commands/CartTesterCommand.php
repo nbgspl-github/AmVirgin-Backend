@@ -54,8 +54,11 @@ class CartTesterCommand extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		$a = ProductAttribute::retrieve(4);
-		dd($a->values()->pluck('value'));
+		$data = [
+			'name' => 'Aviral',
+			'age' => 24,
+		];
+		dd([$data, 'weight' => 85]);
 	}
 
 	private function createRange($array){

@@ -11,7 +11,7 @@ use App\Traits\HasSpecialAttributes;
 use App\Traits\QueryProvider;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
-use App\Traits\Sluggable;
+use App\Traits\GenerateSlugs;
 use BinaryCats\Sku\HasSku;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -25,7 +25,7 @@ use Spatie\Sluggable\SlugOptions;
  * @package App\Models
  */
 class Product extends Model{
-	use FluentConstructor, RetrieveResource, RetrieveCollection, DynamicAttributeNamedMethods, HasSpecialAttributes, Sluggable, SoftDeletes, HasSku, QueryProvider;
+	use FluentConstructor, RetrieveResource, RetrieveCollection, DynamicAttributeNamedMethods, HasSpecialAttributes, GenerateSlugs, SoftDeletes, HasSku, QueryProvider;
 	protected $table = 'products';
 	protected $fillable = [
 		'name',
@@ -189,10 +189,6 @@ class Product extends Model{
 			$this->setSpecialAttribute('hotDeal', $yes);
 		}
 		return $this->getSpecialAttribute('hotDeal', false);
-	}
-
-	public function getSlugOptions(): SlugOptions{
-		return SlugOptions::create()->saveSlugsTo('slug')->generateSlugsFrom('name');
 	}
 
 	public static function startQuery(): ProductQuery{

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Auth\Seller;
+namespace App\Resources\Auth\Seller;
 
 use App\Storage\SecuredDisk;
 use Illuminate\Http\Resources\Json\JsonResource;

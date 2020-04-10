@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\App\Customer;
 
 use App\Http\Controllers\TwoFactorBaseAuthController;
-use App\Http\Resources\Auth\Customer\AuthProfileResource;
+use App\Resources\Auth\Customer\AuthProfileResource;
 use App\Models\Auth\Customer;
 use App\Models\CustomerOtp;
 use Illuminate\Database\Eloquent\Model;
@@ -66,6 +66,6 @@ class TwoFactorAuthController extends TwoFactorBaseAuthController{
 	}
 
 	protected function registerPayload(Model $user, string $token){
-		return (new AuthProfileResource($user))->token($token);
+		return (new \App\Resources\Auth\Customer\AuthProfileResource($user))->token($token);
 	}
 }

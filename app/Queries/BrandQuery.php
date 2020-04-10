@@ -17,4 +17,19 @@ class BrandQuery extends AbstractQuery{
 	public function displayable(): self{
 		return $this;
 	}
+
+	public function name(string $name, string $column = 'name'): self{
+		$this->query->where($column, $name);
+		return $this;
+	}
+
+	public function category(int $categoryId): self{
+		$this->query->where('categoryId', $categoryId);
+		return $this;
+	}
+
+	public function seller(int $sellerId): self{
+		$this->query->where('createdBy', $sellerId);
+		return $this;
+	}
 }

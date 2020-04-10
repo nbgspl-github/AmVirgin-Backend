@@ -8,7 +8,7 @@ namespace App\Http\Controllers\App;
 use App\Exceptions\ResourceConflictException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
-use App\Http\Resources\Auth\Seller\AuthProfileResource;
+use App\Resources\Auth\Seller\AuthProfileResource;
 use App\Interfaces\Directories;
 use App\Models\Auth\Seller;
 use App\Storage\SecuredDisk;

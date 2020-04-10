@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\App\Seller;
 
 use App\Http\Controllers\TwoFactorBaseAuthController;
-use App\Http\Resources\Auth\Seller\AuthProfileResource;
+use App\Resources\Auth\Seller\AuthProfileResource;
 use App\Models\Auth\Customer;
 use App\Models\CustomerOtp;
 use App\Models\Auth\Seller;
@@ -64,10 +64,10 @@ class TwoFactorAuthController extends TwoFactorBaseAuthController{
 	}
 
 	protected function loginPayload(Model $user, string $token){
-		return (new AuthProfileResource($user))->token($token);
+		return (new \App\Resources\Auth\Seller\AuthProfileResource($user))->token($token);
 	}
 
 	protected function registerPayload(Model $user, string $token){
-		return (new AuthProfileResource($user))->token($token);
+		return (new \App\Resources\Auth\Seller\AuthProfileResource($user))->token($token);
 	}
 }
