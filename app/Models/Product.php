@@ -151,6 +151,15 @@ class Product extends Model{
 		'Boys' => 'boys',
 		'Girls' => 'girls',
 	];
+	public const PaymentMode = [
+		'PayTM' => 'pay-tm',
+		'UPI' => 'upi',
+		'COD' => 'cash-on-delivery',
+		'NetBanking' => 'net-banking',
+		'CreditCard' => 'credit-card',
+		'DebitCard' => 'debit-card',
+		'PayPal' => 'pay-pal',
+	];
 
 	public function attributes(): HasMany{
 		return $this->hasMany(ProductAttribute::class, 'productId');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\App\Customer\Cart;
 
+use App\Classes\Arrays;
 use App\Classes\Cart\CartItem;
 use App\Constants\CartStatus;
 use App\Exceptions\CartAlreadySubmittedException;
@@ -13,6 +14,7 @@ use App\Interfaces\Tables;
 use App\Models\Cart;
 use App\Models\CustomerWishlist;
 use App\Models\Order;
+use App\Models\Product;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
@@ -57,6 +59,8 @@ class QuoteController extends ExtendedResourceController{
 			'submit' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
 				'addressId' => ['bail', 'required', Rule::exists(Tables::ShippingAddresses, 'id')],
+				'paymentMode' => ['bail', 'required', Rule::in(Arrays::values(Product::PaymentMode))],
+				'transactionId' => ['bail', 'required', 'string', 'min:4', 'max:255'],
 			],
 		];
 	}
@@ -284,6 +288,7 @@ class QuoteController extends ExtendedResourceController{
 			$cart = Cart::retrieveThrows($validated->sessionId);
 			$cart->customerId = $this->guard()->id();
 			$cart->addressId = $validated->addressId;
+			$cart->
 			$order = $cart->submit();
 			$response->status(HttpOkay)->message('Your order was placed successfully.')->setValue('orderNumber', $order->orderNumber);
 		}
