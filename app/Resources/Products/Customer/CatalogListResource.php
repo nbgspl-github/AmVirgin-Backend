@@ -19,6 +19,7 @@ class CatalogListResource extends JsonResource{
 			],
 			'rating' => $this->rating(),
 			'image' => SecuredDisk::existsUrl($this->primaryImage()),
+			'gallery' => ImageResource::collection($this->images),
 			'options' => CatalogListOptionResource::collection($this->options()->where('showInCatalogListing', true)->get()),
 		];
 	}
