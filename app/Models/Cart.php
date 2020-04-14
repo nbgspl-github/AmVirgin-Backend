@@ -178,6 +178,7 @@ class Cart extends Model{
 			'tax' => $this->tax,
 			'total' => $this->total,
 			'paymentMode' => $this->paymentMode,
+			'transactionId' => $this->transactionId,
 			'status' => OrderStatus::Placed,
 		]);
 		$this->itemCollection->iterate(function (CartItem $cartItem) use ($order){

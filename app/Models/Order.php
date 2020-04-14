@@ -24,6 +24,7 @@ class Order extends Model{
 		'tax',
 		'total',
 		'paymentMode',
+		'transactionId',
 		'status',
 	];
 	protected $hidden = ['created_at', 'updated_at'];

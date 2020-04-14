@@ -288,7 +288,8 @@ class QuoteController extends ExtendedResourceController{
 			$cart = Cart::retrieveThrows($validated->sessionId);
 			$cart->customerId = $this->guard()->id();
 			$cart->addressId = $validated->addressId;
-			$cart->
+			$cart->paymentMode = $validated->paymentMode;
+			$cart->transactionId = $validated->transactionId;
 			$order = $cart->submit();
 			$response->status(HttpOkay)->message('Your order was placed successfully.')->setValue('orderNumber', $order->orderNumber);
 		}
