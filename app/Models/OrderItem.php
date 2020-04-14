@@ -22,6 +22,6 @@ class OrderItem extends Model{
 	];
 
 	public function product(){
-		return $this->hasMany(Product::class, 'id', 'productId')->with('images');
+		return $this->hasOne(Product::class, 'id', 'productId')->with('images');
 	}
 }

@@ -18,7 +18,7 @@ class CreateOrderItemsTable extends Migration {
 			$table->integer('quantity')->default(0);
 			$table->float('price')->default(0.0);
 			$table->integer('total')->default(0);
-			$table->text('options');
+			$table->json('options');
 			$table->timestamps();
 		});
 	}
