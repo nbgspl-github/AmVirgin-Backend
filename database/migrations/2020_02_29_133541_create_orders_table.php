@@ -21,6 +21,7 @@ class CreateOrdersTable extends Migration {
 			$table->float('tax')->default(0.0);
 			$table->integer('total')->default(0);
 			$table->string('paymentMode');
+			$table->string('transactionId')->nullable();
 			$table->string('status');
 			$table->timestamps();
 		});

@@ -21,7 +21,8 @@ class CreateCartsTable extends Migration {
 			$table->float('subTotal')->default(0.0);
 			$table->float('tax')->default(0.0);
 			$table->integer('total')->default(0.0);
-			$table->string('paymentMode', 50);
+			$table->string('paymentMode');
+			$table->string('transactionId')->nullable();
 			$table->string('status');
 			$table->timestamps();
 		});
