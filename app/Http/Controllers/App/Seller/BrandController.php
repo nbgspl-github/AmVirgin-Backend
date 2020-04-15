@@ -39,9 +39,21 @@ class BrandController extends ExtendedResourceController{
 				'productSaleMarketPlace' => ['bail', 'nullable', 'string', 'min:2', 'max:255'],
 				'sampleMRPTagImage' => ['bail', 'nullable', 'image', 'min:1', 'max:5120'],
 				'isBrandOwner' => ['bail', 'nullable', 'boolean'],
-				'documentProof' => ['bail', 'nullable', 'mimes:pdf', 'max:5120'],
-				'documentType' => ['bail', 'nullable', 'string', 'min:2', 'max:255'],
 				'categoryId' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)->where('type', Category::Types['Vertical'])],
+				'documentProof' => ['bail', 'nullable', 'mimes:pdf', 'max:5120'],
+				'documentType' => ['bail', 'nullable', Rule::in(Arrays::values(Brand::DocumentType))],
+				'trademarkNumber' => ['bail', 'required_if:documentType,trademark-certificate', 'string', 'min:2', 'max:255'],
+				'trademarkStatus' => ['bail', 'required_if:documentType,trademark-certificate', 'string', 'min:2', 'max:255'],
+				'trademarkStatusOn' => ['bail', 'required_if:documentType,trademark-certificate', 'date'],
+				'trademarkClass' => ['bail', 'required_if:documentType,trademark-certificate', 'string', 'min:2', 'max:255'],
+				'trademarkAppliedDate' => ['bail', 'required_if:documentType,trademark-certificate', 'date'],
+				'trademarkExpiryDate' => ['bail', 'required_if:documentType,trademark-certificate', 'date', 'after:trademarkAppliedDate'],
+				'trademarkType' => ['bail', 'required_if:documentType,trademark-certificate', Rule::in(['device', 'word', 'logo', 'other'])],
+				'balExpiryDate' => ['bail', 'required_if:documentType,brand-authorization-letter', 'date'],
+				'invoiceDate' => ['bail', 'required_if:documentType,brand-authorization-letter', 'date'],
+				'invoiceNumber' => ['bail', 'required_if:documentType,brand-authorization-letter', 'string', 'min:2', 'max:255'],
+				'sellerGstIN' => ['bail', 'required', 'string', 'min:2', 'max:255'],
+				'supplierGstIN' => ['bail', 'required', 'string', 'min:2', 'max:255'],
 			],
 		];
 	}
@@ -104,9 +116,37 @@ class BrandController extends ExtendedResourceController{
 				}
 			}
 			else {
+				if ($payload['documentType'] == Brand::DocumentType['TrademarkCertificate']) {
+					$extras = [
+						'trademarkNumber' => $payload['trademarkNumber'],
+						'trademarkStatus' => $payload['trademarkStatus'],
+						'trademarkStatusOn' => $payload['trademarkStatusOn'],
+						'trademarkClass' => $payload['trademarkClass'],
+						'trademarkAppliedDate' => $payload['trademarkAppliedDate'],
+						'trademarkExpiryDate' => $payload['trademarkExpiryDate'],
+						'trademarkType' => $payload['trademarkType'],
+					];
+				}
+				else if ($payload['documentType'] == Brand::DocumentType['BrandAuthorizationLetter']) {
+					$extras = [
+						'balExpiryDate' => $payload['balExpiryDate'],
+					];
+				}
+				else if ($payload['documentType'] == Brand::DocumentType['Invoice']) {
+					$extras = [
+						'invoiceDate' => $payload['invoiceDate'],
+						'invoiceNumber' => $payload['invoiceNumber'],
+						'sellerGstIN' => $payload['sellerGstIN'],
+						'supplierGstIN' => $payload['supplierGstIN'],
+					];
+				}
+				else {
+					$extras = Arrays::Empty;
+				}
 				Arrays::replaceValues($payload, [
 					'createdBy' => $this->guard()->id(),
 					'status' => Brand::Status['Pending'],
+					'documentExtras' => $extras,
 				]);
 				$brand = Brand::create($payload);
 				$response->status(HttpOkay)->message('Your request has been queued. Please check back shortly to get an update.')->setValue('payload', ['status' => $brand->status()]);

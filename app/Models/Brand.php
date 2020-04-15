@@ -26,10 +26,12 @@ class Brand extends Model{
 		'createdBy',
 		'status',
 		'active',
+		'documentExtras',
 	];
 	protected $casts = [
 		'active' => 'bool',
 		'isBrandOwner' => 'bool',
+		'documentExtras' => 'array',
 	];
 	protected $hidden = [
 		'created_at', 'updated_at', 'id',
@@ -38,6 +40,12 @@ class Brand extends Model{
 		'Approved' => 'approved',
 		'Rejected' => 'rejected',
 		'Pending' => 'pending',
+	];
+	public const DocumentType = [
+		'TrademarkCertificate' => 'trademark-certificate',
+		'BrandAuthorizationLetter' => 'brand-authorization-letter',
+		'Invoice' => 'invoice',
+		'Other' => 'other',
 	];
 
 	public static function startQuery(): BrandQuery{
