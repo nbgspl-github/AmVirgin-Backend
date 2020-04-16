@@ -50,10 +50,10 @@ class BrandController extends ExtendedResourceController{
 				'trademarkExpiryDate' => ['bail', 'required_if:documentType,trademark-certificate', 'date', 'after:trademarkAppliedDate'],
 				'trademarkType' => ['bail', 'required_if:documentType,trademark-certificate', Rule::in(['device', 'word', 'logo', 'other'])],
 				'balExpiryDate' => ['bail', 'required_if:documentType,brand-authorization-letter', 'date'],
-				'invoiceDate' => ['bail', 'required_if:documentType,brand-authorization-letter', 'date'],
-				'invoiceNumber' => ['bail', 'required_if:documentType,brand-authorization-letter', 'string', 'min:2', 'max:255'],
-				'sellerGstIN' => ['bail', 'required', 'string', 'min:2', 'max:255'],
-				'supplierGstIN' => ['bail', 'required', 'string', 'min:2', 'max:255'],
+				'invoiceDate' => ['bail', 'required_if:documentType,invoice', 'date'],
+				'invoiceNumber' => ['bail', 'required_if:documentType,invoice', 'string', 'min:2', 'max:255'],
+				'sellerGstIN' => ['bail', 'required_if:documentType,invoice', 'string', 'min:2', 'max:255'],
+				'supplierGstIN' => ['bail', 'required_if:documentType,invoice', 'string', 'min:2', 'max:255'],
 			],
 		];
 	}
