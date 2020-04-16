@@ -9,6 +9,7 @@ use App\Constants\OfferTypes;
 use App\Constants\WarrantyServiceType;
 use App\Exceptions\BrandNotApprovedForSellerException;
 use App\Exceptions\InvalidCategoryException;
+use App\Exceptions\TokenInvalidException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\App\Seller\Products\AbstractProductController;
 use App\Http\Controllers\Web\ExtendedResourceController;
@@ -22,6 +23,7 @@ use App\Models\HsnCode;
 use App\Models\Product;
 use App\Models\ProductAttribute;
 use App\Models\ProductImage;
+use App\Models\ProductToken;
 use App\Resources\Products\Seller\CatalogListResource;
 use App\Resources\Products\Seller\ProductEditResource;
 use App\Resources\Products\Seller\ProductResource;
@@ -31,6 +33,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
@@ -88,11 +91,11 @@ class ProductController extends AbstractProductController{
 	public function store(): JsonResponse{
 		$response = responseApp();
 		try {
+			$token = $this->validateToken();
 			$outer = $this->validateOuter();
 			$trailer = $this->trailerFilePath();
 			$category = $this->category();
 			$brand = $this->brand();
-			$sessionUid = $outer['requestToken'] ?? $this->sessionUuid();
 			if ($this->isInvalidCategory($category)) {
 				throw new InvalidCategoryException();
 			}
@@ -101,75 +104,48 @@ class ProductController extends AbstractProductController{
 			}
 
 			$productsPayloadCollection = new Collection();
-			if ($this->isVariantType()) {
-				collect($outer['payload'])->each(function ($variant) use (&$productsPayloadCollection, $category, $brand, $trailer, $outer, $sessionUid){
-					$variant = $this->validateProductPayload($variant);
-					Arrays::replaceValues($variant, [
-						'categoryId' => $category->id(),
-						'brandId' => $brand->id(),
-						'sellerId' => $this->guard()->id(),
-						'type' => Product::Type['Variant'],
-						'currency' => $outer['currency'],
-						'description' => $outer['description'],
-						'taxRate' => HsnCode::find($variant['hsn'])->taxRate(),
-						'trailer' => $trailer,
-						'group' => $sessionUid,
-						'discount' => $this->calculateDiscount($variant['originalPrice'], $variant['sellingPrice']),
-					]);
-					$attributes = $variant['attributes'];
-					$primaryIndex = $variant['primaryImageIndex'];
-					$currentIndex = 0;
-					$images = collect(isset($variant['files']) ? $variant['files'] : [])->transform(function (UploadedFile $file) use (&$currentIndex, $primaryIndex, &$variant){
-						$file = SecuredDisk::access()->putFile(Directories::ProductImage, $file);
-						if ($currentIndex++ == $primaryIndex) {
-							$variant['primaryImage'] = $file;
-						}
-						return $file;
-					})->toArray();
-					$productsPayloadCollection->push([
-						'product' => $variant,
-						'attributes' => $attributes,
-						'images' => $images,
-					]);
-				});
-			}
-			else {
-				$variant = $this->validateProductPayload($outer['payload']);
-				Arrays::replaceValues($variant, [
-					'categoryId' => $category->id(),
-					'brandId' => $brand->id(),
-					'sellerId' => $this->guard()->id(),
-					'type' => Product::Type['Simple'],
-					'currency' => $outer['currency'],
-					'description' => $outer['description'],
-					'taxRate' => HsnCode::find($variant['hsn'])->taxRate(),
-					'trailer' => $trailer,
-					'group' => $sessionUid,
-					'discount' => $this->calculateDiscount($variant['originalPrice'], $variant['sellingPrice']),
-				]);
-				$attributes = $variant['attributes'];
-				$primaryIndex = $variant['primaryImageIndex'];
-				$currentIndex = 0;
-				$images = collect(isset($variant['files']) ? $variant['files'] : [])->transform(function (UploadedFile $file) use (&$currentIndex, $primaryIndex, &$variant){
-					$file = SecuredDisk::access()->putFile(Directories::ProductImage, $file);
-					if ($currentIndex++ == $primaryIndex) {
-						$variant['primaryImage'] = $file;
-					}
-					return $file;
-				})->toArray();
-				$productsPayloadCollection->push([
-					'product' => $variant,
-					'attributes' => $attributes,
-					'images' => $images,
-				]);
-			}
+			$product = $this->validateProductPayload($outer['payload']);
+			Arrays::replaceValues($product, [
+				'categoryId' => $category->id(),
+				'brandId' => $brand->id(),
+				'sellerId' => $this->guard()->id(),
+				'type' => Product::Type['Simple'],
+				'currency' => $outer['currency'],
+				'description' => $outer['description'],
+				'taxRate' => HsnCode::find($product['hsn'])->taxRate(),
+				'trailer' => $trailer,
+				'group' => $token,
+				'discount' => $this->calculateDiscount($product['originalPrice'], $product['sellingPrice']),
+			]);
+			$attributes = $product['attributes'];
+			$primaryIndex = $product['primaryImageIndex'];
+			$currentIndex = 0;
+			$images = collect(isset($product['files']) ? $product['files'] : [])->transform(function (UploadedFile $file) use (&$currentIndex, $primaryIndex, &$product){
+				$file = SecuredDisk::access()->putFile(Directories::ProductImage, $file);
+				if ($currentIndex++ == $primaryIndex) {
+					$product['primaryImage'] = $file;
+				}
+				return $file;
+			})->toArray();
+			$productsPayloadCollection->push([
+				'product' => $product,
+				'attributes' => $attributes,
+				'images' => $images,
+			]);
 
 			$productsPayloadCollection->each(function ($payload){
 				$product = $this->storeProduct($payload['product']);
 				$this->storeAttribute($product, $payload['attributes']);
 				$this->storeImages($product, $payload['images']);
 			});
-			$response->status(HttpCreated)->message('Product details were saved successfully.');
+			$didConvertAny = $this->convertAllSimpleToVariants($token);
+			if (!$didConvertAny)
+				$response->status(HttpCreated)->message('Product details were saved successfully.');
+			else
+				$response->status(HttpCreated)->message('Product variant was saved successfully.');
+		}
+		catch (TokenInvalidException $exception) {
+			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
 		}
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
@@ -312,8 +288,22 @@ class ProductController extends AbstractProductController{
 	}
 
 	public function token(){
+		$token = $this->sessionUuid();
+		$productToken = ProductToken::updateOrCreate(
+			[
+				'token' => $token,
+				'sellerId' => $this->guard()->id(),
+			],
+			[
+				'token' => $token,
+				'sellerId' => $this->guard()->id(),
+				'createdFor' => request()->ip(),
+				'validUntil' => Carbon::now()->addHours(2)->toDateTimeString(),
+			]
+		);
 		return responseApp()->setValue('payload', [
-			'token' => $this->sessionUuid(),
+			'token' => $productToken->token(),
+			'validUntil' => $productToken->validUntil(),
 		])->status(HttpOkay)->message('Token generated successfully.')->send();
 	}
 }

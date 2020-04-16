@@ -44,6 +44,27 @@ class ProductQuery extends AbstractQuery{
 		return $this;
 	}
 
+	public function simple(bool $invert = false): self{
+		if (!$invert)
+			$this->query->where('type', Product::Type['Simple']);
+		else
+			$this->query->where('type', '!=', Product::Type['Simple']);
+		return $this;
+	}
+
+	public function variant(bool $invert = false): self{
+		if (!$invert)
+			$this->query->where('type', Product::Type['Simple']);
+		else
+			$this->query->where('type', '!=', Product::Type['Simple']);
+		return $this;
+	}
+
+	public function group(string $groupGuid): self{
+		$this->query->where('group', $groupGuid);
+		return $this;
+	}
+
 	public function categoryOrDescendant(int $categoryId){
 		$category = Category::retrieve($categoryId);
 		$descendants = $category->descendants(true)->pluck('id')->toArray();

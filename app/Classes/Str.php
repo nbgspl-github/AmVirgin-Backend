@@ -32,4 +32,14 @@ class Str extends \Illuminate\Support\Str{
 		$value = __($key);
 		return Str::equals($value, $key) ? $default : $value;
 	}
+
+	public static function makeUuid(){
+		$segmentX = Str::random();
+		$segmentY = Str::uuid()->toString();
+		$segmentY = str_replace('-', self::Empty, $segmentY);
+		$segmentX = self::upper($segmentX);
+		$segmentY = self::upper($segmentY);
+		$segmentZ = date('s');
+		return $segmentX . $segmentZ . $segmentY;
+	}
 }

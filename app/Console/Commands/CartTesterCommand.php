@@ -17,14 +17,16 @@ use App\Models\Auth\Seller;
 use App\Models\Settings;
 use App\Models\ShopSlider;
 use App\Storage\SecuredDisk;
+use App\Traits\ValidatesRequest;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
-use Sujip\Guid\Guid;
+use Sujip\Guid\Facades\Guid;
 
 class CartTesterCommand extends Command{
 	use ConditionallyLoadsAttributes;
+	use ValidatesRequest;
 
 	/**
 	 * The name and signature of the console command.
@@ -54,12 +56,17 @@ class CartTesterCommand extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		$data = [
-			'name' => 'Aviral',
-			'age' => '24',
-		];
-		$value = $data['age'] ?? 22;
-		dd($value);
+		try {
+			$this->arrayValid([
+				'url' => null,
+			], [
+				'url' => ['bail', 'nullable', 'url'],
+			]);
+			dd('Valid');
+		}
+		catch (ValidationException $e) {
+			dd($e->getMessage());
+		}
 	}
 
 	private function createRange($array){

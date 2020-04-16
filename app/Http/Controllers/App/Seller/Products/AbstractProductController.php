@@ -5,7 +5,9 @@ namespace App\Http\Controllers\App\Seller\Products;
 use App\Classes\Arrays;
 use App\Classes\Rule;
 use App\Classes\Str;
+use App\Classes\Time;
 use App\Constants\WarrantyServiceType;
+use App\Exceptions\TokenInvalidException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Interfaces\Directories;
@@ -19,6 +21,7 @@ use App\Models\Category;
 use App\Models\HsnCode;
 use App\Models\Product;
 use App\Models\ProductAttribute;
+use App\Models\ProductToken;
 use App\Models\SellerBrand;
 use App\Storage\SecuredDisk;
 use App\Traits\ValidatesRequest;
@@ -40,7 +43,6 @@ class AbstractProductController extends ExtendedResourceController{
 					'requestToken' => ['bail', 'nullable', 'string', 'min:30', 'max:36'],
 					'categoryId' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)],
 					'brandId' => ['bail', 'required', Rule::existsPrimary(Tables::Brands), Rule::exists(Tables::SellerBrands, 'brandId')->where('status', 'approved')],
-					'type' => ['bail', 'required', 'string', Rule::in([Product::Type['Simple'], Product::Type['Variant']])],
 					'currency' => ['bail', 'nullable', 'string', 'min:2', 'max:5', Rule::exists(Tables::Currencies, 'code')],
 					'description' => ['bail', 'required', 'string', 'min:1', 'max:2000'],
 					'trailer' => ['bail', 'nullable', 'mimes:mp4', 'min:1', 'max:100000'],
@@ -74,8 +76,8 @@ class AbstractProductController extends ExtendedResourceController{
 					'notCoveredInWarranty' => ['bail', 'nullable', 'string', 'min:1', 'max:100000'],
 					'maxQuantityPerOrder' => ['bail', 'nullable', 'numeric', 'min:1', 'max:1000'],
 					'primaryImageIndex' => ['bail', 'required', 'numeric', Rule::minimum(0), Rule::maximum(8)],
-					'files' => ['bail', 'required', 'min:1', 'max:8'],
-					'files.*' => ['bail', 'required', 'mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
+					'files' => ['bail', 'nullable', 'min:1', 'max:8'],
+					'files.*' => ['bail', 'nullable', 'mimes:jpg,jpeg,png,bmp', 'min:1', 'max:5120'],
 					'attributes' => ['bail', 'required'],
 					'attributes.*.key' => ['bail', 'required', 'exists:attributes,id'],
 					'attributes.*.value' => ['bail', 'required'],
@@ -187,7 +189,37 @@ class AbstractProductController extends ExtendedResourceController{
 	}
 
 	protected function sessionUuid(): string{
-		return Guid::create();
+		return Str::makeUuid();
+	}
+
+	protected function convertAllSimpleToVariants(string $token){
+		$products = Product::startQuery()->seller($this->guard()->id())->simple()->group($token)->get();
+		// If there are more than one products under the same group,
+		// it means they should be treated as variants of the same kind.
+		// Otherwise let the be the type they are.
+		if ($products->count() > 1) {
+			$products->each(function (Product $product){
+				$product->type(Product::Type['Variant']);
+				$product->save();
+			});
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	protected function validateToken(){
+		$productToken = ProductToken::where([
+			['token', request()->header('X-PRODUCT-TOKEN')],
+			['sellerId', $this->guard()->id()],
+			['createdFor', request()->ip()],
+			['validUntil', '>', Time::mysqlStamp()],
+		])->first();
+		if ($productToken == null)
+			throw new TokenInvalidException();
+		else
+			return $productToken->token();
 	}
 
 	protected function guard(){

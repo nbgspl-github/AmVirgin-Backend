@@ -22,7 +22,7 @@ class CreateProductsTable extends Migration{
 			$table->unsignedBigInteger('categoryId')->comment('Category under which this product falls.');
 			$table->unsignedBigInteger('sellerId')->comment('Seller to whom this product belongs.');
 			$table->unsignedBigInteger('brandId')->comment('Brand to which this product belongs.');
-			$table->uuid('group')->comment('Unique identifier to identify variations of same product. For variations, this will be same for all.');
+			$table->string('group')->comment('Unique identifier to identify variations of same product. For variations, this will be same for all.');
 			$table->enum('listingStatus', [Product::ListingStatus['Active'], Product::ListingStatus['Inactive']])->comment('Whether the product will show up in catalog listing or not?');
 			$table->enum('type', Arrays::values(Product::Type))->comment('What type of product is this?');
 			$table->enum('idealFor', Arrays::values(Product::IdealFor))->nullable()->comment('What gender would the product be most suitable for?');
