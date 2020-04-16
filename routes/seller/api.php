@@ -56,7 +56,7 @@ Route::middleware('auth:seller-api')->prefix('products')->group(function (){
 	Route::delete('/attributes/{id}', [ProductAttributeController::class, 'delete'])->name('seller.products.attributes.delete');
 
 	Route::prefix('token')->group(function (){
-		Route::get(Str::Empty, [ProductController::class, 'token']);
+		Route::get('create', [ProductController::class, 'token']);
 	});
 });
 
