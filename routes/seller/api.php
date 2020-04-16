@@ -54,6 +54,10 @@ Route::middleware('auth:seller-api')->prefix('products')->group(function (){
 	Route::delete('{id}', [ProductController::class, 'delete'])->name('seller.products.delete');
 	Route::delete('/images/{id}', [ProductImageController::class, 'delete'])->name('seller.products.images.delete');
 	Route::delete('/attributes/{id}', [ProductAttributeController::class, 'delete'])->name('seller.products.attributes.delete');
+
+	Route::prefix('token')->group(function (){
+		Route::get(Str::Empty, [ProductController::class, 'token']);
+	});
 });
 
 Route::prefix('currencies')->group(function (){

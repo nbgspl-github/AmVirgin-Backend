@@ -56,9 +56,10 @@ class CartTesterCommand extends Command{
 	public function handle(){
 		$data = [
 			'name' => 'Aviral',
-			'age' => 24,
+			'age' => '24',
 		];
-		dd([$data, 'weight' => 85]);
+		$value = $data['age'] ?? 22;
+		dd($value);
 	}
 
 	private function createRange($array){

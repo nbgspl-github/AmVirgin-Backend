@@ -37,6 +37,7 @@ class AbstractProductController extends ExtendedResourceController{
 		$this->rules = [
 			'store' => [
 				'outer' => [
+					'requestToken' => ['bail', 'nullable', 'string', 'min:30', 'max:36'],
 					'categoryId' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)],
 					'brandId' => ['bail', 'required', Rule::existsPrimary(Tables::Brands), Rule::exists(Tables::SellerBrands, 'brandId')->where('status', 'approved')],
 					'type' => ['bail', 'required', 'string', Rule::in([Product::Type['Simple'], Product::Type['Variant']])],
@@ -148,7 +149,7 @@ class AbstractProductController extends ExtendedResourceController{
 	}
 
 	protected function isBrandApprovedForSeller(Brand $brand){
-		return SellerBrand::startQuery()->seller($brand->id())->approved()->first() != null;
+		return Brand::startQuery()->seller($this->guard()->id())->displayable()->key($brand->id())->first() !== null;
 	}
 
 	protected function trailerFilePath(): ?string{

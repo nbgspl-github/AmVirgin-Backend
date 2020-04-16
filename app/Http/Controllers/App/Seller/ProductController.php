@@ -92,7 +92,7 @@ class ProductController extends AbstractProductController{
 			$trailer = $this->trailerFilePath();
 			$category = $this->category();
 			$brand = $this->brand();
-			$sessionUid = $this->sessionUuid();
+			$sessionUid = $outer['requestToken'] ?? $this->sessionUuid();
 			if ($this->isInvalidCategory($category)) {
 				throw new InvalidCategoryException();
 			}
@@ -309,5 +309,11 @@ class ProductController extends AbstractProductController{
 		finally {
 			return $response->send();
 		}
+	}
+
+	public function token(){
+		return responseApp()->setValue('payload', [
+			'token' => $this->sessionUuid(),
+		])->status(HttpOkay)->message('Token generated successfully.')->send();
 	}
 }
