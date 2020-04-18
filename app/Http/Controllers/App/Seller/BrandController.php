@@ -6,6 +6,7 @@ use App\Classes\Arrays;
 use App\Classes\Rule;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Interfaces\Directories;
 use App\Interfaces\Tables;
 use App\Models\Brand;
 use App\Models\Category;
@@ -147,6 +148,7 @@ class BrandController extends ExtendedResourceController{
 					'createdBy' => $this->guard()->id(),
 					'status' => Brand::Status['Pending'],
 					'documentExtras' => $extras,
+					'logo' => isset($payload['logo']) ? SecuredDisk::access()->putFile(Directories::Brands, $payload['logo']) : null,
 				]);
 				$brand = Brand::create($payload);
 				$response->status(HttpOkay)->message('Your request has been queued. Please check back shortly to get an update.')->setValue('payload', ['status' => $brand->status()]);
