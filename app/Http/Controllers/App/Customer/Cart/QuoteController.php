@@ -60,7 +60,7 @@ class QuoteController extends ExtendedResourceController{
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
 				'addressId' => ['bail', 'required', Rule::exists(Tables::ShippingAddresses, 'id')],
 				'paymentMode' => ['bail', 'required', Rule::in(Arrays::values(Product::PaymentMode))],
-				'transactionId' => ['bail', 'required', 'string', 'min:4', 'max:255'],
+				'transactionId' => ['bail', 'required_unless:paymentMode,cash-on-delivery', 'string', 'min:4', 'max:255'],
 			],
 		];
 	}
