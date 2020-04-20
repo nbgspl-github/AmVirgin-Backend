@@ -44,7 +44,7 @@ class QuoteController extends ExtendedResourceController{
 			'update' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
 				'key' => ['bail', 'required', Rule::existsPrimary(Tables::Products)->whereNull('deleted_at')],
-				'quantity' => ['bail', 'required', 'numeric', 'min:1', 'max:10'],
+				'quantity' => ['bail', 'required', 'numeric', 'min:1', 'max:100'],
 			],
 			'destroy' => [
 				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
