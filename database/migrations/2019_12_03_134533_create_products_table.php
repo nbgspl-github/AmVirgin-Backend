@@ -41,7 +41,7 @@ class CreateProductsTable extends Migration{
 			$table->integer('stock')->default(0)->comment('How many units are in stock?');
 			$table->integer('lowStockThreshold')->default(0)->comment('When should a particular product be shown as low in stock to customer? (0 means disabled)');
 			$table->boolean('draft')->default(false)->comment('True if the seller is midway creating this product.');
-			$table->string('description', 2000)->comment('Short description for this product.');
+			$table->string('description', 2000)->nullable()->comment('Short description for this product.');
 			$table->string('sku')->comment('Stock Keeping Unit identifier, unique for each product');
 			$table->string('styleCode')->nullable()->comment('For variants of the same product, this will be same. Unique code which sets up relations between different variants of the same product.');
 			$table->string('trailer', Constants::MaxFilePathLength)->nullable()->comment('Video path for product trailer.');

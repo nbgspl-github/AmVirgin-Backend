@@ -25,20 +25,21 @@ class OrderController extends ExtendedResourceController{
 		];
 	}
 
-	public function index() {
+	public function index(){
 		$response = responseApp();
 		try {
 			$orders = SellerOrder::where([
 				['sellerId', $this->guard()->id()],
 			])->get();
-			$orders->transform(function (SellerOrder $sellerOrder) {
+			$orders->transform(function (SellerOrder $sellerOrder){
 				return [
 					'orderId' => $sellerOrder->orderId(),
 					'orderNumber' => $sellerOrder->orderNumber(),
+					'orderDate' => $sellerOrder->created_at,
+					'status' => $sellerOrder->order->status(),
+					'quantity' => $sellerOrder->items()->sum('quantity'),
 					'customerId' => $sellerOrder->customerId(),
 					'customer' => $sellerOrder->customer,
-					// 'items' => $sellerOrder->items,
-
 				];
 			});
 			$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('data', $orders);
@@ -50,15 +51,16 @@ class OrderController extends ExtendedResourceController{
 			return $response->send();
 		}
 	}
-	public function getorders() {
+
+	public function getorders(){
 		$response = responseApp();
 		$user = auth('customer-api')->user()->id;
 		// DB::enableQueryLog(); 
 		try {
-			$orders = Order::with('customer','items')
-			->where([
-				['customerId', $user],
-			])->get();  
+			$orders = Order::with('customer', 'items')
+				->where([
+					['customerId', $user],
+				])->get();
 
 			// $orders = new ProductImageResource($orders);
 			// $payload = $orders->jsonSerialize();
@@ -73,15 +75,15 @@ class OrderController extends ExtendedResourceController{
 		}
 	}
 
-	public function getorderdetails($id) {
+	public function getorderdetails($id){
 		$response = responseApp();
 		$user = auth('customer-api')->user()->id;
 		// DB::enableQueryLog(); 
 		try {
-			$orders = Order::with('customer','items','address')
-			->where([
-				['customerId', $user],['id', $id],
-			])->get();   
+			$orders = Order::with('customer', 'items', 'address')
+				->where([
+					['customerId', $user], ['id', $id],
+				])->get();
 
 			$response->status(HttpOkay)->message('Order details for this Customer and this order id.')->setValue('data', $orders);
 		}
@@ -93,14 +95,14 @@ class OrderController extends ExtendedResourceController{
 		}
 	}
 
-	public function getOrdersDetails($id) {
+	public function getOrdersDetails($id){
 		$response = responseApp();
 		$user = auth('seller-api')->user()->id;
 		// DB::enableQueryLog(); 
-		try { 
-			$orders = SellerOrder::with('item','order')
-			->where([ ['sellerId', $this->guard()->id()],['orderId', $id],
-			])->first(); 
+		try {
+			$orders = SellerOrder::with('item', 'order')
+				->where([['sellerId', $this->guard()->id()], ['orderId', $id],
+				])->first();
 
 			$response->status(HttpOkay)->message('Order details for this order id.')->setValue('data', $orders);
 		}
@@ -112,37 +114,40 @@ class OrderController extends ExtendedResourceController{
 		}
 	}
 
-	public function updateOrderStatus($id='', $status= '')
-	{   
-	 	// DB::enableQueryLog();  
-	 	$response = responseApp();
-	 	try {
-	 		$data = Order::find($id);  
-		 	if(!empty($data)){
+	public function updateOrderStatus($id = '', $status = ''){
+		// DB::enableQueryLog();
+		$response = responseApp();
+		try {
+			$data = Order::find($id);
+			if (!empty($data)) {
 
-		 		$order_status = Order::getAllStatus();//Config::get('app.order_status');
-		 		  
-		 		if (in_array($status, $order_status)) {  
-			 		$data->update([
-			 			'status' => $status
-			 		]); 
-					$response->status(HttpOkay)->message('Status Updated Successfully'); 
-				}else{
+				$order_status = Order::getAllStatus();//Config::get('app.order_status');
+
+				if (in_array($status, $order_status)) {
+					$data->update([
+						'status' => $status,
+					]);
+					$response->status(HttpOkay)->message('Status Updated Successfully');
+				}
+				else {
 					$response->status(HttpOkay)->message('Status did not matched in our record');
 				}
-		 	}else{
-		 		$response->status(HttpResourceNotFound)->message('Order Not Found');
-		 	} 
+			}
+			else {
+				$response->status(HttpResourceNotFound)->message('Order Not Found');
+			}
 
-	 	} catch (Throwable $exception) {
-	 		 
-	 		 $response->status(HttpServerError)->message($exception->getMessage());
-	 	}finally {
+		}
+		catch (Throwable $exception) {
+
+			$response->status(HttpServerError)->message($exception->getMessage());
+		}
+		finally {
 			return $response->send();
 		}
-	 } 
+	}
 
-	public function customer($id) {
+	public function customer($id){
 		$response = responseApp();
 		try {
 			$customer = Customer::retrieve($id);
@@ -156,53 +161,57 @@ class OrderController extends ExtendedResourceController{
 		}
 	}
 
-	public function getOrderStatus()
-	{
-		$response = responseApp(); 
-	 	try { 
-	 		$order_status = Order::getAllStatus();
-	 		$response->status(HttpOkay)->message('Status listing for orders.')->setValue('data', $order_status);
-	 	} catch (Throwable $exception) {
-	 		$response->status(HttpServerError)->message($exception->getMessage());
-	 	}finally{
-	 		return $response->send();
-	 	}
-	}
-	public function getOrderByStatus($status)
-	{
-		$response = responseApp(); 
-	 	try { 
-	 		// $order_status= Config::get('app.order_status');
-	 		$order_status = Order::getAllStatus();
-
-	 		if (in_array($status, $order_status)) {
-	 			
-	 		$ordersData = $total = array();
-
-	 		$ordersData = Order::where(['status' => $status])
-	 						->get(); 
-	 						 
-	 		if (!empty(count($ordersData)) ) {
-		 		$total['subTotal'] = $ordersData->sum( 'subTotal' );
-		 		$total['tax']      = $ordersData->sum( 'tax' );
-	 		  	$total['total']    = $ordersData->sum( 'total' );
-
-		 		$ordersData['total'] = $total;
-	 		  }   
-
-	 		$response->status(HttpOkay)->message("Orders Listing for '$status' status")->setValue('data', $ordersData);
-	 		}else{
-	 			$response->status(HttpOkay)->message('Status did not matched in our record');
-	 		} 
-	 		
-	 	} catch (Throwable $exception) {
-	 		$response->status(HttpServerError)->message($exception->getMessage());
-	 	}finally{
-	 		return $response->send();
-	 	}
+	public function getOrderStatus(){
+		$response = responseApp();
+		try {
+			$order_status = Order::getAllStatus();
+			$response->status(HttpOkay)->message('Status listing for orders.')->setValue('data', $order_status);
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
 	}
 
-	protected function guard() {
+	public function getOrderByStatus($status){
+		$response = responseApp();
+		try {
+			// $order_status= Config::get('app.order_status');
+			$order_status = Order::getAllStatus();
+
+			if (in_array($status, $order_status)) {
+
+				$ordersData = $total = [];
+
+				$ordersData = Order::where(['status' => $status])
+					->get();
+
+				if (!empty(count($ordersData))) {
+					$total['subTotal'] = $ordersData->sum('subTotal');
+					$total['tax'] = $ordersData->sum('tax');
+					$total['total'] = $ordersData->sum('total');
+
+					$ordersData['total'] = $total;
+				}
+
+				$response->status(HttpOkay)->message("Orders Listing for '$status' status")->setValue('data', $ordersData);
+			}
+			else {
+				$response->status(HttpOkay)->message('Status did not matched in our record');
+			}
+
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+
+	protected function guard(){
 		return auth('seller-api');
 	}
 }
