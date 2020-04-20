@@ -98,7 +98,6 @@ class QuoteController extends ExtendedResourceController{
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
 		}
 		catch (Throwable $exception) {
-			dd($exception);
 			$response->status(HttpServerError)->message($exception->getTraceAsString());
 		}
 		finally {
@@ -189,7 +188,6 @@ class QuoteController extends ExtendedResourceController{
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
 		}
 		catch (Throwable $exception) {
-			dd($exception);
 			$response->status(HttpServerError)->message($exception->getTraceAsString());
 		}
 		finally {
@@ -271,7 +269,6 @@ class QuoteController extends ExtendedResourceController{
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
 		}
 		catch (Throwable $exception) {
-			dd($exception);
 			$response->status(HttpServerError)->message($exception->getTraceAsString());
 		}
 		finally {

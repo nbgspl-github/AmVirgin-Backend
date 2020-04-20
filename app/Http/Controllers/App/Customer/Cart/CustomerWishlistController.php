@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\App\Customer\Cart;
 
 use App\Classes\Cart\CartItem;
+use App\Constants\CartStatus;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Interfaces\Tables;
@@ -17,11 +18,12 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\Rule;
 use Throwable;
 
-class CustomerWishlistController extends ExtendedResourceController {
+class CustomerWishlistController extends ExtendedResourceController{
 	use ValidatesRequest;
+
 	protected array $rules;
 
-	public function __construct() {
+	public function __construct(){
 		parent::__construct();
 		$this->rules = [
 			'store' => [
@@ -33,17 +35,17 @@ class CustomerWishlistController extends ExtendedResourceController {
 		];
 	}
 
-	public function index() {
+	public function index(){
 		$wishList = CustomerWishlist::where('customerId', $this->guard()->id())->get();
 		$wishList->transform(function (CustomerWishlist $item){
 			return new CatalogListResource(Product::retrieve($item->productId));
 		});
-		return responseApp()->status(HttpOkay)->setValue('data', $wishList)->message(function () use ($wishList) {
+		return responseApp()->status(HttpOkay)->setValue('data', $wishList)->message(function () use ($wishList){
 			return sprintf('Found %d items in the wishlist.', $wishList->count());
 		})->send();
 	}
 
-	public function store($productId) {
+	public function store($productId){
 		$response = responseApp();
 		$validated = null;
 		try {
@@ -77,7 +79,7 @@ class CustomerWishlistController extends ExtendedResourceController {
 		}
 	}
 
-	public function delete($productId) {
+	public function delete($productId){
 		$response = responseApp();
 		try {
 			$wishListItem = CustomerWishlist::where([
@@ -98,7 +100,7 @@ class CustomerWishlistController extends ExtendedResourceController {
 		}
 	}
 
-	public function moveToCart($productId) {
+	public function moveToCart($productId){
 		$response = responseApp();
 		$validated = null;
 		$cart = null;
@@ -122,7 +124,15 @@ class CustomerWishlistController extends ExtendedResourceController {
 				}
 			}
 			catch (ModelNotFoundException $exception) {
-				$response->status(HttpOkay)->message('No cart was found for that session.');
+				\App\Models\Cart::create([
+					'sessionId' => $validated->sessionId,
+					'status' => CartStatus::Pending,
+				]);
+				$cartItem = new CartItem($cart, $productId);
+				$wishlistItem->delete();
+				$cart->addItem($cartItem);
+				$cart->save();
+				$response->status(HttpOkay)->message('Item moved to cart.');
 			}
 		}
 		catch (ModelNotFoundException $exception) {
@@ -139,7 +149,7 @@ class CustomerWishlistController extends ExtendedResourceController {
 		}
 	}
 
-	protected function guard() {
+	protected function guard(){
 		return auth('customer-api');
 	}
 }

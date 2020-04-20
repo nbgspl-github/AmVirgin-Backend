@@ -24,6 +24,19 @@ const HttpUnauthorized = 401;
 
 const HttpDeniedAccess = 403;
 
+const ShipmentPlaced = 'placed';
+const ShipmentReadyForDispatch = 'ready-for-dispatch';
+const ShipmentDispatched = 'placed';
+const ShipmentOutForDelivery = 'placed';
+const ShipmentRescheduled = 'placed';
+const ShipmentDelivered = 'placed';
+const ShipmentCancelled = 'placed';
+const ShipmentRefundProcessing = 'placed';
+const ShipmentRefunded = 'placed';
+
+const CartStatusPending = 'pending';
+const CartStatusSubmitted = 'submitted';
+
 /**
  * App is in production stage and is deployed to production servers.
  */

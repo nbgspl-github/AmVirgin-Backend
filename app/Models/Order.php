@@ -14,6 +14,7 @@ use App\Models\SellerOrder;
 
 class Order extends Model{
 	use DynamicAttributeNamedMethods, RetrieveResource;
+
 	protected $table = 'orders';
 	protected $fillable = [
 		'customerId',
@@ -27,10 +28,14 @@ class Order extends Model{
 		'transactionId',
 		'status',
 	];
-	protected $hidden = ['created_at', 'updated_at'];
+	protected $hidden = [
+		'created_at',
+		'updated_at',
+	];
 
 	public static $status = [
 		'Placed' => 'placed',
+		'ReadyForDispatch' => 'ready-for-dispatch',
 		'Dispatched' => 'dispatched',
 		'Delivered' => 'delivered',
 		'Cancelled' => 'cancelled',

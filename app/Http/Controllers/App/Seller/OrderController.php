@@ -10,7 +10,6 @@ use App\Traits\ValidatesRequest;
 use Throwable;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
-use DB;
 use App\Resources\Products\Customer\ImageResource;
 use Illuminate\Support\Facades\Config;
 
@@ -118,7 +117,6 @@ class OrderController extends ExtendedResourceController{
 	}
 
 	public function updateOrderStatus($id = '', $status = ''){
-		// DB::enableQueryLog();
 		$response = responseApp();
 		try {
 			$data = Order::find($id);
@@ -142,7 +140,6 @@ class OrderController extends ExtendedResourceController{
 
 		}
 		catch (Throwable $exception) {
-
 			$response->status(HttpServerError)->message($exception->getMessage());
 		}
 		finally {
