@@ -286,7 +286,7 @@ class QuoteController extends ExtendedResourceController{
 			$cart->customerId = $this->guard()->id();
 			$cart->addressId = $validated->addressId;
 			$cart->paymentMode = $validated->paymentMode;
-			$cart->transactionId = $validated->transactionId;
+			$cart->transactionId = $validated->transactionId ?? null;
 			$order = $cart->submit();
 			$response->status(HttpOkay)->message('Your order was placed successfully.')->setValue('orderNumber', $order->orderNumber);
 		}
