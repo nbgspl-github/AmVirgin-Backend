@@ -44,7 +44,7 @@ class AbstractProductController extends ExtendedResourceController{
 					'categoryId' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)],
 					'brandId' => ['bail', 'required', Rule::existsPrimary(Tables::Brands), Rule::exists(Tables::SellerBrands, 'brandId')->where('status', 'approved')],
 					'currency' => ['bail', 'nullable', 'string', 'min:2', 'max:5', Rule::exists(Tables::Currencies, 'code')],
-					'description' => ['bail', 'required', 'string', 'min:1', 'max:2000'],
+					'description' => ['bail', 'nullable', 'string', 'min:1', 'max:2000'],
 					'trailer' => ['bail', 'nullable', 'mimes:mp4', 'min:1', 'max:100000'],
 					'payload' => ['bail', 'required'],
 				],
