@@ -32,11 +32,13 @@ class OrderController extends ExtendedResourceController{
 				['sellerId', $this->guard()->id()],
 			])->get();
 			$orders->transform(function (SellerOrder $sellerOrder){
+				$status = $sellerOrder->order;
+				$status = $status != null ? $status->status() : 'N/A';
 				return [
 					'orderId' => $sellerOrder->orderId(),
 					'orderNumber' => $sellerOrder->orderNumber(),
 					'orderDate' => $sellerOrder->created_at,
-					'status' => $sellerOrder->order->status(),
+					'status' => $status,
 					'quantity' => $sellerOrder->items()->sum('quantity'),
 					'customerId' => $sellerOrder->customerId(),
 					'customer' => $sellerOrder->customer,
