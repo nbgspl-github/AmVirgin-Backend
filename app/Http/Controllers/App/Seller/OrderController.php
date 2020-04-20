@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\App\Seller;
 
+use App\Classes\Time;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Models\Auth\Customer;
 use App\Models\SellerOrder;
@@ -37,7 +38,7 @@ class OrderController extends ExtendedResourceController{
 				return [
 					'orderId' => $sellerOrder->orderId(),
 					'orderNumber' => $sellerOrder->orderNumber(),
-					'orderDate' => $sellerOrder->created_at,
+					'orderDate' => Time::mysqlStamp(strtotime($sellerOrder->created_at)),
 					'status' => $status,
 					'quantity' => $sellerOrder->items()->sum('quantity'),
 					'customerId' => $sellerOrder->customerId(),
