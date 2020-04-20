@@ -18,6 +18,7 @@ class CartItemResource extends JsonResource{
 				'original' => $this->originalPrice(),
 				'selling' => $this->sellingPrice(),
 			],
+			'maxAllowedQuantity' => $this->maxQuantityPerOrder(),
 			'image' => SecuredDisk::existsUrl($this->primaryImage()),
 			'options' => OptionResource::collection($this->options),
 		];
