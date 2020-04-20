@@ -128,6 +128,7 @@ class CustomerWishlistController extends ExtendedResourceController{
 					'sessionId' => $validated->sessionId,
 					'status' => CartStatus::Pending,
 				]);
+				$cart = Cart::retrieveThrows($validated->sessionId);
 				$cartItem = new CartItem($cart, $productId);
 				$wishlistItem->delete();
 				$cart->addItem($cartItem);
