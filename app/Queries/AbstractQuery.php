@@ -2,6 +2,7 @@
 
 namespace App\Queries;
 
+use App\Classes\Str;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -84,6 +85,9 @@ abstract class AbstractQuery{
 		}
 		catch (ModelNotFoundException $exception) {
 			$modelName = __modelNameFromSlug($this->model());
+			if (defined(static::ModelUserName)) {
+				$modelName = static::ModelUserName;
+			}
 			$msg = sprintf(self::$throwsMessage, lcfirst($modelName));
 			throw new ModelNotFoundException($msg);
 		}

@@ -5,6 +5,8 @@ namespace App\Queries;
 use App\Models\SellerOrder;
 
 class SellerOrderQuery extends AbstractQuery{
+	protected const ModelUserName = 'seller order';
+
 	protected function model(): string{
 		return SellerOrder::class;
 	}
