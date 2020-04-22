@@ -85,8 +85,8 @@ abstract class AbstractQuery{
 		}
 		catch (ModelNotFoundException $exception) {
 			$modelName = __modelNameFromSlug($this->model());
-			if (defined(static::ModelUserName)) {
-				$modelName = static::ModelUserName;
+			if (property_exists($this, 'modelUserString')) {
+				$modelName = $this->modelUserString;
 			}
 			$msg = sprintf(self::$throwsMessage, lcfirst($modelName));
 			throw new ModelNotFoundException($msg);
