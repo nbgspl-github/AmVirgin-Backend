@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Auth\Customer;
 use App\Models\Order;
 
-class SellerOrder extends ModelExtended{
+class SellerOrder extends Model{
 	use DynamicAttributeNamedMethods, RetrieveResource, RetrieveCollection;
 
 	protected $table = 'seller-orders';
