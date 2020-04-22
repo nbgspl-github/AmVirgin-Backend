@@ -26,6 +26,6 @@ class SellerOrderItem extends Model{
 	}
 
 	public function product(){
-		return $this->hasOne(Product::class, 'productId');
+		return $this->hasOne(Product::class, 'id', 'productId');
 	}
 }
