@@ -48,7 +48,7 @@ class OrderController extends ExtendedResourceController{
 		$response = responseApp();
 		try {
 			$order = SellerOrder::startQuery()->useAuth()->key($id)->firstOrFail();
-			$resource = OrderResource::collection($order);
+			$resource = new OrderResource($order);
 			$response->status(HttpOkay)->message('Listing order details for given key.')->setValue('payload', $resource);
 		}
 		catch (ModelNotFoundException $exception) {

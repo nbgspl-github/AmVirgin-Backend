@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Auth\Customer;
 use App\Models\Order;
 
-class SellerOrder extends Model{
+class SellerOrder extends ModelExtended{
 	use DynamicAttributeNamedMethods, RetrieveResource, RetrieveCollection;
 
 	protected $table = 'seller-orders';
@@ -20,6 +20,12 @@ class SellerOrder extends Model{
 		'customerId',
 		'orderId',
 		'orderNumber',
+	];
+	public const AllowedStatuses = [
+		ShipmentPlaced => [
+			ShipmentReadyForDispatch,
+			ShipmentDispatched,
+		],
 	];
 
 	public function seller(){
