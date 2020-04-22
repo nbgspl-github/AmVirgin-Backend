@@ -7,6 +7,7 @@ use App\Models\Auth\Seller;
 use App\Queries\ProductQuery;
 use App\Traits\FluentConstructor;
 use App\Traits\DynamicAttributeNamedMethods;
+use App\Traits\HasInventoryStocks;
 use App\Traits\HasSpecialAttributes;
 use App\Traits\QueryProvider;
 use App\Traits\RetrieveCollection;
@@ -25,7 +26,8 @@ use Spatie\Sluggable\SlugOptions;
  * @package App\Models
  */
 class Product extends Model{
-	use FluentConstructor, RetrieveResource, RetrieveCollection, DynamicAttributeNamedMethods, HasSpecialAttributes, GenerateSlugs, SoftDeletes, HasSku, QueryProvider;
+	use FluentConstructor, RetrieveResource, RetrieveCollection, DynamicAttributeNamedMethods, HasSpecialAttributes, GenerateSlugs, SoftDeletes, HasSku, QueryProvider, HasInventoryStocks;
+
 	protected $table = 'products';
 	protected $fillable = [
 		'name',

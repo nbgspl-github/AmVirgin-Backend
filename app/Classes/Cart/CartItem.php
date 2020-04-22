@@ -4,9 +4,9 @@ namespace App\Classes\Cart;
 
 use App\Constants\OfferTypes;
 use App\Exceptions\MaxAllowedQuantityReachedException;
+use App\Exceptions\OutOfStockException;
 use App\Models\Product;
 use App\Resources\Cart\CartItemResource;
-use App\Resources\Products\Customer\SimpleProductResource;
 use JsonSerializable;
 use stdClass;
 
@@ -31,14 +31,25 @@ class CartItem extends stdClass implements JsonSerializable{
 		$this->setKey($key);
 		$this->setProduct(Product::retrieve($this->getKey()));
 		$this->setMinAllowedQuantity(1);
-		$this->setMaxAllowedQuantity($this->getProduct()->maxQuantityPerOrder());
+		$this->setMaxAllowedQuantity($this->getCalculatedMaxAllowedQuantity());
 		$this->setCart($cart);
 		$this->setQuantity(0);
 		$this->setUniqueId(sprintf('%s-%d', $cart->sessionId, $key));
+		if ($this->getProduct()->isOutOfStock())
+			throw new OutOfStockException();
 	}
 
 	public function getMaxAllowedQuantity(): int{
 		return $this->maxAllowedQuantity;
+	}
+
+	public function getCalculatedMaxAllowedQuantity(): int{
+		$actualMaxAllowed = $this->getProduct()->maxQuantityPerOrder();
+		$inStock = $this->getProduct()->stock();
+		if ($inStock >= $actualMaxAllowed)
+			return $actualMaxAllowed;
+		else
+			return $inStock;
 	}
 
 	protected function setMaxAllowedQuantity(int $maxAllowedQuantity): CartItem{

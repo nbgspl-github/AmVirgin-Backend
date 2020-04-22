@@ -8,6 +8,7 @@ use App\Constants\CartStatus;
 use App\Exceptions\CartAlreadySubmittedException;
 use App\Exceptions\CartItemNotFoundException;
 use App\Exceptions\MaxAllowedQuantityReachedException;
+use App\Exceptions\OutOfStockException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Interfaces\Tables;
@@ -80,6 +81,9 @@ class QuoteController extends ExtendedResourceController{
 		catch (CartAlreadySubmittedException $exception) {
 			$response->status(HttpDeniedAccess)->message($exception->getMessage())->setValue('data');
 		}
+		catch (OutOfStockException $exception) {
+			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage())->setValue('data', $cart->render());
+		}
 		catch (MaxAllowedQuantityReachedException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage())->setValue('data', $cart->render());
 		}
@@ -145,6 +149,9 @@ class QuoteController extends ExtendedResourceController{
 		}
 		catch (CartAlreadySubmittedException $exception) {
 			$response->status(HttpDeniedAccess)->message($exception->getMessage())->setValue('data');
+		}
+		catch (OutOfStockException $exception) {
+			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage())->setValue('data', $cart->render());
 		}
 		catch (MaxAllowedQuantityReachedException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage())->setValue('data', $cart->render());

@@ -18,6 +18,7 @@ use stdClass;
 
 class Cart extends Model{
 	use RetrieveResource;
+
 	const TaxRate = 0.25;
 	protected $table = 'carts';
 	protected $fillable = [
@@ -182,13 +183,15 @@ class Cart extends Model{
 			'status' => OrderStatus::Placed,
 		]);
 		$this->itemCollection->iterate(function (CartItem $cartItem) use ($order){
+			$boundProduct = $cartItem->getProduct();
+			$boundProduct->decreaseStockBy($cartItem->getQuantity());
 			$item = OrderItem::create([
 				'orderId' => $order->getKey(),
-				'productId' => $cartItem->getProduct()->id(),
+				'productId' => $boundProduct->id(),
 				'quantity' => $cartItem->getQuantity(),
 				'price' => $cartItem->getApplicablePrice(),
 				'total' => $cartItem->getItemTotal(),
-				'options' => OptionResource::collection($cartItem->getProduct()->options),
+				'options' => OptionResource::collection($boundProduct->options),
 			]);
 			$sellerOrder = SellerOrder::where([
 				['orderId', $order->getKey()],
