@@ -33,12 +33,12 @@ class OrderController extends ExtendedResourceController{
 	public function show($id){
 		$response = responseApp();
 		try {
-			$order = Order::retrieveThrows($id);
+			$order = $this->guard()->user()->orders()->where('id', $id)->firstOrFail();
 			$order = new OrderResource($order);
 			$response->status(HttpOkay)->message('Order details retrieved successfully.')->setValue('data', $order);
 		}
 		catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage());
+			$response->status(HttpResourceNotFound)->message('Could not find order for that key.');
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());

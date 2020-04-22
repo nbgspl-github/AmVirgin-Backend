@@ -11,7 +11,6 @@ use App\Models\Cart;
 use App\Models\CustomerWishlist;
 use App\Models\Product;
 use App\Resources\Products\Customer\CatalogListResource;
-use App\Resources\Products\Customer\SimpleProductResource;
 use App\Resources\Products\Customer\ProductResource;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
