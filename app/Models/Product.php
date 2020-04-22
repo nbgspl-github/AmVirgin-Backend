@@ -72,6 +72,7 @@ class Product extends Model{
 		'discount',
 		'primaryImage',
 		'specials',
+		'idealFor',
 	];
 	protected $hidden = [
 		'id',
