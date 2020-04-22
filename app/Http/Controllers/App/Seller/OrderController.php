@@ -6,8 +6,11 @@ use App\Classes\Time;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Models\Auth\Customer;
 use App\Models\SellerOrder;
+use App\Resources\Orders\Seller\ListResource;
 use App\Resources\Orders\Seller\OrderResource;
 use App\Traits\ValidatesRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Throwable;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
@@ -26,11 +29,11 @@ class OrderController extends ExtendedResourceController{
 		];
 	}
 
-	public function index(){
+	public function index(): JsonResponse{
 		$response = responseApp();
 		try {
-			$orders = SellerOrder::startQuery()->seller($this->guard()->id())->get();
-			$resource = OrderResource::collection($orders);
+			$orders = SellerOrder::startQuery()->useAuth()->get();
+			$resource = ListResource::collection($orders);
 			$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('data', $orders);
 		}
 		catch (Throwable $exception) {
@@ -41,39 +44,18 @@ class OrderController extends ExtendedResourceController{
 		}
 	}
 
-	public function getorderdetails($id){
+	public function show($id): JsonResponse{
 		$response = responseApp();
-		$user = auth('customer-api')->user()->id;
-		// DB::enableQueryLog(); 
 		try {
-			$orders = Order::with('customer', 'items', 'address')
-				->where([
-					['customerId', $user], ['id', $id],
-				])->get();
-
-			$response->status(HttpOkay)->message('Order details for this Customer and this order id.')->setValue('data', $orders);
+			$order = SellerOrder::startQuery()->useAuth()->key($id)->firstOrFail();
+			$resource = OrderResource::collection($order);
+			$response->status(HttpOkay)->message('Listing order details for given key.')->setValue('payload', $resource);
+		}
+		catch (ModelNotFoundException $exception) {
+			$response->status(HttpResourceNotFound)->message($exception->getMessage());
 		}
 		catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
-			return $response->send();
-		}
-	}
-
-	public function getOrdersDetails($id){
-		$response = responseApp();
-		$user = auth('seller-api')->user()->id;
-		// DB::enableQueryLog(); 
-		try {
-			$orders = SellerOrder::with('item', 'order')
-				->where([['sellerId', $this->guard()->id()], ['orderId', $id],
-				])->first();
-
-			$response->status(HttpOkay)->message('Order details for this order id.')->setValue('data', $orders);
-		}
-		catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(HttpResourceNotFound)->message($exception->getMessage());
 		}
 		finally {
 			return $response->send();
@@ -102,20 +84,6 @@ class OrderController extends ExtendedResourceController{
 				$response->status(HttpResourceNotFound)->message('Order Not Found');
 			}
 
-		}
-		catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
-			return $response->send();
-		}
-	}
-
-	public function customer($id){
-		$response = responseApp();
-		try {
-			$customer = Customer::retrieve($id);
-			$response->status(HttpOkay)->message('Customer Details.')->setValue('data', $customer);
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());

@@ -17,7 +17,7 @@ class SellerOrderQuery extends AbstractQuery{
 		return $this;
 	}
 
-	public function auth(): self{
+	public function useAuth(): self{
 		$this->query->where('sellerId', auth('seller-api')->id());
 		return $this;
 	}

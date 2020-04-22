@@ -3,9 +3,11 @@
 namespace App\Queries;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 abstract class AbstractQuery{
 	protected ?Builder $query = null;
+	protected static string $throwsMessage = 'Could not find %s for given key.';
 
 	protected function __construct(){
 		$this->initialize();
@@ -77,7 +79,14 @@ abstract class AbstractQuery{
 	}
 
 	public function firstOrFail(){
-		return $this->query->firstOrFail();
+		try {
+			return $this->query->firstOrFail();
+		}
+		catch (ModelNotFoundException $exception) {
+			$modelName = __modelNameFromSlug($this->model());
+			$msg = sprintf(self::$throwsMessage, lcfirst($modelName));
+			throw new ModelNotFoundException($msg);
+		}
 	}
 
 	public function get($columns = ['*']){
