@@ -14,6 +14,7 @@
 							<th class="text-center">Name</th>
 							<th class="text-center">Logo</th>
 							<th class="text-center">Active</th>
+							<th class="text-center">Status</th>
 							<th class="text-center">Actions</th>
 						</tr>
 						</thead>
@@ -31,6 +32,41 @@
 									@endif
 								</td>
 								<td class="text-center">{{__boolean($brand->active())}}</td>
+								<td class="text-center">
+									<div class="btn-group btn-group-toggle shadow-sm" data-toggle="buttons">
+										@if($brand->status()=='approved')
+											<label class="btn btn-outline-danger active" @include('admin.extras.tooltip.left', ['title' => 'Set genre active'])>
+												<input type="radio" name="options" id="optionOn_{{$genre->getKey()}}" onchange="toggleStatus('{{$genre->getKey()}}',1);"/> On
+											</label>
+											<label class="btn btn-outline-primary" @include('admin.extras.tooltip.right', ['title' => 'Set genre inactive'])>
+												<input type="radio" name="options" id="optionOff_{{$genre->getKey()}}" onchange="toggleStatus('{{$genre->getKey()}}',0);"/> Off
+											</label>
+											<label class="btn btn-outline-primary" @include('admin.extras.tooltip.right', ['title' => 'Set genre inactive'])>
+												<input type="radio" name="options" id="optionOff_{{$genre->getKey()}}" onchange="toggleStatus('{{$genre->getKey()}}',0);"/> Off
+											</label>
+										@elseif($brand->status()=='rejected')
+											<label class="btn btn-outline-danger active" @include('admin.extras.tooltip.left', ['title' => 'Set genre active'])>
+												<input type="radio" name="options" id="optionOn_{{$genre->getKey()}}" onchange="toggleStatus('{{$genre->getKey()}}',1);"/> On
+											</label>
+											<label class="btn btn-outline-primary" @include('admin.extras.tooltip.right', ['title' => 'Set genre inactive'])>
+												<input type="radio" name="options" id="optionOff_{{$genre->getKey()}}" onchange="toggleStatus('{{$genre->getKey()}}',0);"/> Off
+											</label>
+											<label class="btn btn-outline-primary" @include('admin.extras.tooltip.right', ['title' => 'Set genre inactive'])>
+												<input type="radio" name="options" id="optionOff_{{$genre->getKey()}}" onchange="toggleStatus('{{$genre->getKey()}}',0);"/> Off
+											</label>
+										@else
+											<label class="btn btn-outline-danger active" @include('admin.extras.tooltip.left', ['title' => 'Set genre active'])>
+												<input type="radio" name="options" id="optionOn_{{$genre->getKey()}}" onchange="toggleStatus('{{$genre->getKey()}}',1);"/> On
+											</label>
+											<label class="btn btn-outline-primary" @include('admin.extras.tooltip.right', ['title' => 'Set genre inactive'])>
+												<input type="radio" name="options" id="optionOff_{{$genre->getKey()}}" onchange="toggleStatus('{{$genre->getKey()}}',0);"/> Off
+											</label>
+											<label class="btn btn-outline-primary" @include('admin.extras.tooltip.right', ['title' => 'Set genre inactive'])>
+												<input type="radio" name="options" id="optionOff_{{$genre->getKey()}}" onchange="toggleStatus('{{$genre->getKey()}}',0);"/> Off
+											</label>
+										@endif
+									</div>
+								</td>
 								<td class="text-center">
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group mx-auto" role="group">

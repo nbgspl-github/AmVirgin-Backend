@@ -6,6 +6,7 @@ use App\Classes\Time;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Models\Auth\Customer;
 use App\Models\SellerOrder;
+use App\Resources\Orders\Seller\OrderResource;
 use App\Traits\ValidatesRequest;
 use Throwable;
 use App\Models\Order;
@@ -28,46 +29,9 @@ class OrderController extends ExtendedResourceController{
 	public function index(){
 		$response = responseApp();
 		try {
-			$orders = SellerOrder::where([
-				['sellerId', $this->guard()->id()],
-			])->get();
-			$orders->transform(function (SellerOrder $sellerOrder){
-				$status = $sellerOrder->order;
-				$status = $status != null ? $status->status() : 'N/A';
-				return [
-					'orderId' => $sellerOrder->orderId(),
-					'orderNumber' => $sellerOrder->orderNumber(),
-					'orderDate' => Time::mysqlStamp(strtotime($sellerOrder->created_at)),
-					'status' => $status,
-					'quantity' => $sellerOrder->items()->sum('quantity'),
-					'customerId' => $sellerOrder->customerId(),
-					'customer' => $sellerOrder->customer,
-				];
-			});
+			$orders = SellerOrder::startQuery()->seller($this->guard()->id())->get();
+			$resource = OrderResource::collection($orders);
 			$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('data', $orders);
-		}
-		catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
-			return $response->send();
-		}
-	}
-
-	public function getorders(){
-		$response = responseApp();
-		$user = auth('customer-api')->user()->id;
-		// DB::enableQueryLog(); 
-		try {
-			$orders = Order::with('customer', 'items')
-				->where([
-					['customerId', $user],
-				])->get();
-
-			// $orders = new ProductImageResource($orders);
-			// $payload = $orders->jsonSerialize();
-			// print_r($orders);die();
-			$response->status(HttpOkay)->message('Listing all orders for this Customer.')->setValue('data', $orders);
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
