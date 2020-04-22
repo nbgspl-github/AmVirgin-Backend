@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Classes\Eloquent\ModelExtended;
 use App\Queries\SellerOrderQuery;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\RetrieveCollection;
@@ -10,10 +11,10 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Auth\Customer;
 use App\Models\Order;
 
-class SellerOrder extends Model{
+class SellerOrder extends ModelExtended{
 	use DynamicAttributeNamedMethods, RetrieveResource, RetrieveCollection;
 
-	protected $table = 'seller-orders';
+//	protected $table = 'seller-orders';
 	protected $fillable = [
 		'sellerId',
 		'customerId',
