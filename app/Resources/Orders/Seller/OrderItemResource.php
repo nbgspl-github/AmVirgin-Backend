@@ -7,9 +7,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class OrderItemResource extends JsonResource{
 	public function toArray($request){
 		return [
-			'product' => null,
 			'quantity' => $this->quantity(),
-			'',
+			'product' => new OrderProductResource($this->product),
 		];
 	}
 }
