@@ -14,13 +14,13 @@ class ListResource extends JsonResource{
 		$status = $this->order;
 		$status = $status != null ? $status->status() : 'N/A';
 		return [
+			'key' => $this->id(),
 			'orderId' => $this->orderId(),
 			'orderNumber' => $this->orderNumber(),
 			'orderDate' => Time::mysqlStamp(strtotime($this->created_at)),
 			'status' => $status,
 			'quantity' => $this->items()->sum('quantity'),
-			'customerId' => $this->customerId(),
-			'customer' => $this->customer,
+			'customer' => new OrderCustomerResource($this->customer),
 		];
 	}
 }
