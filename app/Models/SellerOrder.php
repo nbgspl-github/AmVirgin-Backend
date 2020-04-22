@@ -14,7 +14,7 @@ use App\Models\Order;
 class SellerOrder extends ModelExtended{
 	use DynamicAttributeNamedMethods, RetrieveResource, RetrieveCollection;
 
-//	protected $table = 'seller-orders';
+	protected $table = 'seller-orders';
 	protected $fillable = [
 		'sellerId',
 		'customerId',
