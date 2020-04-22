@@ -72,7 +72,7 @@ Route::prefix('countries')->group(function (){
 
 Route::prefix('orders')->middleware('auth:seller-api')->group(function (){
 	Route::get(Str::Empty, [OrderController::class, 'index']);
-	Route::get('/{param}', [OrderController::class, 'getOrdersDetails']);
+	Route::get('{id}', [OrderController::class, 'show']);
 	Route::get('/{id}/{status}', [OrderController::class, 'updateOrderStatus']);
 });
 Route::prefix('order')->middleware('auth:seller-api')->group(function (){
