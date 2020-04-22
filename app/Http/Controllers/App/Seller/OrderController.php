@@ -32,9 +32,9 @@ class OrderController extends ExtendedResourceController{
 	public function index(): JsonResponse{
 		$response = responseApp();
 		try {
-			$orders = SellerOrder::startQuery()->useAuth()->get();
-			$resource = ListResource::collection($orders);
-			$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('data', $orders);
+			$orderCollection = SellerOrder::startQuery()->useAuth()->get();
+			$resourceCollection = ListResource::collection($orderCollection);
+			$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('data', $resourceCollection);
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
