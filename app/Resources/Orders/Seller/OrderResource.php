@@ -9,7 +9,7 @@ class OrderResource extends JsonResource{
 		return [
 			'key' => $this->id(),
 			'customer' => new OrderCustomerResource($this->customer),
-			'name' => 'my hello',
+			'items' => OrderItemResource::collection($this->items),
 		];
 	}
 }
