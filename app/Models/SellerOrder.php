@@ -21,12 +21,6 @@ class SellerOrder extends ModelExtended{
 		'orderId',
 		'orderNumber',
 	];
-	public const AllowedStatuses = [
-		ShipmentPlaced => [
-			ShipmentReadyForDispatch,
-			ShipmentDispatched,
-		],
-	];
 
 	public function seller(){
 		return $this->belongsTo('App\Models\Auth\Seller', 'sellerId');
