@@ -9,7 +9,6 @@ class OrderResource extends JsonResource{
 		return [
 			'key' => $this->id(),
 			'customer' => new OrderCustomerResource($this->customer),
-			'orderId',
 		];
 	}
 }

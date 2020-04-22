@@ -26,13 +26,13 @@ const HttpDeniedAccess = 403;
 
 const ShipmentPlaced = 'placed';
 const ShipmentReadyForDispatch = 'ready-for-dispatch';
-const ShipmentDispatched = 'placed';
-const ShipmentOutForDelivery = 'placed';
-const ShipmentRescheduled = 'placed';
-const ShipmentDelivered = 'placed';
-const ShipmentCancelled = 'placed';
-const ShipmentRefundProcessing = 'placed';
-const ShipmentRefunded = 'placed';
+const ShipmentDispatched = 'dispatched';
+const ShipmentOutForDelivery = 'out-for-delivery';
+const ShipmentRescheduled = 'rescheduled';
+const ShipmentDelivered = 'delivered';
+const ShipmentCancelled = 'cancelled';
+const ShipmentRefundProcessing = 'refund-processing';
+const ShipmentRefunded = 'refunded';
 
 const CartStatusPending = 'pending';
 const CartStatusSubmitted = 'submitted';

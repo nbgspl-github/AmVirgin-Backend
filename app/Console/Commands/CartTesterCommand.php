@@ -51,66 +51,15 @@ class CartTesterCommand extends Command{
 		parent::__construct();
 	}
 
+	public const AllowedStatuses = [
+		CartStatusPending,
+	];
+
 	/**
 	 * Execute the console command.
 	 * @return mixed
 	 */
 	public function handle(){
-		try {
-			$this->arrayValid([
-				'email' => 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@gmail.com',
-			], [
-				'email' => ['bail', 'email', 'max:254'],
-			]);
-			dd('Valid');
-		}
-		catch (ValidationException $e) {
-			dd($e->getMessage());
-		}
-	}
-
-	private function createRange($array){
-		$priceCollection = collect($array);
-		$minimumPrice = $priceCollection->min();
-		$maximumPrice = $priceCollection->max();
-		$itemCount = $priceCollection->count();
-		$boundaries = config('filters.price.boundaries');
-		$divisions = -1;
-		// Find the highest threshold value by comparing maxPrice.
-		foreach ($boundaries as $key => $value) {
-			if ($key >= $maximumPrice) {
-				$divisions = $value;
-				break;
-			}
-		}
-
-		// If the threshold value wasn't matched, means the maximum price has
-		// exceeded defined threshold limit. Hence we revert to default divisions.
-		if ($divisions == -1) {
-			$divisions = config('filters.price.static.divisions');
-		}
-
-		// Now we can calculate a median value, upon which we'll create price segments.
-		// We must also ensure to divide even by even only. If that's not the case, we'll add 1 to all ranges.
-		$neutralizer = 0;
-		$diff = $maximumPrice - $minimumPrice;
-		self::even($diff) && self::even($divisions) ? $neutralizer = 0 : $neutralizer = 1;
-		$median = (int)($diff / $divisions);
-
-		$sections = Arrays::Empty;
-		for ($i = 0; $i < $divisions; $i++) {
-			$lastMinimum = $minimumPrice;
-			$minimumPrice = $minimumPrice + $median + $neutralizer;
-			Arrays::push($sections, [
-				'start' => $lastMinimum,
-				'end' => $minimumPrice,
-				'count' => $priceCollection->whereBetween(null, [$lastMinimum, $minimumPrice])->count(),
-			]);
-		}
-		return $sections;
-	}
-
-	protected static function even(int $number){
-		return $number % 2 == 0;
+		dd(self::AllowedStatuses);
 	}
 }
