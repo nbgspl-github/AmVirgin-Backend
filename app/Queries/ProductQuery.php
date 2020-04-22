@@ -35,7 +35,7 @@ class ProductQuery extends AbstractQuery{
 	}
 
 	public function displayable(): self{
-		$this->query->where('draft', false)->where('listingStatus', Product::ListingStatus['Active']);
+		$this->query->where('draft', false)->where('listingStatus', Product::ListingStatus['Active'])->where('approved', true)->whereNotNull('approvedAt');
 		return $this;
 	}
 
