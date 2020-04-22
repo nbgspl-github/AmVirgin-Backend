@@ -116,6 +116,7 @@ class ProductController extends AbstractProductController{
 				'trailer' => $trailer,
 				'group' => $token,
 				'discount' => $this->calculateDiscount($product['originalPrice'], $product['sellingPrice']),
+				'maxQuantityPerOrder' => $product['maxQuantityPerOrder'] ?? 10,
 			]);
 			$attributes = $product['attributes'];
 			$primaryIndex = $product['primaryImageIndex'];
