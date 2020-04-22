@@ -67,7 +67,7 @@ class Product extends Model{
 		'warrantyServiceType',
 		'coveredInWarranty',
 		'notCoveredInWarranty',
-		'maxAllowedQuantityPerOrder',
+		'maxQuantityPerOrder',
 		'lowStockThreshold',
 		'discount',
 		'primaryImage',
