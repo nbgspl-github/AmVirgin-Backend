@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Resources\Cart\CartItemResource;
 use JsonSerializable;
 use stdClass;
+use Symfony\Component\HttpFoundation\ServerBag;
 
 class CartItem extends stdClass implements JsonSerializable{
 	protected int $maxAllowedQuantity;
