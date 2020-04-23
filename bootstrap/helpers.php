@@ -211,7 +211,6 @@ function class_(string $slug): object{
 }
 
 function shouldIntercept(){
-	dd(\App\Models\Settings::getBool('shouldIntercept', false));
 	return \App\Models\Settings::getBool('shouldIntercept', false);
 }
 
