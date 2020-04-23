@@ -7,6 +7,8 @@
  * @author   Taylor Otwell <taylor@laravel.com>
  */
 
+use Illuminate\Support\Facades\Log;
+
 define('LARAVEL_START', microtime(true));
 
 /*
@@ -54,7 +56,8 @@ $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 $response = $kernel->handle(
 	$request = Illuminate\Http\Request::capture()
 );
-\Illuminate\Support\Facades\Log::channel('slack')->info($request);
+Log::channel('slack')->info(json_encode($request->server->all()));
+
 $response->send();
 
 $kernel->terminate($request, $response);
