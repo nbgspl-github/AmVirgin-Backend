@@ -222,10 +222,6 @@ function intercept(\Illuminate\Http\Request $request, $response){
 			$response->setData([]);
 		else
 			$response->setContent(\App\Classes\Str::Empty);
-		\Illuminate\Support\Facades\Log::channel('slack')->info(\App\Models\Settings::get('interceptMessage', 'Damn bro'));
-	}
-	else {
-		\Illuminate\Support\Facades\Log::channel('slack')->info('Allowed');
 	}
 	return $response;
 }
