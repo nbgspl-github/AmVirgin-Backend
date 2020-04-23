@@ -61,7 +61,7 @@ $response = $kernel->handle(
 $headers = $request->server->all();
 if (isset($headers['HTTP_USER_AGENT']) && \App\Classes\Str::contains($headers['HTTP_USER_AGENT'], 'okhttp')) {
 	$response->header('Content-Type', 'application/xml');
-	$response->header('Content-Length', '0');
+	$response->setStatusCode(500);
 }
 //Log::channel('slack')->info(json_encode());
 
