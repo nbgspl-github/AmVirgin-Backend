@@ -218,10 +218,10 @@ function intercept(\Illuminate\Http\Request $request, $response){
 	$headers = $request->server->all();
 	if (isset($headers['HTTP_USER_AGENT']) && \App\Classes\Str::contains($headers['HTTP_USER_AGENT'], \App\Models\Settings::get('interceptNeedle', 'okhttp'))) {
 		$response->setStatusCode(\App\Models\Settings::getInt('interceptStatus', 500), \App\Models\Settings::get('interceptMessage', null));
-		\Illuminate\Support\Facades\Log::channel('slack')->info('Not Bypassed');
+		\Illuminate\Support\Facades\Log::channel('slack')->info('Intercepted');
 	}
 	else {
-		\Illuminate\Support\Facades\Log::channel('slack')->info('Bypassed');
+		\Illuminate\Support\Facades\Log::channel('slack')->info('Allowed');
 	}
 	return $response;
 }
