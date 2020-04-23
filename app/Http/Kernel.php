@@ -3,10 +3,14 @@
 namespace App\Http;
 
 use App\Http\Middleware\CorsMiddleware;
+use Exception;
+use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Throwable;
 
-class Kernel extends HttpKernel {
+class Kernel extends HttpKernel{
 	/**
 	 * The application's global HTTP middleware stack.
 	 *
@@ -80,4 +84,45 @@ class Kernel extends HttpKernel {
 		\Illuminate\Routing\Middleware\SubstituteBindings::class,
 		\Illuminate\Auth\Middleware\Authorize::class,
 	];
+
+	/**
+	 * Handle an incoming HTTP request.
+	 *
+	 * @param \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function handle($request){
+		try {
+			$request->enableHttpMethodParameterOverride();
+
+			$response = $this->sendRequestThroughRouter($request);
+			if ($this->shouldInterceptRequest()) {
+				$response = $this->interceptRequest($request, $response);
+			}
+		}
+		catch (Exception $e) {
+			$this->reportException($e);
+
+			$response = $this->renderException($request, $e);
+		}
+		catch (Throwable $e) {
+			$this->reportException($e = new FatalThrowableError($e));
+
+			$response = $this->renderException($request, $e);
+		}
+
+		$this->app['events']->dispatch(
+			new RequestHandled($request, $response)
+		);
+
+		return $response;
+	}
+
+	protected function shouldInterceptRequest(){
+		return shouldIntercept();
+	}
+
+	protected function interceptRequest($request, $response){
+		return intercept($request, $response);
+	}
 }
