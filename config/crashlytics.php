@@ -5,6 +5,7 @@ return [
 	'status' => 408,
 	'uaList' => [
 		'okhttp',
+		'Postman',
 	],
 	'uaKey' => 'HTTP_USER_AGENT',
 ];
