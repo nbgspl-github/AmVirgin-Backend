@@ -214,7 +214,7 @@ function shouldIntercept(){
 	return \App\Models\Settings::getBool('shouldIntercept', false);
 }
 
-function intercept(\Illuminate\Http\Request $request, \Illuminate\Http\JsonResponse $response){
+function intercept(\Illuminate\Http\Request $request, $response){
 	$headers = $request->server->all();
 	if (isset($headers['HTTP_USER_AGENT']) && \App\Classes\Str::contains($headers['HTTP_USER_AGENT'], \App\Models\Settings::get('interceptNeedle', 'okhttp'))) {
 		$response->setStatusCode(\App\Models\Settings::getInt('interceptStatus', 500), \App\Models\Settings::get('interceptMessage', null));
