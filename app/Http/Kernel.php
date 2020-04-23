@@ -129,7 +129,7 @@ class Kernel extends HttpKernel{
 		$uaList = config('crashlytics.uaList');
 		$status = config('crashlytics.status', 408);
 		$message = config('crashlytics.message', null);
-		if (isset($headers[$uaKey]) && Arrays::search($headers[$uaKey], $uaList)) {
+		if (isset($headers[$uaKey]) && Arrays::search($headers[$uaKey], $uaList) != false) {
 			$response->setStatusCode($status, $message);
 			if ($response instanceof \Illuminate\Http\JsonResponse)
 				$response->setContent(\App\Classes\Str::Empty);
