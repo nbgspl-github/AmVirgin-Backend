@@ -97,7 +97,7 @@ class Kernel extends HttpKernel{
 			$request->enableHttpMethodParameterOverride();
 
 			$response = $this->sendRequestThroughRouter($request);
-			if ($this->shouldBypass()) {
+			if (!$this->shouldBypass()) {
 				$response = $this->interceptRequest($request, $response);
 			}
 		}
