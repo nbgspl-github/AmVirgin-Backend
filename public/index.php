@@ -56,7 +56,7 @@ $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 $response = $kernel->handle(
 	$request = Illuminate\Http\Request::capture()
 );
-$response = shouldIntercept() == false ? handleIntercept($request, $response) : $response;
+$response = shouldIntercept() == false ? intercept($request, $response) : $response;
 $response->send();
 
 $kernel->terminate($request, $response);

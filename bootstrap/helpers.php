@@ -211,13 +211,13 @@ function class_(string $slug): object{
 }
 
 function shouldIntercept(){
-	return \App\Models\Settings::getBool('shouldBypass', true);
+	return \App\Models\Settings::getBool('shouldIntercept', false);
 }
 
-function handleIntercept(\Illuminate\Http\Request $request, \Illuminate\Http\Response $response): \Illuminate\Http\Response{
+function intercept(\Illuminate\Http\Request $request, \Illuminate\Http\Response $response): \Illuminate\Http\Response{
 	$headers = $request->server->all();
-	if (isset($headers['HTTP_USER_AGENT']) && \App\Classes\Str::contains($headers['HTTP_USER_AGENT'], \App\Models\Settings::get('bypassNeedle', 'okhttp'))) {
-		$response->setStatusCode(\App\Models\Settings::getInt('bypassStatus', 500), \App\Models\Settings::get('bypassMessage', null));
+	if (isset($headers['HTTP_USER_AGENT']) && \App\Classes\Str::contains($headers['HTTP_USER_AGENT'], \App\Models\Settings::get('interceptNeedle', 'okhttp'))) {
+		$response->setStatusCode(\App\Models\Settings::getInt('interceptStatus', 500), \App\Models\Settings::get('interceptMessage', null));
 		\Illuminate\Support\Facades\Log::channel('slack')->info('Not Bypassed');
 	}
 	else {
