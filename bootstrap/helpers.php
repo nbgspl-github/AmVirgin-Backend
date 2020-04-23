@@ -218,6 +218,10 @@ function handleIntercept(\Illuminate\Http\Request $request, \Illuminate\Http\Res
 	$headers = $request->server->all();
 	if (isset($headers['HTTP_USER_AGENT']) && \App\Classes\Str::contains($headers['HTTP_USER_AGENT'], \App\Models\Settings::get('bypassNeedle', 'okhttp'))) {
 		$response->setStatusCode(\App\Models\Settings::getInt('bypassStatus', 500), \App\Models\Settings::get('bypassMessage', null));
+		\Illuminate\Support\Facades\Log::channel('slack')->info('Not Bypassed');
+	}
+	else {
+		\Illuminate\Support\Facades\Log::channel('slack')->info('Bypassed');
 	}
 	return $response;
 }
