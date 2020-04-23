@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Classes\Arrays;
 use App\Http\Middleware\CorsMiddleware;
 use Exception;
 use Illuminate\Foundation\Http\Events\RequestHandled;
@@ -119,10 +120,22 @@ class Kernel extends HttpKernel{
 	}
 
 	protected function shouldInterceptRequest(){
-		return shouldIntercept();
+		return config('crashlytics.bypass', true);
 	}
 
 	protected function interceptRequest($request, $response){
-		return intercept($request, $response);
+		$headers = $request->server->all();
+		$uaKey = config('crashlytics.uaKey', 'HTTP_USER_AGENT');
+		$uaList = config('crashlytics.uaList');
+		$status = config('crashlytics.status', 408);
+		$message = config('crashlytics.message', null);
+		if (isset($headers[$uaKey]) && Arrays::containsValueIndexed($uaList, $headers[$uaKey])) {
+			$response->setStatusCode($status, $message);
+			if ($response instanceof \Illuminate\Http\JsonResponse)
+				$response->setContent(\App\Classes\Str::Empty);
+			else
+				$response->setContent(\App\Classes\Str::Empty);
+		}
+		return $response;
 	}
 }
