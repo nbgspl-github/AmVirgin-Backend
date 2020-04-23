@@ -54,7 +54,7 @@ $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 $response = $kernel->handle(
 	$request = Illuminate\Http\Request::capture()
 );
-
+\Illuminate\Support\Facades\Log::channel('slack')->info($request);
 $response->send();
 
 $kernel->terminate($request, $response);
