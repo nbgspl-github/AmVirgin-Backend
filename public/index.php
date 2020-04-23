@@ -52,19 +52,11 @@ $app = require_once __DIR__ . '/../bootstrap/app.php';
 */
 
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
-/**
- * @var $response \Illuminate\Http\Response
- */
+
 $response = $kernel->handle(
 	$request = Illuminate\Http\Request::capture()
 );
-$headers = $request->server->all();
-if (isset($headers['HTTP_USER_AGENT']) && \App\Classes\Str::contains($headers['HTTP_USER_AGENT'], 'okhttp')) {
-	$response->header('Content-Type', 'application/xml');
-	$response->setStatusCode(500);
-}
-//Log::channel('slack')->info(json_encode());
-
+$response = !shouldIntercept() ? handleIntercept($request, $response) : $response;
 $response->send();
 
 $kernel->terminate($request, $response);

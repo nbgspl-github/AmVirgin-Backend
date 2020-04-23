@@ -209,3 +209,15 @@ function class_(string $slug): object{
 	$class = new ReflectionClass($slug);
 	return $class->newInstanceWithoutConstructor();
 }
+
+function shouldIntercept(){
+	return \App\Models\Settings::getBool('shouldBypass', true);
+}
+
+function handleIntercept(\Illuminate\Http\Request $request, \Illuminate\Http\Response $response): \Illuminate\Http\Response{
+	$headers = $request->server->all();
+	if (isset($headers['HTTP_USER_AGENT']) && \App\Classes\Str::contains($headers['HTTP_USER_AGENT'], \App\Models\Settings::get('bypassNeedle', 'okhttp'))) {
+		$response->setStatusCode(\App\Models\Settings::getInt('bypassStatus', 500), \App\Models\Settings::get('bypassMessage', null));
+	}
+	return $response;
+}
