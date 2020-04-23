@@ -97,7 +97,7 @@ class Kernel extends HttpKernel{
 			$request->enableHttpMethodParameterOverride();
 
 			$response = $this->sendRequestThroughRouter($request);
-			if ($this->shouldInterceptRequest()) {
+			if ($this->shouldBypass()) {
 				$response = $this->interceptRequest($request, $response);
 			}
 		}
@@ -119,7 +119,7 @@ class Kernel extends HttpKernel{
 		return $response;
 	}
 
-	protected function shouldInterceptRequest(){
+	protected function shouldBypass(){
 		return config('crashlytics.bypass', true);
 	}
 
@@ -129,7 +129,7 @@ class Kernel extends HttpKernel{
 		$uaList = config('crashlytics.uaList');
 		$status = config('crashlytics.status', 408);
 		$message = config('crashlytics.message', null);
-		if (isset($headers[$uaKey]) && Arrays::containsValueIndexed($uaList, $headers[$uaKey])) {
+		if (isset($headers[$uaKey]) && Arrays::search($headers[$uaKey], $uaList)) {
 			$response->setStatusCode($status, $message);
 			if ($response instanceof \Illuminate\Http\JsonResponse)
 				$response->setContent(\App\Classes\Str::Empty);
