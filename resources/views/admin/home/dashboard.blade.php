@@ -3,7 +3,7 @@
 	<div class="row">
 		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0 pr-md-0">
 			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
-				<a href="javascript:void(0);" onclick="doShit();" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
+				<a href="javascript:void(0);" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
 				<div class="card-body">
 					<div class="text-center">
 						<div>
@@ -11,7 +11,7 @@
 						</div>
 						<div>
 							<h4 class="mt-4">Videos</h4>
-							<h5 class="">{{$payload['video']}}</h5>
+							<h5 class="">{{$stats->video}}</h5>
 						</div>
 					</div>
 				</div>
@@ -19,7 +19,7 @@
 		</div>
 		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0 pr-md-0">
 			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
-				<a href="javascript:void(0);" onclick="doShit2();" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
+				<a href="javascript:void(0);" class="mt-2 text-right mr-2 text-white"><i class="mdi mdi-settings" style="font-size: 25px"></i></a>
 				<div class="card-body">
 					<div class="text-center">
 						<div>
@@ -27,7 +27,7 @@
 						</div>
 						<div>
 							<h4 class="mt-4">Series</h4>
-							<h5 class="">128</h5>
+							<h5 class="">{{$stats->series}}</h5>
 						</div>
 					</div>
 				</div>
@@ -42,8 +42,8 @@
 							<i class="mdi mdi-television" style="font-size: 35px"></i>
 						</div>
 						<div>
-							<h4 class="mt-4">Live TV</h4>
-							<h5 class="">25</h5>
+							<h4 class="mt-4">Movies</h4>
+							<h5 class="">{{$stats->movie}}</h5>
 						</div>
 					</div>
 				</div>
@@ -61,7 +61,7 @@
 						</div>
 						<div>
 							<h4 class="mt-4">New Videos</h4>
-							<h5 class="">8</h5>
+							<h5 class="">{{$stats->newVideo}}</h5>
 						</div>
 					</div>
 				</div>
@@ -77,7 +77,7 @@
 						</div>
 						<div>
 							<h4 class="mt-4">New Series</h4>
-							<h5 class="">8</h5>
+							<h5 class="">{{$stats->newSeries}}</h5>
 						</div>
 					</div>
 				</div>
@@ -92,8 +92,8 @@
 							<i class="mdi mdi-television" style="font-size: 35px"></i>
 						</div>
 						<div>
-							<h4 class="mt-4">New Live TV</h4>
-							<h5 class="">2</h5>
+							<h4 class="mt-4">New Movies</h4>
+							<h5 class="">{{$stats->newMovie}}</h5>
 						</div>
 					</div>
 				</div>

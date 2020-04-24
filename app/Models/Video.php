@@ -20,11 +20,7 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 class Video extends Model{
-	use RetrieveResource, DynamicAttributeNamedMethods;
-	use RetrieveCollection;
-	use FluentConstructor;
-	use ActiveStatus;
-	use GenerateSlugs;
+	use RetrieveResource, DynamicAttributeNamedMethods, RetrieveCollection, FluentConstructor, ActiveStatus, GenerateSlugs;
 
 	protected $fillable = [
 		'title',
@@ -53,10 +49,13 @@ class Video extends Model{
 		'seasons',
 		'active',
 	];
-
 	protected $hidden = [
 		'created_at',
 		'updated_at',
+	];
+	public const Type = [
+		'Movie' => 'movie',
+		'Series' => 'series',
 	];
 
 	/**

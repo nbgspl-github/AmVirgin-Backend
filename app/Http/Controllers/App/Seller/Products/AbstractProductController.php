@@ -32,6 +32,7 @@ use Sujip\Guid\Facades\Guid;
 
 class AbstractProductController extends ExtendedResourceController{
 	use ValidatesRequest;
+
 	protected ?Collection $items = null;
 	protected array $rules;
 
@@ -82,6 +83,9 @@ class AbstractProductController extends ExtendedResourceController{
 					'attributes.*.key' => ['bail', 'required', 'exists:attributes,id'],
 					'attributes.*.value' => ['bail', 'required'],
 				],
+			],
+			'trailer' => [
+				'video' => ['bail', 'required', 'mimes:mp4', 'min:1', 'max:100000'],
 			],
 		];
 	}
@@ -136,6 +140,10 @@ class AbstractProductController extends ExtendedResourceController{
 			]));
 		}
 		return $images;
+	}
+
+	protected function storeTrailer(): ?string{
+		return $this->trailerFilePath();
 	}
 
 	protected function category(): Category{

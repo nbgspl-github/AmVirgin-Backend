@@ -204,24 +204,3 @@ function countRequiredPages(int $total, int $perPage){
 	}
 	return $result;
 }
-
-function class_(string $slug): object{
-	$class = new ReflectionClass($slug);
-	return $class->newInstanceWithoutConstructor();
-}
-
-function shouldIntercept(){
-	return \App\Models\Settings::getBool('shouldIntercept', false);
-}
-
-function intercept(\Illuminate\Http\Request $request, $response){
-	$headers = $request->server->all();
-	if (isset($headers['HTTP_USER_AGENT']) && \App\Classes\Str::contains($headers['HTTP_USER_AGENT'], \App\Models\Settings::get('interceptNeedle', 'okhttp'))) {
-		$response->setStatusCode(\App\Models\Settings::getInt('interceptStatus', 500), \App\Models\Settings::get('interceptMessage', null));
-		if ($response instanceof \Illuminate\Http\JsonResponse)
-			$response->setContent(\App\Classes\Str::Empty);
-		else
-			$response->setContent(\App\Classes\Str::Empty);
-	}
-	return $response;
-}

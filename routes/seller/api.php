@@ -58,6 +58,10 @@ Route::middleware('auth:seller-api')->prefix('products')->group(function (){
 	Route::prefix('token')->group(function (){
 		Route::get('create', [ProductController::class, 'token']);
 	});
+
+	Route::prefix('trailer')->group(function (){
+		Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\Products\ProductTrailerController::class, 'store']);
+	});
 });
 
 Route::prefix('currencies')->group(function (){

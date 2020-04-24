@@ -3,7 +3,6 @@
 namespace App\Http;
 
 use App\Classes\Arrays;
-use App\Http\Middleware\CorsMiddleware;
 use Exception;
 use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
