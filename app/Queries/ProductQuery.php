@@ -96,6 +96,11 @@ class ProductQuery extends AbstractQuery{
 		return $this;
 	}
 
+	public function useAuth(): self{
+		$this->query->where('sellerId', auth('seller-api')->id());
+		return $this;
+	}
+
 	protected function model(): string{
 		return Product::class;
 	}

@@ -26,6 +26,7 @@ use App\Models\SellerBrand;
 use App\Storage\SecuredDisk;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use stdClass;
 use Sujip\Guid\Facades\Guid;
@@ -83,9 +84,9 @@ class AbstractProductController extends ExtendedResourceController{
 					'attributes.*.key' => ['bail', 'required', 'exists:attributes,id'],
 					'attributes.*.value' => ['bail', 'required'],
 				],
-			],
-			'trailer' => [
-				'video' => ['bail', 'required', 'mimes:mp4', 'min:1', 'max:100000'],
+				'trailer' => [
+					'video' => ['bail', 'required', 'mimes:mp4', 'min:1', 'max:100000'],
+				],
 			],
 		];
 	}
@@ -142,10 +143,6 @@ class AbstractProductController extends ExtendedResourceController{
 		return $images;
 	}
 
-	protected function storeTrailer(): ?string{
-		return $this->trailerFilePath();
-	}
-
 	protected function category(): Category{
 		return Category::retrieve(request('categoryId'));
 	}
@@ -162,13 +159,8 @@ class AbstractProductController extends ExtendedResourceController{
 		return Brand::startQuery()->seller($this->guard()->id())->displayable()->key($brand->id())->first() !== null;
 	}
 
-	protected function trailerFilePath(): ?string{
-		if (request()->hasFile('trailer')) {
-			return SecuredDisk::access()->putFile(Directories::Trailers, request()->file('trailer'));
-		}
-		else {
-			return null;
-		}
+	protected function storeTrailer(UploadedFile $file): ?string{
+		return SecuredDisk::access()->putFile(Directories::Trailers, $file);
 	}
 
 	protected function isVariantType(): bool{
@@ -194,6 +186,10 @@ class AbstractProductController extends ExtendedResourceController{
 
 	protected function validateAttributePayload(array $payload): array{
 		return $this->arrayValid($payload, $this->rules['store']['attribute']);
+	}
+
+	protected function validateTrailerPayload(array $payload): array{
+		return $this->arrayValid($payload, $this->rules['store']['trailer']);
 	}
 
 	protected function sessionUuid(): string{

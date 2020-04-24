@@ -93,7 +93,6 @@ class ProductController extends AbstractProductController{
 		try {
 			$token = $this->validateToken();
 			$outer = $this->validateOuter();
-			$trailer = $this->trailerFilePath();
 			$category = $this->category();
 			$brand = $this->brand();
 			if ($this->isInvalidCategory($category)) {
@@ -113,7 +112,6 @@ class ProductController extends AbstractProductController{
 				'currency' => $outer['currency'],
 				'description' => $outer['description'] ?? Str::Null,
 				'taxRate' => HsnCode::find($product['hsn'])->taxRate(),
-				'trailer' => $trailer,
 				'group' => $token,
 				'discount' => $this->calculateDiscount($product['originalPrice'], $product['sellingPrice']),
 				'maxQuantityPerOrder' => $product['maxQuantityPerOrder'] ?? 10,
@@ -169,7 +167,6 @@ class ProductController extends AbstractProductController{
 		$response = responseApp();
 		try {
 			$outer = $this->validateOuter();
-			$trailer = $this->trailerFilePath();
 			$category = $this->category();
 			$brand = $this->brand();
 			$sessionUid = $this->sessionUuid();
@@ -182,7 +179,7 @@ class ProductController extends AbstractProductController{
 
 			$productsPayloadCollection = new Collection();
 			if ($this->isVariantType()) {
-				collect($outer['payload'])->each(function ($variant) use (&$productsPayloadCollection, $category, $brand, $trailer, $outer, $sessionUid){
+				collect($outer['payload'])->each(function ($variant) use (&$productsPayloadCollection, $category, $brand, $outer, $sessionUid){
 					$variant = $this->validateProductPayload($variant);
 					Arrays::replaceValues($variant, [
 						'categoryId' => $category->id(),
@@ -192,7 +189,6 @@ class ProductController extends AbstractProductController{
 						'currency' => $outer['currency'],
 						'description' => $outer['description'],
 						'taxRate' => HsnCode::find($variant['hsn'])->taxRate(),
-						'trailer' => $trailer,
 						'group' => $sessionUid,
 						'discount' => $this->calculateDiscount($variant['originalPrice'], $variant['sellingPrice']),
 					]);
