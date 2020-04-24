@@ -60,7 +60,7 @@ Route::middleware('auth:seller-api')->prefix('products')->group(function (){
 	});
 
 	Route::prefix('trailer')->group(function (){
-		Route::post(Str::Empty, [\App\Http\Controllers\App\Seller\Products\ProductTrailerController::class, 'store']);
+		Route::post('upload', [\App\Http\Controllers\App\Seller\Products\ProductTrailerController::class, 'store']);
 	});
 });
 
