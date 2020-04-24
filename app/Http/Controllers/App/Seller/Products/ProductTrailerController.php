@@ -29,7 +29,7 @@ class ProductTrailerController extends AbstractProductController{
 				$response->status(HttpOkay)->message('Trailer uploaded successfully.');
 			}
 			else {
-				$response->status(HttpInvalidRequestFormat)->message('There are no products available for this token. Please upload trailer past product creation.');
+				$response->status(HttpInvalidRequestFormat)->message('There are no products available for this token. Please upload trailer post product creation.');
 			}
 		}
 		catch (TokenInvalidException $exception) {
