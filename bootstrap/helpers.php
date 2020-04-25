@@ -204,3 +204,7 @@ function countRequiredPages(int $total, int $perPage){
 	}
 	return $result;
 }
+
+function makeUrl($path): ?string{
+	return \App\Storage\SecuredDisk::existsUrl($path);
+}

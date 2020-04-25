@@ -45,7 +45,9 @@ class AuthController extends BaseAuthController{
 	}
 
 	protected function rulesUpdateProfile(){
-
+		return [
+			'name' => ['bail', 'required', 'string', 'min:2', 'max:255'],
+		];
 	}
 
 	protected function rulesUpdateAvatar(){

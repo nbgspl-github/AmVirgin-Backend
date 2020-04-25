@@ -274,6 +274,22 @@ abstract class BaseAuthController extends BaseController{
 		}
 	}
 
+	public function updateProfile(){
+		$response = responseApp();
+		try {
+			$validated = $this->requestValid(request(), $this->rulesUpdateProfile());
+			$user = $this->guard()->user();
+			$user->update($validated);
+			$response->status(HttpOkay)->message('Profile was updated successfully.');
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+
 	protected function updateAvatar(){
 		$response = responseApp();
 		try {

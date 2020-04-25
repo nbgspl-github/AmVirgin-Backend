@@ -30,33 +30,6 @@ class AuthController extends BaseAuthController{
 		return new AuthProfileResource($this->guard()->user());
 	}
 
-	public function updateProfile(){
-		$response = responseApp();
-		try {
-			$validated = (object)$this->requestValid(request(), $this->rulesUpdateProfile());
-			$seller = Seller::retrieveThrows($this->guard()->id());
-			$seller->name = $validated->name;
-			$seller->businessName = $validated->businessName;
-			$seller->description = $validated->description;
-			$seller->countryId = $validated->countryId;
-			$seller->stateId = $validated->stateId;
-			$seller->cityId = $validated->cityId;
-			$seller->pinCode = $validated->pinCode;
-			$seller->address = $validated->address;
-			$seller->save();
-			$response->status(HttpOkay)->message('Seller profile was updated successfully.');
-		}
-		catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find seller for that key.');
-		}
-		catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
-			return $response->send();
-		}
-	}
-
 	public function changePassword(Request $request){
 		$response = responseApp();
 
