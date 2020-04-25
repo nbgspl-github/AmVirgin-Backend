@@ -45,10 +45,12 @@ class AuthController extends BaseAuthController{
 	}
 
 	protected function rulesUpdateProfile(){
-		// TODO: Implement rulesUpdateProfile() method.
+
 	}
 
 	protected function rulesUpdateAvatar(){
-		// TODO: Implement rulesUpdateAvatar() method.
+		return [
+			'avatar' => ['bail', 'required', 'image', 'min:1', 'max:4096'],
+		];
 	}
 }

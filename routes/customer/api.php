@@ -26,6 +26,7 @@ Route::get('/profile', [AuthController::class, 'profile'])->name('customer.profi
 Route::post('/login', [TwoFactorAuthController::class, 'login'])->name('customer.login');
 Route::post('/register', [TwoFactorAuthController::class, 'register'])->name('customer.register');
 Route::post('/logout', [AuthController::class, 'logout'])->name('customer.logout')->middleware('auth:customer-api');
+Route::post('/profile/avatar', [AuthController::class, 'updateAvatar'])->name('customer.update.avatar')->middleware('auth:customer-api');
 Route::get('/profile', [AuthController::class, 'profile'])->name('customer.profile')->middleware('auth:customer-api');
 
 Route::prefix('videos')->group(function (){

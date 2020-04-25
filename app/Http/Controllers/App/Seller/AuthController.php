@@ -337,7 +337,9 @@ class AuthController extends BaseAuthController{
 	}
 
 	protected function rulesUpdateAvatar(){
-		return $this->ruleSet['update']['avatar'];
+		return [
+			'avatar' => ['bail', 'required', 'image', 'min:1', 'max:4096'],
+		];
 	}
 
 	protected function rulesUpdateProfile(){
