@@ -2,6 +2,7 @@
 
 namespace App\Resources\Auth\Customer;
 
+use App\Storage\SecuredDisk;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AuthProfileResource extends JsonResource{
@@ -13,6 +14,7 @@ class AuthProfileResource extends JsonResource{
 			'name' => $this->name(),
 			'email' => $this->email(),
 			'mobile' => $this->mobile(),
+			'avatar' => SecuredDisk::existsUrl($this->avatar()),
 			'subscription' => [
 				'active' => true,
 				'plan' => [
