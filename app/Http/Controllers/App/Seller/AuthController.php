@@ -326,4 +326,8 @@ class AuthController extends BaseAuthController{
 	protected function shouldAllowOnlyActiveUsers(): bool{
 		return true;
 	}
+
+	protected function rulesUpdatePassword(): array{
+		// TODO: Implement rulesUpdatePassword() method.
+	}
 }

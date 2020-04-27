@@ -68,4 +68,8 @@ class TwoFactorAuthController extends TwoFactorBaseAuthController{
 	protected function registerPayload(Model $user, string $token){
 		return (new \App\Resources\Auth\Customer\AuthProfileResource($user))->token($token);
 	}
+
+	protected function rulesUpdatePassword(): array{
+		// TODO: Implement rulesUpdatePassword() method.
+	}
 }
