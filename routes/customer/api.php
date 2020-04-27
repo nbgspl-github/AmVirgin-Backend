@@ -32,6 +32,7 @@ Route::prefix(Str::Empty)->group(function (){
 		Route::put(Str::Empty, [AuthController::class, 'updateProfile']);
 		Route::put('password', [AuthController::class, 'updatePassword']);
 	});
+	Route::post('contact-us', [\App\Http\Controllers\App\Customer\ContactUsController::class, 'store']);
 });
 
 Route::prefix('videos')->group(function (){
