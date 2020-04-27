@@ -44,6 +44,8 @@ abstract class BaseAuthController extends BaseController{
 
 	protected abstract function rulesUpdateAvatar();
 
+	protected abstract function rulesUpdatePassword(): array;
+
 	protected function checkSuccess(){
 		return __('strings.auth.check.success');
 	}
@@ -300,6 +302,31 @@ abstract class BaseAuthController extends BaseController{
 				'avatar' => SecuredDisk::access()->putFile(Directories::SellerAvatars, \request()->file('avatar')),
 			]);
 			$response->status(HttpOkay)->message('Avatar updated successfully.');
+		}
+		catch (ValidationException $exception) {
+			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+
+	protected function updatePassword(){
+		$response = responseApp();
+		try {
+			$validated = $this->requestValid(\request(), $this->rulesUpdatePassword());
+			$user = $this->guard()->user();
+			if (!Hash::check($validated['current'], $user->password())) {
+				$response->status(HttpDeniedAccess)->message('Your given current password does not match with the one in you account.');
+			}
+			else {
+				$user->password($validated['new']);
+				$user->save();
+				$response->status(HttpOkay)->message('Passsword updated successfully.');
+			}
 		}
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());

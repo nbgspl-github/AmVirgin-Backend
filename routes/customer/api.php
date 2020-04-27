@@ -21,14 +21,18 @@ use App\Http\Controllers\App\Customer\SubscriptionController;
 use App\Http\Controllers\App\Customer\GlobalSearchController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [TwoFactorAuthController::class, 'exists'])->name('customer.check');
-Route::get('/profile', [AuthController::class, 'profile'])->name('customer.profile')->middleware('auth:customer-api');
-Route::post('/login', [TwoFactorAuthController::class, 'login'])->name('customer.login');
-Route::post('/register', [TwoFactorAuthController::class, 'register'])->name('customer.register');
-Route::post('/logout', [AuthController::class, 'logout'])->name('customer.logout')->middleware('auth:customer-api');
-Route::post('/profile/avatar', [AuthController::class, 'updateAvatar'])->name('customer.update.avatar')->middleware('auth:customer-api');
-Route::get('/profile', [AuthController::class, 'profile'])->name('customer.profile')->middleware('auth:customer-api');
-Route::put('/profile', [AuthController::class, 'updateProfile'])->name('customer.update.profile')->middleware('auth:customer-api');
+Route::prefix(Str::Empty)->group(function (){
+	Route::get(Str::Empty, [TwoFactorAuthController::class, 'exists']);
+	Route::post('login', [TwoFactorAuthController::class, 'login']);
+	Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:customer-api');
+	Route::post('register', [TwoFactorAuthController::class, 'register']);
+	Route::prefix('profile')->middleware('auth:customer-api')->group(function (){
+		Route::get(Str::Empty, [AuthController::class, 'profile']);
+		Route::post('avatar', [AuthController::class, 'updateAvatar']);
+		Route::put(Str::Empty, [AuthController::class, 'updateProfile']);
+		Route::put('password', [AuthController::class, 'updatePassword']);
+	});
+});
 
 Route::prefix('videos')->group(function (){
 	Route::get('/{id}', [\App\Http\Controllers\App\Customer\VideosController::class, 'show']);

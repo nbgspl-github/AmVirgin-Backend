@@ -55,4 +55,12 @@ class AuthController extends BaseAuthController{
 			'avatar' => ['bail', 'required', 'image', 'min:1', 'max:4096'],
 		];
 	}
+
+	protected function rulesUpdatePassword(): array{
+		return [
+			'current' => ['bail', 'required', 'string', 'min4', 'max:64'],
+			'new' => ['bail', 'required', 'string', 'min4', 'max:64', 'different:current'],
+			'confirm' => ['bail', 'required', 'string', 'same:new'],
+		];
+	}
 }
