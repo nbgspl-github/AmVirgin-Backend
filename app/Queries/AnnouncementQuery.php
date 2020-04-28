@@ -20,4 +20,14 @@ class AnnouncementQuery extends AbstractQuery{
 		$this->query->where('validFrom', '<=', $current)->where('validUntil', '>=', $current);
 		return $this;
 	}
+
+	public function excludeDeleted(): self{
+		$this->query->whereJsonDoesntContain('deletedBy', auth('seller-api')->id());
+		return $this;
+	}
+
+	public function excludeRead(): self{
+		$this->query->whereJsonDoesntContain('readBy', auth('seller-api')->id());
+		return $this;
+	}
 }
