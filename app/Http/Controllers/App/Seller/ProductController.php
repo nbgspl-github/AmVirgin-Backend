@@ -219,7 +219,6 @@ class ProductController extends AbstractProductController{
 					'currency' => $outer['currency'],
 					'description' => $outer['description'],
 					'taxRate' => HsnCode::find($variant['hsn'])->taxRate(),
-					'trailer' => $trailer,
 					'group' => $sessionUid,
 					'discount' => $this->calculateDiscount($variant['originalPrice'], $variant['sellingPrice']),
 				]);
@@ -257,7 +256,6 @@ class ProductController extends AbstractProductController{
 			$response->status(HttpDeniedAccess)->message($exception->getMessage());
 		}
 		catch (Throwable $exception) {
-			dd($exception);
 			$response->status(HttpServerError)->message($exception->getMessage());
 		}
 		finally {
