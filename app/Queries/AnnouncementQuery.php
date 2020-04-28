@@ -22,12 +22,12 @@ class AnnouncementQuery extends AbstractQuery{
 	}
 
 	public function excludeDeleted(): self{
-		$this->query->whereJsonDoesntContain('deletedBy', auth('seller-api')->id());
+		$this->query->whereJsonDoesntContain('deletedBy', '1');
 		return $this;
 	}
 
 	public function excludeRead(): self{
-		$this->query->whereJsonDoesntContain('readBy', auth('seller-api')->id());
+		$this->query->whereJsonDoesntContain('readBy', '1');
 		return $this;
 	}
 }
