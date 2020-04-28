@@ -17,7 +17,7 @@ class AnnouncementController extends \App\Http\Controllers\Web\ExtendedResourceC
 	}
 
 	public function index(): JsonResponse{
-		$announcementCollection = Announcement::startQuery()->displayable()->excludeDeleted()->get();
+		$announcementCollection = Announcement::startQuery()->displayable()->excludeDeleted()->excludeRead()->get();
 		$resourceCollection = \App\Resources\Announcements\Announcement::collection($announcementCollection);
 		return responseApp()->status(HttpOkay)
 			->message('Listing all announcements.')
