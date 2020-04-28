@@ -21,7 +21,8 @@ class AnnouncementController extends \App\Http\Controllers\Web\ExtendedResourceC
 		$resourceCollection = \App\Resources\Announcements\Announcement::collection($announcementCollection);
 		return responseApp()->status(HttpOkay)
 			->message('Listing all announcements.')
-			->setValue('payload', $resourceCollection)->send();
+			->setValue('payload', $resourceCollection)
+			->send();
 	}
 
 	protected function guard(){
