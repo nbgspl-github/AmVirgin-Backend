@@ -18,7 +18,7 @@ class AnnouncementQuery extends AbstractQuery{
 	public function displayable(): self{
 		$current = Carbon::now()->toDateTimeString();
 		$oneYearLater = Carbon::now()->addYear()->toDateTimeString();
-		$this->query->where('validFrom', '<=', $current)->where('validUntil', '>', $oneYearLater);
+		$this->query->where('validFrom', '>=', $current)->where('validUntil', '<', $oneYearLater);
 		return $this;
 	}
 }
