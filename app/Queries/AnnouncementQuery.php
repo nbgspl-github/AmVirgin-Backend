@@ -22,6 +22,7 @@ class AnnouncementQuery extends AbstractQuery{
 	}
 
 	public function excludeDeleted(): self{
+		dd('User id is ' . $this->user());
 		$this->query->whereJsonDoesntContain('deletedBy', $this->user()->id());
 		return $this;
 	}
