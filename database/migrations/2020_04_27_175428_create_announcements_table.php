@@ -18,6 +18,8 @@ class CreateAnnouncementsTable extends Migration{
 			$table->string('banner', \App\Constants\Constants::MaxFilePathLength)->nullable();
 			$table->timestamp('validFrom')->nullable();
 			$table->timestamp('validUntil')->nullable();
+			$table->json('readBy');
+			$table->json('deletedBy');
 			$table->timestamps();
 		});
 	}

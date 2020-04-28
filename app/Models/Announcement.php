@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Model;
 class Announcement extends Model{
 	use DynamicAttributeNamedMethods;
 
+	protected $attributes = [
+		'readBy' => [],
+		'deletedBy' => [],
+	];
 	protected $fillable = [
 		'title',
 		'content',
@@ -19,6 +23,10 @@ class Announcement extends Model{
 	protected $hidden = [
 		'created_at',
 		'updated_at',
+	];
+	protected $casts = [
+		'readBy' => 'array',
+		'deletedBy' => 'array',
 	];
 
 	public static function startQuery(): AnnouncementQuery{
