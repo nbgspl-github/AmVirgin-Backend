@@ -102,5 +102,5 @@ Route::prefix('brands')->middleware('auth:seller-api')->group(function (){
 });
 
 Route::prefix('announcements')->group(function (){
-	Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\AnnouncementController::class, 'index']);
+	Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\AnnouncementController::class, 'index'])->middleware('auth:seller-api');
 });
