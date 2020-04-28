@@ -19,6 +19,7 @@ class AnnouncementQuery extends AbstractQuery{
 		$current = Carbon::now();
 		$oneYearLater = $current->addYear()->toDateTimeString();
 		$current = $current->toDateTimeString();
+		dd(sprintf('Dates are %s and %s', $current, $oneYearLater));
 		$this->query->where('validFrom', '<=', $current)->where('validUntil', '>', $oneYearLater);
 		return $this;
 	}
