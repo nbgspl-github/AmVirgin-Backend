@@ -55,7 +55,7 @@ class ProductController extends AbstractProductController{
 	public function edit($id): JsonResponse{
 		$response = responseApp();
 		try {
-			$product = Product::startQuery()->seller($this->guard()->id())->firstOrFail();
+			$product = Product::startQuery()->seller($this->guard()->id())->key($id)->firstOrFail();
 			$resource = new ProductResource($product);
 			$response->status(HttpOkay)->message('Listing product details.')->setValue('payload', $resource);
 		}

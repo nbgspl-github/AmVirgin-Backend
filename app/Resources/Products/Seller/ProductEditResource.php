@@ -67,7 +67,7 @@ class ProductEditResource extends JsonResource {
 			'shippingCost' => $this->shippingCost,
 			'shortDescription' => $this->shortDescription,
 			'longDescription' => $this->longDescription,
-			'images' => ProductImageEditResource::collection($this->images()->get()),
+			'images' => ProductImageEditResource::collection($this->images),
 			'attributes' => $distinctIds,
 		];
 	}
