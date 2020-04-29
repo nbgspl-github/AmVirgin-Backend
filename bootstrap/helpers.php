@@ -38,8 +38,8 @@ const CartStatusPending = 'pending';
 const CartStatusSubmitted = 'submitted';
 
 const AuthSeller = 'auth:seller-api';
-const AuthCustomer = 'auth:seller-api';
-const AuthAdmin = 'auth:seller-api';
+const AuthCustomer = 'auth:customer-api';
+const AuthAdmin = 'auth:admin';
 
 /**
  * App is in production stage and is deployed to production servers.
