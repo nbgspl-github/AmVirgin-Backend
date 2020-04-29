@@ -28,7 +28,7 @@ class CreateBankDetailsTable extends Migration{
 			$table->boolean('panVerified')->default(false);
 			$table->string('addressProofType')->nullable();
 			$table->string('addressProofDocument', \App\Constants\Constants::MaxFilePathLength)->nullable();
-			$table->string('addressProofVerified');
+			$table->boolean('addressProofVerified')->default(false);
 			$table->string('cancelledCheque', \App\Constants\Constants::MaxFilePathLength)->nullable();
 			$table->boolean('cancelledChequeVerified')->default(false);
 			$table->timestamps();
