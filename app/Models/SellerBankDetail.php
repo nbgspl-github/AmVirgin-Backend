@@ -17,6 +17,7 @@ class SellerBankDetail extends ModelExtended{
 	use DynamicAttributeNamedMethods;
 
 	protected $fillable = [
+		'sellerId',
 		'accountHolderName',
 		'accountNumber',
 		'bankName',
