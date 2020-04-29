@@ -62,7 +62,7 @@ class BankDetailController extends \App\Http\Controllers\Web\ExtendedResourceCon
 		try {
 			$validated = $this->requestValid(request(), $this->rules['update']);
 			SellerBankDetail::updateOrCreate([
-				'sellerId', $this->guard()->id(),
+				'sellerId' => $this->guard()->id(),
 			], $validated);
 			$response->status(HttpOkay)->message('Business details updated successfully.');
 		}
