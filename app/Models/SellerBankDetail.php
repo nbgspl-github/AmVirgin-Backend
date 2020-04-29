@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\Classes\Arrays;
 use App\Classes\Eloquent\ModelExtended;
+use App\Classes\Rule;
 use App\Interfaces\Directories;
+use App\Interfaces\Tables;
 use App\Queries\SellerBankDetailQuery;
 use App\Storage\SecuredDisk;
 use App\Traits\DynamicAttributeNamedMethods;
@@ -13,6 +16,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class SellerBankDetail extends ModelExtended{
 	use DynamicAttributeNamedMethods;
 
+	protected $fillable = [
+		'accountHolderName',
+		'accountNumber',
+		'bankName',
+		'city',
+		'state',
+		'country',
+		'branch',
+		'ifsc',
+		'businessType',
+		'pan',
+		'addressProofType',
+		'addressProofDocument',
+		'cancelledCheque',
+	];
 	protected $casts = [
 		'addressProofDocument' => 'uri',
 		'cancelledCheque' => 'uri',
