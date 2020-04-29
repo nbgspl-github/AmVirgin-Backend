@@ -14,6 +14,7 @@ use App\Models\Product;
 use App\Models\ProductAttribute;
 use App\Models\ProductImage;
 use App\Models\Auth\Seller;
+use App\Models\SellerBankDetail;
 use App\Models\Settings;
 use App\Models\ShopSlider;
 use App\Storage\SecuredDisk;
@@ -62,6 +63,6 @@ class CartTesterCommand extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		return Void_::class;
+		dd(SellerBankDetail::all());
 	}
 }

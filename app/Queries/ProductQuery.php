@@ -12,10 +12,12 @@ use App\Filters\PriceRangeFilter;
 use App\Models\CatalogFilter;
 use App\Models\Category;
 use App\Models\Product;
+use App\Queries\Traits\SellerAuthentication;
 use Illuminate\Database\Eloquent\Builder;
 
 class ProductQuery extends AbstractQuery{
 	use PriceRangeFilter, BrandFilter, GenderFilter, CategoryFilter, DiscountFilter;
+	use SellerAuthentication;
 
 	protected function __construct(){
 		parent::__construct();
@@ -93,11 +95,6 @@ class ProductQuery extends AbstractQuery{
 
 	public function seller(int $sellerId){
 		$this->query->where('sellerId', $sellerId);
-		return $this;
-	}
-
-	public function useAuth(): self{
-		$this->query->where('sellerId', auth('seller-api')->id());
 		return $this;
 	}
 

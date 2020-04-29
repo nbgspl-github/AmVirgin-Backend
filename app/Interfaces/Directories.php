@@ -20,4 +20,5 @@ interface Directories{
 	const CustomerAvatars = 'customer-avatars';
 	const SubscriptionPlans = 'subscription-plans';
 	const Brands = 'brands-logos';
+	const SellerDocuments = 'seller-documents';
 }

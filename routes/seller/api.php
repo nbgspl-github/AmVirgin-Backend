@@ -17,24 +17,40 @@ use App\Http\Controllers\App\Seller\TwoFactorAuthController;
 use App\Http\Controllers\App\Seller\OrderController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [TwoFactorAuthController::class, 'exists'])->name('seller.check');
-Route::get('/profile', [AuthController::class, 'profile'])->name('seller.profile')->middleware('auth:seller-api');
-Route::post('/login', [TwoFactorAuthController::class, 'login'])->name('seller.login');
-Route::post('/register', [TwoFactorAuthController::class, 'register'])->name('seller.register');
-Route::post('/logout', [AuthController::class, 'logout'])->name('seller.logout')->middleware('auth:seller-api');
-Route::post('/profile', [AuthController::class, 'profile'])->name('seller.logout')->middleware('auth:seller-api');
-Route::post('/profile/avatar', [AuthController::class, 'updateAvatar'])->name('seller.update.avatar')->middleware('auth:seller-api');
-Route::put('/profile', [AuthController::class, 'updateProfile'])->name('seller.update.profile')->middleware('auth:seller-api');
+Route::prefix(Str::Empty)->group(static function (){
+	Route::get(Str::Empty, [TwoFactorAuthController::class, 'exists']);
+	Route::post('login', [TwoFactorAuthController::class, 'login']);
+	Route::post('register', [TwoFactorAuthController::class, 'register']);
+	Route::post('logout', [AuthController::class, 'logout'])->middleware(AuthSeller);
 
-Route::post('/change-password', [AuthController::class, 'changePassword'])->name('seller.changePassword')->middleware('auth:seller-api');
+	Route::prefix('profile')->group(static function (){
+		Route::get(Str::Empty, [AuthController::class, 'profile'])->middleware(AuthSeller);
+		Route::put(Str::Empty, [AuthController::class, 'updateProfile'])->middleware(AuthSeller);
+		Route::post('avatar', [AuthController::class, 'updateAvatar'])->middleware(AuthSeller);
 
-Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('seller.forgotPassword');
+		Route::prefix('business-details')->group(static function (){
 
-Route::post('/change-email', [AuthController::class, 'changeEmail'])->name('seller.changeEmail')->middleware('auth:seller-api')->middleware('auth:seller-api');
+		});
 
-Route::post('/change-email-token', [AuthController::class, 'getChangeEmailToken'])->name('seller.getChangeEmailToken')->middleware('auth:seller-api');
+		Route::prefix('bank-details')->group(static function (){
+			Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\BankDetailController::class, 'show']);
+			Route::post(Str::Empty, [\App\Http\Controllers\App\Seller\BankDetailController::class, 'update']);
+		});
 
-Route::post('/reset-password-token', [AuthController::class, 'getResetPasswordToken'])->name('seller.getResetPasswordToken');
+		Route::prefix('contact-details')->group(static function (){
+
+		});
+
+		Route::prefix('pickup-details')->group(static function (){
+
+		});
+	});
+});
+Route::post('change-password', [AuthController::class, 'changePassword'])->middleware(AuthSeller);
+Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('change-email', [AuthController::class, 'changeEmail'])->middleware(AuthSeller);
+Route::post('change-email-token', [AuthController::class, 'getChangeEmailToken'])->middleware(AuthSeller);
+Route::post('reset-password-token', [AuthController::class, 'getResetPasswordToken']);
 
 Route::prefix('categories')->group(function (){
 	Route::get('/', [CategoryController::class, 'index'])->name('seller.categories.index');
@@ -45,7 +61,7 @@ Route::prefix('attributes')->group(function (){
 	Route::get('/{attributeId}/values', [ValueController::class, 'show']);
 });
 
-Route::middleware('auth:seller-api')->prefix('products')->group(function (){
+Route::middleware(AuthSeller)->prefix('products')->group(function (){
 	Route::get('/', [ProductController::class, 'index'])->name('seller.products.index');
 	Route::post(Str::Empty, [ProductController::class, 'store'])->name('seller.products.store');
 	Route::get('{id}', [ProductController::class, 'show'])->name('seller.products.show');
