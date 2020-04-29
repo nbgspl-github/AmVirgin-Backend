@@ -18,9 +18,9 @@ class CreateBankDetailsTable extends Migration{
 			$table->string('accountNumber')->nullable();
 			$table->boolean('accountNumberVerified')->default(false);
 			$table->string('bankName')->nullable();
-			$table->unsignedBigInteger('city')->nullable();
-			$table->unsignedBigInteger('state')->nullable();
-			$table->unsignedBigInteger('country')->nullable();
+			$table->unsignedBigInteger('cityId')->nullable();
+			$table->unsignedBigInteger('stateId')->nullable();
+			$table->unsignedBigInteger('countryId')->nullable();
 			$table->string('branch')->nullable();
 			$table->string('ifsc')->nullable();
 			$table->string('businessType')->nullable();
