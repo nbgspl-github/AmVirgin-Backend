@@ -7,10 +7,6 @@ use App\Models\Country;
 use App\Models\State;
 
 class BankDetailResource extends \Illuminate\Http\Resources\Json\JsonResource{
-	protected ?CityResource $city;
-	protected ?StateResource $state;
-	protected ?CountryResource $country;
-
 	public function __construct($resource){
 		parent::__construct($resource);
 	}
