@@ -13,7 +13,7 @@ class BankDetailResource extends \Illuminate\Http\Resources\Json\JsonResource{
 			'state' => new CityResource($this->state),
 			'country' => new CityResource($this->country),
 			'branch' => $this->branch(),
-			'ifsc' => $this->isfc(),
+			'ifsc' => $this->ifsc(),
 			'businessType' => $this->businessType(),
 			'pan' => $this->pan(),
 			'panVerified' => $this->panVerified(),
