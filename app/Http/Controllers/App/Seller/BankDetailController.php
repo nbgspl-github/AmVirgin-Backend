@@ -61,6 +61,7 @@ class BankDetailController extends \App\Http\Controllers\Web\ExtendedResourceCon
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules['update']);
+			Arrays::set($validated, 'sellerId', $this->guard()->id());
 			SellerBankDetail::updateOrCreate([
 				'sellerId' => $this->guard()->id(),
 			], $validated);
