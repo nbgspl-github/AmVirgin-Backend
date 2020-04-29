@@ -10,8 +10,8 @@ class CreateSellersTable extends Migration{
 	 *
 	 * @return void
 	 */
-	public function up(){
-		Schema::create('sellers', function (Blueprint $table){
+	public function up(): void{
+		Schema::create('sellers', static function (Blueprint $table){
 			$table->bigIncrements('id');
 			$table->string('name');
 			$table->string('password');
@@ -40,7 +40,7 @@ class CreateSellersTable extends Migration{
 	 *
 	 * @return void
 	 */
-	public function down(){
+	public function down(): void{
 		Schema::dropIfExists('sellers');
 	}
 }

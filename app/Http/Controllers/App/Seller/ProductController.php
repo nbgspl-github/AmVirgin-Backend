@@ -39,10 +39,6 @@ use Illuminate\Support\Facades\Auth;
 use Throwable;
 
 class ProductController extends AbstractProductController{
-	public function __construct(){
-		parent::__construct();
-	}
-
 	public function index(): JsonResponse{
 		$products = Product::startQuery()->singleVariantMode()->seller($this->guard()->id())->get();
 		$products = CatalogListResource::collection($products);
@@ -119,9 +115,9 @@ class ProductController extends AbstractProductController{
 			$attributes = $product['attributes'];
 			$primaryIndex = $product['primaryImageIndex'];
 			$currentIndex = 0;
-			$images = collect(isset($product['files']) ? $product['files'] : [])->transform(function (UploadedFile $file) use (&$currentIndex, $primaryIndex, &$product){
+			$images = collect($product['files'] ?? [])->transform(function (UploadedFile $file) use (&$currentIndex, $primaryIndex, &$product){
 				$file = SecuredDisk::access()->putFile(Directories::ProductImage, $file);
-				if ($currentIndex++ == $primaryIndex) {
+				if ($currentIndex++ === $primaryIndex) {
 					$product['primaryImage'] = $file;
 				}
 				return $file;
@@ -195,7 +191,7 @@ class ProductController extends AbstractProductController{
 					$attributes = $variant['attributes'];
 					$primaryIndex = $variant['primaryImageIndex'];
 					$currentIndex = 0;
-					$images = collect(isset($variant['files']) ? $variant['files'] : [])->transform(function (UploadedFile $file) use (&$currentIndex, $primaryIndex, &$variant){
+					$images = collect($variant['files'] ?? [])->transform(function (UploadedFile $file) use (&$currentIndex, $primaryIndex, &$variant){
 						$file = SecuredDisk::access()->putFile(Directories::ProductImage, $file);
 						if ($currentIndex++ == $primaryIndex) {
 							$variant['primaryImage'] = $file;
@@ -225,7 +221,7 @@ class ProductController extends AbstractProductController{
 				$attributes = $variant['attributes'];
 				$primaryIndex = $variant['primaryImageIndex'];
 				$currentIndex = 0;
-				$images = collect(isset($variant['files']) ? $variant['files'] : [])->transform(function (UploadedFile $file) use (&$currentIndex, $primaryIndex, &$variant){
+				$images = collect($variant['files'] ?? [])->transform(function (UploadedFile $file) use (&$currentIndex, $primaryIndex, &$variant){
 					$file = SecuredDisk::access()->putFile(Directories::ProductImage, $file);
 					if ($currentIndex++ == $primaryIndex) {
 						$variant['primaryImage'] = $file;

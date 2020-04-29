@@ -22,6 +22,8 @@ use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
+use Illuminate\Support\Carbon;
+use phpDocumentor\Reflection\Types\Void_;
 use Sujip\Guid\Facades\Guid;
 
 class CartTesterCommand extends Command{
@@ -60,6 +62,6 @@ class CartTesterCommand extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		dd(self::AllowedStatuses);
+		return Void_::class;
 	}
 }
