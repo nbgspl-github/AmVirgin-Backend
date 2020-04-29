@@ -64,7 +64,7 @@ class BankDetailController extends \App\Http\Controllers\Web\ExtendedResourceCon
 			SellerBankDetail::updateOrCreate([
 				'sellerId' => $this->guard()->id(),
 			], $validated);
-			$response->status(HttpOkay)->message('Business details updated successfully.');
+			$response->status(HttpOkay)->message('Bank details updated successfully.');
 		}
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
