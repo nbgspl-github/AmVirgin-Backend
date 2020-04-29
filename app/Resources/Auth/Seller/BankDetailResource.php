@@ -13,9 +13,6 @@ class BankDetailResource extends \Illuminate\Http\Resources\Json\JsonResource{
 
 	public function __construct($resource){
 		parent::__construct($resource);
-		$this->city = new CityResource(City::find($this->city));
-		$this->city = new CityResource(City::find($this->city));
-		$this->city = new CityResource(City::find($this->city));
 	}
 
 	public function toArray($request){
@@ -25,8 +22,8 @@ class BankDetailResource extends \Illuminate\Http\Resources\Json\JsonResource{
 			'accountNumberVerified' => $this->accountNumberVerified(),
 			'bankName' => $this->bankName(),
 			'city' => new CityResource($this->city),
-			'state' => new CityResource($this->state),
-			'country' => new CityResource($this->country),
+			'state' => new StateResource($this->state),
+			'country' => new CountryResource($this->country),
 			'branch' => $this->branch(),
 			'ifsc' => $this->ifsc(),
 			'businessType' => $this->businessType(),

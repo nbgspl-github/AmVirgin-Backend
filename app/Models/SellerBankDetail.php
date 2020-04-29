@@ -21,9 +21,9 @@ class SellerBankDetail extends ModelExtended{
 		'accountHolderName',
 		'accountNumber',
 		'bankName',
-		'city',
-		'state',
-		'country',
+		'cityId',
+		'stateId',
+		'countryId',
 		'branch',
 		'ifsc',
 		'businessType',
@@ -58,11 +58,11 @@ class SellerBankDetail extends ModelExtended{
 	}
 
 	public function state(): BelongsTo{
-		return $this->belongsTo('App\Models\State', 'stateId');
+		return $this->belongsTo(State::class, 'stateId');
 	}
 
 	public function city(): BelongsTo{
-		return $this->belongsTo('App\Models\City', 'cityId');
+		return $this->belongsTo(City::class, 'cityId');
 	}
 
 	public function country(){
