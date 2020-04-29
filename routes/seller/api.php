@@ -32,7 +32,7 @@ Route::prefix(Str::Empty)->group(static function (){
 
 		});
 
-		Route::prefix('bank-details')->group(static function (){
+		Route::prefix('bank-details')->middleware(AuthSeller)->group(static function (){
 			Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\BankDetailController::class, 'show']);
 			Route::post(Str::Empty, [\App\Http\Controllers\App\Seller\BankDetailController::class, 'update']);
 		});
