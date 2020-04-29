@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class SellerBankDetail extends ModelExtended{
 	use DynamicAttributeNamedMethods;
 
+	protected $fillable = ['*'];
 	protected $casts = [
 		'addressProofDocument' => 'uri',
 		'cancelledCheque' => 'uri',
