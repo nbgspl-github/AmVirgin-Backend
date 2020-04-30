@@ -166,7 +166,16 @@ class ProductController extends AbstractProductController{
 			$payload = $this->validateUpdate();
 			$product = Product::startQuery()->displayable()->key($id)->useAuth()->firstOrFail();
 			$product->update($payload);
-			$this->storeImages($product, $payload['files']);
+			$primaryIndex = $payload['primaryImageIndex'] ?? 0;
+			$currentIndex = 0;
+			$images = collect($payload['files'] ?? [])->transform(function (UploadedFile $file) use (&$currentIndex, $primaryIndex, &$product){
+				$file = SecuredDisk::access()->putFile(Directories::ProductImage, $file);
+				if ($currentIndex++ === $primaryIndex) {
+					$product['primaryImage'] = $file;
+				}
+				return $file;
+			})->toArray();
+			$this->storeImages($product, $images);
 			$response->status(HttpCreated)->message('Product details were updated successfully.');
 		}
 		catch (ValidationException $exception) {
