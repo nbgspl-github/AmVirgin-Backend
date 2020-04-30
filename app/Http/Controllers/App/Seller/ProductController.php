@@ -163,9 +163,10 @@ class ProductController extends AbstractProductController{
 	public function update($id): JsonResponse{
 		$response = responseApp();
 		try {
-			$outer = $this->validateUpdate();
+			$payload = $this->validateUpdate();
 			$product = Product::startQuery()->displayable()->key($id)->useAuth()->firstOrFail();
-			$product->update($outer);
+			$product->update($payload);
+			$this->storeImages($product, $payload['files']);
 			$response->status(HttpCreated)->message('Product details were updated successfully.');
 		}
 		catch (ValidationException $exception) {

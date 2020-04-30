@@ -29,6 +29,6 @@ class ProductImageController extends ExtendedResourceController{
 	}
 
 	protected function guard(){
-		return auth('seller-api');
+		return auth(self::SellerAPI);
 	}
 }
