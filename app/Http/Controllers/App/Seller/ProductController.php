@@ -164,7 +164,6 @@ class ProductController extends AbstractProductController{
 		$response = responseApp();
 		try {
 			$outer = $this->validateUpdate();
-			dd($outer);
 			$product = Product::startQuery()->displayable()->key($id)->useAuth()->firstOrFail();
 			$product->update($outer);
 			$response->status(HttpCreated)->message('Product details were updated successfully.');
