@@ -63,6 +63,9 @@ class CartTesterCommand extends Command{
 	 * @return mixed
 	 */
 	public function handle(){
-		dd(SellerBankDetail::all());
+		$array = [
+			'holy2' => ['abc'],
+		];
+		dd($array['holy'] ?? ['Not holy']);
 	}
 }

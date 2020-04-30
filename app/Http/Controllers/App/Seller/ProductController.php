@@ -37,6 +37,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class ProductController extends AbstractProductController{
@@ -163,7 +164,9 @@ class ProductController extends AbstractProductController{
 	public function update($id): JsonResponse{
 		$response = responseApp();
 		try {
+			slack(jsonEncode(request()->all()));
 			$payload = $this->validateUpdate();
+			slack(jsonEncode($payload));
 			$product = Product::startQuery()->displayable()->key($id)->useAuth()->firstOrFail();
 			$product->update($payload);
 			$primaryIndex = $payload['primaryImageIndex'] ?? 0;

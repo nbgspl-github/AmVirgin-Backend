@@ -212,3 +212,7 @@ function countRequiredPages(int $total, int $perPage){
 function makeUrl($path): ?string{
 	return \App\Storage\SecuredDisk::existsUrl($path);
 }
+
+function slack($message){
+	\Illuminate\Support\Facades\Log::channel('slack')->info($message);
+}
