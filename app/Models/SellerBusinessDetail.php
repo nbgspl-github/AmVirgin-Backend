@@ -46,11 +46,11 @@ class SellerBusinessDetail extends ModelExtended{
 	}
 
 	public function state(): BelongsTo{
-		return $this->belongsTo(State::class, 'stateId');
+		return $this->belongsTo(State::class, 'rbaStateId');
 	}
 
 	public function city(): BelongsTo{
-		return $this->belongsTo(City::class, 'cityId');
+		return $this->belongsTo(City::class, 'rbaCityId');
 	}
 
 	public function country(){
