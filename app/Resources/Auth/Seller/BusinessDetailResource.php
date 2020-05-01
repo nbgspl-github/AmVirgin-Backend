@@ -20,7 +20,6 @@ class BusinessDetailResource extends \Illuminate\Http\Resources\Json\JsonResourc
 			'gstINVerified' => $this->gstINVerified(),
 			'signature' => $this->signature(),
 			'signatureVerified' => $this->signatureVerified(),
-			'branch' => $this->branch(),
 			'rbaFirstLine' => $this->rbaFirstLine(),
 			'rbaSecondLine' => $this->rbaSecondLine(),
 			'rbaPinCode' => $this->rbaPinCode(),
