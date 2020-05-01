@@ -3,6 +3,7 @@
 namespace App\Queries\Seller;
 
 use App\Models\SellerBankDetail;
+use App\Models\SellerBusinessDetail;
 use App\Queries\AbstractQuery;
 use App\Queries\Traits\SellerAuthentication;
 
@@ -10,7 +11,7 @@ class BusinessDetailQuery extends AbstractQuery{
 	use SellerAuthentication;
 
 	protected function model(): string{
-		return SellerBankDetail::class;
+		return SellerBusinessDetail::class;
 	}
 
 	public static function begin(): self{
