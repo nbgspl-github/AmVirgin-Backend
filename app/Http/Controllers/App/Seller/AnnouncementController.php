@@ -19,7 +19,7 @@ class AnnouncementController extends \App\Http\Controllers\Web\ExtendedResourceC
 		parent::__construct();
 		$this->rules = [
 			'mark' => [
-				'action' => ['bail', 'required', Rule::in(['read', 'deleted', 'unread'])],
+				'action' => ['bail', 'required', Rule::in(['read', 'delete', 'unread'])],
 			],
 		];
 	}
@@ -58,7 +58,7 @@ class AnnouncementController extends \App\Http\Controllers\Web\ExtendedResourceC
 					$announcement->save();
 					break;
 
-				case 'deleted':
+				case 'delete':
 					$deletedBy = $announcement->deletedBy();
 					if (!Arrays::containsValueIndexed($deletedBy, $this->guard()->id())) {
 						Arrays::push($deletedBy, $this->guard()->id());
