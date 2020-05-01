@@ -18,6 +18,7 @@ class SellerBusinessDetail extends ModelExtended{
 	use DynamicAttributeNamedMethods;
 
 	protected $fillable = [
+		'sellerId',
 		'name',
 		'nameVerified',
 		'tan',
