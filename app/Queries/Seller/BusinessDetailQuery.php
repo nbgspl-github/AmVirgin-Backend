@@ -10,6 +10,8 @@ use App\Queries\Traits\SellerAuthentication;
 class BusinessDetailQuery extends AbstractQuery{
 	use SellerAuthentication;
 
+	protected $modelUserString = 'seller business details';
+
 	protected function model(): string{
 		return SellerBusinessDetail::class;
 	}
