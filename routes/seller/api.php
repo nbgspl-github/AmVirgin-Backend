@@ -118,5 +118,6 @@ Route::prefix('brands')->middleware('auth:seller-api')->group(function (){
 });
 
 Route::prefix('announcements')->group(function (){
-	Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\AnnouncementController::class, 'index'])->middleware('auth:seller-api');
+	Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\AnnouncementController::class, 'index'])->middleware(AuthSeller);
+	Route::put('{id}/mark', [\App\Http\Controllers\App\Seller\AnnouncementController::class, 'mark'])->middleware(AuthSeller);
 });
