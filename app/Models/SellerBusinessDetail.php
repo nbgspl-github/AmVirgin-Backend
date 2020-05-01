@@ -8,6 +8,7 @@ use App\Classes\Rule;
 use App\Interfaces\Directories;
 use App\Interfaces\Tables;
 use App\Queries\Seller\BankDetailQuery;
+use App\Queries\Seller\BusinessDetailQuery;
 use App\Storage\SecuredDisk;
 use App\Traits\DynamicAttributeNamedMethods;
 use Illuminate\Database\Eloquent\Model;
@@ -55,7 +56,7 @@ class SellerBusinessDetail extends ModelExtended{
 		return Country::where('initials', 'IN')->first();
 	}
 
-	public static function startQuery(): BankDetailQuery{
-		return BankDetailQuery::begin();
+	public static function startQuery(): BusinessDetailQuery{
+		return BusinessDetailQuery::begin();
 	}
 }
