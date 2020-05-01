@@ -7,6 +7,7 @@ use App\Classes\Arrays;
 class Announcement extends \Illuminate\Http\Resources\Json\JsonResource{
 	public function toArray($request){
 		return [
+			'key' => $this->id(),
 			'title' => $this->title(),
 			'content' => $this->content(),
 			"banner" => $this->bannerUri(),
