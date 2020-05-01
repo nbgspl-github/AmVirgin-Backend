@@ -7,7 +7,7 @@ use App\Classes\Eloquent\ModelExtended;
 use App\Classes\Rule;
 use App\Interfaces\Directories;
 use App\Interfaces\Tables;
-use App\Queries\SellerBankDetailQuery;
+use App\Queries\Seller\BankDetailQuery;
 use App\Storage\SecuredDisk;
 use App\Traits\DynamicAttributeNamedMethods;
 use Illuminate\Database\Eloquent\Model;
@@ -69,7 +69,7 @@ class SellerBankDetail extends ModelExtended{
 		return Country::where('initials', 'IN')->first();
 	}
 
-	public static function startQuery(): SellerBankDetailQuery{
-		return SellerBankDetailQuery::begin();
+	public static function startQuery(): BankDetailQuery{
+		return BankDetailQuery::begin();
 	}
 }

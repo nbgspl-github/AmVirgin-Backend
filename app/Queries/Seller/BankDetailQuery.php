@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Queries;
+namespace App\Queries\Seller;
 
 use App\Models\SellerBankDetail;
+use App\Queries\AbstractQuery;
 use App\Queries\Traits\SellerAuthentication;
 
-class SellerBankDetailQuery extends AbstractQuery{
+class BankDetailQuery extends AbstractQuery{
 	use SellerAuthentication;
 
 	protected function model(): string{

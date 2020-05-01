@@ -24,9 +24,9 @@ class CreateBusinessDetailsTable extends Migration{
 			$table->string('rbaFirstLine')->nullable();
 			$table->string('rbaSecondLine')->nullable();
 			$table->string('rbaPinCode')->nullable();
-			$table->unsignedBigInteger('rbaCity')->nullable();
-			$table->unsignedBigInteger('rbaState')->nullable();
-			$table->unsignedBigInteger('rbaCountry')->nullable();
+			$table->unsignedBigInteger('rbaCityId')->nullable();
+			$table->unsignedBigInteger('rbaStateId')->nullable();
+			$table->unsignedBigInteger('rbaCountryId')->nullable();
 			$table->timestamps();
 
 			if (appEnvironment(AppEnvironmentProduction)) {
