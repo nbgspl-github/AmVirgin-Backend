@@ -3,34 +3,32 @@
 namespace App\Http\Controllers\App\Seller;
 
 use App\Http\Controllers\App\BaseAuthController;
-use App\Resources\Auth\Seller\AuthProfileResource;
-use App\Models\Auth\Seller;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Auth;
-use Throwable;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Mail;
 use App\Mail\SendMail;
+use App\Models\Auth\Seller;
+use App\Resources\Auth\Seller\AuthProfileResource;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Throwable;
 
-class AuthController extends BaseAuthController{
+class AuthController extends BaseAuthController {
 	protected $ruleSet;
 
-	public function __construct(){
+	public function __construct () {
 		parent::__construct();
 		$this->ruleSet = config('rules.auth.seller');
 	}
 
-	public function profile(){
+	public function profile () {
 		return new AuthProfileResource($this->guard()->user());
 	}
 
-	public function changePassword(Request $request){
+	public function changePassword (Request $request) {
 		$response = responseApp();
 
 		$input = $request->all();
@@ -75,7 +73,7 @@ class AuthController extends BaseAuthController{
 		}
 	}
 
-	public function forgotPassword(Request $request){
+	public function forgotPassword (Request $request) {
 		$response = responseApp();
 
 		$input = $request->all();
@@ -130,7 +128,7 @@ class AuthController extends BaseAuthController{
 		return $response->send();
 	}
 
-	public function getResetPasswordToken(Request $request){
+	public function getResetPasswordToken (Request $request) {
 		$response = responseApp();
 		$dataSet = [];
 		$input = request()->all();
@@ -188,7 +186,7 @@ class AuthController extends BaseAuthController{
 		}
 	}
 
-	public function getChangeEmailToken(Request $request){
+	public function getChangeEmailToken (Request $request) {
 		$response = responseApp();
 		$dataSet = [];
 		$input = request()->all();
@@ -237,7 +235,7 @@ class AuthController extends BaseAuthController{
 		}
 	}
 
-	public function changeEmail(Request $request){
+	public function changeEmail (Request $request) {
 		$response = responseApp();
 
 		$input = $request->all();
@@ -293,41 +291,45 @@ class AuthController extends BaseAuthController{
 		return $response->send();
 	}
 
-	protected function authTarget(): string{
+	protected function authTarget () : string {
 		return Seller::class;
 	}
 
-	protected function rulesExists(){
+	protected function rulesExists () {
 		return $this->ruleSet['exists'];
 	}
 
-	protected function rulesLogin(){
+	protected function rulesLogin () {
 		return $this->ruleSet['login'];
 	}
 
-	protected function rulesRegister(){
+	protected function rulesRegister () {
 		return $this->ruleSet['register'];
 	}
 
-	protected function rulesUpdateAvatar(){
+	protected function rulesUpdateAvatar () {
 		return [
 			'avatar' => ['bail', 'required', 'image', 'min:1', 'max:4096'],
 		];
 	}
 
-	protected function rulesUpdateProfile(){
+	protected function rulesUpdateProfile () {
 		return $this->ruleSet['update']['profile'];
 	}
 
-	protected function guard(){
+	protected function guard () {
 		return Auth::guard('seller-api');
 	}
 
-	protected function shouldAllowOnlyActiveUsers(): bool{
+	protected function shouldAllowOnlyActiveUsers () : bool {
 		return true;
 	}
 
-	protected function rulesUpdatePassword(): array{
-		// TODO: Implement rulesUpdatePassword() method.
+	protected function rulesUpdatePassword () : array {
+		return [
+			'current' => ['bail', 'required', 'string', 'min:4', 'max:64'],
+			'new' => ['bail', 'required', 'string', 'min:4', 'max:64', 'different:current'],
+			'confirm' => ['bail', 'required', 'string', 'same:new'],
+		];
 	}
 }
