@@ -13,12 +13,12 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 
-class BankDetailController extends \App\Http\Controllers\Web\ExtendedResourceController{
+class BankDetailController extends \App\Http\Controllers\Web\ExtendedResourceController {
 	use ValidatesRequest;
 
 	protected array $rules;
 
-	public function __construct(){
+	public function __construct () {
 		parent::__construct();
 		$this->rules = [
 			'update' => [
@@ -39,7 +39,7 @@ class BankDetailController extends \App\Http\Controllers\Web\ExtendedResourceCon
 		];
 	}
 
-	public function show(): JsonResponse{
+	public function show () : JsonResponse {
 		$response = responseApp();
 		try {
 			$bankDetails = SellerBankDetail::startQuery()->useAuth()->firstOrFail();
@@ -57,15 +57,16 @@ class BankDetailController extends \App\Http\Controllers\Web\ExtendedResourceCon
 		}
 	}
 
-	public function update(): JsonResponse{
+	public function update () : JsonResponse {
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules['update']);
 			Arrays::set($validated, 'sellerId', $this->guard()->id());
-			SellerBankDetail::updateOrCreate([
+			$payload = SellerBankDetail::updateOrCreate([
 				'sellerId' => $this->guard()->id(),
 			], $validated);
-			$response->status(HttpOkay)->message('Bank details updated successfully.');
+			$resource = new BankDetailResource($payload);
+			$response->status(HttpOkay)->message('Bank details updated successfully.')->setValue('payload', $resource);
 		}
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
@@ -78,7 +79,7 @@ class BankDetailController extends \App\Http\Controllers\Web\ExtendedResourceCon
 		}
 	}
 
-	protected function guard(){
+	protected function guard () {
 		return auth(self::SellerAPI);
 	}
 }
