@@ -30,6 +30,13 @@ class Seller extends Authenticatable implements JWTSubject{
 		'password',
 		'mobile',
 		'avatar',
+		'businessName',
+		'description',
+		'pinCode',
+		'address',
+		'countryId',
+		'stateId',
+		'cityId',
 	];
 	protected $hidden = [
 		'password',
