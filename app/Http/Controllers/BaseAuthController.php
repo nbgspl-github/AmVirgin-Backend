@@ -325,7 +325,7 @@ abstract class BaseAuthController extends BaseController {
 				$response->status(HttpDeniedAccess)->message('Your given current password does not match with the one in you account.');
 			}
 			else {
-				$user->password($validated['new']);
+				$user->password(Hash::make($validated['new']));
 				$user->save();
 				$response->status(HttpOkay)->message('Password updated successfully.');
 			}
