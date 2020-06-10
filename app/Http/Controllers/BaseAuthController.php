@@ -327,7 +327,7 @@ abstract class BaseAuthController extends BaseController {
 			else {
 				$user->password($validated['new']);
 				$user->save();
-				$response->status(HttpOkay)->message('Passsword updated successfully.');
+				$response->status(HttpOkay)->message('Password updated successfully.');
 			}
 		}
 		catch (ValidationException $exception) {
