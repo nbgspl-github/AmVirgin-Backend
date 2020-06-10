@@ -6,21 +6,19 @@ use App\Classes\Arrays;
 use App\Classes\Rule;
 use App\Exceptions\ValidationException;
 use App\Interfaces\Tables;
-use App\Models\SellerBankDetail;
 use App\Models\SellerBusinessDetail;
-use App\Resources\Auth\Seller\BankDetailResource;
 use App\Resources\Auth\Seller\BusinessDetailResource;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 
-class BusinessDetailController extends \App\Http\Controllers\Web\ExtendedResourceController{
+class BusinessDetailController extends \App\Http\Controllers\Web\ExtendedResourceController {
 	use ValidatesRequest;
 
 	protected array $rules;
 
-	public function __construct(){
+	public function __construct () {
 		parent::__construct();
 		$this->rules = [
 			'update' => [
@@ -38,7 +36,7 @@ class BusinessDetailController extends \App\Http\Controllers\Web\ExtendedResourc
 		];
 	}
 
-	public function show(): JsonResponse{
+	public function show () : JsonResponse {
 		$response = responseApp();
 		try {
 			$businessDetails = SellerBusinessDetail::startQuery()->useAuth()->firstOrFail();
@@ -56,15 +54,16 @@ class BusinessDetailController extends \App\Http\Controllers\Web\ExtendedResourc
 		}
 	}
 
-	public function update(): JsonResponse{
+	public function update () : JsonResponse {
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules['update']);
 			Arrays::set($validated, 'sellerId', $this->guard()->id());
-			SellerBusinessDetail::updateOrCreate([
+			$payload = SellerBusinessDetail::updateOrCreate([
 				'sellerId' => $this->guard()->id(),
 			], $validated);
-			$response->status(HttpOkay)->message('Business details updated successfully.');
+			$resource = new BusinessDetailResource($payload);
+			$response->status(HttpOkay)->message('Business details updated successfully.')->setValue('payload', $resource);
 		}
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
@@ -77,7 +76,7 @@ class BusinessDetailController extends \App\Http\Controllers\Web\ExtendedResourc
 		}
 	}
 
-	protected function guard(){
+	protected function guard () {
 		return auth(self::SellerAPI);
 	}
 }
