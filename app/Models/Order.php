@@ -2,17 +2,12 @@
 
 namespace App\Models;
 
-use App\Classes\Str;
+use App\Models\Auth\Customer;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Auth\Customer;
-use App\Models\Product;
-use App\Models\OrderItem;
-use App\Models\ShippingAddress;
-use App\Models\SellerOrder;
 
-class Order extends Model{
+class Order extends Model {
 	use DynamicAttributeNamedMethods, RetrieveResource;
 
 	protected $table = 'orders';
@@ -43,32 +38,23 @@ class Order extends Model{
 		'OutForDelivery' => 'out-for-delivery',
 	];
 
-	public function setOrderNumberAttribute($value){
-		$this->attributes['orderNumber'] = sprintf('AVG-%d-%d', time(), rand(1, 1000));
-	}
-
-	public function items(){
+	public function items () {
 		return $this->hasMany(OrderItem::class, 'orderId')->with('product');
 	}
 
-	public function customer(){
+	public function customer () {
 		return $this->belongsTo(Customer::class, 'customerId');
 	}
 
-	public function products(){
+	public function products () {
 		return $this->belongsTo(Product::class, OrderItem::class, 'id', 'productId');
 	}
 
-	public function address(){
+	public function address () {
 		return $this->belongsTo(ShippingAddress::class, 'addressId')->with('city', 'state');
 	}
 
-	public static function getAllStatus(){
+	public static function getAllStatus () {
 		return self::$status;
-	}
-
-	public function save(array $options = []){
-		$this->orderNumber = Str::Empty;
-		return parent::save($options);
 	}
 }
