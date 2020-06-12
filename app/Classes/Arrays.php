@@ -27,13 +27,35 @@ class Arrays extends \Illuminate\Support\Arr{
 		}
 	}
 
-	public static function eachAssociative(array $array, callable $callback){
+	public static function eachAssociative (array $array, callable $callback) {
 		foreach ($array as $key => $value) {
 			call_user_func($callback, $key, $value);
 		}
 	}
 
-	public static function containsValueIndexed(array $array, $value){
+	/**
+	 * Checks whether an array contains an item.
+	 *
+	 * @param array $haystack The array to search into
+	 * @param $needle mixed Value to search for
+	 * @param bool $associative True if the haystack is an associative array
+	 * @return bool true if item is found, false otherwise
+	 */
+	public static function contains (array $haystack, $needle, bool $associative = false) : bool {
+		if (!$associative)
+			foreach ($haystack as $value) {
+				if ($value == $needle)
+					return true;
+			}
+		else
+			foreach ($haystack as $key => $value) {
+				if ($value == $needle)
+					return true;
+			}
+		return false;
+	}
+
+	public static function containsValueIndexed (array $array, $value) {
 		foreach ($array as $item) {
 			if ($item == $value) {
 				return true;

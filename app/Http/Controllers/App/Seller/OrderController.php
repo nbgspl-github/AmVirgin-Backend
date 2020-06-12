@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\App\Seller;
 
-use App\Classes\Time;
+use App\Classes\Arrays;
+use App\Enums\Seller\OrderStatus;
 use App\Http\Controllers\Web\ExtendedResourceController;
-use App\Models\Auth\Customer;
+use App\Models\Order;
 use App\Models\SellerOrder;
 use App\Resources\Orders\Seller\ListResource;
 use App\Resources\Orders\Seller\OrderResource;
@@ -12,24 +13,20 @@ use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Throwable;
-use App\Models\Order;
-use Illuminate\Support\Facades\Auth;
-use App\Resources\Products\Customer\ImageResource;
-use Illuminate\Support\Facades\Config;
 
-class OrderController extends ExtendedResourceController{
+class OrderController extends ExtendedResourceController {
 	use ValidatesRequest;
 
 	protected array $rules;
 
-	public function __construct(){
+	public function __construct () {
 		parent::__construct();
 		$this->rules = [
 
 		];
 	}
 
-	public function index(): JsonResponse{
+	public function index () : JsonResponse {
 		$response = responseApp();
 		try {
 			$orderCollection = SellerOrder::startQuery()->useAuth()->get();
@@ -44,7 +41,7 @@ class OrderController extends ExtendedResourceController{
 		}
 	}
 
-	public function show($id): JsonResponse{
+	public function show ($id) : JsonResponse {
 		$response = responseApp();
 		try {
 			$order = SellerOrder::startQuery()->useAuth()->key($id)->firstOrFail();
@@ -62,7 +59,33 @@ class OrderController extends ExtendedResourceController{
 		}
 	}
 
-	public function updateOrderStatus($id = '', $status = ''){
+	public function updateStatus (int $id, string $status) : JsonResponse {
+		$response = responseApp();
+		try {
+			$order = Order::query()->whereKey($id)->firstOrFail();
+			$transitions = OrderStatus::transitions($order->status);
+			if (Arrays::contains($transitions, $status, true)) {
+				$order->update([
+					'status' => $status,
+				]);
+				$response->status(HttpOkay)->message('Order status updated successfully.');
+			}
+			else {
+				$response->status(HttpOkay)->message('Requested order status is invalid for current active status.');
+			}
+		}
+		catch (ModelNotFoundException $exception) {
+			$response->status(HttpResourceNotFound)->message('Could not find order for that key.');
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpResourceNotFound)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+
+	public function updateOrderStatus ($id = '', $status = '') {
 		$response = responseApp();
 		try {
 			$data = Order::find($id);
@@ -93,7 +116,7 @@ class OrderController extends ExtendedResourceController{
 		}
 	}
 
-	public function getOrderStatus(){
+	public function getOrderStatus () {
 		$response = responseApp();
 		try {
 			$order_status = Order::getAllStatus();
@@ -107,7 +130,7 @@ class OrderController extends ExtendedResourceController{
 		}
 	}
 
-	public function getOrderByStatus($status){
+	public function getOrderByStatus ($status) {
 		$response = responseApp();
 		try {
 			// $order_status= Config::get('app.order_status');
@@ -143,7 +166,7 @@ class OrderController extends ExtendedResourceController{
 		}
 	}
 
-	protected function guard(){
+	protected function guard () {
 		return auth('seller-api');
 	}
 }
