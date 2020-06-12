@@ -10,6 +10,7 @@ use App\Models\SellerOrder;
 use App\Resources\Orders\Seller\ListResource;
 use App\Resources\Orders\Seller\OrderResource;
 use App\Traits\ValidatesRequest;
+use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Throwable;
@@ -64,7 +65,7 @@ class OrderController extends ExtendedResourceController {
 		$status = request('status');
 		try {
 			$order = Order::query()->whereKey($id)->firstOrFail();
-			$transitions = OrderStatus::transitions($order->status);
+			$transitions = OrderStatus::transitions(new OrderStatus($order->status));
 			if (!empty($status) && Arrays::contains($transitions, $status, true)) {
 				$order->update([
 					'status' => $status,
@@ -74,6 +75,9 @@ class OrderController extends ExtendedResourceController {
 			else {
 				$response->status(HttpOkay)->message('Requested order status is invalid for current active status.');
 			}
+		}
+		catch (InvalidEnumMemberException $exception) {
+			$response->status(HttpOkay)->message('Requested order status is invalid.');
 		}
 		catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('Could not find order for that key.');
