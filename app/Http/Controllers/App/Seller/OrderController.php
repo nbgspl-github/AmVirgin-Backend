@@ -77,7 +77,7 @@ class OrderController extends ExtendedResourceController {
 			}
 		}
 		catch (InvalidEnumMemberException $exception) {
-			$response->status(HttpOkay)->message('Requested order status is invalid.');
+			$response->status(HttpOkay)->message('Current order status is invalid.');
 		}
 		catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('Could not find order for that key.');
