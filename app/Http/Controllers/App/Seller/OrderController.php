@@ -59,12 +59,13 @@ class OrderController extends ExtendedResourceController {
 		}
 	}
 
-	public function updateStatus (int $id, string $status) : JsonResponse {
+	public function updateStatus (int $id) : JsonResponse {
 		$response = responseApp();
+		$status = request('status');
 		try {
 			$order = Order::query()->whereKey($id)->firstOrFail();
 			$transitions = OrderStatus::transitions($order->status);
-			if (Arrays::contains($transitions, $status, true)) {
+			if (!empty($status) && Arrays::contains($transitions, $status, true)) {
 				$order->update([
 					'status' => $status,
 				]);
