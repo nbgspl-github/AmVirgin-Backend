@@ -4,14 +4,14 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSellersTable extends Migration{
+class CreateSellersTable extends Migration {
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
-	public function up(): void{
-		Schema::create('sellers', static function (Blueprint $table){
+	public function up () : void {
+		Schema::create('sellers', static function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->string('name');
 			$table->string('password');
@@ -30,6 +30,7 @@ class CreateSellersTable extends Migration{
 			$table->boolean('active')->default(true);
 			$table->integer('productsAdded')->default(0);
 			$table->integer('productsSold')->default(0);
+			$table->boolean('mouAgreed')->default(false);
 			$table->rememberToken();
 			$table->timestamps();
 		});
@@ -40,7 +41,7 @@ class CreateSellersTable extends Migration{
 	 *
 	 * @return void
 	 */
-	public function down(): void{
+	public function down () : void {
 		Schema::dropIfExists('sellers');
 	}
 }

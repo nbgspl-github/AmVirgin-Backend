@@ -5,7 +5,6 @@ namespace App\Models\Auth;
 use App\Models\Brand;
 use App\Models\City;
 use App\Models\Product;
-use App\Models\SellerBrand;
 use App\Models\State;
 use App\Traits\ActiveStatus;
 use App\Traits\BroadcastPushNotifications;
@@ -17,13 +16,13 @@ use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Seller extends Authenticatable implements JWTSubject{
+class Seller extends Authenticatable implements JWTSubject {
 	use Notifiable, BroadcastPushNotifications, FluentConstructor, ActiveStatus, RetrieveResource, RetrieveCollection, OtpVerificationSupport, JWTAuthDefaultSetup, DynamicAttributeNamedMethods;
+
 	protected $fillable = [
 		'name',
 		'email',
@@ -37,6 +36,7 @@ class Seller extends Authenticatable implements JWTSubject{
 		'countryId',
 		'stateId',
 		'cityId',
+		'mouAgreed',
 	];
 	protected $hidden = [
 		'password',
@@ -47,21 +47,22 @@ class Seller extends Authenticatable implements JWTSubject{
 		'name' => 'string',
 		'email' => 'string',
 		'email_verified_at' => 'datetime',
+		'mouAgreed' => 'bool',
 	];
 
-	public function approvedBrands(): HasMany{
+	public function approvedBrands () : HasMany {
 		return $this->hasMany(Brand::class, 'createdBy', 'id');
 	}
 
-	public function city(): BelongsTo{
+	public function city () : BelongsTo {
 		return $this->belongsTo(City::class, 'cityId');
 	}
 
-	public function products(): HasMany{
+	public function products () : HasMany {
 		return $this->hasMany(Product::class, 'sellerId');
 	}
 
-	public function state(): BelongsTo{
+	public function state () : BelongsTo {
 		return $this->belongsTo(State::class, 'stateId');
 	}
 }

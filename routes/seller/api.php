@@ -46,6 +46,11 @@ Route::prefix(Str::Empty)->group(static function () {
 		Route::prefix('pickup-details')->group(static function () {
 
 		});
+
+		Route::prefix('mou')->group(function () {
+			Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\AgreementController::class, 'show'])->middleware(AuthSeller);
+			Route::put('update', [\App\Http\Controllers\App\Seller\AgreementController::class, 'update'])->middleware(AuthSeller);
+		});
 	});
 });
 Route::post('change-password', [AuthController::class, 'changePassword'])->middleware(AuthSeller);
