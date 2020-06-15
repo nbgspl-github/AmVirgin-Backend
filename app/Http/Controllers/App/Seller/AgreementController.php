@@ -13,6 +13,20 @@ use Throwable;
 class AgreementController extends ExtendedResourceController {
 	use ValidatesRequest;
 
+	public function index () : JsonResponse {
+		$response = responseApp();
+		try {
+			$agreed = $this->guard()->user()->mouAgreed();
+			$response->status(HttpOkay)->message('Retrieved seller agreed status.')->setValue('agreed', $agreed);
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpOkay)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+
 	public function show () : JsonResponse {
 		$response = responseApp();
 		try {
