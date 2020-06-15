@@ -17,8 +17,7 @@ class AgreementController extends ExtendedResourceController {
 		$response = responseApp();
 		try {
 			$agreement = Settings::get('mou', Str::Empty);
-			$agreed = $this->guard()->user()->mouAgreed();
-			$response->status(HttpOkay)->message('Showing MOU.')->setValue('payload', ['mou' => $agreement, 'agreed' => $agreed]);
+			$response->status(HttpOkay)->message('Showing MOU.')->setValue('payload', $agreement);
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpOkay)->message($exception->getMessage());
