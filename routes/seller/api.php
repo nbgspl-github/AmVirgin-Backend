@@ -48,7 +48,7 @@ Route::prefix(Str::Empty)->group(static function () {
 		});
 
 		Route::prefix('mou')->group(function () {
-			Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\AgreementController::class, 'show'])->middleware(AuthSeller);
+			Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\AgreementController::class, 'show']);
 			Route::put(Str::Empty, [\App\Http\Controllers\App\Seller\AgreementController::class, 'update'])->middleware(AuthSeller);
 		});
 	});
