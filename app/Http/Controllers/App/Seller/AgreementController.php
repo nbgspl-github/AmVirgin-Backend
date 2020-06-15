@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\App\Seller;
 
 use App\Classes\Str;
+use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Models\Settings;
 use App\Traits\ValidatesRequest;
@@ -33,6 +34,9 @@ class AgreementController extends ExtendedResourceController {
 			$validated = $this->requestValid(request(), ['agreed' => 'bail|required|boolean']);
 			$this->guard()->user()->update(['mouAgreed' => $validated['agreed']]);
 			$response->status(HttpOkay)->message('Updated agreement status successfully.');
+		}
+		catch (ValidationException $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
