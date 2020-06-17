@@ -30,9 +30,32 @@ class OrderController extends ExtendedResourceController {
 	public function index () : JsonResponse {
 		$response = responseApp();
 		try {
-			$orderCollection = SellerOrder::startQuery()->useAuth()->get();
-			$resourceCollection = ListResource::collection($orderCollection);
-			$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('data', $resourceCollection);
+			$orderCollection = SellerOrder::startQuery()->withRelations('order')->useAuth()->get();
+			if (request()->has('status') && !empty(request('status'))) {
+				try {
+					$status = new OrderStatus(request('status'));
+					$status = $status->value;
+					$orderCollection->filter(static function (SellerOrder $sellerOrder) use ($status) {
+						$order = $sellerOrder->order;
+						if ($order != null && $order->status == $status)
+							return true;
+						else
+							return false;
+					});
+					$resourceCollection = ListResource::collection($orderCollection);
+					$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('data', $resourceCollection);
+				}
+				catch (InvalidEnumMemberException $exception) {
+					$response->status(HttpOkay)->message('Invalid status value for filter.');
+				}
+				catch (Throwable $exception) {
+					$response->status(HttpOkay)->message($exception->getMessage());
+				}
+			}
+			else {
+				$resourceCollection = ListResource::collection($orderCollection);
+				$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('data', $resourceCollection);
+			}
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
@@ -84,37 +107,6 @@ class OrderController extends ExtendedResourceController {
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpResourceNotFound)->message($exception->getMessage());
-		}
-		finally {
-			return $response->send();
-		}
-	}
-
-	public function updateOrderStatus ($id = '', $status = '') {
-		$response = responseApp();
-		try {
-			$data = Order::find($id);
-			if (!empty($data)) {
-
-				$order_status = Order::getAllStatus();//Config::get('app.order_status');
-
-				if (in_array($status, $order_status)) {
-					$data->update([
-						'status' => $status,
-					]);
-					$response->status(HttpOkay)->message('Status Updated Successfully');
-				}
-				else {
-					$response->status(HttpOkay)->message('Status did not matched in our record');
-				}
-			}
-			else {
-				$response->status(HttpResourceNotFound)->message('Order Not Found');
-			}
-
-		}
-		catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
 		}
 		finally {
 			return $response->send();
