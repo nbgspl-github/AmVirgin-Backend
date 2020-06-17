@@ -38,9 +38,9 @@ class OrderController extends ExtendedResourceController {
 					$orderCollection->filter(static function (SellerOrder $sellerOrder) use ($status) {
 						$order = $sellerOrder->order;
 						if ($order != null && $order->status == $status)
-							return true;
-						else
 							return false;
+						else
+							return true;
 					});
 					$resourceCollection = ListResource::collection($orderCollection);
 					$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('data', $resourceCollection);
