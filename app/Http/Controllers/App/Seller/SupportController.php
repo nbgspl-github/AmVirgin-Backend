@@ -42,6 +42,10 @@ class SupportController extends ExtendedResourceController {
 		}
 	}
 
+	public function store () : JsonResponse {
+
+	}
+
 	protected function guard () {
 		return auth(self::SellerAPI);
 	}

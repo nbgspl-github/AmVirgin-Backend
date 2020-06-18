@@ -129,3 +129,10 @@ Route::prefix('announcements')->group(function () {
 	Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\AnnouncementController::class, 'index'])->middleware(AuthSeller);
 	Route::put('{id}/mark', [\App\Http\Controllers\App\Seller\AnnouncementController::class, 'mark'])->middleware(AuthSeller);
 });
+
+Route::prefix('support')->group(static function () {
+	Route::prefix('tickets')->group(static function () {
+		Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\SupportController::class, 'index'])->middleware(AuthSeller);
+		Route::post(Str::Empty, [\App\Http\Controllers\App\Seller\SupportController::class, 'store'])->middleware(AuthSeller);
+	});
+});
