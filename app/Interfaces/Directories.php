@@ -2,7 +2,7 @@
 
 namespace App\Interfaces;
 
-interface Directories{
+interface Directories {
 	const Genre = 'genre';
 	const Sliders = 'slider';
 	const ShopSliders = 'shop-slider';
@@ -21,4 +21,5 @@ interface Directories{
 	const SubscriptionPlans = 'subscription-plans';
 	const Brands = 'brands-logos';
 	const SellerDocuments = 'seller-documents';
+	const SellerSupportAttachments = 'seller-support-documents';
 }

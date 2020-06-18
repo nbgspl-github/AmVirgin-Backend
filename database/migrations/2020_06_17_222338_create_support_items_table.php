@@ -18,6 +18,7 @@ class CreateSupportItemsTable extends Migration {
 			$table->string('description', 5000);
 			$table->json('order_id');
 			$table->string('callback_number');
+			$table->json('attachments');
 			$table->timestamps();
 		});
 	}
