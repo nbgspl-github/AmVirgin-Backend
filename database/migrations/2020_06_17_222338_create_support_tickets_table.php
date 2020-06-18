@@ -4,21 +4,23 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSupportItemsTable extends Migration {
+class CreateSupportTicketsTable extends Migration {
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
 	public function up () {
-		Schema::create('support_items', function (Blueprint $table) {
+		Schema::create('support-tickets', function (Blueprint $table) {
 			$table->bigIncrements('id');
+			$table->unsignedBigInteger('sellerId');
 			$table->string('email');
 			$table->string('subject', 500);
 			$table->string('description', 5000);
-			$table->json('order_id');
-			$table->string('callback_number');
+			$table->json('orderId');
+			$table->string('callbackNumber');
 			$table->json('attachments');
+			$table->string('status')->default('open');
 			$table->timestamps();
 		});
 	}
@@ -29,6 +31,6 @@ class CreateSupportItemsTable extends Migration {
 	 * @return void
 	 */
 	public function down () {
-		Schema::dropIfExists('support_items');
+		Schema::dropIfExists('support-tickets');
 	}
 }

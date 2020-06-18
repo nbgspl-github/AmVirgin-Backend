@@ -5,14 +5,17 @@ namespace App\Models;
 use App\Classes\Arrays;
 use App\Interfaces\Directories;
 use App\Storage\SecuredDisk;
+use App\Traits\DynamicAttributeNamedMethods;
 use Illuminate\Database\Eloquent\Model;
 
-class SupportItem extends Model {
+class SupportTicket extends Model {
+	use DynamicAttributeNamedMethods;
+
 	protected $attributes = [
 		'attachments' => '[]',
 	];
 	protected $fillable = [
-		'email', 'subject', 'description', 'order_id', 'callback_number',
+		'email', 'subject', 'description', 'orderId', 'callbackNumber', 'sellerId', 'status',
 	];
 	protected $hidden = [
 		'id', 'created_at', 'updated_at',
