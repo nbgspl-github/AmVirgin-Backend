@@ -5,10 +5,10 @@ namespace App\Resources\Auth\Seller;
 use App\Storage\SecuredDisk;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AuthProfileResource extends JsonResource{
+class AuthProfileResource extends JsonResource {
 	protected ?string $token = null;
 
-	public function toArray($request){
+	public function toArray ($request) {
 		return [
 			'key' => $this->id(),
 			'name' => $this->name(),
@@ -16,11 +16,14 @@ class AuthProfileResource extends JsonResource{
 			'description' => $this->description(),
 			'email' => $this->email(),
 			'mobile' => $this->mobile(),
-			'state' => $this->state,
-			'city' => $this->city,
+			'country' => new CountryResource($this->countryId),
+			'state' => new StateResource($this->stateId),
+			'city' => new CityResource($this->cityId),
 			'rating' => $this->rating(),
-			'address' => $this->address(),
-			'pinCode' => $this->pinCode(),
+			'address' => [
+				'firstLine' => $this->addressFirstLine(),
+				'secondLine' => $this->addressSecondLine(),
+			],
 			'avatar' => SecuredDisk::existsUrl($this->avatar()),
 			'statistics' => [
 				'brands' => [
@@ -44,7 +47,7 @@ class AuthProfileResource extends JsonResource{
 		];
 	}
 
-	public function token(?string $token){
+	public function token (?string $token) {
 		$this->token = $token;
 		return $this;
 	}

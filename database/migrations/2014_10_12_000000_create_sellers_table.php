@@ -23,7 +23,8 @@ class CreateSellersTable extends Migration {
 			$table->unsignedBigInteger('stateId')->nullable();
 			$table->unsignedBigInteger('cityId')->nullable();
 			$table->string('pinCode')->nullable();
-			$table->string('address')->nullable();
+			$table->string('addressFirstLine')->nullable();
+			$table->string('addressSecondLine')->nullable();
 			$table->float('rating', 2, 1)->default(0.0);
 			$table->integer('otp')->nullable();
 			$table->string('avatar', 4096)->nullable();

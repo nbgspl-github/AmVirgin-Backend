@@ -4,6 +4,7 @@ namespace App\Models\Auth;
 
 use App\Models\Brand;
 use App\Models\City;
+use App\Models\Country;
 use App\Models\Product;
 use App\Models\State;
 use App\Traits\ActiveStatus;
@@ -32,7 +33,8 @@ class Seller extends Authenticatable implements JWTSubject {
 		'businessName',
 		'description',
 		'pinCode',
-		'address',
+		'addressFirstLine',
+		'addressSecondLine',
 		'countryId',
 		'stateId',
 		'cityId',
@@ -64,5 +66,9 @@ class Seller extends Authenticatable implements JWTSubject {
 
 	public function state () : BelongsTo {
 		return $this->belongsTo(State::class, 'stateId');
+	}
+
+	public function country () : BelongsTo {
+		return $this->belongsTo(Country::class, 'countryId');
 	}
 }
