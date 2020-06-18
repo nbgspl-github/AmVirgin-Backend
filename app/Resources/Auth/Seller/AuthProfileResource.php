@@ -16,9 +16,9 @@ class AuthProfileResource extends JsonResource {
 			'description' => $this->description(),
 			'email' => $this->email(),
 			'mobile' => $this->mobile(),
-			'country' => new CountryResource($this->countryId),
-			'state' => new StateResource($this->stateId),
-			'city' => new CityResource($this->cityId),
+			'country' => new CountryResource($this->country),
+			'state' => new StateResource($this->state),
+			'city' => new CityResource($this->city),
 			'rating' => $this->rating(),
 			'address' => [
 				'firstLine' => $this->addressFirstLine(),
