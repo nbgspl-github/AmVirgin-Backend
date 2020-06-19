@@ -9,7 +9,7 @@ class TicketResource extends \Illuminate\Http\Resources\Json\JsonResource {
 			'description' => $this->description(),
 			'orderId' => $this->orderId(),
 			'callbackNumber' => $this->callbackNumber(),
-			'attachments' => $this->attachments,
+			'attachments' => $this->attachments(),
 			'status' => $this->status(),
 		];
 	}
