@@ -5,9 +5,12 @@ namespace App\Models;
 use App\Classes\Arrays;
 use App\Interfaces\Directories;
 use App\Storage\SecuredDisk;
+use App\Traits\DynamicAttributeNamedMethods;
 use Illuminate\Database\Eloquent\Model;
 
 class SupportTicket extends Model {
+	use DynamicAttributeNamedMethods;
+
 	protected $table = 'support-tickets';
 	protected $attributes = [
 		'orderId' => '[]', 'attachments' => '[]',
