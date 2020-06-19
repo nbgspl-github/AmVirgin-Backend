@@ -63,7 +63,8 @@ class SupportController extends ExtendedResourceController {
 			$validated['sellerId'] = $this->guard()->id();
 			$validated['status'] = 'open';
 			$ticket = SupportTicket::create($validated);
-			$response->status(HttpOkay)->message('Support ticket created successfully.')->setValue('payload', $ticket);
+			$resource = new TicketResource($ticket);
+			$response->status(HttpOkay)->message('Support ticket created successfully.')->setValue('payload', $resource);
 		}
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
