@@ -51,7 +51,7 @@ class SupportController extends ExtendedResourceController {
 				$query->where('subIssue', $validated['subIssue']);
 			$tickets = $query->get();
 			$resourceCollection = TicketResource::collection($tickets);
-			$response->status(HttpOkay)->message('Listing all support tickets for seller.')->setValue('payload', $resourceCollection);
+			$response->status($tickets->count() > 0 ? HttpOkay : HttpNoContent)->message('Listing all support tickets for seller.')->setValue('payload', $resourceCollection);
 		}
 		catch (\Throwable $exception) {
 			$response->status(HttpOkay)->message($exception->getMessage());
