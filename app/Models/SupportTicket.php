@@ -12,18 +12,18 @@ class SupportTicket extends Model {
 	use DynamicAttributeNamedMethods;
 
 	protected $table = 'support-tickets';
-//	protected $attributes = [
-//		'attachments' => '[]', 'orderId' => '[]',
-//	];
+	protected $attributes = [
+		'attachments' => '[]', 'orderId' => '[]',
+	];
 	protected $fillable = [
 		'email', 'subject', 'description', 'orderId', 'callbackNumber', 'sellerId', 'status', 'attachments',
 	];
 	protected $hidden = [
 		'id', 'created_at', 'updated_at',
 	];
-	protected $casts = [
-		'orderId' => 'array', 'attachments' => 'array',
-	];
+//	protected $casts = [
+//		'orderId' => 'array', 'attachments' => 'array',
+//	];
 
 	public function setAttachmentsAttribute ($value) : void {
 		if (is_array($value) && count($value) > 0) {
