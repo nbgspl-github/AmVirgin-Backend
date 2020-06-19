@@ -65,6 +65,7 @@ class SupportController extends ExtendedResourceController {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
 		}
 		catch (\Throwable $exception) {
+			dd($exception);
 			$response->status(HttpServerError)->message($exception->getMessage());
 		}
 		finally {
