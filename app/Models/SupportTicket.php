@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class SupportTicket extends Model {
 	protected $table = 'support-tickets';
 	protected $attributes = [
-		'orderId' => [], 'attachments' => [],
+		'orderId' => '[]', 'attachments' => '[]',
 	];
 	protected $fillable = [
 		'email', 'subject', 'description', 'orderId', 'callbackNumber', 'sellerId', 'status', 'attachments',
