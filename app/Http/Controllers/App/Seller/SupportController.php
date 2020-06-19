@@ -69,7 +69,6 @@ class SupportController extends ExtendedResourceController {
 				}
 				$validated['attachments'] = $files;
 			}
-			dd($validated);
 			$ticket = SupportTicket::create($validated);
 			$resource = new TicketResource($ticket);
 			$response->status(HttpOkay)->message('Support ticket created successfully.')->setValue('payload', $resource);
