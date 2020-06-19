@@ -9,8 +9,6 @@ use App\Traits\DynamicAttributeNamedMethods;
 use Illuminate\Database\Eloquent\Model;
 
 class SupportTicket extends Model {
-	use DynamicAttributeNamedMethods;
-
 	protected $table = 'support-tickets';
 	protected $attributes = [
 		'orderId' => [],
