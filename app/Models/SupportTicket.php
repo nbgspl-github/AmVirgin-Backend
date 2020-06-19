@@ -35,14 +35,15 @@ class SupportTicket extends Model {
 			foreach ($value as $file) {
 				Arrays::push($files, SecuredDisk::access()->putFile(Directories::SellerSupportAttachments, $file));
 			}
-			$this->attributes['attachments'] = $files;
+			$this->attributes['attachments'] = jsonEncode($files);
 		}
 	}
 
 	public function getAttachmentsAttribute ($value) : array {
-		if (is_array($this->attributes['attachments']) && count($this->attributes['attachments']) > 0) {
+		$decoded = jsonDecodeArray($this->attributes['attachments']);
+		if (is_array($decoded) && count($decoded) > 0) {
 			$paths = Arrays::Empty;
-			foreach ($this->attributes['attachments'] as $file) {
+			foreach ($decoded as $file) {
 				$path = SecuredDisk::existsUrl($file);
 				if ($path != null)
 					Arrays::push($paths, $path);
