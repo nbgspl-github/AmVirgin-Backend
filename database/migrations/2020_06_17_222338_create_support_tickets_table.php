@@ -14,6 +14,8 @@ class CreateSupportTicketsTable extends Migration {
 		Schema::create('support-tickets', function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->unsignedBigInteger('sellerId');
+			$table->string('issue');
+			$table->string('subIssue');
 			$table->string('email');
 			$table->string('subject', 500);
 			$table->string('description', 5000);

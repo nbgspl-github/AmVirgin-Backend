@@ -16,7 +16,7 @@ class SupportTicket extends Model {
 		'orderId' => '[]', 'attachments' => '[]',
 	];
 	protected $fillable = [
-		'email', 'subject', 'description', 'orderId', 'callbackNumber', 'sellerId', 'status', 'attachments',
+		'email', 'subject', 'description', 'orderId', 'callbackNumber', 'sellerId', 'status', 'attachments', 'issue', 'subIssue',
 	];
 	protected $hidden = [
 		'id', 'created_at', 'updated_at',
@@ -24,13 +24,6 @@ class SupportTicket extends Model {
 	protected $casts = [
 		'orderId' => 'array', 'attachments' => 'array',
 	];
-
-	protected static function boot () {
-		parent::boot();
-		self::creating(static function (SupportTicket $supportTicket) {
-
-		});
-	}
 
 	public function setAttachmentsAttribute ($value) : void {
 		if (is_array($value) && count($value) > 0) {

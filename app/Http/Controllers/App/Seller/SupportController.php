@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers\App\Seller;
 
-use App\Classes\Arrays;
 use App\Classes\Rule;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
-use App\Interfaces\Directories;
 use App\Models\SupportTicket;
 use App\Resources\Support\Seller\TicketResource;
-use App\Storage\SecuredDisk;
 use App\Traits\ValidatesRequest;
 use Illuminate\Http\JsonResponse;
 
@@ -22,9 +19,11 @@ class SupportController extends ExtendedResourceController {
 		parent::__construct();
 		$this->rules = [
 			'index' => [
-				'status' => ['bail', 'nullable', Rule::in(['open', 'closed'])],
+				'status' => ['bail', 'nullable', Rule::in(['open', 'resolved'])],
 			],
 			'store' => [
+				'issue' => ['bail', 'required', 'string', 'min:2', 'max:255'],
+				'subIssue' => ['bail', 'required', 'string', 'min:2', 'max:255'],
 				'email' => ['bail', 'required', 'email', 'exists:sellers'],
 				'subject' => ['bail', 'required', 'string', 'min:4', 'max:500'],
 				'description' => ['bail', 'required', 'string', 'min:2', 'max:5000'],
@@ -70,7 +69,6 @@ class SupportController extends ExtendedResourceController {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
 		}
 		catch (\Throwable $exception) {
-			dd($exception);
 			$response->status(HttpServerError)->message($exception->getMessage());
 		}
 		finally {
