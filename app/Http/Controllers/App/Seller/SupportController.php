@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\App\Seller;
 
 use App\Classes\Rule;
+use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Models\SupportTicket;
 use App\Resources\Support\Seller\TicketResource;
@@ -19,6 +20,16 @@ class SupportController extends ExtendedResourceController {
 		$this->rules = [
 			'index' => [
 				'status' => ['bail', 'nullable', Rule::in(['open', 'closed'])],
+			],
+			'store' => [
+				'email' => ['bail', 'required', 'email', 'exists:sellers'],
+				'subject' => ['bail', 'required', 'string', 'min:4', 'max:500'],
+				'description' => ['bail', 'required', 'string', 'min:2', 'max:5000'],
+				'orderId' => ['bail', 'required'],
+				'orderId.*' => ['bail', 'required', 'exists:seller-orders,id'],
+				'callbackNumber' => ['bail', 'required', 'string', 'min:10', 'max:14'],
+				'attachments' => ['bail', 'required'],
+				'attachments.*' => ['bail', 'required', 'mimes:jpeg,jpg,png,doc,docx,xls,xslx,pdf'],
 			],
 		];
 	}
@@ -43,7 +54,22 @@ class SupportController extends ExtendedResourceController {
 	}
 
 	public function store () : JsonResponse {
-
+		$response = responseApp();
+		try {
+			$validated = $this->requestValid(request(), $this->rules['store']);
+			$ticket = SupportTicket::query()->create($validated);
+			$resource = new TicketResource($ticket);
+			$response->status(HttpOkay)->message('Support ticket created successfully.')->setValue('payload', $resource);
+		}
+		catch (ValidationException $exception) {
+			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+		}
+		catch (\Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
 	}
 
 	protected function guard () {
