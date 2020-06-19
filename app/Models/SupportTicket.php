@@ -12,9 +12,9 @@ class SupportTicket extends Model {
 	use DynamicAttributeNamedMethods;
 
 	protected $table = 'support-tickets';
-	protected $attributes = [
-		'attachments' => '[]', 'orderId' => '[]',
-	];
+//	protected $attributes = [
+//		'attachments' => '[]', 'orderId' => '[]',
+//	];
 	protected $fillable = [
 		'email', 'subject', 'description', 'orderId', 'callbackNumber', 'sellerId', 'status',
 	];
