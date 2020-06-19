@@ -25,7 +25,7 @@ class SupportTicket extends Model {
 	protected static function boot () {
 		parent::boot();
 		self::creating(static function (SupportTicket $supportTicket) {
-			dd($supportTicket);
+
 		});
 	}
 
