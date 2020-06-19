@@ -57,6 +57,7 @@ class SupportController extends ExtendedResourceController {
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules['store']);
+			$validated['sellerId'] = $this->guard()->id();
 			$ticket = SupportTicket::query()->create($validated);
 			$resource = new TicketResource($ticket);
 			$response->status(HttpOkay)->message('Support ticket created successfully.')->setValue('payload', $resource);
