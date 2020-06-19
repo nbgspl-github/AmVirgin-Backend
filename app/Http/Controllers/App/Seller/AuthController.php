@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\App\Seller;
 
+use App\Classes\Rule;
 use App\Http\Controllers\App\BaseAuthController;
+use App\Interfaces\Tables;
 use App\Mail\SendMail;
 use App\Models\Auth\Seller;
 use App\Resources\Auth\Seller\AuthProfileResource;
@@ -314,7 +316,17 @@ class AuthController extends BaseAuthController {
 	}
 
 	protected function rulesUpdateProfile () {
-		return $this->ruleSet['update']['profile'];
+		return [
+			'name' => ['bail', 'sometimes', 'string', 'min:2', 'max:256'],
+			'businessName' => ['bail', 'sometimes', 'string', 'min:2', 'max:256'],
+			'description' => ['bail', 'sometimes', 'string', 'min:1', 'max:2000'],
+			'pinCode' => ['bail', 'sometimes', 'string', 'min:1', 'max:256'],
+			'addressFirstLine' => ['bail', 'sometimes', 'string', 'min:1', 'max:256'],
+			'addressSecondLine' => ['bail', 'sometimes', 'string', 'min:1', 'max:256'],
+			'countryId' => ['bail', 'sometimes', Rule::exists(Tables::Countries, 'id')],
+			'stateId' => ['bail', 'sometimes', Rule::exists(Tables::States, 'id')],
+			'cityId' => ['bail', 'sometimes', Rule::exists(Tables::Cities, 'id')],
+		];
 	}
 
 	protected function guard () {
