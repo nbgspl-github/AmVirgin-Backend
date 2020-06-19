@@ -19,6 +19,8 @@ class SupportController extends ExtendedResourceController {
 		parent::__construct();
 		$this->rules = [
 			'index' => [
+				'issue' => ['bail', 'nullable', 'string', 'min:2', 'max:255'],
+				'subIssue' => ['bail', 'nullable', 'string', 'min:2', 'max:255'],
 				'status' => ['bail', 'nullable', Rule::in(['open', 'resolved'])],
 			],
 			'store' => [
@@ -40,10 +42,14 @@ class SupportController extends ExtendedResourceController {
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules['index']);
+			$query = SupportTicket::query()->where('sellerId', $this->guard()->id());
 			if (isset($validated['status']))
-				$tickets = SupportTicket::query()->where('sellerId', $this->guard()->id())->where('status', $validated['status'])->get();
-			else
-				$tickets = SupportTicket::query()->where('sellerId', $this->guard()->id())->get();
+				$query->where('status', $validated['status']);
+			if (isset($validated['issue']))
+				$query->where('issue', $validated['issue']);
+			if (isset($validated['subIssue']))
+				$query->where('subIssue', $validated['subIssue']);
+			$tickets = $query->get();
 			$resourceCollection = TicketResource::collection($tickets);
 			$response->status(HttpOkay)->message('Listing all support tickets for seller.')->setValue('payload', $resourceCollection);
 		}
