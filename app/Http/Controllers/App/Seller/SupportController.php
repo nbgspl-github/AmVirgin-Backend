@@ -62,13 +62,13 @@ class SupportController extends ExtendedResourceController {
 			$validated = $this->requestValid(request(), $this->rules['store']);
 			$validated['sellerId'] = $this->guard()->id();
 			$validated['status'] = 'open';
-			if (is_array($validated['attachments']) && count($validated['attachments']) > 0) {
-				$files = Arrays::Empty;
-				foreach ($validated['attachments'] as $file) {
-					Arrays::push($files, SecuredDisk::access()->putFile(Directories::SellerSupportAttachments, $file));
-				}
-				$validated['attachments'] = $files;
-			}
+//			if (is_array($validated['attachments']) && count($validated['attachments']) > 0) {
+//				$files = Arrays::Empty;
+//				foreach ($validated['attachments'] as $file) {
+//					Arrays::push($files, SecuredDisk::access()->putFile(Directories::SellerSupportAttachments, $file));
+//				}
+//				$validated['attachments'] = $files;
+//			}
 			$ticket = SupportTicket::create($validated);
 			$resource = new TicketResource($ticket);
 			$response->status(HttpOkay)->message('Support ticket created successfully.')->setValue('payload', $resource);

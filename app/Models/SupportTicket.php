@@ -12,11 +12,11 @@ class SupportTicket extends Model {
 	use DynamicAttributeNamedMethods;
 
 	protected $table = 'support-tickets';
-//	protected $attributes = [
-//		'attachments' => '[]', 'orderId' => '[]',
-//	];
+	protected $attributes = [
+		'attachments' => '[]', 'orderId' => '[]',
+	];
 	protected $fillable = [
-		'email', 'subject', 'description', 'orderId', 'callbackNumber', 'sellerId', 'status',
+		'email', 'subject', 'description', 'orderId', 'callbackNumber', 'sellerId', 'status', 'attachments',
 	];
 	protected $hidden = [
 		'id', 'created_at', 'updated_at',
@@ -25,15 +25,15 @@ class SupportTicket extends Model {
 		'orderId' => 'array', 'attachments' => 'array',
 	];
 
-//	public function setAttachmentsAttribute ($value) : void {
-//		if (is_array($value) && count($value) > 0) {
-//			$files = Arrays::Empty;
-//			foreach ($value as $file) {
-//				Arrays::push($files, SecuredDisk::access()->putFile(Directories::SellerSupportAttachments, $file));
-//			}
-//			$this->attributes['attachments'] = $files;
-//		}
-//	}
+	public function setAttachmentsAttribute ($value) : void {
+		if (is_array($value) && count($value) > 0) {
+			$files = Arrays::Empty;
+			foreach ($value as $file) {
+				Arrays::push($files, SecuredDisk::access()->putFile(Directories::SellerSupportAttachments, $file));
+			}
+			$this->attributes['attachments'] = $files;
+		}
+	}
 
 	public function getAttachmentsAttribute ($value) : array {
 		if (is_array($this->attributes['attachments']) && count($this->attributes['attachments']) > 0) {
