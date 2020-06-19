@@ -13,13 +13,16 @@ class SupportTicket extends Model {
 
 	protected $table = 'support-tickets';
 	protected $attributes = [
-		'attachments' => '[]',
+		'attachments' => '[]', 'orderId' => '[]',
 	];
 	protected $fillable = [
 		'email', 'subject', 'description', 'orderId', 'callbackNumber', 'sellerId', 'status',
 	];
 	protected $hidden = [
 		'id', 'created_at', 'updated_at',
+	];
+	protected $casts = [
+		'orderId' => 'array', 'attachments' => 'array',
 	];
 
 	public function setAttachmentsAttribute ($value) : void {
