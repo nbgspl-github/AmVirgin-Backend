@@ -55,6 +55,7 @@ class SupportController extends ExtendedResourceController {
 
 	public function store () : JsonResponse {
 		$response = responseApp();
+		dd(request()->all());
 		try {
 			$validated = $this->requestValid(request(), $this->rules['store']);
 			$ticket = SupportTicket::query()->create($validated);
