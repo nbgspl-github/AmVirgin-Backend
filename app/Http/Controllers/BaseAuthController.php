@@ -9,6 +9,7 @@ use App\Exceptions\ResourceConflictException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Interfaces\Directories;
+use App\Models\Auth\Seller;
 use App\Resources\Auth\Seller\AuthProfileResource;
 use App\Storage\SecuredDisk;
 use App\Traits\FluentResponse;
@@ -281,7 +282,7 @@ abstract class BaseAuthController extends BaseController {
 			$validated = $this->requestValid(request(), $this->rulesUpdateProfile());
 			$user = $this->guard()->user();
 			$user->update($validated);
-			$response->status(HttpOkay)->message('Profile was updated successfully.');
+			$response->status(HttpOkay)->message('Profile was updated successfully.')->setValue('payload', $user instanceof Seller ? new AuthProfileResource($user) : new \App\Resources\Auth\Customer\AuthProfileResource($user));
 		}
 		catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());

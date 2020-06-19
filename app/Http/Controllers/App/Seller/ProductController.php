@@ -201,7 +201,7 @@ class ProductController extends AbstractProductController{
 			$response->status(HttpOkay)->message('Product deleted successfully.');
 		}
 		catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could no find product for that key.');
+			$response->status(HttpResourceNotFound)->message('Could not find product for that key.');
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpResourceNotFound)->message($exception->getMessage());
