@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\App\Seller;
 
+use App\Classes\Arrays;
 use App\Classes\Rule;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Interfaces\Directories;
 use App\Models\SupportTicket;
 use App\Resources\Support\Seller\TicketResource;
+use App\Storage\SecuredDisk;
 use App\Traits\ValidatesRequest;
 use Illuminate\Http\JsonResponse;
 
@@ -59,6 +62,13 @@ class SupportController extends ExtendedResourceController {
 			$validated = $this->requestValid(request(), $this->rules['store']);
 			$validated['sellerId'] = $this->guard()->id();
 			$validated['status'] = 'open';
+			if (is_array($validated['attachments']) && count($validated['attachments']) > 0) {
+				$files = Arrays::Empty;
+				foreach ($validated['attachments'] as $file) {
+					Arrays::push($files, SecuredDisk::access()->putFile(Directories::SellerSupportAttachments, $file));
+				}
+				$validated['attachments'] = $files;
+			}
 			$ticket = SupportTicket::create($validated);
 			$resource = new TicketResource($ticket);
 			$response->status(HttpOkay)->message('Support ticket created successfully.')->setValue('payload', $resource);
