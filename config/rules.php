@@ -47,9 +47,9 @@ return [
 					'pinCode' => ['bail', 'nullable', 'string', 'min:1', 'max:2000'],
 					'addressFirstLine' => ['bail', 'nullable', 'string', 'min:1', 'max:256'],
 					'addressSecondLine' => ['bail', 'nullable', 'string', 'min:1', 'max:256'],
-					'countryId' => ['bail', 'required', Rule::exists(Tables::Countries, 'id')],
-					'stateId' => ['bail', 'required', Rule::exists(Tables::States, 'id')],
-					'cityId' => ['bail', 'required', Rule::exists(Tables::Cities, 'id')],
+					'countryId' => ['bail', 'nullable', Rule::exists(Tables::Countries, 'id')],
+					'stateId' => ['bail', 'nullable', Rule::exists(Tables::States, 'id')],
+					'cityId' => ['bail', 'nullable', Rule::exists(Tables::Cities, 'id')],
 				],
 				'avatar' => [
 					'avatar' => ['bail', 'required', 'image', 'min:1', 'max:4096'],
