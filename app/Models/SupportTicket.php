@@ -5,13 +5,12 @@ namespace App\Models;
 use App\Classes\Arrays;
 use App\Interfaces\Directories;
 use App\Storage\SecuredDisk;
-use App\Traits\DynamicAttributeNamedMethods;
 use Illuminate\Database\Eloquent\Model;
 
 class SupportTicket extends Model {
 	protected $table = 'support-tickets';
 	protected $attributes = [
-		'orderId' => [],
+		'orderId' => [], 'attachments' => [],
 	];
 	protected $fillable = [
 		'email', 'subject', 'description', 'orderId', 'callbackNumber', 'sellerId', 'status', 'attachments',
@@ -19,9 +18,16 @@ class SupportTicket extends Model {
 	protected $hidden = [
 		'id', 'created_at', 'updated_at',
 	];
-//	protected $casts = [
-//		'orderId' => 'array', 'attachments' => 'array',
-//	];
+	protected $casts = [
+		'orderId' => 'array', 'attachments' => 'array',
+	];
+
+	protected static function boot () {
+		parent::boot();
+		self::creating(static function (SupportTicket $supportTicket) {
+			dd($supportTicket);
+		});
+	}
 
 	public function setAttachmentsAttribute ($value) : void {
 		if (is_array($value) && count($value) > 0) {
