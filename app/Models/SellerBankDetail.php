@@ -45,6 +45,8 @@ class SellerBankDetail extends ModelExtended{
 		'AadharCard' => 'aadhar-card',
 		'VoterID' => 'voter-id',
 		'DrivingLicense' => 'driving-license',
+		'ElectrycityBill' => 'electrycity-bill',
+		'PhoneBill' => 'pbone-bill',
 	];
 
 	public function setAddressProofDocumentAttribute($value){

@@ -32,6 +32,9 @@ class SellerBusinessDetail extends ModelExtended{
 		'rbaCityId',
 		'rbaStateId',
 		'rbaCountryId',
+		'pan',
+		'panVerified',
+		'panProofDocument',
 	];
 	protected $casts = [
 		'signature' => 'uri',
@@ -43,6 +46,10 @@ class SellerBusinessDetail extends ModelExtended{
 	public function setSignatureAttribute($value){
 		$this->attributes['signature'] = SecuredDisk::access()->putFile(Directories::SellerDocuments, $value);
 		return $this->attributes['signature'];
+	}
+	public function setPanProofDocumentAttribute($value){
+		$this->attributes['panProofDocument'] = SecuredDisk::access()->putFile(Directories::SellerDocuments, $value);
+		return $this->attributes['panProofDocument'];
 	}
 
 	public function state(): BelongsTo{

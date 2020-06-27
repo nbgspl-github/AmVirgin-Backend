@@ -32,6 +32,8 @@ class BusinessDetailController extends \App\Http\Controllers\Web\ExtendedResourc
 				'rbaCityId' => ['bail', 'required', 'string', Rule::existsPrimary(Tables::Cities)],
 				'rbaStateId' => ['bail', 'required', 'string', Rule::existsPrimary(Tables::States)],
 				'rbaCountryId' => ['bail', 'required', 'string', Rule::existsPrimary(Tables::Countries)],
+				'pan' => ['bail', 'required', 'string', 'min:8', 'max:16'],
+				'panProofDocument' => ['bail', 'required', 'image', 'min:1', 'max:5000'],
 			],
 		];
 	}

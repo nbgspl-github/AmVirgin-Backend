@@ -31,7 +31,7 @@ class BankDetailController extends \App\Http\Controllers\Web\ExtendedResourceCon
 				'branch' => ['bail', 'required', 'string', 'min:3', 'max:255'],
 				'ifsc' => ['bail', 'required', 'string', 'min:11', 'max:15'],
 				'businessType' => ['bail', 'required', 'string', 'min:1', 'max:255'],
-				'pan' => ['bail', 'required', 'string', 'min:8', 'max:16'],
+				// 'pan' => ['bail', 'required', 'string', 'min:8', 'max:16'],
 				'addressProofType' => ['bail', 'required', Rule::in(Arrays::values(SellerBankDetail::AddressProofType))],
 				'addressProofDocument' => ['bail', 'required', 'image', 'min:1', 'max:5000'],
 				'cancelledCheque' => ['bail', 'required', 'image', 'min:1', 'max:5000'],
