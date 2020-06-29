@@ -230,4 +230,9 @@ class ProductController extends AbstractProductController{
 			'validUntil' => $productToken->validUntil(),
 		])->status(HttpOkay)->message('Token generated successfully.')->send();
 	}
+
+	public function changeStatus($id='')
+	{
+		# code...
+	}
 }

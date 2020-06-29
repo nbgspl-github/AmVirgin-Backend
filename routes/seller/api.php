@@ -75,6 +75,7 @@ Route::middleware(AuthSeller)->prefix('products')->group(function () {
 	Route::get('{id}', [ProductController::class, 'show'])->name('seller.products.show');
 	Route::get('edit/{id}', [ProductController::class, 'edit'])->name('seller.products.edit');
 	Route::post('{id}', [ProductController::class, 'update'])->name('seller.products.update');
+	Route::post('change-status/{id}', [ProductController::class, 'changeStatus'])->name('seller.products.change-status');
 	Route::delete('{id}', [ProductController::class, 'delete'])->name('seller.products.delete');
 	Route::delete('/images/{id}', [ProductImageController::class, 'delete'])->name('seller.products.images.delete');
 	Route::delete('/attributes/{id}', [ProductAttributeController::class, 'delete'])->name('seller.products.attributes.delete');
