@@ -44,16 +44,28 @@ use Throwable;
 class ProductController extends AbstractProductController{
 	public function index(): JsonResponse{
 		$per_page = request()->get('per_page') ?? '';
+		$per_no = request()->get('page') ?? '1';
 		if (empty($per_page)) {
 			$per_page = 10;
 		}
-		 
+	 
 		$products = Product::startQuery()->singleVariantMode()->seller($this->guard()->id())->paginate($per_page);
+		$total = count($products);
+		$totalRec = $products->total();
+		$meta = [
+				'pagination' => [
+					'pages' => countRequiredPages($total, $per_page),
+					'items' => ['total' => $total, 'totalRec' => $totalRec, 'chunk' => $per_page], 
+				],
+			];
 		$products = CatalogListResource::collection($products);
+		$products->total = 12;//$products->count();
 		return responseApp()
 			->status($products->count() > 0 ? HttpOkay : HttpNoContent)
 			->message('Listing all products for this seller.')
-			->setValue('payload', $products)->send();
+			->setValue('meta', $meta)
+			->setValue('payload', $products)
+			->send();
 	}
 
 	public function edit($id): JsonResponse{
