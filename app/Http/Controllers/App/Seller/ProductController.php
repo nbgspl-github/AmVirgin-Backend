@@ -51,7 +51,7 @@ class ProductController extends AbstractProductController{
 		// if (empty($page_no)) {
 		// 	$page_no = 1;
 		// }
-		$recordLimit = $per_page * $page_no;
+		// $recordLimit = $per_page * $page_no;
 		$products = Product::startQuery()->singleVariantMode()->seller($this->guard()->id())->get();
 		// $products = Product::startQuery()->singleVariantMode()->seller($this->guard()->id())->skip($recordLimit)->take($per_page)->get();
 		$products = CatalogListResource::collection($products);
