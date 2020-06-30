@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\App\Seller;
 
+use Illuminate\Http\Request;
 use App\Classes\Arrays;
 use App\Classes\Rule;
 use App\Classes\Str;
