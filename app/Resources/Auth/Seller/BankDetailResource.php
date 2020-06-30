@@ -23,13 +23,13 @@ class BankDetailResource extends \Illuminate\Http\Resources\Json\JsonResource{
 			'branch' => $this->branch(),
 			'ifsc' => $this->ifsc(),
 			'businessType' => $this->businessType(),
-			'pan' => $this->pan(),
-			'panVerified' => $this->panVerified(),
-			'addressProof' => [
-				'type' => $this->addressProofType(),
-				'document' => $this->addressProofDocument(),
-				'verified' => $this->addressProofVerified(),
-			],
+			// 'pan' => $this->pan(),
+			// 'panVerified' => $this->panVerified(),
+			// 'addressProof' => [
+			// 	'type' => $this->addressProofType(),
+			// 	'document' => $this->addressProofDocument(),
+			// 	'verified' => $this->addressProofVerified(),
+			// ],
 			'cancelledCheque' => $this->cancelledCheque(),
 			'cancelledChequeVerified' => $this->cancelledChequeVerified(),
 		];
