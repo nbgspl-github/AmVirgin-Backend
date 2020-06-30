@@ -7,6 +7,7 @@ use App\Classes\Rule;
 use App\Exceptions\ValidationException;
 use App\Interfaces\Tables;
 use App\Models\SellerBusinessDetail;
+use App\Models\SellerBankDetail;
 use App\Resources\Auth\Seller\BusinessDetailResource;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -34,6 +35,8 @@ class BusinessDetailController extends \App\Http\Controllers\Web\ExtendedResourc
 				'rbaCountryId' => ['bail', 'required', 'string', Rule::existsPrimary(Tables::Countries)],
 				'pan' => ['bail', 'required', 'string', 'min:8', 'max:16'],
 				'panProofDocument' => ['bail', 'required', 'image', 'min:1', 'max:5000'],
+				'addressProofType' => ['bail', 'required', Rule::in(Arrays::values(SellerBankDetail::AddressProofType))],
+				'addressProofDocument' => ['bail', 'required', 'image', 'min:1', 'max:5000'],
 			],
 		];
 	}

@@ -35,6 +35,8 @@ class SellerBusinessDetail extends ModelExtended{
 		'pan',
 		'panVerified',
 		'panProofDocument',
+		'addressProofType',
+		'addressProofDocument',
 	];
 	protected $casts = [
 		'signature' => 'uri',
@@ -52,6 +54,10 @@ class SellerBusinessDetail extends ModelExtended{
 		return $this->attributes['panProofDocument'];
 	}
 
+	public function setAddressProofDocumentAttribute($value){
+		$this->attributes['addressProofDocument'] = SecuredDisk::access()->putFile(Directories::SellerDocuments, $value);
+		return $this->attributes['addressProofDocument'];
+	}
 	public function state(): BelongsTo{
 		return $this->belongsTo(State::class, 'rbaStateId');
 	}
