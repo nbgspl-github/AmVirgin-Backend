@@ -70,7 +70,7 @@ Route::prefix('attributes')->group(function () {
 });
 
 Route::middleware(AuthSeller)->prefix('products')->group(function () {
-	Route::get('/?per_page={per_page}&page_no={page_no}', [ProductController::class, 'index'])->name('seller.products.index');
+	Route::get('/', [ProductController::class, 'index'])->name('seller.products.index');
 	Route::post(Str::Empty, [ProductController::class, 'store'])->name('seller.products.store');
 	Route::get('{id}', [ProductController::class, 'show'])->name('seller.products.show');
 	Route::get('edit/{id}', [ProductController::class, 'edit'])->name('seller.products.edit');
