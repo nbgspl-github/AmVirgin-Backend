@@ -40,8 +40,11 @@ class SellerBusinessDetail extends ModelExtended{
 	];
 	protected $casts = [
 		'signature' => 'uri',
+		'addressProofDocument' => 'uri',
 		'signatureVerified' => 'bool',
 		'gstINVerified' => 'bool',
+		'panVerified' => 'bool',
+		'panProofDocument' => 'uri',
 		'nameVerified' => 'bool',
 	];
 
