@@ -54,7 +54,8 @@ class ProductController extends AbstractProductController{
 		$totalRec = $products->total();
 		$meta = [
 				'pagination' => [
-					'pages' => countRequiredPages($total, $per_page),
+					'pages' => countRequiredPages($totalRec, $per_page),
+					'current_page' => $per_page,
 					'items' => ['total' => $total, 'totalRec' => $totalRec, 'chunk' => $per_page], 
 				],
 			];
