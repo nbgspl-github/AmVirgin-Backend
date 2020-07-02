@@ -86,7 +86,7 @@ class OrderController extends ExtendedResourceController {
 		$response = responseApp();
 		try {
 			$order = SellerOrder::startQuery()->useAuth()->key($id)->firstOrFail();
-			$order->status ='ready-for-dispatch';
+			$order->status ='pending-dispatch';
 			$order->update();
 			$resource = new OrderResource($order);
 			$response->status(HttpOkay)->message('Listing order details for given key.')->setValue('payload', $resource);
