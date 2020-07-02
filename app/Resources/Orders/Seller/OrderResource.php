@@ -11,6 +11,8 @@ class OrderResource extends JsonResource {
 		$status = $status != null ? $status->status() : OrderStatus::NotAvailable;
 		return [
 			'key' => $this->id(),
+			'orderId' => $this->orderNumber(),
+			'orderId' => $this->status(),
 			'customer' => new OrderCustomerResource($this->customer),
 			'items' => OrderItemResource::collection($this->items),
 			'transitions' => OrderStatus::transitions(new OrderStatus($status)),

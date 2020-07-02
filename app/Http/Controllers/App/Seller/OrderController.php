@@ -82,6 +82,25 @@ class OrderController extends ExtendedResourceController {
 			return $response->send();
 		}
 	}
+	public function orderDetails($id) : JsonResponse {
+		$response = responseApp();
+		try {
+			$order = SellerOrder::startQuery()->useAuth()->key($id)->firstOrFail();
+			$order->status ='ready-for-dispatch';
+			$order->update();
+			$resource = new OrderResource($order);
+			$response->status(HttpOkay)->message('Listing order details for given key.')->setValue('payload', $resource);
+		}
+		catch (ModelNotFoundException $exception) {
+			$response->status(HttpResourceNotFound)->message($exception->getMessage());
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpResourceNotFound)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
+	}
 
 	public function updateStatus (int $id) : JsonResponse {
 		$response = responseApp();
