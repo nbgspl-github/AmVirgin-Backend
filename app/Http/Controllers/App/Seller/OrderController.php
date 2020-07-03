@@ -101,7 +101,7 @@ class OrderController extends ExtendedResourceController {
 	}
 	public function orderDetails($id) : JsonResponse {
 		$response = responseApp();
-		try {
+		try { 
 			$order = SellerOrder::startQuery()->useAuth()->key($id)->firstOrFail();
 			$order->status ='pending-dispatch';
 			$order->update();
