@@ -14,6 +14,7 @@ final class OrderStatus extends \BenSampo\Enum\Enum {
 	const RefundProcessing = 'refund-processing';
 	const Refunded = 'refunded';
 	const NotAvailable = 'N/A';
+	const PendingDispatch = 'pending-dispatch';
 
 	public static function transitions (OrderStatus $status) : array {
 		switch ($status->value) {
