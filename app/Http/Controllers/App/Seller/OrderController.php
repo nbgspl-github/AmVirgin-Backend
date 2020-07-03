@@ -49,7 +49,7 @@ class OrderController extends ExtendedResourceController {
 							return false;
 					})->values();
 					$total = count($products);
-					$totalRec = $products->total();
+					$totalRec = $products->total(); 
 					$meta = [
 							'pagination' => [
 								'pages' => countRequiredPages($totalRec, $per_page),
