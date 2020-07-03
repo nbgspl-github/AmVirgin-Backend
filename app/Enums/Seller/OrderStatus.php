@@ -35,7 +35,7 @@ final class OrderStatus extends \BenSampo\Enum\Enum {
 				return [
 					self::getKey(self::OutForDelivery) => self::OutForDelivery,
 					self::getKey(self::Rescheduled) => self::Rescheduled,
-					self::getKey(self::Cancelled) => self::Cancelled,
+					self::getKey(self::Cancelled) => self::Cancelled, 
 				];
 
 			case self::Rescheduled:

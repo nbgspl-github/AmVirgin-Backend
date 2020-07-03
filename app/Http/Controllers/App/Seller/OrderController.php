@@ -37,7 +37,7 @@ class OrderController extends ExtendedResourceController {
 		}
 		try {
 			$orderCollection = SellerOrder::startQuery()->withRelations('order')->useAuth()->paginate($per_page);
-			
+
 			$total = count($orderCollection);
 			$totalRec = $orderCollection->total(); 
 			$meta = [
@@ -113,7 +113,7 @@ class OrderController extends ExtendedResourceController {
 		catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message($exception->getMessage());
 		}
-		catch (Throwable $exception) {
+		catch (Throwable $exception) { 
 			$response->status(HttpResourceNotFound)->message($exception->getMessage());
 		}
 		finally {
