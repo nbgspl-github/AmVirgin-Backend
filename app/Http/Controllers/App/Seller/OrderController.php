@@ -29,8 +29,14 @@ class OrderController extends ExtendedResourceController {
 
 	public function index () : JsonResponse {
 		$response = responseApp();
+
+		$per_page = request()->get('per_page') ?? '';
+		$page_no = request()->get('page') ?? '1';
+		if (empty($per_page)) {
+			$per_page = 10;
+		}
 		try {
-			$orderCollection = SellerOrder::startQuery()->withRelations('order')->useAuth()->get();
+			$orderCollection = SellerOrder::startQuery()->withRelations('order')->useAuth()->paginate($per_page);
 			if (request()->has('status') && !empty(request('status'))) {
 				try {
 					$status = new OrderStatus(request('status'));
@@ -42,8 +48,17 @@ class OrderController extends ExtendedResourceController {
 						else
 							return false;
 					})->values();
+					$total = count($products);
+					$totalRec = $products->total();
+					$meta = [
+							'pagination' => [
+								'pages' => countRequiredPages($totalRec, $per_page),
+								'current_page' => $page_no,
+								'items' => ['total' => $total, 'totalRec' => $totalRec, 'chunk' => $per_page], 
+							],
+						];
 					$resourceCollection = ListResource::collection($orderCollection);
-					$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('data', $resourceCollection);
+					$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('meta', $meta)->setValue('data', $resourceCollection);
 				}
 				catch (InvalidEnumMemberException $exception) {
 					$response->status(HttpOkay)->message('Invalid status value for filter.');
