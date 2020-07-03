@@ -35,7 +35,8 @@ class Order extends Model {
 		'Delivered' => 'delivered',
 		'Cancelled' => 'cancelled',
 		'RefundProcessing' => 'refund-processing',
-		'OutForDelivery' => 'out-for-delivery',
+		'PendingDispatch' => 'pending-dispatch', 
+		// 'OutForDelivery' => 'out-for-delivery',
 	];
 
 	public function items () {
