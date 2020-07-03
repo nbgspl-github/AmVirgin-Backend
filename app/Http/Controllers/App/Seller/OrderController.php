@@ -37,6 +37,16 @@ class OrderController extends ExtendedResourceController {
 		}
 		try {
 			$orderCollection = SellerOrder::startQuery()->withRelations('order')->useAuth()->paginate($per_page);
+			
+			$total = count($orderCollection);
+			$totalRec = $orderCollection->total(); 
+			$meta = [
+					'pagination' => [
+						'pages' => countRequiredPages($totalRec, $per_page),
+						'current_page' => $page_no,
+						'items' => ['total' => $total, 'totalRec' => $totalRec, 'chunk' => $per_page], 
+					],
+				];
 			if (request()->has('status') && !empty(request('status'))) {
 				try {
 					$status = new OrderStatus(request('status'));
@@ -48,15 +58,7 @@ class OrderController extends ExtendedResourceController {
 						else
 							return false;
 					})->values();
-					$total = count($products);
-					$totalRec = $products->total(); 
-					$meta = [
-							'pagination' => [
-								'pages' => countRequiredPages($totalRec, $per_page),
-								'current_page' => $page_no,
-								'items' => ['total' => $total, 'totalRec' => $totalRec, 'chunk' => $per_page], 
-							],
-						];
+					
 					$resourceCollection = ListResource::collection($orderCollection);
 					$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('meta', $meta)->setValue('data', $resourceCollection);
 				}
@@ -69,7 +71,7 @@ class OrderController extends ExtendedResourceController {
 			}
 			else {
 				$resourceCollection = ListResource::collection($orderCollection);
-				$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('data', $resourceCollection);
+				$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('meta', $meta)->setValue('data', $resourceCollection);
 			}
 		}
 		catch (Throwable $exception) {
