@@ -14,6 +14,7 @@ final class OrderStatus extends \BenSampo\Enum\Enum {
 	const RefundProcessing = 'refund-processing';
 	const Refunded = 'refunded';
 	const NotAvailable = 'N/A';
+	const PendingDispatch = 'pending-dispatch';
 
 	public static function transitions (OrderStatus $status) : array {
 		switch ($status->value) {
@@ -34,7 +35,7 @@ final class OrderStatus extends \BenSampo\Enum\Enum {
 				return [
 					self::getKey(self::OutForDelivery) => self::OutForDelivery,
 					self::getKey(self::Rescheduled) => self::Rescheduled,
-					self::getKey(self::Cancelled) => self::Cancelled,
+					self::getKey(self::Cancelled) => self::Cancelled, 
 				];
 
 			case self::Rescheduled:
@@ -60,6 +61,10 @@ final class OrderStatus extends \BenSampo\Enum\Enum {
 				return [
 					self::getKey(self::Refunded) => self::Refunded,
 				];
+			// case self::PendingDispatch:
+			// 	return [
+			// 		self::getKey(self::Refunded) => self::Refunded,
+			// 	];
 
 			default:
 				return [
