@@ -59,8 +59,7 @@ class ProductController extends AbstractProductController{
 					'items' => ['total' => $total, 'totalRec' => $totalRec, 'chunk' => $per_page], 
 				],
 			];
-		$products = CatalogListResource::collection($products);
-		$products->total = 12;//$products->count();
+		$products = CatalogListResource::collection($products); 
 		return responseApp()
 			->status($products->count() > 0 ? HttpOkay : HttpNoContent)
 			->message('Listing all products for this seller.')
