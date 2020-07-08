@@ -203,6 +203,7 @@ class Cart extends Model{
 					'customerId' => $order->customerId,
 					'orderId' => $order->getKey(),
 					'orderNumber' => $order->orderNumber,
+					'status' => OrderStatus::Placed,
 				]);
 			}
 			SellerOrderItem::create([

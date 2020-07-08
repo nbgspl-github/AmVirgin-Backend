@@ -133,6 +133,8 @@ class OrderController extends ExtendedResourceController {
 				$order->update([
 					'status' => $status,
 				]);
+				$sellerOrder = SellerOrder::where('orderId',$id)
+											->update(['status'=>$status]);
 				$response->status(HttpOkay)->message('Order status updated successfully.');
 			}
 			else {
