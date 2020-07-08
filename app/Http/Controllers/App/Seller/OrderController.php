@@ -35,9 +35,12 @@ class OrderController extends ExtendedResourceController {
 		if (empty($per_page)) {
 			$per_page = 10;
 		}
-		try {
-			$orderCollection = SellerOrder::startQuery()->withRelations('order')->useAuth()->paginate($per_page);
-
+		try { 
+			if (!empty(request()->get('status'))) {
+				$orderCollection = SellerOrder::startQuery()->withRelations('order')->useAuth()->useWhere('status',request()->get('status'))->paginate($per_page);
+			}else{
+				$orderCollection = SellerOrder::startQuery()->withRelations('order')->useAuth()->paginate($per_page);
+			}
 			$total = count($orderCollection);
 			$totalRec = $orderCollection->total(); 
 			$meta = [
@@ -47,32 +50,31 @@ class OrderController extends ExtendedResourceController {
 						'items' => ['total' => $total, 'totalRec' => $totalRec, 'chunk' => $per_page], 
 					],
 				];
-			if (request()->has('status') && !empty(request('status'))) {
-				try {
-					$status = new OrderStatus(request('status'));
-					$status = $status->value;
-					$orderCollection = $orderCollection->filter(static function (SellerOrder $sellerOrder) use ($status) {
-						$order = $sellerOrder->order;
-						if ($order != null && $order->status == $status)
-							return true;
-						else
-							return false;
-					})->values();
+			// if (request()->has('status') && !empty(request('status'))) {
+			// 	try {
+			// 		$status = new OrderStatus(request('status'));
+			// 		$status = $status->value;
+			// 		$orderCollection = $orderCollection->filter(static function (SellerOrder $sellerOrder) use ($status) {
+			// 			$order = $sellerOrder->order;
+			// 			if ($order != null && $order->status == $status)
+			// 				return true;
+			// 			else
+			// 				return false;
+			// 		})->values();
 					
-					$resourceCollection = ListResource::collection($orderCollection);
-					$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('meta', $meta)->setValue('data', $resourceCollection);
-				}
-				catch (InvalidEnumMemberException $exception) {
-					$response->status(HttpOkay)->message('Invalid status value for filter.');
-				}
-				catch (Throwable $exception) {
-					$response->status(HttpOkay)->message($exception->getMessage());
-				}
-			}
-			else {
+			// 		$resourceCollection = ListResource::collection($orderCollection);
+			// 		$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('meta', $meta)->setValue('data', $resourceCollection);
+			// 	}
+			// 	catch (InvalidEnumMemberException $exception) {
+			// 		$response->status(HttpOkay)->message('Invalid status value for filter.');
+			// 	}
+			// 	catch (Throwable $exception) {
+			// 		$response->status(HttpOkay)->message($exception->getMessage());
+			// 	}
+			// }else{
 				$resourceCollection = ListResource::collection($orderCollection);
 				$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('meta', $meta)->setValue('data', $resourceCollection);
-			}
+			// }
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());

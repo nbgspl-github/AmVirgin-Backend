@@ -23,6 +23,10 @@ class SellerOrderQuery extends AbstractQuery{
 		$this->query->where('sellerId', auth('seller-api')->id());
 		return $this;
 	}
+	public function useWhere(string $column='',string $value=''): self{
+		$this->query->where($column, $value);
+		return $this;
+	}
 
 	public function seller(int $sellerId): self{
 		$this->query->where('sellerId', $sellerId);
