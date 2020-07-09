@@ -37,10 +37,14 @@ class OrderController extends ExtendedResourceController {
 		}
 		try { 
 			if (!empty(request()->get('status'))) {
-				$orderCollection = SellerOrder::startQuery()->withRelations('order')->useAuth()->useWhere('status',request()->get('status'))->paginate($per_page);
+				$orderCollection = SellerOrder::startQuery()->withRelations('order')->useAuth()->useWhere('status',request()->get('status'));
 			}else{
-				$orderCollection = SellerOrder::startQuery()->withRelations('order')->useAuth()->paginate($per_page);
+				$orderCollection = SellerOrder::startQuery()->withRelations('order')->useAuth();
 			}
+			if (!empty(request()->get('keyword'))){
+				$orderCollection->search(request()->get('keyword'),'orderNumber');
+			}
+			$orderCollection->paginate($per_page);
 			$total = count($orderCollection);
 			$totalRec = $orderCollection->total(); 
 			$meta = [
