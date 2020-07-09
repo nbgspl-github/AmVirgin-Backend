@@ -101,4 +101,16 @@ class ProductQuery extends AbstractQuery{
 	protected function model(): string{
 		return Product::class;
 	}
+
+	public function search(string $keywords, string $column = 'name'): self{
+		$this->query->where($column, 'LIKE', "%{$keywords}%");
+		return $this;
+	}public function orSearch(string $keywords, string $column = 'name'): self{
+		$this->query->orWhere($column, 'LIKE', "%{$keywords}%");
+		return $this;
+	}
+	public function withWhere(string $column='', string $keywords = ''): self{
+		$this->query->where($column, $keywords);
+		return $this;
+	}
 }

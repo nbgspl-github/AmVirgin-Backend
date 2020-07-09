@@ -49,7 +49,19 @@ class ProductController extends AbstractProductController{
 			$per_page = 10;
 		}
 	 
-		$products = Product::startQuery()->singleVariantMode()->seller($this->guard()->id())->paginate($per_page);
+		$productRecord = Product::startQuery()->singleVariantMode()->seller($this->guard()->id());
+		if (!empty(request()->get('status'))) { 
+			$productRecord->withWhere('listingStatus',request()->get('status'));
+		}
+		if (!empty(request()->get('query'))) { 
+			$keywords = request()->get('query'); 
+			$productRecord->search($keywords,'name');
+            $productRecord->orSearch($keywords,'slug');
+            $productRecord->orSearch($keywords,'listingStatus');
+            $productRecord->orSearch($keywords,'created_at');
+		} 
+		$products = $productRecord->paginate($per_page);
+
 		$total = count($products);
 		$totalRec = $products->total();
 		$meta = [

@@ -17,6 +17,7 @@ class SellerOrder extends ModelExtended {
 		'customerId',
 		'orderId',
 		'orderNumber',
+		'status',
 	];
 	public const AllowedStatuses = [
 		ShipmentPending => [
