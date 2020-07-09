@@ -115,8 +115,8 @@ abstract class AbstractQuery{
 		$this->query->where($column, 'LIKE', "%{$keywords}%");
 		return $this;
 	}
-	public function witthWhere(string $column='', string $keywords = ''): self{
-		$this->query->where($column, 'LIKE', "%{$keywords}%");
+	public function withWhere(string $column='', string $keywords = ''): self{
+		$this->query->where($column, $keywords);
 		return $this;
 	}
 }
