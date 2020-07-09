@@ -259,10 +259,27 @@ class ProductController extends AbstractProductController{
 			'token' => $productToken->token(),
 			'validUntil' => $productToken->validUntil(),
 		])->status(HttpOkay)->message('Token generated successfully.')->send();
-	}
-
-	public function changeStatus($id='')
-	{
-		# code...
+	} 
+	public function changeStatus (int $id) : JsonResponse {
+		$response = responseApp();  
+		try {
+			$product = Product::where(['id'=>$id,'sellerId'=>auth('seller-api')->id()])->first(); 
+			if (!empty($product) || !empty(request('status'))) { 
+				$product->listingStatus =request('status');
+				$product->update(); 					 
+				$response->status(HttpOkay)->message('Product status updated successfully.');
+			}else{
+				$response->status(HttpOkay)->message('Product status is required.');
+			}
+		} 
+		catch (ModelNotFoundException $exception) {
+			$response->status(HttpResourceNotFound)->message('Could not find product for that key.');
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpResourceNotFound)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
 	}
 }
