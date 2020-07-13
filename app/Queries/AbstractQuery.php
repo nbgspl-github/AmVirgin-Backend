@@ -141,6 +141,11 @@ abstract class AbstractQuery
         $this->query->where($column, $keywords);
         return $this;
     }
+    public function withWhereBetween(string $column = '', $fromDate='', $toDate = ''): self
+    { 
+        $this->query->whereBetween($column, [$fromDate." 00:00:00", $toDate." 23:59:59"]);
+        return $this;
+    }
 
     public function withinCurrentMonth($inclusive = true, $timestamp = 'created_at'): self
     {

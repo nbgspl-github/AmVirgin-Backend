@@ -5,7 +5,7 @@ namespace App\Resources\Orders\Seller;
 use App\Classes\Time;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ListResource extends JsonResource{
+class PaymentListResource extends JsonResource{
 	public function __construct($resource){
 		parent::__construct($resource);
 	}
@@ -19,7 +19,12 @@ class ListResource extends JsonResource{
 			'orderId' => $this->orderId(),
 			'orderNumber' => $this->orderNumber(),
 			'orderDate' => Time::mysqlStamp(strtotime($this->created_at)),
-			'status' => $status, 
+			'status' => $status,
+			'transactionId' => $order->transactionId ?? '',
+			'tax' => $order->tax ?? '',
+			'subTotal' => $order->subTotal ?? '',
+			'total' => $order->total ?? '',
+			'paymentMode' => $order->paymentMode ?? '',
 			'quantity' => $this->items()->sum('quantity'),
 			'customer' => new OrderCustomerResource($this->customer),
 		];
