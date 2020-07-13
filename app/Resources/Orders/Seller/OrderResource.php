@@ -6,7 +6,8 @@ use App\Enums\Seller\OrderStatus;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderResource extends JsonResource {
-	public function toArray ($request) { 
+	public function toArray ($request) {
+		$status = $this->order;
 		$status = $status != null ? $status->status() : OrderStatus::NotAvailable;
 		return [
 			'key' => $this->id(),
