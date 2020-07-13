@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\SellerOrder;
 use App\Resources\Orders\Seller\ListResource;
 use App\Resources\Orders\Seller\PaymentListResource;
+use App\Resources\Orders\Seller\PreviousPaymentListResource;
 use App\Resources\Orders\Seller\OrderResource;
 use App\Traits\ValidatesRequest;
 use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
@@ -88,7 +89,7 @@ class OrderController extends ExtendedResourceController {
 			return $response->send();
 		}
 	}
-	public function getPreviousPayments () : JsonResponse {
+	public function getPaymentsTransaction() : JsonResponse {
 		$response = responseApp();
 
 		$per_page = request()->get('per_page') ?? '';
@@ -120,7 +121,48 @@ class OrderController extends ExtendedResourceController {
 				],
 			]; 
 			$resourceCollection = PaymentListResource::collection($orderCollection);
-			$response->status(HttpOkay)->message('Listing all orders for this seller.')->setValue('meta', $meta)->setValue('data', $resourceCollection); 
+			$response->status(HttpOkay)->message('Listing all Transaction for this seller.')->setValue('meta', $meta)->setValue('data', $resourceCollection); 
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+	public function getPreviousPayments () : JsonResponse {
+		$response = responseApp();
+
+		$per_page = request()->get('per_page') ?? '';
+		$page_no = request()->get('page') ?? '1';
+		if (empty($per_page)) {
+			$per_page = 10;
+		}
+		try {  
+			$orderC = SellerOrder::startQuery()->withRelations('order')->withRelations('sellerBank:id,accountHolderName,accountHolderName,bankName,branch,ifsc')->useAuth(); 
+			if (!empty(request()->get('status'))) { 
+				$orderC->withWhere('status',request()->get('status'));
+			}if (!empty(request()->get('query'))) { 
+				$orderC->search(request()->get('query'),'orderNumber');
+			}if (!empty(request()->get('from')) && !empty(request()->get('to'))) {
+				$from= request()->get('from');
+				$toDate= request()->get('to');
+				$orderC->withWhereBetween('created_at',$from,$toDate);
+			} 
+			$orderCollection = $orderC->paginate($per_page);
+ 
+
+			$total = count($orderCollection);
+			$totalRec = $orderCollection->total(); 
+			$meta = [
+				'pagination' => [
+					'pages' => countRequiredPages($totalRec, $per_page),
+					'current_page' => $page_no,
+					'items' => ['total' => $total, 'totalRec' => $totalRec, 'chunk' => $per_page], 
+				],
+			]; 
+			$resourceCollection = PreviousPaymentListResource::collection($orderCollection);
+			$response->status(HttpOkay)->message('Listing all Previous Payment for this seller.')->setValue('meta', $meta)->setValue('data', $resourceCollection); 
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());

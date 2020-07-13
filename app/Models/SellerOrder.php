@@ -70,6 +70,9 @@ class SellerOrder extends ModelExtended {
 	public function order () {
 		return $this->belongsTo(Order::class, 'orderId')->with('address');
 	}
+	public function sellerBank () {
+		return $this->belongsTo(SellerBankDetail::class, 'sellerId');
+	}
 
 	public static function startQuery () : SellerOrderQuery {
 		return SellerOrderQuery::begin();

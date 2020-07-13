@@ -135,6 +135,10 @@ abstract class AbstractQuery
         $this->query->where($column, 'LIKE', "%{$keywords}%");
         return $this;
     }
+    public function orSearch(string $keywords, string $column = 'name'): self{
+        $this->query->orWhere($column, 'LIKE', "%{$keywords}%");
+        return $this;
+    }
 
     public function withWhere(string $column = '', string $keywords = ''): self
     {
