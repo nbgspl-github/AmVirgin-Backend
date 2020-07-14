@@ -79,7 +79,7 @@ class OverviewController extends \App\Http\Controllers\Web\ExtendedResourceContr
             if (!empty(request('days'))) {
                 $orderC->useWhere('created_at', '>=', $today->subDays(request('days')));
             }            
-            $orderCollection = $orderC->get(); 
+            $orderCollection = $orderC->status((new OrderStatus(OrderStatus::Delivered)))->get(); 
             $datSet=array();
             if (!empty(count($orderCollection))) {
                     $i = 0; 
