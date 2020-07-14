@@ -16,6 +16,7 @@ use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Throwable;
+use App\Models\ReviewRating;
 
 class OrderController extends ExtendedResourceController {
 	use ValidatesRequest;
@@ -284,6 +285,56 @@ class OrderController extends ExtendedResourceController {
 				$response->status(HttpOkay)->message('Status did not matched in our record');
 			}
 
+		}
+		catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		}
+		finally {
+			return $response->send();
+		}
+	}
+
+
+	//Rating
+
+	public function getRatingList () : JsonResponse {
+		$response = responseApp();
+
+		$per_page = request()->get('per_page') ?? '';
+		$page_no = request()->get('page') ?? '1';
+		if (empty($per_page)) {
+			$per_page = 10;
+		}
+		try {  
+			// $ratingC = SellerOrder::startQuery()->withRelations('order')->withRelations('sellerBank:id,accountHolderName,accountHolderName,bankName,branch,ifsc')->useAuth(); 
+			$ratingC = ReviewRating::with('customer')->where('sellerId', auth('seller-api')->id()); 
+			if (!empty(request()->get('status'))) { 
+				$ratingC->withWhere('status',request()->get('status'));
+			}if (!empty(request()->get('query'))) { 
+				$keywords = request()->get('query');
+				$ratingC->where('orderNumber', 'LIKE', "%{$keywords}%"); 
+				$ratingC->orWhere('commentMsg', 'LIKE', "%{$keywords}%"); 
+				$ratingC->orWhere('rate', 'LIKE', "%{$keywords}%"); 
+			}if (!empty(request()->get('from')) && !empty(request()->get('to'))) {
+				$from= request()->get('from');
+				$toDate= request()->get('to');
+				$ratingC->whereBetween('created_at',[$from,$toDate]);
+			} 
+			$orderCollection = $ratingC->get();
+ 
+
+			// $total = count($orderCollection);
+			// $totalRec = $orderCollection->total(); 
+			$meta = [
+				// 'pagination' => [
+				// 	'pages' => countRequiredPages($totalRec, $per_page),
+				// 	'current_page' => $page_no,
+				// 	'items' => ['total' => $total, 'totalRec' => $totalRec, 'chunk' => $per_page], 
+				// ],
+				'avg' => $orderCollection->avg('rate'),
+			]; 
+			// $resourceCollection = PreviousPaymentListResource::collection($orderCollection);
+			$response->status(HttpOkay)->message('Listing all Rating With Avg Rating for this seller.')->setValue('meta', $meta)->setValue('data', $orderCollection); 
 		}
 		catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());

@@ -147,3 +147,6 @@ Route::prefix('payments')->group(static function () {
 Route::prefix('sales')->group(static function () {
     Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\Payments\OverviewController::class, 'totalSales'])->middleware(AuthSeller);    
 });
+Route::prefix('ratings')->group(static function () {
+    Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\OrderController::class, 'getRatingList'])->middleware(AuthSeller);    
+});
