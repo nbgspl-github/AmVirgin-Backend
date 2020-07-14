@@ -69,6 +69,34 @@ class OverviewController extends \App\Http\Controllers\Web\ExtendedResourceContr
             return $response->send();
         }
     }
+    public function totalSales(): JsonResponse
+    {
+        $response = responseApp();
+        try {
+            $today = Carbon::today(); 
+            $current = Carbon::now()->timestamp; 
+            $orderC = SellerOrder::startQuery()->useAuth()->withRelations('order');
+            if (!empty(request('days'))) {
+                $orderC->useWhere('created_at', '>=', $today->subDays(request('days')));
+            }            
+            $orderCollection = $orderC->get(); 
+            $datSet=array();
+            if (!empty(count($orderCollection))) {
+                    $i = 0; 
+                    $datSet['salesInUnit']=count($orderCollection);
+                    $salesInRupee=0;
+                   foreach ($orderCollection as $key => $value) {
+                       $salesInRupee += $value->order->total; 
+                   } 
+                $datSet['salesInRupees']=$salesInRupee;
+                }    
+            $response->status(HttpOkay)->message('Sales in last '.request('days').' days retrieved successfully.')->setValue('payload', $datSet);
+        } catch (\Throwable $exception) {
+            $response->status(HttpOkay)->message($exception->getMessage());
+        } finally {
+            return $response->send();
+        }
+    }
 
     protected function guard()
     {
