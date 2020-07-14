@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 use App\Models\ReviewRating;
+use Illuminate\Support\Carbon;
+
 
 class OrderController extends ExtendedResourceController {
 	use ValidatesRequest;
@@ -307,6 +309,7 @@ class OrderController extends ExtendedResourceController {
 		}
 		try {  
 			// $ratingC = SellerOrder::startQuery()->withRelations('order')->withRelations('sellerBank:id,accountHolderName,accountHolderName,bankName,branch,ifsc')->useAuth(); 
+			$today = Carbon::today(); 
 			$ratingC = ReviewRating::with('customer')->where('sellerId', auth('seller-api')->id()); 
 			if (!empty(request()->get('status'))) { 
 				$ratingC->withWhere('status',request()->get('status'));
@@ -315,7 +318,10 @@ class OrderController extends ExtendedResourceController {
 				$ratingC->where('orderNumber', 'LIKE', "%{$keywords}%"); 
 				$ratingC->orWhere('commentMsg', 'LIKE', "%{$keywords}%"); 
 				$ratingC->orWhere('rate', 'LIKE', "%{$keywords}%"); 
-			}if (!empty(request()->get('from')) && !empty(request()->get('to'))) {
+			}if (!empty(request('days'))) {
+                $ratingC->where('created_at', '>=', $today->subDays(request('days')));
+            } 
+			if (!empty(request()->get('from')) && !empty(request()->get('to'))) {
 				$from= request()->get('from');
 				$toDate= request()->get('to');
 				$ratingC->whereBetween('created_at',[$from,$toDate]);
