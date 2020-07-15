@@ -9,6 +9,7 @@ use App\Models\Advertisement;
 use App\Resources\Advertisements\Seller\ListResource;
 use App\Storage\SecuredDisk;
 use App\Traits\ValidatesRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 
@@ -71,6 +72,22 @@ class AdvertisementController extends ExtendedResourceController
             $response->status(HttpOkay)->message('Advertisement created successfully.')->setValue('payload', $resource);
         } catch (ValidationException $exception) {
             $response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+        } catch (Throwable $exception) {
+            $response->status(HttpServerError)->message($exception->getMessage());
+        } finally {
+            return $response->send();
+        }
+    }
+
+    public function show($id): JsonResponse
+    {
+        $response = responseApp();
+        try {
+            $advertisement = Advertisement::query()->whereKey($id)->firstOrFail();
+            $resource = new ListResource($advertisement);
+            $response->status(HttpOkay)->message('Listing advertisement details.')->setValue('payload', $resource);
+        } catch (ModelNotFoundException $exception) {
+            $response->status(HttpResourceNotFound)->message('Could not find advertisement for that key.');
         } catch (Throwable $exception) {
             $response->status(HttpServerError)->message($exception->getMessage());
         } finally {
