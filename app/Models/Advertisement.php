@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Storage\SecuredDisk;
 use Illuminate\Database\Eloquent\Model;
 
 class Advertisement extends Model
@@ -15,4 +16,9 @@ class Advertisement extends Model
     protected $casts = [
         'active' => 'bool'
     ];
+
+    public function getBannerAttribute($value): ?string
+    {
+        return SecuredDisk::existsUrl($this->attributes['banner']);
+    }
 }
