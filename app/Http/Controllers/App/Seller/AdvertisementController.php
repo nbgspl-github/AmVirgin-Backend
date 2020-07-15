@@ -6,8 +6,10 @@ use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Interfaces\Directories;
 use App\Models\Advertisement;
+use App\Resources\Advertisements\Seller\ListResource;
 use App\Storage\SecuredDisk;
 use App\Traits\ValidatesRequest;
+use Illuminate\Http\JsonResponse;
 use Throwable;
 
 class AdvertisementController extends ExtendedResourceController
@@ -20,6 +22,10 @@ class AdvertisementController extends ExtendedResourceController
     {
         parent::__construct();
         $this->rules = [
+            'index' => [
+                'page' => ['bail', 'nullable', 'numeric', 'min:1', 'max:10000'],
+                'active' => ['bail', 'sometimes', 'boolean']
+            ],
             'store' => [
                 'subject' => ['bail', 'required', 'string', 'min:1', 'max:255'],
                 'message' => ['bail', 'nullable', 'string', 'min:1', 'max:5000'],
@@ -35,7 +41,25 @@ class AdvertisementController extends ExtendedResourceController
         ];
     }
 
-    public function store()
+    public function index(): JsonResponse
+    {
+        $response = responseApp();
+        try {
+            $validated = $this->requestValid(request(), $this->rules['index']);
+            $validated['page'] = $validated['page'] ?? 1;
+            $advertisementCollection = Advertisement::startQuery()->active(request('active'))->useAuth()->paginate($validated['page']);
+            $resourceCollection = ListResource::collection($advertisementCollection);
+            $response->status($resourceCollection->count() > 0 ? HttpOkay : HttpNoContent)->message('Listing all advertisements by this seller.')->setValue('payload', $resourceCollection);
+        } catch (ValidationException $exception) {
+            $response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+        } catch (Throwable $exception) {
+            $response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+        } finally {
+            return $response->send();
+        }
+    }
+
+    public function store(): JsonResponse
     {
         $response = responseApp();
         try {

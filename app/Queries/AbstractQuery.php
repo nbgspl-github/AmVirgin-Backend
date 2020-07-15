@@ -27,9 +27,9 @@ abstract class AbstractQuery
 
     public abstract function displayable(): self;
 
-    protected function active(): self
+    public function active($state = true): self
     {
-        $this->query->where('active', true);
+        $this->query->where('active', $state);
         return $this;
     }
 
@@ -135,7 +135,9 @@ abstract class AbstractQuery
         $this->query->where($column, 'LIKE', "%{$keywords}%");
         return $this;
     }
-    public function orSearch(string $keywords, string $column = 'name'): self{
+
+    public function orSearch(string $keywords, string $column = 'name'): self
+    {
         $this->query->orWhere($column, 'LIKE', "%{$keywords}%");
         return $this;
     }
@@ -145,9 +147,10 @@ abstract class AbstractQuery
         $this->query->where($column, $keywords);
         return $this;
     }
-    public function withWhereBetween(string $column = '', $fromDate='', $toDate = ''): self
-    { 
-        $this->query->whereBetween($column, [$fromDate." 00:00:00", $toDate." 23:59:59"]);
+
+    public function withWhereBetween(string $column = '', $fromDate = '', $toDate = ''): self
+    {
+        $this->query->whereBetween($column, [$fromDate . " 00:00:00", $toDate . " 23:59:59"]);
         return $this;
     }
 
