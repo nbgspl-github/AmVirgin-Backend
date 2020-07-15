@@ -6,5 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Advertisement extends Model
 {
-    protected $fillable = ['sellerId','title','description','image','date','status'];
+    protected $fillable = [
+        'sellerId', 'subject', 'message', 'banner', 'date', 'active'
+    ];
+    protected $hidden = [
+        'id', 'created_at', 'updated_at'
+    ];
+    protected $casts = [
+        'active' => 'bool'
+    ];
 }

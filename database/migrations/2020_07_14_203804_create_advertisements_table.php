@@ -1,5 +1,6 @@
 <?php
 
+use App\Constants\Constants;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,12 +16,12 @@ class CreateAdvertisementsTable extends Migration
     {
         Schema::create('advertisements', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('sellerId')->nullable(); 
-            $table->string('title')->nullable(); 
-            $table->string('description')->nullable(); 
-            $table->string('image', Constants::MaxFilePathLength)->nullable(); 
+            $table->unsignedBigInteger('sellerId')->nullable();
+            $table->string('subject')->nullable();
+            $table->string('message', 5000)->nullable();
+            $table->string('banner', Constants::MaxFilePathLength)->nullable();
             $table->date('date')->default(date('Y-m-d'));
-            $table->boolean('status')->default(false);
+            $table->boolean('active')->default(false);
             $table->timestamps();
         });
     }
