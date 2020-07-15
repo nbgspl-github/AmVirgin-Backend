@@ -65,6 +65,7 @@ class AdvertisementController extends ExtendedResourceController
         try {
             $payload = $this->requestValid(request(), $this->rules['store']);
             $payload['banner'] = \request()->hasFile('banner') ? SecuredDisk::access()->putFile(Directories::Advertisement, \request()->file('banner')) : null;
+            $payload['sellerId'] = $this->guard()->id();
             $advertisement = Advertisement::query()->create($payload);
             $response->status(HttpOkay)->message('Advertisement created successfully.')->setValue('payload', $advertisement);
         } catch (ValidationException $exception) {
