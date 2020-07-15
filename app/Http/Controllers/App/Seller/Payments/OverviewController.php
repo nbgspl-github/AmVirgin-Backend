@@ -20,8 +20,10 @@ class OverviewController extends \App\Http\Controllers\Web\ExtendedResourceContr
     {
         $response = responseApp();
         try {
+            $current = Carbon::now()->timestamp;
             $payload = [
                 'next' => [
+                    'date' => date('j F', $current),
                     'postpaid' => 0.0,
                     'prepaid' => 0.0,
                     'total' => 0.0
@@ -37,7 +39,6 @@ class OverviewController extends \App\Http\Controllers\Web\ExtendedResourceContr
                     'total' => 0.0
                 ]
             ];
-            $current = Carbon::now()->timestamp;
             $orderCollection = SellerOrder::startQuery()->useAuth()->withRelations('order')->withinCurrentMonth()->status((new OrderStatus(OrderStatus::Delivered)))->get();
             $orderCollection->each(function (SellerOrder $sellerOrder) use ($current, &$payload) {
                 if ($sellerOrder->order()->exists()) {
