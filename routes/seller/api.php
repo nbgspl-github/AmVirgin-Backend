@@ -156,4 +156,5 @@ Route::prefix('ratings')->group(static function () {
 Route::prefix('advertisements')->group(static function () {
     Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\AdvertisementController::class, 'index'])->middleware(AuthSeller);
     Route::post(Str::Empty, [\App\Http\Controllers\App\Seller\AdvertisementController::class, 'store'])->middleware(AuthSeller);
+    Route::get('{id}', [\App\Http\Controllers\App\Seller\AdvertisementController::class, 'show'])->middleware(AuthSeller);
 });
