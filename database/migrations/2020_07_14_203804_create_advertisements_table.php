@@ -21,7 +21,7 @@ class CreateAdvertisementsTable extends Migration
             $table->string('message', 5000)->nullable();
             $table->string('banner', Constants::MaxFilePathLength)->nullable();
             $table->date('date')->default(date('Y-m-d'));
-            $table->boolean('active')->default(false);
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }
