@@ -30,9 +30,9 @@ class SellerOrderQuery extends AbstractQuery
         return $this;
     }
 
-    public function useWhere(string $column = '', string $value = ''): self
+    public function useWhere(string $column = '',$operator= '=', string $value = ''): self
     {
-        $this->query->where($column, $value);
+        $this->query->where($column,$operator, $value);
         return $this;
     }
 

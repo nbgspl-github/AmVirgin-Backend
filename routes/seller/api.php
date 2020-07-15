@@ -141,4 +141,12 @@ Route::prefix('support')->group(static function () {
 
 Route::prefix('payments')->group(static function () {
     Route::get('overview', [\App\Http\Controllers\App\Seller\Payments\OverviewController::class, 'show'])->middleware(AuthSeller);
+    Route::get('transaction', [OrderController::class, 'getPaymentsTransaction'])->middleware(AuthSeller);
+    Route::get('previous', [OrderController::class, 'getPreviousPayments'])->middleware(AuthSeller);
+});
+Route::prefix('sales')->group(static function () {
+    Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\Payments\OverviewController::class, 'totalSales'])->middleware(AuthSeller);    
+});
+Route::prefix('ratings')->group(static function () {
+    Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\OrderController::class, 'getRatingList'])->middleware(AuthSeller);    
 });

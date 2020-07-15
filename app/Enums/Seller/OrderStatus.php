@@ -57,13 +57,16 @@ final class OrderStatus extends \BenSampo\Enum\Enum {
 					self::getKey(self::Refunded) => self::Refunded,
 				];
 
-			// case self::RefundProcessing:
-			// 	return [
-			// 		self::getKey(self::Refunded) => self::Refunded,
-			// 	];
+			case self::RefundProcessing:
+				return [
+					self::getKey(self::Refunded) => self::Refunded,
+				];
 			case self::PendingDispatch:
 				return [
-					self::getKey(self::PendingDispatch) => self::PendingDispatch,
+					self::getKey(self::Dispatched) => self::Dispatched,
+					self::getKey(self::Delivered) => self::Delivered,
+					self::getKey(self::Cancelled) => self::Cancelled,
+					self::getKey(self::ReadyForDispatch) => self::ReadyForDispatch,
 				];
 
 			default:

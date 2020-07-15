@@ -12,7 +12,7 @@ class OrderResource extends JsonResource {
 		return [
 			'key' => $this->id(),
 			'orderId' => $this->orderNumber(),
-			'status' => $this->status(),
+			'status' => $this->status(), 
 			'customer' => new OrderCustomerResource($this->customer),
 			'items' => OrderItemResource::collection($this->items),
 			'transitions' => OrderStatus::transitions(new OrderStatus($status)),

@@ -135,10 +135,19 @@ abstract class AbstractQuery
         $this->query->where($column, 'LIKE', "%{$keywords}%");
         return $this;
     }
+    public function orSearch(string $keywords, string $column = 'name'): self{
+        $this->query->orWhere($column, 'LIKE', "%{$keywords}%");
+        return $this;
+    }
 
     public function withWhere(string $column = '', string $keywords = ''): self
     {
         $this->query->where($column, $keywords);
+        return $this;
+    }
+    public function withWhereBetween(string $column = '', $fromDate='', $toDate = ''): self
+    { 
+        $this->query->whereBetween($column, [$fromDate." 00:00:00", $toDate." 23:59:59"]);
         return $this;
     }
 
