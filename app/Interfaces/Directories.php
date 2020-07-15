@@ -22,4 +22,5 @@ interface Directories {
 	const Brands = 'brands-logos';
 	const SellerDocuments = 'seller-documents';
 	const SellerSupportAttachments = 'seller-support-documents';
+	const Advertisement = 'advertisement';
 }
