@@ -47,7 +47,7 @@ class AdvertisementController extends ExtendedResourceController
         try {
             $validated = $this->requestValid(request(), $this->rules['index']);
             $validated['page'] = $validated['page'] ?? 1;
-            $advertisementCollection = Advertisement::startQuery()->active(request('active', true))->useAuth()->paginate($validated['page']);
+            $advertisementCollection = Advertisement::startQuery()->active(request('active', true))->useAuth()->paginate(50);
             $resourceCollection = ListResource::collection($advertisementCollection);
             $response->status($resourceCollection->count() > 0 ? HttpOkay : HttpNoContent)->message('Listing all advertisements by this seller.')->setValue('payload', $resourceCollection);
         } catch (ValidationException $exception) {
