@@ -48,7 +48,7 @@ class OverviewController extends ExtendedResourceController
                 $toDate = request()->get('to');
                 $ratingC->whereBetween('created_at', [$from, $toDate]);
             }
-            $orderCollection = $ratingC->get();
+            $orderCollectionRating = $ratingC->get();
             $today = Carbon::today();
             $current = Carbon::now()->timestamp;
             $orderC = SellerOrder::startQuery()->useAuth()->withRelations('order');
@@ -66,7 +66,7 @@ class OverviewController extends ExtendedResourceController
                 $dataSet['salesInRupees'] = $salesInRupee;
             }
             $meta = [
-                'averageRating' => $orderCollection->avg('rate'),
+                'averageRating' => $orderCollectionRating->avg('rate'),
                 'customerReturns' => mt_rand(10, 100),
                 'sales' => $dataSet
             ];
