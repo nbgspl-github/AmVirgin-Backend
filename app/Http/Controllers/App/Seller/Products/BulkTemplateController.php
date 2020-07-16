@@ -31,7 +31,7 @@ class BulkTemplateController extends ExtendedResourceController
         ];
     }
 
-    public function show(): JsonResponse
+    public function show()
     {
 //        $response = responseApp();
 //        try {
