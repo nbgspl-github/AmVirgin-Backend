@@ -9,10 +9,10 @@ use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Traits\ValidatesRequest;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class BulkTemplateController extends ExtendedResourceController
 {
@@ -33,36 +33,37 @@ class BulkTemplateController extends ExtendedResourceController
 
     public function show()
     {
-//        $response = responseApp();
-//        try {
-//            /**
-//             * @var Category $category
-//             * @var Brand $brand
-//             * @var Collection $attributes
-//             */
-//            $validated = $this->requestValid(request(), $this->rules['show']);
-//            $category = Category::find($validated['categoryId']);
-//            $brand = Brand::find($validated['brandId']);
-//            $attributes = $category->attributes;
+        $response = responseApp();
+        try {
+            /**
+             * @var Category $category
+             * @var Brand $brand
+             * @var Collection $attributes
+             */
+            $validated = $this->requestValid(request(), $this->rules['show']);
+            $category = Category::find($validated['categoryId']);
+            $brand = Brand::find($validated['brandId']);
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
             $sheet->setCellValue('A1', 'Hello World !');
             $writer = new Xls($spreadsheet);
-            response()->streamDownload(function () use ($writer) {
-                $writer->save('php://output');
-            }, 'Template.xlsx', [
-                'Content-Type' => 'application/vnd.ms-excel',
-                'Content-Disposition', 'attachment;filename="ExportScan.xls"',
-                'Cache-Control', 'max-age=0'
-            ]);
-//
-//        } catch (ValidationException $exception) {
-//            $response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
-//        } catch (\Throwable $exception) {
-//            $response->status(HttpServerError)->message($exception->getMessage());
-//        } finally {
-//            return $response->send();
-//        }
+            $response = new StreamedResponse(
+                function () use ($writer) {
+                    $writer->save('php://output');
+                }
+            );
+            $response->headers->set('Content-Type', 'application/vnd.ms-excel');
+            $response->headers->set('Content-Disposition', 'attachment;filename="Bulk.xls"');
+            $response->headers->set('Cache-Control', 'max-age=0');
+            return $response;
+
+        } catch (ValidationException $exception) {
+            $response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+        } catch (\Throwable $exception) {
+            $response->status(HttpServerError)->message($exception->getMessage());
+        } finally {
+            return $response->send();
+        }
     }
 
     protected function guard()
