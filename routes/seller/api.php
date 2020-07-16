@@ -87,10 +87,6 @@ Route::middleware(AuthSeller)->prefix('products')->group(function () {
     Route::prefix('trailer')->group(function () {
         Route::post('upload', [\App\Http\Controllers\App\Seller\Products\ProductTrailerController::class, 'store']);
     });
-
-    Route::prefix('bulk')->group(static function () {
-        Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\Products\BulkTemplateController::class, 'show']);
-    });
 });
 
 Route::prefix('currencies')->group(function () {
@@ -161,4 +157,8 @@ Route::prefix('advertisements')->group(static function () {
     Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\AdvertisementController::class, 'index'])->middleware(AuthSeller);
     Route::post(Str::Empty, [\App\Http\Controllers\App\Seller\AdvertisementController::class, 'store'])->middleware(AuthSeller);
     Route::get('{id}', [\App\Http\Controllers\App\Seller\AdvertisementController::class, 'show'])->middleware(AuthSeller);
+});
+
+Route::prefix('bulk')->group(static function () {
+    Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\Products\BulkTemplateController::class, 'show']);
 });
