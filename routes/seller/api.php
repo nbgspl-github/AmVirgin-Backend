@@ -150,7 +150,7 @@ Route::prefix('sales')->group(static function () {
 });
 
 Route::prefix('growth')->group(static function () {
-    Route::get('overview', [\App\Http\Controllers\App\Seller\Rating\RatingController::class, 'show'])->middleware(AuthSeller);
+    Route::get('overview', [\App\Http\Controllers\App\Seller\Growth\OverviewController::class, 'show'])->middleware(AuthSeller);
 });
 
 Route::prefix('advertisements')->group(static function () {

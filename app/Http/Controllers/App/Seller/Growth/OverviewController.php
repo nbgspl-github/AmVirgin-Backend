@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\App\Seller\Rating;
+namespace App\Http\Controllers\App\Seller\Growth;
 
+use App\Enums\Seller\OrderStatus;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Models\ReviewRating;
+use App\Models\SellerOrder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
 use Throwable;
 
-class RatingController extends ExtendedResourceController
+class OverviewController extends ExtendedResourceController
 {
     protected array $rules;
 
@@ -26,14 +28,7 @@ class RatingController extends ExtendedResourceController
     public function show(): JsonResponse
     {
         $response = responseApp();
-
-        $per_page = request()->get('per_page') ?? '';
-        $page_no = request()->get('page') ?? '1';
-        if (empty($per_page)) {
-            $per_page = 10;
-        }
         try {
-            // $ratingC = SellerOrder::startQuery()->withRelations('order')->withRelations('sellerBank:id,accountHolderName,accountHolderName,bankName,branch,ifsc')->useAuth();
             $today = Carbon::today();
             $ratingC = ReviewRating::with('customer')->where('sellerId', auth('seller-api')->id());
             if (!empty(request()->get('status'))) {
@@ -54,18 +49,26 @@ class RatingController extends ExtendedResourceController
                 $ratingC->whereBetween('created_at', [$from, $toDate]);
             }
             $orderCollection = $ratingC->get();
-
-
-            // $total = count($orderCollection);
-            // $totalRec = $orderCollection->total();
+            $today = Carbon::today();
+            $current = Carbon::now()->timestamp;
+            $orderC = SellerOrder::startQuery()->useAuth()->withRelations('order');
+            if (!empty(request('days'))) {
+                $orderC->useWhere('created_at', '>=', $today->subDays(request('days')));
+            }
+            $orderCollection = $orderC->status((new OrderStatus(OrderStatus::Delivered)))->get();
+            $dataSet = array();
+            if (!empty(count($orderCollection))) {
+                $dataSet['salesInUnit'] = count($orderCollection);
+                $salesInRupee = 0;
+                foreach ($orderCollection as $key => $value) {
+                    $salesInRupee += $value->order->total;
+                }
+                $dataSet['salesInRupees'] = $salesInRupee;
+            }
             $meta = [
-                // 'pagination' => [
-                // 	'pages' => countRequiredPages($totalRec, $per_page),
-                // 	'current_page' => $page_no,
-                // 	'items' => ['total' => $total, 'totalRec' => $totalRec, 'chunk' => $per_page],
-                // ],
                 'averageRating' => $orderCollection->avg('rate'),
                 'customerReturns' => mt_rand(10, 100),
+                'sales' => $dataSet
             ];
             $response->status(HttpOkay)->message('Listing all rating and performance stats.')->setValue('payload', $meta);
         } catch (Throwable $exception) {
