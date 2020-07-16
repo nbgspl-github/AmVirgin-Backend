@@ -149,8 +149,8 @@ Route::prefix('sales')->group(static function () {
     Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\Payments\OverviewController::class, 'totalSales'])->middleware(AuthSeller);
 });
 
-Route::prefix('ratings')->group(static function () {
-    Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\Rating\RatingController::class, 'show'])->middleware(AuthSeller);
+Route::prefix('growth')->group(static function () {
+    Route::get('overview', [\App\Http\Controllers\App\Seller\Rating\RatingController::class, 'show'])->middleware(AuthSeller);
 });
 
 Route::prefix('advertisements')->group(static function () {
