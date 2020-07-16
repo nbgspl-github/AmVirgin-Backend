@@ -43,7 +43,7 @@ class BulkTemplateController extends ExtendedResourceController
             $validated = $this->requestValid(request(), $this->rules['show']);
             $category = Category::find($validated['categoryId']);
             $brand = Brand::find($validated['brandId']);
-            $attributes = $category->attributes;
+//            $attributes = $category->attributes;
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
             $sheet->setCellValue('A1', 'Hello World !');
