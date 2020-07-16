@@ -64,9 +64,10 @@ class RatingController extends ExtendedResourceController
                 // 	'current_page' => $page_no,
                 // 	'items' => ['total' => $total, 'totalRec' => $totalRec, 'chunk' => $per_page],
                 // ],
-                'avg' => $orderCollection->avg('rate'),
+                'averageRating' => $orderCollection->avg('rate'),
+                'customerReturns' => mt_rand(10, 100),
             ];
-            $response->status(HttpOkay)->message('Listing all rating and performance stats.')->setValue('meta', $meta)->setValue('data', $orderCollection);
+            $response->status(HttpOkay)->message('Listing all rating and performance stats.')->setValue('payload', $meta);
         } catch (Throwable $exception) {
             $response->status(HttpServerError)->message($exception->getMessage());
         } finally {
