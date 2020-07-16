@@ -9,27 +9,33 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 
-abstract class ExtendedResourceController extends BaseController{
-	use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-	use FluentResponse;
-	protected const CustomerAPI = 'customer-api';
-	protected const SellerAPI = 'seller-api';
+abstract class ExtendedResourceController extends BaseController
+{
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use FluentResponse;
 
-	protected function user(){
-		return $this->guard()->user();
-	}
+    protected const CustomerAPI = 'customer-api';
+    protected const SellerAPI = 'seller-api';
 
-	protected function userKey(){
-		return $this->guard()->user()->getKey();
-	}
+    protected function user()
+    {
+        return $this->guard()->user();
+    }
 
-	protected function evaluate(callable $closure, ...$arguments){
-		return call_user_func($closure, $arguments);
-	}
+    protected function userId()
+    {
+        return $this->guard()->user()->getKey();
+    }
 
-	protected function query(){
-		return AbstractQuery::class;
-	}
+    protected function evaluate(callable $closure, ...$arguments)
+    {
+        return call_user_func($closure, $arguments);
+    }
 
-	protected abstract function guard();
+    protected function query()
+    {
+        return AbstractQuery::class;
+    }
+
+    protected abstract function guard();
 }
