@@ -33,16 +33,16 @@ class BulkTemplateController extends ExtendedResourceController
 
     public function show(): JsonResponse
     {
-        $response = responseApp();
-        try {
-            /**
-             * @var Category $category
-             * @var Brand $brand
-             * @var Collection $attributes
-             */
-            $validated = $this->requestValid(request(), $this->rules['show']);
-            $category = Category::find($validated['categoryId']);
-            $brand = Brand::find($validated['brandId']);
+//        $response = responseApp();
+//        try {
+//            /**
+//             * @var Category $category
+//             * @var Brand $brand
+//             * @var Collection $attributes
+//             */
+//            $validated = $this->requestValid(request(), $this->rules['show']);
+//            $category = Category::find($validated['categoryId']);
+//            $brand = Brand::find($validated['brandId']);
 //            $attributes = $category->attributes;
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
@@ -55,14 +55,14 @@ class BulkTemplateController extends ExtendedResourceController
                 'Content-Disposition', 'attachment;filename="ExportScan.xls"',
                 'Cache-Control', 'max-age=0'
             ]);
-
-        } catch (ValidationException $exception) {
-            $response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
-        } catch (\Throwable $exception) {
-            $response->status(HttpServerError)->message($exception->getMessage());
-        } finally {
-            return $response->send();
-        }
+//
+//        } catch (ValidationException $exception) {
+//            $response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+//        } catch (\Throwable $exception) {
+//            $response->status(HttpServerError)->message($exception->getMessage());
+//        } finally {
+//            return $response->send();
+//        }
     }
 
     protected function guard()
