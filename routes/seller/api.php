@@ -87,6 +87,10 @@ Route::middleware(AuthSeller)->prefix('products')->group(function () {
     Route::prefix('trailer')->group(function () {
         Route::post('upload', [\App\Http\Controllers\App\Seller\Products\ProductTrailerController::class, 'store']);
     });
+
+    Route::prefix('bulk')->group(static function () {
+        Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\Products\BulkTemplateController::class, 'show']);
+    });
 });
 
 Route::prefix('currencies')->group(function () {
