@@ -9,6 +9,7 @@ use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Traits\ValidatesRequest;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
@@ -53,7 +54,7 @@ class BulkTemplateController extends ExtendedResourceController
                 }
             );
             $response->headers->set('Content-Type', 'application/vnd.ms-excel');
-            $response->headers->set('Content-Disposition', 'attachment;filename="Bulk.xls"');
+            $response->headers->set('Content-Disposition', sprintf('attachment;filename="%s_%s_%s.xls"', $category->name, $brand->name, Carbon::now()->timestamp));
             $response->headers->set('Cache-Control', 'max-age=0');
             return $response;
 
