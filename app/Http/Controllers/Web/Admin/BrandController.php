@@ -9,6 +9,7 @@ use App\Http\Controllers\BaseController;
 use App\Interfaces\Directories;
 use App\Interfaces\Tables;
 use App\Models\Brand;
+use App\Models\Category;
 use App\Storage\SecuredDisk;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -52,6 +53,39 @@ class BrandController extends BaseController
         try {
             $brand = Brand::retrieveThrows($id);
             $response = view('admin.brands.edit')->with('payload', $brand);
+        } catch (ModelNotFoundException $exception) {
+            $response->error($exception->getMessage())->data(request()->all())->back();
+        } catch (Throwable $exception) {
+            $response->error($exception->getMessage())->data(request()->all())->back();
+        } finally {
+            if ($response instanceof WebResponse)
+                return $response->send();
+            else
+                return $response;
+        }
+    }
+
+    public function approve($id)
+    {
+        $response = responseWeb();
+        try {
+            $brand = Brand::retrieveThrows($id);
+            /**
+             * @var Category $category
+             */
+            $category = $brand->category;
+            $categories = $category->descendants(false);
+            $categories->each(function (Category $category) use ($brand) {
+                $cloned = $brand->replicate();
+                $cloned->categoryId = $category->getKey();
+                $cloned->status = 'approved';
+                $cloned->active = 1;
+                $cloned->save();
+            });
+            $brand->status = 'approved';
+            $brand->active = 1;
+            $brand->save();
+            $response->back()->success('Brand approved successfully for related categories.');
         } catch (ModelNotFoundException $exception) {
             $response->error($exception->getMessage())->data(request()->all())->back();
         } catch (Throwable $exception) {

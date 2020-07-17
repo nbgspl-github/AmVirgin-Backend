@@ -12,6 +12,7 @@ use App\Traits\ValidatesRequest;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -45,8 +46,18 @@ class BulkTemplateController extends ExtendedResourceController
             $category = Category::find($validated['categoryId']);
             $brand = Brand::find($validated['brandId']);
             $spreadsheet = new Spreadsheet();
-            $sheet = $spreadsheet->getActiveSheet();
-            $sheet->setCellValue('A1', 'Hello World !');
+            $worksheetA = new Worksheet($spreadsheet, 'First');
+            $worksheetA->setCodeName('First');
+            $worksheetA->setCellValue('A1', 'First Sheet Cell Value');
+            $worksheetB = new Worksheet($spreadsheet, 'Second');
+            $worksheetB->setCellValue('B1', 'Second Sheet Cell Value');
+            $worksheetA->setCodeName('Second');
+            $worksheetC = new Worksheet($spreadsheet, 'Third');
+            $worksheetC->setCellValue('C1', 'Third Sheet Cell Value');
+            $worksheetC->setCodeName('Third');
+            $worksheetD = new Worksheet($spreadsheet, 'Fourth');
+            $worksheetD->setCellValue('D1', 'Fourth Sheet Cell Value');
+            $worksheetD->setCodeName('Fourth');
             $writer = new Xls($spreadsheet);
             $response = new StreamedResponse(
                 function () use ($writer) {
@@ -66,6 +77,7 @@ class BulkTemplateController extends ExtendedResourceController
             return $response->send();
         }
     }
+
 
     protected function guard()
     {

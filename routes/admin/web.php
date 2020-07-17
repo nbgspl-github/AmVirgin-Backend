@@ -301,6 +301,7 @@ Route::prefix('admin')->group(function (){
 			Route::get(Str::Empty, [\App\Http\Controllers\Web\Admin\BrandController::class, 'index'])->name('admin.brands.index');
 			Route::get('create', [\App\Http\Controllers\Web\Admin\BrandController::class, 'create'])->name('admin.brands.create');
 			Route::get('{id}/edit', [\App\Http\Controllers\Web\Admin\BrandController::class, 'edit'])->name('admin.brands.edit');
+			Route::get('{id}/approve', [\App\Http\Controllers\Web\Admin\BrandController::class, 'approve'])->name('admin.brands.approve');
 			Route::post(Str::Empty, [\App\Http\Controllers\Web\Admin\BrandController::class, 'store'])->name('admin.brands.store');
 			Route::post('{id}', [\App\Http\Controllers\Web\Admin\BrandController::class, 'update'])->name('admin.brands.update');
 		});
