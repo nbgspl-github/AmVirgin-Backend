@@ -153,7 +153,7 @@ Route::prefix('growth')->group(static function () {
     Route::get('overview', [\App\Http\Controllers\App\Seller\Growth\OverviewController::class, 'show'])->middleware(AuthSeller);
 });
 
-Route::prefix('advertisements')->group(static function () {
+Route::prefix('promotions')->group(static function () {
     Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\AdvertisementController::class, 'index'])->middleware(AuthSeller);
     Route::post(Str::Empty, [\App\Http\Controllers\App\Seller\AdvertisementController::class, 'store'])->middleware(AuthSeller);
     Route::get('{id}', [\App\Http\Controllers\App\Seller\AdvertisementController::class, 'show'])->middleware(AuthSeller);
