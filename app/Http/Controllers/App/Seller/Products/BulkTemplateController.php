@@ -12,8 +12,11 @@ use App\Models\Category;
 use App\Traits\ValidatesRequest;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use PhpOffice\PhpSpreadsheet\RichText\RichText;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -130,18 +133,18 @@ class BulkTemplateController extends ExtendedResourceController
                 $attributeSetItems = $attributeSet->items;
                 $attributeSetItems->each(function (AttributeSetItem $attributeSetItem) use (&$worksheetIndex, &$index, &$character, &$items, $category) {
                     $attribute = $attributeSetItem->attribute;
-                    $richText = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
+                    $richText = new RichText();
                     $payable = $richText->createTextRun($attribute->name);
                     $payable->getFont()->setUnderline(true);
-                    $payable->getFont()->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_DARKBLUE));
+                    $payable->getFont()->setColor(new Color(Color::COLOR_DARKBLUE));
                     $worksheetIndex->setCellValue(sprintf('%c%d', $character, $index), $richText);
                     $worksheetIndex->getCell(sprintf('%c%d', $character, $index))->getHyperlink()->setUrl(sprintf("sheet://'%s' !A1", $category->name));
-                    $worksheetIndex->getCell(sprintf('%c%d', $character, $index))->getStyle()->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $worksheetIndex->getCell(sprintf('%c%d', $character, $index))->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
                     $worksheetIndex->getColumnDimension(sprintf('%c', $character))->setAutoSize(true);
                     $currentIndex = 2;
                     foreach ($attribute->values() as $value) {
                         $worksheetIndex->setCellValue(sprintf('%c%d', $character, $currentIndex), $value);
-                        $worksheetIndex->getCell(sprintf('%c%d', $character, $currentIndex))->getStyle()->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                        $worksheetIndex->getCell(sprintf('%c%d', $character, $currentIndex))->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
                         $currentIndex++;
                     }
                     $character++;
@@ -163,7 +166,7 @@ class BulkTemplateController extends ExtendedResourceController
                     $worksheetImages->setCellValue($cell, $item['text']);
                     $worksheetImages->getCell($cell)->getStyle()->getFont()->setBold(true)->setColor(new Color(Color::COLOR_BLACK));
                     $worksheetImages->getCell($cell)->getStyle()->getFill()
-                        ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                        ->setFillType(Fill::FILL_SOLID)
                         ->getStartColor()->setRGB('E0E0E0');
                 } else {
                     $worksheetImages->setCellValue($cell, $item['text']);
