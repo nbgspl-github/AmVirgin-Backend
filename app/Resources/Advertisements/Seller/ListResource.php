@@ -14,7 +14,7 @@ class ListResource extends JsonResource
             'key' => $this->id,
             'subject' => $this->subject,
             'message' => $this->message,
-            'banner' => $this->banner,
+            'image' => $this->banner,
             'active' => $this->active
         ];
     }
