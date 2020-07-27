@@ -96,8 +96,7 @@ class BulkTemplateController extends ExtendedResourceController
             ],
             [
                 "header" => false,
-                "text" => "Images with text/Watermark are not acceptable in primary images.
-",
+                "text" => "Images with text/Watermark are not acceptable in primary images.",
             ],
         ];
     }
