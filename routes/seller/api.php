@@ -104,7 +104,7 @@ Route::prefix('orders')->middleware('auth:seller-api')->group(function () {
     Route::get('{id}', [OrderController::class, 'show']);
     Route::get('download-pdf/{id}', [OrderController::class, 'orderDetails']);
     Route::put('{id}', [OrderController::class, 'updateStatus']);
-    Route::put('batch-update', [OrderController::class, 'updateStatusBulk']);
+    Route::put('status/batch-update', [OrderController::class, 'updateStatusBulk']);
 });
 Route::prefix('order')->middleware('auth:seller-api')->group(function () {
     Route::get('/status', [OrderController::class, 'getOrderStatus']);
