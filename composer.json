@@ -17,6 +17,7 @@
 		"jeremeamia/superclosure": "^2.4",
 		"laravel/framework": "^6.2",
 		"laravel/tinker": "^1.0",
+		"niklasravnsborg/laravel-pdf": "^4.0",
 		"phpoffice/phpspreadsheet": "^1.14",
 		"spatie/laravel-sluggable": "^2.2",
 		"staudenmeir/laravel-adjacency-list": "^1.0",

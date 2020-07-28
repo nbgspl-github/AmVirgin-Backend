@@ -163,3 +163,7 @@ Route::prefix('promotions')->group(static function () {
 Route::prefix('bulk')->group(static function () {
     Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\Products\BulkTemplateController::class, 'show']);
 });
+
+Route::prefix('manifest')->group(static function () {
+    Route::get('{id}', [\App\Http\Controllers\App\Seller\Manifest\ManifestController::class, 'show'])->middleware(AuthSeller);
+});
