@@ -21,7 +21,7 @@ class ManifestController extends ExtendedResourceController
         $response = responseApp();
         try {
             foreach (request('orderId') as $orderId) {
-                $sellerOrder = SellerOrder::startQuery()->useAuth()->key($orderId)->firstOrFail();
+                $sellerOrder = SellerOrder::startQuery()->key($orderId)->firstOrFail();
                 if ($sellerOrder->order()->exists()) {
                     $pdf = PDF::loadView('seller.manifest');
                     return $pdf->stream('document.pdf');
