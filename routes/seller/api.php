@@ -165,5 +165,5 @@ Route::prefix('bulk')->group(static function () {
 });
 
 Route::prefix('manifest')->group(static function () {
-    Route::get('download', [\App\Http\Controllers\App\Seller\Manifest\ManifestController::class, 'show'])->middleware(AuthSeller);
+    Route::get('download', [\App\Http\Controllers\App\Seller\Manifest\ManifestController::class, 'show']);
 });
