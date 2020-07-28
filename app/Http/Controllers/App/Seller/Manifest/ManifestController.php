@@ -6,7 +6,6 @@ namespace App\Http\Controllers\App\Seller\Manifest;
 
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Models\SellerOrder;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use niklasravnsborg\LaravelPdf\Facades\Pdf;
 use Throwable;
 
@@ -17,19 +16,17 @@ class ManifestController extends ExtendedResourceController
         parent::__construct();
     }
 
-    public function show($id)
+    public function show()
     {
         $response = responseApp();
         try {
-            $sellerOrder = SellerOrder::startQuery()->useAuth()->key($id)->firstOrFail();
-            if ($sellerOrder->order()->exists()) {
-                $pdf = PDF::loadView('seller.manifest');
-                return $pdf->stream('document.pdf');
-            } else {
-                $response->status(HttpResourceNotFound)->message('Could not find order for that key.');
+            foreach (request('orderId') as $orderId) {
+                $sellerOrder = SellerOrder::startQuery()->useAuth()->key($orderId)->firstOrFail();
+                if ($sellerOrder->order()->exists()) {
+                    $pdf = PDF::loadView('seller.manifest');
+                    return $pdf->stream('document.pdf');
+                }
             }
-        } catch (ModelNotFoundException $exception) {
-            $response->status(HttpResourceNotFound)->message($exception->getMessage());
         } catch (Throwable $exception) {
             $response->status(HttpResourceNotFound)->message($exception->getMessage());
         }
