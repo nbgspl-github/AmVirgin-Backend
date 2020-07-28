@@ -96,7 +96,6 @@ class AbstractProductController extends ExtendedResourceController{
 				'hsn' => ['bail', 'nullable', Rule::existsPrimary(Tables::HsnCodes, 'hsnCode')],
 				'stock' => ['bail', 'nullable', 'numeric', 'min:0', RuleMaxStock],
 				'lowStockThreshold' => ['bail', 'nullable', 'numeric', 'min:0', 'lt:stock'],
-                'sku' => ['bail', 'required', 'string','min:1','max:255','unique:products,sku'],
                 'styleCode' => ['bail', 'required', 'string','min:1','max:255'],
 				'idealFor' => ['bail', 'nullable', Rule::in(Arrays::values(Product::IdealFor))],
 				'procurementSla' => ['bail', 'nullable', 'numeric', Rule::minimum(Product::ProcurementSLA['Minimum']), Rule::maximum(Product::ProcurementSLA['Maximum'])],
