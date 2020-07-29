@@ -17,6 +17,7 @@ class ListResource extends JsonResource
         $payload['orderId'] = $this->id;
         if ($this->seller()->exists()) {
             $payload['seller'] = new BusinessDetailResource($this->seller->businessDetails);
+            $payload['businessName'] = $this->seller->businessName;
         }
         if ($this->seller()->exists()) {
             $payload['order'] = new OrderResource($this);
