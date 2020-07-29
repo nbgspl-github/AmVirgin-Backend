@@ -5,8 +5,8 @@ namespace App\Http\Controllers\App\Seller\Manifest;
 
 
 use App\Http\Controllers\Web\ExtendedResourceController;
-use App\Storage\SecuredDisk;
-use Illuminate\Support\Facades\App;
+use App\Models\SellerOrder;
+use App\Resources\Manifest\Seller\ListResource;
 use Throwable;
 
 class ManifestController extends ExtendedResourceController
@@ -21,24 +21,19 @@ class ManifestController extends ExtendedResourceController
         $response = responseApp();
         try {
             if (count(request('orderId')) > 1) {
-//                foreach (request('orderId') as $orderId) {
-//                    $sellerOrder = SellerOrder::startQuery()->key($orderId)->firstOrFail();
-//                    if ($sellerOrder->order()->exists()) {
-//                        $zip = Zip::create('archived.zip');
-//                        $zip->close();
-//                    }
-//                }
-                $file = SecuredDisk::access()->put("uploads/compressed.zip", '');
-                return response()->download(storage_path("app/public/uploads/compressed.zip"));
+                $sellerOrderCollection = SellerOrder::query()->whereIn('id', request('orderId'))->where('sellerId', $this->userId())->get();
+                $resourceCollection = ListResource::collection($sellerOrderCollection);
+                $response->status($resourceCollection->count() > 0 ? HttpOkay : HttpNoContent)->message('Listing all details for order keys.')->setValue('payload', $resourceCollection);
             } else {
-                $pdf = App::make('dompdf.wrapper');
-                $pdf->loadHTML('<h6>Manifest</h6>');
-                return $pdf->stream();
+                $sellerOrder = SellerOrder::query()->whereKey(request('orderId'))->where('sellerId', $this->userId())->get();
+                $resource = new ListResource($sellerOrder);
+                $response->status(HttpOkay)->message('Listing all details for order.')->setValue('payload', $resource);
             }
         } catch (Throwable $exception) {
             $response->status(HttpResourceNotFound)->message($exception->getMessage());
+        } finally {
+            return $response->send();
         }
-        return $response->send();
     }
 
 

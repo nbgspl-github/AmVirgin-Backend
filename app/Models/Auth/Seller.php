@@ -6,6 +6,7 @@ use App\Models\Brand;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Product;
+use App\Models\SellerBusinessDetail;
 use App\Models\State;
 use App\Traits\ActiveStatus;
 use App\Traits\BroadcastPushNotifications;
@@ -17,58 +18,70 @@ use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Seller extends Authenticatable implements JWTSubject {
-	use Notifiable, BroadcastPushNotifications, FluentConstructor, ActiveStatus, RetrieveResource, RetrieveCollection, OtpVerificationSupport, JWTAuthDefaultSetup, DynamicAttributeNamedMethods;
+class Seller extends Authenticatable implements JWTSubject
+{
+    use Notifiable, BroadcastPushNotifications, FluentConstructor, ActiveStatus, RetrieveResource, RetrieveCollection, OtpVerificationSupport, JWTAuthDefaultSetup, DynamicAttributeNamedMethods;
 
-	protected $fillable = [
-		'name',
-		'email',
-		'password',
-		'mobile',
-		'avatar',
-		'businessName',
-		'description',
-		'pinCode',
-		'addressFirstLine',
-		'addressSecondLine',
-		'countryId',
-		'stateId',
-		'cityId',
-		'mouAgreed',
-	];
-	protected $hidden = [
-		'password',
-		'remember_token',
-	];
-	protected $casts = [
-		'id' => 'integer',
-		'name' => 'string',
-		'email' => 'string',
-		'email_verified_at' => 'datetime',
-		'mouAgreed' => 'bool',
-	];
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'mobile',
+        'avatar',
+        'businessName',
+        'description',
+        'pinCode',
+        'addressFirstLine',
+        'addressSecondLine',
+        'countryId',
+        'stateId',
+        'cityId',
+        'mouAgreed',
+    ];
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+    protected $casts = [
+        'id' => 'integer',
+        'name' => 'string',
+        'email' => 'string',
+        'email_verified_at' => 'datetime',
+        'mouAgreed' => 'bool',
+    ];
 
-	public function approvedBrands () : HasMany {
-		return $this->hasMany(Brand::class, 'createdBy', 'id');
-	}
+    public function approvedBrands(): HasMany
+    {
+        return $this->hasMany(Brand::class, 'createdBy', 'id');
+    }
 
-	public function city () : BelongsTo {
-		return $this->belongsTo(City::class, 'cityId');
-	}
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class, 'cityId');
+    }
 
-	public function products () : HasMany {
-		return $this->hasMany(Product::class, 'sellerId');
-	}
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class, 'sellerId');
+    }
 
-	public function state () : BelongsTo {
-		return $this->belongsTo(State::class, 'stateId');
-	}
+    public function state(): BelongsTo
+    {
+        return $this->belongsTo(State::class, 'stateId');
+    }
 
-	public function country () : BelongsTo {
-		return $this->belongsTo(Country::class, 'countryId');
-	}
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class, 'countryId');
+    }
+
+    public function businessDetails(): HasOne
+    {
+        return $this->hasOne(SellerBusinessDetail::class, 'sellerId');
+    }
 }
