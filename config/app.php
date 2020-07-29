@@ -170,7 +170,8 @@ return [
         Yoeunes\Notify\NotifyServiceProvider::class,
         Sujip\Guid\GuidServiceProvider::class,
         Tightenco\Ziggy\ZiggyServiceProvider::class,
-        niklasravnsborg\LaravelPdf\PdfServiceProvider::class
+        niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
@@ -221,7 +222,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Guid' => Sujip\Guid\Guid::class,
-        'PDF' => niklasravnsborg\LaravelPdf\Facades\Pdf::class
+//        'PDF' => niklasravnsborg\LaravelPdf\Facades\Pdf::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
     'order_status' => [

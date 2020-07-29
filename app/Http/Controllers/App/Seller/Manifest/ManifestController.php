@@ -6,7 +6,7 @@ namespace App\Http\Controllers\App\Seller\Manifest;
 
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Models\SellerOrder;
-use niklasravnsborg\LaravelPdf\Facades\Pdf;
+use Barryvdh\DomPDF\PDF;
 use Throwable;
 
 class ManifestController extends ExtendedResourceController
