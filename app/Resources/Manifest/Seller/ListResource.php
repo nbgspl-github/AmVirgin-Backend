@@ -20,6 +20,8 @@ class ListResource extends JsonResource
         if ($this->seller()->exists()) {
             $payload['order'] = new OrderResource($this);
         }
-        return [$this->id => $payload];
+        $data = [];
+        $data[$this->id] = $payload;
+        return $data;
     }
 }
