@@ -21,10 +21,12 @@ class ManifestController extends ExtendedResourceController
         $response = responseApp();
         try {
             if (is_array(request('orderId'))) {
+                dd('Yes it is');
                 $sellerOrderCollection = SellerOrder::query()->whereIn('id', request('orderId'))->where('sellerId', $this->userId())->get();
                 $resourceCollection = ListResource::collection($sellerOrderCollection);
                 $response->status($resourceCollection->count() > 0 ? HttpOkay : HttpNoContent)->message('Listing all details for order keys.')->setValue('payload', $resourceCollection);
             } else {
+                dd('No it is nt');
                 $sellerOrder = SellerOrder::query()->whereKey(request('orderId'))->where('sellerId', $this->userId())->get();
                 $resource = new ListResource($sellerOrder);
                 $response->status(HttpOkay)->message('Listing all details for order.')->setValue('payload', $resource);
