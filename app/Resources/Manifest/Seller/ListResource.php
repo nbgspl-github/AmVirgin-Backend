@@ -14,14 +14,13 @@ class ListResource extends JsonResource
     public function toArray($request)
     {
         $payload = Arrays::Empty;
+        $payload['orderId'] = $this->id;
         if ($this->seller()->exists()) {
             $payload['seller'] = new BusinessDetailResource($this->seller->businessDetails);
         }
         if ($this->seller()->exists()) {
             $payload['order'] = new OrderResource($this);
         }
-        $data = [];
-        $data[$this->id] = $payload;
-        return $data;
+        return $payload;
     }
 }
