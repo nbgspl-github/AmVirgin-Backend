@@ -5,8 +5,8 @@ namespace App\Http\Controllers\App\Seller\Manifest;
 
 
 use App\Http\Controllers\Web\ExtendedResourceController;
-use App\Models\SellerOrder;
-use Barryvdh\DomPDF\PDF;
+use App\Storage\SecuredDisk;
+use Illuminate\Support\Facades\App;
 use Throwable;
 
 class ManifestController extends ExtendedResourceController
@@ -20,12 +20,20 @@ class ManifestController extends ExtendedResourceController
     {
         $response = responseApp();
         try {
-            foreach (request('orderId') as $orderId) {
-                $sellerOrder = SellerOrder::startQuery()->key($orderId)->firstOrFail();
-                if ($sellerOrder->order()->exists()) {
-                    $pdf = PDF::loadView('seller.manifest');
-                    return $pdf->stream('document.pdf');
-                }
+            if (count(request('orderId')) > 1) {
+//                foreach (request('orderId') as $orderId) {
+//                    $sellerOrder = SellerOrder::startQuery()->key($orderId)->firstOrFail();
+//                    if ($sellerOrder->order()->exists()) {
+//                        $zip = Zip::create('archived.zip');
+//                        $zip->close();
+//                    }
+//                }
+                $file = SecuredDisk::access()->put("uploads/compressed.zip", '');
+                return response()->download(storage_path("app/public/uploads/compressed.zip"));
+            } else {
+                $pdf = App::make('dompdf.wrapper');
+                $pdf->loadHTML('<h6>Manifest</h6>');
+                return $pdf->stream();
             }
         } catch (Throwable $exception) {
             $response->status(HttpResourceNotFound)->message($exception->getMessage());

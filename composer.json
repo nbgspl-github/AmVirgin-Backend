@@ -26,6 +26,7 @@
 		"tightenco/ziggy": "^0.8.1",
 		"tymon/jwt-auth": "1.0.*",
 		"yoeunes/notify": "^1.0",
+		"zanysoft/laravel-zip": "^1.0",
 		"zumba/json-serializer": "^2.2"
 	},
 	"require-dev": {

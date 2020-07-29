@@ -172,6 +172,7 @@ return [
         Tightenco\Ziggy\ZiggyServiceProvider::class,
         niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        ZanySoft\Zip\ZipServiceProvider::class,
     ],
 
     /*
@@ -224,6 +225,7 @@ return [
         'Guid' => Sujip\Guid\Guid::class,
 //        'PDF' => niklasravnsborg\LaravelPdf\Facades\Pdf::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'Zip' => ZanySoft\Zip\ZipFacade::class,
     ],
 
     'order_status' => [
