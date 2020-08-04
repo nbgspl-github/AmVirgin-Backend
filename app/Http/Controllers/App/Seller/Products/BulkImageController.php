@@ -44,13 +44,14 @@ class BulkImageController extends ExtendedResourceController
             $notMatched = Arrays::Empty;
             Collection::make($images)->each(function (UploadedFile $file) use (&$notMatched) {
                 $matches = Arrays::Empty;
-                if (preg_match($this->regex, pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME), $matches) != 0) {
-                    $sku = $matches[0];
+                if (preg_match($this->regex, pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME), $matches) == 1) {
+                    $sku = $matches[1];
                     $product = Product::query()->where('sku', $sku)->first();
                     if ($product != null) {
-                        $product->images->associate(ProductImage::create([
-                            'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $file, 'public')
-                        ]));
+                        ProductImage::query()->create([
+                            'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $file, 'public'),
+                            'productId' => $product->getKey()
+                        ]);
                     } else {
                         $notMatched[] = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
                     }
