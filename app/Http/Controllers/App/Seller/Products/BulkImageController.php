@@ -22,7 +22,7 @@ class BulkImageController extends ExtendedResourceController
 
     protected array $rules;
 
-    protected string $regex = "/^([a-z0-9A-Z]{10,20})_\d+$/";
+    protected string $regex = "/^([a-z0-9A-Z-]{10,20})_\d+$/";
 
     public function __construct()
     {
@@ -49,7 +49,7 @@ class BulkImageController extends ExtendedResourceController
                     $product = Product::query()->where('sku', $sku)->first();
                     if ($product != null) {
                         $product->images->associate(ProductImage::create([
-                            'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $file)
+                            'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $file, 'public')
                         ]));
                     } else {
                         $notMatched[] = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
