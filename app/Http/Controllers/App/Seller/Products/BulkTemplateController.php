@@ -28,6 +28,8 @@ class BulkTemplateController extends ExtendedResourceController
 
     protected array $imageGuidelines;
 
+    protected array $keyColumns;
+
     public function __construct()
     {
         parent::__construct();
@@ -99,6 +101,89 @@ class BulkTemplateController extends ExtendedResourceController
                 "text" => "Images with text/Watermark are not acceptable in primary images.",
             ],
         ];
+        $this->keyColumns = [
+            [
+                'key' => 'name',
+                'cell' => 'A1',
+                'title' => 'Name'
+            ], [
+                'key' => 'listingStatus',
+                'cell' => 'B1',
+                'title' => 'Listing Status'
+            ], [
+                'key' => 'idealFor',
+                'cell' => 'C1',
+                'title' => 'Ideal For (Optional)'
+            ], [
+                'key' => 'procurementSla',
+                'cell' => 'D1',
+                'title' => 'Procurement SLA'
+            ], [
+                'key' => 'originalPrice',
+                'title' => 'Original Price',
+                'cell' => 'E1',
+            ], [
+                'key' => 'sellingPrice',
+                'title' => 'Selling Price',
+                'cell' => 'F1',
+            ], [
+                'key' => 'fulfillmentBy',
+                'cell' => 'G1',
+                'title' => 'Fulfillment By'
+            ], [
+                'key' => 'hsn',
+                'cell' => 'H1',
+                'title' => 'HSN'
+            ], [
+                'key' => 'stock',
+                'cell' => 'I1',
+                'title' => 'Stock'
+            ], [
+                'key' => 'lowStockThreshold',
+                'cell' => 'J1',
+                'title' => 'Low Stock Threshold (Optional)'
+            ], [
+                'key' => 'description',
+                'cell' => 'K1',
+                'title' => 'Description'
+            ], [
+                'key' => 'sku',
+                'cell' => 'L1',
+                'title' => 'SKU'
+            ], [
+                'key' => 'styleCode',
+                'cell' => 'M1',
+                'title' => 'Style Code'
+            ], [
+                'key' => 'localShippingCost',
+                'cell' => 'N1',
+                'title' => 'Local Shipping Cost'
+            ], [
+                'key' => 'zonalShippingCost',
+                'cell' => 'O1',
+                'title' => 'Zonal Shipping Cost'
+            ], [
+                'key' => 'internationalShippingCost',
+                'cell' => 'P1',
+                'title' => 'International Shipping Cost'
+            ], [
+                'key' => 'packageWeight',
+                'cell' => 'Q1',
+                'title' => 'Package Weight'
+            ], [
+                'key' => 'packageLength',
+                'cell' => 'R1',
+                'title' => 'Package Length'
+            ], [
+                'key' => 'packageBreadth',
+                'cell' => 'S1',
+                'title' => 'Package Breadth'
+            ], [
+                'key' => 'packageHeight',
+                'cell' => 'T1',
+                'title' => 'Package Height'
+            ],
+        ];
     }
 
     public function show()
@@ -117,8 +202,6 @@ class BulkTemplateController extends ExtendedResourceController
             $images = $reader->load(public_path("static/Images.xls"));
             $spreadsheet = new Spreadsheet();
             $spreadsheet->removeSheetByIndex(0);
-            $worksheetSummary = $spreadsheet->createSheet();
-            $worksheetSummary->setTitle('Summary Sheet');
             $worksheetIndex = $spreadsheet->createSheet();
             $worksheetIndex->setTitle('Index');
             $worksheetMain = $spreadsheet->createSheet();
@@ -137,7 +220,7 @@ class BulkTemplateController extends ExtendedResourceController
                     $payable->getFont()->setUnderline(true);
                     $payable->getFont()->setColor(new Color(Color::COLOR_DARKBLUE));
                     $worksheetIndex->setCellValue(sprintf('%c%d', $character, $index), $richText);
-                    $worksheetIndex->getCell(sprintf('%c%d', $character, $index))->getHyperlink()->setUrl(sprintf("sheet://'%s' !A1", $category->name));
+                    $worksheetIndex->getCell(sprintf('%c%d', $character, $index))->getHyperlink()->setUrl(sprintf("sheet://' %s' !A1", $category->name));
                     $worksheetIndex->getCell(sprintf('%c%d', $character, $index))->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
                     $worksheetIndex->getColumnDimension(sprintf('%c', $character))->setAutoSize(true);
                     $currentIndex = 2;
@@ -172,6 +255,15 @@ class BulkTemplateController extends ExtendedResourceController
                 }
                 $index++;
             }
+            $index = 1;
+            $character = 65;
+            foreach ($this->keyColumns as $column) {
+                $worksheetMain->setCellValue($column['cell'], $column['title']);
+                $worksheetMain->getCell($column['cell'])->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+            }
+            for ($x = $character; $x < 91; $x++) {
+                $worksheetMain->getColumnDimension(sprintf('%c', $x))->setAutoSize(true);
+            }
             $writer = new Xls($spreadsheet);
             $response = new StreamedResponse(
                 function () use ($writer) {
@@ -183,9 +275,11 @@ class BulkTemplateController extends ExtendedResourceController
             $response->headers->set('Cache-Control', 'max-age=0');
             return $response;
 
-        } catch (ValidationException $exception) {
+        } catch
+        (ValidationException $exception) {
             $response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
         } catch (\Throwable $exception) {
+            dd($exception);
             $response->status(HttpServerError)->message($exception->getMessage());
         } finally {
             return $response->send();

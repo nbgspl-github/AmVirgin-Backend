@@ -162,6 +162,8 @@ Route::prefix('promotions')->group(static function () {
 
 Route::prefix('bulk')->group(static function () {
     Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\Products\BulkTemplateController::class, 'show']);
+    Route::post(Str::Empty, [\App\Http\Controllers\App\Seller\Products\BulkProductController::class, 'store']);
+    Route::post('images', [\App\Http\Controllers\App\Seller\Products\BulkImageController::class, 'store']);
 });
 
 Route::prefix('manifest')->group(static function () {
