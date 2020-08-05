@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\App\Seller\Products;
 
 
+use App\Classes\ColumnNavigator;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Models\AttributeSetItem;
@@ -17,6 +18,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -104,83 +106,78 @@ class BulkTemplateController extends ExtendedResourceController
         $this->keyColumns = [
             [
                 'key' => 'name',
-                'cell' => 'A1',
                 'title' => 'Name'
             ], [
                 'key' => 'listingStatus',
-                'cell' => 'B1',
-                'title' => 'Listing Status'
+                'title' => 'Listing Status',
+                'items' => [
+                    'active', 'inactive'
+                ]
             ], [
                 'key' => 'idealFor',
-                'cell' => 'C1',
-                'title' => 'Ideal For (Optional)'
+                'title' => 'Ideal For (Optional)',
+                'items' => [
+                    'boys', 'girls', 'men', 'women'
+                ]
             ], [
                 'key' => 'procurementSla',
-                'cell' => 'D1',
-                'title' => 'Procurement SLA'
+                'title' => 'Procurement SLA',
+                'items' => [
+                    0, 1, 2, 3, 4, 5, 6, 7
+                ]
             ], [
                 'key' => 'originalPrice',
                 'title' => 'Original Price',
-                'cell' => 'E1',
             ], [
                 'key' => 'sellingPrice',
                 'title' => 'Selling Price',
-                'cell' => 'F1',
             ], [
                 'key' => 'fulfillmentBy',
-                'cell' => 'G1',
-                'title' => 'Fulfillment By'
+                'title' => 'Fulfillment By',
+                'items' => [
+                    'seller', 'seller-smart'
+                ]
             ], [
                 'key' => 'hsn',
-                'cell' => 'H1',
                 'title' => 'HSN'
             ], [
                 'key' => 'stock',
-                'cell' => 'I1',
                 'title' => 'Stock'
             ], [
                 'key' => 'lowStockThreshold',
-                'cell' => 'J1',
-                'title' => 'Low Stock Threshold (Optional)'
+                'title' => 'Low Stock Threshold (Optional)',
+                'items' => [
+                    10
+                ]
             ], [
                 'key' => 'description',
-                'cell' => 'K1',
                 'title' => 'Description'
             ], [
                 'key' => 'sku',
-                'cell' => 'L1',
                 'title' => 'SKU'
             ], [
                 'key' => 'styleCode',
-                'cell' => 'M1',
                 'title' => 'Style Code'
             ], [
                 'key' => 'localShippingCost',
-                'cell' => 'N1',
                 'title' => 'Local Shipping Cost'
             ], [
                 'key' => 'zonalShippingCost',
-                'cell' => 'O1',
                 'title' => 'Zonal Shipping Cost'
             ], [
                 'key' => 'internationalShippingCost',
-                'cell' => 'P1',
                 'title' => 'International Shipping Cost'
             ], [
                 'key' => 'packageWeight',
-                'cell' => 'Q1',
                 'title' => 'Package Weight'
             ], [
                 'key' => 'packageLength',
-                'cell' => 'R1',
                 'title' => 'Package Length'
             ], [
                 'key' => 'packageBreadth',
-                'cell' => 'S1',
                 'title' => 'Package Breadth'
             ], [
                 'key' => 'packageHeight',
-                'cell' => 'T1',
                 'title' => 'Package Height'
             ],
         ];
@@ -198,8 +195,6 @@ class BulkTemplateController extends ExtendedResourceController
             $validated = $this->requestValid(request(), $this->rules['show']);
             $category = Category::find($validated['categoryId']);
             $brand = Brand::find($validated['brandId']);
-            $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
-            $images = $reader->load(public_path("static/Images.xls"));
             $spreadsheet = new Spreadsheet();
             $spreadsheet->removeSheetByIndex(0);
             $worksheetIndex = $spreadsheet->createSheet();
@@ -209,30 +204,62 @@ class BulkTemplateController extends ExtendedResourceController
             $worksheetImages = $spreadsheet->createSheet();
             $worksheetImages->setTitle('Image Guidelines');
             $attributeSet = $category->attributeSet;
-            $index = 1;
-            $character = 65;
+            $navigatorMain = new ColumnNavigator();
+            $count = 0;
+            foreach ($this->keyColumns as $column) {
+                $worksheetMain->setCellValue($navigatorMain->currentCell(), $column['title']);
+                $worksheetMain->getCell($navigatorMain->currentCell())->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $navigatorMain->nextCell();
+                $count++;
+            }
+            $navigator = new ColumnNavigator();
+            for ($x = 1; $x <= $count; $x++) {
+                $worksheetMain->getColumnDimension($navigator->currentColumn())->setAutoSize(true);
+                $navigator->nextColumn();
+            }
+            $navigator = new ColumnNavigator();
             if ($attributeSet != null) {
                 $attributeSetItems = $attributeSet->items;
-                $attributeSetItems->each(function (AttributeSetItem $attributeSetItem) use (&$worksheetIndex, &$index, &$character, &$items, $category) {
+                $attributeSetItems->each(function (AttributeSetItem $attributeSetItem) use (&$worksheetIndex, $category, $navigator, $navigatorMain, $worksheetMain) {
+                    $navigator->moveToFirstRow();
                     $attribute = $attributeSetItem->attribute;
                     $richText = new RichText();
-                    $payable = $richText->createTextRun($attribute->name);
+                    $payable = $richText->createTextRun($attribute->code);
                     $payable->getFont()->setUnderline(true);
                     $payable->getFont()->setColor(new Color(Color::COLOR_DARKBLUE));
-                    $worksheetIndex->setCellValue(sprintf('%c%d', $character, $index), $richText);
-                    $worksheetIndex->getCell(sprintf('%c%d', $character, $index))->getHyperlink()->setUrl(sprintf("sheet://' %s' !A1", $category->name));
-                    $worksheetIndex->getCell(sprintf('%c%d', $character, $index))->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-                    $worksheetIndex->getColumnDimension(sprintf('%c', $character))->setAutoSize(true);
-                    $currentIndex = 2;
+                    $worksheetIndex->setCellValue($navigator->currentCell(), $richText);
+                    $worksheetMain->setCellValue($navigatorMain->currentCell(), $richText);
+                    $worksheetMain->getCell($navigatorMain->currentCell())->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                    $worksheetMain->getColumnDimension($navigatorMain->currentColumn())->setAutoSize(true);
+                    $worksheetMain->getCell($navigatorMain->currentCell())->getHyperlink()->setUrl(sprintf("sheet://'%s'!%s", 'Index', $navigator->currentCell()));
+                    $worksheetIndex->getCell($navigator->currentCell())->getHyperlink()->setUrl(sprintf("sheet://'%s'!%s", $category->name, $navigatorMain->currentCell()));
+                    $worksheetIndex->getCell($navigator->currentCell())->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                    $worksheetIndex->getColumnDimension($navigator->currentColumn())->setAutoSize(true);
+                    $navigator->advanceNextRow();
                     foreach ($attribute->values() as $value) {
-                        $worksheetIndex->setCellValue(sprintf('%c%d', $character, $currentIndex), $value);
-                        $worksheetIndex->getCell(sprintf('%c%d', $character, $currentIndex))->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-                        $currentIndex++;
+                        $worksheetIndex->setCellValue($navigator->currentCell(), $value);
+                        $worksheetIndex->getCell($navigator->currentCell())->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                        $navigator->advanceNextRow();
                     }
-                    $character++;
+                    $navigator->nextColumn();
+                    $navigatorMain->nextCell();
                 });
             } else {
                 $worksheetIndex->setCellValue('A1', 'No attributes found!');
+            }
+            foreach ($this->keyColumns as $column) {
+                if (isset($column['items'])) {
+                    $navigator->moveToFirstRow();
+                    $worksheetIndex->getCell($navigator->currentCell())->setValue($column['title']);
+                    $worksheetIndex->getCell($navigator->currentCell())->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                    $worksheetIndex->getColumnDimension($navigator->currentColumn())->setAutoSize(true);
+                    foreach ($column['items'] as $item) {
+                        $navigator->advanceNextRow();
+                        $worksheetIndex->getCell($navigator->currentCell())->setValue($item);
+                        $worksheetIndex->getCell($navigator->currentCell())->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                    }
+                    $navigator->nextCell();
+                }
             }
             $index = 1;
             $character = 65;
@@ -255,15 +282,6 @@ class BulkTemplateController extends ExtendedResourceController
                 }
                 $index++;
             }
-            $index = 1;
-            $character = 65;
-            foreach ($this->keyColumns as $column) {
-                $worksheetMain->setCellValue($column['cell'], $column['title']);
-                $worksheetMain->getCell($column['cell'])->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-            }
-            for ($x = $character; $x < 91; $x++) {
-                $worksheetMain->getColumnDimension(sprintf('%c', $x))->setAutoSize(true);
-            }
             $writer = new Xls($spreadsheet);
             $response = new StreamedResponse(
                 function () use ($writer) {
@@ -275,15 +293,29 @@ class BulkTemplateController extends ExtendedResourceController
             $response->headers->set('Cache-Control', 'max-age=0');
             return $response;
 
-        } catch
-        (ValidationException $exception) {
+        } catch (ValidationException $exception) {
             $response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
         } catch (\Throwable $exception) {
-            dd($exception);
             $response->status(HttpServerError)->message($exception->getMessage());
         } finally {
             return $response->send();
         }
+    }
+
+    protected function addListToCell(Worksheet $worksheet, string $cell, array $items)
+    {
+        $validation = $worksheet->getCell($cell)->getDataValidation();
+        $validation->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST);
+        $validation->setErrorStyle(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_INFORMATION);
+        $validation->setAllowBlank(false);
+        $validation->setShowInputMessage(true);
+        $validation->setShowErrorMessage(true);
+        $validation->setShowDropDown(true);
+        $validation->setErrorTitle('Input error');
+        $validation->setError('Value is not in list.');
+        $validation->setPromptTitle('Pick from list');
+        $validation->setPrompt('Please pick a value from the drop-down list.');
+        $validation->setFormula1(sprintf("\"%s\"", implode(',', $items)));
     }
 
 

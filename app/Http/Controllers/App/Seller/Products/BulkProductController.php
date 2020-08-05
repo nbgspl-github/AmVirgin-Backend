@@ -9,6 +9,8 @@ use App\Classes\Rule;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
 use App\Interfaces\Tables;
+use App\Models\Attribute;
+use App\Models\AttributeSetItem;
 use App\Models\Category;
 use App\Models\Product;
 use App\Traits\ValidatesRequest;
@@ -144,25 +146,56 @@ class BulkProductController extends ExtendedResourceController
         $response = responseApp();
         try {
             $validated = $this->requestValid(request(), $this->rules['store']);
+            $category = Category::find($validated['categoryId']);
             $reader = new Xls();
+            $attributeSet = $category->attributeSet;
+            $attributes = [];
+            if ($attributeSet != null) {
+                $attributeSetItems = $attributeSet->items;
+                $attributeSetItems->each(function (AttributeSetItem $attributeSetItem) use (&$attributes) {
+                    $attribute = $attributeSetItem->attribute;
+                    $attributes[] = [
+                        'code' => $attribute->code,
+                        'key' => $attribute->getKey(),
+                        'group' => $attributeSetItem->group
+                    ];
+                });
+            }
             $main = $reader->load(request()->file('catalog')->getPathname());
             $spreadsheet = $main->getSheetByName(Category::find($validated['categoryId'])->name);
             if ($spreadsheet->getHighestDataRow() < 2) {
                 $response->status(HttpInvalidRequestFormat)->message('Uploaded sheet does not contain any data.');
             } else {
                 if ($this->validateHeaderRow($spreadsheet)) {
-                    $rowIterator = $spreadsheet->getRowIterator();
-                    $rowIndex = 2;
-                    do {
-                        $payload = $this->payloadFromRow($spreadsheet, $rowIndex);
+                    for ($rowIndex = 2; $rowIndex <= $spreadsheet->getHighestDataRow(); $rowIndex++) {
+                        $data = $this->payloadFromRow($spreadsheet, $rowIndex, $attributes);
+                        $payload = $data['payload'];
                         $payload = $this->validatePayload($payload);
-                        Product::query()->create($payload);
-                        $rowIndex++;
-                    } while ($rowIterator->valid());
+                        $payload['lowStockThreshold'] = $payload['lowStockThreshold'] ?? 0;
+                        $payload['sellerId'] = $this->userId();
+                        $payload['categoryId'] = $validated['categoryId'];
+                        $payload['brandId'] = $validated['brandId'];
+                        $product = Product::create($payload);
+                        foreach ($data['values'] as $key => $value) {
+                            $attribute = Attribute::query()->where('code', $key)->first();
+                            if ($attribute != null) {
+                                $product->attributes()->create([
+                                    'attributeId' => $attribute->id(),
+                                    'variantAttribute' => $attribute->useToCreateVariants(),
+                                    'showInCatalogListing' => $attribute->showInCatalogListing(),
+                                    'visibleToCustomers' => $attribute->visibleToCustomers(),
+                                    'label' => $attribute->name(),
+                                    'group' => $value[1],
+                                    'value' => $value[0],
+                                ]);
+                            }
+                        }
+                    }
                 } else {
                     $response->status(HttpInvalidRequestFormat)->message('Catalog format is invalid. Please upload a proper sheet!');
                 }
             }
+            $response->status(HttpOkay)->message('Catalog processed successfully! Products sent for approval.');
         } catch (ValidationException $exception) {
             $response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
         } catch (\Throwable $exception) {
@@ -182,15 +215,23 @@ class BulkProductController extends ExtendedResourceController
         return true;
     }
 
-    protected function payloadFromRow(Worksheet $worksheet, int $rowNumber): array
+    protected function payloadFromRow(Worksheet $worksheet, int $rowNumber, array $attributes): array
     {
         $character = 65;
         $payload = [];
-        for ($x = 0; $x < count($this->keyColumns); $x++) {
+        $x = 0;
+        for (; $x < count($this->keyColumns); $x++) {
             $column = $this->keyColumns[$x];
             $payload[$column['key']] = $worksheet->getCell($this->cellIndex($character++, $rowNumber))->getValue();
         }
-        return $payload;
+        $values = [];
+        for ($x = 0; $x < count($attributes); $x++) {
+            $values[$attributes[$x]['code']] = [$worksheet->getCell($this->cellIndex($character++, $rowNumber))->getValue(), $attributes[$x]['group']];
+        }
+        return [
+            'payload' => $payload,
+            'values' => $values
+        ];
     }
 
     /**
