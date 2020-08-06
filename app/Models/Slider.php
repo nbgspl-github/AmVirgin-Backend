@@ -42,7 +42,7 @@ class Slider extends Model{
 		'ProductKey' => 'product-key',
 	];
 
-	public function getBannerAttribute(): string{
+	public function getBannerAttribute(): ?string{
 		return SecuredDisk::existsUrl($this->attributes['banner']);
 	}
 
