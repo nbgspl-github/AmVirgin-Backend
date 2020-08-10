@@ -253,9 +253,10 @@ class OrderController extends ExtendedResourceController
     {
         $response = responseApp();
         try {
+            $invalid = [];
             $validated = $this->requestValid(request(), $this->rules['updateStatusBulk']);
             $orderCollection = Order::query()->whereIn('id', $validated['orderId'])->get();
-            $orderCollection->each(function (Order $order) {
+            $orderCollection->each(function (Order $order) use (&$invalid) {
                 try {
                     $transitions = OrderStatus::transitions(new OrderStatus($order->status));
                     if (!empty($status) && Arrays::contains($transitions, $status, true)) {
@@ -265,10 +266,10 @@ class OrderController extends ExtendedResourceController
                         SellerOrder::query()->where('orderId', $order->getKey())->update(['status' => $status]);
                     }
                 } catch (InvalidEnumMemberException $exception) {
-
+                    $invalid[] = $order->getKey();
                 }
             });
-            $response->status(HttpOkay)->message('Order status updated successfully for batch.');
+            $response->status(HttpOkay)->message('Order status updated successfully for batch.')->setValue('invalid', $invalid);
         } catch (Throwable $exception) {
             $response->status(HttpResourceNotFound)->message($exception->getMessage());
         } finally {
