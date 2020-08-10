@@ -67,7 +67,7 @@ class OverviewController extends \App\Http\Controllers\Web\ExtendedResourceContr
                     }
                 }
             });
-            $payload['previous']['date'] = date('j F', $previous->sort()->last());
+            $payload['previous']['date'] = date("F j, Y, g:i a", $previous->sort()->last());
             $response->status(HttpOkay)->message('Payment overview details retrieved successfully.')->setValue('payload', $payload);
         } catch (\Throwable $exception) {
             $response->status(HttpOkay)->message($exception->getMessage());
