@@ -256,15 +256,14 @@ class OrderController extends ExtendedResourceController
             $invalid = [];
             $validated = $this->requestValid(request(), $this->rules['updateStatusBulk']);
             $orderCollection = Order::query()->whereIn('id', $validated['orderId'])->get();
-            dd($orderCollection->toArray());
             $orderCollection->each(function (Order $order) use (&$invalid) {
                 try {
                     $transitions = OrderStatus::transitions(new OrderStatus($order->status));
-                    if (!empty($status) && Arrays::contains($transitions, $status, true)) {
+                    if (!empty(request('status')) && Arrays::contains($transitions, request('status'), true)) {
                         $order->update([
-                            'status' => $status,
+                            'status' => request('status'),
                         ]);
-                        SellerOrder::query()->where('orderId', $order->getKey())->update(['status' => $status]);
+                        SellerOrder::query()->where('orderId', $order->getKey())->update(['status' => request('status')]);
                     }
                 } catch (InvalidEnumMemberException $exception) {
                     $invalid[] = $order->getKey();
