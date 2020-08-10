@@ -256,6 +256,7 @@ class OrderController extends ExtendedResourceController
             $invalid = [];
             $validated = $this->requestValid(request(), $this->rules['updateStatusBulk']);
             $orderCollection = Order::query()->whereIn('id', $validated['orderId'])->get();
+            dd($orderCollection->toArray());
             $orderCollection->each(function (Order $order) use (&$invalid) {
                 try {
                     $transitions = OrderStatus::transitions(new OrderStatus($order->status));
