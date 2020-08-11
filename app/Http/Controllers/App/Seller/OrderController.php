@@ -159,6 +159,9 @@ class OrderController extends ExtendedResourceController
             if (!empty(request()->get('query'))) {
                 $orderC->search(request()->get('query'), 'orderNumber');
             }
+            if (!empty(request()->get('neftId'))) {
+                $orderC->search('pay_' . request()->get('neftId'), 'transactionId');
+            }
             if (!empty(request()->get('from')) && !empty(request()->get('to'))) {
                 $from = request()->get('from');
                 $toDate = request()->get('to');
