@@ -247,6 +247,16 @@ class BulkTemplateController extends ExtendedResourceController
             } else {
                 $worksheetIndex->setCellValue('A1', 'No attributes found!');
             }
+            for ($i = 1; $i <= 8; $i++) {
+                if ($i == 1)
+                    $worksheetMain->setCellValue($navigatorMain->currentCell(), 'Product Image (Front)');
+                else
+                    $worksheetMain->setCellValue($navigatorMain->currentCell(), 'Product Image (Extra)');
+                $worksheetMain->getCell($navigatorMain->currentCell())->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $worksheetMain->getColumnDimension($navigatorMain->currentColumn())->setAutoSize(true);
+                $navigatorMain->nextCell();
+                $count++;
+            }
             foreach ($this->keyColumns as $column) {
                 if (isset($column['items'])) {
                     $navigator->moveToFirstRow();

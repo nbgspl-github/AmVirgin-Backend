@@ -6,8 +6,10 @@ namespace App\Http\Controllers\App\Seller\Products;
 
 use App\Classes\Arrays;
 use App\Classes\Rule;
+use App\Classes\Str;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Interfaces\Directories;
 use App\Interfaces\Tables;
 use App\Models\Attribute;
 use App\Models\AttributeSetItem;
@@ -15,7 +17,9 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Traits\ValidatesRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\File;
 use PhpOffice\PhpSpreadsheet\Reader\Xls;
+use PhpOffice\PhpSpreadsheet\Worksheet\MemoryDrawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class BulkProductController extends ExtendedResourceController
@@ -24,6 +28,7 @@ class BulkProductController extends ExtendedResourceController
 
     protected array $rules;
     private array $keyColumns;
+    private $regex = "/^([A-Z]+)(\d+)$/";
 
     public function __construct()
     {
@@ -175,6 +180,10 @@ class BulkProductController extends ExtendedResourceController
                         $payload['sellerId'] = $this->userId();
                         $payload['categoryId'] = $validated['categoryId'];
                         $payload['brandId'] = $validated['brandId'];
+                        $images = $data['images'];
+                        /**
+                         * @var Product $product
+                         */
                         $product = Product::create($payload);
                         foreach ($data['values'] as $key => $value) {
                             $attribute = Attribute::query()->where('code', $key)->first();
@@ -188,6 +197,21 @@ class BulkProductController extends ExtendedResourceController
                                     'group' => $value[1],
                                     'value' => $value[0],
                                 ]);
+                            }
+                        }
+                        $primary = true;
+                        foreach ($images as $image) {
+                            $path = $this->exportAsImage($image);
+                            if ($path != null) {
+                                $product->images()->create([
+                                    'path' => $path
+                                ]);
+                            }
+                            if ($primary) {
+                                $product->update([
+                                    'primaryImage' => $path
+                                ]);
+                                $primary = false;
                             }
                         }
                     }
@@ -225,13 +249,51 @@ class BulkProductController extends ExtendedResourceController
             $payload[$column['key']] = $worksheet->getCell($this->cellIndex($character++, $rowNumber))->getValue();
         }
         $values = [];
+        $images = [];
         for ($x = 0; $x < count($attributes); $x++) {
             $values[$attributes[$x]['code']] = [$worksheet->getCell($this->cellIndex($character++, $rowNumber))->getValue(), $attributes[$x]['group']];
         }
+        $drawings = $worksheet->getDrawingCollection();
+        foreach ($drawings as $drawing) {
+            $matches = [];
+            if (preg_match($this->regex, $drawing->getCoordinates(), $matches) == 1 && $matches[2] == $rowNumber) {
+                $images[] = $drawing;
+            }
+        }
         return [
             'payload' => $payload,
-            'values' => $values
+            'values' => $values,
+            'images' => $images
         ];
+    }
+
+    protected function exportAsImage(MemoryDrawing $drawing)
+    {
+        if ($drawing instanceof MemoryDrawing) {
+            ob_start();
+            call_user_func(
+                $drawing->getRenderingFunction(),
+                $drawing->getImageResource()
+            );
+            $imageContents = ob_get_contents();
+            ob_end_clean();
+            $extension = 'jpg';
+            switch ($drawing->getMimeType()) {
+                case MemoryDrawing::MIMETYPE_PNG :
+                    $extension = 'png';
+                    break;
+                case MemoryDrawing::MIMETYPE_GIF:
+                    $extension = 'gif';
+                    break;
+                case MemoryDrawing::MIMETYPE_JPEG :
+                    $extension = 'jpg';
+                    break;
+            }
+            $relative = Directories::ProductImage . '/' . sprintf('%s.%s', Str::makeUuid(), $extension);
+            File::put(storage_path('app/public/' . $relative), $imageContents);
+            return $relative;
+        }
+        return null;
     }
 
     /**
