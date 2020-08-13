@@ -125,6 +125,7 @@ Route::prefix('hsn')->group(function () {
 Route::prefix('brands')->middleware('auth:seller-api')->group(function () {
     Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\BrandController::class, 'index']);
     Route::get('approved', [\App\Http\Controllers\App\Seller\BrandController::class, 'show']);
+    Route::get('all', [\App\Http\Controllers\App\Seller\ApprovedBrandController::class, 'index']);
     Route::post('approval', [\App\Http\Controllers\App\Seller\BrandController::class, 'store']);
 });
 
