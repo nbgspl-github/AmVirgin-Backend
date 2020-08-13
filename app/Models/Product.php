@@ -73,7 +73,10 @@ class Product extends Model
         'primaryImage',
         'specials',
         'idealFor',
-        'primaryImageIndex'
+        'primaryImageIndex',
+        'approved',
+        'approvedBy',
+        'approvedAt'
     ];
     protected $hidden = [
         'id',
