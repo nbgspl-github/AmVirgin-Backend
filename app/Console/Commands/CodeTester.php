@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Classes\CellNavigator;
 use App\Classes\ColumnNavigator;
 use App\Traits\GenerateUrls;
 use Illuminate\Console\Command;
@@ -46,8 +45,7 @@ class CodeTester extends Command
     {
         $navigator = new ColumnNavigator();
         for ($i = 0; $i < 75; $i++) {
-            echo $navigator->currentColumn() . "\n";
-            $navigator->nextColumn();
+            echo random_str(32)."\n";
         }
     }
 }
