@@ -51,9 +51,9 @@ class Brand extends Model
 
     protected static function boot()
     {
-        static::creating(function (Brand $brand) {
-            $brand->requestId = random_str(25);
-        });
+//        static::creating(function (Brand $brand) {
+//            $brand->requestId = random_str(25);
+//        });
     }
 
     public function category(): BelongsTo
