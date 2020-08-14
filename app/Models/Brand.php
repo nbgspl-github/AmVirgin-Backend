@@ -49,13 +49,6 @@ class Brand extends Model
         'Other' => 'other',
     ];
 
-    protected static function boot()
-    {
-//        static::creating(function (Brand $brand) {
-//            $brand->requestId = random_str(25);
-//        });
-    }
-
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'categoryId');
