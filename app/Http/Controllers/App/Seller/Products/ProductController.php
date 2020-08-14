@@ -37,7 +37,13 @@ class ProductController extends AbstractProductController
             if (request('status') == 'active' || request('status') == 'inactive') {
                 $productRecord->withWhere('listingStatus', request()->get('status'));
             } else {
-                $productRecord->withWhere('status', request()->get('status'));
+                if (request('status') == 'underprocess') {
+                    $productRecord->withWhere('approved', false);
+                } else if (request('status') == 'approved') {
+                    $productRecord->withWhere('approved', true);
+                } else {
+
+                }
             }
         }
         if (!empty(request()->get('query'))) {
