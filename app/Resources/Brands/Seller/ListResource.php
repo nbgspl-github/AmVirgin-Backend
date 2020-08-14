@@ -17,7 +17,7 @@ class ListResource extends JsonResource
             'name' => $this->name(),
             'logo' => SecuredDisk::existsUrl($this->logo()),
             'status' => $this->status(),
-            'category' => $this->category()->exists() ? $this->category->name : Str::Empty
+            'verticalName' => $this->category()->exists() ? $this->category->name : Str::Empty
         ];
     }
 }
