@@ -28,6 +28,7 @@ class Brand extends Model
         'status',
         'active',
         'documentExtras',
+        'requestId'
     ];
     protected $casts = [
         'active' => 'bool',
