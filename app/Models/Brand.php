@@ -51,7 +51,8 @@ class Brand extends Model
 
     protected static function boot()
     {
-        self::creating(function (Brand $brand) {
+        parent::boot();
+        Brand::saving(function ($brand) {
             $brand->requestId = random_str(25);
         });
     }
