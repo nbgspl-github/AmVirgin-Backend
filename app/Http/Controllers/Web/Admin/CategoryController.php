@@ -171,7 +171,9 @@ class CategoryController extends BaseController
             $payload = $this->requestValid(request(), $this->rules['store']);
             $payload['icon'] = \request()->hasFile('icon') ? SecuredDisk::access()->putFile(Directories::Categories, \request()->file('icon')) : null;
             $payload['specials'] = [];
-            $payload['summary'] = $this->processMarkup($payload['summary']);
+            $summary = $payload['summary'];
+            $payload['summary'] = $this->processMarkup($summary);
+            $payload['summary_excel'] = $this->processMarkupExcel($summary);
             Category::query()->create($payload);
             $response->route('admin.categories.index')->success('Created category successfully.');
         } catch (ValidationException $exception) {
