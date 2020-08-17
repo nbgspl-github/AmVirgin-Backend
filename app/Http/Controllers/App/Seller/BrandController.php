@@ -29,11 +29,11 @@ class BrandController extends ExtendedResourceController
         $this->rules = [
             'index' => [
                 'name' => ['bail', 'required', 'string', 'min:2', 'max:25'],
-                'category' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)->where('type', Category::Types['Vertical'])],
+                'category' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)],
                 'type' => ['bail', 'nullable', Rule::in(['all', 'own'])]
             ],
             'show' => [
-                'category' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)->where('type', Category::Types['Vertical'])],
+                'category' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)],
             ],
             'store' => [
                 'name' => ['bail', 'required', 'string', 'min:2', 'max:255'],
@@ -42,7 +42,7 @@ class BrandController extends ExtendedResourceController
                 'productSaleMarketPlace' => ['bail', 'nullable', 'string', 'min:2', 'max:255'],
                 'sampleMRPTagImage' => ['bail', 'nullable', 'image', 'min:1', 'max:5120'],
                 'isBrandOwner' => ['bail', 'nullable', 'boolean'],
-                'categoryId' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)->where('type', Category::Types['Vertical'])],
+                'categoryId' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)],
                 'documentProof' => ['bail', 'nullable', 'mimes:pdf', 'max:5120'],
                 'documentType' => ['bail', 'nullable', Rule::in(Arrays::values(Brand::DocumentType))],
                 'trademarkNumber' => ['bail', 'required_if:documentType,trademark-certificate', 'string', 'min:2', 'max:255'],
