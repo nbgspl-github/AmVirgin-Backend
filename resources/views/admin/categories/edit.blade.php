@@ -252,6 +252,7 @@
                         ['font', ['bold', 'underline', 'clear']],
                         ['color', ['color']],
                         ['insert', ['picture']],
+                        ['view', ['fullscreen', 'codeview', 'help']],
                     ]
                 }
             )

@@ -222,6 +222,26 @@ class CategoryController extends BaseController
         }
     }
 
+    protected function processMarkupExcel(?string $markup): ?string
+    {
+        libxml_use_internal_errors(true);
+        $dom = new \domdocument();
+        $dom->loadHtml($markup, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $images = $dom->getElementsByTagName('img');
+        foreach ($images as $count => $image) {
+            $src = $image->getAttribute('src');
+            if (preg_match('/data:image/', $src)) {
+                preg_match('/data:image\/(?<mime>.*?)\;/', $src, $groups);
+                $mimeType = $groups['mime'];
+                $path = 'summary-images/' . Str::makeUuid() . '.' . $mimeType;
+                SecuredDisk::access()->put($path, file_get_contents($src));
+                $image->removeAttribute('src');
+                $image->setAttribute('src', storage_path('app/public/' . $path));
+            }
+        }
+        return $dom->saveHTML();
+    }
+
     protected function processMarkup(?string $markup): ?string
     {
         libxml_use_internal_errors(true);
@@ -233,7 +253,7 @@ class CategoryController extends BaseController
             if (preg_match('/data:image/', $src)) {
                 preg_match('/data:image\/(?<mime>.*?)\;/', $src, $groups);
                 $mimeType = $groups['mime'];
-                $path = '/summary-images/' . Str::makeUuid() . '.' . $mimeType;
+                $path = 'summary-images/' . Str::makeUuid() . '.' . $mimeType;
                 SecuredDisk::access()->put($path, file_get_contents($src));
                 $image->removeAttribute('src');
                 $image->setAttribute('src', SecuredDisk::access()->url($path));

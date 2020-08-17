@@ -186,7 +186,7 @@ class BulkTemplateController extends ExtendedResourceController
     public function show()
     {
         $response = responseApp();
-//        try {
+        try {
             /**
              * @var Category $category
              * @var Brand $brand
@@ -196,11 +196,11 @@ class BulkTemplateController extends ExtendedResourceController
             $category = Category::find($validated['categoryId']);
             $brand = Brand::find($validated['brandId']);
             $spreadsheet = new Spreadsheet();
-//            dd($category->summary);
-        libxml_use_internal_errors(true);
+            libxml_use_internal_errors(true);
             $reader = new \PhpOffice\PhpSpreadsheet\Reader\Html();
-            $html = $reader->loadFromString($category->summary);
+            $html = $reader->loadFromString($category->summary_excel);
             $summary = $html->getSheet(0);
+            $summary->setTitle('Summary Sheet');
             $spreadsheet->removeSheetByIndex(0);
             $spreadsheet->addSheet($summary, 0);
             $worksheetIndex = $spreadsheet->createSheet();
@@ -308,14 +308,13 @@ class BulkTemplateController extends ExtendedResourceController
             $response->headers->set('Content-Disposition', sprintf('attachment;filename="%s_%s_%s.xls"', $category->name, $brand->name, Carbon::now()->timestamp));
             $response->headers->set('Cache-Control', 'max-age=0');
             return $response;
-
-//        } catch (ValidationException $exception) {
-//            $response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
-//        } catch (\Throwable $exception) {
-//            $response->status(HttpServerError)->message($exception->getMessage());
-//        } finally {
-//            return $response->send();
-//        }
+        } catch (ValidationException $exception) {
+            $response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+        } catch (\Throwable $exception) {
+            $response->status(HttpServerError)->message($exception->getMessage());
+        } finally {
+            return $response->send();
+        }
     }
 
     protected function addListToCell(Worksheet $worksheet, string $cell, array $items)

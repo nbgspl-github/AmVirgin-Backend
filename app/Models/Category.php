@@ -27,7 +27,7 @@ class Category extends Model
     use RetrieveResource, FluentConstructor, HasSpecialAttributes, DynamicAttributeNamedMethods, GenerateSlugs, QueryProvider;
 
     protected $table = 'categories';
-    protected $fillable = ['name', 'parentId', 'description', 'type', 'order', 'icon', 'listingStatus', 'specials', 'summary'];
+    protected $fillable = ['name', 'parentId', 'description', 'type', 'order', 'icon', 'listingStatus', 'specials', 'summary', 'summary_excel'];
     protected $casts = ['specials' => 'array', 'order' => 'int'];
     protected $hidden = ['created_at', 'updated_at'];
     public const Types = [
