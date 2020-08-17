@@ -27,8 +27,10 @@
 		"tymon/jwt-auth": "1.0.*",
 		"yoeunes/notify": "^1.0",
 		"zanysoft/laravel-zip": "^1.0",
-		"zumba/json-serializer": "^2.2"
-	},
+		"zumba/json-serializer": "^2.2",
+      "ext-libxml": "*",
+      "ext-dom": "*"
+    },
 	"require-dev": {
 		"facade/ignition": "^1.4",
 		"fzaninotto/faker": "^1.4",

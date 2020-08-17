@@ -54,6 +54,8 @@
 <script src="{{asset('assets/admin/js/duration-picker.js')}}"></script>
 <script src="{{asset('assets/admin/js/Selectize.js')}}"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
 {{--<!-- App js -->--}}
 <script src="{{asset("assets/admin/js/app.js")}}"></script>
 

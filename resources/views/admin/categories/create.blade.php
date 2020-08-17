@@ -16,7 +16,8 @@
 									<hr class="my-2">
 									<ul class="px-3">
 										<li><p>There are 4 nesting levels or types for categories.</p></li>
-										<li><p>Main<br>Main ► Category<br>Main ► Category ► Sub-Category<br>Main ► Category ► Sub-Category ► Vertical</p></li>
+										<li><p>Main<br>Main ► Category<br>Main ► Category ► Sub-Category<br>Main ►
+												Category ► Sub-Category ► Vertical</p></li>
 										<li>
 											<p>Products can only be added to categories having type as
 												<mark>Vertical</mark>
@@ -31,13 +32,15 @@
 											</p>
 										</li>
 										<li>
-											<p>You may additionally set any category to inherit attributes of its parent. For example - if you are creating verticals named
+											<p>You may additionally set any category to inherit attributes of its
+												parent. For example - if you are creating verticals named
 												<mark>Casual Shoes</mark>
 												, and
 												<mark>Sports Shoes</mark>
 												under
 												<mark>Footwear</mark>
-												, it is only logical to enable attribute inheritance for both of them since they both share attributes such as
+												, it is only logical to enable attribute inheritance for both of them
+												since they both share attributes such as
 												<mark>Color</mark>
 												and
 												<mark>Size</mark>
@@ -59,9 +62,11 @@
 										@foreach($roots as $root)
 											<option value="{{$root['key']}}" data-type="{{$root['type']}}" id="option-item-{{$root['key']}}">{{$root['name']}}</option>
 											@foreach($root['children']['items'] as $category)
-												<option value="{{ $category['key'] }}" data-type="{{$category['type']}}" id="option-item-{{$category['key']}}">{{$root['name']}} ► {{$category['name']}}</option>
+												<option value="{{ $category['key'] }}" data-type="{{$category['type']}}" id="option-item-{{$category['key']}}">{{$root['name']}}
+													► {{$category['name']}}</option>
 												@foreach($category['children']['items'] as $subCategory)
-													<option value="{{ $subCategory['key'] }}" data-type="{{$subCategory['type']}}" id="option-item-{{$subCategory['key'] }}">{{$root['name']}} ► {{$category['name']}} ► {{$subCategory['name']}}</option>
+													<option value="{{ $subCategory['key'] }}" data-type="{{$subCategory['type']}}" id="option-item-{{$subCategory['key'] }}">{{$root['name']}}
+														► {{$category['name']}} ► {{$subCategory['name']}}</option>
 												@endforeach
 											@endforeach
 										@endforeach
@@ -72,7 +77,8 @@
 									<select name="type" id="type" class="form-control">
 										<option value="" disabled selected>Choose</option>
 										<option value="{{\App\Models\Category::Types['Category']}}">Category</option>
-										<option value="{{\App\Models\Category::Types['SubCategory']}}">Sub-Category</option>
+										<option value="{{\App\Models\Category::Types['SubCategory']}}">Sub-Category
+										</option>
 										<option value="{{\App\Models\Category::Types['Vertical']}}">Vertical</option>
 									</select>
 								</div>
@@ -83,8 +89,11 @@
 								<div class="form-group">
 									<label>Listing Status</label>
 									<select name="listingStatus" class="form-control">
-										<option value="{{\App\Models\Category::ListingStatus['Active']}}" selected>Active</option>
-										<option value="{{\App\Models\Category::ListingStatus['Inactive']}}">Inactive</option>
+										<option value="{{\App\Models\Category::ListingStatus['Active']}}" selected>
+											Active
+										</option>
+										<option value="{{\App\Models\Category::ListingStatus['Inactive']}}">Inactive
+										</option>
 									</select>
 								</div>
 								<div class="form-group">
@@ -117,7 +126,9 @@
 													<h3 class="my-0 header-title">Preview</h3>
 												</div>
 												<div class="col-6">
-													<button type="button" class="btn btn-outline-primary rounded shadow-sm float-right" onclick="openImagePicker1();">Choose Image</button>
+													<button type="button" class="btn btn-outline-primary rounded shadow-sm float-right" onclick="openImagePicker1();">
+														Choose Image
+													</button>
 												</div>
 											</div>
 										</div>
@@ -129,6 +140,10 @@
 											</div>
 										</div>
 									</div>
+								</div>
+								<div class="form-group">
+									<label>Summary</label>
+									<textarea name="summary" id="summernote"></textarea>
 								</div>
 								<div class="form-group mb-0">
 									<div class="row">
@@ -155,60 +170,76 @@
 
 @section('javascript')
 	<script>
-		var lastFile = null;
-		window.onload = () => {
+        var lastFile = null;
+        window.onload = () => {
 
-		};
+        };
 
-		previewImage = (event) => {
-			const reader = new FileReader();
-			reader.onload = function () {
-				const output = document.getElementById('posterPreview');
-				output.src = reader.result;
-			};
-			lastFile = event.target.files[0];
-			reader.readAsDataURL(lastFile);
-		};
+        previewImage = (event) => {
+            const reader = new FileReader();
+            reader.onload = function () {
+                const output = document.getElementById('posterPreview');
+                output.src = reader.result;
+            };
+            lastFile = event.target.files[0];
+            reader.readAsDataURL(lastFile);
+        };
 
-		openImagePicker = () => {
-			$('#pickImage').trigger('click');
-		}
+        openImagePicker = () => {
+            $('#pickImage').trigger('click');
+        }
 
-		var lastFile1 = null;
-		previewImage1 = (event) => {
-			const reader = new FileReader();
-			reader.onload = function () {
-				const output = document.getElementById('posterPreview1');
-				output.src = reader.result;
-			};
-			lastFile1 = event.target.files[0];
-			reader.readAsDataURL(lastFile1);
-		};
+        var lastFile1 = null;
+        previewImage1 = (event) => {
+            const reader = new FileReader();
+            reader.onload = function () {
+                const output = document.getElementById('posterPreview1');
+                output.src = reader.result;
+            };
+            lastFile1 = event.target.files[0];
+            reader.readAsDataURL(lastFile1);
+        };
 
-		openImagePicker1 = () => {
-			$('#pickImage1').trigger('click');
-		};
+        openImagePicker1 = () => {
+            $('#pickImage1').trigger('click');
+        };
 
-		handleTypeChanged = (value, type) => {
-			console.log(type);
-			if (type === 'root') {
-				$("select option[value=category]").prop('disabled', false);
-				$("#type").val('category');
-				$("select option[value=sub-category]").prop('disabled', true);
-				$("select option[value=vertical]").prop('disabled', true);
-			} else if (type === 'category') {
-				$("select option[value=category]").prop('disabled', true);
-				$("select option[value=sub-category]").prop('disabled', false);
-				$("#type").val('sub-category');
-				$("select option[value=vertical]").prop('disabled', true);
-			} else if (type === 'sub-category') {
-				$("select option[value=category]").prop('disabled', true);
-				$("select option[value=sub-category]").prop('disabled', true);
-				$("select option[value=vertical]").prop('disabled', false);
-				$("#type").val('vertical');
-			} else {
+        handleTypeChanged = (value, type) => {
+            console.log(type);
+            if (type === 'root') {
+                $("select option[value=category]").prop('disabled', false);
+                $("#type").val('category');
+                $("select option[value=sub-category]").prop('disabled', true);
+                $("select option[value=vertical]").prop('disabled', true);
+            } else if (type === 'category') {
+                $("select option[value=category]").prop('disabled', true);
+                $("select option[value=sub-category]").prop('disabled', false);
+                $("#type").val('sub-category');
+                $("select option[value=vertical]").prop('disabled', true);
+            } else if (type === 'sub-category') {
+                $("select option[value=category]").prop('disabled', true);
+                $("select option[value=sub-category]").prop('disabled', true);
+                $("select option[value=vertical]").prop('disabled', false);
+                $("#type").val('vertical');
+            } else {
 
-			}
-		};
+            }
+        };
+
+        $(document).ready(function () {
+            $('#summernote').summernote(
+                {
+                    placeholder: 'Write your formatted summary here...',
+                    tabsize: 2,
+                    height: 250,
+                    toolbar: [
+                        ['style', ['style']],
+                        ['font', ['bold', 'underline', 'clear']],
+                        ['color', ['color']],
+                        ['insert', ['picture']],
+                    ]
+                }
+            )
+        });
 	</script>
 @stop
