@@ -157,8 +157,8 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label>Summary</label>
-									<textarea name="summary" id="summernote">{!! $main->summary !!}</textarea>
+									<label>Catalog Template</label>
+									<input name="catalog" class="form-control" type="file" accept=".xls, .xlsx" style="padding: .290rem .300rem">
 								</div>
 								<div class="form-group mb-0">
 									<div class="row">

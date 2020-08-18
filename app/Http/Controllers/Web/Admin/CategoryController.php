@@ -34,7 +34,8 @@ class CategoryController extends BaseController
                 'type' => ['bail', 'required', Rule::in(Category::Types['Category'], Category::Types['SubCategory'], Category::Types['Vertical'])],
                 'icon' => ['bail', 'nullable', 'image'],
                 'order' => ['bail', 'required', Rule::minimum(0), Rule::maximum(255)],
-                'summary' => ['bail', 'nullable', 'string']
+                'summary' => ['bail', 'nullable', 'string'],
+                'catalog' => ['bail', 'nullable', 'mimes:xls,xlsx', 'max:10240']
             ],
             'update' => [
                 'name' => ['bail', 'required', 'string', 'min:1', 'max:255'],
@@ -44,7 +45,8 @@ class CategoryController extends BaseController
                 'type' => ['bail', 'required', Rule::in(Category::Types['Category'], Category::Types['SubCategory'], Category::Types['Vertical'])],
                 'icon' => ['bail', 'nullable', 'image'],
                 'order' => ['bail', 'required', Rule::minimum(0), Rule::maximum(255)],
-                'summary' => ['bail', 'nullable', 'string']
+                'summary' => ['bail', 'nullable', 'string'],
+                'catalog' => ['bail', 'nullable', 'mimes:xls,xlsx', 'max:10240']
             ],
         ];
     }
@@ -171,9 +173,6 @@ class CategoryController extends BaseController
             $payload = $this->requestValid(request(), $this->rules['store']);
             $payload['icon'] = \request()->hasFile('icon') ? SecuredDisk::access()->putFile(Directories::Categories, \request()->file('icon')) : null;
             $payload['specials'] = [];
-            $summary = $payload['summary'];
-            $payload['summary'] = $this->processMarkup($summary);
-            $payload['summary_excel'] = $this->processMarkupExcel($summary);
             Category::query()->create($payload);
             $response->route('admin.categories.index')->success('Created category successfully.');
         } catch (ValidationException $exception) {
@@ -194,7 +193,6 @@ class CategoryController extends BaseController
             if (\request()->hasFile('icon')) {
                 $payload['icon'] = SecuredDisk::access()->putFile(Directories::Categories, \request()->file('icon'));
             }
-            $payload['summary'] = $this->processMarkup($payload['summary']);
             $category->update($payload);
             $response->route('admin.categories.index')->success('Updated category successfully.');
         } catch (ModelNotFoundException $exception) {

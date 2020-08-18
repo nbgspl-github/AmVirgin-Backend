@@ -4,7 +4,9 @@ namespace App\Models;
 
 use App\Classes\Arrays;
 use App\Classes\Str;
+use App\Interfaces\Directories;
 use App\Queries\CategoryQuery;
+use App\Storage\SecuredDisk;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\FluentConstructor;
 use App\Traits\GenerateSlugs;
@@ -15,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Spatie\Sluggable\SlugOptions;
 
@@ -27,7 +30,7 @@ class Category extends Model
     use RetrieveResource, FluentConstructor, HasSpecialAttributes, DynamicAttributeNamedMethods, GenerateSlugs, QueryProvider;
 
     protected $table = 'categories';
-    protected $fillable = ['name', 'parentId', 'description', 'type', 'order', 'icon', 'listingStatus', 'specials', 'summary', 'summary_excel'];
+    protected $fillable = ['name', 'parentId', 'description', 'type', 'order', 'icon', 'listingStatus', 'specials', 'summary', 'summary_excel', 'catalog'];
     protected $casts = ['specials' => 'array', 'order' => 'int'];
     protected $hidden = ['created_at', 'updated_at'];
     public const Types = [
@@ -114,6 +117,20 @@ class Category extends Model
             $descendants = $descendants->merge($innerChildren->descendants());
         }
         return $descendants;
+    }
+
+    public function setCatalogAttribute($value): void
+    {
+        if ($value instanceof UploadedFile) {
+            $this->attributes['catalog'] = SecuredDisk::access()->putFile(Directories::Catalogs, $value);
+        } else {
+            $this->attributes['catalog'] = $value;
+        }
+    }
+
+    public function getCatalogAttribute($value): ?string
+    {
+        return SecuredDisk::existsUrl($this->attributes['catalog']);
     }
 
     public function getSlugOptions(): SlugOptions

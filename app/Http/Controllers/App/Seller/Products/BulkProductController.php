@@ -52,7 +52,7 @@ class BulkProductController extends ExtendedResourceController
                 'title' => 'Procurement SLA'
             ], [
                 'key' => 'originalPrice',
-                'title' => 'Original Price',
+                'title' => 'MRP',
                 'cell' => 'E1',
             ], [
                 'key' => 'sellingPrice',

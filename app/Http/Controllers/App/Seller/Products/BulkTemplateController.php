@@ -20,6 +20,7 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class BulkTemplateController extends ExtendedResourceController
@@ -127,7 +128,7 @@ class BulkTemplateController extends ExtendedResourceController
                 ]
             ], [
                 'key' => 'originalPrice',
-                'title' => 'Original Price',
+                'title' => 'MRP',
             ], [
                 'key' => 'sellingPrice',
                 'title' => 'Selling Price',
@@ -183,7 +184,7 @@ class BulkTemplateController extends ExtendedResourceController
         ];
     }
 
-    public function show()
+    public function showBak()
     {
         $response = responseApp();
         try {
@@ -317,6 +318,36 @@ class BulkTemplateController extends ExtendedResourceController
         }
     }
 
+    public function show()
+    {
+        $response = responseApp();
+        try {
+            /**
+             * @var Category $category
+             * @var Brand $brand
+             * @var Collection $attributes
+             */
+            $validated = $this->requestValid(request(), $this->rules['show']);
+            $category = Category::find($validated['categoryId']);
+            $brand = Brand::find($validated['brandId']);
+            if ($category->catalog != null) {
+                $response = new BinaryFileResponse(storage_path('app/public/' . $category->getAttributes()['catalog']));
+                $response->headers->set('Content-Type', 'application/vnd.ms-excel');
+                $response->headers->set('Content-Disposition', sprintf('attachment;filename="%s_%s_%s.xls"', $category->name, $brand->name, Carbon::now()->timestamp));
+                $response->headers->set('Cache-Control', 'max-age=0');
+                return $response;
+            } else {
+                $response->status(HttpOkay)->message('No catalog available for category!');
+            }
+        } catch (ValidationException $exception) {
+            $response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+        } catch (\Throwable $exception) {
+            $response->status(HttpServerError)->message($exception->getMessage());
+        } finally {
+            return $response->send();
+        }
+    }
+
     protected function addListToCell(Worksheet $worksheet, string $cell, array $items)
     {
         $validation = $worksheet->getCell($cell)->getDataValidation();
@@ -331,6 +362,16 @@ class BulkTemplateController extends ExtendedResourceController
         $validation->setPromptTitle('Pick from list');
         $validation->setPrompt('Please pick a value from the drop-down list.');
         $validation->setFormula1(sprintf("\"%s\"", implode(',', $items)));
+    }
+
+    protected function addYesNoCell(Worksheet $worksheet, string $cell)
+    {
+
+    }
+
+    protected function addActiveInactiveCell(Worksheet $worksheet, string $cell, array $items)
+    {
+
     }
 
 
