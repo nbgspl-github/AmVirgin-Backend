@@ -61,6 +61,6 @@
 
 <script>
 	window.onload = () => {
-		window.onInitialize();
+		// window.onInitialize();
 	};
 </script>
