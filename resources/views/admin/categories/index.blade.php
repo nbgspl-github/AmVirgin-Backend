@@ -37,6 +37,9 @@
 										<div class="btn-toolbar" role="toolbar">
 											<div class="btn-group mx-auto" role="group">
 												<a class="btn btn-outline-danger" href="{{route('admin.categories.edit',$category->id())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
+												@if($category->type==\App\Models\Category::Types['Vertical'])
+													<a class="btn btn-outline-secondary" href="{{route('admin.categories.download',$category->id)}}" @include('admin.extras.tooltip.bottom', ['title' => 'Download Details Sheet'])><i class="mdi mdi-download"></i></a>
+												@endif
 												<a class="btn btn-outline-primary" href="javascript:void(0);" onclick="deleteCategory('{{$category->id()}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>
 											</div>
 										</div>
@@ -54,80 +57,80 @@
 
 @section('javascript')
 	<script type="application/javascript">
-		let dataTable = null;
+        let dataTable = null;
 
-		$(document).ready(() => {
-			dataTable = $('#datatable').DataTable({
-				initComplete: function () {
-					$('#datatable_wrapper').addClass('px-0 mx-0');
-				}
-			});
-		});
+        $(document).ready(() => {
+            dataTable = $('#datatable').DataTable({
+                initComplete: function () {
+                    $('#datatable_wrapper').addClass('px-0 mx-0');
+                }
+            });
+        });
 
-		/**
-		 * Returns route for Update/Status route.
-		 * @param id
-		 * @returns {string}
-		 */
-		updateStatusRoute = (id) => {
-			return 'categories/' + id + '/status';
-		};
+        /**
+         * Returns route for Update/Status route.
+         * @param id
+         * @returns {string}
+         */
+        updateStatusRoute = (id) => {
+            return 'categories/' + id + '/status';
+        };
 
-		/**
-		 * Returns route for Genre/Delete route.
-		 * @param id
-		 * @returns {string}
-		 */
-		deleteRoute = (id) => {
-			return 'categories/' + id;
-		};
+        /**
+         * Returns route for Genre/Delete route.
+         * @param id
+         * @returns {string}
+         */
+        deleteRoute = (id) => {
+            return 'categories/' + id;
+        };
 
-		/**
-		 * Callback for active status changes.
-		 * @param id
-		 * @param state
-		 */
-		toggleStatus = (id, state) => {
-			axios.put(updateStatusRoute(id),
-				{id: id, status: state})
-				.then(response => {
-					if (response.status === 200) {
-						toastr.success(response.data.message);
-					} else {
-						toastr.error(response.data.message);
-					}
-				})
-				.catch(reason => {
-					console.log(reason);
-					toastr.error('Failed to update status.');
-				});
-		};
+        /**
+         * Callback for active status changes.
+         * @param id
+         * @param state
+         */
+        toggleStatus = (id, state) => {
+            axios.put(updateStatusRoute(id),
+                {id: id, status: state})
+                .then(response => {
+                    if (response.status === 200) {
+                        toastr.success(response.data.message);
+                    } else {
+                        toastr.error(response.data.message);
+                    }
+                })
+                .catch(reason => {
+                    console.log(reason);
+                    toastr.error('Failed to update status.');
+                });
+        };
 
-		/**
-		 * Callback for delete genre trigger.
-		 * @param id
-		 */
-		deleteCategory = (id) => {
-			window.genreId = id;
-			alertify.confirm("Are you sure you want to delete this category? ",
-				(ev) => {
-					ev.preventDefault();
-					axios.delete(deleteRoute(id))
-						.then(response => {
-							if (response.data.status === 200) {
-								$('#category_row_' + id).remove();
-								toastr.success(response.data.message);
-							} else {
-								toastr.error(response.data.message);
-							}
-						})
-						.catch(error => {
-							toastr.error('Something went wrong. Please try again in a while.');
-						});
-				},
-				(ev) => {
-					ev.preventDefault();
-				});
-		}
+        /**
+         * Callback for delete genre trigger.
+         * @param id
+         */
+        deleteCategory = (id) => {
+            window.genreId = id;
+            alertify.confirm("Are you sure you want to delete this category? ",
+                (ev) => {
+                    ev.preventDefault();
+                    axios.delete(deleteRoute(id))
+                        .then(response => {
+                            if (response.data.status === 200) {
+                                $('#category_row_' + id).remove();
+                                toastr.success(response.data.message);
+                            } else {
+                                toastr.error(response.data.message);
+                            }
+                        })
+                        .catch(error => {
+                            toastr.error('Something went wrong. Please try again in a while.');
+                        });
+                },
+                (ev) => {
+                    ev.preventDefault();
+                });
+        }
 	</script>
 @stop

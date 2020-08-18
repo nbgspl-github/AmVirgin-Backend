@@ -71,7 +71,6 @@ Route::prefix('admin')->group(function () {
             Route::post('store', [CategoriesBanner::class, Methods::Store])->name('admin.categories-banner.store');
             Route::post('{id}', [CategoriesBanner::class, Methods::Update])->name('admin.categories-banner.update');
             Route::delete('{id}', [CategoriesBanner::class, Methods::Delete])->name('admin.categories-banner.delete');
-
         });
 
         // Categories Route(s)
@@ -82,6 +81,7 @@ Route::prefix('admin')->group(function () {
             Route::post('store', [CategoryController::class, Methods::Store])->name('admin.categories.store');
             Route::post('{id}', [CategoryController::class, Methods::Update])->name('admin.categories.update');
             Route::delete('{id}', [CategoryController::class, Methods::Delete])->name('admin.categories.delete');
+            Route::get('{id}/download', [CategoryController::class, 'downloadTemplate'])->name('admin.categories.download');
         });
 
         // Videos Route(s)

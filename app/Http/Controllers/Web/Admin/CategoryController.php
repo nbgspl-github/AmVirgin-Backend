@@ -2,17 +2,28 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
+use App\Classes\ColumnNavigator;
 use App\Classes\Rule;
 use App\Classes\Str;
+use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Interfaces\Directories;
 use App\Interfaces\Tables;
+use App\Models\AttributeSetItem;
 use App\Models\Category;
 use App\Storage\SecuredDisk;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
+use PhpOffice\PhpSpreadsheet\RichText\RichText;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Throwable;
 
 class CategoryController extends BaseController
@@ -21,6 +32,7 @@ class CategoryController extends BaseController
     use FluentResponse;
 
     protected array $rules;
+    protected array $keyColumns;
 
     public function __construct()
     {
@@ -47,6 +59,84 @@ class CategoryController extends BaseController
                 'order' => ['bail', 'required', Rule::minimum(0), Rule::maximum(255)],
                 'summary' => ['bail', 'nullable', 'string'],
                 'catalog' => ['bail', 'nullable', 'mimes:xls,xlsx', 'max:10240']
+            ],
+        ];
+        $this->keyColumns = [
+            [
+                'key' => 'name',
+                'title' => 'Name'
+            ], [
+                'key' => 'listingStatus',
+                'title' => 'Listing Status',
+                'items' => [
+                    'active', 'inactive'
+                ]
+            ], [
+                'key' => 'idealFor',
+                'title' => 'Ideal For (Optional)',
+                'items' => [
+                    'boys', 'girls', 'men', 'women'
+                ]
+            ], [
+                'key' => 'procurementSla',
+                'title' => 'Procurement SLA',
+                'items' => [
+                    0, 1, 2, 3, 4, 5, 6, 7
+                ]
+            ], [
+                'key' => 'originalPrice',
+                'title' => 'MRP',
+            ], [
+                'key' => 'sellingPrice',
+                'title' => 'Selling Price',
+            ], [
+                'key' => 'fulfillmentBy',
+                'title' => 'Fulfillment By',
+                'items' => [
+                    'seller', 'seller-smart'
+                ]
+            ], [
+                'key' => 'hsn',
+                'title' => 'HSN'
+            ], [
+                'key' => 'stock',
+                'title' => 'Stock'
+            ], [
+                'key' => 'lowStockThreshold',
+                'title' => 'Low Stock Threshold (Optional)',
+                'items' => [
+                    10
+                ]
+            ], [
+                'key' => 'description',
+                'title' => 'Description'
+            ], [
+                'key' => 'sku',
+                'title' => 'SKU'
+            ], [
+                'key' => 'styleCode',
+                'title' => 'Style Code'
+            ], [
+                'key' => 'localShippingCost',
+                'title' => 'Local Shipping Cost'
+            ], [
+                'key' => 'zonalShippingCost',
+                'title' => 'Zonal Shipping Cost'
+            ], [
+                'key' => 'internationalShippingCost',
+                'title' => 'International Shipping Cost'
+            ], [
+                'key' => 'packageWeight',
+                'title' => 'Package Weight'
+            ], [
+                'key' => 'packageLength',
+                'title' => 'Package Length'
+            ], [
+                'key' => 'packageBreadth',
+                'title' => 'Package Breadth'
+            ], [
+                'key' => 'packageHeight',
+                'title' => 'Package Height'
             ],
         ];
     }
@@ -260,5 +350,109 @@ class CategoryController extends BaseController
             }
         }
         return $dom->saveHTML();
+    }
+
+    public function downloadTemplate($id)
+    {
+        $response = responseWeb();
+        try {
+            /**
+             * @var Category $category
+             * @var Collection $attributes
+             */
+            $category = Category::query()->whereKey($id)->where('type', Category::Types['Vertical'])->first();
+            $spreadsheet = new Spreadsheet();
+            $spreadsheet->removeSheetByIndex(0);
+            $worksheetIndex = $spreadsheet->createSheet();
+            $worksheetIndex->setTitle('Index');
+            $worksheetMain = $spreadsheet->createSheet();
+            $worksheetMain->setTitle($category->name);
+            $attributeSet = $category->attributeSet;
+            $navigatorMain = new ColumnNavigator();
+            $count = 0;
+            foreach ($this->keyColumns as $column) {
+                $worksheetMain->setCellValue($navigatorMain->currentCell(), $column['title']);
+                $worksheetMain->getCell($navigatorMain->currentCell())->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $navigatorMain->nextCell();
+                $count++;
+            }
+            $navigator = new ColumnNavigator();
+            for ($x = 1; $x <= $count; $x++) {
+                $worksheetMain->getColumnDimension($navigator->currentColumn())->setAutoSize(true);
+                $navigator->nextColumn();
+            }
+            $navigator = new ColumnNavigator();
+            if ($attributeSet != null) {
+                $attributeSetItems = $attributeSet->items;
+                $attributeSetItems->each(function (AttributeSetItem $attributeSetItem) use (&$worksheetIndex, $category, $navigator, $navigatorMain, $worksheetMain) {
+                    $navigator->moveToFirstRow();
+                    $attribute = $attributeSetItem->attribute;
+                    $richText = new RichText();
+                    $payable = $richText->createTextRun($attribute->code);
+                    $payable->getFont()->setUnderline(true);
+                    $payable->getFont()->setColor(new Color(Color::COLOR_DARKBLUE));
+                    $worksheetIndex->setCellValue($navigator->currentCell(), $richText);
+                    $worksheetMain->setCellValue($navigatorMain->currentCell(), $richText);
+                    $worksheetMain->getCell($navigatorMain->currentCell())->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                    $worksheetMain->getColumnDimension($navigatorMain->currentColumn())->setAutoSize(true);
+                    $worksheetMain->getCell($navigatorMain->currentCell())->getHyperlink()->setUrl(sprintf("sheet://'%s'!%s", 'Index', $navigator->currentCell()));
+                    $worksheetIndex->getCell($navigator->currentCell())->getHyperlink()->setUrl(sprintf("sheet://'%s'!%s", $category->name, $navigatorMain->currentCell()));
+                    $worksheetIndex->getCell($navigator->currentCell())->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                    $worksheetIndex->getColumnDimension($navigator->currentColumn())->setAutoSize(true);
+                    $navigator->advanceNextRow();
+                    foreach ($attribute->values() as $value) {
+                        $worksheetIndex->setCellValue($navigator->currentCell(), $value);
+                        $worksheetIndex->getCell($navigator->currentCell())->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                        $navigator->advanceNextRow();
+                    }
+                    $navigator->nextColumn();
+                    $navigatorMain->nextCell();
+                });
+            } else {
+                $worksheetIndex->setCellValue('A1', 'No attributes found!');
+            }
+            for ($i = 1; $i <= 8; $i++) {
+                if ($i == 1)
+                    $worksheetMain->setCellValue($navigatorMain->currentCell(), 'Product Image (Front)');
+                else
+                    $worksheetMain->setCellValue($navigatorMain->currentCell(), 'Product Image (Extra)');
+                $worksheetMain->getCell($navigatorMain->currentCell())->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $worksheetMain->getColumnDimension($navigatorMain->currentColumn())->setAutoSize(true);
+                $navigatorMain->nextCell();
+                $count++;
+            }
+            foreach ($this->keyColumns as $column) {
+                if (isset($column['items'])) {
+                    $navigator->moveToFirstRow();
+                    $worksheetIndex->getCell($navigator->currentCell())->setValue($column['title']);
+                    $worksheetIndex->getCell($navigator->currentCell())->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                    $worksheetIndex->getColumnDimension($navigator->currentColumn())->setAutoSize(true);
+                    foreach ($column['items'] as $item) {
+                        $navigator->advanceNextRow();
+                        $worksheetIndex->getCell($navigator->currentCell())->setValue($item);
+                        $worksheetIndex->getCell($navigator->currentCell())->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                    }
+                    $navigator->nextCell();
+                }
+            }
+            $writer = new Xls($spreadsheet);
+            $response = new StreamedResponse(
+                function () use ($writer) {
+                    $writer->save('php://output');
+                }
+            );
+            $response->headers->set('Content-Type', 'application/vnd.ms-excel');
+            $response->headers->set('Content-Disposition', sprintf('attachment;filename="%s_%s.xls"', $category->name, Carbon::now()->timestamp));
+            $response->headers->set('Cache-Control', 'max-age=0');
+        } catch (ModelNotFoundException $exception) {
+            $response->error('Could not fin category for that key.');
+        } catch (\Throwable $exception) {
+            $response->error($exception->getMessage());
+        } finally {
+            if ($response instanceof WebResponse)
+                return $response->send();
+            else
+                return $response;
+        }
     }
 }
