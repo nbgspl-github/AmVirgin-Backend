@@ -21,25 +21,23 @@ use Illuminate\Support\Carbon;
 use Throwable;
 
 
-class OrderController extends ExtendedResourceController
-{
+class OrderController extends ExtendedResourceController {
     use ValidatesRequest;
 
     protected array $rules;
 
-    public function __construct()
-    {
+    public function __construct () {
         parent::__construct();
         $this->rules = [
             'updateStatusBulk' => [
                 'orderId' => ['bail', 'required', 'exists:orders,id'],
-                'status' => ['bail', 'required', Rule::in(OrderStatus::getValues())]
+                'status' => ['bail', 'required', Rule::in(OrderStatus::getValues())],
+                'cancellationReason' => ['bail', 'required_if:status,cancelled', 'string', 'min:2', 'max:500']
             ]
         ];
     }
 
-    public function index(): JsonResponse
-    {
+    public function index (): JsonResponse {
         $response = responseApp();
 
         $per_page = request()->get('per_page') ?? '';
@@ -99,8 +97,7 @@ class OrderController extends ExtendedResourceController
         }
     }
 
-    public function getPaymentsTransaction(): JsonResponse
-    {
+    public function getPaymentsTransaction (): JsonResponse {
         $response = responseApp();
 
         $per_page = request()->get('per_page') ?? '';
@@ -142,8 +139,7 @@ class OrderController extends ExtendedResourceController
         }
     }
 
-    public function getPreviousPayments(): JsonResponse
-    {
+    public function getPreviousPayments (): JsonResponse {
         $response = responseApp();
 
         $per_page = request()->get('per_page') ?? '';
@@ -188,8 +184,7 @@ class OrderController extends ExtendedResourceController
         }
     }
 
-    public function show($id): JsonResponse
-    {
+    public function show ($id): JsonResponse {
         $response = responseApp();
         try {
             $order = SellerOrder::startQuery()->useAuth()->key($id)->firstOrFail();
@@ -204,8 +199,7 @@ class OrderController extends ExtendedResourceController
         }
     }
 
-    public function orderDetails($id): JsonResponse
-    {
+    public function orderDetails ($id): JsonResponse {
         $response = responseApp();
         try {
             $order = SellerOrder::startQuery()->useAuth()->key($id)->firstOrFail();
@@ -224,8 +218,7 @@ class OrderController extends ExtendedResourceController
         }
     }
 
-    public function updateStatus(int $id): JsonResponse
-    {
+    public function updateStatus (int $id): JsonResponse {
         $response = responseApp();
         $status = request('status');
         try {
@@ -252,8 +245,7 @@ class OrderController extends ExtendedResourceController
         }
     }
 
-    public function updateStatusBulk(): JsonResponse
-    {
+    public function updateStatusBulk (): JsonResponse {
         $response = responseApp();
         try {
             $invalid = [];
@@ -266,7 +258,11 @@ class OrderController extends ExtendedResourceController
                         $order->update([
                             'status' => request('status'),
                         ]);
-                        SellerOrder::query()->where('orderId', $order->getKey())->update(['status' => request('status')]);
+                        if (request('status') == OrderStatus::Cancelled) {
+                            SellerOrder::query()->where('orderId', $order->getKey())->update(['status' => request('status'), 'cancellationReason' => request('cancellationReason')]);
+                        } else {
+                            SellerOrder::query()->where('orderId', $order->getKey())->update(['status' => request('status')]);
+                        }
                     }
                 } catch (InvalidEnumMemberException $exception) {
                     $invalid[] = $order->getKey();
@@ -280,8 +276,7 @@ class OrderController extends ExtendedResourceController
         }
     }
 
-    public function getOrderStatus()
-    {
+    public function getOrderStatus () {
         $response = responseApp();
         try {
             $order_status = Order::getAllStatus();
@@ -293,8 +288,7 @@ class OrderController extends ExtendedResourceController
         }
     }
 
-    public function getOrderByStatus($status)
-    {
+    public function getOrderByStatus ($status) {
         $response = responseApp();
         try {
             // $order_status= Config::get('app.order_status');
@@ -327,8 +321,7 @@ class OrderController extends ExtendedResourceController
         }
     }
 
-    public function getRatingList(): JsonResponse
-    {
+    public function getRatingList (): JsonResponse {
         $response = responseApp();
 
         $per_page = request()->get('per_page') ?? '';
@@ -379,8 +372,7 @@ class OrderController extends ExtendedResourceController
         }
     }
 
-    protected function guard()
-    {
+    protected function guard () {
         return auth('seller-api');
     }
 }

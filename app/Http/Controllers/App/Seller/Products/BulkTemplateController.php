@@ -124,7 +124,7 @@ class BulkTemplateController extends ExtendedResourceController
                 'key' => 'procurementSla',
                 'title' => 'Procurement SLA',
                 'items' => [
-                    0, 1, 2, 3, 4, 5, 6, 7
+                    0, 1, 2
                 ]
             ], [
                 'key' => 'originalPrice',

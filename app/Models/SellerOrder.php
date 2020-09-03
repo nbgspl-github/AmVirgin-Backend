@@ -8,8 +8,7 @@ use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 
-class SellerOrder extends ModelExtended
-{
+class SellerOrder extends ModelExtended {
     use DynamicAttributeNamedMethods, RetrieveResource, RetrieveCollection;
 
     protected $table = 'seller-orders';
@@ -19,7 +18,8 @@ class SellerOrder extends ModelExtended
         'orderId',
         'orderNumber',
         'status',
-        'neftId'
+        'neftId',
+        'cancellationReason'
     ];
     public const AllowedStatuses = [
         ShipmentPending => [
@@ -53,38 +53,31 @@ class SellerOrder extends ModelExtended
         ],
     ];
 
-    public function seller()
-    {
+    public function seller () {
         return $this->belongsTo('App\Models\Auth\Seller', 'sellerId');
     }
 
-    public function customer()
-    {
+    public function customer () {
         return $this->belongsTo(Auth\Customer::class, 'customerId');
     }
 
-    public function items()
-    {
+    public function items () {
         return $this->hasMany('App\Models\SellerOrderItem', 'sellerOrderId');
     }
 
-    public function item()
-    {
+    public function item () {
         return $this->hasMany('App\Models\SellerOrderItem', 'sellerOrderId')->with('productDetails');
     }
 
-    public function order()
-    {
+    public function order () {
         return $this->belongsTo(Order::class, 'orderId')->with('address');
     }
 
-    public function sellerBank()
-    {
+    public function sellerBank () {
         return $this->belongsTo(SellerBankDetail::class, 'sellerId');
     }
 
-    public static function startQuery(): SellerOrderQuery
-    {
+    public static function startQuery (): SellerOrderQuery {
         return SellerOrderQuery::begin();
     }
 }
