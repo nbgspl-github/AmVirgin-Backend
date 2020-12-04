@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\App\Customer;
 
-use App\Http\Controllers\App\BaseAuthController;
-use App\Resources\Auth\Customer\AuthProfileResource;
+use App\Http\Controllers\BaseAuthController;
 use App\Models\Auth\Customer;
-use Illuminate\Database\Eloquent\Model;
+use App\Resources\Auth\Customer\AuthProfileResource;
 use Illuminate\Support\Facades\Auth;
 
 /**

@@ -3,11 +3,10 @@
  * Copyright (c) 2019. Aviral Singh
  */
 
-namespace App\Http\Controllers\App;
+namespace App\Http\Controllers;
 
 use App\Exceptions\ResourceConflictException;
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\BaseController;
 use App\Interfaces\Directories;
 use App\Models\Auth\Seller;
 use App\Resources\Auth\Seller\AuthProfileResource;

@@ -56,6 +56,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
+
 {{--<!-- App js -->--}}
 <script src="{{asset("assets/admin/js/app.js")}}"></script>
 

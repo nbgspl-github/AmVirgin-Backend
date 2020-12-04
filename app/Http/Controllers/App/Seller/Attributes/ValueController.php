@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\App\Seller\Attributes;
 
-use App\Classes\Str;
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class ValueController extends ExtendedResourceController{
+class ValueController extends AppController{
 	public function __construct(){
 		parent::__construct();
 	}

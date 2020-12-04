@@ -2,7 +2,7 @@
 
 namespace App\Validation\Products\Seller;
 
-use App\Validation\RuleContainers\BaseProvider;
+use App\Validation\BaseProvider;
 
 class RulesProvider extends BaseProvider {
 	public function store(): array {

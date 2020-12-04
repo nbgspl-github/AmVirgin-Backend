@@ -151,7 +151,7 @@ class VideosBase extends BaseController {
 
 	protected function replaceTrending($chosenRank) {
 		$ranked = Video::where('rank', $chosenRank)->first();
-		if (!null($ranked)) {
+		if (!is_null($ranked)) {
 			$ranked->rank = 0;
 			$ranked->trending = false;
 			$ranked->save();

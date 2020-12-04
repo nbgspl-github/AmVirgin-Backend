@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\App\Seller;
 
 use App\Classes\Rule;
-use App\Http\Controllers\App\BaseAuthController;
+use App\Http\Controllers\BaseAuthController;
 use App\Interfaces\Tables;
 use App\Mail\SendMail;
 use App\Models\Auth\Seller;

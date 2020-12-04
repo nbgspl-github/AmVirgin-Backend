@@ -12,18 +12,18 @@ use App\Models\Video;
 use App\Storage\SecuredDisk;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
-use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
-class SliderController extends BaseController{
+class SliderController extends BaseController
+{
 	use ValidatesRequest;
 	use FluentResponse;
 
 	protected array $rules;
 
-	public function __construct(){
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->rules = [
 			'store' => [
@@ -49,23 +49,25 @@ class SliderController extends BaseController{
 		];
 	}
 
-	public function index(){
+	public function index ()
+	{
 		$slides = Slider::all();
 		return view('admin.sliders.index')->with('slides', $slides);
 	}
 
-	public function create(){
+	public function create ()
+	{
 		$videos = Video::where('pending', false)->get(['id', 'title']);
 		return view('admin.sliders.create')->with('videos', $videos);
 	}
 
-	public function edit($id){
+	public function edit ($id)
+	{
 		$videos = Video::where('pending', false)->get(['id', 'title']);
 		$slider = Slider::find($id);
 		if ($slider != null) {
 			return view('admin.sliders.edit')->with('slide', $slider)->with('videos', $videos);
-		}
-		else {
+		} else {
 			return responseWeb()->
 			route('admin.sliders.index')->
 			error('Could not find slide for that key.')->
@@ -73,7 +75,8 @@ class SliderController extends BaseController{
 		}
 	}
 
-	public function store(Request $request){
+	public function store (Request $request)
+	{
 		$response = responseWeb();
 		try {
 			$validated = $this->requestValid($request, $this->rules['store']);
@@ -81,27 +84,24 @@ class SliderController extends BaseController{
 			$validated['banner'] = request()->hasFile('banner') ? SecuredDisk::access()->putFile(Directories::Sliders, $request->file('banner')) : null;
 			Slider::create($validated);
 			$response->route('admin.sliders.index')->success('Slider created successfully.');
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response->back()->error($exception->getError())->data($request->all());
-		}
-		catch (\Throwable $exception) {
+		} catch (\Throwable $exception) {
 			$response->back()->error($exception->getMessage())->data($request->all());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function delete($id){
+	public function delete ($id)
+	{
 		$slider = Slider::find($id);
 		if ($slider == null) {
 			return $this->failed()->
 			message('Could not find slide for that key.')->
 			status(HttpResourceNotFound)->
 			send();
-		}
-		else {
+		} else {
 			$slider->delete();
 			return $this->success()->
 			status(HttpOkay)->
@@ -110,7 +110,8 @@ class SliderController extends BaseController{
 		}
 	}
 
-	public function update(Request $request){
+	public function update (Request $request)
+	{
 		$response = responseWeb();
 		$banner = null;
 		try {
@@ -120,7 +121,7 @@ class SliderController extends BaseController{
 				'title' => $validated['title'],
 				'description' => $validated['description'],
 				'type' => $validated['type'],
-				'target' => $validated['target'],
+				'target' => $validated['type'] == Slider::TargetType['ExternalLink'] ? $validated['targetLink'] : $validated['targetKey'],
 				'rating' => $validated['rating'],
 				'active' => $validated['active'],
 			]);
@@ -129,19 +130,17 @@ class SliderController extends BaseController{
 				$slide->update(['banner' => $banner]);
 			}
 			$response->route('admin.sliders.index')->success('Slider updated successfully.');
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response->back()->error($exception->getError())->data($request->all());
-		}
-		catch (\Throwable $exception) {
+		} catch (\Throwable $exception) {
 			$response->back()->error($exception->getMessage())->data($request->all());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function updateStatus(Request $request){
+	public function updateStatus (Request $request)
+	{
 		$validator = Validator::make($request->all(), [
 			'id' => ['bail', 'required', Rule::exists(Tables::Sliders, 'id')],
 			'active' => ['bail', 'required', 'boolean'],
@@ -151,8 +150,7 @@ class SliderController extends BaseController{
 			message($validator->errors()->first())->
 			status(HttpResourceNotFound)->
 			send();
-		}
-		else {
+		} else {
 			Slider::find($request->id)->
 			setActive($request->active)->
 			save();

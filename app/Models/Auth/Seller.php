@@ -7,6 +7,7 @@ use App\Models\City;
 use App\Models\Country;
 use App\Models\Product;
 use App\Models\SellerBusinessDetail;
+use App\Models\SellerOrder;
 use App\Models\State;
 use App\Traits\ActiveStatus;
 use App\Traits\BroadcastPushNotifications;
@@ -25,63 +26,68 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Seller extends Authenticatable implements JWTSubject
 {
-    use Notifiable, BroadcastPushNotifications, FluentConstructor, ActiveStatus, RetrieveResource, RetrieveCollection, OtpVerificationSupport, JWTAuthDefaultSetup, DynamicAttributeNamedMethods;
+	use Notifiable, BroadcastPushNotifications, FluentConstructor, ActiveStatus, RetrieveResource, RetrieveCollection, OtpVerificationSupport, JWTAuthDefaultSetup, DynamicAttributeNamedMethods;
 
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'mobile',
-        'avatar',
-        'businessName',
-        'description',
-        'pinCode',
-        'addressFirstLine',
-        'addressSecondLine',
-        'countryId',
-        'stateId',
-        'cityId',
-        'mouAgreed',
-    ];
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-    protected $casts = [
-        'id' => 'integer',
-        'name' => 'string',
-        'email' => 'string',
-        'email_verified_at' => 'datetime',
-        'mouAgreed' => 'bool',
-    ];
+	protected $fillable = [
+		'name',
+		'email',
+		'password',
+		'mobile',
+		'avatar',
+		'businessName',
+		'description',
+		'pinCode',
+		'addressFirstLine',
+		'addressSecondLine',
+		'countryId',
+		'stateId',
+		'cityId',
+		'mouAgreed',
+	];
+	protected $hidden = [
+		'password',
+		'remember_token',
+	];
+	protected $casts = [
+		'id' => 'integer',
+		'name' => 'string',
+		'email' => 'string',
+		'email_verified_at' => 'datetime',
+		'mouAgreed' => 'bool',
+	];
 
-    public function approvedBrands(): HasMany
-    {
-        return $this->hasMany(Brand::class, 'createdBy', 'id');
-    }
+	public function approvedBrands (): HasMany
+	{
+		return $this->hasMany(Brand::class, 'createdBy', 'id');
+	}
 
-    public function city(): BelongsTo
-    {
-        return $this->belongsTo(City::class, 'cityId');
-    }
+	public function city (): BelongsTo
+	{
+		return $this->belongsTo(City::class, 'cityId');
+	}
 
-    public function products(): HasMany
-    {
-        return $this->hasMany(Product::class, 'sellerId');
-    }
+	public function products (): HasMany
+	{
+		return $this->hasMany(Product::class, 'sellerId');
+	}
 
-    public function state(): BelongsTo
-    {
-        return $this->belongsTo(State::class, 'stateId');
-    }
+	public function orders (): HasMany
+	{
+		return $this->hasMany(SellerOrder::class, 'sellerId');
+	}
 
-    public function country(): BelongsTo
-    {
-        return $this->belongsTo(Country::class, 'countryId');
-    }
+	public function state (): BelongsTo
+	{
+		return $this->belongsTo(State::class, 'stateId');
+	}
 
-    public function businessDetails(): HasOne
-    {
-        return $this->hasOne(SellerBusinessDetail::class, 'sellerId');
-    }
+	public function country (): BelongsTo
+	{
+		return $this->belongsTo(Country::class, 'countryId');
+	}
+
+	public function businessDetails (): HasOne
+	{
+		return $this->hasOne(SellerBusinessDetail::class, 'sellerId');
+	}
 }

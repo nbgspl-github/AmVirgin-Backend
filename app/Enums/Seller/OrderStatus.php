@@ -2,9 +2,13 @@
 
 namespace App\Enums\Seller;
 
-final class OrderStatus extends \BenSampo\Enum\Enum {
+use BenSampo\Enum\Enum;
+
+final class OrderStatus extends Enum
+{
 	const Placed = 'placed';
 	const Pending = 'pending';
+	const PendingDispatch = 'pending-dispatch';
 	const ReadyForDispatch = 'ready-for-dispatch';
 	const Dispatched = 'dispatched';
 	const OutForDelivery = 'out-for-delivery';
@@ -13,10 +17,14 @@ final class OrderStatus extends \BenSampo\Enum\Enum {
 	const Cancelled = 'cancelled';
 	const RefundProcessing = 'refund-processing';
 	const Refunded = 'refunded';
+	const ReturnInitiated = 'return-initiated';
+	const ReturnApproved = 'return-approved';
+	const ReturnDisapproved = 'return-disapproved';
+	const ReturnCompleted = 'return-completed';
 	const NotAvailable = 'N/A';
-	const PendingDispatch = 'pending-dispatch';
 
-	public static function transitions (OrderStatus $status) : array {
+	public static function transitions (OrderStatus $status): array
+	{
 		switch ($status->value) {
 			case self::Placed:
 				return [
@@ -35,7 +43,7 @@ final class OrderStatus extends \BenSampo\Enum\Enum {
 				return [
 					self::getKey(self::OutForDelivery) => self::OutForDelivery,
 					self::getKey(self::Rescheduled) => self::Rescheduled,
-					self::getKey(self::Cancelled) => self::Cancelled, 
+					self::getKey(self::Cancelled) => self::Cancelled,
 				];
 
 			case self::Rescheduled:

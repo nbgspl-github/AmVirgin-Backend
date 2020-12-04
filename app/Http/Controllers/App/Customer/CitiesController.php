@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\App\Customer;
 
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Models\City;
 
-class CitiesController extends ExtendedResourceController {
+class CitiesController extends AppController {
 	public function index($stateId) {
 		$cities = City::where('stateId', $stateId)->get();
 		$cities->transform(function (City $city) {

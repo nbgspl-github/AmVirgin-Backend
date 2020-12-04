@@ -19,6 +19,7 @@ class TrendingNowVideoResource extends JsonResource{
 			'trailer' => SecuredDisk::existsUrl($this->trailer),
 			'rating' => $this->rating,
 			'poster' => SecuredDisk::existsUrl($this->poster),
+			'backdrop' => SecuredDisk::existsUrl($this->backdrop),
 			'pgRating' => $this->pgRating,
 			'subscriptionType' => $this->subscriptionType,
 			'hasSeasons' => boolval($this->hasSeasons),

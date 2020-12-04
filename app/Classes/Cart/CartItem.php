@@ -5,6 +5,7 @@ namespace App\Classes\Cart;
 use App\Constants\OfferTypes;
 use App\Exceptions\MaxAllowedQuantityReachedException;
 use App\Exceptions\OutOfStockException;
+use App\Models\Cart;
 use App\Models\Product;
 use App\Resources\Cart\CartItemResource;
 use JsonSerializable;
@@ -26,9 +27,9 @@ class CartItem extends stdClass implements JsonSerializable{
 
 	protected Product $product;
 
-	protected \App\Models\Cart $cart;
+	protected Cart $cart;
 
-	public function __construct(\App\Models\Cart $cart, int $key){
+	public function __construct(Cart $cart, int $key){
 		$this->setKey($key);
 		$this->setProduct(Product::retrieve($this->getKey()));
 		$this->setMinAllowedQuantity(1);
@@ -113,11 +114,11 @@ class CartItem extends stdClass implements JsonSerializable{
 		return $this;
 	}
 
-	public function getCart(): \App\Models\Cart{
+	public function getCart(): Cart{
 		return $this->cart;
 	}
 
-	public function setCart(\App\Models\Cart $cart): CartItem{
+	public function setCart(Cart $cart): CartItem{
 		$this->cart = $cart;
 		return $this;
 	}

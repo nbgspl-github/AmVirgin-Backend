@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\App\Customer;
 
 use App\Classes\Arrays;
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use Illuminate\Http\JsonResponse;
 
-class SortController extends ExtendedResourceController{
+class SortController extends AppController{
 	public function sorts(): JsonResponse{
 		$available = config('sorts.shop');
 		$sorts = Arrays::Empty;

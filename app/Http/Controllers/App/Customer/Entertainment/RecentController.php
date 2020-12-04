@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\App\Customer\Entertainment;
 
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Models\CustomerRecent;
 
-class RecentController extends ExtendedResourceController {
+class RecentController extends AppController {
 	public function __construct() {
 		parent::__construct();
 	}

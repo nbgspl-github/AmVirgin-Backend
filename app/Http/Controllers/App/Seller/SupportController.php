@@ -4,13 +4,13 @@ namespace App\Http\Controllers\App\Seller;
 
 use App\Classes\Rule;
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Models\SupportTicket;
 use App\Resources\Support\Seller\TicketResource;
 use App\Traits\ValidatesRequest;
 use Illuminate\Http\JsonResponse;
 
-class SupportController extends ExtendedResourceController {
+class SupportController extends AppController {
 	use ValidatesRequest;
 
 	protected array $rules;

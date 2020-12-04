@@ -27,7 +27,7 @@ trait RetrieveResource{
 		$model = self::retrieve($id);
 		$modelName = __modelNameFromSlug(self::class);
 		$msg = sprintf(self::$throwsMessage, lcfirst($modelName));
-		throw_if(null($model), new ModelNotFoundException($msg));
+		throw_if(is_null($model), new ModelNotFoundException($msg));
 		return $model;
 	}
 

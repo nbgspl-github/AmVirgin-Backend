@@ -6,56 +6,58 @@ use App\Models\Auth\Customer;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Order extends Model {
+class Order extends Model
+{
 	use DynamicAttributeNamedMethods, RetrieveResource;
 
-	protected $table = 'orders';
-	protected $fillable = [
-		'customerId',
-		'addressId',
-		'orderNumber',
-		'quantity',
-		'subTotal',
-		'tax',
-		'total',
-		'paymentMode',
-		'transactionId',
-		'status',
+	protected $guarded = [
+		'id'
 	];
 	protected $hidden = [
 		'created_at',
 		'updated_at',
 	];
 
-	public static $status = [
-		'Placed' => 'placed',
-		'ReadyForDispatch' => 'ready-for-dispatch',
-		'Dispatched' => 'dispatched',
-		'Delivered' => 'delivered',
-		'Cancelled' => 'cancelled',
-		'RefundProcessing' => 'refund-processing',
-		'PendingDispatch' => 'pending-dispatch', 
-		// 'OutForDelivery' => 'out-for-delivery',
-	];
-
-	public function items () {
+	public function items ()
+	{
 		return $this->hasMany(OrderItem::class, 'orderId')->with('product');
 	}
 
-	public function customer () {
+	public function customer ()
+	{
 		return $this->belongsTo(Customer::class, 'customerId');
 	}
 
-	public function products () {
+	public function products ()
+	{
 		return $this->belongsTo(Product::class, OrderItem::class, 'id', 'productId');
 	}
 
-	public function address () {
+	public function address ()
+	{
 		return $this->belongsTo(ShippingAddress::class, 'addressId')->with('city', 'state');
 	}
 
-	public static function getAllStatus () {
-		return self::$status;
+	public function sellerOrder (): HasOne
+	{
+		return $this->hasOne(SellerOrder::class, 'orderId', 'id');
+	}
+
+	public function transaction (): HasOne
+	{
+		return $this->hasOne(Transaction::class, 'orderId');
+	}
+
+	public function segments (): HasMany
+	{
+		return $this->hasMany(OrderSegment::class, 'orderId');
+	}
+
+	public function timeline (): HasMany
+	{
+		return $this->hasMany(OrderTimeline::class, 'orderId');
 	}
 }

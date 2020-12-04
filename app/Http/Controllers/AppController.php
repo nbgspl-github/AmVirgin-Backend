@@ -1,34 +1,40 @@
 <?php
 
-namespace App\Http\Controllers\Base;
+namespace App\Http\Controllers;
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
+use App\Queries\AbstractQuery;
+use App\Traits\FluentResponse;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 
-abstract class AppController extends BaseController{
-	protected function index(){
-		return $this->resource()::with($this->provider()::paginate());
-	}
+abstract class AppController extends BaseController
+{
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use FluentResponse;
 
-	protected function edit($id){
+    protected const CustomerAPI = 'customer-api';
+    protected const SellerAPI = 'seller-api';
 
-	}
+    protected function user()
+    {
+        return $this->guard()->user();
+    }
 
-	protected function store(){
+    protected function userId()
+    {
+        return $this->guard()->user()->getKey();
+    }
 
-	}
+    protected function evaluate(callable $closure, ...$arguments)
+    {
+        return call_user_func($closure, $arguments);
+    }
 
-	protected function update(){
+    protected function query()
+    {
+        return AbstractQuery::class;
+    }
 
-	}
-
-	protected function delete(){
-
-	}
-
-	protected abstract function provider();
-
-	protected abstract function resource();
-
-	protected abstract function collection();
+    protected abstract function guard();
 }

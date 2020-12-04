@@ -13,15 +13,15 @@
 								@csrf
 								<div class="form-group">
 									<label>Name</label>
-									<input type="text" name="name" class="form-control" required placeholder="Type here the user's name" minlength="4" maxlength="50" value="{{$customer->getName()}}"/>
+									<input type="text" name="name" class="form-control" required placeholder="Type here the user's name" minlength="4" maxlength="50" value="{{$customer->name}}"/>
 								</div>
 								<div class="form-group">
 									<label>Email</label>
-									<input type="text" name="email" class="form-control" required placeholder="Type here the user's email" data-parsley-type="email" value="{{$customer->getEmail()}}"/>
+									<input type="text" name="email" class="form-control" required placeholder="Type here the user's email" data-parsley-type="email" value="{{$customer->email}}"/>
 								</div>
 								<div class="form-group">
 									<label>Mobile</label>
-									<input type="text" name="mobile" class="form-control" required placeholder="Type here the user's mobile number" data-parsley-type="digits" minlength="10" maxlength="10" value="{{$customer->getMobile()}}"/>
+									<input type="text" name="mobile" class="form-control" required placeholder="Type here the user's mobile number" data-parsley-type="digits" minlength="10" maxlength="10" value="{{$customer->mobile}}"/>
 								</div>
 								<div class="form-group">
 									<label>Active</label>

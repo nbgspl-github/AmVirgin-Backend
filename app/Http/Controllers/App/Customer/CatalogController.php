@@ -5,7 +5,7 @@ namespace App\Http\Controllers\App\Customer;
 use App\Classes\Rule;
 use App\Classes\Sorting\AbstractSorts;
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Interfaces\Tables;
 use App\Models\Category;
 use App\Models\Product;
@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 
-class CatalogController extends ExtendedResourceController
+class CatalogController extends AppController
 {
     use ValidatesRequest;
 

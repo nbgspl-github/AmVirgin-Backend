@@ -4,28 +4,28 @@ namespace App\Http\Controllers\App\Customer\Entertainment;
 
 use App\Classes\Arrays;
 use App\Classes\Str;
-use App\Classes\Time;
 use App\Constants\PageSectionType;
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Models\PageSection;
 use App\Models\Product;
 use App\Models\Slider;
 use App\Models\Video;
 use App\Resources\Shop\Customer\HomePage\EntertainmentProductResource;
 use App\Resources\Shop\Customer\HomePage\EntertainmentSliderResource;
-use App\Resources\Shop\Customer\HomePage\ShopSliderResource;
 use App\Resources\Shop\Customer\HomePage\TopPickResource;
-use App\Resources\Shop\Customer\HomePage\TrendingNowResource;
 use App\Resources\Shop\Customer\HomePage\TrendingNowVideoResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class HomePageController extends ExtendedResourceController{
-	public function __construct(){
+class HomePageController extends AppController
+{
+	public function __construct ()
+	{
 		parent::__construct();
 	}
 
-	public function index(){
+	public function index ()
+	{
 		/**
 		 * We need to send the following stuff for the homepage.
 		 * 1.) Sliders
@@ -59,8 +59,16 @@ class HomePageController extends ExtendedResourceController{
 			 * Page Sections
 			 */
 			$sections = PageSection::entertainment()->get();
-			$sections->transform(function (PageSection $pageSection){
-				$contents = Video::startQuery()->displayable()->section($pageSection->id())->take($pageSection->visibleItemCount())->get();
+			$sections->transform(function (PageSection $pageSection) {
+				$contents = Video::startQuery()
+					->displayable()
+					->language(request('languageId', null))
+					->includeExplicit(request('explicit', 0) == 1)
+					->genre(request('genre', null))
+					->subscriptionType(request('subscriptionType', null))
+					->section($pageSection->id())
+					->take($pageSection->visibleItemCount())
+					->get();
 				$contents = TopPickResource::collection($contents);
 				return [
 					'id' => $pageSection->id(),
@@ -81,47 +89,51 @@ class HomePageController extends ExtendedResourceController{
 			/**
 			 * Trending Now
 			 */
-			$trendingNow = Video::startQuery()->displayable()->trending()->get();
+			$trendingNow = Video::startQuery()
+				->displayable()
+				->language(request('languageId', null))
+				->includeExplicit(request('explicit', 0) == 1)
+				->genre(request('genre', null))
+				->subscriptionType(request('subscriptionType', null))
+				->trending()
+				->get();
 			$trendingNow = TrendingNowVideoResource::collection($trendingNow);
 			$data['trendingNow'] = $trendingNow;
 
 			return responseApp()->status(HttpOkay)->message('Successfully retrieved entertainment homepage resources.')->setValue('data', $data)->send();
-		}
-		catch (Throwable $throwable) {
+		} catch (Throwable $throwable) {
 			return responseApp()->status(HttpServerError)->message($throwable->getMessage())->setValue('data')->send();
 		}
 	}
 
-	public function showAllItemsInSection($id){
+	public function showAllItemsInSection ($id)
+	{
 		$response = responseApp();
 		try {
 			$pageSection = PageSection::retrieve($id);
 			if (Str::equals($pageSection->type(), PageSectionType::Entertainment)) {
 				$contents = Video::startQuery()->displayable()->section($pageSection->id())->take($pageSection->visibleItemCount())->get();
-			}
-			else {
+			} else {
 				$contents = Product::startQuery()->displayable()->promoted()->take($pageSection->visibleItemCount())->get();
 			}
 			$contents = TopPickResource::collection($contents);
-			$response->status(HttpOkay)->message(sprintf('Found %d items under %s.', count($contents), $pageSection->title()))
-				->setValue('data', $contents);
-		}
-		catch (ModelNotFoundException $exception) {
+			$response->status(HttpOkay)->message(sprintf('Found %d items under %s.', $contents->count(), $pageSection->title()))->setValue('data', $contents);
+		} catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('Could not find section for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	protected function guard(){
+	protected function guard ()
+	{
 		return auth('customer-api');
 	}
 
-	public function trendingNow(){
+	public function trendingNow ()
+	{
 		$data = [];
 		try {
 			$trendingNow = Video::startQuery()->displayable()->trending()->get();
@@ -134,14 +146,14 @@ class HomePageController extends ExtendedResourceController{
 
 			return responseApp()->status(HttpOkay)->message($msg)->setValue('data', $data)->send();
 
-		}
-		catch (Throwable $e) {
+		} catch (Throwable $e) {
 			return responseApp()->status(HttpServerError)->message($e)->setValue('data')->send();
 
 		}
 	}
 
-	public function recommendedVideo(){
+	public function recommendedVideo ()
+	{
 		try {
 			$trendingNow = Video::startQuery()->displayable()->orderByDescending('rating')->limit(15)->get();
 			$trendingNow = TrendingNowVideoResource::collection($trendingNow);
@@ -153,10 +165,8 @@ class HomePageController extends ExtendedResourceController{
 
 			return responseApp()->status(HttpOkay)->message($msg)->setValue('data', $data)->send();
 
-		}
-		catch (Throwable $e) {
+		} catch (Throwable $e) {
 			return responseApp()->status(HttpServerError)->message($e)->setValue('data')->send();
-
 		}
 	}
 }

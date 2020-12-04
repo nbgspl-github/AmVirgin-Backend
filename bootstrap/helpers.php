@@ -96,11 +96,6 @@ function __boolean($value)
     return $value == true ? 'Yes' : 'No';
 }
 
-function null($expression)
-{
-    return $expression == null;
-}
-
 function __modelNameFromSlug($slug)
 {
     $identifier = 'model-mapping.' . $slug;

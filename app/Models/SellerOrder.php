@@ -2,82 +2,60 @@
 
 namespace App\Models;
 
-use App\Classes\Eloquent\ModelExtended;
+use App\Models\Auth\Customer;
+use App\Models\Auth\Seller;
 use App\Queries\SellerOrderQuery;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
+use Illuminate\Database\Eloquent\Model;
 
-class SellerOrder extends ModelExtended {
-    use DynamicAttributeNamedMethods, RetrieveResource, RetrieveCollection;
+class SellerOrder extends Model
+{
+	use DynamicAttributeNamedMethods, RetrieveResource, RetrieveCollection;
 
-    protected $table = 'seller-orders';
-    protected $fillable = [
-        'sellerId',
-        'customerId',
-        'orderId',
-        'orderNumber',
-        'status',
-        'neftId',
-        'cancellationReason'
-    ];
-    public const AllowedStatuses = [
-        ShipmentPending => [
-            ShipmentPlaced,
-        ],
-        ShipmentPlaced => [
-            ShipmentReadyForDispatch,
-            ShipmentDispatched,
-            ShipmentCancelled,
-        ],
-        ShipmentReadyForDispatch => [
-            ShipmentDispatched,
-        ],
-        ShipmentDispatched => [
-            ShipmentOutForDelivery,
-            ShipmentRescheduled,
-        ],
-        ShipmentRescheduled => [
-            ShipmentOutForDelivery,
-        ],
-        ShipmentOutForDelivery => [
-            ShipmentRescheduled,
-            ShipmentDelivered,
-        ],
-        ShipmentCancelled => [
-            ShipmentRefunded,
-            ShipmentRefundProcessing,
-        ],
-        ShipmentRefundProcessing => [
-            ShipmentRefunded,
-        ],
-    ];
+	protected $guarded = [
+		'id'
+	];
 
-    public function seller () {
-        return $this->belongsTo('App\Models\Auth\Seller', 'sellerId');
-    }
+	protected $fillable = [
+		'placedOn',
+		'dispatchedOn',
+		'shippedOn'
+	];
 
-    public function customer () {
-        return $this->belongsTo(Auth\Customer::class, 'customerId');
-    }
+	public function seller ()
+	{
+		return $this->belongsTo(Seller::class, 'sellerId');
+	}
 
-    public function items () {
-        return $this->hasMany('App\Models\SellerOrderItem', 'sellerOrderId');
-    }
+	public function customer ()
+	{
+		return $this->belongsTo(Customer::class, 'customerId');
+	}
 
-    public function item () {
-        return $this->hasMany('App\Models\SellerOrderItem', 'sellerOrderId')->with('productDetails');
-    }
+	public function items ()
+	{
+		return $this->hasMany(SellerOrderItem::class, 'sellerOrderId');
+	}
 
-    public function order () {
-        return $this->belongsTo(Order::class, 'orderId')->with('address');
-    }
+	public function item ()
+	{
+		return $this->hasMany(SellerOrderItem::class, 'sellerOrderId')->with('productDetails');
+	}
 
-    public function sellerBank () {
-        return $this->belongsTo(SellerBankDetail::class, 'sellerId');
-    }
+	public function order ()
+	{
+		return $this->belongsTo(Order::class, 'orderId')->with('address');
+	}
 
-    public static function startQuery (): SellerOrderQuery {
-        return SellerOrderQuery::begin();
-    }
+	public function sellerBank ()
+	{
+		return $this->belongsTo(SellerBankDetail::class, 'sellerId');
+	}
+
+	public static function startQuery (): SellerOrderQuery
+	{
+		return SellerOrderQuery::begin();
+	}
 }

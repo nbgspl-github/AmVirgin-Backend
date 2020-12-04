@@ -33,7 +33,7 @@ class ProductEditResource extends JsonResource {
 				'values' => $values,
 			];
 		});
-		if (null($category)) {
+		if (is_null($category)) {
 			$category = [];
 		}
 		else {

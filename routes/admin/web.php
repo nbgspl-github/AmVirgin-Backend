@@ -2,7 +2,7 @@
 
 use App\Classes\Methods;
 use App\Classes\Str;
-use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Web\Admin\Auth\LoginController;
 use App\Http\Controllers\Web\Admin\CategoriesBanner;
 use App\Http\Controllers\Web\Admin\CategoryController;
 use App\Http\Controllers\Web\Admin\CustomerController;

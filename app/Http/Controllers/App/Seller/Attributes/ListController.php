@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers\App\Seller\Attributes;
 
-use App\Classes\Str;
-use App\Http\Controllers\Web\ExtendedResourceController;
-use App\Models\Attribute;
-use App\Models\AttributeSet;
+use App\Http\Controllers\AppController;
 use App\Models\AttributeSetItem;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class ListController extends ExtendedResourceController{
+class ListController extends AppController{
 	protected array $rules;
 
 	public function __construct(){

@@ -4,13 +4,13 @@ namespace App\Http\Controllers\App\Seller;
 
 use App\Classes\Str;
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Models\Settings;
 use App\Traits\ValidatesRequest;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 
-class AgreementController extends ExtendedResourceController {
+class AgreementController extends AppController {
 	use ValidatesRequest;
 
 	public function index () : JsonResponse {

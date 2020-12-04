@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\App\Seller;
 
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Models\HsnCode;
 
-class HsnCodeController extends ExtendedResourceController {
+class HsnCodeController extends AppController {
 	public function __construct() {
 		parent::__construct();
 	}

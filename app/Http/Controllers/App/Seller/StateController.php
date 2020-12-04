@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\App\Seller;
 
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Models\State;
 
-class StateController extends ExtendedResourceController{
+class StateController extends AppController{
 	public function index($countryId){
 		$states = State::where('countryId', $countryId)->get();
 		$states->transform(function (State $state){

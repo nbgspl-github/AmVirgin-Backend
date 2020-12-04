@@ -116,9 +116,9 @@ class ProductController extends AbstractProductController
             if ($this->isInvalidCategory($category)) {
                 throw new InvalidCategoryException();
             }
-            if (!$this->isBrandApprovedForSeller($brand)) {
-                throw new BrandNotApprovedForSellerException();
-            }
+//            if (!$this->isBrandApprovedForSeller($brand)) {
+//                throw new BrandNotApprovedForSellerException();
+//            }
 
             $productsPayloadCollection = new Collection();
             $product = $this->validateProductPayload($outer['payload']);

@@ -8,7 +8,7 @@ use App\Traits\ValidatesRequest;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 
-class ContactUsController extends \App\Http\Controllers\Web\ExtendedResourceController{
+class ContactUsController extends \App\Http\Controllers\AppController{
 	use ValidatesRequest;
 
 	protected array $rules;

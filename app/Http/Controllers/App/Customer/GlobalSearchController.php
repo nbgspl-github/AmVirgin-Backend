@@ -6,19 +6,16 @@ use App\Classes\Rule;
 use App\Classes\Str;
 use App\Constants\PageSectionType;
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Interfaces\Tables;
 use App\Models\Product;
 use App\Models\Video;
 use App\Resources\GlobalSearch\ProductResultResource;
 use App\Resources\GlobalSearch\VideoResultResource;
-use App\Resources\Search\Customer\Entertainment\ProductResource;
-use App\Resources\Search\Customer\Entertainment\VideoResource;
 use App\Traits\ValidatesRequest;
 use Throwable;
-use Illuminate\Http\Request;
 
-class GlobalSearchController extends ExtendedResourceController{
+class GlobalSearchController extends AppController{
 	use ValidatesRequest;
 	protected array $rules;
 

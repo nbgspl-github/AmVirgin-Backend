@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listeners\Admin\TvSeries;
+namespace App\Listeners\Admin\Series;
 
 use App\Events\Admin\TvSeries\TvSeriesUpdated;
 use App\Models\MediaLanguage;
@@ -14,7 +14,7 @@ class UpdateVideoSlugs{
 
 	public function handle(TvSeriesUpdated $event){
 		$series = Video::retrieve($event->eventData());
-		if (!null($series)) {
+		if (!is_null($series)) {
 			$languages = $series->sources()->get()->unique('mediaLanguageId');
 			$languages->transform(function (VideoSource $source){
 				return MediaLanguage::find($source->mediaLanguageId);

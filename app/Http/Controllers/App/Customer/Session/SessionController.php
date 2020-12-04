@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\App\Customer\Session;
 
+use App\Classes\Str;
 use App\Http\Controllers\BaseController;
 use App\Models\CartSession;
 use App\Traits\FluentResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Sujip\Guid\Facades\Guid;
 use Throwable;
 
 class SessionController extends BaseController{
@@ -17,8 +17,8 @@ class SessionController extends BaseController{
 	}
 
 	public function create(){
-		$session = CartSession::create([
-			'sessionId' => Guid::create(),
+		$session = CartSession::query()->create([
+			'sessionId' => Str::uuid()->toString(),
 			'customerId' => null,
 		]);
 		return $this->response()->status(HttpOkay)->message('Session initialized successfully.')->
@@ -28,7 +28,7 @@ class SessionController extends BaseController{
 	public function check($sessionId){
 		$response = $this->response();
 		try {
-			$session = CartSession::where('sessionId', $sessionId)->firstOrFail();
+			$session = CartSession::query()->where('sessionId', $sessionId)->firstOrFail();
 			$response->status(HttpOkay)->message('Session token is valid.')->setValue('valid', true);
 		}
 		catch (ModelNotFoundException $exception) {

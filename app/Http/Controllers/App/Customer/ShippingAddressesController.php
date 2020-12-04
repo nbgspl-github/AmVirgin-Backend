@@ -3,17 +3,16 @@
 namespace App\Http\Controllers\App\Customer;
 
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Interfaces\Tables;
 use App\Models\ShippingAddress;
 use App\Resources\Addresses\Customer\ShippingAddressResource;
-use App\Traits\ExtendedRequestValidator;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\Rule;
 use Throwable;
 
-class ShippingAddressesController extends ExtendedResourceController {
+class ShippingAddressesController extends AppController {
 	use ValidatesRequest;
 	protected array $rules;
 

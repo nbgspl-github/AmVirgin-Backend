@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\App\Customer\Shop;
 
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Models\Brand;
 use App\Resources\Brands\Customer\BrandResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class BrandController extends ExtendedResourceController{
+class BrandController extends AppController{
 	public function __construct(){
 		parent::__construct();
 	}

@@ -2,7 +2,6 @@
 
 namespace App\Resources\Orders\Customer;
 
-use App\Resources\Products\Customer\CartProductResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderItemResource extends JsonResource{

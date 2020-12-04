@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
-class OverviewController extends \App\Http\Controllers\Web\ExtendedResourceController
+class OverviewController extends \App\Http\Controllers\AppController
 {
     public function __construct()
     {

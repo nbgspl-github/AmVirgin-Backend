@@ -8,30 +8,21 @@ use App\Classes\Str;
 use App\Classes\Time;
 use App\Constants\WarrantyServiceType;
 use App\Exceptions\TokenInvalidException;
-use App\Exceptions\ValidationException;
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Interfaces\Directories;
 use App\Interfaces\Tables;
 use App\Models\Attribute;
-use App\Models\AttributeSet;
-use App\Models\AttributeSetItem;
-use App\Models\Auth\Seller;
 use App\Models\Brand;
 use App\Models\Category;
-use App\Models\HsnCode;
 use App\Models\Product;
-use App\Models\ProductAttribute;
 use App\Models\ProductToken;
-use App\Models\SellerBrand;
 use App\Storage\SecuredDisk;
 use App\Traits\ValidatesRequest;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
-use stdClass;
 use Sujip\Guid\Facades\Guid;
 
-class AbstractProductController extends ExtendedResourceController{
+class AbstractProductController extends AppController{
 	use ValidatesRequest;
 
 	protected ?Collection $items = null;
@@ -43,7 +34,7 @@ class AbstractProductController extends ExtendedResourceController{
 			'store' => [
 				'outer' => [
 					'categoryId' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)],
-					'brandId' => ['bail', 'required', Rule::existsPrimary(Tables::Brands), Rule::exists(Tables::SellerBrands, 'brandId')->where('status', 'approved')],
+					'brandId' => ['bail', 'required', Rule::existsPrimary(Tables::Brands)],
 					'currency' => ['bail', 'nullable', 'string', 'min:2', 'max:5', Rule::exists(Tables::Currencies, 'code')],
 					'description' => ['bail', 'nullable', 'string', 'min:1', 'max:2000'],
 					'trailer' => ['bail', 'nullable', 'mimes:mp4', 'min:1', 'max:100000'],

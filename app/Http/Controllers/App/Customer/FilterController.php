@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\App\Customer;
 
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Models\CatalogFilter;
 use App\Models\Product;
-use App\Queries\ProductQuery;
 use App\Resources\Shop\Customer\Catalog\Filters\AbstractBuiltInResource;
 use App\Resources\Shop\Customer\Catalog\Filters\BrandResource;
 use App\Resources\Shop\Customer\Catalog\Filters\CategoryResource;
@@ -16,7 +15,7 @@ use App\Resources\Shop\Customer\Catalog\Filters\PriceRangeResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 
-class FilterController extends ExtendedResourceController{
+class FilterController extends AppController{
 	public function __construct(){
 		parent::__construct();
 	}

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\App\Customer;
+namespace App\Http\Controllers\Web\Customer;
 
 use App\Http\Controllers\BaseController;
 

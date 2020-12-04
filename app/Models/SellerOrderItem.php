@@ -7,25 +7,25 @@ use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class SellerOrderItem extends Model{
+class SellerOrderItem extends Model
+{
 	use DynamicAttributeNamedMethods, RetrieveResource, RetrieveCollection;
 
-	protected $table = 'seller-order-items';
-	protected $fillable = [
-		'sellerOrderId',
-		'productId',
-		'quantity',
+	protected $guarded = [
+		'id'
 	];
 	protected $hidden = [
 		'created_at',
 		'updated_at',
 	];
 
-	public function productDetails(){
+	public function productDetails ()
+	{
 		return $this->hasOne(Product::class, 'id', 'productId')->with('images');
 	}
 
-	public function product(){
+	public function product ()
+	{
 		return $this->hasOne(Product::class, 'id', 'productId');
 	}
 }

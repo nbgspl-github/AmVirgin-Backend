@@ -12,7 +12,7 @@ class UpdatePendingStatus {
 
 	public function handle(VideoUpdated $event) {
 		$series = Video::retrieve($event->eventData());
-		if (!null($series)) {
+		if (!is_null($series)) {
 			$sources = $series->sources()->get();
 			$count = $sources->unique('season')->count();
 			$series->setSeasons($count);

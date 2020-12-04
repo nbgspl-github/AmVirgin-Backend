@@ -1,24 +1,25 @@
 <?php
 
-namespace App\Resources\Products\Customer;
+namespace App\Resources\Orders\Customer;
 
-use App\Models\Product;
 use App\Storage\SecuredDisk;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CartProductResource extends JsonResource{
-	public function toArray($request){
+class CartProductResource extends JsonResource
+{
+	public function toArray ($request)
+	{
 		return [
-			'key' => $this->id(),
-			'slug' => $this->slug(),
+			'key' => $this->id,
+			'slug' => $this->slug,
 			'brand' => $this->brand->name,
-			'name' => $this->name(),
+			'name' => $this->name,
 			'price' => [
-				'original' => $this->originalPrice(),
-				'selling' => $this->sellingPrice(),
+				'original' => $this->originalPrice,
+				'selling' => $this->sellingPrice,
 			],
-			'rating' => $this->rating(),
-			'image' => SecuredDisk::existsUrl($this->primaryImage()),
+			'rating' => $this->rating,
+			'image' => SecuredDisk::existsUrl($this->primaryImage),
 		];
 	}
 }

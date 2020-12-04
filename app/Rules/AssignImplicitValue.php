@@ -27,7 +27,7 @@ class AssignImplicitValue implements Rule {
 	 * @return bool
 	 */
 	public function passes($attribute, $value) {
-		if (!null($value))
+		if (!is_null($value))
 			$this->request->$attribute = $this->implicitValue;
 		return true;
 	}

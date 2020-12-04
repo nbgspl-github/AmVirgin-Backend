@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 
-class BankDetailController extends \App\Http\Controllers\Web\ExtendedResourceController {
+class BankDetailController extends \App\Http\Controllers\AppController {
 	use ValidatesRequest;
 
 	protected array $rules;

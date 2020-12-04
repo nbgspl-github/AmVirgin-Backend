@@ -6,7 +6,7 @@ namespace App\Http\Controllers\App\Seller\Products;
 
 use App\Classes\Arrays;
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Interfaces\Directories;
 use App\Models\Product;
 use App\Models\ProductImage;
@@ -16,7 +16,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 
-class BulkImageController extends ExtendedResourceController
+class BulkImageController extends AppController
 {
     use ValidatesRequest;
 

@@ -8,7 +8,7 @@ use App\Classes\Arrays;
 use App\Classes\Rule;
 use App\Classes\Str;
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Interfaces\Directories;
 use App\Interfaces\Tables;
 use App\Models\Attribute;
@@ -22,7 +22,7 @@ use PhpOffice\PhpSpreadsheet\Reader\Xls;
 use PhpOffice\PhpSpreadsheet\Worksheet\MemoryDrawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class BulkProductController extends ExtendedResourceController
+class BulkProductController extends AppController
 {
     use ValidatesRequest;
 

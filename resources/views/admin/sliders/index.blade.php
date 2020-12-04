@@ -28,7 +28,7 @@
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">
 									@if($slide->banner()!=null)
-										<img src="{{\Illuminate\Support\Facades\Storage::disk('secured')->url($slide->banner())}}" style="width: 100px; height: 60px" alt="{{$slide->title()}}"/>
+										<img src="{{$slide->banner}}" style="width: 100px; height: 60px" alt="{{$slide->title()}}"/>
 									@else
 										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 90px"></i>
 									@endif
@@ -57,10 +57,15 @@
 								</td>
 								<td class="text-center">{{$slide->type()}}</td>
 								@if($slide->type()==\App\Models\Slider::TargetType['ExternalLink'])
-									<td class="text-center"><a class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig" target="_blank" href="{{$slide->target()}}">{{__ellipsis($slide->target())}}</a></td>
+									<td class="text-center">
+										<a class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig" target="_blank" href="{{$slide->target()}}">{{__ellipsis($slide->target())}}</a>
+									</td>
 								@else
 									<td class="text-center">
-										<button class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig">{{\App\Models\Video::retrieve($slide->target())->title()}}</button>
+										@php
+										$video=\App\Models\Video::retrieve($slide->target());
+												@endphp
+										<button class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig">{{$video!=null?$video->title():'N/A'}}</button>
 									</td>
 								@endif
 								<td class="text-center">
@@ -118,7 +123,10 @@
 		 */
 		toggleStatus = (id, state) => {
 			axios.put(updateStatusRoute(id),
-				{id: id, active: state})
+				{
+					id: id,
+					active: state
+				})
 				.then(response => {
 					if (response.status === 200) {
 						toastr.success(response.data.message);

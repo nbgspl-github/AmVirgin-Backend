@@ -10,7 +10,7 @@ use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 
-class AnnouncementController extends \App\Http\Controllers\Web\ExtendedResourceController{
+class AnnouncementController extends \App\Http\Controllers\AppController{
 	use ValidatesRequest;
 
 	protected array $rules;

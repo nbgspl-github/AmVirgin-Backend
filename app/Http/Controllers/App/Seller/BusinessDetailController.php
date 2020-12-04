@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 
-class BusinessDetailController extends \App\Http\Controllers\Web\ExtendedResourceController
+class BusinessDetailController extends \App\Http\Controllers\AppController
 {
     use ValidatesRequest;
 

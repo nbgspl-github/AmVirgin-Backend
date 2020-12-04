@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Validation\RuleContainers;
-
-use App\Validation\RuleContext;
+namespace App\Validation;
 
 abstract class BaseProvider implements RuleContext{
 	public function index(): array{

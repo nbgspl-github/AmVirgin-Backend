@@ -3,16 +3,12 @@
 namespace App\Http\Controllers\App\Seller;
 
 use App\Classes\Str;
-use App\Http\Controllers\BaseController;
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Models\Category;
-use App\Storage\SecuredDisk;
-use App\Traits\FluentResponse;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 use Sujip\Guid\Facades\Guid;
 
-class CategoryController extends ExtendedResourceController{
+class CategoryController extends AppController{
 	public function __construct(){
 		parent::__construct();
 	}

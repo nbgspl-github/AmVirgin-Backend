@@ -2,21 +2,19 @@
 
 namespace App\Models;
 
-use App\Classes\Arrays;
-use App\Constants\Constants;
-use App\Contracts\DisplayableModel;
-use App\Queries\AbstractQuery;
 use App\Queries\SliderQuery;
 use App\Storage\SecuredDisk;
 use App\Traits\ActiveStatus;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\QueryProvider;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Slider extends Model{
+class Slider extends Model
+{
 	use DynamicAttributeNamedMethods, QueryProvider;
+	use ActiveStatus;
+
 	protected $table = 'sliders';
 	protected $fillable = [
 		'title',
@@ -42,19 +40,23 @@ class Slider extends Model{
 		'ProductKey' => 'product-key',
 	];
 
-	public function getBannerAttribute(): ?string{
+	public function getBannerAttribute (): ?string
+	{
 		return SecuredDisk::existsUrl($this->attributes['banner']);
 	}
 
-	public function video(): HasOne{
-		return $this->hasOne(Video::class, 'target');
+	public function video (): HasOne
+	{
+		return $this->hasOne(Video::class, 'id', 'target');
 	}
 
-	public function product(): HasOne{
+	public function product (): HasOne
+	{
 		return $this->hasOne(Product::class, 'target');
 	}
 
-	public static function startQuery(): SliderQuery{
+	public static function startQuery (): SliderQuery
+	{
 		return SliderQuery::begin();
 	}
 }

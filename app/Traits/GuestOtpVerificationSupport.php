@@ -28,7 +28,6 @@ trait GuestOtpVerificationSupport{
 
 	/**
 	 * @return int
-	 * @throws OtpPushException
 	 */
 	public function sendGuestOtp(string $mobile): int{
 		$length = Settings::getInt('otpLength', 4);

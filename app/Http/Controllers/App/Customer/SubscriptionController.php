@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\App\Customer;
 
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Models\SubscriptionPlan;
 use App\Resources\Subscriptions\Customer\SubscriptionResource;
 
-class SubscriptionController extends ExtendedResourceController {
+class SubscriptionController extends AppController {
 	public function index() {
 		$subscriptions = SubscriptionPlan::where([
 			['active', true],

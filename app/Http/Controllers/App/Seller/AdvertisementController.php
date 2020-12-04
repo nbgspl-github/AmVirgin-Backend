@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\App\Seller;
 
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Interfaces\Directories;
 use App\Models\Advertisement;
 use App\Resources\Advertisements\Seller\ListResource;
@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 
-class AdvertisementController extends ExtendedResourceController
+class AdvertisementController extends AppController
 {
     use ValidatesRequest;
 

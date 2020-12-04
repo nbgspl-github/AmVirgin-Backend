@@ -88,7 +88,7 @@ class VideosController extends BaseController{
 				'type' => VideoTypes::Movie,
 				'hits' => 0,
 				'trending' => request()->has('trending'),
-				'rank' => null($validated['rank']) ? 0 : $validated['rank'],
+				'rank' => is_null($validated['rank']) ? 0 : $validated['rank'],
 				'showOnHome' => request()->has('showOnHome'),
 				'subscriptionType' => $validated['subscriptionType'],
 				'price' => isset($validated['price']) ? $validated['price'] : 0.00,
@@ -229,7 +229,7 @@ class VideosController extends BaseController{
 
 	protected function replaceTrendingItem($chosenRank){
 		$ranked = Video::where('rank', $chosenRank)->first();
-		if (!null($ranked)) {
+		if (!is_null($ranked)) {
 			$ranked->rank = 0;
 			$ranked->trending = false;
 			$ranked->save();

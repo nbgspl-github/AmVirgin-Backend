@@ -12,53 +12,69 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class CustomerController extends BaseController{
+class CustomerController extends BaseController
+{
 	use ValidatesRequest;
 
 	protected $ruleSet;
 
-	public function __construct(){
+	public function __construct ()
+	{
+		parent::__construct();
 		$this->ruleSet = config('rules.admin.customers');
 	}
 
-	public function index(){
+	public function index ()
+	{
 		$users = Customer::retrieveAll();
 		return view('admin.customers.index')->with('users', $users);
 	}
 
-	public function create(Request $request){
+	public function create ()
+	{
 		return view('admin.customers.create');
 	}
 
-	public function edit($id = null){
+	public function edit ($id = null)
+	{
 		$customer = Customer::retrieve($id);
 		if ($customer != null) {
 			return view('admin.customers.edit')->with('customer', $customer);
-		}
-		else {
+		} else {
 			return responseWeb()->route('admin.customers.index')->error(trans('admin.customers.not-found'))->send();
 		}
 	}
 
-	public function store(Request $request){
+	public function store (Request $request)
+	{
 		$response = null;
 		try {
 			$payload = $this->requestValid($request, $this->ruleSet['store']);
-			Customer::create($payload);
+			Customer::query()->create($payload);
 			$response = responseWeb()->route('admin.customers.index')->success(__('strings.customer.store.success'));
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response = responseWeb()->back()->data($request->all())->error($exception->getError());
-		}
-		catch (Exception $exception) {
+		} catch (Exception $exception) {
 			$response = responseWeb()->back()->data($request->all())->error($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function update(Request $request, $id = null){
+	public function show ($id)
+	{
+		try {
+			$customer = Customer::retrieveThrows($id);
+			return responseApp()->status(HttpOkay)->message('Showing user details.')->setValue('payload')->send();
+		} catch (ModelNotFoundException $e) {
+			return responseApp()->status(HttpResourceNotFound)->message($e->getMessage())->send();
+		} catch (\Throwable $e) {
+			return responseApp()->status(HttpResourceNotFound)->message($e->getMessage())->send();
+		}
+	}
+
+	public function update (Request $request, $id = null)
+	{
 		$response = null;
 		$customer = Customer::retrieve($id);
 		try {
@@ -71,17 +87,13 @@ class CustomerController extends BaseController{
 			$payload = $this->requestValid($request, $this->ruleSet['update'], $additional);
 			$customer->update($payload);
 			$response = responseWeb()->route('admin.customers.index')->success(__('strings.customer.update.success'));
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response = responseWeb()->route('admin.customers.index')->error($exception->getMessage());
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response = responseWeb()->back()->data($request->all())->error($exception->getError());
-		}
-		catch (Exception $exception) {
+		} catch (Exception $exception) {
 			$response = responseWeb()->route('admin.customers.index')->error($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}

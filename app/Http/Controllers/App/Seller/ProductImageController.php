@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\App\Seller;
 
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Models\ProductImage;
 use App\Storage\SecuredDisk;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class ProductImageController extends ExtendedResourceController{
+class ProductImageController extends AppController{
 	public function delete($id){
 		$response = $this->response();
 		try {

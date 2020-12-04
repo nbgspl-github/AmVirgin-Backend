@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\App\Customer;
 
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Http\Resources\Videos\PopularVideosResource;
 use App\Models\Video;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
 
-class PopularPicksController extends ExtendedResourceController{
+class PopularPicksController extends AppController{
 	public function index(){
 		$response = $this->response();
 		try {

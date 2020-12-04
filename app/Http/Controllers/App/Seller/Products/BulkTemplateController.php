@@ -6,7 +6,7 @@ namespace App\Http\Controllers\App\Seller\Products;
 
 use App\Classes\ColumnNavigator;
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Models\AttributeSetItem;
 use App\Models\Brand;
 use App\Models\Category;
@@ -23,7 +23,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-class BulkTemplateController extends ExtendedResourceController
+class BulkTemplateController extends AppController
 {
     use ValidatesRequest;
 

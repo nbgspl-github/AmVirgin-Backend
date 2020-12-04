@@ -2,25 +2,24 @@
 
 namespace App\Models;
 
-use App\Contracts\DisplayableModel;
-use App\Http\Controllers\App\Customer\Playback\TrailerPlayback;
 use App\Queries\VideoQuery;
 use App\Traits\ActiveStatus;
-use App\Traits\FluentConstructor;
 use App\Traits\DynamicAttributeNamedMethods;
+use App\Traits\FluentConstructor;
+use App\Traits\GenerateSlugs;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
-use App\Traits\GenerateSlugs;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
-use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Video extends Model{
+class Video extends Model
+{
 	use RetrieveResource, DynamicAttributeNamedMethods, RetrieveCollection, FluentConstructor, ActiveStatus, GenerateSlugs;
+	use SoftDeletes;
 
 	protected $fillable = [
 		'title',
@@ -61,7 +60,8 @@ class Video extends Model{
 	/**
 	 * @return int
 	 */
-	public function getSeasons(): ?int{
+	public function getSeasons (): ?int
+	{
 		return $this->seasons;
 	}
 
@@ -69,7 +69,8 @@ class Video extends Model{
 	 * @param int $seasons
 	 * @return Video
 	 */
-	public function setSeasons(int $seasons): Video{
+	public function setSeasons (int $seasons): Video
+	{
 		$this->seasons = $seasons;
 		return $this;
 	}
@@ -77,7 +78,8 @@ class Video extends Model{
 	/**
 	 * @return string
 	 */
-	public function getDuration(): string{
+	public function getDuration (): string
+	{
 		return $this->duration;
 	}
 
@@ -85,7 +87,8 @@ class Video extends Model{
 	 * @param string $duration
 	 * @return Video
 	 */
-	public function setDuration(string $duration): Video{
+	public function setDuration (string $duration): Video
+	{
 		$this->duration = $duration;
 		return $this;
 	}
@@ -93,7 +96,8 @@ class Video extends Model{
 	/**
 	 * @return string
 	 */
-	public function getTitle(): string{
+	public function getTitle (): string
+	{
 		return $this->title;
 	}
 
@@ -101,7 +105,8 @@ class Video extends Model{
 	 * @param string $title
 	 * @return Video
 	 */
-	public function setTitle(string $title): Video{
+	public function setTitle (string $title): Video
+	{
 		$this->title = $title;
 		return $this;
 	}
@@ -109,21 +114,24 @@ class Video extends Model{
 	/**
 	 * @return string
 	 */
-	public function getSlug(): string{
+	public function getSlug (): string
+	{
 		return $this->slug;
 	}
 
 	/**
 	 * @param string $slug
 	 */
-	public function setSlug(string $slug){
+	public function setSlug (string $slug)
+	{
 		$this->slug = $slug;
 	}
 
 	/**
 	 * @return string|null
 	 */
-	public function getDescription(): ?string{
+	public function getDescription (): ?string
+	{
 		return $this->description;
 	}
 
@@ -131,7 +139,8 @@ class Video extends Model{
 	 * @param string|null $description
 	 * @return Video
 	 */
-	public function setDescription(?string $description): Video{
+	public function setDescription (?string $description): Video
+	{
 		$this->description = $description;
 		return $this;
 	}
@@ -139,7 +148,8 @@ class Video extends Model{
 	/**
 	 * @return string|null
 	 */
-	public function getReleased(): ?string{
+	public function getReleased (): ?string
+	{
 		return $this->released;
 	}
 
@@ -147,7 +157,8 @@ class Video extends Model{
 	 * @param string|null $release
 	 * @return Video
 	 */
-	public function setReleased(?string $release): Video{
+	public function setReleased (?string $release): Video
+	{
 		$this->released = $release;
 		return $this;
 	}
@@ -155,7 +166,8 @@ class Video extends Model{
 	/**
 	 * @return string
 	 */
-	public function getCast(): string{
+	public function getCast (): string
+	{
 		return $this->cast;
 	}
 
@@ -163,7 +175,8 @@ class Video extends Model{
 	 * @param string $cast
 	 * @return Video
 	 */
-	public function setCast(string $cast): Video{
+	public function setCast (string $cast): Video
+	{
 		$this->cast = $cast;
 		return $this;
 	}
@@ -171,7 +184,8 @@ class Video extends Model{
 	/**
 	 * @return string
 	 */
-	public function getDirector(): string{
+	public function getDirector (): string
+	{
 		return $this->director;
 	}
 
@@ -179,7 +193,8 @@ class Video extends Model{
 	 * @param string $director
 	 * @return Video
 	 */
-	public function setDirector(string $director): Video{
+	public function setDirector (string $director): Video
+	{
 		$this->director = $director;
 		return $this;
 	}
@@ -187,7 +202,8 @@ class Video extends Model{
 	/**
 	 * @return string
 	 */
-	public function getTrailer(): string{
+	public function getTrailer (): string
+	{
 		return $this->trailer;
 	}
 
@@ -195,7 +211,8 @@ class Video extends Model{
 	 * @param string $trailer
 	 * @return Video
 	 */
-	public function setTrailer(string $trailer): Video{
+	public function setTrailer (string $trailer): Video
+	{
 		$this->trailer = $trailer;
 		return $this;
 	}
@@ -203,7 +220,8 @@ class Video extends Model{
 	/**
 	 * @return string
 	 */
-	public function getPoster(): string{
+	public function getPoster (): string
+	{
 		return $this->poster;
 	}
 
@@ -211,7 +229,8 @@ class Video extends Model{
 	 * @param string $poster
 	 * @return Video
 	 */
-	public function setPoster(string $poster): Video{
+	public function setPoster (string $poster): Video
+	{
 		$this->poster = $poster;
 		return $this;
 	}
@@ -219,7 +238,8 @@ class Video extends Model{
 	/**
 	 * @return string
 	 */
-	public function getBackdrop(): string{
+	public function getBackdrop (): string
+	{
 		return $this->backdrop;
 	}
 
@@ -227,7 +247,8 @@ class Video extends Model{
 	 * @param string $backdrop
 	 * @return Video
 	 */
-	public function setBackdrop(string $backdrop): Video{
+	public function setBackdrop (string $backdrop): Video
+	{
 		$this->backdrop = $backdrop;
 		return $this;
 	}
@@ -235,7 +256,8 @@ class Video extends Model{
 	/**
 	 * @return int
 	 */
-	public function getGenreId(): int{
+	public function getGenreId (): int
+	{
 		return $this->genreId;
 	}
 
@@ -243,7 +265,8 @@ class Video extends Model{
 	 * @param int $genreId
 	 * @return Video
 	 */
-	public function setGenreId(int $genreId): Video{
+	public function setGenreId (int $genreId): Video
+	{
 		$this->genreId = $genreId;
 		return $this;
 	}
@@ -251,7 +274,8 @@ class Video extends Model{
 	/**
 	 * @return float
 	 */
-	public function getRating(): float{
+	public function getRating (): float
+	{
 		return round($this->rating, 2);
 	}
 
@@ -259,7 +283,8 @@ class Video extends Model{
 	 * @param float $rating
 	 * @return Video
 	 */
-	public function setRating(float $rating): Video{
+	public function setRating (float $rating): Video
+	{
 		$this->rating = $rating;
 		return $this;
 	}
@@ -267,7 +292,8 @@ class Video extends Model{
 	/**
 	 * @return string|null
 	 */
-	public function getPgRating(): ?string{
+	public function getPgRating (): ?string
+	{
 		return $this->pgRating;
 	}
 
@@ -275,7 +301,8 @@ class Video extends Model{
 	 * @param string|null $pgRating
 	 * @return Video
 	 */
-	public function setPgRating(?string $pgRating): Video{
+	public function setPgRating (?string $pgRating): Video
+	{
 		$this->pgRating = $pgRating;
 		return $this;
 	}
@@ -283,7 +310,8 @@ class Video extends Model{
 	/**
 	 * @return string
 	 */
-	public function getType(): string{
+	public function getType (): string
+	{
 		return $this->type;
 	}
 
@@ -291,7 +319,8 @@ class Video extends Model{
 	 * @param string $type
 	 * @return Video
 	 */
-	public function setType(string $type): Video{
+	public function setType (string $type): Video
+	{
 		$this->type = $type;
 		return $this;
 	}
@@ -299,7 +328,8 @@ class Video extends Model{
 	/**
 	 * @return int
 	 */
-	public function getHits(): int{
+	public function getHits (): int
+	{
 		return $this->hits;
 	}
 
@@ -307,7 +337,8 @@ class Video extends Model{
 	 * @param int $hits
 	 * @return Video
 	 */
-	public function setHits(int $hits): Video{
+	public function setHits (int $hits): Video
+	{
 		$this->hits = $hits;
 		return $this;
 	}
@@ -315,7 +346,8 @@ class Video extends Model{
 	/**
 	 * @return bool
 	 */
-	public function isTrending(): bool{
+	public function isTrending (): bool
+	{
 		return $this->trending;
 	}
 
@@ -323,7 +355,8 @@ class Video extends Model{
 	 * @param bool $trending
 	 * @return Video
 	 */
-	public function setTrending(bool $trending): Video{
+	public function setTrending (bool $trending): Video
+	{
 		$this->trending = $trending;
 		return $this;
 	}
@@ -331,7 +364,8 @@ class Video extends Model{
 	/**
 	 * @return int
 	 */
-	public function getRank(): int{
+	public function getRank (): int
+	{
 		return $this->rank;
 	}
 
@@ -339,7 +373,8 @@ class Video extends Model{
 	 * @param int $rank
 	 * @return Video
 	 */
-	public function setRank(int $rank): Video{
+	public function setRank (int $rank): Video
+	{
 		$this->rank = $rank;
 		return $this;
 	}
@@ -347,7 +382,8 @@ class Video extends Model{
 	/**
 	 * @return bool
 	 */
-	public function isTopPick(): bool{
+	public function isTopPick (): bool
+	{
 		return $this->topPick;
 	}
 
@@ -355,7 +391,8 @@ class Video extends Model{
 	 * @param bool $topPick
 	 * @return Video
 	 */
-	public function setTopPick(bool $topPick): Video{
+	public function setTopPick (bool $topPick): Video
+	{
 		$this->topPick = $topPick;
 		return $this;
 	}
@@ -363,7 +400,8 @@ class Video extends Model{
 	/**
 	 * @return bool
 	 */
-	public function showOnHome(): bool{
+	public function showOnHome (): bool
+	{
 		return $this->showOnHome;
 	}
 
@@ -371,7 +409,8 @@ class Video extends Model{
 	 * @param bool $showOnHome
 	 * @return Video
 	 */
-	public function setShowOnHome(bool $showOnHome): Video{
+	public function setShowOnHome (bool $showOnHome): Video
+	{
 		$this->showOnHome = $showOnHome;
 		return $this;
 	}
@@ -379,7 +418,8 @@ class Video extends Model{
 	/**
 	 * @return string
 	 */
-	public function getSubscriptionType(): string{
+	public function getSubscriptionType (): string
+	{
 		return $this->subscriptionType;
 	}
 
@@ -387,7 +427,8 @@ class Video extends Model{
 	 * @param string $subscriptionType
 	 * @return Video
 	 */
-	public function setSubscriptionType(string $subscriptionType): Video{
+	public function setSubscriptionType (string $subscriptionType): Video
+	{
 		$this->subscriptionType = $subscriptionType;
 		return $this;
 	}
@@ -395,7 +436,8 @@ class Video extends Model{
 	/**
 	 * @return float
 	 */
-	public function getPrice(): float{
+	public function getPrice (): float
+	{
 		return $this->price;
 	}
 
@@ -403,7 +445,8 @@ class Video extends Model{
 	 * @param float $price
 	 * @return Video
 	 */
-	public function setPrice(float $price): Video{
+	public function setPrice (float $price): Video
+	{
 		$this->price = $price;
 		return $this;
 	}
@@ -411,7 +454,8 @@ class Video extends Model{
 	/**
 	 * @return bool
 	 */
-	public function hasSeasons(): bool{
+	public function hasSeasons (): bool
+	{
 		return $this->hasSeasons;
 	}
 
@@ -419,7 +463,8 @@ class Video extends Model{
 	 * @param bool $hasSeasons
 	 * @return Video
 	 */
-	public function setHasSeasons(bool $hasSeasons): Video{
+	public function setHasSeasons (bool $hasSeasons): Video
+	{
 		$this->hasSeasons = $hasSeasons;
 		return $this;
 	}
@@ -427,7 +472,8 @@ class Video extends Model{
 	/**
 	 * @return array
 	 */
-	public function getQualitySlug(): array{
+	public function getQualitySlug (): array
+	{
 		return explode($this->qualitySlug, '/');
 	}
 
@@ -435,9 +481,10 @@ class Video extends Model{
 	 * @param Collection $mediaQualities
 	 * @return $this
 	 */
-	public function setQualitySlug(Collection $mediaQualities){
+	public function setQualitySlug (Collection $mediaQualities)
+	{
 		$mediaQualities = $mediaQualities->unique('name');
-		$mediaQualities->transform(function (MediaQuality $quality){
+		$mediaQualities->transform(function (MediaQuality $quality) {
 			return $quality->getName();
 		});
 		$this->qualitySlug = implode('/', $mediaQualities->toArray());
@@ -447,7 +494,8 @@ class Video extends Model{
 	/**
 	 * @return array
 	 */
-	public function getLanguageSlug(): array{
+	public function getLanguageSlug (): array
+	{
 		return explode($this->qualitySlug, '/');
 	}
 
@@ -455,9 +503,10 @@ class Video extends Model{
 	 * @param Collection $mediaLanguages
 	 * @return $this
 	 */
-	public function setLanguageSlug(Collection $mediaLanguages){
+	public function setLanguageSlug (Collection $mediaLanguages)
+	{
 		$mediaLanguages = $mediaLanguages->unique('name');
-		$mediaLanguages->transform(function (MediaLanguage $language){
+		$mediaLanguages->transform(function (MediaLanguage $language) {
 			return $language->getName();
 		});
 		$this->languageSlug = implode('/', $mediaLanguages->toArray());
@@ -467,31 +516,36 @@ class Video extends Model{
 	/**
 	 * @return BelongsTo
 	 */
-	public function genre(){
+	public function genre ()
+	{
 		return $this->belongsTo('App\Models\Genre', 'genreId');
 	}
 
 	/**
 	 * @return HasMany
 	 */
-	public function sources(){
+	public function sources ()
+	{
 		return $this->hasMany('App\Models\VideoSource', 'videoId');
 	}
 
 	/**
 	 * @return HasMany
 	 */
-	public function snaps(){
+	public function snaps ()
+	{
 		return $this->hasMany(VideoSnap::class, 'videoId');
 	}
 
-	public function getSlugOptions(): SlugOptions{
+	public function getSlugOptions (): SlugOptions
+	{
 		return SlugOptions::create()
 			->generateSlugsFrom('title')
 			->saveSlugsTo('slug');
 	}
 
-	public static function startQuery(): VideoQuery{
+	public static function startQuery (): VideoQuery
+	{
 		return VideoQuery::begin();
 	}
 }

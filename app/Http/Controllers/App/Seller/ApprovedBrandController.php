@@ -4,13 +4,12 @@
 namespace App\Http\Controllers\App\Seller;
 
 
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Models\Brand;
-use App\Resources\Brands\Seller\AvailableListResource;
 use App\Resources\Brands\Seller\ListResource;
 use Illuminate\Http\JsonResponse;
 
-class ApprovedBrandController extends ExtendedResourceController
+class ApprovedBrandController extends AppController
 {
     protected array $rules = [
 

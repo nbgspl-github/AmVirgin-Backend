@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\App\Seller\Attributes;
 
-use App\Http\Controllers\Web\ExtendedResourceController;
+use App\Http\Controllers\AppController;
 use App\Models\ProductAttribute;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class ProductAttributeController extends ExtendedResourceController{
+class ProductAttributeController extends AppController{
 	public function __construct(){
 		parent::__construct();
 	}
