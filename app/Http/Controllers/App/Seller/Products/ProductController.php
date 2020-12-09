@@ -24,241 +24,241 @@ use Throwable;
 
 class ProductController extends AbstractProductController
 {
-    public function index(): JsonResponse
-    {
-        $per_page = request()->get('per_page') ?? '';
-        $per_no = request()->get('page') ?? '1';
-        if (empty($per_page)) {
-            $per_page = 10;
-        }
+	public function index (): JsonResponse
+	{
+		$per_page = request()->get('per_page') ?? '';
+		$per_no = request()->get('page') ?? '1';
+		if (empty($per_page)) {
+			$per_page = 10;
+		}
 
-        $productRecord = Product::startQuery()->singleVariantMode()->seller($this->guard()->id());
-        if (!empty(request()->get('status'))) {
-            if (request('status') == 'active' || request('status') == 'inactive') {
-                $productRecord->withWhere('listingStatus', request()->get('status'));
-            } else {
-                if (request('status') == 'underprocess') {
-                    $productRecord->withWhere('approved', false);
-                } else if (request('status') == 'approved') {
-                    $productRecord->withWhere('approved', true);
-                } else {
+		$productRecord = Product::startQuery()->singleVariantMode()->seller($this->guard()->id());
+		if (!empty(request()->get('status'))) {
+			if (request('status') == 'active' || request('status') == 'inactive') {
+				$productRecord->withWhere('listingStatus', request()->get('status'));
+			} else {
+				if (request('status') == 'underprocess') {
+					$productRecord->withWhere('approved', false);
+				} else if (request('status') == 'approved') {
+					$productRecord->withWhere('approved', true);
+				} else {
 
-                }
-            }
-        }
-        if (!empty(request()->get('query'))) {
-            $keywords = request()->get('query');
-            $productRecord->search($keywords, 'name');
-            $productRecord->orSearch($keywords, 'slug');
-            $productRecord->orSearch($keywords, 'listingStatus');
-            $productRecord->orSearch($keywords, 'created_at');
-        }
-        $products = $productRecord->paginate($per_page);
+				}
+			}
+		}
+		if (!empty(request()->get('query'))) {
+			$keywords = request()->get('query');
+			$productRecord->search($keywords, 'name');
+			$productRecord->orSearch($keywords, 'slug');
+			$productRecord->orSearch($keywords, 'listingStatus');
+			$productRecord->orSearch($keywords, 'created_at');
+		}
+		$products = $productRecord->paginate($per_page);
 
-        $total = count($products);
-        $totalRec = $products->total();
-        $meta = [
-            'pagination' => [
-                'pages' => countRequiredPages($totalRec, $per_page),
-                'current_page' => $per_no,
-                'items' => ['total' => $total, 'totalRec' => $totalRec, 'chunk' => $per_page],
-            ],
-        ];
-        $products = CatalogListResource::collection($products);
-        return responseApp()
-            ->status($products->count() > 0 ? HttpOkay : HttpNoContent)
-            ->message('Listing all products for this seller.')
-            ->setValue('meta', $meta)
-            ->setValue('payload', $products)
-            ->send();
-    }
+		$total = count($products);
+		$totalRec = $products->total();
+		$meta = [
+			'pagination' => [
+				'pages' => countRequiredPages($totalRec, $per_page),
+				'current_page' => $per_no,
+				'items' => ['total' => $total, 'totalRec' => $totalRec, 'chunk' => $per_page],
+			],
+		];
+		$products = CatalogListResource::collection($products);
+		return responseApp()
+			->status($products->count() > 0 ? HttpOkay : HttpNoContent)
+			->message('Listing all products for this seller.')
+			->setValue('meta', $meta)
+			->setValue('payload', $products)
+			->send();
+	}
 
-    public function edit($id): JsonResponse
-    {
-        $response = responseApp();
-        try {
-            $product = Product::startQuery()->seller($this->guard()->id())->key($id)->firstOrFail();
-            $resource = new ProductResource($product);
-            $response->status(HttpOkay)->message('Listing product details.')->setValue('payload', $resource);
-        } catch (ModelNotFoundException $exception) {
-            $response->status(HttpResourceNotFound)->message('Could not find product for that key.');
-        } catch (Throwable $exception) {
-            $response->status(HttpServerError)->message($exception->getMessage());
-        } finally {
-            return $response->send();
-        }
-    }
+	public function edit ($id): JsonResponse
+	{
+		$response = responseApp();
+		try {
+			$product = Product::startQuery()->seller($this->guard()->id())->key($id)->firstOrFail();
+			$resource = new ProductResource($product);
+			$response->status(HttpOkay)->message('Listing product details.')->setValue('payload', $resource);
+		} catch (ModelNotFoundException $exception) {
+			$response->status(HttpResourceNotFound)->message('Could not find product for that key.');
+		} catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		} finally {
+			return $response->send();
+		}
+	}
 
-    public function show($id): JsonResponse
-    {
-        $response = responseApp();
-        try {
-            $product = Product::startQuery()->seller($this->guard()->id())->key($id)->firstOrFail();
-            $resource = new ProductResource($product);
-            $response->status(HttpOkay)->message('Listing product details.')->setValue('payload', $resource);
-        } catch (ModelNotFoundException $exception) {
-            $response->status(HttpResourceNotFound)->message('Could not find product for that key.');
-        } catch (Throwable $exception) {
-            $response->status(HttpServerError)->message($exception->getMessage());
-        } finally {
-            return $response->send();
-        }
-    }
+	public function show ($id): JsonResponse
+	{
+		$response = responseApp();
+		try {
+			$product = Product::startQuery()->seller($this->guard()->id())->key($id)->firstOrFail();
+			$resource = new ProductResource($product);
+			$response->status(HttpOkay)->message('Listing product details.')->setValue('payload', $resource);
+		} catch (ModelNotFoundException $exception) {
+			$response->status(HttpResourceNotFound)->message('Could not find product for that key.');
+		} catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		} finally {
+			return $response->send();
+		}
+	}
 
-    public function store(): JsonResponse
-    {
-        $response = responseApp();
-        try {
-            $token = $this->validateToken();
-            $outer = $this->validateOuter();
-            $category = $this->category();
-            $brand = $this->brand();
-            if ($this->isInvalidCategory($category)) {
-                throw new InvalidCategoryException();
-            }
+	public function store (): JsonResponse
+	{
+		$response = responseApp();
+		try {
+			$token = $this->validateToken();
+			$outer = $this->validateOuter();
+			$category = $this->category();
+			$brand = $this->brand();
+			if ($this->isInvalidCategory($category)) {
+				throw new InvalidCategoryException();
+			}
 //            if (!$this->isBrandApprovedForSeller($brand)) {
 //                throw new BrandNotApprovedForSellerException();
 //            }
 
-            $productsPayloadCollection = new Collection();
-            $product = $this->validateProductPayload($outer['payload']);
-            Arrays::replaceValues($product, [
-                'categoryId' => $category->id(),
-                'brandId' => $brand->id(),
-                'sellerId' => $this->guard()->id(),
-                'type' => Product::Type['Simple'],
-                'currency' => $outer['currency'],
-                'description' => $outer['description'] ?? Str::Null,
-                'taxRate' => HsnCode::find($product['hsn'])->taxRate(),
-                'group' => $token,
-                'discount' => $this->calculateDiscount($product['originalPrice'], $product['sellingPrice']),
-                'maxQuantityPerOrder' => $product['maxQuantityPerOrder'] ?? 10,
-            ]);
-            $attributes = $product['attributes'];
-            $primaryIndex = $product['primaryImageIndex'];
-            $currentIndex = 0;
-            $images = collect($product['files'] ?? [])->transform(function (UploadedFile $file) use (&$currentIndex, $primaryIndex, &$product) {
-                $file = SecuredDisk::access()->putFile(Directories::ProductImage, $file);
-                if ($currentIndex++ === $primaryIndex) {
-                    $product['primaryImage'] = $file;
-                }
-                return $file;
-            })->toArray();
-            $productsPayloadCollection->push([
-                'product' => $product,
-                'attributes' => $attributes,
-                'images' => $images,
-            ]);
+			$productsPayloadCollection = new Collection();
+			$product = $this->validateProductPayload($outer['payload']);
+			Arrays::replaceValues($product, [
+				'categoryId' => $category->id(),
+				'brandId' => $brand->id(),
+				'sellerId' => $this->guard()->id(),
+				'type' => Product::Type['Simple'],
+				'currency' => $outer['currency'],
+				'description' => $outer['description'] ?? Str::Null,
+				'taxRate' => HsnCode::find($product['hsn'])->taxRate(),
+				'group' => $token,
+				'discount' => $this->calculateDiscount($product['originalPrice'], $product['sellingPrice']),
+				'maxQuantityPerOrder' => $product['maxQuantityPerOrder'] ?? 10,
+			]);
+			$attributes = $product['attributes'];
+			$primaryIndex = $product['primaryImageIndex'];
+			$currentIndex = 0;
+			$images = collect($product['files'] ?? [])->transform(function (UploadedFile $file) use (&$currentIndex, $primaryIndex, &$product) {
+				$file = SecuredDisk::access()->putFile(Directories::ProductImage, $file);
+				if ($currentIndex++ === $primaryIndex) {
+					$product['primaryImage'] = $file;
+				}
+				return $file;
+			})->toArray();
+			$productsPayloadCollection->push([
+				'product' => $product,
+				'attributes' => $attributes,
+				'images' => $images,
+			]);
 
-            $productsPayloadCollection->each(function ($payload) {
-                $product = $this->storeProduct($payload['product']);
-                $this->storeAttribute($product, $payload['attributes']);
-                $this->storeImages($product, $payload['images']);
-            });
-            $didConvertAny = $this->convertAllSimpleToVariants($token);
-            if (!$didConvertAny)
-                $response->status(HttpCreated)->message('Product details were saved successfully.');
-            else
-                $response->status(HttpCreated)->message('Product variant was saved successfully.');
-        } catch (TokenInvalidException $exception) {
-            $response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
-        } catch (ValidationException $exception) {
-            $response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
-        } catch (InvalidCategoryException $exception) {
-            $response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
-        } catch (BrandNotApprovedForSellerException $exception) {
-            $response->status(HttpDeniedAccess)->message($exception->getMessage());
-        } catch (Throwable $exception) {
-            $response->status(HttpServerError)->message($exception->getMessage());
-        } finally {
-            return $response->send();
-        }
-    }
+			$productsPayloadCollection->each(function ($payload) {
+				$product = $this->storeProduct($payload['product']);
+				$this->storeAttribute($product, $payload['attributes']);
+				$this->storeImages($product, $payload['images']);
+			});
+			$didConvertAny = $this->convertAllSimpleToVariants($token);
+			if (!$didConvertAny)
+				$response->status(HttpCreated)->message('Product details were saved successfully.');
+			else
+				$response->status(HttpCreated)->message('Product variant was saved successfully.');
+		} catch (TokenInvalidException $exception) {
+			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+		} catch (ValidationException $exception) {
+			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+		} catch (InvalidCategoryException $exception) {
+			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+		} catch (BrandNotApprovedForSellerException $exception) {
+			$response->status(HttpDeniedAccess)->message($exception->getMessage());
+		} catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		} finally {
+			return $response->send();
+		}
+	}
 
-    public function update($id): JsonResponse
-    {
-        $response = responseApp();
-        try {
-            $payload = $this->validateUpdate();
-            $product = Product::startQuery()->displayable()->key($id)->useAuth()->firstOrFail();
-            $product->update($payload);
-            $primaryIndex = $payload['primaryImageIndex'] ?? 0;
-            $currentIndex = 0;
-            $images = collect($payload['files'] ?? [])->transform(function (UploadedFile $file) use (&$currentIndex, $primaryIndex, &$product) {
-                $file = SecuredDisk::access()->putFile(Directories::ProductImage, $file);
-                if ($currentIndex++ === $primaryIndex) {
-                    $product['primaryImage'] = $file;
-                }
-                return $file;
-            })->toArray();
-            $this->storeImages($product, $images);
-            $response->status(HttpCreated)->message('Product details were updated successfully.');
-        } catch (ValidationException $exception) {
-            $response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
-        } catch (ModelNotFoundException $exception) {
-            $response->status(HttpResourceNotFound)->message($exception->getMessage());
-        } catch (Throwable $exception) {
-            $response->status(HttpServerError)->message($exception->getMessage());
-        } finally {
-            return $response->send();
-        }
-    }
+	public function update ($id): JsonResponse
+	{
+		$response = responseApp();
+		try {
+			$payload = $this->validateUpdate();
+			$product = Product::startQuery()->displayable()->key($id)->useAuth()->firstOrFail();
+			$product->update($payload);
+			$primaryIndex = $payload['primaryImageIndex'] ?? 0;
+			$currentIndex = 0;
+			$images = collect($payload['files'] ?? [])->transform(function (UploadedFile $file) use (&$currentIndex, $primaryIndex, &$product) {
+				$file = SecuredDisk::access()->putFile(Directories::ProductImage, $file);
+				if ($currentIndex++ === $primaryIndex) {
+					$product['primaryImage'] = $file;
+				}
+				return $file;
+			})->toArray();
+			$this->storeImages($product, $images);
+			$response->status(HttpCreated)->message('Product details were updated successfully.');
+		} catch (ValidationException $exception) {
+			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+		} catch (ModelNotFoundException $exception) {
+			$response->status(HttpResourceNotFound)->message($exception->getMessage());
+		} catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		} finally {
+			return $response->send();
+		}
+	}
 
-    public function delete($id): JsonResponse
-    {
-        $response = responseApp();
-        try {
-            $product = Product::startQuery()->seller($this->guard()->id())->key($id)->firstOrFail();
-            $product->delete();
-            $response->status(HttpOkay)->message('Product deleted successfully.');
-        } catch (ModelNotFoundException $exception) {
-            $response->status(HttpResourceNotFound)->message('Could not find product for that key.');
-        } catch (Throwable $exception) {
-            $response->status(HttpResourceNotFound)->message($exception->getMessage());
-        } finally {
-            return $response->send();
-        }
-    }
+	public function delete ($id): JsonResponse
+	{
+		$response = responseApp();
+		try {
+			$product = Product::startQuery()->seller($this->guard()->id())->key($id)->firstOrFail();
+			$product->delete();
+			$response->status(HttpOkay)->message('Product deleted successfully.');
+		} catch (ModelNotFoundException $exception) {
+			$response->status(HttpResourceNotFound)->message('Could not find product for that key.');
+		} catch (Throwable $exception) {
+			$response->status(HttpResourceNotFound)->message($exception->getMessage());
+		} finally {
+			return $response->send();
+		}
+	}
 
-    public function token()
-    {
-        $token = $this->sessionUuid();
-        $productToken = ProductToken::updateOrCreate(
-            [
-                'token' => $token,
-                'sellerId' => $this->guard()->id(),
-            ],
-            [
-                'token' => $token,
-                'sellerId' => $this->guard()->id(),
-                'createdFor' => request()->ip(),
-                'validUntil' => Carbon::now()->addHours(2)->toDateTimeString(),
-            ]
-        );
-        return responseApp()->setValue('payload', [
-            'token' => $productToken->token(),
-            'validUntil' => $productToken->validUntil(),
-        ])->status(HttpOkay)->message('Token generated successfully.')->send();
-    }
+	public function token ()
+	{
+		$token = $this->sessionUuid();
+		$productToken = ProductToken::updateOrCreate(
+			[
+				'token' => $token,
+				'sellerId' => $this->guard()->id(),
+			],
+			[
+				'token' => $token,
+				'sellerId' => $this->guard()->id(),
+				'createdFor' => request()->ip(),
+				'validUntil' => Carbon::now()->addHours(2)->toDateTimeString(),
+			]
+		);
+		return responseApp()->setValue('payload', [
+			'token' => $productToken->token(),
+			'validUntil' => $productToken->validUntil(),
+		])->status(HttpOkay)->message('Token generated successfully.')->send();
+	}
 
-    public function changeStatus(int $id): JsonResponse
-    {
-        $response = responseApp();
-        try {
-            $product = Product::where(['id' => $id, 'sellerId' => auth('seller-api')->id()])->first();
-            if (!empty($product) || !empty(request('status'))) {
-                $product->listingStatus = request('status');
-                $product->update();
-                $response->status(HttpOkay)->message('Product status updated successfully.');
-            } else {
-                $response->status(HttpOkay)->message('Product status is required.');
-            }
-        } catch (ModelNotFoundException $exception) {
-            $response->status(HttpResourceNotFound)->message('Could not find product for that key.');
-        } catch (Throwable $exception) {
-            $response->status(HttpResourceNotFound)->message($exception->getMessage());
-        } finally {
-            return $response->send();
-        }
-    }
+	public function changeStatus (int $id): JsonResponse
+	{
+		$response = responseApp();
+		try {
+			$product = Product::where(['id' => $id, 'sellerId' => auth('seller-api')->id()])->first();
+			if (!empty($product) || !empty(request('status'))) {
+				$product->listingStatus = request('status');
+				$product->update();
+				$response->status(HttpOkay)->message('Product status updated successfully.');
+			} else {
+				$response->status(HttpOkay)->message('Product status is required.');
+			}
+		} catch (ModelNotFoundException $exception) {
+			$response->status(HttpResourceNotFound)->message('Could not find product for that key.');
+		} catch (Throwable $exception) {
+			$response->status(HttpResourceNotFound)->message($exception->getMessage());
+		} finally {
+			return $response->send();
+		}
+	}
 }

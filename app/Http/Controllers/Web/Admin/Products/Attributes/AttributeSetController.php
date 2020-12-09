@@ -14,11 +14,14 @@ use App\Models\Category;
 use App\Traits\ValidatesRequest;
 use Throwable;
 
-class AttributeSetController extends BaseController{
+class AttributeSetController extends BaseController
+{
 	use ValidatesRequest;
+
 	protected array $rules;
 
-	public function __construct(){
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->rules = [
 			'store' => [
@@ -30,21 +33,23 @@ class AttributeSetController extends BaseController{
 		];
 	}
 
-	public function index(){
+	public function index ()
+	{
 		$attributeSets = AttributeSet::all();
 		return view('admin.attributes.sets.index')->with('sets', $attributeSets);
 	}
 
-	public function create(){
+	public function create ()
+	{
 		$attributes = Attribute::startQuery()->orderByAscending('name')->get();
 		$roots = Category::startQuery()->isRoot()->get();
-		$roots->transform(function (Category $root){
+		$roots->transform(function (Category $root) {
 			$category = $root->children()->orderBy('name')->get();
-			$category = $category->transform(function (Category $category){
+			$category = $category->transform(function (Category $category) {
 				$subCategory = $category->children()->orderBy('name')->get();
-				$subCategory = $subCategory->transform(function (Category $subCategory){
+				$subCategory = $subCategory->transform(function (Category $subCategory) {
 					$vertical = $subCategory->children()->orderBy('name')->get();
-					$vertical->transform(function (Category $vertical){
+					$vertical->transform(function (Category $vertical) {
 						return [
 							'key' => $vertical->id(),
 							'name' => $vertical->name(),
@@ -87,7 +92,8 @@ class AttributeSetController extends BaseController{
 		return view('admin.attributes.sets.create')->with('attributes', $attributes)->with('roots', $roots);
 	}
 
-	public function store(){
+	public function store ()
+	{
 		$response = responseWeb();
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['store']);
@@ -96,7 +102,7 @@ class AttributeSetController extends BaseController{
 				'categoryId' => $validated->categoryId,
 			]);
 			$index = 0;
-			Arrays::each($validated->selected, function ($attributeId) use ($attributeSet, $validated, &$index){
+			Arrays::each($validated->selected, function ($attributeId) use ($attributeSet, $validated, &$index) {
 				AttributeSetItem::updateOrCreate(
 					[
 						'attributeSetId' => $attributeSet->id(),
@@ -110,14 +116,11 @@ class AttributeSetController extends BaseController{
 				);
 			});
 			$response->success('Attribute set created successfully.')->route('admin.attributes.sets.index');
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response->error($exception->getMessage())->data(request()->all())->back();
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->error($exception->getMessage())->data(request()->all())->back();
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}

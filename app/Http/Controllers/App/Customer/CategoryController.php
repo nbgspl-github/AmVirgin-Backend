@@ -8,18 +8,21 @@ use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Sujip\Guid\Facades\Guid;
 
-class CategoryController extends AppController{
-	public function __construct(){
+class CategoryController extends AppController
+{
+	public function __construct ()
+	{
 		parent::__construct();
 	}
 
-	public function index(): JsonResponse{
+	public function index (): JsonResponse
+	{
 		$category = Category::startQuery()->isCategory()->get();
-		$category->transform(function (Category $category){
+		$category->transform(function (Category $category) {
 			$subCategory = $category->children()->get();
-			$subCategory = $subCategory->transform(function (Category $subCategory){
+			$subCategory = $subCategory->transform(function (Category $subCategory) {
 				$vertical = $subCategory->children()->get();
-				$vertical = $vertical->transform(function (Category $vertical){
+				$vertical = $vertical->transform(function (Category $vertical) {
 					return [
 						'key' => $vertical->id(),
 						'slug' => $vertical->slug(),
@@ -71,7 +74,8 @@ class CategoryController extends AppController{
 			->send();
 	}
 
-	protected function guard(){
+	protected function guard ()
+	{
 		return auth('seller-api');
 	}
 }

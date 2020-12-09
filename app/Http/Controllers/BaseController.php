@@ -12,7 +12,8 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\ResponseTrait;
 use Illuminate\Routing\Controller;
 
-class BaseController extends Controller{
+class BaseController extends Controller
+{
 	use AuthorizesRequests;
 	use DispatchesJobs;
 	use ValidatesRequests;
@@ -23,15 +24,18 @@ class BaseController extends Controller{
 	 */
 	protected $ruleSet;
 
-	public function __construct(){
+	public function __construct ()
+	{
 		$this->ruleSet = new ValidationRuleset();
 	}
 
-	protected function rules(string $key){
+	protected function rules (string $key)
+	{
 		return $this->ruleSet->rules($key);
 	}
 
-	protected function extend(array $rules){
+	protected function extend (array $rules)
+	{
 
 	}
 }

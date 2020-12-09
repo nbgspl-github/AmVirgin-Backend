@@ -6,14 +6,17 @@ use App\Http\Controllers\BaseController;
 use App\Models\Country;
 use App\Traits\FluentResponse;
 
-class CountriesController extends BaseController {
+class CountriesController extends BaseController
+{
 	use FluentResponse;
 
-	public function __construct() {
+	public function __construct ()
+	{
 		parent::__construct();
 	}
 
-	public function index() {
+	public function index ()
+	{
 		$categories = Country::all();
 		$categories->transform(function (Country $country) {
 			return [

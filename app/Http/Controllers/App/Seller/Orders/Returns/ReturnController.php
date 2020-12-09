@@ -30,7 +30,7 @@ class ReturnController extends AppController
 		}
 	}
 
-	public function approve (Returns $return)
+	public function approve (Returns $return): JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -40,7 +40,7 @@ class ReturnController extends AppController
 				]);
 				$response->status(HttpOkay)->setPayload(['status' => $return->status])->message('Return request was approved successfully!');
 			} else {
-				$response->status(HttpDeniedAccess)->setPayload(['status' => $return->status])->message('Return request is already processed.');
+				$response->status(HttpNotModified)->setPayload(['status' => $return->status])->message('Return request is already processed.');
 			}
 		} catch (\Throwable $e) {
 			$response->status(HttpServerError)->message($e->getMessage())->setPayload();
@@ -49,7 +49,7 @@ class ReturnController extends AppController
 		}
 	}
 
-	public function disapprove (Returns $return)
+	public function disapprove (Returns $return): JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -59,7 +59,7 @@ class ReturnController extends AppController
 				]);
 				$response->status(HttpOkay)->setPayload(['status' => $return->status])->message('Return request was disapproved successfully!');
 			} else {
-				$response->status(HttpDeniedAccess)->setPayload(['status' => $return->status])->message('Return request is already processed.');
+				$response->status(HttpNotModified)->setPayload(['status' => $return->status])->message('Return request is already processed.');
 			}
 		} catch (\Throwable $e) {
 			$response->status(HttpServerError)->message($e->getMessage())->setPayload();

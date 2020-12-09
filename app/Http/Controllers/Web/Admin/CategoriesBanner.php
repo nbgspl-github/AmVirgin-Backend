@@ -13,27 +13,32 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 
-class CategoriesBanner extends BaseController{
+class CategoriesBanner extends BaseController
+{
 	use ValidatesRequest;
 	use FluentResponse;
 
-	public function __construct(){
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->ruleSet->load('rules.admin.categories-banner');
 	}
 
-	public function index(){
+	public function index ()
+	{
 		$categories = CategoryBanner::all();
 
 		return view('admin.categories-banner.index')->with('categoriesBanner', $categories);
 	}
 
-	public function create(){
+	public function create ()
+	{
 
 		return view('admin.categories-banner.create');
 	}
 
-	public function store(Request $request){
+	public function store (Request $request)
+	{
 		$images = [];
 		$response = null;
 		try {
@@ -50,30 +55,28 @@ class CategoriesBanner extends BaseController{
 			$payload['image'] = implode(",", $images);
 			CategoryBanner::create($payload);
 			$response = responseWeb()->route('admin.categories-banner.index')->success('Created category banner successfully.');
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response = responseWeb()->back()->data($request->all())->error($exception->getError());
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response = responseWeb()->back()->data($request->all())->error($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function edit($id = null){
+	public function edit ($id = null)
+	{
 		$response = null;
 		$categoriesdata = CategoryBanner::where('id', $id)->first();
 		if ($categoriesdata != null) {
 			return view('admin.categories-banner.edit')->with('categoriesBanner', $categoriesdata);
-		}
-		else {
+		} else {
 			return responseWeb()->route('admin.categories-banner.index')->error('Could not find a category banner with that key.')->send();
 		}
 	}
 
-	public function update(Request $request, $id = null){
+	public function update (Request $request, $id = null)
+	{
 
 		$response = null;
 		try {
@@ -106,22 +109,19 @@ class CategoriesBanner extends BaseController{
 			$payload = $this->requestValid($request, $this->rules('update'));
 			$category->update($payload);
 			$response = responseWeb()->route('admin.categories-banner.index')->success('Update category banner successfully.');
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response = responseWeb()->route('admin.categories.index')->error('Could not find category for that key.');
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response = responseWeb()->back()->data($request->all())->error($exception->getError());
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response = responseWeb()->back()->data($request->all())->error($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function delete($id){
+	public function delete ($id)
+	{
 		$categories = CategoryBanner::whereid($id)->first();
 		try {
 
@@ -138,8 +138,7 @@ class CategoriesBanner extends BaseController{
 			$category->delete();
 
 			return $this->success()->message('Category deleted successfully.')->status(HttpOkay)->send();
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			return $this->failed()->message($exception->getMessage())->status(HttpResourceNotFound)->send();
 		}
 	}

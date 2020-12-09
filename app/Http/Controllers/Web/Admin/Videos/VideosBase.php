@@ -21,33 +21,34 @@ use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class VideosBase extends BaseController {
+class VideosBase extends BaseController
+{
 	use FluentResponse;
 	use ValidatesRequest;
 
-	public function __construct() {
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->ruleSet->load('rules.admin.videos');
 	}
 
-	public function index() {
+	public function index ()
+	{
 		$videos = Video::where('hasSeasons', false)->get();
 		return view('admin.videos.index')->with('videos', $videos);
 	}
 
-	public function choose($id) {
+	public function choose ($id)
+	{
 		$response = responseWeb();
 		try {
 			$payload = Video::where(['id' => $id, 'hasSeasons' => false])->firstOrFail();
 			$response = view('admin.videos.edit.choices')->with('payload', $payload);
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->route('admin.videos.index')->error('Could not find video for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->route('admin.videos.index')->error($exception->getMessage());
-		}
-		finally {
+		} finally {
 			if ($response instanceof WebResponse)
 				return $response->send();
 			else
@@ -55,7 +56,8 @@ class VideosBase extends BaseController {
 		}
 	}
 
-	public function create() {
+	public function create ()
+	{
 		$genres = Genre::all();
 		$languages = MediaLanguage::all()->sortBy('name')->all();
 		$servers = MediaServer::all();
@@ -69,21 +71,21 @@ class VideosBase extends BaseController {
 		with('sections', $sections);
 	}
 
-	public function show($slug) {
+	public function show ($slug)
+	{
 		$video = null;
 		try {
 			$video = Video::where('slug', $slug)->where('hasSeasons', true)->firstOrFail();
 			return jsonEncode($video);
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			return $exception->getMessage();
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			return $exception->getMessage();
 		}
 	}
 
-	public function store() {
+	public function store ()
+	{
 		$response = $this->response();
 		try {
 			$payload = $this->requestValid(request(), $this->rules('store'));
@@ -110,19 +112,17 @@ class VideosBase extends BaseController {
 			$video->pending = false;
 			$video->save();
 			$response->setValue('route', route('admin.videos.edit.action', $video->getKey()))->message('Video details were saved successfully.');
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response->message($exception->getError())->status(HttpInvalidRequestFormat);
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->error($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function delete($id, $subId = null) {
+	public function delete ($id, $subId = null)
+	{
 		$tvSeries = null;
 		$response = $this->response();
 		try {
@@ -137,19 +137,17 @@ class VideosBase extends BaseController {
 			});
 			$tvSeries->delete();
 			$response->setValue('code', 200)->message('Successfully deleted video.');
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->setValue('code', 400)->message('Could not find video for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->setValue('code', 500)->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	protected function replaceTrending($chosenRank) {
+	protected function replaceTrending ($chosenRank)
+	{
 		$ranked = Video::where('rank', $chosenRank)->first();
 		if (!is_null($ranked)) {
 			$ranked->rank = 0;

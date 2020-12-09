@@ -13,54 +13,57 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class SellerController extends BaseController{
+class SellerController extends BaseController
+{
 	use ValidatesRequest;
 
 	protected $ruleSet;
 
-	public function __construct(){
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->ruleSet = config('rules.admin.sellers');
 	}
 
-	public function index(){
+	public function index ()
+	{
 		$payload = Seller::retrieveAll();
 		return view('admin.sellers.index')->with('sellers', $payload);
 	}
 
-	public function create(){
+	public function create ()
+	{
 		return view('admin.sellers.create');
 	}
 
-	public function edit($id = null){
+	public function edit ($id = null)
+	{
 		$seller = Seller::retrieve($id);
 		if ($seller != null) {
 			return view('admin.sellers.edit')->with('seller', $seller);
-		}
-		else {
+		} else {
 			return responseWeb()->route('admin.sellers.index')->error(trans('admin.sellers.not-found'))->send();
 		}
 	}
 
-	public function store(Request $request){
+	public function store (Request $request)
+	{
 		$response = null;
 		try {
 			$payload = $this->requestValid($request, $this->ruleSet['store']);
 			Seller::create($payload);
 			$response = responseWeb()->route('admin.sellers.index')->success(__('strings.sellers.store.success'));
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response = responseWeb()->back()->data($request->all())->error($exception->getMessage());
-		}
-		catch (Exception $exception) {
+		} catch (Exception $exception) {
 			$response = responseWeb()->back()->data($request->all())->error($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function update(Request $request, $id = null){
+	public function update (Request $request, $id = null)
+	{
 		$response = null;
 		$seller = Seller::retrieve($id);
 		try {
@@ -73,17 +76,13 @@ class SellerController extends BaseController{
 			$payload = $this->requestValid($request, $this->ruleSet['update'], $additional);
 			$seller->update($payload);
 			$response = responseWeb()->route('admin.sellers.index')->success(__('strings.seller.update.success'));
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response = responseWeb()->route('admin.sellers.index')->error($exception->getMessage());
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response = responseWeb()->back()->data($request->all())->error($exception->getError());
-		}
-		catch (Exception $exception) {
+		} catch (Exception $exception) {
 			$response = responseWeb()->route('admin.sellers.index')->error($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}

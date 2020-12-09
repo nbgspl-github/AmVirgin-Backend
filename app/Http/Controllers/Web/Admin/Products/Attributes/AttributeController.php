@@ -18,12 +18,14 @@ use Sujip\Guid\Facades\Guid;
 use Throwable;
 use function foo\func;
 
-class AttributeController extends BaseController{
+class AttributeController extends BaseController
+{
 	use ValidatesRequest;
 
 	protected array $rules;
 
-	public function __construct(){
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->rules = [
 			'store' => [
@@ -32,7 +34,7 @@ class AttributeController extends BaseController{
 				'minValues' => ['bail', 'required_with:multiValue,on', 'numeric', 'min:1', 'max:9999'],
 				'maxValues' => ['bail', 'required_with:multiValue,on', 'numeric', 'min:2', 'max:10000', 'gte:minValues'],
 				'values' => ['bail', 'required_with:predefined,on',
-					function ($attribute, $value, $fail){
+					function ($attribute, $value, $fail) {
 						if (request()->has('predefined')) {
 							$values = Str::split(';', $value);
 							if (Arrays::length($values) < 1) {
@@ -45,20 +47,22 @@ class AttributeController extends BaseController{
 		];
 	}
 
-	public function index(){
+	public function index ()
+	{
 		$attributes = Attribute::all();
 		$categories = Category::all();
 		return view('admin.attributes.index')->with('categories', $categories)->with('attributes', $attributes);
 	}
 
-	public function create(){
+	public function create ()
+	{
 		$types = PrimitiveType::all();
 		$categories = $topLevel = Category::where('parentId', 0)->get();
-		$topLevel->transform(function (Category $topLevel){
+		$topLevel->transform(function (Category $topLevel) {
 			$children = $topLevel->children()->get();
-			$children = $children->transform(function (Category $child){
+			$children = $children->transform(function (Category $child) {
 				$innerChildren = $child->children()->get();
-				$innerChildren = $innerChildren->transform(function (Category $inner){
+				$innerChildren = $innerChildren->transform(function (Category $inner) {
 					return [
 						'id' => $inner->getKey(),
 						'name' => $inner->getName(),
@@ -81,7 +85,8 @@ class AttributeController extends BaseController{
 		return view('admin.attributes.create')->with('categories', $topLevel)->with('types', $types);
 	}
 
-	public function store(){
+	public function store ()
+	{
 		/**
 		 * Guidelines to deal with attribute inheritance and how to handle values of such attributes.
 		 * 1.) Let us suppose two categories Footwear and Casual.
@@ -111,19 +116,15 @@ class AttributeController extends BaseController{
 					'maxValues' => request()->has('multiValue') ? $validated->maxValues : 0,
 					'values' => request()->has('predefined') ? Str::split('|', $validated->values) : [],
 				]);
-			}
-			else {
+			} else {
 				throw new AttributeNameConflictException();
 			}
 			$response->success('Successfully created attribute.')->route('admin.products.attributes.index');
-		}
-		catch (ValidationException | AttributeNameConflictException $exception) {
+		} catch (ValidationException | AttributeNameConflictException $exception) {
 			$response->error($exception->getMessage())->data(request()->all())->back();
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->error($exception->getMessage())->data(request()->all())->back();
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}

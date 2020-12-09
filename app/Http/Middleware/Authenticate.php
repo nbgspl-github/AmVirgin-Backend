@@ -6,11 +6,13 @@ use App\Interfaces\StatusCodes;
 use Closure;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
-class Authenticate extends Middleware{
+class Authenticate extends Middleware
+{
 
 	private $redirectTo;
 
-	public function handle($request, Closure $next, ...$guards){
+	public function handle ($request, Closure $next, ...$guards)
+	{
 		$guard = $guards[0];
 		if (!$this->auth->guard($guard)->user()) {
 			switch ($guard) {
@@ -36,7 +38,8 @@ class Authenticate extends Middleware{
 		return $next($request);
 	}
 
-	protected function unauthenticated($request, array $guards){
+	protected function unauthenticated ($request, array $guards)
+	{
 		return redirect($this->redirectTo);
 	}
 

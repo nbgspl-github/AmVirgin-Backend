@@ -8,21 +8,24 @@ use App\Models\Category;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class ListController extends AppController{
+class ListController extends AppController
+{
 	protected array $rules;
 
-	public function __construct(){
+	public function __construct ()
+	{
 		parent::__construct();
 	}
 
-	public function show(int $categoryId){
+	public function show (int $categoryId)
+	{
 		$response = responseApp();
 		try {
 			$category = Category::retrieveThrows($categoryId);
 			$attributeSet = $category->attributeSet;
 			if ($attributeSet != null) {
 				$attributeSetItems = $attributeSet->items;
-				$attributeSetItems->transform(function (AttributeSetItem $attributeSetItem){
+				$attributeSetItems->transform(function (AttributeSetItem $attributeSetItem) {
 					$attribute = $attributeSetItem->attribute;
 					return [
 						'key' => $attribute->id(),
@@ -42,23 +45,20 @@ class ListController extends AppController{
 				});
 				$status = $attributeSetItems->count() == 0 ? HttpNoContent : HttpOkay;
 				$response->status($status)->message('Listing all attributes for the category.')->setValue('data', $attributeSetItems);
-			}
-			else {
+			} else {
 				$response->status(HttpNoContent)->message('There are no attribute sets defined for that category.')->setValue('data', []);
 			}
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message($exception->getMessage());
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	protected function guard(){
+	protected function guard ()
+	{
 		return auth('seller-api');
 	}
 }

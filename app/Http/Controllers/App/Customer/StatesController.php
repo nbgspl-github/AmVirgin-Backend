@@ -5,8 +5,10 @@ namespace App\Http\Controllers\App\Customer;
 use App\Http\Controllers\AppController;
 use App\Models\State;
 
-class StatesController extends AppController {
-	public function index($countryId) {
+class StatesController extends AppController
+{
+	public function index ($countryId)
+	{
 		$states = State::where('countryId', $countryId)->get();
 		$states->transform(function (State $state) {
 			return [
@@ -19,7 +21,8 @@ class StatesController extends AppController {
 		})->setValue('data', $states)->send();
 	}
 
-	protected function guard() {
+	protected function guard ()
+	{
 		return auth('seller-api');
 	}
 }

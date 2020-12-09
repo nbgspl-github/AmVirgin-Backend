@@ -6,10 +6,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderSegmentResource extends JsonResource
 {
-	public function toArray ($request)
+	public function toArray ($request): array
 	{
 		return [
-
+			'key' => $this->id
 		];
 	}
 }

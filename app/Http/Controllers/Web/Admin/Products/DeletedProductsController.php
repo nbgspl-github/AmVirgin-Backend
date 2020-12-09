@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Web\Admin\Products;
 use App\Http\Controllers\BaseController;
 use App\Models\Product;
 
-class DeletedProductsController extends BaseController {
-	public function index() {
+class DeletedProductsController extends BaseController
+{
+	public function index ()
+	{
 		$products = Product::where([
 			['draft', false],
 			['deleted', true],

@@ -6,8 +6,10 @@ use App\Classes\Arrays;
 use App\Http\Controllers\AppController;
 use Illuminate\Http\JsonResponse;
 
-class SortController extends AppController{
-	public function sorts(): JsonResponse{
+class SortController extends AppController
+{
+	public function sorts (): JsonResponse
+	{
 		$available = config('sorts.shop');
 		$sorts = Arrays::Empty;
 		foreach ($available as $key => $value) {
@@ -22,7 +24,8 @@ class SortController extends AppController{
 			->setValue('data', $sorts)->send();
 	}
 
-	protected function guard(){
+	protected function guard ()
+	{
 		return auth('customer-api');
 	}
 }

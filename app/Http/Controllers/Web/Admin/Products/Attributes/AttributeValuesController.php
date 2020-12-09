@@ -12,12 +12,14 @@ use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class AttributeValuesController extends BaseController{
+class AttributeValuesController extends BaseController
+{
 	use ValidatesRequest;
 
 	protected array $rules;
 
-	public function __construct(){
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->rules = [
 			'store' => [
@@ -29,7 +31,8 @@ class AttributeValuesController extends BaseController{
 		];
 	}
 
-	public function edit($attributeId){
+	public function edit ($attributeId)
+	{
 		$response = responseWeb();
 		try {
 			$attribute = Attribute::retrieveThrows($attributeId);
@@ -42,21 +45,17 @@ class AttributeValuesController extends BaseController{
 				}
 				$parents = array_reverse($parents);
 				$parents = implode(' > ', $parents);
-				$values = $attribute->values()->get('value')->transform(fn(AttributeValue $attributeValue) => $attributeValue->value())->toArray();
+				$values = $attribute->values()->get('value')->transform(fn (AttributeValue $attributeValue) => $attributeValue->value())->toArray();
 				$values = implode('/', $values);
 				$response = view('admin.attributes.values.edit')->with('attribute', $attribute)->with('parent', $parents)->with('values', $values);
-			}
-			else {
+			} else {
 				$response->error('You can not add values to an attribute marked for input by seller.')->route('admin.products.attributes.index');
 			}
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->error($exception->getMessage())->route('admin.products.attributes.index');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->error($exception->getMessage())->route('admin.products.attributes.index');
-		}
-		finally {
+		} finally {
 			if ($response instanceof WebResponse)
 				return $response->send();
 			else
@@ -64,7 +63,8 @@ class AttributeValuesController extends BaseController{
 		}
 	}
 
-	public function store($attributeId){
+	public function store ($attributeId)
+	{
 		$response = responseWeb();
 		try {
 			$attribute = Attribute::retrieveThrows($attributeId);
@@ -72,7 +72,7 @@ class AttributeValuesController extends BaseController{
 			AttributeValue::where([
 				['attributeId', $attributeId],
 				['categoryId', $attribute->categoryId()],
-			])->get()->each(fn(AttributeValue $attributeValue) => AttributeValue::destroy($attributeValue->id()));
+			])->get()->each(fn (AttributeValue $attributeValue) => AttributeValue::destroy($attributeValue->id()));
 			$values = explode('/', $validated->values);
 			foreach ($values as $value) {
 				AttributeValue::create([
@@ -82,17 +82,13 @@ class AttributeValuesController extends BaseController{
 				]);
 			}
 			$response->success('Attribute values were modified successfully.')->route('admin.products.attributes.index');
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response->error('You must provide at-least two values.')->back();
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->error($exception->getMessage())->route('admin.products.attributes.index');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->error($exception->getMessage())->route('admin.products.attributes.index');
-		}
-		finally {
+		} finally {
 			if ($response instanceof WebResponse)
 				return $response->send();
 			else

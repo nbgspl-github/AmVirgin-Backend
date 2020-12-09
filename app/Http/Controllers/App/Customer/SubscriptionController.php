@@ -6,8 +6,10 @@ use App\Http\Controllers\AppController;
 use App\Models\SubscriptionPlan;
 use App\Resources\Subscriptions\Customer\SubscriptionResource;
 
-class SubscriptionController extends AppController {
-	public function index() {
+class SubscriptionController extends AppController
+{
+	public function index ()
+	{
 		$subscriptions = SubscriptionPlan::where([
 			['active', true],
 		])->get();
@@ -15,7 +17,8 @@ class SubscriptionController extends AppController {
 		return responseApp()->status(HttpOkay)->message('Listing all available subscriptions.')->setValue('data', $subscriptions)->send();
 	}
 
-	protected function guard() {
+	protected function guard ()
+	{
 		return auth('customer-api');
 	}
 }

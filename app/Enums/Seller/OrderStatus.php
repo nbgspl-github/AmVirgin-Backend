@@ -69,6 +69,7 @@ final class OrderStatus extends Enum
 				return [
 					self::getKey(self::Refunded) => self::Refunded,
 				];
+
 			case self::PendingDispatch:
 				return [
 					self::getKey(self::Dispatched) => self::Dispatched,

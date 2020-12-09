@@ -18,85 +18,85 @@ use Throwable;
 
 class CatalogController extends AppController
 {
-    use ValidatesRequest;
+	use ValidatesRequest;
 
-    protected const DefaultSort = 'relevance';
-    protected const ItemsPerPage = 50;
-    protected array $rules = [];
+	protected const DefaultSort = 'relevance';
+	protected const ItemsPerPage = 50;
+	protected array $rules = [];
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->rules = [
-            'index' => [
-                'category' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)->whereNot('type', Category::Types['Root'])],
-                'sortBy' => ['bail', 'nullable', Rule::in(collect(config('sorts.shop'))->keys()->toArray())],
-                'page' => ['bail', 'nullable', 'numeric', 'min:1', 'max:10000'],
-            ],
-        ];
-    }
+	public function __construct ()
+	{
+		parent::__construct();
+		$this->rules = [
+			'index' => [
+				'category' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)->whereNot('type', Category::Types['Root'])],
+				'sortBy' => ['bail', 'nullable', Rule::in(collect(config('sorts.shop'))->keys()->toArray())],
+				'page' => ['bail', 'nullable', 'numeric', 'min:1', 'max:10000'],
+			],
+		];
+	}
 
-    public function index(): JsonResponse
-    {
-        $response = responseApp();
-        try {
-            $validated = $this->requestValid(request(), $this->rules['index']);
-            $itemsPerPage = config('shop.catalog.defaults.listing.perPage', 50);
-            if (!isset($validated['page'])) $validated['page'] = 0;
-            if (!isset($validated['sortBy'])) $validated['sortBy'] = config('shop.catalog.defaults.sort', 'relevance');
+	public function index (): JsonResponse
+	{
+		$response = responseApp();
+		try {
+			$validated = $this->requestValid(request(), $this->rules['index']);
+			$itemsPerPage = config('shop.catalog.defaults.listing.perPage', 50);
+			if (!isset($validated['page'])) $validated['page'] = 0;
+			if (!isset($validated['sortBy'])) $validated['sortBy'] = config('shop.catalog.defaults.sort', 'relevance');
 
-            // Grab the sorting algorithm.
-            $sort = AbstractSorts::take(config('sorts.shop')[$validated['sortBy']]['class']);
+			// Grab the sorting algorithm.
+			$sort = AbstractSorts::take(config('sorts.shop')[$validated['sortBy']]['class']);
 
-            // Collect all viable products.
-            $products = Product::startQuery()->displayable()->categoryOrDescendant($validated['category'])->singleVariantMode();
+			// Collect all viable products.
+			$products = Product::startQuery()->displayable()->categoryOrDescendant($validated['category'])->singleVariantMode();
 
-            // Preload all relations that we'll need in this call.
-            $products->withRelations('options', 'brand');
+			// Preload all relations that we'll need in this call.
+			$products->withRelations('options', 'brand');
 
-            // Apply any incoming sort request, or just go with the default one.
-            $sort::sort($products);
+			// Apply any incoming sort request, or just go with the default one.
+			$sort::sort($products);
 
-            // Paginate to first 50 results for page.
-            $total = $products->get('name')->count();
-            $products = $products->paginate($itemsPerPage);
-            $products = CatalogListResource::collection($products);
-            $meta = [
-                'pagination' => [
-                    'pages' => countRequiredPages($total, $itemsPerPage),
-                    'items' => ['total' => $total, 'chunk' => $itemsPerPage],
-                ],
-            ];
-            $response->status(HttpOkay)->message('Listing products for given category.')
-                ->setValue('meta', $meta)
-                ->setValue('payload', $products);
-        } catch (ValidationException $exception) {
-            $response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
-        } catch (Throwable $exception) {
-            $response->status(HttpServerError)->message($exception->getMessage());
-        } finally {
-            return $response->send();
-        }
-    }
+			// Paginate to first 50 results for page.
+			$total = $products->get('name')->count();
+			$products = $products->paginate($itemsPerPage);
+			$products = CatalogListResource::collection($products);
+			$meta = [
+				'pagination' => [
+					'pages' => countRequiredPages($total, $itemsPerPage),
+					'items' => ['total' => $total, 'chunk' => $itemsPerPage],
+				],
+			];
+			$response->status(HttpOkay)->message('Listing products for given category.')
+				->setValue('meta', $meta)
+				->setValue('payload', $products);
+		} catch (ValidationException $exception) {
+			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+		} catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		} finally {
+			return $response->send();
+		}
+	}
 
-    public function show($id): JsonResponse
-    {
-        $response = responseApp();
-        try {
-            $product = Product::startQuery()->displayable()->key($id)->firstOrFail();
-            $product = new ProductResource($product);
-            $response->status(HttpOkay)->message('Listing details of product.')->setValue('payload', $product);
-        } catch (ModelNotFoundException $exception) {
-            $response->status(HttpResourceNotFound)->message('Could not find the product for that key.');
-        } catch (Throwable $exception) {
-            $response->status(HttpServerError)->message($exception->getMessage());
-        } finally {
-            return $response->send();
-        }
-    }
+	public function show ($id): JsonResponse
+	{
+		$response = responseApp();
+		try {
+			$product = Product::startQuery()->displayable()->key($id)->firstOrFail();
+			$product = new ProductResource($product);
+			$response->status(HttpOkay)->message('Listing details of product.')->setValue('payload', $product);
+		} catch (ModelNotFoundException $exception) {
+			$response->status(HttpResourceNotFound)->message('Could not find the product for that key.');
+		} catch (Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		} finally {
+			return $response->send();
+		}
+	}
 
-    protected function guard()
-    {
-        return auth(self::CustomerAPI);
-    }
+	protected function guard ()
+	{
+		return auth(self::CustomerAPI);
+	}
 }

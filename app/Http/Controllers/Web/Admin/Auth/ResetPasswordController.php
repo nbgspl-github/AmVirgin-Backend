@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Web\Admin\Auth;
 use App\Http\Controllers\BaseController;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 
-class ResetPasswordController extends BaseController{
+class ResetPasswordController extends BaseController
+{
 	/*
 	|--------------------------------------------------------------------------
 	| Password Reset Controller

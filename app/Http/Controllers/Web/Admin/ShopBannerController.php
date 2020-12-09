@@ -15,32 +15,36 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class ShopBannerController extends BaseController{
+class ShopBannerController extends BaseController
+{
 	use ValidatesRequest;
 	use FluentResponse;
 
 	protected $ruleSet;
 
-	public function __construct(){
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->ruleSet = config('rules.admin.home-banner');
 	}
 
-	public function index() {
+	public function index ()
+	{
 		$slides = ShopSlider::all();
 		return view('admin.home-banners.index')->with('slides', $slides);
 	}
 
-	public function create(){
+	public function create ()
+	{
 		return view('admin.home-banners.create');
 	}
 
-	public function edit($id) {
+	public function edit ($id)
+	{
 		$slider = ShopSlider::find($id);
 		if ($slider != null) {
 			return view('admin.home-banners.edit')->with('slide', $slider);
-		}
-		else {
+		} else {
 			return responseWeb()->
 			route('admin.shop-banners.index')->
 			error('Could not find slide for that key.')->
@@ -48,7 +52,8 @@ class ShopBannerController extends BaseController{
 		}
 	}
 
-	public function store(Request $request){
+	public function store (Request $request)
+	{
 		$response = null;
 
 		try {
@@ -59,37 +64,35 @@ class ShopBannerController extends BaseController{
 			$response = responseWeb()->
 			route('admin.shop-banners.index')->
 			success('Home Banner created successfully.');
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response = responseWeb()->
 			back()->
 			error($exception->getError())->
 			data($request->all());
-		}
-		catch (Exception $exception) {
+		} catch (Exception $exception) {
 			$response = responseWeb()->
 			back()->
 			error($exception->getMessage())->
 			data($request->all());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function show($id){
+	public function show ($id)
+	{
 
 	}
 
-	public function delete($id) {
+	public function delete ($id)
+	{
 		$slider = ShopSlider::find($id);
 		if ($slider == null) {
 			return $this->failed()->
 			message('Could not find slide for that key.')->
 			status(HttpResourceNotFound)->
 			send();
-		}
-		else {
+		} else {
 			$slider->delete();
 			return $this->success()->
 			status(HttpOkay)->
@@ -98,7 +101,8 @@ class ShopBannerController extends BaseController{
 		}
 	}
 
-	public function update(Request $request){
+	public function update (Request $request)
+	{
 		$response = null;
 		$poster = null;
 		try {
@@ -118,25 +122,23 @@ class ShopBannerController extends BaseController{
 			$response = responseWeb()->
 			route('admin.shop-banners.index')->
 			success('Slider updated successfully.');
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response = responseWeb()->
 			back()->
 			error($exception->getError())->
 			data($request->all());
-		}
-		catch (Exception $exception) {
+		} catch (Exception $exception) {
 			$response = responseWeb()->
 			back()->
 			error($exception->getMessage())->
 			data($request->all());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function updateStatus(Request $request){
+	public function updateStatus (Request $request)
+	{
 		$validator = Validator::make($request->all(), [
 			'id' => ['bail', 'required', Rule::exists(Tables::ShopBanner, 'id')],
 			'active' => ['bail', 'required', 'boolean'],
@@ -146,8 +148,7 @@ class ShopBannerController extends BaseController{
 			message($validator->errors()->first())->
 			status(HttpResourceNotFound)->
 			send();
-		}
-		else {
+		} else {
 			ShopSlider::find($request->id)->
 			setActive($request->active)->
 			save();

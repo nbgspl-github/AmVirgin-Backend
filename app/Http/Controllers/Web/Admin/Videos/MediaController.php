@@ -10,25 +10,25 @@ use App\Storage\SecuredDisk;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class MediaController extends VideosBase{
-	public function __construct(){
+class MediaController extends VideosBase
+{
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->ruleSet->load('rules.admin.videos.media');
 	}
 
-	public function edit($id){
+	public function edit ($id)
+	{
 		$response = responseWeb();
 		try {
 			$video = Video::retrieveThrows($id);
 			$response = view('admin.videos.media.edit')->with('payload', $video);
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->route('admin.videos.index')->error('Could not find video for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->route('admin.videos.index')->error($exception->getMessage());
-		}
-		finally {
+		} finally {
 			if ($response instanceof WebResponse)
 				return $response->send();
 			else
@@ -36,7 +36,8 @@ class MediaController extends VideosBase{
 		}
 	}
 
-	public function update($id){
+	public function update ($id)
+	{
 		$response = $this->response();
 		try {
 			$video = Video::retrieveThrows($id);
@@ -63,14 +64,11 @@ class MediaController extends VideosBase{
 			}
 			$video->save();
 			$response->status(HttpOkay)->message('Successfully uploaded/updated media for video.');
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('Could not find video for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}

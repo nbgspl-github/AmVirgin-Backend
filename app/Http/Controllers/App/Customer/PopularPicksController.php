@@ -8,8 +8,10 @@ use App\Models\Video;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
 
-class PopularPicksController extends AppController{
-	public function index(){
+class PopularPicksController extends AppController
+{
+	public function index ()
+	{
 		$response = $this->response();
 		try {
 			$popular = Video::where([
@@ -19,21 +21,20 @@ class PopularPicksController extends AppController{
 				['topPick', true],
 			])->orderBy('rank', 'DESC')->orderBy('hits', 'DESC')->get();
 
-			$popular->transform(function (Video $video){
+			$popular->transform(function (Video $video) {
 				return new PopularVideosResource($video);
 			});
 			$payload = $popular->all();
 			$response->status(HttpOkay)->setValue('data', $payload)->message('Success');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->setValue('data')->message('Error');
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	protected function guard(){
+	protected function guard ()
+	{
 		return Auth::guard('customer-api');
 	}
 }

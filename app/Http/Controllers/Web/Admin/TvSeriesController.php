@@ -21,21 +21,25 @@ use Illuminate\Support\Facades\Storage;
 use stdClass;
 use Throwable;
 
-class TvSeriesController extends BaseController{
+class TvSeriesController extends BaseController
+{
 	use FluentResponse;
 	use ValidatesRequest;
 
-	public function __construct(){
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->ruleSet->load('rules.admin.tv-series');
 	}
 
-	public function index(){
+	public function index ()
+	{
 		$series = Video::where('hasSeasons', true)->get();
 		return view('admin.tv-series.index')->with('series', $series);
 	}
 
-	public function create(){
+	public function create ()
+	{
 		$genrePayload = Genre::all();
 		$languagePayload = MediaLanguage::all()->sortBy('name')->all();
 		$serverPayload = MediaServer::all();
@@ -47,7 +51,8 @@ class TvSeriesController extends BaseController{
 		with('qualities', $qualityPayload);
 	}
 
-	public function store(){
+	public function store ()
+	{
 		$response = $this->response();
 		try {
 			$validated = $this->requestValid(request(), $this->rules('store'));
@@ -86,70 +91,65 @@ class TvSeriesController extends BaseController{
 			]);
 			$video->save();
 			$response = $this->success()->message('Tv series details were successfully saved. Please proceed to next step.');
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response = $this->failed()->message($exception->getError())->status(HttpInvalidRequestFormat);
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response = $this->error()->message($exception->getTraceAsString());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function show($slug){
+	public function show ($slug)
+	{
 		$video = null;
 		try {
 			$video = Video::where('slug', $slug)->where('hasSeasons', true)->firstOrFail();
 			return jsonEncode($video);
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			return $exception->getMessage();
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			return $exception->getMessage();
 		}
 	}
 
-	public function update($id){
+	public function update ($id)
+	{
 		$type = request('type');
 		if ($type == 'attributes') {
 			return $this->updateAttributes($id);
-		}
-		else {
+		} else {
 			return $this->updateContent($id);
 		}
 	}
 
-	public function delete($id){
+	public function delete ($id)
+	{
 		$tvSeries = null;
 		$response = $this->response();
 		try {
 			$tvSeries = Video::findOrFail($id);
 			$meta = VideoMeta::where('videoId', $tvSeries->getKey())->get();
-			$meta->each(function (VideoMeta $meta){
+			$meta->each(function (VideoMeta $meta) {
 				$meta->delete();
 			});
 			$sources = VideoSource::where('videoId', $tvSeries->getKey())->get();
-			$sources->each(function (VideoSource $videoSource){
+			$sources->each(function (VideoSource $videoSource) {
 				$videoSource->delete();
 			});
 			$tvSeries->delete();
 			$response->setValue('code', 200)->message('Successfully deleted tv series.');
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->setValue('code', 400)->message('Could not find tv series for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->setValue('code,500')->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	protected function replaceTrendingItem($chosenRank){
+	protected function replaceTrendingItem ($chosenRank)
+	{
 		$ranked = Video::where('rank', $chosenRank)->first();
 		if (!is_null($ranked)) {
 			$ranked->rank = 0;
@@ -158,7 +158,8 @@ class TvSeriesController extends BaseController{
 		}
 	}
 
-	private function editAttributes($id){
+	private function editAttributes ($id)
+	{
 		$response = responseWeb();
 		try {
 			$genrePayload = Genre::all();
@@ -172,16 +173,13 @@ class TvSeriesController extends BaseController{
 			with('languages', $languagePayload)->
 			with('servers', $serverPayload)->
 			with('qualities', $qualityPayload);
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->route('admin.tv-series.index')->error('Could not find tv series for that key.');
 			dd('ModelNotFound');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->route('admin.tv-series.index')->error($exception->getMessage());
 			dd('Throwable');
-		}
-		finally {
+		} finally {
 			if ($response instanceof WebResponse)
 				return $response->send();
 			else
@@ -189,7 +187,8 @@ class TvSeriesController extends BaseController{
 		}
 	}
 
-	private function updateAttributes($id){
+	private function updateAttributes ($id)
+	{
 		$response = responseWeb();
 		$video = null;
 		try {
@@ -219,19 +218,17 @@ class TvSeriesController extends BaseController{
 
 			$video->update($validated);
 			$response->success('Tv series details were successfully updated.')->route('admin.tv-series.index');
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response->error($exception->getError())->back();
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->error($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	private function editContent($id){
+	private function editContent ($id)
+	{
 		$response = responseWeb();
 		try {
 			$video = Video::retrieveThrows($id);
@@ -240,7 +237,7 @@ class TvSeriesController extends BaseController{
 			$contentPayload = [];
 			$sources = $video->sources();
 			$sources = $sources->get();
-			$sources->transform(function (VideoSource $videoSource) use ($qualities, $languages){
+			$sources->transform(function (VideoSource $videoSource) use ($qualities, $languages) {
 				$payload = new stdClass();
 				$payload->title = $videoSource->getTitle();
 				$payload->description = $videoSource->getDescription();
@@ -262,14 +259,11 @@ class TvSeriesController extends BaseController{
 			with('languages', $languages)->
 			with('data', $row)->
 			with('key', $id);
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->route('admin.tv-series.index')->error('Could not find tv series for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->route('admin.tv-series.index')->error($exception->getMessage());
-		}
-		finally {
+		} finally {
 			if ($response instanceof WebResponse)
 				return $response->send();
 			else
@@ -277,7 +271,8 @@ class TvSeriesController extends BaseController{
 		}
 	}
 
-	private function updateContent($id){
+	private function updateContent ($id)
+	{
 		$response = $this->response();
 		try {
 			$video = Video::retrieveThrows($id);
@@ -311,8 +306,7 @@ class TvSeriesController extends BaseController{
 						$fields['file'] = Storage::disk('secured')->putFile(Directories::Videos, $videos[$i], 'public');
 					}
 					$source->update($fields);
-				}
-				else {
+				} else {
 					VideoSource::create([
 						'title' => $titles[$i],
 						'description' => $descriptions[$i],
@@ -330,11 +324,11 @@ class TvSeriesController extends BaseController{
 			}
 			$seasonCount = VideoSource::distinct('season')->count('season');
 			$mediaLanguages = VideoSource::select('mediaLanguageId')->where('videoId', $video->getKey())->get();
-			$mediaLanguages->transform(function ($obj){
+			$mediaLanguages->transform(function ($obj) {
 				return MediaLanguage::find($obj->mediaLanguageId);
 			});
 			$mediaQualities = VideoSource::select('mediaQualityId')->where('videoId', $video->getKey())->get();
-			$mediaQualities->transform(function ($obj){
+			$mediaQualities->transform(function ($obj) {
 				return MediaQuality::find($obj->mediaQualityId);
 			});
 			$video->update([
@@ -345,15 +339,12 @@ class TvSeriesController extends BaseController{
 			$video->save();
 
 			$response->status(HttpOkay)->message('Video content was updated successfully.');
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('Could not find video for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			dd($exception);
 			$response->status(HttpServerError)->message($exception->getTraceAsString());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}

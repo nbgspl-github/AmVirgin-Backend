@@ -10,12 +10,14 @@ use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 
-class AnnouncementController extends \App\Http\Controllers\AppController{
+class AnnouncementController extends \App\Http\Controllers\AppController
+{
 	use ValidatesRequest;
 
 	protected array $rules;
 
-	public function __construct(){
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->rules = [
 			'mark' => [
@@ -24,7 +26,8 @@ class AnnouncementController extends \App\Http\Controllers\AppController{
 		];
 	}
 
-	public function index(): JsonResponse{
+	public function index (): JsonResponse
+	{
 		$announcementCollection = Announcement::startQuery()->displayable()->excludeDeleted()->get();
 		$resourceCollection = \App\Resources\Announcements\Announcement::collection($announcementCollection);
 		return responseApp()->status(HttpOkay)
@@ -33,7 +36,8 @@ class AnnouncementController extends \App\Http\Controllers\AppController{
 			->send();
 	}
 
-	public function mark($id){
+	public function mark ($id)
+	{
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules['mark']);
@@ -51,7 +55,7 @@ class AnnouncementController extends \App\Http\Controllers\AppController{
 				case 'unread':
 					$readBy = $announcement->readBy();
 					$id = $this->guard()->id();
-					$readBy = collect($readBy)->filter(function ($value, $key) use ($id){
+					$readBy = collect($readBy)->filter(function ($value, $key) use ($id) {
 						return $value != $id;
 					})->toArray();
 					$announcement->readBy($readBy);
@@ -68,22 +72,19 @@ class AnnouncementController extends \App\Http\Controllers\AppController{
 					break;
 			}
 			$response->status(HttpOkay)->message('Marked announcement status successfully.');
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response->status(HttpOkay)->message($exception->getMessage());
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message($exception->getMessage());
-		}
-		catch (\Throwable $exception) {
+		} catch (\Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	protected function guard(){
+	protected function guard ()
+	{
 		return auth(self::SellerAPI);
 	}
 }

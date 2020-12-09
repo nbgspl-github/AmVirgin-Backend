@@ -9,29 +9,30 @@ use App\Storage\SecuredDisk;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class MediaController extends TvSeriesBase{
-	public function __construct(){
+class MediaController extends TvSeriesBase
+{
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->ruleSet->load('rules.admin.tv-series.media');
 	}
 
-	public function create(){
+	public function create ()
+	{
 
 	}
 
-	public function edit($id){
+	public function edit ($id)
+	{
 		$response = responseWeb();
 		try {
 			$tvSeries = Video::retrieveThrows($id);
 			$response = view('admin.tv-series.media.edit')->with('payload', $tvSeries);
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->route('admin.tv-series.index')->error('Could not find tv series for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->route('admin.tv-series.index')->error($exception->getMessage());
-		}
-		finally {
+		} finally {
 			if ($response instanceof WebResponse)
 				return $response->send();
 			else
@@ -39,11 +40,13 @@ class MediaController extends TvSeriesBase{
 		}
 	}
 
-	public function store(){
+	public function store ()
+	{
 
 	}
 
-	public function update($id){
+	public function update ($id)
+	{
 		$response = $this->response();
 		try {
 			$tvSeries = Video::retrieveThrows($id);
@@ -70,14 +73,11 @@ class MediaController extends TvSeriesBase{
 			}
 			$tvSeries->save();
 			$response->status(HttpOkay)->message('Successfully uploaded/updated media for tv series.');
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('Could not find tv series for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}

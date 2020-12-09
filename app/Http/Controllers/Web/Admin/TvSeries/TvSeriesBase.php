@@ -20,43 +20,44 @@ use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class TvSeriesBase extends BaseController {
+class TvSeriesBase extends BaseController
+{
 	use FluentResponse;
 	use ValidatesRequest;
 
-	public function __construct() {
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->ruleSet->load('rules.admin.tv-series');
 	}
 
-	public function index() {
+	public function index ()
+	{
 		$series = Video::where('hasSeasons', true)->get();
 		return view('admin.tv-series.index')->with('series', $series);
 	}
 
-	public function edit($id) {
+	public function edit ($id)
+	{
 		$type = request('type');
 		if ($type == 'attributes') {
 			return $this->editAttributes($id);
-		}
-		else {
+		} else {
 			return $this->editContent($id);
 		}
 	}
 
-	public function choose($id) {
+	public function choose ($id)
+	{
 		$response = responseWeb();
 		try {
 			$payload = Video::where(['id' => $id, 'hasSeasons' => true])->firstOrFail();
 			$response = view('admin.tv-series.edit.choices')->with('payload', $payload);
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->route('admin.tv-series.index')->error('Could not find tv series for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->route('admin.tv-series.index')->error($exception->getMessage());
-		}
-		finally {
+		} finally {
 			if ($response instanceof WebResponse)
 				return $response->send();
 			else
@@ -64,7 +65,8 @@ class TvSeriesBase extends BaseController {
 		}
 	}
 
-	public function create() {
+	public function create ()
+	{
 		$genrePayload = Genre::all();
 		$languagePayload = MediaLanguage::all()->sortBy('name')->all();
 		$serverPayload = MediaServer::all();
@@ -78,7 +80,8 @@ class TvSeriesBase extends BaseController {
 		with('sections', $sections);
 	}
 
-	public function store() {
+	public function store ()
+	{
 		$response = $this->response();
 		try {
 			$validated = $this->requestValid(request(), $this->rules('store'));
@@ -108,33 +111,30 @@ class TvSeriesBase extends BaseController {
 			]);
 			$video->save();
 			$response = $this->success()->message('Tv series details were successfully saved. Please proceed to next step.')->setValue('route', route('admin.tv-series.edit.action', $video->getKey()));
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response = $this->failed()->message($exception->getError())->status(HttpInvalidRequestFormat);
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response = $this->error()->message($exception->getTraceAsString());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function show($slug) {
+	public function show ($slug)
+	{
 		$video = null;
 		try {
 			$video = Video::where('slug', $slug)->where('hasSeasons', true)->firstOrFail();
 			return jsonEncode($video);
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			return $exception->getMessage();
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			return $exception->getMessage();
 		}
 	}
 
-	public function delete($id, $subId = null) {
+	public function delete ($id, $subId = null)
+	{
 		$tvSeries = null;
 		$response = $this->response();
 		try {
@@ -149,19 +149,17 @@ class TvSeriesBase extends BaseController {
 			});
 			$tvSeries->delete();
 			$response->setValue('code', 200)->message('Successfully deleted tv series.');
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->setValue('code', 400)->message('Could not find tv series for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->setValue('code,500')->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	protected function replaceTrending($chosenRank) {
+	protected function replaceTrending ($chosenRank)
+	{
 		$ranked = Video::where('rank', $chosenRank)->first();
 		if (!is_null($ranked)) {
 			$ranked->rank = 0;

@@ -14,13 +14,16 @@ use App\Models\Video;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class AttributesController extends VideosBase {
-	public function __construct() {
+class AttributesController extends VideosBase
+{
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->ruleSet->load('rules.admin.videos.attributes');
 	}
 
-	public function edit($id) {
+	public function edit ($id)
+	{
 		$response = responseWeb();
 		try {
 			$payload = Video::retrieveThrows($id);
@@ -36,14 +39,11 @@ class AttributesController extends VideosBase {
 			with('servers', $serverPayload)->
 			with('qualities', $qualityPayload)->
 			with('sections', $sectionsPayload);
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->route('admin.videos.index')->error('Could not find video for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->route('admin.videos.index')->error($exception->getMessage());
-		}
-		finally {
+		} finally {
 			if ($response instanceof WebResponse)
 				return $response->send();
 			else
@@ -51,7 +51,8 @@ class AttributesController extends VideosBase {
 		}
 	}
 
-	public function update($id) {
+	public function update ($id)
+	{
 		$response = responseWeb();
 		try {
 			$video = Video::retrieveThrows($id);
@@ -67,14 +68,11 @@ class AttributesController extends VideosBase {
 
 			$video->update($validated);
 			$response->success('Video details were successfully updated.')->route('admin.videos.index');
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response->error($exception->getError())->back();
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->error($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}

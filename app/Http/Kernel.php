@@ -10,7 +10,8 @@ use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
 
-class Kernel extends HttpKernel{
+class Kernel extends HttpKernel
+{
 	/**
 	 * The application's global HTTP middleware stack.
 	 *
@@ -91,7 +92,8 @@ class Kernel extends HttpKernel{
 	 * @param \Illuminate\Http\Request $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function handle($request){
+	public function handle ($request)
+	{
 		try {
 			$request->enableHttpMethodParameterOverride();
 
@@ -99,13 +101,11 @@ class Kernel extends HttpKernel{
 			if (!$this->shouldBypass()) {
 				$response = $this->interceptRequest($request, $response);
 			}
-		}
-		catch (Exception $e) {
+		} catch (Exception $e) {
 			$this->reportException($e);
 
 			$response = $this->renderException($request, $e);
-		}
-		catch (Throwable $e) {
+		} catch (Throwable $e) {
 			$this->reportException($e = new FatalThrowableError($e));
 
 			$response = $this->renderException($request, $e);
@@ -118,11 +118,13 @@ class Kernel extends HttpKernel{
 		return $response;
 	}
 
-	protected function shouldBypass(){
+	protected function shouldBypass ()
+	{
 		return config('crashlytics.bypass', true);
 	}
 
-	protected function interceptRequest($request, $response){
+	protected function interceptRequest ($request, $response)
+	{
 		$headers = $request->server->all();
 		$uaKey = config('crashlytics.uaKey', 'HTTP_USER_AGENT');
 		$uaList = config('crashlytics.uaList');

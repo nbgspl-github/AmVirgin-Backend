@@ -18,19 +18,23 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Throwable;
 
-class AuthController extends BaseAuthController {
+class AuthController extends BaseAuthController
+{
 	protected $ruleSet;
 
-	public function __construct () {
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->ruleSet = config('rules.auth.seller');
 	}
 
-	public function profile () {
+	public function profile ()
+	{
 		return new AuthProfileResource($this->guard()->user());
 	}
 
-	public function changePassword (Request $request) {
+	public function changePassword (Request $request)
+	{
 		$response = responseApp();
 
 		$input = $request->all();
@@ -44,8 +48,7 @@ class AuthController extends BaseAuthController {
 		if ($validator->fails()) {
 			$response->status(HttpServerError)->message($validator->errors()->first());
 			return $response->send();
-		}
-		else {
+		} else {
 			try {
 
 				$seller = Seller::retrieveThrows($this->guard()->id());
@@ -54,28 +57,25 @@ class AuthController extends BaseAuthController {
 
 					$response->status(HttpUnauthorized)->message('Check your old password');
 
-				}
-				else if ((Hash::check(request('new_password'), $seller->password)) == true) {
+				} else if ((Hash::check(request('new_password'), $seller->password)) == true) {
 
 					$response->status(HttpUnauthorized)->message('Please enter a password which is not similar then current password');
 
-				}
-				else {
+				} else {
 					$seller->update(['password' => Hash::make($input['new_password'])]);
 					$response->status(HttpOkay)->message('Password updated successfully');
 
 				}
-			}
-			catch (Throwable $exception) {
+			} catch (Throwable $exception) {
 				$response->status(HttpServerError)->message($exception->getMessage());
-			}
-			finally {
+			} finally {
 				return $response->send();
 			}
 		}
 	}
 
-	public function forgotPassword (Request $request) {
+	public function forgotPassword (Request $request)
+	{
 		$response = responseApp();
 
 		$input = $request->all();
@@ -86,8 +86,7 @@ class AuthController extends BaseAuthController {
 		$validator = Validator::make($input, $rules);
 		if ($validator->fails()) {
 			$response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
-		}
-		else {
+		} else {
 			try {
 
 				$password = $request->password;
@@ -103,8 +102,7 @@ class AuthController extends BaseAuthController {
 						$response->status(HttpResourceNotFound)->message('Invalid seller email.');
 						return $response->send();
 					}
-				}
-				else {
+				} else {
 					$response->status(HttpResourceNotFound)->message('Invalid token.');
 					return $response->send();
 				}
@@ -117,20 +115,19 @@ class AuthController extends BaseAuthController {
 				DB::table('password-resets')->where('email', $seller->email)->delete();
 				$response->status(HttpOkay)->message('Password has been reset successfully');
 
-			}
-			catch (ModelNotFoundException $exception) {
+			} catch (ModelNotFoundException $exception) {
 
 				$response->status(HttpResourceNotFound)->message('Could not find seller for that key.');
 
-			}
-			catch (Throwable $exception) {
+			} catch (Throwable $exception) {
 				$response->status(HttpServerError)->message($exception->getMessage());
 			}
 		}
 		return $response->send();
 	}
 
-	public function getResetPasswordToken (Request $request) {
+	public function getResetPasswordToken (Request $request)
+	{
 		$response = responseApp();
 		$dataSet = [];
 		$input = request()->all();
@@ -145,8 +142,7 @@ class AuthController extends BaseAuthController {
 
 			$response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
 			return $response->send();
-		}
-		else {
+		} else {
 			try {
 				DB::table('password-resets')->insert([
 					'email' => $request->email,
@@ -177,18 +173,17 @@ class AuthController extends BaseAuthController {
 				//  } 
 				$response->status(HttpOkay)->message('Great! Please Check Your Email for Password reset!')->setValue('data', $dataSet);
 
-			}
-			catch (Throwable $exception) {
+			} catch (Throwable $exception) {
 				$response->status(HttpServerError)->message($exception->getMessage());
 
-			}
-			finally {
+			} finally {
 				return $response->send();
 			}
 		}
 	}
 
-	public function getChangeEmailToken (Request $request) {
+	public function getChangeEmailToken (Request $request)
+	{
 		$response = responseApp();
 		$dataSet = [];
 		$input = request()->all();
@@ -204,8 +199,7 @@ class AuthController extends BaseAuthController {
 
 			$response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
 			return $response->send();
-		}
-		else {
+		} else {
 			try {
 				DB::table('change-emails')->insert([
 					'email' => $request->current_email,
@@ -226,18 +220,17 @@ class AuthController extends BaseAuthController {
 
 				$response->status(HttpOkay)->message('Great! Please check your new email for change email')->setValue('data', $dataSet);
 
-			}
-			catch (Throwable $exception) {
+			} catch (Throwable $exception) {
 				$response->status(HttpServerError)->message($exception->getMessage());
 
-			}
-			finally {
+			} finally {
 				return $response->send();
 			}
 		}
 	}
 
-	public function changeEmail (Request $request) {
+	public function changeEmail (Request $request)
+	{
 		$response = responseApp();
 
 		$input = $request->all();
@@ -249,8 +242,7 @@ class AuthController extends BaseAuthController {
 		$validator = Validator::make($input, $rules);
 		if ($validator->fails()) {
 			$response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
-		}
-		else {
+		} else {
 			try {
 
 				$newEmail = $request->new_email;
@@ -266,8 +258,7 @@ class AuthController extends BaseAuthController {
 						$response->status(HttpResourceNotFound)->message('Invalid seller current email.');
 						return $response->send();
 					}
-				}
-				else {
+				} else {
 					$response->status(HttpResourceNotFound)->message('Invalid token or Current Email.');
 					return $response->send();
 				}
@@ -280,42 +271,46 @@ class AuthController extends BaseAuthController {
 				DB::table('change-emails')->where('email', $oldEmail)->delete();
 				$response->status(HttpOkay)->message('Email has been changed successfully');
 
-			}
-			catch (ModelNotFoundException $exception) {
+			} catch (ModelNotFoundException $exception) {
 
 				$response->status(HttpResourceNotFound)->message('Could not find seller for that key.');
 
-			}
-			catch (Throwable $exception) {
+			} catch (Throwable $exception) {
 				$response->status(HttpServerError)->message($exception->getMessage());
 			}
 		}
 		return $response->send();
 	}
 
-	protected function authTarget () : string {
+	protected function authTarget (): string
+	{
 		return Seller::class;
 	}
 
-	protected function rulesExists () {
+	protected function rulesExists ()
+	{
 		return $this->ruleSet['exists'];
 	}
 
-	protected function rulesLogin () {
+	protected function rulesLogin ()
+	{
 		return $this->ruleSet['login'];
 	}
 
-	protected function rulesRegister () {
+	protected function rulesRegister ()
+	{
 		return $this->ruleSet['register'];
 	}
 
-	protected function rulesUpdateAvatar () {
+	protected function rulesUpdateAvatar ()
+	{
 		return [
 			'avatar' => ['bail', 'required', 'image', 'min:1', 'max:4096'],
 		];
 	}
 
-	protected function rulesUpdateProfile () {
+	protected function rulesUpdateProfile ()
+	{
 		return [
 			'name' => ['bail', 'sometimes', 'string', 'min:2', 'max:256'],
 			'businessName' => ['bail', 'sometimes', 'string', 'min:2', 'max:256'],
@@ -329,15 +324,18 @@ class AuthController extends BaseAuthController {
 		];
 	}
 
-	protected function guard () {
+	protected function guard ()
+	{
 		return Auth::guard('seller-api');
 	}
 
-	protected function shouldAllowOnlyActiveUsers () : bool {
+	protected function shouldAllowOnlyActiveUsers (): bool
+	{
 		return true;
 	}
 
-	protected function rulesUpdatePassword () : array {
+	protected function rulesUpdatePassword (): array
+	{
 		return [
 			'current' => ['bail', 'required', 'string', 'min:4', 'max:64'],
 			'new' => ['bail', 'required', 'string', 'min:4', 'max:64', 'different:current'],

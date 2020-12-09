@@ -8,12 +8,15 @@ use App\Models\Auth\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class NotificationsController extends BaseController{
-	public function create(){
+class NotificationsController extends BaseController
+{
+	public function create ()
+	{
 		return view('admin.notifications.create');
 	}
 
-	public function send(Request $request){
+	public function send (Request $request)
+	{
 		$validator = Validator::make($request->all(), [
 			'title' => ['bail', 'required', 'string', 'min:1', 'max:75'],
 			'content' => ['bail', 'required', 'string', 'min:1', 'max:1024'],

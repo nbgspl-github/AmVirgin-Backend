@@ -16,37 +16,39 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Throwable;
 
-class SubscriptionPlansController extends BaseController {
+class SubscriptionPlansController extends BaseController
+{
 	use ValidatesRequest;
 	use FluentResponse;
 
-	public function __construct() {
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->ruleSet->load('rules.admin.subscription-plans');
 	}
 
-	public function index() {
+	public function index ()
+	{
 		$payload = SubscriptionPlan::all();
 		return view('admin.subscription-plans.index')->with('plans', $payload);
 	}
 
-	public function create() {
+	public function create ()
+	{
 		return view('admin.subscription-plans.create');
 	}
 
-	public function edit($id) {
+	public function edit ($id)
+	{
 		$response = responseWeb();
 		try {
 			$plan = SubscriptionPlan::retrieveThrows($id);
 			$response = view('admin.subscription-plans.edit')->with('plan', $plan);
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->route('admin.subscription-plans.index')->error('Could not find a subscription plan for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->back()->data(request()->all())->error($exception->getMessage());
-		}
-		finally {
+		} finally {
 			if ($response instanceof WebResponse)
 				return $response->send();
 			else
@@ -54,11 +56,13 @@ class SubscriptionPlansController extends BaseController {
 		}
 	}
 
-	public function show($id) {
+	public function show ($id)
+	{
 
 	}
 
-	public function store() {
+	public function store ()
+	{
 		$response = responseWeb();
 		try {
 			$payload = $this->requestValid(request(), $this->rules('store'));
@@ -66,19 +70,17 @@ class SubscriptionPlansController extends BaseController {
 			$payload['banner'] = SecuredDisk::access()->putFile(Directories::SubscriptionPlans, request()->file('banner'));
 			SubscriptionPlan::create($payload);
 			$response->route('admin.subscription-plans.index')->success('Subscription plan created successfully.');
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response->back()->data(request()->all())->error($exception->getError());
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->back()->data(request()->all())->error($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function update($id) {
+	public function update ($id)
+	{
 		$response = responseWeb();
 		try {
 			$plan = SubscriptionPlan::retrieveThrows($id);
@@ -94,39 +96,34 @@ class SubscriptionPlansController extends BaseController {
 			}
 			$plan->update($payload);
 			$response->route('admin.subscription-plans.index')->success('Plan details updated successfully.');
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->route('admin.subscription-plans.index')->error('Could not find a subscription plan for that key.');
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response->back()->data(request()->all())->error($exception->getError());
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->back()->data(request()->all())->error($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function updateStatus($id) {
+	public function updateStatus ($id)
+	{
 
 	}
 
-	public function delete($id) {
+	public function delete ($id)
+	{
 		$response = $this->response();
 		try {
 			$plan = SubscriptionPlan::retrieveThrows($id);
 			$plan->delete();
 			$response->status(HttpOkay)->message('Successfully deleted subscription plan.');
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('Could not find subscription plan for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}

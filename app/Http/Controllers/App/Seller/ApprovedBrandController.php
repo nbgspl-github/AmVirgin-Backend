@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Controllers\App\Seller;
-
 
 use App\Http\Controllers\AppController;
 use App\Models\Brand;
@@ -11,34 +9,34 @@ use Illuminate\Http\JsonResponse;
 
 class ApprovedBrandController extends AppController
 {
-    protected array $rules = [
+	protected array $rules = [
 
-    ];
+	];
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->rules = [
+	public function __construct ()
+	{
+		parent::__construct();
+		$this->rules = [
 
-        ];
-    }
+		];
+	}
 
-    public function index(): JsonResponse
-    {
-        $response = responseApp();
-        try {
-            $brands = Brand::startQuery()->seller($this->userId())->get();
-            $brandCollection = ListResource::collection($brands);
-            $response->status(HttpOkay)->message('Listing all brands by you.')->setValue('payload', $brandCollection);
-        } catch (\Throwable $exception) {
-            $response->status(HttpServerError)->message($exception->getMessage());
-        } finally {
-            return $response->send();
-        }
-    }
+	public function index (): JsonResponse
+	{
+		$response = responseApp();
+		try {
+			$brands = Brand::startQuery()->seller($this->userId())->get();
+			$brandCollection = ListResource::collection($brands);
+			$response->status(HttpOkay)->message('Listing all brands by you.')->setValue('payload', $brandCollection);
+		} catch (\Throwable $exception) {
+			$response->status(HttpServerError)->message($exception->getMessage());
+		} finally {
+			return $response->send();
+		}
+	}
 
-    protected function guard()
-    {
-        return auth(self::SellerAPI);
-    }
+	protected function guard ()
+	{
+		return auth(self::SellerAPI);
+	}
 }

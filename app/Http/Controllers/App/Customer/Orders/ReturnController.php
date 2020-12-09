@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\App\Customer\Orders;
 
+use App\Classes\Time;
 use App\Enums\Orders\Returns\Status;
 use App\Http\Controllers\AppController;
 use App\Models\OrderItem;
@@ -30,6 +31,7 @@ class ReturnController extends AppController
 						'seller_id' => $item->sellerId,
 						'order_segment_id' => $item->segment->id,
 						'return_type' => $item->returnType,
+						'raised_at' => Time::mysqlStamp()
 					]);
 					$response->status(HttpCreated)->message('You return request was raised successfully.');
 				} else {

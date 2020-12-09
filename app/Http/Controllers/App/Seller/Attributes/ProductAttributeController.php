@@ -7,30 +7,31 @@ use App\Models\ProductAttribute;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class ProductAttributeController extends AppController{
-	public function __construct(){
+class ProductAttributeController extends AppController
+{
+	public function __construct ()
+	{
 		parent::__construct();
 	}
 
-	public function delete($id){
+	public function delete ($id)
+	{
 		$response = responseApp();
 		try {
 			$productAttribute = ProductAttribute::retrieveThrows($id);
 			$productAttribute->delete();
 			$response->status(HttpOkay)->message('Product attribute deleted successfully.');
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('Could not find product attribute for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	protected function guard() {
+	protected function guard ()
+	{
 		return auth('seller-api');
 	}
 }

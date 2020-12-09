@@ -22,13 +22,15 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Sujip\Guid\Facades\Guid;
 
-class AbstractProductController extends AppController{
+class AbstractProductController extends AppController
+{
 	use ValidatesRequest;
 
 	protected ?Collection $items = null;
 	protected array $rules;
 
-	public function __construct(){
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->rules = [
 			'store' => [
@@ -49,8 +51,8 @@ class AbstractProductController extends AppController{
 					'hsn' => ['bail', 'required', Rule::existsPrimary(Tables::HsnCodes, 'hsnCode')],
 					'stock' => ['bail', 'required', 'numeric', 'min:0', RuleMaxStock],
 					'lowStockThreshold' => ['bail', 'nullable', 'numeric', 'min:0', 'lt:stock'],
-                    'sku' => ['bail', 'required', 'string','min:1','max:255','unique:products,sku'],
-					'styleCode' => ['bail', 'required', 'string','min:1','max:255'],
+					'sku' => ['bail', 'required', 'string', 'min:1', 'max:255', 'unique:products,sku'],
+					'styleCode' => ['bail', 'required', 'string', 'min:1', 'max:255'],
 					'idealFor' => ['bail', 'nullable', Rule::in(Arrays::values(Product::IdealFor))],
 					'procurementSla' => ['bail', 'required', 'numeric', Rule::minimum(Product::ProcurementSLA['Minimum']), Rule::maximum(Product::ProcurementSLA['Maximum'])],
 					'localShippingCost' => ['bail', 'nullable', 'numeric', Rule::minimum(Product::ShippingCost['Local']['Minimum']), Rule::maximum(Product::ShippingCost['Local']['Maximum'])],
@@ -87,7 +89,7 @@ class AbstractProductController extends AppController{
 				'hsn' => ['bail', 'nullable', Rule::existsPrimary(Tables::HsnCodes, 'hsnCode')],
 				'stock' => ['bail', 'nullable', 'numeric', 'min:0', RuleMaxStock],
 				'lowStockThreshold' => ['bail', 'nullable', 'numeric', 'min:0', 'lt:stock'],
-                'styleCode' => ['bail', 'required', 'string','min:1','max:255'],
+				'styleCode' => ['bail', 'required', 'string', 'min:1', 'max:255'],
 				'idealFor' => ['bail', 'nullable', Rule::in(Arrays::values(Product::IdealFor))],
 				'procurementSla' => ['bail', 'nullable', 'numeric', Rule::minimum(Product::ProcurementSLA['Minimum']), Rule::maximum(Product::ProcurementSLA['Maximum'])],
 				'localShippingCost' => ['bail', 'nullable', 'numeric', Rule::minimum(Product::ShippingCost['Local']['Minimum']), Rule::maximum(Product::ShippingCost['Local']['Maximum'])],
@@ -111,16 +113,18 @@ class AbstractProductController extends AppController{
 		];
 	}
 
-	protected function storeProduct(array $payload): Product{
+	protected function storeProduct (array $payload): Product
+	{
 		return Product::create($payload);
 	}
 
-	protected function storeAttribute(Product $product, array $payload): Collection{
+	protected function storeAttribute (Product $product, array $payload): Collection
+	{
 		if (!$this->items) {
 			$this->items = $product->category->attributeSet->items;
 		}
 		$attributesCollection = new Collection();
-		collect($payload)->each(function ($payload) use ($product, $attributesCollection){
+		collect($payload)->each(function ($payload) use ($product, $attributesCollection) {
 			$attribute = Attribute::retrieve($payload['key']);
 			$group = $this->items->where('attributeId', $attribute->id())->pluck('group')->first();
 			$value = $payload['value'];
@@ -135,8 +139,7 @@ class AbstractProductController extends AppController{
 					'group' => $group,
 					'value' => $attribute->combineMultipleValues() ? Str::join(Str::WhiteSpace, $value) : $value,
 				]);
-			}
-			else {
+			} else {
 				$created = $product->attributes()->create([
 					'attributeId' => $attribute->id(),
 					'variantAttribute' => $attribute->useToCreateVariants(),
@@ -152,7 +155,8 @@ class AbstractProductController extends AppController{
 		return $attributesCollection;
 	}
 
-	protected function storeImages(Product $product, array $payload): Collection{
+	protected function storeImages (Product $product, array $payload): Collection
+	{
 		$images = new Collection();
 		foreach ($payload as $image) {
 			$images->push($product->images()->create([
@@ -163,31 +167,38 @@ class AbstractProductController extends AppController{
 		return $images;
 	}
 
-	protected function category(): Category{
+	protected function category (): Category
+	{
 		return Category::retrieve(request('categoryId'));
 	}
 
-	protected function brand(): Brand{
+	protected function brand (): Brand
+	{
 		return Brand::retrieve(request('brandId'));
 	}
 
-	protected function isInvalidCategory(Category $category): bool{
+	protected function isInvalidCategory (Category $category): bool
+	{
 		return !Str::equals($category->type(), Category::Types['Vertical']);
 	}
 
-	protected function isBrandApprovedForSeller(Brand $brand){
+	protected function isBrandApprovedForSeller (Brand $brand)
+	{
 		return Brand::startQuery()->seller($this->guard()->id())->displayable()->key($brand->id())->first() !== null;
 	}
 
-	protected function storeTrailer(UploadedFile $file): ?string{
+	protected function storeTrailer (UploadedFile $file): ?string
+	{
 		return SecuredDisk::access()->putFile(Directories::Trailers, $file);
 	}
 
-	protected function isVariantType(): bool{
+	protected function isVariantType (): bool
+	{
 		return request('type') == Product::Type['Variant'];
 	}
 
-	protected function calculateDiscount(int $originalPrice, int $sellingPrice): int{
+	protected function calculateDiscount (int $originalPrice, int $sellingPrice): int
+	{
 		$difference = $originalPrice - $sellingPrice;
 		if ($difference == 0)
 			return 0;
@@ -196,44 +207,50 @@ class AbstractProductController extends AppController{
 		}
 	}
 
-	protected function validateOuter(): array{
+	protected function validateOuter (): array
+	{
 		return $this->requestValid(request(), $this->rules['store']['outer']);
 	}
 
-	protected function validateProductPayload(array $payload): array{
+	protected function validateProductPayload (array $payload): array
+	{
 		return $this->arrayValid($payload, $this->rules['store']['product']);
 	}
 
-	protected function validateAttributePayload(array $payload): array{
+	protected function validateAttributePayload (array $payload): array
+	{
 		return $this->arrayValid($payload, $this->rules['store']['attribute']);
 	}
 
-	protected function validateTrailerPayload(array $payload): array{
+	protected function validateTrailerPayload (array $payload): array
+	{
 		return $this->arrayValid($payload, $this->rules['store']['trailer']);
 	}
 
-	protected function sessionUuid(): string{
+	protected function sessionUuid (): string
+	{
 		return Str::makeUuid();
 	}
 
-	protected function convertAllSimpleToVariants(string $token){
+	protected function convertAllSimpleToVariants (string $token)
+	{
 		$products = Product::startQuery()->seller($this->guard()->id())->simple()->group($token)->get();
 		// If there are more than one products under the same group,
 		// it means they should be treated as variants of the same kind.
 		// Otherwise let the be the type they are.
 		if ($products->count() > 1) {
-			$products->each(function (Product $product){
+			$products->each(function (Product $product) {
 				$product->type(Product::Type['Variant']);
 				$product->save();
 			});
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
 
-	protected function validateToken(){
+	protected function validateToken ()
+	{
 		$productToken = ProductToken::where([
 			['token', request()->header('X-PRODUCT-TOKEN')],
 			['sellerId', $this->guard()->id()],
@@ -246,11 +263,13 @@ class AbstractProductController extends AppController{
 			return $productToken->token();
 	}
 
-	protected function validateUpdate(): array{
+	protected function validateUpdate (): array
+	{
 		return $this->requestValid(request(), $this->rules['update']);
 	}
 
-	protected function guard(){
+	protected function guard ()
+	{
 		return auth('seller-api');
 	}
 }

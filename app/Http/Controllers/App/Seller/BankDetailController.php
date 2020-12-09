@@ -13,12 +13,14 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 
-class BankDetailController extends \App\Http\Controllers\AppController {
+class BankDetailController extends \App\Http\Controllers\AppController
+{
 	use ValidatesRequest;
 
 	protected array $rules;
 
-	public function __construct () {
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->rules = [
 			'update' => [
@@ -39,25 +41,24 @@ class BankDetailController extends \App\Http\Controllers\AppController {
 		];
 	}
 
-	public function show () : JsonResponse {
+	public function show (): JsonResponse
+	{
 		$response = responseApp();
 		try {
 			$bankDetails = SellerBankDetail::startQuery()->useAuth()->firstOrFail();
 			$resource = new BankDetailResource($bankDetails);
 			$response->status(HttpOkay)->message('Listing bank details.')->setValue('payload', $resource);
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message($exception->getMessage());
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function update () : JsonResponse {
+	public function update (): JsonResponse
+	{
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules['update']);
@@ -67,19 +68,17 @@ class BankDetailController extends \App\Http\Controllers\AppController {
 			], $validated);
 			$resource = new BankDetailResource($payload);
 			$response->status(HttpOkay)->message('Bank details updated successfully.')->setValue('payload', $resource);
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	protected function guard () {
+	protected function guard ()
+	{
 		return auth(self::SellerAPI);
 	}
 }

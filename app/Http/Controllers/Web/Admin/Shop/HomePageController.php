@@ -16,11 +16,14 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
 use Throwable;
 
-class HomePageController extends BaseController{
+class HomePageController extends BaseController
+{
 	use ValidatesRequest;
+
 	protected array $rules;
 
-	public function __construct(){
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->rules = [
 			'update' => [
@@ -33,11 +36,13 @@ class HomePageController extends BaseController{
 		];
 	}
 
-	public function choices(){
+	public function choices ()
+	{
 		return view('admin.shop.choices');
 	}
 
-	public function editSaleOfferTimerDetails(){
+	public function editSaleOfferTimerDetails ()
+	{
 		$details = Settings::get('shopSaleOfferDetails', null);
 		$saleOffer = null;
 		if ($details == null) {
@@ -47,15 +52,15 @@ class HomePageController extends BaseController{
 				'countDown' => '00:01:00',
 				'visible' => true,
 			];
-		}
-		else {
+		} else {
 			$saleOffer = jsonDecodeArray($details);
 			$saleOffer['statements'] = implode(Str::NewLine, $saleOffer['statements']);
 		}
 		return view('admin.shop.sale-offer-timer.edit')->with('payload', (object)$saleOffer);
 	}
 
-	public function updateSaleOfferTimerDetails(){
+	public function updateSaleOfferTimerDetails ()
+	{
 		$response = responseWeb();
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['update']['saleOfferTime']);
@@ -68,25 +73,23 @@ class HomePageController extends BaseController{
 			Settings::set('shopSaleOfferDetailsUpdated', time());
 			Settings::set('shopSaleOfferDetails', jsonEncode($saleOffer));
 			$response->success('Sale offer timer details updated successfully.')->route('admin.shop.choices');
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response->error($exception->getMessage())->data(request()->all())->back();
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->error($exception->getMessage())->back()->data(request()->all());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function editBrandsInFocus(){
+	public function editBrandsInFocus ()
+	{
 		$categories = $topLevel = Category::startQuery()->isCategory()->get();
-		$topLevel->transform(function (Category $topLevel){
+		$topLevel->transform(function (Category $topLevel) {
 			$children = $topLevel->children()->get();
-			$children = $children->transform(function (Category $child){
+			$children = $children->transform(function (Category $child) {
 				$innerChildren = $child->children()->get();
-				$innerChildren = $innerChildren->transform(function (Category $inner){
+				$innerChildren = $innerChildren->transform(function (Category $inner) {
 					return [
 						'id' => $inner->id(),
 						'name' => $inner->name(),
@@ -112,41 +115,39 @@ class HomePageController extends BaseController{
 		return view('admin.shop.brands-in-focus.edit')->with('categories', $topLevel);
 	}
 
-	public function updateBrandsInFocus(){
+	public function updateBrandsInFocus ()
+	{
 		$response = responseWeb();
 		try {
 			$choices = request('choice');
 			if (count($choices) > 8) {
 				$response->error('You can select a maximum of 8 categories only.')->back();
-			}
-			else {
-				Category::all()->each(function (Category $category) use ($choices){
+			} else {
+				Category::all()->each(function (Category $category) use ($choices) {
 					if (in_array($category->id(), $choices)) {
 						$category->brandInFocus(true);
-					}
-					else {
+					} else {
 						$category->brandInFocus(false);
 					}
 					$category->save();
 				});
 				$response->route('admin.shop.choices')->success('Successfully updated categories for brands in focus.');
 			}
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->error($exception->getMessage())->data(request()->all());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function editPopularStuff(){
+	public function editPopularStuff ()
+	{
 		$categories = $topLevel = Category::startQuery()->isCategory()->get();
-		$topLevel->transform(function (Category $topLevel){
+		$topLevel->transform(function (Category $topLevel) {
 			$children = $topLevel->children()->get();
-			$children = $children->transform(function (Category $child){
+			$children = $children->transform(function (Category $child) {
 				$innerChildren = $child->children()->get();
-				$innerChildren = $innerChildren->transform(function (Category $inner){
+				$innerChildren = $innerChildren->transform(function (Category $inner) {
 					return [
 						'id' => $inner->id(),
 						'name' => $inner->name(),
@@ -172,41 +173,39 @@ class HomePageController extends BaseController{
 		return view('admin.shop.popular-stuff.edit')->with('categories', $topLevel);
 	}
 
-	public function updatePopularStuff(){
+	public function updatePopularStuff ()
+	{
 		$response = responseWeb();
 		try {
 			$choices = request('choice');
 			if (count($choices) > 5) {
 				$response->error('You can select a maximum of 5 categories only.')->back();
-			}
-			else {
-				Category::all()->each(function (Category $category) use ($choices){
+			} else {
+				Category::all()->each(function (Category $category) use ($choices) {
 					if (in_array($category->id(), $choices)) {
 						$category->popularCategory(true);
-					}
-					else {
+					} else {
 						$category->popularCategory(false);
 					}
 					$category->save();
 				});
 				$response->route('admin.shop.choices')->success('Successfully updated categories for popular stuff.');
 			}
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->error($exception->getMessage())->data(request()->all());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function editTrendingNow(){
+	public function editTrendingNow ()
+	{
 		$categories = $topLevel = Category::startQuery()->isCategory()->get();
-		$topLevel->transform(function (Category $topLevel){
+		$topLevel->transform(function (Category $topLevel) {
 			$children = $topLevel->children()->get();
-			$children = $children->transform(function (Category $child){
+			$children = $children->transform(function (Category $child) {
 				$innerChildren = $child->children()->get();
-				$innerChildren = $innerChildren->transform(function (Category $inner){
+				$innerChildren = $innerChildren->transform(function (Category $inner) {
 					return [
 						'id' => $inner->id(),
 						'name' => $inner->name(),
@@ -232,37 +231,35 @@ class HomePageController extends BaseController{
 		return view('admin.shop.trending-now.edit')->with('categories', $topLevel);
 	}
 
-	public function updateTrendingNow(){
+	public function updateTrendingNow ()
+	{
 		$response = responseWeb();
 		try {
 			$choices = request('choice');
 			if (count($choices) > 4) {
 				$response->error('You can select a maximum of 4 categories only.')->back();
-			}
-			else {
-				Category::all()->each(function (Category $category) use ($choices){
+			} else {
+				Category::all()->each(function (Category $category) use ($choices) {
 					if (in_array($category->id(), $choices)) {
 						$category->trendingNow(true);
-					}
-					else {
+					} else {
 						$category->trendingNow(false);
 					}
 					$category->save();
 				});
 				$response->route('admin.shop.choices')->success('Successfully updated categories for trending now.');
 			}
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->error($exception->getMessage())->data(request()->all());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function editHotDeals(){
+	public function editHotDeals ()
+	{
 		$products = Product::startQuery()->displayable()->get();
-		$products->transform(function (Product $product){
+		$products->transform(function (Product $product) {
 			return [
 				'id' => $product->id(),
 				'name' => $product->name(),
@@ -272,30 +269,29 @@ class HomePageController extends BaseController{
 		return view('admin.shop.hot-deals.edit')->with('products', $products);
 	}
 
-	public function updateHotDeals(){
+	public function updateHotDeals ()
+	{
 		$response = responseWeb();
 		try {
 			$choices = request('choice');
 			if (count($choices) > 50) {
 				$response->error('You can select a maximum of 50 products only.')->back();
-			}
-			else {
-				Product::all()->each(function (Product $product) use ($choices){
+			} else {
+				Product::all()->each(function (Product $product) use ($choices) {
 					$product->hotDeal(in_array($product->id(), $choices));
 					$product->save();
 				});
 				$response->route('admin.shop.choices')->success('Successfully updated products for hot deals.');
 			}
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->error($exception->getMessage())->data(request()->all());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function viewProductDetails($id){
+	public function viewProductDetails ($id)
+	{
 		$response = responseApp();
 		try {
 			$product = Product::retrieveThrows($id);
@@ -303,14 +299,12 @@ class HomePageController extends BaseController{
 			$category = $product->category;
 			if ($seller == null) {
 				$seller = Str::Empty;
-			}
-			else {
+			} else {
 				$seller = sprintf('%s [%d]', $seller->getName(), $seller->getKey());
 			}
 			if ($category == null) {
 				$category = Str::Empty;
-			}
-			else {
+			} else {
 				$category = sprintf('%s [%d]', $category->getName(), $category->getKey());
 			}
 			$data = [
@@ -322,14 +316,11 @@ class HomePageController extends BaseController{
 				'sku' => $product->getSku(),
 			];
 			$response->status(HttpOkay)->message('Product details retrieved successfully.')->setValue('data', $data);
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message($exception->getMessage());
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}

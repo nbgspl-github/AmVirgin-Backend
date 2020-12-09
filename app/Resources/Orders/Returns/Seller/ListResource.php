@@ -6,14 +6,16 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ListResource extends JsonResource
 {
-	public function toArray ($request)
+	public function toArray ($request): array
 	{
 		return [
 			'key' => $this->id,
 			'item' => new ItemResource($this->item),
+			'order' => new OrderSegmentResource($this->segment),
 			'customer' => new CustomerResource($this->customer),
 			'status' => $this->status,
-			'segment' => new OrderSegmentResource($this->segment)
+			'raised' => $this->raised_at,
+			'reason' => $this->reason
 		];
 	}
 }

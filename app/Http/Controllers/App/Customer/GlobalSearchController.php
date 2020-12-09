@@ -15,11 +15,14 @@ use App\Resources\GlobalSearch\VideoResultResource;
 use App\Traits\ValidatesRequest;
 use Throwable;
 
-class GlobalSearchController extends AppController{
+class GlobalSearchController extends AppController
+{
 	use ValidatesRequest;
+
 	protected array $rules;
 
-	public function __construct(){
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->rules = [
 			'search' => [
@@ -31,7 +34,8 @@ class GlobalSearchController extends AppController{
 		];
 	}
 
-	public function search(){
+	public function search ()
+	{
 		$response = responseApp();
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['search']);
@@ -45,8 +49,7 @@ class GlobalSearchController extends AppController{
 				$response->status($results->count() > 0 ? HttpOkay : HttpNoContent)
 					->message('Listing videos matching keywords.')
 					->setValue('data', $results);
-			}
-			else {
+			} else {
 				$query = Product::startQuery()->displayable();
 				if (isset($validated->category)) {
 					$query->categoryOrDescendant($validated->category);
@@ -57,19 +60,17 @@ class GlobalSearchController extends AppController{
 					->message('Listing products matching keywords.')
 					->setValue('data', $results);
 			}
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	protected function guard(){
+	protected function guard ()
+	{
 		return auth(self::CustomerAPI);
 	}
 }

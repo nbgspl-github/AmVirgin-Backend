@@ -17,13 +17,16 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use stdClass;
 use Throwable;
 
-class ContentController extends VideosBase {
-	public function __construct() {
+class ContentController extends VideosBase
+{
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->ruleSet->load('rules.admin.videos.content');
 	}
 
-	public function edit($id) {
+	public function edit ($id)
+	{
 		$response = responseWeb();
 		try {
 			$video = Video::retrieveThrows($id);
@@ -50,14 +53,11 @@ class ContentController extends VideosBase {
 			with('languages', $languages)->
 			with('template', $row)->
 			with('key', $id);
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->route('admin.videos.index')->error('Could not find video for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->route('admin.videos.index')->error($exception->getMessage());
-		}
-		finally {
+		} finally {
 			if ($response instanceof WebResponse)
 				return $response->send();
 			else
@@ -65,7 +65,8 @@ class ContentController extends VideosBase {
 		}
 	}
 
-	public function update($id) {
+	public function update ($id)
+	{
 		$response = $this->response();
 		try {
 			$video = Video::retrieveThrows($id);
@@ -82,12 +83,10 @@ class ContentController extends VideosBase {
 			for ($i = 0; $i < $count; $i++) {
 				try {
 					$source = VideoSource::retrieveThrows($sources[$i]);
-				}
-				catch (ModelNotFoundException $exception) {
+				} catch (ModelNotFoundException $exception) {
 					$source = VideoSource::newObject();
 					$source->setVideoId($id);
-				}
-				finally {
+				} finally {
 					if (isset($titles[$i]))
 						$source->setTitle($titles[$i]);
 
@@ -124,36 +123,30 @@ class ContentController extends VideosBase {
 				}
 			}
 			$response->status(HttpOkay)->message('Video sources were updated successfully.');
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('Could not find video for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			event(new TvSeriesUpdated($id));
 			return $response->send();
 		}
 	}
 
-	public function delete($id, $subId = null) {
+	public function delete ($id, $subId = null)
+	{
 		$response = $this->response();
 		try {
 			$videoSnap = VideoSource::retrieveThrows($subId);
 			$videoSnap->delete();
 			$response->status(HttpOkay)->message('Video source deleted successfully.');
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('Could not find video source for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			event(new VideoUpdated($id));
 			return $response->send();
 		}

@@ -20,6 +20,8 @@ const HttpUnauthorized = 401;
 
 const HttpDeniedAccess = 403;
 
+const HttpNotModified = 304;
+
 const ShipmentPlaced = 'placed';
 const ShipmentPending = 'pending';
 const ShipmentReadyForDispatch = 'ready-for-dispatch';
@@ -48,151 +50,151 @@ const AppEnvironmentProduction = 'production';
  */
 const AppEnvironmentLocal = 'local';
 
-function __status($status)
+function __status ($status)
 {
-    if ($status == 1)
-        return 'Active';
-    else if ($status == 0)
-        return 'Disabled';
-    else
-        return 'Unknown';
+	if ($status == 1)
+		return 'Active';
+	else if ($status == 0)
+		return 'Disabled';
+	else
+		return 'Unknown';
 }
 
-function __visibility($visibility)
+function __visibility ($visibility)
 {
-    if ($visibility == 1)
-        return "Visible";
-    else if ($visibility == 2)
-        return "Hidden";
-    else
-        return "Unknown";
+	if ($visibility == 1)
+		return "Visible";
+	else if ($visibility == 2)
+		return "Hidden";
+	else
+		return "Unknown";
 }
 
-function __blank($value)
+function __blank ($value)
 {
-    $value = trim($value);
-    if ($value == null || strlen($value) < 1)
-        return '-';
-    else
-        return $value;
+	$value = trim($value);
+	if ($value == null || strlen($value) < 1)
+		return '-';
+	else
+		return $value;
 }
 
-function __rating($value)
+function __rating ($value)
 {
-    if ($value == 0)
-        return '<Not rated>';
-    else
-        return $value;
+	if ($value == 0)
+		return '<Not rated>';
+	else
+		return $value;
 }
 
-function __ellipsis($value, $length = 20)
+function __ellipsis ($value, $length = 20)
 {
-    return strlen($value) > $length ? substr($value, 0, $length) . "..." : $value;
+	return strlen($value) > $length ? substr($value, 0, $length) . "..." : $value;
 }
 
-function __boolean($value)
+function __boolean ($value)
 {
-    $value = boolval($value);
-    return $value == true ? 'Yes' : 'No';
+	$value = boolval($value);
+	return $value == true ? 'Yes' : 'No';
 }
 
-function __modelNameFromSlug($slug)
+function __modelNameFromSlug ($slug)
 {
-    $identifier = 'model-mapping.' . $slug;
-    $modelName = __($identifier);
-    if (strcmp($modelName, $identifier) == 0) {
-        $name = $slug;
-        $lastIndex = strrpos($name, "\\") + 1;
-        $modelName = substr($name, $lastIndex);
-    }
-    return $modelName;
+	$identifier = 'model-mapping.' . $slug;
+	$modelName = __($identifier);
+	if (strcmp($modelName, $identifier) == 0) {
+		$name = $slug;
+		$lastIndex = strrpos($name, "\\") + 1;
+		$modelName = substr($name, $lastIndex);
+	}
+	return $modelName;
 }
 
-function image($path = null)
+function image ($path = null)
 {
-    if ($path == null)
-        return null;
-    else
-        return Storage::download($path);
+	if ($path == null)
+		return null;
+	else
+		return Storage::download($path);
 }
 
 /**
  * @param $payload
  * @return false|string
  */
-function jsonEncode($payload)
+function jsonEncode ($payload)
 {
-    $encoded = json_encode($payload);
-    return $encoded == false ? '' : $encoded;
+	$encoded = json_encode($payload);
+	return $encoded == false ? '' : $encoded;
 }
 
 /**
  * @param $payload
  * @return mixed
  */
-function jsonDecode($payload)
+function jsonDecode ($payload)
 {
-    $decoded = json_decode($payload);
-    return $decoded;
+	$decoded = json_decode($payload);
+	return $decoded;
 }
 
 /**
  * @param $payload
  * @return array
  */
-function jsonDecodeArray($payload)
+function jsonDecodeArray ($payload)
 {
-    $decoded = json_decode($payload, true);
-    return $decoded == null ? [] : $decoded;
+	$decoded = json_decode($payload, true);
+	return $decoded == null ? [] : $decoded;
 }
 
 /**
  * @param string $route
  * @return \App\Classes\WebResponse
  */
-function responseWeb()
+function responseWeb ()
 {
-    return \App\Classes\WebResponse::instance();
+	return \App\Classes\WebResponse::instance();
 }
 
-function responseApp()
+function responseApp ()
 {
-    return \App\Classes\Builders\ResponseBuilder::instance();
+	return \App\Classes\Builders\ResponseBuilder::instance();
 }
 
-function iterate($arrayable, $callback)
+function iterate ($arrayable, $callback)
 {
-    collect($arrayable)->each($callback);
+	collect($arrayable)->each($callback);
 }
 
-function hostName()
+function hostName ()
 {
-    return parse_url(env('APP_URL'), PHP_URL_HOST);
+	return parse_url(env('APP_URL'), PHP_URL_HOST);
 }
 
-function subDomain(string $prefix)
+function subDomain (string $prefix)
 {
-    return sprintf('%s.%s', $prefix, hostName());
+	return sprintf('%s.%s', $prefix, hostName());
 }
 
-function __cast($value, $type)
+function __cast ($value, $type)
 {
-    switch ($type) {
-        case 'string':
-            return strval($value);
+	switch ($type) {
+		case 'string':
+			return strval($value);
 
-        case 'float':
-            return floatval($value);
+		case 'float':
+			return floatval($value);
 
-        case 'int':
-            return intval($value);
+		case 'int':
+			return intval($value);
 
-        case 'bool':
-            return boolval($value);
+		case 'bool':
+			return boolval($value);
 
-        default:
-            return $value;
-    }
+		default:
+			return $value;
+	}
 }
 
 /**
@@ -200,35 +202,35 @@ function __cast($value, $type)
  * @param null $match Env string to match against
  * @return string|null
  */
-function appEnvironment($match = null): ?string
+function appEnvironment ($match = null): ?string
 {
-    if ($match == null)
-        return env('APP_ENV');
-    else
-        return \App\Classes\Str::equals($match, env('APP_ENV'));
+	if ($match == null)
+		return env('APP_ENV');
+	else
+		return \App\Classes\Str::equals($match, env('APP_ENV'));
 }
 
-function countRequiredPages(int $total, int $perPage)
+function countRequiredPages (int $total, int $perPage)
 {
-    if ($total <= $perPage)
-        return 1;
+	if ($total <= $perPage)
+		return 1;
 
-    $result = $total / $perPage;
-    $remainder = $total % $perPage;
-    if ($remainder > 0 && $remainder <= $perPage) {
-        $result += 1;
-    }
-    return $result;
+	$result = $total / $perPage;
+	$remainder = $total % $perPage;
+	if ($remainder > 0 && $remainder <= $perPage) {
+		$result += 1;
+	}
+	return $result;
 }
 
-function makeUrl($path): ?string
+function makeUrl ($path): ?string
 {
-    return \App\Storage\SecuredDisk::existsUrl($path);
+	return \App\Storage\SecuredDisk::existsUrl($path);
 }
 
-function slack($message)
+function slack ($message)
 {
-    \Illuminate\Support\Facades\Log::channel('slack')->info($message);
+	\Illuminate\Support\Facades\Log::channel('slack')->info($message);
 }
 
 /**
@@ -247,12 +249,12 @@ function slack($message)
  * @return string
  * @throws Exception
  */
-function random_str(int $length = 16, string $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'): string
+function random_str (int $length = 16, string $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'): string
 {
-    $pieces = [];
-    $max = mb_strlen($keyspace, '8bit') - 1;
-    for ($i = 0; $i < $length; ++$i) {
-        $pieces [] = $keyspace[random_int(0, $max)];
-    }
-    return implode('', $pieces);
+	$pieces = [];
+	$max = mb_strlen($keyspace, '8bit') - 1;
+	for ($i = 0; $i < $length; ++$i) {
+		$pieces [] = $keyspace[random_int(0, $max)];
+	}
+	return implode('', $pieces);
 }

@@ -17,7 +17,7 @@ class OrderController extends AppController
 		parent::__construct();
 	}
 
-	public function index ()
+	public function index (): \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -31,7 +31,7 @@ class OrderController extends AppController
 		}
 	}
 
-	public function show ($id)
+	public function show ($id): \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -47,7 +47,7 @@ class OrderController extends AppController
 		}
 	}
 
-	public function track ($id)
+	public function track ($id): \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -63,7 +63,7 @@ class OrderController extends AppController
 		}
 	}
 
-	public function cancel ($id)
+	public function cancel ($id): \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -90,7 +90,7 @@ class OrderController extends AppController
 		}
 	}
 
-	public function return ($id)
+	public function return ($id): \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		try {

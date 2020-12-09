@@ -8,27 +8,27 @@ use App\Storage\SecuredDisk;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class ProductImageController extends AppController{
-	public function delete($id){
+class ProductImageController extends AppController
+{
+	public function delete ($id)
+	{
 		$response = $this->response();
 		try {
 			$image = ProductImage::retrieveThrows($id);
 			SecuredDisk::deleteIfExists($image->path);
 			$image->delete();
 			$response->status(HttpOkay)->message('Product image deleted successfully.');
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('Could not find product image for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	protected function guard(){
+	protected function guard ()
+	{
 		return auth(self::SellerAPI);
 	}
 }

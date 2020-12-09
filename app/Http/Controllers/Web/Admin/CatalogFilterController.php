@@ -17,12 +17,14 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Throwable;
 
-class CatalogFilterController extends BaseController{
+class CatalogFilterController extends BaseController
+{
 	use ValidatesRequest;
 
 	protected array $rules;
 
-	public function __construct(){
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->rules = [
 			'store' => [
@@ -34,20 +36,22 @@ class CatalogFilterController extends BaseController{
 		];
 	}
 
-	public function index(){
+	public function index ()
+	{
 		$catalogFilters = CatalogFilter::all();
 		return view('admin.filters.catalog.index')->with('filters', $catalogFilters);
 	}
 
-	public function create(){
+	public function create ()
+	{
 		$roots = Category::startQuery()->isRoot()->get();
-		$roots->transform(function (Category $root){
+		$roots->transform(function (Category $root) {
 			$category = $root->children()->orderBy('name')->get();
-			$category = $category->transform(function (Category $category){
+			$category = $category->transform(function (Category $category) {
 				$subCategory = $category->children()->orderBy('name')->get();
-				$subCategory = $subCategory->transform(function (Category $subCategory){
+				$subCategory = $subCategory->transform(function (Category $subCategory) {
 					$vertical = $subCategory->children()->orderBy('name')->get();
-					$vertical->transform(function (Category $vertical){
+					$vertical->transform(function (Category $vertical) {
 						return [
 							'key' => $vertical->id(),
 							'name' => $vertical->name(),
@@ -90,7 +94,8 @@ class CatalogFilterController extends BaseController{
 		return view('admin.filters.catalog.create')->with('roots', $roots);
 	}
 
-	public function store(){
+	public function store ()
+	{
 		$response = responseWeb();
 		try {
 			$validated = $this->requestValid(request(), $this->rules['store']);
@@ -103,42 +108,36 @@ class CatalogFilterController extends BaseController{
 				'allowMultiValue' => !request()->has('builtIn') ? request()->has('allowMultiValue') : CatalogFilter::AllowMultiValueDefault[$validated['builtInType']],
 			]);
 			$response->success('Catalog filter created successfully.')->route('admin.filters.catalog.index');
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response->error($exception->getMessage())->data(request()->all())->back();
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->error($exception->getMessage())->data(request()->all())->back();
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function attributes($id): JsonResponse{
+	public function attributes ($id): JsonResponse
+	{
 		$response = responseApp();
 		try {
 			$category = Category::startQuery()->displayable()->key($id)->firstOrFail();
 			$attributeSet = $category->attributeSet;
 			if ($attributeSet != null) {
 				$attributes = $attributeSet->items;
-				$attributes->transform(function (AttributeSetItem $item){
+				$attributes->transform(function (AttributeSetItem $item) {
 					return $item->attribute;
 				});
 				$attributes = $attributes->where('predefined', true)->values();
 				$response->setValue('options', view('admin.filters.catalog.attributeOptions')->with('attributes', $attributes)->render())->status(HttpOkay)->message('Attributes retrieved successfully.');
-			}
-			else {
+			} else {
 				$response->setValue('options', view('admin.filters.catalog.attributeOptions'))->status(HttpNoContent)->message('No attribute set found for category.');
 			}
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->setValue('options')->status(HttpResourceNotFound)->message('Could not find category for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->setValue('options')->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}

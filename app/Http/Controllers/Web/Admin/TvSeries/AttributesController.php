@@ -14,13 +14,16 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 
-class AttributesController extends TvSeriesBase{
-	public function __construct(){
+class AttributesController extends TvSeriesBase
+{
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->ruleSet->load('rules.admin.tv-series.attributes');
 	}
 
-	public function edit($id){
+	public function edit ($id)
+	{
 		$response = responseWeb();
 		try {
 			$genrePayload = Genre::all();
@@ -34,14 +37,11 @@ class AttributesController extends TvSeriesBase{
 			with('languages', $languagePayload)->
 			with('servers', $serverPayload)->
 			with('qualities', $qualityPayload);
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->route('admin.tv-series.index')->error('Could not find tv series for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->route('admin.tv-series.index')->error($exception->getMessage());
-		}
-		finally {
+		} finally {
 			if ($response instanceof WebResponse)
 				return $response->send();
 			else
@@ -49,7 +49,8 @@ class AttributesController extends TvSeriesBase{
 		}
 	}
 
-	public function update($id){
+	public function update ($id)
+	{
 		$response = responseWeb();
 		$video = null;
 		try {
@@ -79,14 +80,11 @@ class AttributesController extends TvSeriesBase{
 
 			$video->update($validated);
 			$response->success('Tv series details were successfully updated.')->route('admin.tv-series.index');
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response->error($exception->getError())->back();
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->error($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}

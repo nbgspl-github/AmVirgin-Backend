@@ -5,8 +5,10 @@ namespace App\Http\Controllers\App\Customer;
 use App\Http\Controllers\AppController;
 use App\Models\City;
 
-class CitiesController extends AppController {
-	public function index($stateId) {
+class CitiesController extends AppController
+{
+	public function index ($stateId)
+	{
 		$cities = City::where('stateId', $stateId)->get();
 		$cities->transform(function (City $city) {
 			return [
@@ -19,7 +21,8 @@ class CitiesController extends AppController {
 		})->setValue('data', $cities)->send();
 	}
 
-	protected function guard() {
+	protected function guard ()
+	{
 		return auth('seller-api');
 	}
 }

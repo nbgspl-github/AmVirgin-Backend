@@ -8,12 +8,14 @@ use App\Traits\ValidatesRequest;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 
-class ContactUsController extends \App\Http\Controllers\AppController{
+class ContactUsController extends \App\Http\Controllers\AppController
+{
 	use ValidatesRequest;
 
 	protected array $rules;
 
-	public function __construct(){
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->rules = [
 			'store' => [
@@ -25,11 +27,13 @@ class ContactUsController extends \App\Http\Controllers\AppController{
 		];
 	}
 
-	public function index(): JsonResponse{
+	public function index (): JsonResponse
+	{
 		return responseApp()->send();
 	}
 
-	public function store(): JsonResponse{
+	public function store (): JsonResponse
+	{
 		$response = responseApp();
 		try {
 			$user = $this->guard()->user();
@@ -37,19 +41,17 @@ class ContactUsController extends \App\Http\Controllers\AppController{
 			if ($user != null) $validated['customerId'] = $user->id();
 			CustomerQuery::create($validated);
 			$response->status(HttpOkay)->message('We have received your query and will respond to you shortly.');
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response->status(HttpOkay)->message($exception->getMessage());
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->status(HttpOkay)->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	protected function guard(){
+	protected function guard ()
+	{
 		return auth(self::CustomerAPI);
 	}
 }

@@ -12,11 +12,14 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\Rule;
 use Throwable;
 
-class ShippingAddressesController extends AppController {
+class ShippingAddressesController extends AppController
+{
 	use ValidatesRequest;
+
 	protected array $rules;
 
-	public function __construct() {
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->rules = [
 			'store' => [
@@ -48,7 +51,8 @@ class ShippingAddressesController extends AppController {
 		];
 	}
 
-	public function index() {
+	public function index ()
+	{
 		$shippingAddresses = ShippingAddress::where('customerId', $this->guard()->id())->get();
 		$shippingAddresses = ShippingAddressResource::collection($shippingAddresses);
 		return responseApp()->status(HttpOkay)->message(function () use ($shippingAddresses) {
@@ -56,7 +60,8 @@ class ShippingAddressesController extends AppController {
 		})->setValue('data', $shippingAddresses)->send();
 	}
 
-	public function store() {
+	public function store ()
+	{
 		$response = responseApp();
 		$validated = null;
 		try {
@@ -79,8 +84,7 @@ class ShippingAddressesController extends AppController {
 					'sundayWorking' => $validated->sundayWorking,
 				]);
 				$response->status(HttpOkay)->message('Shipping address updated successfully.');
-			}
-			catch (ModelNotFoundException $exception) {
+			} catch (ModelNotFoundException $exception) {
 				ShippingAddress::create([
 					'customerId' => $this->guard()->id(),
 					'name' => $validated->name,
@@ -97,22 +101,20 @@ class ShippingAddressesController extends AppController {
 				]);
 				$response->status(HttpOkay)->message('Shipping address saved successfully.');
 			}
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function update($id) {
+	public function update ($id)
+	{
 		$response = responseApp();
-		try { 
-			$validated = (object)$this->requestValid(request(), $this->rules['update']); 
+		try {
+			$validated = (object)$this->requestValid(request(), $this->rules['update']);
 			$address = ShippingAddress::where([
 				['customerId', $this->guard()->id()],
 				['id', $id],
@@ -130,22 +132,19 @@ class ShippingAddressesController extends AppController {
 				'sundayWorking' => $validated->sundayWorking,
 			]);
 			$response->status(HttpOkay)->message('Shipping address updated successfully.');
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('Could not find address for that key.');
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function delete($id) {
+	public function delete ($id)
+	{
 		$response = responseApp();
 		try {
 			$address = ShippingAddress::where([
@@ -154,19 +153,17 @@ class ShippingAddressesController extends AppController {
 			])->firstOrFail();
 			$address->delete();
 			$response->status(HttpOkay)->message('Shipping address deleted successfully.');
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('Could not find address for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	protected function guard() {
+	protected function guard ()
+	{
 		return auth('customer-api');
 	}
 }

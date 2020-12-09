@@ -10,12 +10,14 @@ use App\Resources\Support\Seller\TicketResource;
 use App\Traits\ValidatesRequest;
 use Illuminate\Http\JsonResponse;
 
-class SupportController extends AppController {
+class SupportController extends AppController
+{
 	use ValidatesRequest;
 
 	protected array $rules;
 
-	public function __construct () {
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->rules = [
 			'index' => [
@@ -38,7 +40,8 @@ class SupportController extends AppController {
 		];
 	}
 
-	public function index () : JsonResponse {
+	public function index (): JsonResponse
+	{
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules['index']);
@@ -52,16 +55,15 @@ class SupportController extends AppController {
 			$tickets = $query->get();
 			$resourceCollection = TicketResource::collection($tickets);
 			$response->status($tickets->count() > 0 ? HttpOkay : HttpNoContent)->message('Listing all support tickets for seller.')->setValue('payload', $resourceCollection);
-		}
-		catch (\Throwable $exception) {
+		} catch (\Throwable $exception) {
 			$response->status(HttpOkay)->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function store () : JsonResponse {
+	public function store (): JsonResponse
+	{
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules['store']);
@@ -70,19 +72,17 @@ class SupportController extends AppController {
 			$ticket = SupportTicket::create($validated);
 			$resource = new TicketResource($ticket);
 			$response->status(HttpOkay)->message('Support ticket created successfully.')->setValue('payload', $resource);
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
-		}
-		catch (\Throwable $exception) {
+		} catch (\Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	protected function guard () {
+	protected function guard ()
+	{
 		return auth(self::SellerAPI);
 	}
 }

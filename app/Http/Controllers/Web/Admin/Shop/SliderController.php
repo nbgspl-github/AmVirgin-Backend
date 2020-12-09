@@ -19,12 +19,14 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Throwable;
 
-class SliderController extends BaseController {
+class SliderController extends BaseController
+{
 	use ValidatesRequest;
 
 	protected array $rules = [];
 
-	public function __construct() {
+	public function __construct ()
+	{
 		parent::__construct();
 		$this->rules = [
 			'store' => [
@@ -50,28 +52,28 @@ class SliderController extends BaseController {
 		];
 	}
 
-	public function index() {
+	public function index ()
+	{
 		$slides = ShopSlider::all();
 		return view('admin.shop.sliders.index')->with('slides', $slides);
 	}
 
-	public function create() {
+	public function create ()
+	{
 		return view('admin.shop.sliders.create');
 	}
 
-	public function edit($id) {
+	public function edit ($id)
+	{
 		$response = responseWeb();
 		try {
 			$slider = ShopSlider::retrieveThrows($id);
 			$response = view('admin.shop.sliders.edit')->with('slide', $slider);
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->error('Could not find shop slider for that key.')->route('admin.shop.sliders.index');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->error($exception->getMessage())->route('admin.shop.sliders.index');
-		}
-		finally {
+		} finally {
 			if ($response instanceof WebResponse)
 				return $response->send();
 			else
@@ -79,45 +81,41 @@ class SliderController extends BaseController {
 		}
 	}
 
-	public function store() {
+	public function store ()
+	{
 		$response = responseWeb();
 		try {
 			$payload = $this->requestValid(request(), $this->rules['store']);
 			$payload['banner'] = \request()->hasFile('banner') ? SecuredDisk::access()->putFile(Directories::ShopSliders, request()->file('banner')) : null;
 			ShopSlider::create($payload);
 			$response->route('admin.shop.sliders.index')->success('Shop slider created successfully.');
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response->back()->data(\request()->all())->error($exception->getMessage());
-		}
-		catch (Exception $exception) {
+		} catch (Exception $exception) {
 			$response->back()->data(\request()->all())->error($exception->getMessage());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function delete($id) {
+	public function delete ($id)
+	{
 		$response = responseApp();
 		try {
 			$slider = ShopSlider::retrieveThrows($id);
 			$slider->delete();
 			$response->status(HttpOkay)->message('Shop slider deleted successfully.');
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('Could not find shop slider for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function update($id) {
+	public function update ($id)
+	{
 		$response = responseWeb();
 		$banner = null;
 		try {
@@ -138,22 +136,19 @@ class SliderController extends BaseController {
 				]);
 			}
 			$response->route('admin.shop.sliders.index')->success('Shop slider updated successfully.');
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->route('admin.shop.sliders.index')->error($exception->getMessage());
-		}
-		catch (ValidationException $exception) {
+		} catch (ValidationException $exception) {
 			$response->back()->error($exception->getMessage())->data(\request()->all());
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->back()->error($exception->getMessage())->data(\request()->all());
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
 
-	public function updateStatus() {
+	public function updateStatus ()
+	{
 		$response = responseApp();
 		try {
 			$validated = (object)$this->requestValid(\request(), $this->rules['updateStatus']);
@@ -161,15 +156,11 @@ class SliderController extends BaseController {
 			$slider->setActive($validated->active);
 			$slider->save();
 			$response->status(HttpOkay)->message('Status updated successfully.');
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('Could not find shop slider for that key.');
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
-		}
-
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}

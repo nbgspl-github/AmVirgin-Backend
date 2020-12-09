@@ -15,12 +15,15 @@ use App\Resources\Shop\Customer\Catalog\Filters\PriceRangeResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 
-class FilterController extends AppController{
-	public function __construct(){
+class FilterController extends AppController
+{
+	public function __construct ()
+	{
 		parent::__construct();
 	}
 
-	public function show(): JsonResponse{
+	public function show (): JsonResponse
+	{
 		$id = request('category');
 		$filters = CatalogFilter::startQuery()->category($id)->get();
 		$products = Product::startQuery()->displayable()->categoryOrDescendant($id);
@@ -38,7 +41,7 @@ class FilterController extends AppController{
 		$requiredColumnValues = $products->get($requiredColumns);
 
 		// Transform each available filters, excluding inbuilt ones by send them to a new function.
-		$filters->transform(function (CatalogFilter $catalogFilter) use ($requiredColumnValues){
+		$filters->transform(function (CatalogFilter $catalogFilter) use ($requiredColumnValues) {
 			return $catalogFilter->builtIn() ? $this->transform($catalogFilter, $requiredColumnValues) : new FilterResource($catalogFilter);
 		});
 
@@ -48,7 +51,8 @@ class FilterController extends AppController{
 			->message('Listing available filters for category.')->send();
 	}
 
-	public function transform(CatalogFilter $catalogFilter, Collection $columnValues): AbstractBuiltInResource{
+	public function transform (CatalogFilter $catalogFilter, Collection $columnValues): AbstractBuiltInResource
+	{
 		// Retrieve the appropriate Resource class for built in filter.
 		$resourceClass = CatalogFilter::BuiltInFilterResourceMapping[$catalogFilter->builtInType()];
 		// Get column values as per the requirements of resource class.
@@ -57,7 +61,8 @@ class FilterController extends AppController{
 		return (new $resourceClass($catalogFilter))->withValues($values);
 	}
 
-	protected function guard(){
+	protected function guard ()
+	{
 		return auth(self::CustomerAPI);
 	}
 }

@@ -5,12 +5,15 @@ namespace App\Http\Resources\Videos;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
-class TrendingPicksVideoResource extends JsonResource{
-	public static function withoutWrapping(){
+class TrendingPicksVideoResource extends JsonResource
+{
+	public static function withoutWrapping ()
+	{
 		return true;
 	}
 
-	public function toArray($request){
+	public function toArray ($request)
+	{
 		return [
 			'slug' => $this->slug,
 			'title' => $this->title,

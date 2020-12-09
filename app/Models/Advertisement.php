@@ -2,36 +2,50 @@
 
 namespace App\Models;
 
+use App\Enums\Advertisements\Status;
+use App\Models\Auth\Seller;
 use App\Queries\Seller\AdvertisementQuery;
 use App\Storage\SecuredDisk;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\FluentConstructor;
-use App\Traits\GenerateSlugs;
-use App\Traits\HasSpecialAttributes;
 use App\Traits\QueryProvider;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Class Advertisement
+ * @package App\Models
+ * @property ?integer $sellerId
+ * @property ?Seller $seller
+ * @property Status $status
+ */
 class Advertisement extends Model
 {
-    use RetrieveResource, FluentConstructor, DynamicAttributeNamedMethods, QueryProvider;
-    protected $fillable = [
-        'sellerId', 'subject', 'message', 'banner', 'date', 'active'
-    ];
-    protected $hidden = [
-        'id', 'created_at', 'updated_at'
-    ];
-    protected $casts = [
-        'active' => 'bool'
-    ];
+	use RetrieveResource, FluentConstructor, DynamicAttributeNamedMethods, QueryProvider;
 
-    public function getBannerAttribute($value): ?string
-    {
-        return SecuredDisk::existsUrl($this->attributes['banner']);
-    }
+	protected $guarded = [
+		'id'
+	];
+	protected $hidden = [
+		'id', 'created_at', 'updated_at'
+	];
+	protected $casts = [
+		'active' => 'bool', 'status' => Status::class
+	];
 
-    public static function startQuery(): AdvertisementQuery
-    {
-        return AdvertisementQuery::begin();
-    }
+	public function seller (): BelongsTo
+	{
+		return $this->belongsTo(Seller::class, 'sellerId');
+	}
+
+	public function getBannerAttribute ($value): ?string
+	{
+		return SecuredDisk::existsUrl($this->attributes['banner']);
+	}
+
+	public static function startQuery (): AdvertisementQuery
+	{
+		return AdvertisementQuery::begin();
+	}
 }

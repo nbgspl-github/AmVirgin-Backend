@@ -9,14 +9,17 @@ use App\Traits\FluentResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class SessionController extends BaseController{
+class SessionController extends BaseController
+{
 	use FluentResponse;
 
-	public function __construct(){
+	public function __construct ()
+	{
 		parent::__construct();
 	}
 
-	public function create(){
+	public function create ()
+	{
 		$session = CartSession::query()->create([
 			'sessionId' => Str::uuid()->toString(),
 			'customerId' => null,
@@ -25,19 +28,17 @@ class SessionController extends BaseController{
 		setValue('session', $session->sessionId)->send();
 	}
 
-	public function check($sessionId){
+	public function check ($sessionId)
+	{
 		$response = $this->response();
 		try {
 			$session = CartSession::query()->where('sessionId', $sessionId)->firstOrFail();
 			$response->status(HttpOkay)->message('Session token is valid.')->setValue('valid', true);
-		}
-		catch (ModelNotFoundException $exception) {
+		} catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('Session token is invalid or expired.')->setValue('valid', false);
-		}
-		catch (Throwable $exception) {
+		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage())->setValue('valid', false);
-		}
-		finally {
+		} finally {
 			return $response->send();
 		}
 	}
