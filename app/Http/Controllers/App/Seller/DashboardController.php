@@ -29,14 +29,20 @@ class DashboardController extends AppController
 			'delivered' => $seller->orders()->where('status', OrderStatus::Delivered)->count('id'),
 			'cancelled' => $seller->orders()->where('status', OrderStatus::Cancelled)->count('id'),
 			'pending' => $seller->orders()->where('status', OrderStatus::Pending)->count('id'),
-			'grossRevenue' => $this->salesRevenue($sales)
+			'grossRevenue' => $this->revenue($sales)
 		];
 		return $response->status(HttpOkay)->message('Listing dashboard statistics.')->setValue('payload', $payload)->send();
 	}
 
-	public function salesRevenue ($sales): float
+	protected function revenue ($sales): float
 	{
-		return 3.3 * $sales;
+		$commission = $this->commission($sales);
+		return $sales - $commission;
+	}
+
+	protected function commission ($sales): float
+	{
+		return 0.33 * $sales;
 	}
 
 	protected function guard ()

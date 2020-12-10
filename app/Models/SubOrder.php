@@ -5,7 +5,10 @@ namespace App\Models;
 use App\Enums\Orders\Status;
 use App\Models\Auth\Customer;
 use App\Models\Auth\Seller;
+use App\Queries\SubOrderQuery;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class SubOrder
@@ -20,13 +23,18 @@ class SubOrder extends Model
 
 	protected $casts = ['status' => Status::class];
 
-	public function items (): \Illuminate\Database\Eloquent\Relations\HasMany
+	public function items (): HasMany
 	{
 		return $this->hasMany(OrderItem::class, 'subOrderId');
 	}
 
-	public function customer (): \Illuminate\Database\Eloquent\Relations\BelongsTo
+	public function customer (): BelongsTo
 	{
 		return $this->belongsTo(Customer::class, 'customerId');
+	}
+
+	public static function startQuery (): SubOrderQuery
+	{
+		return SubOrderQuery::begin();
 	}
 }

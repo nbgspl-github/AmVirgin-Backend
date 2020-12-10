@@ -4,13 +4,10 @@ namespace App\Http\Controllers\App\Seller\Orders;
 
 use App\Classes\Rule;
 use App\Enums\Orders\Status;
-use App\Enums\Seller\OrderStatus;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\AppController;
 use App\Models\SubOrder;
 use App\Traits\ValidatesRequest;
-use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 
@@ -38,6 +35,9 @@ class StatusController extends AppController
 			Status::Dispatched => function (SubOrder $order, array $payload) {
 				$order->update($payload);
 			},
+			Status::ReadyForDispatch => function (SubOrder $order, array $payload) {
+				$order->update($payload);
+			},
 		];
 	}
 
@@ -58,12 +58,10 @@ class StatusController extends AppController
 				$this->performStatusUpdate($order, $new, $validated);
 				$response->status(HttpOkay)->message('Order status updated successfully.');
 			} else {
-				$response->status(HttpOkay)->message('Requested order status is invalid for current active status.');
+				$response->status(HttpNotModified)->message('Requested order status is invalid for current active status.');
 			}
 		} catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
-		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find order for that key.');
 		} catch (Throwable $exception) {
 			$response->status(HttpResourceNotFound)->message($exception->getMessage());
 		} finally {
@@ -73,13 +71,7 @@ class StatusController extends AppController
 
 	protected function statusAllowed (string $current, string $next): bool
 	{
-		try {
-			$transitions = OrderStatus::transitions(new OrderStatus($current));
-//			return Arrays::contains($transitions, $next, true);
-			return true;
-		} catch (InvalidEnumMemberException $exception) {
-			return false;
-		}
+		return true;
 	}
 
 	protected function performStatusUpdate (SubOrder $order, string $new, array $payload)

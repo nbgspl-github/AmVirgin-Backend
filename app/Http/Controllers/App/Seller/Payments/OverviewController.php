@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\App\Seller\Payments;
 
+use App\Enums\Orders\Status;
 use App\Enums\Seller\OrderStatus;
+use App\Http\Controllers\AppController;
 use App\Models\SellerOrder;
+use App\Models\SubOrder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
-class OverviewController extends \App\Http\Controllers\AppController
+class OverviewController extends AppController
 {
 	public function __construct ()
 	{
@@ -40,29 +43,18 @@ class OverviewController extends \App\Http\Controllers\AppController
 				]
 			];
 			$previous = new Collection();
-			$orderCollection = SellerOrder::startQuery()->useAuth()->withRelations('order')->withinCurrentMonth()->status((new OrderStatus(OrderStatus::Delivered)))->get();
-			$orderCollection->each(function (SellerOrder $sellerOrder) use ($current, &$payload, $previous) {
-				if ($sellerOrder->order()->exists()) {
-					$order = $sellerOrder->order;
-					if ($order->paymentMode == 'cash-on-delivery') {
-						$payload['total']['postpaid'] += $order->total;
-					} else {
-						$payload['total']['prepaid'] += $order->total;
-					}
-					if (strtotime($order->created_at) < $current) {
-						$previous->push(strtotime($order->created_at));
-						if ($order->paymentMode == 'cash-on-delivery') {
-							$payload['previous']['postpaid'] += $order->total;
-						} else {
-							$payload['previous']['prepaid'] += $order->total;
-						}
-					} else {
-						if ($order->paymentMode == 'cash-on-delivery') {
-							$payload['next']['postpaid'] += $order->total;
-						} else {
-							$payload['next']['prepaid'] += $order->total;
-						}
-					}
+			$orderCollection = SubOrder::startQuery()->useAuth()->withinCurrentMonth()->status((new Status(Status::Delivered)))->get();
+			$orderCollection->each(function (SubOrder $subOrder) use ($current, &$payload, $previous) {
+				$order = $subOrder;
+				$payload['total']['postpaid'] += $order->total;
+				$payload['total']['prepaid'] += $order->total;
+				if (strtotime($order->created_at) < $current) {
+					$previous->push(strtotime($order->created_at));
+					$payload['previous']['postpaid'] += $order->total;
+					$payload['previous']['prepaid'] += $order->total;
+				} else {
+					$payload['next']['postpaid'] += $order->total;
+					$payload['next']['prepaid'] += $order->total;
 				}
 			});
 			$last = $previous->sort()->last();

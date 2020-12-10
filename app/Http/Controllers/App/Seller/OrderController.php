@@ -9,13 +9,10 @@ use App\Http\Controllers\AppController;
 use App\Models\Order;
 use App\Models\ReviewRating;
 use App\Models\SellerOrder;
-use App\Resources\Orders\Seller\ListResource;
-use App\Resources\Orders\Seller\OrderResource;
 use App\Resources\Orders\Seller\PaymentListResource;
 use App\Resources\Orders\Seller\PreviousPaymentListResource;
 use App\Traits\ValidatesRequest;
 use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
 use Throwable;
@@ -120,34 +117,6 @@ class OrderController extends AppController
 			$response->status(HttpOkay)->message('Listing all Previous Payment for this seller.')->setValue('meta', $meta)->setValue('data', $resourceCollection);
 		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
-		} finally {
-			return $response->send();
-		}
-	}
-
-	public function updateStatus (int $id): JsonResponse
-	{
-		$response = responseApp();
-		$status = request('status');
-		try {
-			$order = Order::query()->whereKey($id)->firstOrFail();
-			$transitions = OrderStatus::transitions(new OrderStatus($order->status));
-			if (!empty($status) && Arrays::contains($transitions, $status, true)) {
-				$order->update([
-					'status' => $status,
-				]);
-				$sellerOrder = SellerOrder::where('orderId', $id)
-					->update(['status' => $status]);
-				$response->status(HttpOkay)->message('Order status updated successfully.');
-			} else {
-				$response->status(HttpOkay)->message('Requested order status is invalid for current active status.');
-			}
-		} catch (InvalidEnumMemberException $exception) {
-			$response->status(HttpOkay)->message('Current order status is invalid.');
-		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find order for that key.');
-		} catch (Throwable $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

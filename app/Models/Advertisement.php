@@ -5,13 +5,14 @@ namespace App\Models;
 use App\Enums\Advertisements\Status;
 use App\Models\Auth\Seller;
 use App\Queries\Seller\AdvertisementQuery;
-use App\Storage\SecuredDisk;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\FluentConstructor;
+use App\Traits\MediaLinks;
 use App\Traits\QueryProvider;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Http\UploadedFile;
 
 /**
  * Class Advertisement
@@ -23,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Advertisement extends Model
 {
 	use RetrieveResource, FluentConstructor, DynamicAttributeNamedMethods, QueryProvider;
+	use MediaLinks;
 
 	protected $guarded = [
 		'id'
@@ -41,7 +43,15 @@ class Advertisement extends Model
 
 	public function getBannerAttribute ($value): ?string
 	{
-		return SecuredDisk::existsUrl($this->attributes['banner']);
+		return $this->retrieveMedia($this->attributes['banner']);
+	}
+
+	public function setBannerAttribute ($value): void
+	{
+		if ($value instanceof UploadedFile)
+			$this->attributes['banner'] = $this->storeMedia('promotions', $value);
+		else
+			$this->attributes['banner'] = $value;
 	}
 
 	public static function startQuery (): AdvertisementQuery
