@@ -86,7 +86,7 @@ class QuoteController extends AppController
 		];
 	}
 
-	public function add ()
+	public function add (): \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		$validated = null;
@@ -123,7 +123,7 @@ class QuoteController extends AppController
 		}
 	}
 
-	public function retrieve ()
+	public function retrieve (): \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		$validated = null;
@@ -144,7 +144,7 @@ class QuoteController extends AppController
 		}
 	}
 
-	public function update ()
+	public function update (): \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		$validated = null;
@@ -174,7 +174,7 @@ class QuoteController extends AppController
 		}
 	}
 
-	public function remove ()
+	public function remove (): \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		$validated = null;
@@ -201,7 +201,7 @@ class QuoteController extends AppController
 		}
 	}
 
-	public function destroy ()
+	public function destroy (): \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		$validated = null;
@@ -228,7 +228,7 @@ class QuoteController extends AppController
 		}
 	}
 
-	public function moveToWishlist ($productId)
+	public function moveToWishlist ($productId): \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		$validated = null;
@@ -271,7 +271,7 @@ class QuoteController extends AppController
 		}
 	}
 
-	public function checkout ()
+	public function checkout (): \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		$validated = null;
@@ -299,7 +299,7 @@ class QuoteController extends AppController
 		}
 	}
 
-	public function submit ()
+	public function submit (): \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		$validated = null;
@@ -322,6 +322,9 @@ class QuoteController extends AppController
 				$order->update([
 					'status' => \App\Enums\Orders\Status::Placed
 				]);
+				$order->subOrders()->update([
+					'status' => \App\Enums\Orders\Status::Placed
+				]);
 				$transaction->update([
 					'paymentId' => $transaction->paymentId,
 					'signature' => $transaction->signature,
@@ -333,8 +336,6 @@ class QuoteController extends AppController
 					->setPayload(['pending' => false, 'orderId' => $order->id])
 					->setValue('orderNumber', $order->orderNumber);
 			} else {
-
-
 				$response->status(HttpOkay)
 					->message('We could not verify the payment status at this time. Please allow up to 30 minutes before trying again.')
 					->setPayload(['pending' => true, 'orderId' => null])
@@ -353,7 +354,7 @@ class QuoteController extends AppController
 		}
 	}
 
-	protected function verify (Order $order, Transaction $transaction)
+	protected function verify (Order $order, Transaction $transaction): bool
 	{
 		if ($transaction->isComplete()) {
 			return true;
@@ -396,7 +397,7 @@ class QuoteController extends AppController
 		return $amount * 100;
 	}
 
-	protected function fromAtomicAmount ($amount)
+	protected function fromAtomicAmount ($amount): float
 	{
 		return $amount / 100.0;
 	}

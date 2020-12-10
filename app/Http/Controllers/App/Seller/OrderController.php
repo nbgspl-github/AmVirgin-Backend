@@ -38,33 +38,6 @@ class OrderController extends AppController
 		];
 	}
 
-	public function index (): JsonResponse
-	{
-		$response = responseApp();
-		try {
-			$query = SellerOrder::startQuery()->withRelations('order');
-			if (!empty(request('status'))) {
-				$query->withWhere('status', request('status'));
-			}
-			$orderCollection = $query->paginate();
-			$total = $orderCollection->total();
-			$totalRec = $orderCollection->total();
-			$meta = [
-				'pagination' => [
-					'pages' => countRequiredPages($totalRec, request('per_page', 15)),
-					'current_page' => request('page', 1),
-					'items' => ['total' => $total, 'totalRec' => $totalRec, 'chunk' => request('per_page', 15)],
-				],
-			];
-			$resourceCollection = ListResource::collection($orderCollection);
-			$response->status(HttpOkay)->setValue('data', $resourceCollection)->setValue('meta', $meta);
-		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
-		} finally {
-			return $response->send();
-		}
-	}
-
 	public function getPaymentsTransaction (): JsonResponse
 	{
 		$response = responseApp();
@@ -152,41 +125,6 @@ class OrderController extends AppController
 		}
 	}
 
-	public function show ($id): JsonResponse
-	{
-		$response = responseApp();
-		try {
-			$order = SellerOrder::startQuery()->useAuth()->key($id)->firstOrFail();
-			$resource = new OrderResource($order);
-			$response->status(HttpOkay)->message('Listing order details for given key.')->setValue('payload', $resource);
-		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage());
-		} catch (Throwable $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage());
-		} finally {
-			return $response->send();
-		}
-	}
-
-	public function orderDetails ($id): JsonResponse
-	{
-		$response = responseApp();
-		try {
-			$order = SellerOrder::startQuery()->useAuth()->key($id)->firstOrFail();
-			$order->status = 'pending-dispatch';
-			$order->update();
-			$orderStatus = Order::where('id', $id)->update(['status' => "pending-dispatch"]);
-			$resource = new OrderResource($order);
-			$response->status(HttpOkay)->message('Listing order details for given key.')->setValue('payload', $resource);
-		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage());
-		} catch (Throwable $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage());
-		} finally {
-			return $response->send();
-		}
-	}
-
 	public function updateStatus (int $id): JsonResponse
 	{
 		$response = responseApp();
@@ -242,53 +180,6 @@ class OrderController extends AppController
 			$response->status(HttpOkay)->message('Order status updated successfully for batch.')->setValue('invalid', $invalid);
 		} catch (Throwable $exception) {
 			$response->status(HttpResourceNotFound)->message($exception->getMessage());
-		} finally {
-			return $response->send();
-		}
-	}
-
-	public function getOrderStatus ()
-	{
-		$response = responseApp();
-		try {
-			$order_status = OrderStatus::toArray();
-			$response->status(HttpOkay)->message('Status listing for orders.')->setValue('data', $order_status);
-		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
-		} finally {
-			return $response->send();
-		}
-	}
-
-	public function getOrderByStatus ($status)
-	{
-		$response = responseApp();
-		try {
-			// $order_status= Config::get('app.order_status');
-			$order_status = OrderStatus::toArray();
-
-			if (in_array($status, $order_status)) {
-
-				$ordersData = $total = [];
-
-				$ordersData = Order::where(['status' => $status])
-					->get();
-
-				if (!empty(count($ordersData))) {
-					$total['subTotal'] = $ordersData->sum('subTotal');
-					$total['tax'] = $ordersData->sum('tax');
-					$total['total'] = $ordersData->sum('total');
-
-					$ordersData['total'] = $total;
-				}
-
-				$response->status(HttpOkay)->message("Orders Listing for '$status' status")->setValue('data', $ordersData);
-			} else {
-				$response->status(HttpOkay)->message('Status did not matched in our record');
-			}
-
-		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

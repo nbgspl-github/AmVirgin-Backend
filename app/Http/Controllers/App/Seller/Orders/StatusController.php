@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\App\Seller\Orders;
 
 use App\Classes\Rule;
+use App\Enums\Orders\Status;
 use App\Enums\Seller\OrderStatus;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\AppController;
-use App\Models\Order;
+use App\Models\SubOrder;
 use App\Traits\ValidatesRequest;
 use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -23,7 +24,7 @@ class StatusController extends AppController
 	protected array $rules;
 
 	/**
-	 * @var \Closure[]
+	 * @var \Closure[]|array
 	 */
 	protected array $closures;
 
@@ -31,41 +32,25 @@ class StatusController extends AppController
 	{
 		parent::__construct();
 		$this->rules = [
-			'update' => [
-				'status' => ['bail', 'required', Rule::in(OrderStatus::getValues())],
-				'shippingMethod' => ['bail', Rule::requiredIf(function () {
-					return request('status') == OrderStatus::Dispatched;
-				}), Rule::in('seller', 'seller-smart')],
-				'courierName' => ['bail', Rule::requiredIf(function () {
-					return request('status') == OrderStatus::Dispatched && request('shippingMethod') == 'seller';
-				}), 'string', 'max:255'],
-				'airwayBillNumber' => ['bail', Rule::requiredIf(function () {
-					return request('status') == OrderStatus::Dispatched && request('shippingMethod') == 'seller';
-				}), 'string', 'max:255'],
-				'dispatchedOn' => ['bail', Rule::requiredIf(function () {
-					return request('status') == OrderStatus::Dispatched && request('shippingMethod') == 'seller';
-				}), 'date_format:Y-m-d H:i:s']
-			]
+			'update' => $this->rulesByStatus()
 		];
 		$this->closures = [
-			OrderStatus::Dispatched => function (Order $order, array $payload) {
+			Status::Dispatched => function (SubOrder $order, array $payload) {
 				$order->update($payload);
-				$order->sellerOrder()->update($payload);
 			},
 		];
 	}
 
-	public function update (int $id): JsonResponse
+	public function update (SubOrder $order): JsonResponse
 	{
 		$response = responseApp();
 		try {
 			/**
-			 * @var $order Order
+			 * @var $order SubOrder
 			 * @var $current string
 			 * @var $new string
 			 * @var $validated array
 			 */
-			$order = Order::query()->whereKey($id)->firstOrFail();
 			$validated = $this->requestValid(request(), $this->rules['update']);
 			$new = $validated['status'];
 			$current = $order->status;
@@ -86,7 +71,7 @@ class StatusController extends AppController
 		}
 	}
 
-	protected function statusAllowed (string $current, string $next)
+	protected function statusAllowed (string $current, string $next): bool
 	{
 		try {
 			$transitions = OrderStatus::transitions(new OrderStatus($current));
@@ -97,7 +82,7 @@ class StatusController extends AppController
 		}
 	}
 
-	protected function performStatusUpdate (Order $order, string $new, array $payload)
+	protected function performStatusUpdate (SubOrder $order, string $new, array $payload)
 	{
 		if (isset($this->closures[$new])) {
 			$closure = $this->closures[$new];
@@ -106,9 +91,25 @@ class StatusController extends AppController
 		$order->update([
 			'status' => $new
 		]);
-		$order->sellerOrder()->update([
-			'status' => $new
-		]);
+	}
+
+	protected function rulesByStatus (): array
+	{
+		return [
+			'status' => ['bail', 'required', Rule::in(Status::getValues())],
+			'shippingMethod' => ['bail', Rule::requiredIf(function () {
+				return request('status') == Status::Dispatched;
+			}), Rule::in('seller', 'seller-smart')],
+			'courierName' => ['bail', Rule::requiredIf(function () {
+				return request('status') == Status::Dispatched && request('shippingMethod') == 'seller';
+			}), 'string', 'max:255'],
+			'airwayBillNumber' => ['bail', Rule::requiredIf(function () {
+				return request('status') == Status::Dispatched && request('shippingMethod') == 'seller';
+			}), 'string', 'max:255'],
+			'dispatchedOn' => ['bail', Rule::requiredIf(function () {
+				return request('status') == Status::Dispatched && request('shippingMethod') == 'seller';
+			}), 'date_format:Y-m-d H:i:s']
+		];
 	}
 
 	protected function guard ()

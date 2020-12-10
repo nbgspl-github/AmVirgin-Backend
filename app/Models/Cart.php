@@ -6,6 +6,7 @@ use App\Classes\Cart\CartItem;
 use App\Classes\Cart\CartItemCollection;
 use App\Classes\Str;
 use App\Constants\CartStatus;
+use App\Enums\Orders\Status;
 use App\Exceptions\CartAlreadySubmittedException;
 use App\Exceptions\CartItemNotFoundException;
 use App\Models\Auth\Customer;
@@ -206,19 +207,20 @@ class Cart extends Model
 			});
 			$total = $subTotal;
 			/**
-			 * @var $segment OrderSegment
+			 * @var $subOrder SubOrder
 			 */
-			$segment = $order->segments()->create([
+			$subOrder = $order->subOrders()->create([
 				'sellerId' => $sellerId,
+				'customerId' => $order->customerId,
 				'quantity' => $items->sum(function (CartItem $item) {
 					return $item->getQuantity();
 				}),
 				'tax' => 0,
 				'subTotal' => $subTotal,
-				'total' => $total
+				'total' => $total,
 			]);
-			$items->each(function (CartItem $item) use ($sellerId, $segment, $order) {
-				$segment->items()->create([
+			$items->each(function (CartItem $item) use ($sellerId, $subOrder, $order) {
+				$subOrder->items()->create([
 					'orderId' => $order->id,
 					'sellerId' => $sellerId,
 					'productId' => $item->getProduct()->id,

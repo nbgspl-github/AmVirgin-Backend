@@ -3,28 +3,36 @@
 namespace App\Resources\Orders\Seller;
 
 use App\Classes\Time;
+use App\Enums\Orders\Status;
 use App\Enums\Seller\OrderStatus;
+use App\Models\Auth\Seller;
+use App\Models\Order;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * Class ListResource
+ * @package App\Resources\Orders\Seller
+ * @property ?Order $order
+ * @property ?Seller $seller
+ * @property Status $status
+ * @property ?int $orderId
+ * @property int $quantity
+ */
 class ListResource extends JsonResource
 {
-	public function toArray ($request)
+	public function toArray ($request): array
 	{
-		$status = $this->order;
-		$status = $status != null ? $status->status() : 'N/A';
 		return [
 			'key' => $this->id,
-			'orderId' => $this->orderId,
-			'orderNumber' => $this->orderNumber,
 			'orderDate' => Time::mysqlStamp(strtotime($this->created_at)),
-			'status' => $status,
-			'quantity' => $this->items()->sum('quantity'),
+			'status' => $this->status,
+			'quantity' => $this->quantity,
 			'customer' => new OrderCustomerResource($this->customer),
-			'cancellationReason' => $this->when($status == OrderStatus::Cancelled, $this->cancellationReason),
-			'cancelledBy' => $this->when($status == OrderStatus::Cancelled, $this->cancelledBy),
-			'cancelledOn' => $this->when($status == OrderStatus::Cancelled, Time::mysqlStamp(strtotime($this->cancelledOn))),
-			'dispatchedOn' => $this->when($status == OrderStatus::Dispatched || $status == OrderStatus::ReadyForDispatch, Time::mysqlStamp(strtotime($this->dispatchedOn))),
-			'deliveredOn' => $this->when($status == OrderStatus::Delivered, Time::mysqlStamp(strtotime($this->deliveredOn))),
+			'cancellationReason' => $this->when($this->status->is(OrderStatus::Cancelled), $this->cancellationReason),
+			'cancelledBy' => $this->when($this->status->is(OrderStatus::Cancelled), $this->cancelledBy),
+			'cancelledOn' => $this->when($this->status->is(OrderStatus::Cancelled), Time::mysqlStamp(strtotime($this->cancelledOn))),
+			'dispatchedOn' => $this->when($this->status->is(OrderStatus::Dispatched) || $this->status->is(OrderStatus::ReadyForDispatch), Time::mysqlStamp(strtotime($this->dispatchedOn))),
+			'deliveredOn' => $this->when($this->status->is(OrderStatus::Delivered), Time::mysqlStamp(strtotime($this->deliveredOn))),
 		];
 	}
 }

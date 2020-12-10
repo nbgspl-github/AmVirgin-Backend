@@ -7,7 +7,7 @@
  * @author   Taylor Otwell <taylor@laravel.com>
  */
 
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Response;
 
 define('LARAVEL_START', microtime(true));
 
@@ -52,7 +52,9 @@ $app = require_once __DIR__ . '/../bootstrap/app.php';
 */
 
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
-
+/**
+ * @var $response Response
+ */
 $response = $kernel->handle(
 	$request = Illuminate\Http\Request::capture()
 );

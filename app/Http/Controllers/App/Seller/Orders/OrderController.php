@@ -3,34 +3,39 @@
 namespace App\Http\Controllers\App\Seller\Orders;
 
 use App\Http\Controllers\AppController;
-use App\Models\Order;
+use App\Models\SubOrder;
 use App\Resources\Orders\Seller\ListResource;
+use App\Resources\Orders\Seller\OrderResource;
+use Illuminate\Http\JsonResponse;
 use Throwable;
 
 class OrderController extends AppController
 {
-	public function index ()
+	public function index (): JsonResponse
 	{
 		$response = responseApp();
 		try {
-			$query = Order::query()->where('sellerId', $this->guard()->id());
+			$query = SubOrder::query()->where('sellerId', $this->guard()->id());
 			if (!empty(request('status'))) {
 				$query->where('status', request('status'));
 			}
-			$orderCollection = $query->paginate();
-			$total = $orderCollection->total();
-			$totalRec = $orderCollection->total();
-			$meta = [
-				'pagination' => [
-					'pages' => countRequiredPages($totalRec, request('per_page', 15)),
-					'current_page' => request('page', 1),
-					'items' => ['total' => $total, 'totalRec' => $totalRec, 'chunk' => request('per_page', 15)],
-				],
-			];
-			$resourceCollection = ListResource::collection($orderCollection);
-			$response->status(HttpOkay)->setValue('data', $resourceCollection)->setValue('meta', $meta);
+			$resourceCollection = ListResource::collection($query->paginate());
+			$response->status(HttpOkay)->setPayload($resourceCollection->response()->getData());
 		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
+		} finally {
+			return $response->send();
+		}
+	}
+
+	public function show (SubOrder $order): JsonResponse
+	{
+		$response = responseApp();
+		try {
+			$resource = new OrderResource($order);
+			$response->status(HttpOkay)->message('Listing order details for given key.')->setPayload($resource);
+		} catch (Throwable $exception) {
+			$response->status(HttpResourceNotFound)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

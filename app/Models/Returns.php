@@ -12,7 +12,7 @@ use Illuminate\Support\Carbon;
  * @package App\Models
  * @property Carbon $returnValidUntil
  * @property ?Customer $customer
- * @property ?OrderSegment $segment
+ * @property ?SubOrder $segment
  * @property Status $status
  */
 class Returns extends Model
@@ -30,7 +30,7 @@ class Returns extends Model
 
 	public function segment ()
 	{
-		return $this->belongsTo(OrderSegment::class, 'order_segment_id');
+		return $this->belongsTo(SubOrder::class, 'order_segment_id');
 	}
 
 	public function item ()

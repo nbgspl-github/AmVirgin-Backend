@@ -5,7 +5,7 @@ namespace App\Http\Controllers\App\Seller;
 use App\Enums\Seller\OrderStatus;
 use App\Http\Controllers\AppController;
 use App\Models\Auth\Seller;
-use App\Models\SellerOrder;
+use App\Models\SubOrder;
 use Illuminate\Http\JsonResponse;
 
 class DashboardController extends AppController
@@ -17,11 +17,8 @@ class DashboardController extends AppController
 		 */
 		$seller = $this->guard()->user();
 		$sales = 0;
-		$seller->orders()->with('order')->each(function (SellerOrder $sellerOrder) use (&$sales) {
-			$order = $sellerOrder->order;
-			if ($order != null) {
-				$sales += $order->total;
-			}
+		$seller->orders()->each(function (SubOrder $sellerOrder) use (&$sales) {
+			$sales += $sellerOrder->total;
 		});
 		$response = $this->response();
 		$payload = [
@@ -32,9 +29,14 @@ class DashboardController extends AppController
 			'delivered' => $seller->orders()->where('status', OrderStatus::Delivered)->count('id'),
 			'cancelled' => $seller->orders()->where('status', OrderStatus::Cancelled)->count('id'),
 			'pending' => $seller->orders()->where('status', OrderStatus::Pending)->count('id'),
-			'grossRevenue' => $sales
+			'grossRevenue' => $this->salesRevenue($sales)
 		];
 		return $response->status(HttpOkay)->message('Listing dashboard statistics.')->setValue('payload', $payload)->send();
+	}
+
+	public function salesRevenue ($sales): float
+	{
+		return 3.3 * $sales;
 	}
 
 	protected function guard ()

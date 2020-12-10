@@ -37,6 +37,6 @@ class OrderItem extends Model
 
 	public function segment (): BelongsTo
 	{
-		return $this->belongsTo(OrderSegment::class);
+		return $this->belongsTo(SubOrder::class);
 	}
 }

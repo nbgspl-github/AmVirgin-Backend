@@ -5,6 +5,7 @@ namespace App\Models\Auth;
 use App\Models\Brand;
 use App\Models\City;
 use App\Models\Country;
+use App\Models\SubOrder;
 use App\Models\Product;
 use App\Models\SellerBusinessDetail;
 use App\Models\SellerOrder;
@@ -73,7 +74,7 @@ class Seller extends Authenticatable implements JWTSubject
 
 	public function orders (): HasMany
 	{
-		return $this->hasMany(SellerOrder::class, 'sellerId');
+		return $this->hasMany(SubOrder::class, 'sellerId');
 	}
 
 	public function state (): BelongsTo
