@@ -15,6 +15,7 @@ use App\Resources\Shop\Customer\HomePage\EntertainmentSliderResource;
 use App\Resources\Shop\Customer\HomePage\TopPickResource;
 use App\Resources\Shop\Customer\HomePage\TrendingNowVideoResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Throwable;
 
 class HomePageController extends AppController
@@ -62,18 +63,15 @@ class HomePageController extends AppController
 			$sections->transform(function (PageSection $pageSection) {
 				$contents = Video::startQuery()
 					->displayable()
-					->language(request('languageId', null))
-					->includeExplicit(request('explicit', 0) == 1)
-					->genre(request('genre', null))
-					->subscriptionType(request('subscriptionType', null))
-					->section($pageSection->id())
-					->take($pageSection->visibleItemCount())
+					->section($pageSection->id)
+					->take($pageSection->visibleItemCount)
+					->applyFilters(true)
 					->get();
 				$contents = TopPickResource::collection($contents);
 				return [
-					'id' => $pageSection->id(),
-					'title' => $pageSection->title(),
-					'visibleItemCount' => $pageSection->visibleItemCount(),
+					'id' => $pageSection->id,
+					'title' => $pageSection->title,
+					'visibleItemCount' => $pageSection->visibleItemCount,
 					'items' => $contents,
 				];
 			});
@@ -91,11 +89,8 @@ class HomePageController extends AppController
 			 */
 			$trendingNow = Video::startQuery()
 				->displayable()
-				->language(request('languageId', null))
-				->includeExplicit(request('explicit', 0) == 1)
-				->genre(request('genre', null))
-				->subscriptionType(request('subscriptionType', null))
 				->trending()
+				->applyFilters(true)
 				->get();
 			$trendingNow = TrendingNowVideoResource::collection($trendingNow);
 			$data['trendingNow'] = $trendingNow;
@@ -106,18 +101,18 @@ class HomePageController extends AppController
 		}
 	}
 
-	public function showAllItemsInSection ($id)
+	public function showAllItemsInSection ($id): JsonResponse
 	{
 		$response = responseApp();
 		try {
 			$pageSection = PageSection::retrieve($id);
-			if (Str::equals($pageSection->type(), PageSectionType::Entertainment)) {
-				$contents = Video::startQuery()->displayable()->section($pageSection->id())->take($pageSection->visibleItemCount())->get();
+			if (Str::equals($pageSection->type, PageSectionType::Entertainment)) {
+				$contents = Video::startQuery()->displayable()->section($pageSection->id)->take($pageSection->visibleItemCount)->get();
 			} else {
-				$contents = Product::startQuery()->displayable()->promoted()->take($pageSection->visibleItemCount())->get();
+				$contents = Product::startQuery()->displayable()->promoted()->take($pageSection->visibleItemCount)->get();
 			}
 			$contents = TopPickResource::collection($contents);
-			$response->status(HttpOkay)->message(sprintf('Found %d items under %s.', $contents->count(), $pageSection->title()))->setValue('data', $contents);
+			$response->status(HttpOkay)->message(sprintf('Found %d items under %s.', $contents->count(), $pageSection->title))->setValue('data', $contents);
 		} catch (ModelNotFoundException $exception) {
 			$response->status(HttpResourceNotFound)->message('Could not find section for that key.');
 		} catch (Throwable $exception) {
@@ -127,12 +122,7 @@ class HomePageController extends AppController
 		}
 	}
 
-	protected function guard ()
-	{
-		return auth('customer-api');
-	}
-
-	public function trendingNow ()
+	public function trendingNow (): JsonResponse
 	{
 		$data = [];
 		try {
@@ -152,7 +142,7 @@ class HomePageController extends AppController
 		}
 	}
 
-	public function recommendedVideo ()
+	public function recommendedVideo (): JsonResponse
 	{
 		try {
 			$trendingNow = Video::startQuery()->displayable()->orderByDescending('rating')->limit(15)->get();
@@ -162,11 +152,14 @@ class HomePageController extends AppController
 				$msg = 'Successfully retrieved entertainment recommended video.';
 			}
 			$data['recommended'] = $trendingNow;
-
 			return responseApp()->status(HttpOkay)->message($msg)->setValue('data', $data)->send();
-
 		} catch (Throwable $e) {
 			return responseApp()->status(HttpServerError)->message($e)->setValue('data')->send();
 		}
+	}
+
+	protected function guard ()
+	{
+		return auth('customer-api');
 	}
 }

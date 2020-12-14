@@ -37,4 +37,9 @@ class SubOrder extends Model
 	{
 		return SubOrderQuery::begin();
 	}
+
+	public function seller (): BelongsTo
+	{
+		return $this->belongsTo(Seller::class, 'sellerId');
+	}
 }

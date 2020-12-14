@@ -2,20 +2,25 @@
 
 namespace App\Resources\Orders\Seller;
 
-use App\Enums\Seller\OrderStatus;
+use App\Enums\Orders\Status;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderResource extends JsonResource {
-	public function toArray ($request) {
-		$status = $this->order;
-		$status = $status != null ? $status->status() : OrderStatus::NotAvailable;
+/**
+ * Class OrderResource
+ * @package App\Resources\Orders\Seller
+ * @property Status $status
+ */
+class OrderResource extends JsonResource
+{
+	public function toArray ($request): array
+	{
 		return [
-			'key' => $this->id(),
-			'orderId' => $this->orderNumber(),
-			'status' => $this->status(), 
+			'key' => $this->id,
+			'orderId' => null,
+			'status' => $this->status,
 			'customer' => new OrderCustomerResource($this->customer),
 			'items' => OrderItemResource::collection($this->items),
-			'transitions' => OrderStatus::transitions(new OrderStatus($status)),
+			'transitions' => Status::transitions($this->status),
 		];
 	}
 }

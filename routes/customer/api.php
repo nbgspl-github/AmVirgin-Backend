@@ -131,15 +131,12 @@ Route::prefix('search')->group(function () {
 
 Route::prefix('orders')->middleware('auth:customer-api')->group(function () {
 	Route::get(Str::Empty, [\App\Http\Controllers\App\Customer\OrderController::class, 'index']);
-	Route::prefix('{id}')->group(function () {
-		Route::prefix('items')->group(static function () {
-			Route::get('{item}/return', [\App\Http\Controllers\App\Customer\Orders\ReturnController::class, 'return']);
-		});
+	Route::prefix('items')->group(function () {
+		Route::post('{item}/return', [\App\Http\Controllers\App\Customer\Orders\ReturnController::class, 'return']);
 	});
-	Route::get('{id}', [\App\Http\Controllers\App\Customer\OrderController::class, 'show']);
-	Route::get('{id}/track', [\App\Http\Controllers\App\Customer\OrderController::class, 'track']);
-	Route::put('{id}/cancel', [\App\Http\Controllers\App\Customer\OrderController::class, 'cancel']);
-	Route::put('{id}/return', [\App\Http\Controllers\App\Customer\OrderController::class, 'return']);
+	Route::get('{order}', [\App\Http\Controllers\App\Customer\OrderController::class, 'show']);
+	Route::get('{order}/track', [\App\Http\Controllers\App\Customer\OrderController::class, 'track']);
+	Route::put('{order}/cancel', [\App\Http\Controllers\App\Customer\Orders\CancellationController::class, 'cancel']);
 	Route::prefix('{order}')->group(static function () {
 		Route::put('return-now', [\App\Http\Controllers\App\Customer\Orders\StatusController::class, 'return']);
 	});

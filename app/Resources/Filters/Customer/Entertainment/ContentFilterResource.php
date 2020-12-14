@@ -8,52 +8,69 @@ use App\Models\VideoSource;
 use App\Resources\Filters\Customer\Entertainment\Country\ListResource as CountryList;
 use App\Resources\Filters\Customer\Entertainment\Genre\ListResource as GenreList;
 use App\Resources\Filters\Customer\Entertainment\Language\ListResource as LanguageList;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ContentFilterResource extends JsonResource
 {
-	public function toArray ($request)
+	public function toArray ($request): array
 	{
 		return [
 			'age' => $this->age(),
-			'rental' => $this->rental(),
+			'type' => $this->type(),
 			'genre' => $this->genres(),
 			'language' => $this->languages(),
 			'country' => $this->countries()
 		];
 	}
 
-	protected function age ()
+	protected function age (): array
 	{
 		return [
-			'Above 18',
-			'Below 18'
+			[
+				'key' => 0,
+				'value' => 'Below 18'
+			],
+			[
+				'key' => 1,
+				'value' => 'Above 18'
+			],
 		];
 	}
 
-	protected function rental ()
+	protected function type (): array
 	{
 		return [
-			'Rental'
+			[
+				'key' => 'free',
+				'value' => 'Free'
+			],
+			[
+				'key' => 'paid',
+				'value' => 'Paid'
+			],
+			[
+				'key' => 'subscription',
+				'value' => 'Subscription'
+			]
 		];
 	}
 
-	protected function genres ()
+	protected function genres (): AnonymousResourceCollection
 	{
 		return GenreList::collection(Genre::all());
 	}
 
-	protected function countries ()
+	protected function countries (): AnonymousResourceCollection
 	{
 		return CountryList::collection(Country::all());
 	}
 
-	protected function languages ()
+	protected function languages (): AnonymousResourceCollection
 	{
 		$availableLanguages = VideoSource::query()->select('mediaLanguageId')->distinct()->get();
 		$availableLanguages->transform(function (VideoSource $videoSource) {
-			$language = $videoSource->language;
-			return $language;
+			return $videoSource->language;
 		});
 		$availableLanguages = $availableLanguages->filter()->values();
 		return LanguageList::collection($availableLanguages);

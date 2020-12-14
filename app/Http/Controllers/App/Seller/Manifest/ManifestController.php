@@ -4,8 +4,10 @@ namespace App\Http\Controllers\App\Seller\Manifest;
 
 use App\Enums\Seller\OrderStatus;
 use App\Http\Controllers\AppController;
-use App\Models\SellerOrder;
+use App\Models\SubOrder;
 use App\Resources\Manifest\Seller\ListResource;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Throwable;
 
 class ManifestController extends AppController
@@ -15,43 +17,33 @@ class ManifestController extends AppController
 		parent::__construct();
 	}
 
-	public function show ()
+	public function show (): JsonResponse
 	{
 		$response = responseApp();
 		try {
 			if (is_array(request('orderId'))) {
-				$sellerOrderCollection = SellerOrder::query()->whereIn('id', request('orderId'))->where('sellerId', $this->userId())->get();
+				$subOrderCollection = SubOrder::startQuery()->whereIn('id', request('orderId', []))->useAuth()->get();
 				if (request('update', 0) == 1) {
-					$sellerOrderCollection->each(function (SellerOrder $sellerOrder) {
-						if ($sellerOrder->order()->exists()) {
-							$sellerOrder->update([
-								'status' => OrderStatus::PendingDispatch
-							]);
-							$sellerOrder->order->update([
-								'status' => OrderStatus::PendingDispatch
-							]);
-						}
+					$subOrderCollection->each(function (SubOrder $subOrder) {
+						$subOrder->update([
+							'status' => OrderStatus::PendingDispatch
+						]);
 					});
 				}
-				$resourceCollection = ListResource::collection($sellerOrderCollection);
+				$resourceCollection = ListResource::collection($subOrderCollection);
 				$response->status($resourceCollection->count() > 0 ? HttpOkay : HttpNoContent)->message('Listing all details for order keys.')->setValue('payload', $resourceCollection);
 			} else {
-				$sellerOrder = SellerOrder::query()->whereKey(request('orderId'))->where('sellerId', $this->userId())->first();
-				if (request('update', 0) == 1) {
-					if ($sellerOrder->order()->exists()) {
-						$sellerOrder->update([
-							'status' => OrderStatus::PendingDispatch
-						]);
-						$sellerOrder->order->update([
-							'status' => OrderStatus::PendingDispatch
-						]);
-					}
+				$subOrder = SubOrder::startQuery()->key(request('orderId'))->useAuth()->first();
+				if (request('update', 0) == 1 && $subOrder != null) {
+					$subOrder->update([
+						'status' => OrderStatus::PendingDispatch
+					]);
 				}
-				$resource = new ListResource($sellerOrder);
+				$resource = new ListResource($subOrder);
 				$response->status(HttpOkay)->message('Listing all details for order.')->setValue('payload', $resource);
 			}
-		} catch (Throwable $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage());
+		} catch (Throwable $e) {
+			$response->status(Response::HTTP_INTERNAL_SERVER_ERROR)->message($e->getMessage());
 		} finally {
 			return $response->send();
 		}

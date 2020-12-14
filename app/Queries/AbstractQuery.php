@@ -179,4 +179,10 @@ abstract class AbstractQuery
 		$this->query->whereBetween($timestamp, [$monthBegin, $monthEnd]);
 		return $this;
 	}
+
+	public function whereIn (string $column, array $items): self
+	{
+		$this->query->whereIn($column, $items);
+		return $this;
+	}
 }

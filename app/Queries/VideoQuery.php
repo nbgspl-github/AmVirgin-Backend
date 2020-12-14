@@ -2,9 +2,11 @@
 
 namespace App\Queries;
 
+use App\Classes\Str;
 use App\Classes\Time;
 use App\Models\MediaLanguage;
 use App\Models\Video;
+use Illuminate\Database\Eloquent\Builder;
 
 class VideoQuery extends AbstractQuery
 {
@@ -63,7 +65,7 @@ class VideoQuery extends AbstractQuery
 		return $this;
 	}
 
-	public function language ($languageId = null)
+	public function language ($languageId = null): self
 	{
 		$language = MediaLanguage::find($languageId);
 		if ($language != null) {
@@ -73,7 +75,7 @@ class VideoQuery extends AbstractQuery
 		return $this;
 	}
 
-	public function includeExplicit ($include = false)
+	public function includeExplicit ($include = false): self
 	{
 		if ($include == true) {
 			$this->query->whereIn('pgRating', ['G', 'PG', 'PG-13', 'R', 'NC-17']);
@@ -83,10 +85,35 @@ class VideoQuery extends AbstractQuery
 		return $this;
 	}
 
-	public function subscriptionType ($subscriptionType = null)
+	public function subscriptionType ($subscriptionType = null): self
 	{
 		if ($subscriptionType != null) {
 			$this->query->where('subscriptionType', $subscriptionType);
+		}
+		return $this;
+	}
+
+	public function applyFilters (bool $apply = true): self
+	{
+		if ($apply) {
+			$languages = Str::split(',', request('language'), true);
+			if (count($languages) > 0) {
+				$this->query->whereHas('sources', function (Builder $q) use ($languages) {
+					$q->whereIn('mediaLanguageId', $languages);
+				});
+			}
+			$genres = Str::split(',', request('genre'), true);
+			if (count($genres) > 0) {
+				$this->query->whereIn('genreId', $genres);
+			}
+
+			$subscription = Str::split(',', request('type'), true);
+			if (count($subscription) > 0) {
+				$this->query->whereIn('subscriptionType', $subscription);
+			}
+
+			$rating = (request('explicit', 0) == 1) ? ['G', 'PG', 'PG-13', 'R', 'NC-17'] : ['G', 'PG', 'PG-13', 'R'];
+			$this->query->whereIn('pgRating', $rating);
 		}
 		return $this;
 	}

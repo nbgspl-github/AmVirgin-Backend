@@ -524,9 +524,9 @@ class Video extends Model
 	/**
 	 * @return HasMany
 	 */
-	public function sources ()
+	public function sources (): HasMany
 	{
-		return $this->hasMany('App\Models\VideoSource', 'videoId');
+		return $this->hasMany(VideoSource::class, 'videoId');
 	}
 
 	/**

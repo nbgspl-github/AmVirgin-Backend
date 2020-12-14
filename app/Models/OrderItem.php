@@ -21,11 +21,11 @@ class OrderItem extends Model
 	use DynamicAttributeNamedMethods, RetrieveResource;
 
 	protected $guarded = ['id'];
-	protected $casts = ['options' => 'array'];
+	protected $casts = ['options' => 'array', 'returnable' => 'bool'];
 	protected $dates = ['returnValidUntil'];
 
 
-	public function product ()
+	public function product (): \Illuminate\Database\Eloquent\Relations\HasOne
 	{
 		return $this->hasOne(Product::class, 'id', 'productId')->with('images');
 	}
@@ -35,8 +35,8 @@ class OrderItem extends Model
 		return $this->hasMany(Returns::class);
 	}
 
-	public function segment (): BelongsTo
+	public function subOrder (): BelongsTo
 	{
-		return $this->belongsTo(SubOrder::class);
+		return $this->belongsTo(SubOrder::class, 'subOrderId');
 	}
 }

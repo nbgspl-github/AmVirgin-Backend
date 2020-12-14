@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Auth\Customer;
+use App\Models\Auth\Seller;
 use App\Queries\AbstractQuery;
 use App\Traits\FluentResponse;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -16,6 +18,9 @@ abstract class AppController extends BaseController
 	protected const CustomerAPI = 'customer-api';
 	protected const SellerAPI = 'seller-api';
 
+	/**
+	 * @return Seller|Customer
+	 */
 	protected function user ()
 	{
 		return $this->guard()->user();

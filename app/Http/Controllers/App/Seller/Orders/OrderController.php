@@ -7,6 +7,7 @@ use App\Models\SubOrder;
 use App\Resources\Orders\Seller\ListResource;
 use App\Resources\Orders\Seller\OrderResource;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Throwable;
 
 class OrderController extends AppController
@@ -32,8 +33,12 @@ class OrderController extends AppController
 	{
 		$response = responseApp();
 		try {
-			$resource = new OrderResource($order);
-			$response->status(HttpOkay)->message('Listing order details for given key.')->setPayload($resource);
+			if ($order->seller != null && $order->seller->is($this->user())) {
+				$resource = new OrderResource($order);
+				$response->status(HttpOkay)->message('Listing order details for given key.')->setPayload($resource);
+			} else {
+				$response->status(Response::HTTP_FORBIDDEN)->message('View details is not available for this order.')->setPayload();
+			}
 		} catch (Throwable $exception) {
 			$response->status(HttpResourceNotFound)->message($exception->getMessage());
 		} finally {

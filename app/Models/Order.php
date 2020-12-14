@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * Class Order
  * @package App\Models
  * @property Status $status
+ * @property ?Customer $customer
  */
 class Order extends Model
 {
