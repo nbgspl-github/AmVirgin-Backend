@@ -26,58 +26,7 @@ class Product extends Model
 {
 	use FluentConstructor, RetrieveResource, RetrieveCollection, DynamicAttributeNamedMethods, HasSpecialAttributes, GenerateSlugs, SoftDeletes, HasSku, QueryProvider, HasInventoryStocks;
 
-	protected $table = 'products';
-	protected $fillable = [
-		'name',
-		'slug',
-		'categoryId',
-		'sellerId',
-		'brandId',
-		'listingStatus',
-		'type',
-		'originalPrice',
-		'sellingPrice',
-		'fulfillmentBy',
-		'group',
-		'hsn',
-		'currency',
-		'taxRate',
-		'promoted',
-		'promotionStart',
-		'promotionEnd',
-		'rating',
-		'stock',
-		'draft',
-		'parentId',
-		'description',
-		'sku',
-		'styleCode',
-		'trailer',
-		'procurementSla',
-		'localShippingCost',
-		'zonalShippingCost',
-		'internationalShippingCost',
-		'packageWeight',
-		'packageLength',
-		'packageBreadth',
-		'packageHeight',
-		'domesticWarranty',
-		'internationalWarranty',
-		'warrantySummary',
-		'warrantyServiceType',
-		'coveredInWarranty',
-		'notCoveredInWarranty',
-		'maxQuantityPerOrder',
-		'lowStockThreshold',
-		'discount',
-		'primaryImage',
-		'specials',
-		'idealFor',
-		'primaryImageIndex',
-		'approved',
-		'approvedBy',
-		'approvedAt'
-	];
+	protected $guarded = ['id'];
 	protected $hidden = [
 		'id',
 		'deletedAt',
@@ -156,15 +105,11 @@ class Product extends Model
 		'Boys' => 'boys',
 		'Girls' => 'girls',
 	];
-	public const PaymentMode = [
-		'PayTM' => 'pay-tm',
-		'UPI' => 'upi',
-		'COD' => 'cash-on-delivery',
-		'NetBanking' => 'net-banking',
-		'CreditCard' => 'credit-card',
-		'DebitCard' => 'debit-card',
-		'PayPal' => 'pay-pal',
-	];
+
+	public function shippingCost (): float
+	{
+		return 3.3;
+	}
 
 	public function attributes (): HasMany
 	{

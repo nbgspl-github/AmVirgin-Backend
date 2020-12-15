@@ -1,20 +1,20 @@
 <?php
 
 use App\Classes\Str;
-use App\Http\Controllers\App\Seller\Attributes\ListController;
-use App\Http\Controllers\App\Seller\Attributes\ProductAttributeController;
-use App\Http\Controllers\App\Seller\Attributes\ValueController;
-use App\Http\Controllers\App\Seller\AuthController;
-use App\Http\Controllers\App\Seller\CategoryController;
-use App\Http\Controllers\App\Seller\CityController;
-use App\Http\Controllers\App\Seller\CountryController;
-use App\Http\Controllers\App\Seller\CurrencyController;
-use App\Http\Controllers\App\Seller\HsnCodeController;
-use App\Http\Controllers\App\Seller\OrderController;
-use App\Http\Controllers\App\Seller\ProductImageController;
-use App\Http\Controllers\App\Seller\Products\ProductController;
-use App\Http\Controllers\App\Seller\StateController;
-use App\Http\Controllers\App\Seller\TwoFactorAuthController;
+use App\Http\Controllers\Api\Seller\Attributes\ListController;
+use App\Http\Controllers\Api\Seller\Attributes\ProductAttributeController;
+use App\Http\Controllers\Api\Seller\Attributes\ValueController;
+use App\Http\Controllers\Api\Seller\AuthController;
+use App\Http\Controllers\Api\Seller\CategoryController;
+use App\Http\Controllers\Api\Seller\CityController;
+use App\Http\Controllers\Api\Seller\CountryController;
+use App\Http\Controllers\Api\Seller\CurrencyController;
+use App\Http\Controllers\Api\Seller\HsnCodeController;
+use App\Http\Controllers\Api\Seller\OrderController;
+use App\Http\Controllers\Api\Seller\ProductImageController;
+use App\Http\Controllers\Api\Seller\Products\ProductController;
+use App\Http\Controllers\Api\Seller\StateController;
+use App\Http\Controllers\Api\Seller\TwoFactorAuthController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix(Str::Empty)->group(static function () {
@@ -30,13 +30,13 @@ Route::prefix(Str::Empty)->group(static function () {
 		Route::put('password', [AuthController::class, 'updatePassword'])->middleware(AuthSeller);
 
 		Route::prefix('business-details')->middleware(AuthSeller)->group(static function () {
-			Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\BusinessDetailController::class, 'show']);
-			Route::post(Str::Empty, [\App\Http\Controllers\App\Seller\BusinessDetailController::class, 'update']);
+			Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\BusinessDetailController::class, 'show']);
+			Route::post(Str::Empty, [\App\Http\Controllers\Api\Seller\BusinessDetailController::class, 'update']);
 		});
 
 		Route::prefix('bank-details')->middleware(AuthSeller)->group(static function () {
-			Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\BankDetailController::class, 'show']);
-			Route::post(Str::Empty, [\App\Http\Controllers\App\Seller\BankDetailController::class, 'update']);
+			Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\BankDetailController::class, 'show']);
+			Route::post(Str::Empty, [\App\Http\Controllers\Api\Seller\BankDetailController::class, 'update']);
 		});
 
 		Route::prefix('contact-details')->group(static function () {
@@ -48,9 +48,9 @@ Route::prefix(Str::Empty)->group(static function () {
 		});
 
 		Route::prefix('mou')->group(static function () {
-			Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\AgreementController::class, 'show']);
-			Route::get('status', [\App\Http\Controllers\App\Seller\AgreementController::class, 'index'])->middleware(AuthSeller);
-			Route::put(Str::Empty, [\App\Http\Controllers\App\Seller\AgreementController::class, 'update'])->middleware(AuthSeller);
+			Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\AgreementController::class, 'show']);
+			Route::get('status', [\App\Http\Controllers\Api\Seller\AgreementController::class, 'index'])->middleware(AuthSeller);
+			Route::put(Str::Empty, [\App\Http\Controllers\Api\Seller\AgreementController::class, 'update'])->middleware(AuthSeller);
 		});
 	});
 });
@@ -85,7 +85,7 @@ Route::middleware(AuthSeller)->prefix('products')->group(function () {
 	});
 
 	Route::prefix('trailer')->group(function () {
-		Route::post('upload', [\App\Http\Controllers\App\Seller\Products\ProductTrailerController::class, 'store']);
+		Route::post('upload', [\App\Http\Controllers\Api\Seller\Products\ProductTrailerController::class, 'store']);
 	});
 });
 
@@ -100,10 +100,10 @@ Route::prefix('countries')->group(function () {
 });
 
 Route::prefix('orders')->middleware('auth:seller-api')->group(function () {
-	Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\Orders\OrderController::class, 'index']);
-	Route::get('{order}', [\App\Http\Controllers\App\Seller\Orders\OrderController::class, 'show']);
-	Route::put('{order}/status', [\App\Http\Controllers\App\Seller\Orders\Status\StatusController::class, 'update']);
-	Route::put('status', [\App\Http\Controllers\App\Seller\Orders\Status\BulkStatusController::class, 'update']);
+	Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\Orders\OrderController::class, 'index']);
+	Route::get('{order}', [\App\Http\Controllers\Api\Seller\Orders\OrderController::class, 'show']);
+	Route::put('{order}/status', [\App\Http\Controllers\Api\Seller\Orders\Status\StatusController::class, 'update']);
+	Route::put('status', [\App\Http\Controllers\Api\Seller\Orders\Status\BulkStatusController::class, 'update']);
 	Route::put('status/batch-update', [OrderController::class, 'updateStatusBulk']);
 });
 
@@ -112,64 +112,64 @@ Route::prefix('hsn')->group(function () {
 });
 
 Route::prefix('brands')->middleware('auth:seller-api')->group(function () {
-	Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\BrandController::class, 'index']);
-	Route::get('approved', [\App\Http\Controllers\App\Seller\BrandController::class, 'show']);
-	Route::get('all', [\App\Http\Controllers\App\Seller\ApprovedBrandController::class, 'index']);
-	Route::post('approval', [\App\Http\Controllers\App\Seller\BrandController::class, 'store']);
+	Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\BrandController::class, 'index']);
+	Route::get('approved', [\App\Http\Controllers\Api\Seller\BrandController::class, 'show']);
+	Route::get('all', [\App\Http\Controllers\Api\Seller\ApprovedBrandController::class, 'index']);
+	Route::post('approval', [\App\Http\Controllers\Api\Seller\BrandController::class, 'store']);
 });
 
 Route::prefix('announcements')->group(function () {
-	Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\AnnouncementController::class, 'index'])->middleware(AuthSeller);
-	Route::put('{id}/mark', [\App\Http\Controllers\App\Seller\AnnouncementController::class, 'mark'])->middleware(AuthSeller);
+	Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\AnnouncementController::class, 'index'])->middleware(AuthSeller);
+	Route::put('{id}/mark', [\App\Http\Controllers\Api\Seller\AnnouncementController::class, 'mark'])->middleware(AuthSeller);
 });
 
 Route::prefix('support')->group(static function () {
 	Route::prefix('tickets')->group(static function () {
-		Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\SupportController::class, 'index'])->middleware(AuthSeller);
-		Route::post(Str::Empty, [\App\Http\Controllers\App\Seller\SupportController::class, 'store'])->middleware(AuthSeller);
+		Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\SupportController::class, 'index'])->middleware(AuthSeller);
+		Route::post(Str::Empty, [\App\Http\Controllers\Api\Seller\SupportController::class, 'store'])->middleware(AuthSeller);
 	});
 });
 
 Route::prefix('payments')->group(static function () {
-	Route::get('overview', [\App\Http\Controllers\App\Seller\Payments\OverviewController::class, 'show'])->middleware(AuthSeller);
+	Route::get('overview', [\App\Http\Controllers\Api\Seller\Payments\OverviewController::class, 'show'])->middleware(AuthSeller);
 	Route::get('transaction', [OrderController::class, 'getPaymentsTransaction'])->middleware(AuthSeller);
 	Route::get('previous', [OrderController::class, 'getPreviousPayments'])->middleware(AuthSeller);
 });
 
 Route::prefix('sales')->group(static function () {
-	Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\Payments\OverviewController::class, 'totalSales'])->middleware(AuthSeller);
+	Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\Payments\OverviewController::class, 'totalSales'])->middleware(AuthSeller);
 });
 
 Route::prefix('growth')->group(static function () {
-	Route::get('overview', [\App\Http\Controllers\App\Seller\Growth\OverviewController::class, 'show'])->middleware(AuthSeller);
+	Route::get('overview', [\App\Http\Controllers\Api\Seller\Growth\OverviewController::class, 'show'])->middleware(AuthSeller);
 });
 
 Route::prefix('promotions')->middleware(AuthSeller)->group(static function () {
-	Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\AdvertisementController::class, 'index']);
-	Route::post(Str::Empty, [\App\Http\Controllers\App\Seller\AdvertisementController::class, 'store']);
-	Route::get('{advertisement}', [\App\Http\Controllers\App\Seller\AdvertisementController::class, 'show']);
-	Route::post('{advertisement}/update', [\App\Http\Controllers\App\Seller\AdvertisementController::class, 'update']);
-	Route::delete('{advertisement}', [\App\Http\Controllers\App\Seller\AdvertisementController::class, 'delete']);
+	Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\AdvertisementController::class, 'index']);
+	Route::post(Str::Empty, [\App\Http\Controllers\Api\Seller\AdvertisementController::class, 'store']);
+	Route::get('{advertisement}', [\App\Http\Controllers\Api\Seller\AdvertisementController::class, 'show']);
+	Route::post('{advertisement}/update', [\App\Http\Controllers\Api\Seller\AdvertisementController::class, 'update']);
+	Route::delete('{advertisement}', [\App\Http\Controllers\Api\Seller\AdvertisementController::class, 'delete']);
 });
 
 Route::prefix('bulk')->group(static function () {
-	Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\Products\BulkTemplateController::class, 'show']);
-	Route::post(Str::Empty, [\App\Http\Controllers\App\Seller\Products\BulkProductController::class, 'store'])->middleware(AuthSeller);
-	Route::post('images', [\App\Http\Controllers\App\Seller\Products\BulkImageController::class, 'store']);
+	Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\Products\BulkTemplateController::class, 'show']);
+	Route::post(Str::Empty, [\App\Http\Controllers\Api\Seller\Products\BulkProductController::class, 'store'])->middleware(AuthSeller);
+	Route::post('images', [\App\Http\Controllers\Api\Seller\Products\BulkImageController::class, 'store']);
 });
 
 Route::prefix('manifest')->group(static function () {
-	Route::get('download', [\App\Http\Controllers\App\Seller\Manifest\ManifestController::class, 'show']);
+	Route::get('download', [\App\Http\Controllers\Api\Seller\Manifest\ManifestController::class, 'show']);
 });
 
 Route::prefix('dashboard')->group(static function () {
-	Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\DashboardController::class, 'index'])->middleware(AuthSeller);
+	Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\DashboardController::class, 'index'])->middleware(AuthSeller);
 });
 
 Route::prefix('returns')->group(function () {
-	Route::get(Str::Empty, [\App\Http\Controllers\App\Seller\Orders\Returns\ReturnController::class, 'index']);
+	Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\Orders\Returns\ReturnController::class, 'index']);
 	Route::prefix('{return}')->group(function () {
-		Route::post('approve', [\App\Http\Controllers\App\Seller\Orders\Returns\ReturnController::class, 'approve']);
-		Route::post('disapprove', [\App\Http\Controllers\App\Seller\Orders\Returns\ReturnController::class, 'disapprove']);
+		Route::post('approve', [\App\Http\Controllers\Api\Seller\Orders\Returns\ReturnController::class, 'approve']);
+		Route::post('disapprove', [\App\Http\Controllers\Api\Seller\Orders\Returns\ReturnController::class, 'disapprove']);
 	});
 });

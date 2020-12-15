@@ -1,20 +1,20 @@
 <?php
 
 use App\Classes\Str;
-use App\Http\Controllers\App\Customer\AuthController;
-use App\Http\Controllers\App\Customer\Cart\CustomerWishlistController;
-use App\Http\Controllers\App\Customer\Cart\QuoteController;
-use App\Http\Controllers\App\Customer\CatalogController;
-use App\Http\Controllers\App\Customer\CitiesController;
-use App\Http\Controllers\App\Customer\CountriesController;
-use App\Http\Controllers\App\Customer\Entertainment\HomePageController as EntertainmentHomeController;
-use App\Http\Controllers\App\Customer\GlobalSearchController;
-use App\Http\Controllers\App\Customer\ShippingAddressesController;
-use App\Http\Controllers\App\Customer\Shop\HomePageController as ShopHomeController;
-use App\Http\Controllers\App\Customer\Shop\ProductRatingController;
-use App\Http\Controllers\App\Customer\StatesController;
-use App\Http\Controllers\App\Customer\SubscriptionController;
-use App\Http\Controllers\App\Customer\TwoFactorAuthController;
+use App\Http\Controllers\Api\Customer\AuthController;
+use App\Http\Controllers\Api\Customer\Cart\CustomerWishlistController;
+use App\Http\Controllers\Api\Customer\Cart\QuoteController;
+use App\Http\Controllers\Api\Customer\CatalogController;
+use App\Http\Controllers\Api\Customer\CitiesController;
+use App\Http\Controllers\Api\Customer\CountriesController;
+use App\Http\Controllers\Api\Customer\Entertainment\HomePageController as EntertainmentHomeController;
+use App\Http\Controllers\Api\Customer\GlobalSearchController;
+use App\Http\Controllers\Api\Customer\ShippingAddressesController;
+use App\Http\Controllers\Api\Customer\Shop\HomePageController as ShopHomeController;
+use App\Http\Controllers\Api\Customer\Shop\ProductRatingController;
+use App\Http\Controllers\Api\Customer\StatesController;
+use App\Http\Controllers\Api\Customer\SubscriptionController;
+use App\Http\Controllers\Api\Customer\TwoFactorAuthController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix(Str::Empty)->group(function () {
@@ -29,26 +29,26 @@ Route::prefix(Str::Empty)->group(function () {
 		Route::put(Str::Empty, [AuthController::class, 'updateProfile']);
 		Route::put('password', [AuthController::class, 'updatePassword']);
 	});
-	Route::post('contact-us', [\App\Http\Controllers\App\Customer\ContactUsController::class, 'store']);
+	Route::post('contact-us', [\App\Http\Controllers\Api\Customer\ContactUsController::class, 'store']);
 });
 
 Route::prefix('videos')->group(function () {
-	Route::get('/{id}', [\App\Http\Controllers\App\Customer\VideosController::class, 'show']);
+	Route::get('/{id}', [\App\Http\Controllers\Api\Customer\VideosController::class, 'show']);
 });
 
 Route::prefix('categories')->group(function () {
-	Route::get('/', [\App\Http\Controllers\App\Customer\CategoryController::class, 'index']);
-	Route::get('filters', [\App\Http\Controllers\App\Customer\FilterController::class, 'show']);
+	Route::get('/', [\App\Http\Controllers\Api\Customer\CategoryController::class, 'index']);
+	Route::get('filters', [\App\Http\Controllers\Api\Customer\FilterController::class, 'show']);
 });
 
 Route::prefix('sessions')->group(function () {
-	Route::get('/start', [\App\Http\Controllers\App\Customer\Session\SessionController::class, 'create']);
-	Route::get('/{sessionId}', [\App\Http\Controllers\App\Customer\Session\SessionController::class, 'check']);
+	Route::get('/start', [\App\Http\Controllers\Api\Customer\Session\SessionController::class, 'create']);
+	Route::get('/{sessionId}', [\App\Http\Controllers\Api\Customer\Session\SessionController::class, 'check']);
 });
 
 Route::prefix('products')->group(function () {
 	Route::get('/', [CatalogController::class, 'index']);
-	Route::get('/sorts', [\App\Http\Controllers\App\Customer\SortController::class, 'sorts']);
+	Route::get('/sorts', [\App\Http\Controllers\Api\Customer\SortController::class, 'sorts']);
 	Route::prefix('{id}')->group(static function () {
 		Route::get(Str::Empty, [CatalogController::class, 'show']);
 		Route::prefix('reviews')->group(static function () {
@@ -71,8 +71,8 @@ Route::prefix('cart')->middleware([])->group(function () {
 });
 
 Route::prefix('checkout/{order}')->group(function () {
-	Route::post('initiate', [\App\Http\Controllers\App\Customer\Cart\CheckoutController::class, 'initiate']);
-	Route::post('verify', [\App\Http\Controllers\App\Customer\Cart\CheckoutController::class, 'verify']);
+	Route::post('initiate', [\App\Http\Controllers\Api\Customer\Cart\CheckoutController::class, 'initiate']);
+	Route::post('verify', [\App\Http\Controllers\Api\Customer\Cart\CheckoutController::class, 'verify']);
 });
 
 Route::prefix('wishlist')->middleware('auth:customer-api')->group(function () {
@@ -105,7 +105,7 @@ Route::prefix('entertainment')->group(function () {
 		Route::get('/', [EntertainmentHomeController::class, 'recommendedVideo']);
 	});
 
-	Route::get('filters', [\App\Http\Controllers\App\Customer\Entertainment\ContentFilterController::class, 'index']);
+	Route::get('filters', [\App\Http\Controllers\Api\Customer\Entertainment\ContentFilterController::class, 'index']);
 });
 
 Route::prefix('addresses')->middleware('auth:customer-api')->group(function () {
@@ -130,15 +130,15 @@ Route::prefix('search')->group(function () {
 });
 
 Route::prefix('orders')->middleware('auth:customer-api')->group(function () {
-	Route::get(Str::Empty, [\App\Http\Controllers\App\Customer\OrderController::class, 'index']);
+	Route::get(Str::Empty, [\App\Http\Controllers\Api\Customer\OrderController::class, 'index']);
 	Route::prefix('items')->group(function () {
-		Route::post('{item}/return', [\App\Http\Controllers\App\Customer\Orders\ReturnController::class, 'return']);
+		Route::post('{item}/return', [\App\Http\Controllers\Api\Customer\Orders\ReturnController::class, 'return']);
 	});
-	Route::get('{order}', [\App\Http\Controllers\App\Customer\OrderController::class, 'show']);
-	Route::get('{order}/track', [\App\Http\Controllers\App\Customer\OrderController::class, 'track']);
-	Route::put('{order}/cancel', [\App\Http\Controllers\App\Customer\Orders\CancellationController::class, 'cancel']);
+	Route::get('{order}', [\App\Http\Controllers\Api\Customer\OrderController::class, 'show']);
+	Route::get('{order}/track', [\App\Http\Controllers\Api\Customer\OrderController::class, 'track']);
+	Route::put('{order}/cancel', [\App\Http\Controllers\Api\Customer\Orders\CancellationController::class, 'cancel']);
 	Route::prefix('{order}')->group(static function () {
-		Route::put('return-now', [\App\Http\Controllers\App\Customer\Orders\StatusController::class, 'return']);
+		Route::put('return-now', [\App\Http\Controllers\Api\Customer\Orders\StatusController::class, 'return']);
 	});
 });
 
@@ -147,35 +147,35 @@ Route::prefix('recent')->middleware('auth:customer-api')->group(function () {
 });
 
 Route::prefix('brands')->group(function () {
-	Route::get('{id}', [\App\Http\Controllers\App\Customer\Shop\BrandController::class, 'show']);
+	Route::get('{id}', [\App\Http\Controllers\Api\Customer\Shop\BrandController::class, 'show']);
 });
 
 Route::prefix('watch-later')->group(function () {
-	Route::post(Str::Empty, [\App\Http\Controllers\App\Customer\VideosController::class, 'addInWatchLater'])->name('customer.addInWatchLater')->middleware('auth:customer-api');
+	Route::post(Str::Empty, [\App\Http\Controllers\Api\Customer\VideosController::class, 'addInWatchLater'])->name('customer.addInWatchLater')->middleware('auth:customer-api');
 
-	Route::delete('/remove/{id}', [\App\Http\Controllers\App\Customer\VideosController::class, 'removeWatchLater'])->name('customer.removeWatchLater')->middleware('auth:customer-api');
+	Route::delete('/remove/{id}', [\App\Http\Controllers\Api\Customer\VideosController::class, 'removeWatchLater'])->name('customer.removeWatchLater')->middleware('auth:customer-api');
 
-	Route::get(Str::Empty, [\App\Http\Controllers\App\Customer\VideosController::class, 'getWatchLaterVideo'])->name('customer.getWatchLaterVideo')->middleware('auth:customer-api');
+	Route::get(Str::Empty, [\App\Http\Controllers\Api\Customer\VideosController::class, 'getWatchLaterVideo'])->name('customer.getWatchLaterVideo')->middleware('auth:customer-api');
 });
 
 Route::prefix('languages')->group(static function () {
-	Route::get(Str::Empty, [\App\Http\Controllers\App\Customer\Entertainment\LanguageListController::class, 'index']);
+	Route::get(Str::Empty, [\App\Http\Controllers\Api\Customer\Entertainment\LanguageListController::class, 'index']);
 });
 
 Route::prefix('genres')->group(static function () {
-	Route::get(Str::Empty, [\App\Http\Controllers\App\Customer\Entertainment\GenreListController::class, 'index']);
+	Route::get(Str::Empty, [\App\Http\Controllers\Api\Customer\Entertainment\GenreListController::class, 'index']);
 });
 
 Route::prefix('news-categories')->group(static function () {
-	Route::get(Str::Empty, [\App\Http\Controllers\App\Customer\News\Categories\CategoryController::class, 'index']);
+	Route::get(Str::Empty, [\App\Http\Controllers\Api\Customer\News\Categories\CategoryController::class, 'index']);
 	Route::prefix('{id}')->group(static function () {
-		Route::get(Str::Empty, [\App\Http\Controllers\App\Customer\News\Categories\CategoryController::class, 'show']);
+		Route::get(Str::Empty, [\App\Http\Controllers\Api\Customer\News\Categories\CategoryController::class, 'show']);
 	});
 });
 
 Route::prefix('news')->group(static function () {
-	Route::get(Str::Empty, [\App\Http\Controllers\App\Customer\News\Categories\NewsController::class, 'index']);
-	Route::get('{id}/show', [\App\Http\Controllers\App\Customer\News\Categories\NewsController::class, 'show']);
+	Route::get(Str::Empty, [\App\Http\Controllers\Api\Customer\News\Categories\NewsController::class, 'index']);
+	Route::get('{id}/show', [\App\Http\Controllers\Api\Customer\News\Categories\NewsController::class, 'show']);
 });
 
 Route::prefix('test-routes')->group(function () {

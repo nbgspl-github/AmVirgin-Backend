@@ -24,14 +24,12 @@ class RouteServiceProvider extends ServiceProvider
 	protected function mapAdminRoutes ()
 	{
 		Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/admin/web.php'));
-		Route::prefix('api')->middleware('api')->namespace($this->namespace)->group(base_path('routes/admin/api.php'));
 	}
 
 	protected function mapSellerRoutes ()
 	{
 		Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/seller/web.php'));
 		Route::prefix('api/seller')->middleware('api')->namespace($this->namespace)->group(base_path('routes/seller/api.php'));
-		Route::prefix('api/seller')->middleware('api')->namespace($this->namespace)->group(base_path('routes/seller/shop.php'));
 	}
 
 	protected function mapCustomerRoutes ()
