@@ -130,12 +130,12 @@ Route::prefix('search')->group(function () {
 });
 
 Route::prefix('orders')->middleware('auth:customer-api')->group(function () {
-	Route::get(Str::Empty, [\App\Http\Controllers\Api\Customer\OrderController::class, 'index']);
+	Route::get(Str::Empty, [\App\Http\Controllers\Api\Customer\Orders\OrderController::class, 'index']);
 	Route::prefix('items')->group(function () {
 		Route::post('{item}/return', [\App\Http\Controllers\Api\Customer\Orders\ReturnController::class, 'return']);
 	});
-	Route::get('{order}', [\App\Http\Controllers\Api\Customer\OrderController::class, 'show']);
-	Route::get('{order}/track', [\App\Http\Controllers\Api\Customer\OrderController::class, 'track']);
+	Route::get('{order}', [\App\Http\Controllers\Api\Customer\Orders\OrderController::class, 'show']);
+	Route::get('{order}/track', [\App\Http\Controllers\Api\Customer\Orders\OrderController::class, 'track']);
 	Route::put('{order}/cancel', [\App\Http\Controllers\Api\Customer\Orders\CancellationController::class, 'cancel']);
 	Route::prefix('{order}')->group(static function () {
 		Route::put('return-now', [\App\Http\Controllers\Api\Customer\Orders\StatusController::class, 'return']);

@@ -17,6 +17,7 @@ abstract class ApiController extends BaseController
 
 	protected const CUSTOMER_API = 'customer-api';
 	protected const SELLER_API = 'seller-api';
+	protected const PAGINATION_PER_PAGE = 15;
 
 	/**
 	 * @return Seller|Customer
@@ -34,6 +35,15 @@ abstract class ApiController extends BaseController
 	protected function evaluate (callable $closure, ...$arguments)
 	{
 		return call_user_func($closure, $arguments);
+	}
+
+	/**
+	 * Returns the number of items to be displayed for the current pagination request.
+	 * @return int
+	 */
+	protected function paginationChunk () : int
+	{
+		return request('per_page', self::PAGINATION_PER_PAGE);
 	}
 
 	protected abstract function guard ();

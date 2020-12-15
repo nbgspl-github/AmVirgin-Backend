@@ -2,9 +2,11 @@
 
 namespace App\Exceptions;
 
-use Throwable;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Response;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -30,21 +32,29 @@ class Handler extends ExceptionHandler
 	/**
 	 * Report or log an exception.
 	 *
-	 * @param Throwable $exception
+	 * @param Throwable $e
 	 * @return void
 	 * @throws Throwable
 	 */
-	public function report (Throwable $exception)
+	public function report (Throwable $e)
 	{
-		parent::report($exception);
+		parent::report($e);
 	}
 
-	public function render ($request, Throwable $exception)
+	public function render ($request, Throwable $e)
 	{
 		if ($request->expectsJson()) {
-			return response()->json(['status' => 404, 'payload' => null], 404);
+			if ($e instanceof ModelNotFoundException) {
+				return response()->json(['status' => Response::HTTP_NOT_FOUND, 'payload' => null], Response::HTTP_NOT_FOUND);
+			} else if ($e instanceof \ErrorException) {
+				return response()->json(['status' => Response::HTTP_INTERNAL_SERVER_ERROR, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_INTERNAL_SERVER_ERROR);
+			} else if ($e instanceof ValidationException) {
+				return response()->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => $e->getError(), 'payload' => null], Response::HTTP_BAD_REQUEST);
+			} else {
+				return response()->json(['status' => Response::HTTP_INTERNAL_SERVER_ERROR, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_INTERNAL_SERVER_ERROR);
+			}
 		}
-		return parent::render($request, $exception);
+		return parent::render($request, $e);
 	}
 
 	protected function unauthenticated ($request, AuthenticationException $exception)
@@ -52,9 +62,7 @@ class Handler extends ExceptionHandler
 		if ($request->expectsJson()) {
 			return response()->json(['error' => 'Unauthenticated.'], 401);
 		}
-
 		$guard = $exception->guards()[0];
-
 		switch ($guard) {
 			case 'admin':
 				$login = 'admin.login';
@@ -68,7 +76,6 @@ class Handler extends ExceptionHandler
 				$login = 'customer.login';
 				break;
 		}
-
 		return redirect()->guest(route($login));
 	}
 }

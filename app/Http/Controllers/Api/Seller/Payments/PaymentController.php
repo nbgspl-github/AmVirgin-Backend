@@ -24,10 +24,13 @@ class PaymentController extends ApiController
 	{
 		$response = responseApp();
 		try {
-			$overview = new \stdClass();
-			$this->query()->each(function (SubOrder $order) use (&$overview) {
-
+			$payload = $this->makePayload();
+			$this->query()->each(function (SubOrder $order) use (&$payload) {
+				$payload->total->prepaid += $order->total;
+				$payload->total->postpaid += $order->total;
+				$payload->total->total += $order->total;
 			});
+			$response->status(Response::HTTP_OK)->setPayload($payload);
 		} catch (\Throwable $e) {
 			$response->status(Response::HTTP_INTERNAL_SERVER_ERROR)->message($e->getMessage());
 		} finally {
@@ -70,7 +73,7 @@ class PaymentController extends ApiController
 		return $cost;
 	}
 
-	protected function makeOverview () : \stdClass
+	protected function makePayload () : \stdClass
 	{
 		return (object)[
 			'next' => [

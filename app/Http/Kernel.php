@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Classes\Arrays;
+use App\Http\Middleware\SetAcceptHeaderIfNotPresent;
 use Exception;
 use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -46,6 +47,7 @@ class Kernel extends HttpKernel
 		'api' => [
 			'throttle:500,1',
 			'bindings',
+			SetAcceptHeaderIfNotPresent::class
 		],
 	];
 

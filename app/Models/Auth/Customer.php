@@ -22,6 +22,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+/**
+ * Class Customer
+ * @package App\Models\Auth
+ * @property Order[] $orders
+ */
 class Customer extends Authenticatable implements JWTSubject
 {
 	use Notifiable, BroadcastPushNotifications, HashPasswords, RetrieveResource, RetrieveCollection;

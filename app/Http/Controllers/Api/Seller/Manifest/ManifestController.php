@@ -17,7 +17,7 @@ class ManifestController extends ApiController
 		parent::__construct();
 	}
 
-	public function show (): JsonResponse
+	public function show () : JsonResponse
 	{
 		$response = responseApp();
 		try {

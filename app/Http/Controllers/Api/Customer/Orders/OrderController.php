@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\Customer\Orders;
 
 use App\Http\Controllers\Api\ApiController;
+use App\Models\Order;
 use App\Resources\Orders\Customer\OrderResource;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Throwable;
+use App\Resources\Orders\Customer\OrderTrackingResource;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class OrderController extends ApiController
 {
@@ -14,34 +16,32 @@ class OrderController extends ApiController
 		parent::__construct();
 	}
 
-	public function index ()
+	public function index () : JsonResponse
 	{
 		$response = responseApp();
-		try {
-			$orders = $this->guard()->user()->orders;
-			$orders = OrderResource::collection($orders);
-			$response->status($orders->count() > 0 ? HttpOkay : HttpNoContent)->message('Listing all orders for this customer.')->setValue('data', $orders);
-		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
-		} finally {
-			return $response->send();
-		}
+		$resourceCollection = OrderResource::collection($this->user()->orders()->paginate($this->paginationChunk()));
+		$response->status(Response::HTTP_OK)
+			->message("Found {$resourceCollection->count()} orders.")
+			->setPayload($resourceCollection->response()->getData());
+		return $response->send();
 	}
 
-	public function show ($id)
+	public function show (Order $order) : JsonResponse
 	{
 		$response = responseApp();
-		try {
-			$order = $this->guard()->user()->orders()->where('id', $id)->firstOrFail();
-			$order = new OrderResource($order);
-			$response->status(HttpOkay)->message('Order details retrieved successfully.')->setValue('data', $order);
-		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find order for that key.');
-		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
-		} finally {
-			return $response->send();
-		}
+		$order = new OrderResource($order);
+		$response->status(Response::HTTP_OK)
+			->message('Order details retrieved successfully.')
+			->setValue('data', $order);
+		return $response->send();
+	}
+
+	public function track (Order $order) : JsonResponse
+	{
+		$response = responseApp();
+		$order = new OrderTrackingResource($order);
+		$response->status(HttpOkay)->message('Tracking details retrieved successfully.')->setValue('data', $order);
+		return $response->send();
 	}
 
 	protected function guard ()
