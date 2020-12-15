@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Seller\Orders\Status;
 
 use App\Classes\Rule;
 use App\Enums\Orders\Status;
+use App\Exceptions\ActionInvalidException;
 use App\Exceptions\ActionNotAllowedException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Api\ApiController;
@@ -34,16 +35,21 @@ class ActionController extends ApiController
 	/**
 	 * @param SubOrder $order
 	 * @return JsonResponse|void
-	 * @throws ValidationException|ActionNotAllowedException
+	 * @throws ValidationException|ActionNotAllowedException|ActionInvalidException
+	 * @throws \Exception
 	 */
 	public function handle (SubOrder $order) : JsonResponse
 	{
-		$status = $this->action();
-		$handler = $this->handler($status->value);
+		$action = $this->action();
+		$handler = $this->handler($action->value);
 		$extra = $this->validateExtra($handler->rules());
-		$handler->authorize($order, $this->user());
-		$handler->allowed($order, $order->status, $status);
-		return $handler->handle($order, $status, $extra)->send();
+		if (!$handler->authorize($order, $this->seller())) {
+			throw new ActionNotAllowedException('This action is not allowed for this user at this time.');
+		}
+		if (!$handler->allowed($order, $order->status, $action)) {
+			throw new ActionInvalidException('This status is invalid/unavailable for this order at this time.');
+		}
+		return $handler->handle($order, $action, $extra)->send();
 	}
 
 	/**
@@ -55,12 +61,17 @@ class ActionController extends ApiController
 		return Status::coerce(($this->requestValid(request(), $this->rules))['status']);
 	}
 
-	protected function handler ($status) : ?Action
+	/**
+	 * @param $status
+	 * @return Action
+	 * @throws \Exception
+	 */
+	protected function handler ($status) : Action
 	{
-		$handler = $this->handlers[$status];
+		$handler = $this->handlers[$status] ?? null;
 		if ($handler != null)
 			return new $handler();
-		return null;
+		throw new \Exception('No handler is defined for this order action.');
 	}
 
 	/**

@@ -27,6 +27,22 @@ abstract class ApiController extends BaseController
 		return $this->guard()->user();
 	}
 
+	/**
+	 * @return Seller
+	 */
+	protected function seller () : Seller
+	{
+		return $this->guard()->user();
+	}
+
+	/**
+	 * @return Customer
+	 */
+	protected function customer () : Customer
+	{
+		return $this->guard()->user();
+	}
+
 	protected function userId ()
 	{
 		return $this->guard()->user()->getKey();

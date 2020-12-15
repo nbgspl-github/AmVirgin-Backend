@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\Seller\Orders\Status\Handlers;
 
 use App\Classes\Builders\ResponseBuilder;
 use App\Enums\Orders\Status;
-use App\Exceptions\ActionNotAllowedException;
 use App\Http\Controllers\Api\Seller\Orders\Status\Contracts\Action;
 use App\Models\Auth\Seller;
 use App\Models\SubOrder;
@@ -19,13 +18,9 @@ class ReadyForDispatch implements Action
 		];
 	}
 
-	public function allowed (SubOrder $order, Status $current, Status $next) : bool
+	public function allowed (SubOrder $order, Status $action, Status $next) : bool
 	{
-		if ($current->isNot($next)) {
-			return true;
-		} else {
-			throw new ActionNotAllowedException('This action is not allowed for this order at this time.');
-		}
+		return $action->isNot($next);
 	}
 
 	public function handle (SubOrder $order, Status $next, array $extra = []) : ResponseBuilder
@@ -36,10 +31,6 @@ class ReadyForDispatch implements Action
 
 	public function authorize (SubOrder $order, Seller $seller) : bool
 	{
-		$authorized = $order->seller != null && $order->seller->is($seller);
-		if (!$authorized)
-			throw new ActionNotAllowedException('This action is not allowed for this order at this time.');
-		else
-			return true;
+		return ($order->seller != null && $order->seller->is($seller));
 	}
 }

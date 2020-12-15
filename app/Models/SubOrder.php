@@ -10,6 +10,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * Class SubOrder
@@ -25,23 +26,28 @@ class SubOrder extends Model
 
 	protected $casts = ['status' => Status::class];
 
-	public function items (): HasMany
+	public function items () : HasMany
 	{
 		return $this->hasMany(OrderItem::class, 'subOrderId');
 	}
 
-	public function customer (): BelongsTo
+	public function customer () : BelongsTo
 	{
 		return $this->belongsTo(Customer::class, 'customerId');
 	}
 
-	public static function startQuery (): SubOrderQuery
+	public static function startQuery () : SubOrderQuery
 	{
 		return SubOrderQuery::begin();
 	}
 
-	public function seller (): BelongsTo
+	public function seller () : BelongsTo
 	{
 		return $this->belongsTo(Seller::class, 'sellerId');
+	}
+
+	public function shipment () : BelongsTo
+	{
+		return $this->belongsTo(Shipment::class, 'shipmentId', 'id');
 	}
 }
