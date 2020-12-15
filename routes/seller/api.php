@@ -102,7 +102,7 @@ Route::prefix('countries')->group(function () {
 Route::prefix('orders')->middleware('auth:seller-api')->group(function () {
 	Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\Orders\OrderController::class, 'index']);
 	Route::get('{order}', [\App\Http\Controllers\Api\Seller\Orders\OrderController::class, 'show']);
-	Route::put('{order}/status', [\App\Http\Controllers\Api\Seller\Orders\Status\StatusController::class, 'update']);
+	Route::put('{order}/status', [\App\Http\Controllers\Api\Seller\Orders\Status\ActionController::class, 'handle']);
 	Route::put('status', [\App\Http\Controllers\Api\Seller\Orders\Status\BulkStatusController::class, 'update']);
 	Route::put('status/batch-update', [OrderController::class, 'updateStatusBulk']);
 });

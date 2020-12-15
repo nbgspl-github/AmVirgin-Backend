@@ -47,15 +47,15 @@ class Handler extends ExceptionHandler
 			if ($e instanceof ModelNotFoundException) {
 				return response()->json(['status' => Response::HTTP_NOT_FOUND, 'payload' => null], Response::HTTP_NOT_FOUND);
 			} elseif ($e instanceof ActionNotAllowedException) {
-				return response()->json(['status' => Response::HTTP_FORBIDDEN, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_FORBIDDEN);
+				return response()->json(['status' => Response::HTTP_FORBIDDEN, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_OK);
 			} elseif ($e instanceof ActionInvalidException) {
-				return response()->json(['status' => Response::HTTP_NOT_MODIFIED, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_NOT_MODIFIED);
+				return response()->json(['status' => Response::HTTP_NOT_MODIFIED, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_OK);
 			} else if ($e instanceof \ErrorException) {
-				return response()->json(['status' => Response::HTTP_INTERNAL_SERVER_ERROR, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_INTERNAL_SERVER_ERROR);
+				return response()->json(['status' => Response::HTTP_INTERNAL_SERVER_ERROR, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_OK);
 			} else if ($e instanceof ValidationException) {
-				return response()->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => $e->getError(), 'payload' => null], Response::HTTP_BAD_REQUEST);
+				return response()->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => $e->getError(), 'payload' => null], Response::HTTP_OK);
 			} else {
-				return response()->json(['status' => Response::HTTP_INTERNAL_SERVER_ERROR, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_INTERNAL_SERVER_ERROR);
+				return response()->json(['status' => Response::HTTP_INTERNAL_SERVER_ERROR, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_OK);
 			}
 		}
 		return parent::render($request, $e);

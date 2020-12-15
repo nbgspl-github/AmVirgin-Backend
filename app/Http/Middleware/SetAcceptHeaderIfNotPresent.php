@@ -16,7 +16,7 @@ class SetAcceptHeaderIfNotPresent
 	 */
 	public function handle (Request $request, Closure $next)
 	{
-		if (!$request->headers->has('Accept'))
+		if (!$request->headers->has('Accept') || env('APP_ENFORCE_JSON_RESPONSE') == 1)
 			$request->headers->set('Accept', 'application/json');
 		return $next($request);
 	}

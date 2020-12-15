@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Seller\Orders\Status\Handlers;
 use App\Classes\Builders\ResponseBuilder;
 use App\Classes\Rule;
 use App\Enums\Orders\Status;
+use App\Exceptions\ActionInvalidException;
 use App\Exceptions\ActionNotAllowedException;
 use App\Http\Controllers\Api\Seller\Orders\Status\Contracts\Action;
 use App\Models\Auth\Seller;
@@ -28,7 +29,7 @@ class Dispatched implements Action
 		if ($current->isNot($next)) {
 			return true;
 		} else {
-			throw new ActionNotAllowedException('This action is not allowed for this order at this time.');
+			throw new ActionInvalidException('This status is invalid for this order at this time.');
 		}
 	}
 
@@ -40,7 +41,7 @@ class Dispatched implements Action
 
 	public function authorize (SubOrder $order, Seller $seller) : bool
 	{
-		$authorized = $order->seller != null && $order->seller->is($seller);
+		$authorized = ($order->seller != null && $order->seller->is($seller));
 		if (!$authorized)
 			throw new ActionNotAllowedException('This action is not allowed for this order at this time.');
 		else

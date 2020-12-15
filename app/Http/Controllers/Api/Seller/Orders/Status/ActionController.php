@@ -38,26 +38,29 @@ class ActionController extends ApiController
 	 */
 	public function handle (SubOrder $order) : JsonResponse
 	{
-		$status = $this->status();
-		$handler = $this->handler($status);
+		$status = $this->action();
+		$handler = $this->handler($status->value);
 		$extra = $this->validateExtra($handler->rules());
-		if ($handler->authorize($order, $this->user()) && $handler->allowed($order, $order->status, $status)) {
-			return $handler->handle($order, $status, $extra)->send();
-		}
+		$handler->authorize($order, $this->user());
+		$handler->allowed($order, $order->status, $status);
+		return $handler->handle($order, $status, $extra)->send();
 	}
 
 	/**
 	 * @return Status|array|Enum
 	 * @throws ValidationException
 	 */
-	protected function status ()
+	protected function action ()
 	{
 		return Status::coerce(($this->requestValid(request(), $this->rules))['status']);
 	}
 
 	protected function handler ($status) : ?Action
 	{
-		return $this->handlers[$status] ?? null;
+		$handler = $this->handlers[$status];
+		if ($handler != null)
+			return new $handler();
+		return null;
 	}
 
 	/**
