@@ -12,7 +12,7 @@ class ContentFilterController extends ApiController
 	public function __construct ()
 	{
 		parent::__construct();
-		$this->middleware(AuthCustomer);
+		$this->middleware(AUTH_CUSTOMER_API);
 	}
 
 	public function index (): JsonResponse

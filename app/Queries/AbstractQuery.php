@@ -185,4 +185,9 @@ abstract class AbstractQuery
 		$this->query->whereIn($column, $items);
 		return $this;
 	}
+
+	public function dump ()
+	{
+		$this->query->dd();
+	}
 }

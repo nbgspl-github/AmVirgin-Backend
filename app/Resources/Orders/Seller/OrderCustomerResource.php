@@ -2,13 +2,15 @@
 
 namespace App\Resources\Orders\Seller;
 
-use App\Classes\Time;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderCustomerResource extends \Illuminate\Http\Resources\Json\JsonResource{
-	public function toArray($request){
+class OrderCustomerResource extends JsonResource
+{
+	public function toArray ($request) : array
+	{
 		return [
-			'key' => $this->id(),
-			'name' => $this->name(),
+			'key' => $this->id,
+			'name' => $this->name,
 		];
 	}
 }

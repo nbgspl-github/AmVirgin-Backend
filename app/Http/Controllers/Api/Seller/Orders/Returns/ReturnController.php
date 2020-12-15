@@ -13,7 +13,7 @@ class ReturnController extends ApiController
 	public function __construct ()
 	{
 		parent::__construct();
-		$this->middleware(AuthSeller);
+		$this->middleware(AUTH_SELLER_API);
 	}
 
 	public function index (): JsonResponse

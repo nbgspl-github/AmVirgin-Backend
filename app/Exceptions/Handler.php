@@ -46,6 +46,10 @@ class Handler extends ExceptionHandler
 		if ($request->expectsJson()) {
 			if ($e instanceof ModelNotFoundException) {
 				return response()->json(['status' => Response::HTTP_NOT_FOUND, 'payload' => null], Response::HTTP_NOT_FOUND);
+			} elseif ($e instanceof ActionNotAllowedException) {
+				return response()->json(['status' => Response::HTTP_FORBIDDEN, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_FORBIDDEN);
+			} elseif ($e instanceof ActionInvalidException) {
+				return response()->json(['status' => Response::HTTP_NOT_MODIFIED, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_NOT_MODIFIED);
 			} else if ($e instanceof \ErrorException) {
 				return response()->json(['status' => Response::HTTP_INTERNAL_SERVER_ERROR, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_INTERNAL_SERVER_ERROR);
 			} else if ($e instanceof ValidationException) {

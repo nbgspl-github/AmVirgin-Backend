@@ -2,53 +2,46 @@
 
 namespace App\Http\Controllers\Api\Seller\Manifest;
 
-use App\Enums\Seller\OrderStatus;
+use App\Enums\Orders\Status;
 use App\Http\Controllers\Api\ApiController;
+use App\Http\Requests\Manifests\UpdateRequest;
 use App\Models\SubOrder;
 use App\Resources\Manifest\Seller\ListResource;
+use App\Traits\ValidatesRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
-use Throwable;
 
 class ManifestController extends ApiController
 {
+	use ValidatesRequest;
+
+	protected array $rules = [];
+
 	public function __construct ()
 	{
 		parent::__construct();
+		$this->middleware(AUTH_SELLER_API);
+		$this->rules = [
+			'update' => [
+				'update' => ['bail', 'required', 'boolean']
+			]
+		];
 	}
 
-	public function show () : JsonResponse
+	public function update (UpdateRequest $request) : JsonResponse
 	{
 		$response = responseApp();
-		try {
-			if (is_array(request('orderId'))) {
-				$subOrderCollection = SubOrder::startQuery()->whereIn('id', request('orderId', []))->useAuth()->get();
-				if (request('update', 0) == 1) {
-					$subOrderCollection->each(function (SubOrder $subOrder) {
-						$subOrder->update([
-							'status' => OrderStatus::PendingDispatch
-						]);
-					});
-				}
-				$resourceCollection = ListResource::collection($subOrderCollection);
-				$response->status($resourceCollection->count() > 0 ? HttpOkay : HttpNoContent)->message('Listing all details for order keys.')->setValue('payload', $resourceCollection);
-			} else {
-				$subOrder = SubOrder::startQuery()->key(request('orderId'))->useAuth()->first();
-				if (request('update', 0) == 1 && $subOrder != null) {
-					$subOrder->update([
-						'status' => OrderStatus::PendingDispatch
-					]);
-				}
-				$resource = new ListResource($subOrder);
-				$response->status(HttpOkay)->message('Listing all details for order.')->setValue('payload', $resource);
+		$validated = $this->requestValid($request, $this->rules['update']);
+		$update = $validated['update'] ?? false;
+		$orders = $request->orders();
+		$orders->each(function (SubOrder $order) use ($update) {
+			if ($update) {
+				$order->update(['status' => Status::PendingDispatch]);
 			}
-		} catch (Throwable $e) {
-			$response->status(Response::HTTP_INTERNAL_SERVER_ERROR)->message($e->getMessage());
-		} finally {
-			return $response->send();
-		}
+		});
+		$resourceCollection = ListResource::collection($orders);
+		$response->status(HttpOkay)->message('Successfully processed all orders.')->setPayload($resourceCollection);
+		return $response->send();
 	}
-
 
 	protected function guard ()
 	{

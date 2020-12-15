@@ -36,9 +36,9 @@ const ShipmentRefunded = 'refunded';
 const CartStatusPending = 'pending';
 const CartStatusSubmitted = 'submitted';
 
-const AuthSeller = 'auth:seller-api';
-const AuthCustomer = 'auth:customer-api';
-const AuthAdmin = 'auth:admin';
+const AUTH_SELLER_API = 'auth:seller-api';
+const AUTH_CUSTOMER_API = 'auth:customer-api';
+const AUTH_ADMIN = 'auth:admin';
 
 /**
  * App is in production stage and is deployed to production servers.

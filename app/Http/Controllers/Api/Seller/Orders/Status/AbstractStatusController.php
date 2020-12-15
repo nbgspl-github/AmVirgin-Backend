@@ -23,7 +23,7 @@ abstract class AbstractStatusController extends ApiController
 	public function __construct ()
 	{
 		parent::__construct();
-		$this->middleware(AuthSeller);
+		$this->middleware(AUTH_SELLER_API);
 		$this->rules = [
 			'update' => $this->rulesByStatus(request('status'))
 		];
