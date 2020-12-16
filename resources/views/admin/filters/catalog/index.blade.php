@@ -27,12 +27,12 @@
 							<tr>
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">{{$filter->label()}}</td>
-								<td class="text-center">{{__boolean($filter->builtIn())}}</td>
+								<td class="text-center">{{\App\Classes\Str::stringifyBoolean($filter->builtIn())}}</td>
 								<td class="text-center">{{\App\Classes\Arrays::search($filter->builtInType(),\App\Models\CatalogFilter::BuiltInFilters,'<N/A>')}}</td>
 								<td class="text-center">{{!$filter->builtIn()?$filter->attribute->name:'<N/A>'}}</td>
 								<td class="text-center">{{\App\Models\Category::parents($filter->category)}}</td>
-								<td class="text-center">{{__boolean($filter->allowMultiValue())}}</td>
-								<td class="text-center">{{__boolean($filter->active())}}</td>
+								<td class="text-center">{{\App\Classes\Str::stringifyBoolean($filter->allowMultiValue())}}</td>
+								<td class="text-center">{{\App\Classes\Str::stringifyBoolean($filter->active())}}</td>
 								<td class="text-center">
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group mx-auto" role="group">

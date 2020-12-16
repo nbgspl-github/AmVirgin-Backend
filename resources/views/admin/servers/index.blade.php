@@ -29,7 +29,7 @@
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">{{$server->getName()}}</td>
 								<td class="text-center">{{$server->getIpAddress()}}</td>
-								<td class="text-center">{{__boolean($server->getUsesAuth())}}</td>
+								<td class="text-center">{{\App\Classes\Str::stringifyBoolean($server->getUsesAuth())}}</td>
 								<td class="text-center">{{$server->getBasePath()}}</td>
 								<td class="text-center">
 									<div class="btn-group">

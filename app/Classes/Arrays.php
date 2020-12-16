@@ -55,15 +55,6 @@ class Arrays extends \Illuminate\Support\Arr{
 		return false;
 	}
 
-	public static function containsValueIndexed (array $array, $value) {
-		foreach ($array as $item) {
-			if ($item == $value) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public static function reverse(array $array): array{
 		return array_reverse($array);
 	}

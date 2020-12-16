@@ -1,6 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Storage;
+use App\Classes\Builders\ResponseBuilder;
+use App\Classes\WebResponse;
+use Illuminate\Support\Facades\Log;
 
 const HttpOkay = 200;
 
@@ -22,23 +24,8 @@ const HttpDeniedAccess = 403;
 
 const HttpNotModified = 304;
 
-const ShipmentPlaced = 'placed';
-const ShipmentPending = 'pending';
-const ShipmentReadyForDispatch = 'ready-for-dispatch';
-const ShipmentDispatched = 'dispatched';
-const ShipmentOutForDelivery = 'out-for-delivery';
-const ShipmentRescheduled = 'rescheduled';
-const ShipmentDelivered = 'delivered';
-const ShipmentCancelled = 'cancelled';
-const ShipmentRefundProcessing = 'refund-processing';
-const ShipmentRefunded = 'refunded';
-
-const CartStatusPending = 'pending';
-const CartStatusSubmitted = 'submitted';
-
 const AUTH_SELLER_API = 'auth:seller-api';
 const AUTH_CUSTOMER_API = 'auth:customer-api';
-const AUTH_ADMIN = 'auth:admin';
 
 /**
  * App is in production stage and is deployed to production servers.
@@ -50,54 +37,6 @@ const AppEnvironmentProduction = 'production';
  */
 const AppEnvironmentLocal = 'local';
 
-function __status ($status)
-{
-	if ($status == 1)
-		return 'Active';
-	else if ($status == 0)
-		return 'Disabled';
-	else
-		return 'Unknown';
-}
-
-function __visibility ($visibility)
-{
-	if ($visibility == 1)
-		return "Visible";
-	else if ($visibility == 2)
-		return "Hidden";
-	else
-		return "Unknown";
-}
-
-function __blank ($value)
-{
-	$value = trim($value);
-	if ($value == null || strlen($value) < 1)
-		return '-';
-	else
-		return $value;
-}
-
-function __rating ($value)
-{
-	if ($value == 0)
-		return '<Not rated>';
-	else
-		return $value;
-}
-
-function __ellipsis ($value, $length = 20)
-{
-	return strlen($value) > $length ? substr($value, 0, $length) . "..." : $value;
-}
-
-function __boolean ($value)
-{
-	$value = boolval($value);
-	return $value == true ? 'Yes' : 'No';
-}
-
 function __modelNameFromSlug ($slug)
 {
 	$identifier = 'model-mapping.' . $slug;
@@ -108,14 +47,6 @@ function __modelNameFromSlug ($slug)
 		$modelName = substr($name, $lastIndex);
 	}
 	return $modelName;
-}
-
-function image ($path = null)
-{
-	if ($path == null)
-		return null;
-	else
-		return Storage::download($path);
 }
 
 /**
@@ -149,52 +80,16 @@ function jsonDecodeArray ($payload)
 }
 
 /**
- * @param string $route
- * @return \App\Classes\WebResponse
+ * @return WebResponse
  */
-function responseWeb ()
+function responseWeb () : WebResponse
 {
-	return \App\Classes\WebResponse::instance();
+	return WebResponse::instance();
 }
 
-function responseApp ()
+function responseApp () : ResponseBuilder
 {
-	return \App\Classes\Builders\ResponseBuilder::instance();
-}
-
-function iterate ($arrayable, $callback)
-{
-	collect($arrayable)->each($callback);
-}
-
-function hostName ()
-{
-	return parse_url(env('APP_URL'), PHP_URL_HOST);
-}
-
-function subDomain (string $prefix)
-{
-	return sprintf('%s.%s', $prefix, hostName());
-}
-
-function __cast ($value, $type)
-{
-	switch ($type) {
-		case 'string':
-			return strval($value);
-
-		case 'float':
-			return floatval($value);
-
-		case 'int':
-			return intval($value);
-
-		case 'bool':
-			return boolval($value);
-
-		default:
-			return $value;
-	}
+	return ResponseBuilder::instance();
 }
 
 /**
@@ -202,7 +97,7 @@ function __cast ($value, $type)
  * @param null $match Env string to match against
  * @return string|null
  */
-function appEnvironment ($match = null): ?string
+function appEnvironment ($match = null) : ?string
 {
 	if ($match == null)
 		return env('APP_ENV');
@@ -223,14 +118,14 @@ function countRequiredPages (int $total, int $perPage)
 	return $result;
 }
 
-function makeUrl ($path): ?string
+function makeUrl ($path) : ?string
 {
 	return \App\Storage\SecuredDisk::existsUrl($path);
 }
 
 function slack ($message)
 {
-	\Illuminate\Support\Facades\Log::channel('slack')->info($message);
+	Log::channel('slack')->info($message);
 }
 
 /**
@@ -249,7 +144,7 @@ function slack ($message)
  * @return string
  * @throws Exception
  */
-function random_str (int $length = 16, string $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'): string
+function random_str (int $length = 16, string $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ') : string
 {
 	$pieces = [];
 	$max = mb_strlen($keyspace, '8bit') - 1;

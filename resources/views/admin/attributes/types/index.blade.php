@@ -30,9 +30,9 @@
 								<td class="text-center">{{$attributeType->name()}}</td>
 								<td class="text-center">{{$attributeType->description()}}</td>
 								<td class="text-center">{{$attributeType->primitiveType->name()}}</td>
-								<td class="text-center">{{__boolean($attributeType->multiValue())}}</td>
+								<td class="text-center">{{\App\Classes\Str::stringifyBoolean($attributeType->multiValue())}}</td>
 								<td class="text-center">{{$attributeType->maxValues()}}</td>
-								<td class="text-center">{{__boolean($attributeType->bounded())}}</td>
+								<td class="text-center">{{\App\Classes\Str::stringifyBoolean($attributeType->bounded())}}</td>
 								<td class="text-center">{{intval($attributeType->minimum())}}</td>
 								<td class="text-center">{{intval($attributeType->maximum())}}</td>
 								<td class="text-center">

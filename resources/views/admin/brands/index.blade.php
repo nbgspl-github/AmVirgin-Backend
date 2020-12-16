@@ -26,17 +26,17 @@
                                 <td class="text-center">{{$loop->index+1}}</td>
                                 <td class="text-center">{{$brand->name()}}</td>
                                 <td class="text-center">{{$brand->logo()}}</td>
-                                <td class="text-center">{{__boolean($brand->active())}}</td>
+                                <td class="text-center">{{\App\Classes\Str::stringifyBoolean($brand->active())}}</td>
                                 <td class="text-center">{{$brand->status()}}</td>
                                 <td class="text-center">
                                     <div class="btn-toolbar" role="toolbar">
                                         <div class="btn-group mx-auto" role="group">
                                             <a class="btn btn-outline-danger shadow-sm"
-                                               href="{{route('admin.brands.edit',$brand->id())}}" @include('admin.extras.tooltip.left', ['title' => 'Edit brand details'])><i
+                                                    href="{{route('admin.brands.edit',$brand->id())}}" @include('admin.extras.tooltip.left', ['title' => 'Edit brand details'])><i
                                                         class="mdi mdi-pencil"></i></a>
                                             @if($brand->status()=='pending')
                                                 <a class="btn btn-outline-danger shadow-sm"
-                                                   href="{{route('admin.brands.approve',$brand->id())}}" @include('admin.extras.tooltip.left', ['title' => 'Approve'])><i
+                                                        href="{{route('admin.brands.approve',$brand->id())}}" @include('admin.extras.tooltip.left', ['title' => 'Approve'])><i
                                                             class="mdi mdi-check"></i></a>
                                             @endif
                                             <a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);"

@@ -25,7 +25,7 @@
 								<td>{{$seller->name()}}</td>
 								<td>{{$seller->mobile()}}</td>
 								<td>{{$seller->email()}}</td>
-								<td>{{__status($seller->active())}}</td>
+								<td>{{$seller->active()?'Active':'Inactive'}}</td>
 								<td>
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group mx-auto" role="group">

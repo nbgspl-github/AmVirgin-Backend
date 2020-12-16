@@ -33,10 +33,10 @@
 									@endif
 								</td>
 								<td class="text-center">{{$video->getTitle()}}</td>
-								<td class="text-center">{{__ellipsis($video->getDescription(),100)}}</td>
+								<td class="text-center">{{\App\Classes\Str::ellipsis($video->getDescription(),100)}}</td>
 								<td class="text-center">{{$video->getRating()}}</td>
-								<td class="text-center">{{__boolean($video->trending)}}</td>
-								<td class="text-center">{{__boolean($video->pending)}}</td>
+								<td class="text-center">{{\App\Classes\Str::stringifyBoolean($video->trending)}}</td>
+								<td class="text-center">{{\App\Classes\Str::stringifyBoolean($video->pending)}}</td>
 								<td class="text-center">
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group mx-auto" role="group">

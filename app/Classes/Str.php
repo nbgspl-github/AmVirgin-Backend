@@ -5,6 +5,7 @@ namespace App\Classes;
 class Str extends \Illuminate\Support\Str
 {
 	const Empty = '';
+	const NotAvailable = '<N/A>';
 	const Null = null;
 	const NewLine = PHP_EOL;
 	const WhiteSpace = ' ';
@@ -52,5 +53,11 @@ class Str extends \Illuminate\Support\Str
 		$segmentY = self::upper($segmentY);
 		$segmentZ = date('s');
 		return $segmentX . $segmentZ . $segmentY;
+	}
+
+	public static function stringifyBoolean ($value, $true = 'Yes', $false = 'No')
+	{
+		$value = boolval($value);
+		return $value == true ? $true : $false;
 	}
 }

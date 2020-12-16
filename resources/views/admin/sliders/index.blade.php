@@ -34,8 +34,8 @@
 									@endif
 								</td>
 								<td class="text-center">{{$slide->title()}}</td>
-								<td class="text-center">{{__ellipsis($slide->description(),50)}}</td>
-								<td class="text-center">{{__rating($slide->rating())}}</td>
+								<td class="text-center">{{\App\Classes\Str::ellipsis($slide->description(),50)}}</td>
+								<td class="text-center">{{$slide->rating??\App\Classes\Str::NotAvailable}}</td>
 								<td class="text-center">
 									<div class="btn-group btn-group-toggle shadow-sm" data-toggle="buttons">
 										@if($slide->active()==true)
@@ -58,13 +58,13 @@
 								<td class="text-center">{{$slide->type()}}</td>
 								@if($slide->type()==\App\Models\Slider::TargetType['ExternalLink'])
 									<td class="text-center">
-										<a class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig" target="_blank" href="{{$slide->target()}}">{{__ellipsis($slide->target())}}</a>
+										<a class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig" target="_blank" href="{{$slide->target()}}">{{\App\Classes\Str::ellipsis($slide->target())}}</a>
 									</td>
 								@else
 									<td class="text-center">
 										@php
-										$video=\App\Models\Video::retrieve($slide->target());
-												@endphp
+											$video=\App\Models\Video::retrieve($slide->target());
+										@endphp
 										<button class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig">{{$video!=null?$video->title():'N/A'}}</button>
 									</td>
 								@endif

@@ -32,7 +32,7 @@
 									@endif
 								</td>
 								<td class="text-center">{{$product->name()}}</td>
-								<td class="text-center">{{__ellipsis($product->shortDescription(),40)}}</td>
+								<td class="text-center">{{\App\Classes\Str::ellipsis($product->shortDescription(),40)}}</td>
 								<td class="text-center">{{$product->originalPrice()}}</td>
 								<td class="text-center">{{$product->offerValue()}}</td>
 								<td class="text-center">

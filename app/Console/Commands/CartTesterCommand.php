@@ -54,10 +54,6 @@ class CartTesterCommand extends Command{
 		parent::__construct();
 	}
 
-	public const AllowedStatuses = [
-		CartStatusPending,
-	];
-
 	/**
 	 * Execute the console command.
 	 * @return mixed
