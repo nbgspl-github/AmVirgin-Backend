@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\Seller\Orders\Status;
 
-use App\Classes\Rule;
-use App\Enums\Orders\Status;
 use App\Exceptions\ValidationException;
 use App\Http\Requests\Orders\Status\Bulk\UpdateRequest;
+use App\Library\Enums\Orders\Status;
+use App\Library\Utils\Extensions\Rule;
 use App\Models\SubOrder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
@@ -13,7 +13,7 @@ use Throwable;
 
 class BulkStatusController extends AbstractStatusController
 {
-	public function update (UpdateRequest $request): JsonResponse
+	public function update (UpdateRequest $request) : JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -41,11 +41,11 @@ class BulkStatusController extends AbstractStatusController
 					$failed->push($order->id);
 				}
 			});
-			$response->status(HttpOkay)->message('Successfully processed all orders.')->payload(['failed' => $failed, 'succeeded' => $succeeded, 'unchanged' => $unchanged]);
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Successfully processed all orders.')->payload(['failed' => $failed, 'succeeded' => $succeeded, 'unchanged' => $unchanged]);
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

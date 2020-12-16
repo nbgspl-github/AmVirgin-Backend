@@ -2,7 +2,7 @@
 
 namespace App\Resources\Products\Seller;
 
-use App\Classes\Str;
+use App\Library\Utils\Extensions\Str;
 use App\Models\Product;
 use Illuminate\Http\Resources\Json\JsonResource;
 

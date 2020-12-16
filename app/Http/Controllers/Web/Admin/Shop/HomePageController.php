@@ -2,18 +2,14 @@
 
 namespace App\Http\Controllers\Web\Admin\Shop;
 
-use App\Classes\Str;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
+use App\Library\Utils\Extensions\Str;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\Auth\Seller;
 use App\Models\Settings;
-use App\Resources\Products\Customer\CategoryResource;
-use App\Storage\SecuredDisk;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Arr;
 use Throwable;
 
 class HomePageController extends BaseController
@@ -315,11 +311,11 @@ class HomePageController extends BaseController
 				'stock' => $product->getStock(),
 				'sku' => $product->getSku(),
 			];
-			$response->status(HttpOkay)->message('Product details retrieved successfully.')->setValue('data', $data);
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Product details retrieved successfully.')->setValue('data', $data);
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message($exception->getMessage());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

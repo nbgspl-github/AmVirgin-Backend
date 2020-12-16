@@ -23,7 +23,7 @@ class CreatePickupAddressTable extends Migration{
 			$table->timestamps();
 
 			if (appEnvironment(AppEnvironmentProduction)) {
-				$table->foreign('sellerId')->references('id')->on(\App\Interfaces\Tables::Sellers)->onDelete('cascade');
+				$table->foreign('sellerId')->references('id')->on(\App\Library\Enums\Common\Tables::Sellers)->onDelete('cascade');
 			}
 		});
 	}

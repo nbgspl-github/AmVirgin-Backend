@@ -34,11 +34,11 @@
 									@endif
 								</td>
 								<td class="text-center">{{$s->getTitle()}}</td>
-								<td class="text-center">{{\App\Classes\Str::ellipsis($s->getDescription(),100)}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::ellipsis($s->getDescription(),100)}}</td>
 								<td class="text-center">{{$s->getRating()}}</td>
-								<td class="text-center">{{\App\Classes\Str::stringifyBoolean($s->trending)}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::stringifyBoolean($s->trending)}}</td>
 								<td class="text-center">{{$s->getSeasons()}}</td>
-								<td class="text-center">{{\App\Classes\Str::stringifyBoolean($s->pending)}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::stringifyBoolean($s->pending)}}</td>
 								<td class="text-center">
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group mx-auto" role="group">

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\Orders\Status;
+use App\Library\Enums\Orders\Status;
 use App\Models\Auth\Customer;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\RetrieveResource;
@@ -24,6 +24,14 @@ class Order extends Model
 	protected $guarded = ['id'];
 	protected $casts = ['status' => Status::class];
 	protected $hidden = ['created_at', 'updated_at'];
+
+	protected static function boot ()
+	{
+		parent::boot();
+		self::creating(function ($order) {
+			$order->orderNumber = sprintf('AVG%d%d', time(), rand(1, 1000));
+		});
+	}
 
 	public function items () : HasMany
 	{

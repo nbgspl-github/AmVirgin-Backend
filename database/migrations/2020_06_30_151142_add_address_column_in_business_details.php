@@ -15,8 +15,8 @@ class AddAddressColumnInBusinessDetails extends Migration
     {
         Schema::table('seller-business-details', function (Blueprint $table) {
             $table->string('addressProofType')->nullable();
-            $table->string('addressProofDocument', \App\Constants\Constants::MaxFilePathLength)->nullable();
-            $table->boolean('addressProofVerified')->default(false);
+	        $table->string('addressProofDocument', \App\Library\Enums\Common\Constants::MaxFilePathLength)->nullable();
+	        $table->boolean('addressProofVerified')->default(false);
         });
     }
 

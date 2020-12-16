@@ -16,7 +16,7 @@ class StatesController extends ApiController
 				'name' => $state->name,
 			];
 		});
-		return responseApp()->status(HttpOkay)->message(function () use ($states) {
+		return responseApp()->status(\Illuminate\Http\Response::HTTP_OK)->message(function () use ($states) {
 			return sprintf('Found %d states for the given country.', $states->count());
 		})->setValue('data', $states)->send();
 	}

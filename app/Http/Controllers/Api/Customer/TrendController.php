@@ -43,9 +43,9 @@ class TrendController extends ApiController
 				'justAdded' => $justAdded->all(),
 				'topPicks' => $topPicks->all(),
 			];
-			$response->status(HttpOkay)->setValue('data', $payload)->message('Success');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->setValue('data', $payload)->message('Success');
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->setValue('data')->message('Error');
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->setValue('data')->message('Error');
 		} finally {
 			return $response->send();
 		}

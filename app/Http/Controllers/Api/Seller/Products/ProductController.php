@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api\Seller\Products;
 
-use App\Classes\Arrays;
-use App\Classes\Str;
 use App\Exceptions\BrandNotApprovedForSellerException;
 use App\Exceptions\InvalidCategoryException;
 use App\Exceptions\TokenInvalidException;
 use App\Exceptions\ValidationException;
-use App\Interfaces\Directories;
+use App\Library\Enums\Common\Directories;
+use App\Library\Utils\Extensions\Arrays;
+use App\Library\Utils\Extensions\Str;
 use App\Models\HsnCode;
 use App\Models\Product;
 use App\Models\ProductToken;
@@ -66,7 +66,7 @@ class ProductController extends AbstractProductController
 		];
 		$products = CatalogListResource::collection($products);
 		return responseApp()
-			->status($products->count() > 0 ? HttpOkay : HttpNoContent)
+			->status($products->count() > 0 ? \Illuminate\Http\Response::HTTP_OK : \Illuminate\Http\Response::HTTP_NO_CONTENT)
 			->message('Listing all products for this seller.')
 			->setValue('meta', $meta)
 			->setValue('payload', $products)
@@ -79,11 +79,11 @@ class ProductController extends AbstractProductController
 		try {
 			$product = Product::startQuery()->seller($this->guard()->id())->key($id)->firstOrFail();
 			$resource = new ProductResource($product);
-			$response->status(HttpOkay)->message('Listing product details.')->setValue('payload', $resource);
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Listing product details.')->setValue('payload', $resource);
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find product for that key.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find product for that key.');
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -95,11 +95,11 @@ class ProductController extends AbstractProductController
 		try {
 			$product = Product::startQuery()->seller($this->guard()->id())->key($id)->firstOrFail();
 			$resource = new ProductResource($product);
-			$response->status(HttpOkay)->message('Listing product details.')->setValue('payload', $resource);
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Listing product details.')->setValue('payload', $resource);
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find product for that key.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find product for that key.');
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -157,19 +157,19 @@ class ProductController extends AbstractProductController
 			});
 			$didConvertAny = $this->convertAllSimpleToVariants($token);
 			if (!$didConvertAny)
-				$response->status(HttpCreated)->message('Product details were saved successfully.');
+				$response->status(\Illuminate\Http\Response::HTTP_CREATED)->message('Product details were saved successfully.');
 			else
-				$response->status(HttpCreated)->message('Product variant was saved successfully.');
+				$response->status(\Illuminate\Http\Response::HTTP_CREATED)->message('Product variant was saved successfully.');
 		} catch (TokenInvalidException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
 		} catch (InvalidCategoryException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
 		} catch (BrandNotApprovedForSellerException $exception) {
-			$response->status(HttpDeniedAccess)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message($exception->getMessage());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -192,13 +192,13 @@ class ProductController extends AbstractProductController
 				return $file;
 			})->toArray();
 			$this->storeImages($product, $images);
-			$response->status(HttpCreated)->message('Product details were updated successfully.');
+			$response->status(\Illuminate\Http\Response::HTTP_CREATED)->message('Product details were updated successfully.');
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message($exception->getMessage());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -210,11 +210,11 @@ class ProductController extends AbstractProductController
 		try {
 			$product = Product::startQuery()->seller($this->guard()->id())->key($id)->firstOrFail();
 			$product->delete();
-			$response->status(HttpOkay)->message('Product deleted successfully.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Product deleted successfully.');
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find product for that key.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find product for that key.');
 		} catch (Throwable $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -238,7 +238,7 @@ class ProductController extends AbstractProductController
 		return responseApp()->setValue('payload', [
 			'token' => $productToken->token(),
 			'validUntil' => $productToken->validUntil(),
-		])->status(HttpOkay)->message('Token generated successfully.')->send();
+		])->status(\Illuminate\Http\Response::HTTP_OK)->message('Token generated successfully.')->send();
 	}
 
 	public function changeStatus (int $id): JsonResponse
@@ -249,14 +249,14 @@ class ProductController extends AbstractProductController
 			if (!empty($product) || !empty(request('status'))) {
 				$product->listingStatus = request('status');
 				$product->update();
-				$response->status(HttpOkay)->message('Product status updated successfully.');
+				$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Product status updated successfully.');
 			} else {
-				$response->status(HttpOkay)->message('Product status is required.');
+				$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Product status is required.');
 			}
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find product for that key.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find product for that key.');
 		} catch (Throwable $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

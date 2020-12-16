@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Web\Admin\Videos;
 
 use App\Classes\WebResponse;
-use App\Constants\PageSectionType;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
-use App\Interfaces\VideoTypes;
+use App\Library\Enums\Common\PageSectionType;
+use App\Library\Enums\Videos\Types;
 use App\Models\Genre;
 use App\Models\MediaLanguage;
 use App\Models\MediaQuality;
@@ -100,7 +100,7 @@ class VideosBase extends BaseController
 				'sectionId' => $payload['sectionId'],
 				'rating' => $payload['rating'],
 				'pgRating' => $payload['pgRating'],
-				'type' => VideoTypes::Movie,
+				'type' => Types::Movie,
 				'hits' => 0,
 				'trending' => request()->has('trending'),
 				'rank' => $payload['rank'],
@@ -113,9 +113,9 @@ class VideosBase extends BaseController
 			$video->save();
 			$response->setValue('route', route('admin.videos.edit.action', $video->getKey()))->message('Video details were saved successfully.');
 		} catch (ValidationException $exception) {
-			$response->message($exception->getError())->status(HttpInvalidRequestFormat);
+			$response->message($exception->getError())->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST);
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->error($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->error($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

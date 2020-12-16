@@ -27,7 +27,7 @@
 								<tr id="{{'category_row_'.$category->getKey()}}">
 									<td>{{$loop->index+1}}</td>
 									<td class="text-center">{{$category->name()}}</td>
-									<td class="text-center">{{\App\Classes\Str::ellipsis($category->description(),50)}}</td>
+									<td class="text-center">{{\App\Library\Utils\Extensions\Str::ellipsis($category->description(),50)}}</td>
 									<td class="text-center">{{\App\Models\Category::parents($category)}}</td>
 									<td class="text-center">{{$category->type()}}</td>
 									<td class="text-center">{{$category->order()}}</td>

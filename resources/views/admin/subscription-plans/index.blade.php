@@ -34,11 +34,11 @@
 									@endif
 								</td>
 								<td class="text-center">{{$plan->getName()}}</td>
-								<td class="text-center">{{\App\Classes\Str::ellipsis($plan->getDescription(),40)}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::ellipsis($plan->getDescription(),40)}}</td>
 								<td class="text-center">{{$plan->getOriginalPrice()}}</td>
 								<td class="text-center">{{$plan->getOfferPrice()}}</td>
 								<td class="text-center">{{$plan->getDuration()}}</td>
-								<td class="text-center">{{\App\Classes\Str::stringifyBoolean($plan->isActive())}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::stringifyBoolean($plan->isActive())}}</td>
 								<td class="text-center">
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group mx-auto" role="group">

@@ -2,27 +2,8 @@
 
 use App\Classes\Builders\ResponseBuilder;
 use App\Classes\WebResponse;
+use App\Library\Utils\Extensions\Str;
 use Illuminate\Support\Facades\Log;
-
-const HttpOkay = 200;
-
-const HttpCreated = 201;
-
-const HttpNoContent = 204;
-
-const HttpInvalidRequestFormat = 400;
-
-const HttpResourceNotFound = 404;
-
-const HttpServerError = 500;
-
-const HttpResourceAlreadyExists = 409;
-
-const HttpUnauthorized = 401;
-
-const HttpDeniedAccess = 403;
-
-const HttpNotModified = 304;
 
 const AUTH_SELLER_API = 'auth:seller-api';
 const AUTH_CUSTOMER_API = 'auth:customer-api';
@@ -65,15 +46,14 @@ function jsonEncode ($payload)
  */
 function jsonDecode ($payload)
 {
-	$decoded = json_decode($payload);
-	return $decoded;
+	return json_decode($payload);
 }
 
 /**
  * @param $payload
  * @return array
  */
-function jsonDecodeArray ($payload)
+function jsonDecodeArray ($payload) : array
 {
 	$decoded = json_decode($payload, true);
 	return $decoded == null ? [] : $decoded;
@@ -102,7 +82,7 @@ function appEnvironment ($match = null) : ?string
 	if ($match == null)
 		return env('APP_ENV');
 	else
-		return \App\Classes\Str::equals($match, env('APP_ENV'));
+		return Str::equals($match, env('APP_ENV'));
 }
 
 function countRequiredPages (int $total, int $perPage)

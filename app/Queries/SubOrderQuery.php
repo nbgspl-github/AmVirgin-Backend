@@ -2,7 +2,7 @@
 
 namespace App\Queries;
 
-use App\Enums\Orders\Status;
+use App\Library\Enums\Orders\Status;
 use App\Models\SubOrder;
 
 class SubOrderQuery extends AbstractQuery

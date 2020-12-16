@@ -43,15 +43,15 @@ class ListController extends ApiController
 						'values' => $attribute->values(),
 					];
 				});
-				$status = $attributeSetItems->count() == 0 ? HttpNoContent : HttpOkay;
+				$status = $attributeSetItems->count() == 0 ? \Illuminate\Http\Response::HTTP_NO_CONTENT : \Illuminate\Http\Response::HTTP_OK;
 				$response->status($status)->message('Listing all attributes for the category.')->setValue('data', $attributeSetItems);
 			} else {
-				$response->status(HttpNoContent)->message('There are no attribute sets defined for that category.')->setValue('data', []);
+				$response->status(\Illuminate\Http\Response::HTTP_NO_CONTENT)->message('There are no attribute sets defined for that category.')->setValue('data', []);
 			}
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message($exception->getMessage());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

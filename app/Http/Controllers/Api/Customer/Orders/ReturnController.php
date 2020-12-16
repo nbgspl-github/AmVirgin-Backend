@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api\Customer\Orders;
 
-use App\Classes\Rule;
-use App\Classes\Time;
-use App\Enums\Orders\Returns\Status;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Api\ApiController;
+use App\Library\Enums\Orders\Returns\Status;
+use App\Library\Utils\Extensions\Rule;
+use App\Library\Utils\Extensions\Time;
 use App\Models\OrderItem;
 use App\Traits\ValidatesRequest;
 use Illuminate\Http\JsonResponse;
@@ -29,36 +29,38 @@ class ReturnController extends ApiController
 		];
 	}
 
-	public function return (OrderItem $item): JsonResponse
+	/**
+	 * @param OrderItem $item
+	 * @return JsonResponse
+	 * @throws ValidationException
+	 */
+	public function return (OrderItem $item) : JsonResponse
 	{
 		$response = responseApp();
-		try {
-			$pending = $item->returns()->whereNotIn('status', [Status::Completed])->exists();
-			if (!$pending) {
-				$response->status(Response::HTTP_CONFLICT)->message('You have already raised a return request for this item.');
+		$pending = $item->returns()->whereNotIn('status', [Status::Completed])->exists();
+		$cancelled = $item->subOrder != null && $item->subOrder->status->is(\App\Library\Enums\Orders\Status::Cancelled);
+		$delivered = $item->subOrder != null && ($item->subOrder->status->is(\App\Library\Enums\Orders\Status::Delivered) || !empty($item->subOrder->fulfilled_at));
+		if (!$pending) {
+			$response->status(Response::HTTP_CONFLICT)->message('You have already raised a return request for this item.');
+		} elseif ($cancelled || !$delivered) {
+			$response->status(Response::HTTP_NOT_MODIFIED)->message('This order is either cancelled or is yet to be delivered.');
+		} else {
+			$validated = $this->requestValid(request(), $this->rules['return']);
+			if ($item->returnable && !$item->returnValidUntil->isPast()) {
+				$item->returns()->create([
+					'order_id' => $item->order->id,
+					'customer_id' => $this->guard()->id(),
+					'seller_id' => $item->sellerId,
+					'order_segment_id' => $item->segment->id,
+					'return_type' => $item->returnType == 'both' ? $validated['action'] : $item->returnType,
+					'raised_at' => Time::mysqlStamp(),
+				]);
+				$response->status(Response::HTTP_CREATED)->message('You return request was raised successfully.');
 			} else {
-				$validated = $this->requestValid(request(), $this->rules['return']);
-				if ($item->returnable && !$item->returnValidUntil->isPast()) {
-					$item->returns()->create([
-						'order_id' => $item->order->id,
-						'customer_id' => $this->guard()->id(),
-						'seller_id' => $item->sellerId,
-						'order_segment_id' => $item->segment->id,
-						'return_type' => $item->returnType == 'both' ? $validated['action'] : $item->returnType,
-						'raised_at' => Time::mysqlStamp(),
-					]);
-					$response->status(HttpCreated)->message('You return request was raised successfully.');
-				} else {
-					$response->status(HttpOkay)->message('Your return request could not be raised as this item is either non-returnable or the return period is over.');
-				}
+				$response->status(Response::HTTP_OK)->message('Your return request could not be raised as this item is either non-returnable or the return period is over.');
 			}
-		} catch (ValidationException $e) {
-			$response->status(Response::HTTP_BAD_REQUEST)->message($e->getError());
-		} catch (\Throwable $e) {
-			$response->status(HttpServerError)->message($e);
-		} finally {
-			return $response->send();
 		}
+		return $response->send();
 	}
 
 	protected function guard ()

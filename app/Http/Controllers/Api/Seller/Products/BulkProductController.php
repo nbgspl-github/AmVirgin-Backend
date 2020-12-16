@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api\Seller\Products;
 
-use App\Classes\Arrays;
-use App\Classes\Rule;
-use App\Classes\Str;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Api\ApiController;
-use App\Interfaces\Directories;
-use App\Interfaces\Tables;
+use App\Library\Enums\Common\Directories;
+use App\Library\Enums\Common\Tables;
+use App\Library\Utils\Extensions\Arrays;
+use App\Library\Utils\Extensions\Rule;
+use App\Library\Utils\Extensions\Str;
 use App\Models\Attribute;
 use App\Models\AttributeSetItem;
 use App\Models\Category;
@@ -167,7 +167,7 @@ class BulkProductController extends ApiController
 			$main = $reader->load(request()->file('catalog')->getPathname());
 			$spreadsheet = $main->getSheetByName(Category::find($validated['categoryId'])->name);
 			if ($spreadsheet->getHighestDataRow() < 2) {
-				$response->status(HttpInvalidRequestFormat)->message('Uploaded sheet does not contain any data.');
+				$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message('Uploaded sheet does not contain any data.');
 			} else {
 				if ($this->validateHeaderRow($spreadsheet)) {
 					for ($rowIndex = 2; $rowIndex <= $spreadsheet->getHighestDataRow(); $rowIndex++) {
@@ -214,14 +214,14 @@ class BulkProductController extends ApiController
 						}
 					}
 				} else {
-					$response->status(HttpInvalidRequestFormat)->message('Catalog format is invalid. Please upload a proper sheet!');
+					$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message('Catalog format is invalid. Please upload a proper sheet!');
 				}
 			}
-			$response->status(HttpOkay)->message('Catalog processed successfully! Products sent for approval.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Catalog processed successfully! Products sent for approval.');
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
 		} catch (\Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Orders\Status\Bulk;
 
-use App\Classes\Str;
+use App\Library\Utils\Extensions\Str;
 use App\Models\SubOrder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Collection;

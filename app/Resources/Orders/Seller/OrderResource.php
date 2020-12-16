@@ -2,7 +2,7 @@
 
 namespace App\Resources\Orders\Seller;
 
-use App\Enums\Orders\Status;
+use App\Library\Enums\Orders\Status;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**

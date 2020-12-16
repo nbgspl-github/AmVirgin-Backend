@@ -2,7 +2,7 @@
 
 namespace App\Resources\Orders\Customer;
 
-use App\Classes\Time;
+use App\Library\Utils\Extensions\Time;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderTrackingResource extends JsonResource{

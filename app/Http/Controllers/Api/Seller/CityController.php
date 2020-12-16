@@ -16,7 +16,7 @@ class CityController extends ApiController
 				'name' => $city->name,
 			];
 		});
-		return responseApp()->status(HttpOkay)->message(function () use ($cities) {
+		return responseApp()->status(\Illuminate\Http\Response::HTTP_OK)->message(function () use ($cities) {
 			return sprintf('Found %d cities for the given state.', $cities->count());
 		})->setValue('data', $cities)->send();
 	}

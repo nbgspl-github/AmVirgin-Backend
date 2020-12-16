@@ -2,7 +2,7 @@
 
 namespace App\Resources\Products\Seller;
 
-use App\Classes\Time;
+use App\Library\Utils\Extensions\Time;
 use App\Models\Product;
 use App\Storage\SecuredDisk;
 use Illuminate\Http\Resources\Json\JsonResource;

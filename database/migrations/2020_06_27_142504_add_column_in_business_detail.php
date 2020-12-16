@@ -16,7 +16,7 @@ class AddColumnInBusinessDetail extends Migration
         Schema::table('seller-business-details', function (Blueprint $table) {
             $table->string('pan')->nullable();
             $table->boolean('panVerified')->default(false);
-            $table->string('panProofDocument', \App\Constants\Constants::MaxFilePathLength)->nullable();
+	        $table->string('panProofDocument', \App\Library\Enums\Common\Constants::MaxFilePathLength)->nullable();
         });
     }
 

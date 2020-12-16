@@ -33,8 +33,8 @@
 									@endif
 								</td>
 								<td class="text-center">{{$slide->title}}</td>
-								<td class="text-center">{{\App\Classes\Str::ellipsis($slide->description,50)}}</td>
-								<td class="text-center">{{$slide->rating??\App\Classes\Str::NotAvailable}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::ellipsis($slide->description,50)}}</td>
+								<td class="text-center">{{$slide->rating??\App\Library\Utils\Extensions\Str::NotAvailable}}</td>
 								<td class="text-center">
 									<div class="btn-group btn-group-toggle shadow-sm" data-toggle="buttons">
 										@if($slide->isActive()==true)
@@ -55,7 +55,7 @@
 									</div>
 								</td>
 								<td class="text-center">
-									<a class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig" target="_blank" href="{{$slide->target}}">{{\App\Classes\Str::ellipsis($slide->target)}}</a>
+									<a class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig" target="_blank" href="{{$slide->target}}">{{\App\Library\Utils\Extensions\Str::ellipsis($slide->target)}}</a>
 								</td>
 								<td class="text-center">
 									<div class="btn-toolbar" role="toolbar">

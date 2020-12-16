@@ -2,12 +2,9 @@
 
 namespace App\Resources\Products\Customer;
 
-use App\Classes\Arrays;
-use App\Classes\Str;
-use App\Models\Category;
+use App\Library\Utils\Extensions\Arrays;
 use App\Models\Product;
 use App\Storage\SecuredDisk;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductResource extends AbstractProductResource{
 	protected ?CategoryResource $categoryResource;

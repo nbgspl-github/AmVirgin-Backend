@@ -28,11 +28,11 @@
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">{{$attribute->name()}}</td>
 								<td class="text-center">{{$attribute->code()}}</td>
-								<td class="text-center">{{\App\Classes\Str::stringifyBoolean($attribute->required())}}</td>
-								<td class="text-center">{{\App\Classes\Str::stringifyBoolean($attribute->useInLayeredNavigation())}}</td>
-								<td class="text-center">{{\App\Classes\Str::stringifyBoolean($attribute->useToCreateVariants())}}</td>
-								<td class="text-center">{{\App\Classes\Str::stringifyBoolean($attribute->predefined())}}</td>
-								<td class="text-center">{{\App\Classes\Str::stringifyBoolean($attribute->multiValue())}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::stringifyBoolean($attribute->required())}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::stringifyBoolean($attribute->useInLayeredNavigation())}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::stringifyBoolean($attribute->useToCreateVariants())}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::stringifyBoolean($attribute->predefined())}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::stringifyBoolean($attribute->multiValue())}}</td>
 								<td class="text-center">
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group mx-auto" role="group">

@@ -4,11 +4,10 @@ namespace App\Models;
 
 use App\Classes\Cart\CartItem;
 use App\Classes\Cart\CartItemCollection;
-use App\Classes\Str;
-use App\Constants\CartStatus;
-use App\Enums\Orders\Status;
 use App\Exceptions\CartAlreadySubmittedException;
 use App\Exceptions\CartItemNotFoundException;
+use App\Library\Enums\Cart\Status;
+use App\Library\Utils\Extensions\Str;
 use App\Models\Auth\Customer;
 use App\Resources\Products\Customer\OptionResource;
 use App\Traits\RetrieveResource;
@@ -238,14 +237,14 @@ class Cart extends Model
 				]);
 			});
 		});
-		$this->status = CartStatus::Submitted;
+		$this->status = Status::Submitted;
 		$this->save();
 		return $order;
 	}
 
 	public function wasSubmitted ()
 	{
-		return Str::equals($this->status, CartStatus::Submitted);
+		return Str::equals($this->status, Status::Submitted);
 	}
 
 	public function transaction ()

@@ -1,7 +1,6 @@
 <?php
 namespace Database\Seeders;
-use App\Classes\Arrays;
-use App\Models\Country;
+use App\Library\Utils\Extensions\Arrays;
 use App\Models\State;
 use Illuminate\Database\Seeder;
 

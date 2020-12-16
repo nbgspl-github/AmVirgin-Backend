@@ -2,7 +2,7 @@
 
 namespace App\Resources\Brands\Seller;
 
-use App\Classes\Str;
+use App\Library\Utils\Extensions\Str;
 use App\Storage\SecuredDisk;
 use Illuminate\Http\Resources\Json\JsonResource;
 

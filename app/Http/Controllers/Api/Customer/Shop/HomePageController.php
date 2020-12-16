@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\Customer\Shop;
 
-use App\Classes\Arrays;
-use App\Classes\Time;
 use App\Http\Controllers\Api\ApiController;
+use App\Library\Utils\Extensions\Arrays;
+use App\Library\Utils\Extensions\Time;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Settings;
@@ -93,9 +93,9 @@ class HomePageController extends ApiController
 			$trendingNow = Category::startQuery()->trendingNow()->get();
 			$trendingNow = TrendingNowResource::collection($trendingNow);
 			Arrays::set($container, 'trendingNow', $trendingNow);
-			return responseApp()->status(HttpOkay)->message('Listing shop homepage contents.')->setValue('data', $container)->send();
+			return responseApp()->status(\Illuminate\Http\Response::HTTP_OK)->message('Listing shop homepage contents.')->setValue('data', $container)->send();
 		} catch (Throwable $exception) {
-			return responseApp()->status(HttpServerError)->message($exception->getMessage())->send();
+			return responseApp()->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage())->send();
 		}
 	}
 
@@ -105,9 +105,9 @@ class HomePageController extends ApiController
 		try {
 			$deals = Product::startQuery()->hotDeal()->get();
 			$deals = TrendingDealsResource::collection($deals);
-			$response->status(HttpOkay)->message('Listing all trending deal.')->setValue('data', $deals);
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Listing all trending deal.')->setValue('data', $deals);
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

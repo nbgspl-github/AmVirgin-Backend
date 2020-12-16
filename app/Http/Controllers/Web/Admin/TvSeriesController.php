@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Web\Admin;
 use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
-use App\Interfaces\Directories;
-use App\Interfaces\VideoTypes;
+use App\Library\Enums\Common\Directories;
+use App\Library\Enums\Videos\Types;
 use App\Models\Genre;
 use App\Models\MediaLanguage;
 use App\Models\MediaQuality;
@@ -80,7 +80,7 @@ class TvSeriesController extends BaseController
 				'genreId' => $validated['genreId'],
 				'rating' => $validated['rating'],
 				'pgRating' => $validated['pgRating'],
-				'type' => VideoTypes::Series,
+				'type' => Types::Series,
 				'hits' => 0,
 				'trending' => request()->has('trending'),
 				'rank' => is_null($validated['rank']) ? 0 : $validated['rank'],
@@ -92,7 +92,7 @@ class TvSeriesController extends BaseController
 			$video->save();
 			$response = $this->success()->message('Tv series details were successfully saved. Please proceed to next step.');
 		} catch (ValidationException $exception) {
-			$response = $this->failed()->message($exception->getError())->status(HttpInvalidRequestFormat);
+			$response = $this->failed()->message($exception->getError())->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST);
 		} catch (Throwable $exception) {
 			$response = $this->error()->message($exception->getTraceAsString());
 		} finally {
@@ -338,12 +338,12 @@ class TvSeriesController extends BaseController
 			$video->setLanguageSlug($mediaLanguages);
 			$video->save();
 
-			$response->status(HttpOkay)->message('Video content was updated successfully.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Video content was updated successfully.');
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find video for that key.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find video for that key.');
 		} catch (Throwable $exception) {
 			dd($exception);
-			$response->status(HttpServerError)->message($exception->getTraceAsString());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getTraceAsString());
 		} finally {
 			return $response->send();
 		}

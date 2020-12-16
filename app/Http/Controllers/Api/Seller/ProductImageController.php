@@ -17,11 +17,11 @@ class ProductImageController extends ApiController
 			$image = ProductImage::retrieveThrows($id);
 			SecuredDisk::deleteIfExists($image->path);
 			$image->delete();
-			$response->status(HttpOkay)->message('Product image deleted successfully.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Product image deleted successfully.');
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find product image for that key.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find product image for that key.');
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

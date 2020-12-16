@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\Seller\Payments;
 
-use App\Classes\Str;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Api\ApiController;
+use App\Library\Utils\Extensions\Str;
 use App\Resources\Payments\Seller\ListResource;
 use App\Traits\ValidatesRequest;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;

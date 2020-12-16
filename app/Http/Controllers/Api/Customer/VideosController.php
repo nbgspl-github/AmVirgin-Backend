@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers\Api\Customer;
 
-use App\Classes\Str;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Resources\Videos\VideoResource;
-use App\Interfaces\VideoTypes;
+use App\Library\Enums\Videos\Types;
+use App\Library\Utils\Extensions\Str;
 use App\Models\Video;
 use App\Models\VideoSource;
 use App\Models\WatchLaterVideo;
 use App\Resources\Shop\Customer\HomePage\TrendingNowVideoResource;
 use App\Storage\SecuredDisk;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Throwable;
@@ -24,7 +26,7 @@ class VideosController extends ApiController
 		parent::__construct();
 	}
 
-	public function show ($id)
+	public function show ($id) : JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -32,7 +34,7 @@ class VideosController extends ApiController
 			$payload = new VideoResource($video);
 			$payload = $payload->jsonSerialize();
 			$payload['content'] = $payload['recommended'] = [];
-			if ($video->getType() == VideoTypes::Series) {
+			if ($video->getType() == Types::Series) {
 				$seasons = $video->sources()->get()->groupBy('season')->transform(function (Collection $season) {
 					return $season->groupBy('episode')->transform(function (Collection $episode) {
 						return [
@@ -81,17 +83,17 @@ class VideosController extends ApiController
 				$payload['recommended'] = $trendingNow;
 			}
 
-			$response->status(HttpOkay)->message('Success')->setValue('data', $payload);
+			$response->status(Response::HTTP_OK)->message('Success')->setValue('data', $payload);
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('No video/tv-series found for given key.')->setValue('data');
+			$response->status(Response::HTTP_NOT_FOUND)->message('No video/tv-series found for given key.')->setValue('data');
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage())->setValue('data');
+			$response->status(Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage())->setValue('data');
 		} finally {
 			return $response->send();
 		}
 	}
 
-	public function addInWatchLater (Request $request)
+	public function addInWatchLater (Request $request) : JsonResponse
 	{
 		$response = responseApp();
 		$dataSet = [];
@@ -103,7 +105,7 @@ class VideosController extends ApiController
 
 		if ($validator->fails()) {
 
-			$response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
+			$response->status(Response::HTTP_BAD_REQUEST)->message($validator->errors()->first());
 			return $response->send();
 		} else {
 
@@ -119,16 +121,16 @@ class VideosController extends ApiController
 				$videoData = WatchLaterVideo::where(['customer_id' => $id, 'video_id' => $videoId])->first();
 
 				if (!empty($videoData)) {
-					$response->status(HttpOkay)->message('OPPS! This video is already added in list');
+					$response->status(Response::HTTP_OK)->message('This video is already added in list');
 					return $response->send();
 				} else {
 					$res = WatchLaterVideo::create($dataSet);
-					$response->status(HttpOkay)->message('Successfully added in list');
+					$response->status(Response::HTTP_OK)->message('Successfully added in list');
 					return $response->send();
 				}
 
 			} catch (Throwable $exception) {
-				$response->status(HttpServerError)->message($exception->getMessage());
+				$response->status(Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 			} finally {
 				return $response->send();
 			}
@@ -149,16 +151,16 @@ class VideosController extends ApiController
 			if (!empty($videoData)) {
 				$videoData->delete();
 
-				$response->status(HttpOkay)->message('Successfully removed from list');
+				$response->status(Response::HTTP_OK)->message('Successfully removed from list');
 				return $response->send();
 			} else {
 
-				$response->status(HttpResourceNotFound)->message('OPPS! This video is not added in list');
+				$response->status(Response::HTTP_NOT_FOUND)->message('OPPS! This video is not added in list');
 				return $response->send();
 			}
 
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -175,10 +177,10 @@ class VideosController extends ApiController
 				->where(['customer_id' => $cId])
 				->get();
 
-			$response->status(HttpOkay)->message('Success')->setValue('data', $dataSet);
+			$response->status(Response::HTTP_OK)->message('Success')->setValue('data', $dataSet);
 
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

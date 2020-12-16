@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\API\Customer\Cart;
 
 use App\Classes\Cart\CartItem;
-use App\Constants\CartStatus;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\AppController;
-use App\Interfaces\Tables;
+use App\Library\Enums\Cart\Status;
+use App\Library\Enums\Common\Tables;
 use App\Models\Cart;
 use App\Models\CustomerWishlist;
 use App\Models\Product;
@@ -41,7 +41,7 @@ class CustomerWishlistController extends AppController
 		$wishList->transform(function (CustomerWishlist $item) {
 			return new CatalogListResource(Product::retrieve($item->productId));
 		});
-		return responseApp()->status(HttpOkay)->setValue('data', $wishList)->message(function () use ($wishList) {
+		return responseApp()->status(\Illuminate\Http\Response::HTTP_OK)->setValue('data', $wishList)->message(function () use ($wishList) {
 			return sprintf('Found %d items in the wishlist.', $wishList->count());
 		})->send();
 	}
@@ -55,9 +55,9 @@ class CustomerWishlistController extends AppController
 				['customerId', $this->guard()->id()],
 				['productId', $productId],
 			])->firstOrFail();
-			$response->status(HttpResourceAlreadyExists)->message('Item already exists in wishlist.');
+			$response->status(\Illuminate\Http\Response::HTTP_CONFLICT)->message('Item already exists in wishlist.');
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
 		} catch (ModelNotFoundException $exception) {
 			try {
 				Product::retrieveThrows($productId);
@@ -65,12 +65,12 @@ class CustomerWishlistController extends AppController
 					'customerId' => $this->guard()->id(),
 					'productId' => $productId,
 				]);
-				$response->status(HttpOkay)->message('Item added to wishlist.');
+				$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Item added to wishlist.');
 			} catch (ModelNotFoundException $exception) {
-				$response->status(HttpResourceNotFound)->message('Could not find product for that key.');
+				$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find product for that key.');
 			}
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -85,11 +85,11 @@ class CustomerWishlistController extends AppController
 				['productId', $productId],
 			])->firstOrFail();
 			$wishListItem->delete();
-			$response->status(HttpOkay)->message('Item removed from wishlist.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Item removed from wishlist.');
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Item not found in wishlist.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Item not found in wishlist.');
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -113,28 +113,28 @@ class CustomerWishlistController extends AppController
 					$wishlistItem->delete();
 					$cart->addItem($cartItem);
 					$cart->save();
-					$response->status(HttpOkay)->message('Item moved to cart.');
+					$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Item moved to cart.');
 				} else {
-					$response->status(HttpResourceNotFound)->message('Cart already contains the item you specified.');
+					$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Cart already contains the item you specified.');
 				}
 			} catch (ModelNotFoundException $exception) {
 				\App\Models\Cart::create([
 					'sessionId' => $validated->sessionId,
-					'status' => CartStatus::Pending,
+					'status' => Status::Pending,
 				]);
 				$cart = Cart::retrieveThrows($validated->sessionId);
 				$cartItem = new CartItem($cart, $productId);
 				$wishlistItem->delete();
 				$cart->addItem($cartItem);
 				$cart->save();
-				$response->status(HttpOkay)->message('Item moved to cart.');
+				$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Item moved to cart.');
 			}
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpOkay)->message('Item was not found in the wishlist.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Item was not found in the wishlist.');
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

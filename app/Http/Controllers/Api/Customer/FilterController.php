@@ -47,7 +47,7 @@ class FilterController extends ApiController
 
 		// Prepare and send response.
 		return responseApp()
-			->status(HttpOkay)->setValue('payload', $filters)
+			->status(\Illuminate\Http\Response::HTTP_OK)->setValue('payload', $filters)
 			->message('Listing available filters for category.')->send();
 	}
 

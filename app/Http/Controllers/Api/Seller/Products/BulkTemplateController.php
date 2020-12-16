@@ -308,9 +308,9 @@ class BulkTemplateController extends ApiController
 			$response->headers->set('Cache-Control', 'max-age=0');
 			return $response;
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
 		} catch (\Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -335,12 +335,12 @@ class BulkTemplateController extends ApiController
 				$response->headers->set('Cache-Control', 'max-age=0');
 				return $response;
 			} else {
-				$response->status(HttpOkay)->message('No catalog available for category!');
+				$response->status(\Illuminate\Http\Response::HTTP_OK)->message('No catalog available for category!');
 			}
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
 		} catch (\Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

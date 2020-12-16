@@ -1,6 +1,6 @@
 <?php
 namespace Database\Seeders;
-use App\Classes\Time;
+use App\Library\Utils\Extensions\Time;
 use App\Models\Auth\Seller;
 use Illuminate\Database\Seeder;
 

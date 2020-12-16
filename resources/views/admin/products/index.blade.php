@@ -24,7 +24,7 @@
 							<tr id="content_row_{{$product->getKey()}}">
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">{{$product->name()}}</td>
-								<td class="text-center">{{\App\Classes\Str::ellipsis($product->description(),40)}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::ellipsis($product->description(),40)}}</td>
 								<td class="text-center">{{$product->originalPrice()}}</td>
 								<td class="text-center">{{$product->approved==true?'approved':'pending'}}</td>
 								<td class="text-center">

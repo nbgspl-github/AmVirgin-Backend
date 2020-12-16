@@ -1,6 +1,5 @@
 <?php
 
-use App\Classes\Str;
 use App\Http\Controllers\Api\Customer\AuthController;
 use App\Http\Controllers\Api\Customer\Cart\CustomerWishlistController;
 use App\Http\Controllers\Api\Customer\Cart\QuoteController;
@@ -15,6 +14,7 @@ use App\Http\Controllers\Api\Customer\Shop\ProductRatingController;
 use App\Http\Controllers\Api\Customer\StatesController;
 use App\Http\Controllers\Api\Customer\SubscriptionController;
 use App\Http\Controllers\Api\Customer\TwoFactorAuthController;
+use App\Library\Utils\Extensions\Str;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix(Str::Empty)->group(function () {

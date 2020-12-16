@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\Customer;
 
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Api\ApiController;
-use App\Interfaces\Tables;
+use App\Library\Enums\Common\Tables;
 use App\Models\Address;
 use App\Resources\Addresses\Customer\ShippingAddressResource;
 use App\Traits\ValidatesRequest;
@@ -55,7 +55,7 @@ class ShippingAddressesController extends ApiController
 	{
 		$shippingAddresses = Address::where('customerId', $this->guard()->id())->get();
 		$shippingAddresses = ShippingAddressResource::collection($shippingAddresses);
-		return responseApp()->status(HttpOkay)->message(function () use ($shippingAddresses) {
+		return responseApp()->status(\Illuminate\Http\Response::HTTP_OK)->message(function () use ($shippingAddresses) {
 			return sprintf('Found %d addresses for this customer', $shippingAddresses->count());
 		})->setValue('data', $shippingAddresses)->send();
 	}
@@ -83,7 +83,7 @@ class ShippingAddressesController extends ApiController
 					'saturdayWorking' => $validated->saturdayWorking,
 					'sundayWorking' => $validated->sundayWorking,
 				]);
-				$response->status(HttpOkay)->message('Shipping address updated successfully.');
+				$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Shipping address updated successfully.');
 			} catch (ModelNotFoundException $exception) {
 				Address::create([
 					'customerId' => $this->guard()->id(),
@@ -99,12 +99,12 @@ class ShippingAddressesController extends ApiController
 					'saturdayWorking' => $validated->saturdayWorking,
 					'sundayWorking' => $validated->sundayWorking,
 				]);
-				$response->status(HttpOkay)->message('Shipping address saved successfully.');
+				$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Shipping address saved successfully.');
 			}
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -131,13 +131,13 @@ class ShippingAddressesController extends ApiController
 				'saturdayWorking' => $validated->saturdayWorking,
 				'sundayWorking' => $validated->sundayWorking,
 			]);
-			$response->status(HttpOkay)->message('Shipping address updated successfully.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Shipping address updated successfully.');
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find address for that key.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find address for that key.');
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -152,11 +152,11 @@ class ShippingAddressesController extends ApiController
 				['id', $id],
 			])->firstOrFail();
 			$address->delete();
-			$response->status(HttpOkay)->message('Shipping address deleted successfully.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Shipping address deleted successfully.');
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find address for that key.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find address for that key.');
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

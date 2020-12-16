@@ -41,7 +41,7 @@ class OrderController extends ApiController
 	{
 		$response = responseApp();
 		$order = new OrderTrackingResource($order);
-		$response->status(HttpOkay)->message('Tracking details retrieved successfully.')->setValue('data', $order);
+		$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Tracking details retrieved successfully.')->setValue('data', $order);
 		return $response->send();
 	}
 

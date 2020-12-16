@@ -85,7 +85,7 @@ class ResponseBuilder
 		$object = new ResponseBuilder();
 		$object->message = 'Failed';
 		$object->status = 0;
-		$object->statusCode = HttpServerError;
+		$object->statusCode = \Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR;
 		return $object;
 	}
 

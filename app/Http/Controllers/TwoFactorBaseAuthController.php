@@ -56,12 +56,12 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController
 			if ($type == self::Type['2Factor']) {
 				$otp = $user->sendVerificationOtp();
 				$user->setOtp($otp)->save();
-				$response->status(HttpResourceAlreadyExists)->message('Otp has been sent to your registered mobile number.');
+				$response->status(\Illuminate\Http\Response::HTTP_CONFLICT)->message('Otp has been sent to your registered mobile number.');
 			} else {
-				$response->status(HttpResourceAlreadyExists)->message('User found for that key.');
+				$response->status(\Illuminate\Http\Response::HTTP_CONFLICT)->message('User found for that key.');
 			}
 		} catch (OtpPushException $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} catch (ModelNotFoundException $exception) {
 			if ($type == self::Type['2Factor']) {
 				try {
@@ -74,17 +74,17 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController
 							'otp' => $otp,
 						]
 					);
-					$response->status(HttpResourceNotFound)->message('Not found');
+					$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Not found');
 				} catch (OtpPushException $exception) {
-					$response->status(HttpServerError)->message($exception->getMessage());
+					$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 				}
 			} else {
-				$response->status(HttpResourceNotFound)->message('User not found for that key.');
+				$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('User not found for that key.');
 			}
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -106,27 +106,27 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController
 					throw_if(($payload['otp'] != $userOtp), new OtpMismatchException());
 				}
 				$token = $this->generateToken($user);
-				$response->message($this->loginSuccess())->setValue('data', $this->loginPayload($user, $token))->status(HttpOkay);
+				$response->message($this->loginSuccess())->setValue('data', $this->loginPayload($user, $token))->status(\Illuminate\Http\Response::HTTP_OK);
 			} else {
 				if ($this->shouldAllowOnlyActiveUsers() && !$user->isActive()) {
-					$response->status(HttpDeniedAccess)->message($this->deniedAccess());
+					$response->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message($this->deniedAccess());
 				}
 				$token = $this->guard()->attempt($this->credentials($request));
 				if (!$token)
-					$response->message($this->loginFailed())->status(HttpUnauthorized);
+					$response->message($this->loginFailed())->status(\Illuminate\Http\Response::HTTP_UNAUTHORIZED);
 				else
 					$response->message($this->loginSuccess())->setValue('data', $this->loginPayload($user, $token));
 			}
 		} catch (OtpMismatchException $exception) {
-			$response->status(HttpUnauthorized)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_UNAUTHORIZED)->message($exception->getMessage());
 		} catch (OtpPushException $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message(__('strings.customer.not-found'));
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message(__('strings.customer.not-found'));
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -149,21 +149,21 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController
 			$user = $this->create($request);
 			$token = $this->generateToken($user);
 			if (!$token)
-				$response->message($this->registerFailed())->status(HttpServerError);
+				$response->message($this->registerFailed())->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR);
 			else
-				$response->message($this->registerSuccess())->status(HttpCreated)->setValue('data', $this->registerPayload($user, $token));
+				$response->message($this->registerSuccess())->status(\Illuminate\Http\Response::HTTP_CREATED)->setValue('data', $this->registerPayload($user, $token));
 		} catch (OtpNotFoundException $exception) {
-			$response->status(HttpDeniedAccess)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message($exception->getMessage());
 		} catch (OtpMismatchException $exception) {
-			$response->status(HttpUnauthorized)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_UNAUTHORIZED)->message($exception->getMessage());
 		} catch (OtpPushException $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} catch (ResourceConflictException $exception) {
-			$response->status(HttpResourceAlreadyExists)->message($this->registerTaken());
+			$response->status(\Illuminate\Http\Response::HTTP_CONFLICT)->message($this->registerTaken());
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -182,11 +182,11 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController
 				$user = $this->authTarget()::create($validated);
 			}
 			$token = $this->generateToken($user);
-			$response->message($this->loginSuccess())->setValue('data', $this->registerPayload($user, $token))->status(HttpOkay);
+			$response->message($this->loginSuccess())->setValue('data', $this->registerPayload($user, $token))->status(\Illuminate\Http\Response::HTTP_OK);
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

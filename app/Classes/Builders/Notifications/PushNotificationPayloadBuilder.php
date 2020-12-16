@@ -2,13 +2,13 @@
 
 namespace App\Classes\Builders\Notifications;
 
-use App\Contracts\FluentConstructor;
-use App\Contracts\SerializesToArray;
-use App\Contracts\SerializesToJson;
+use App\Traits\FluentConstructor;
 use App\Traits\RedactArrayItems;
 
-class PushNotificationPayloadBuilder implements FluentConstructor, SerializesToArray, SerializesToJson {
+class PushNotificationPayloadBuilder
+{
 	use RedactArrayItems;
+	use FluentConstructor;
 
 	/**
 	 * Predefined Firebase recognized keys.
@@ -28,7 +28,8 @@ class PushNotificationPayloadBuilder implements FluentConstructor, SerializesToA
 	/**
 	 * PushNotificationPayloadBuilder constructor.
 	 */
-	private function __construct() {
+	private function __construct ()
+	{
 		$this->payloadItems = [];
 	}
 
@@ -38,17 +39,10 @@ class PushNotificationPayloadBuilder implements FluentConstructor, SerializesToA
 	 * @param string $value
 	 * @return $this
 	 */
-	public function addData(string $key, string $value) {
+	public function addData (string $key, string $value)
+	{
 		$this->payloadItems[$key] = $value;
 		return $this;
-	}
-
-	/**
-	 *  Makes a new instance and returns it.
-	 * @return self
-	 */
-	public static function instance() {
-		return new self();
 	}
 
 	/**
@@ -57,7 +51,8 @@ class PushNotificationPayloadBuilder implements FluentConstructor, SerializesToA
 	 * @param array $redact
 	 * @return array
 	 */
-	public function serializeArray($redact = []) {
+	public function serializeArray ($redact = [])
+	{
 		$payload = $this->redact($this->payloadItems, $redact);
 		return $payload;
 	}
@@ -68,7 +63,8 @@ class PushNotificationPayloadBuilder implements FluentConstructor, SerializesToA
 	 * @param array $redact
 	 * @return array
 	 */
-	public function serializeJson($redact = []) {
+	public function serializeJson ($redact = [])
+	{
 		$payload = $this->redact($this->payloadItems, $redact);
 		return jsonEncode($payload);
 	}

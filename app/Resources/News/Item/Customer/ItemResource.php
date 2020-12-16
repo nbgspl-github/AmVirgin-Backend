@@ -2,7 +2,7 @@
 
 namespace App\Resources\News\Item\Customer;
 
-use App\Classes\Time;
+use App\Library\Utils\Extensions\Time;
 use App\Models\NewsItem;
 use App\Models\NewsVideo;
 use Illuminate\Http\Resources\Json\JsonResource;

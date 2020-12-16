@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\Seller;
 
-use App\Classes\Rule;
 use App\Http\Controllers\BaseAuthController;
-use App\Interfaces\Tables;
+use App\Library\Enums\Common\Tables;
+use App\Library\Utils\Extensions\Rule;
 use App\Mail\SendMail;
 use App\Models\Auth\Seller;
 use App\Resources\Auth\Seller\AuthProfileResource;
@@ -46,7 +46,7 @@ class AuthController extends BaseAuthController
 		];
 		$validator = Validator::make($input, $rules);
 		if ($validator->fails()) {
-			$response->status(HttpServerError)->message($validator->errors()->first());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($validator->errors()->first());
 			return $response->send();
 		} else {
 			try {
@@ -55,19 +55,19 @@ class AuthController extends BaseAuthController
 
 				if ((Hash::check(request('old_password'), $seller->password)) == false) {
 
-					$response->status(HttpUnauthorized)->message('Check your old password');
+					$response->status(\Illuminate\Http\Response::HTTP_UNAUTHORIZED)->message('Check your old password');
 
 				} else if ((Hash::check(request('new_password'), $seller->password)) == true) {
 
-					$response->status(HttpUnauthorized)->message('Please enter a password which is not similar then current password');
+					$response->status(\Illuminate\Http\Response::HTTP_UNAUTHORIZED)->message('Please enter a password which is not similar then current password');
 
 				} else {
 					$seller->update(['password' => Hash::make($input['new_password'])]);
-					$response->status(HttpOkay)->message('Password updated successfully');
+					$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Password updated successfully');
 
 				}
 			} catch (Throwable $exception) {
-				$response->status(HttpServerError)->message($exception->getMessage());
+				$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 			} finally {
 				return $response->send();
 			}
@@ -85,7 +85,7 @@ class AuthController extends BaseAuthController
 		];
 		$validator = Validator::make($input, $rules);
 		if ($validator->fails()) {
-			$response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($validator->errors()->first());
 		} else {
 			try {
 
@@ -99,11 +99,11 @@ class AuthController extends BaseAuthController
 					$seller = Seller::where('email', $tokenData->email)->first();
 					if (!$seller) {
 
-						$response->status(HttpResourceNotFound)->message('Invalid seller email.');
+						$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Invalid seller email.');
 						return $response->send();
 					}
 				} else {
-					$response->status(HttpResourceNotFound)->message('Invalid token.');
+					$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Invalid token.');
 					return $response->send();
 				}
 				//or wherever you want
@@ -113,14 +113,14 @@ class AuthController extends BaseAuthController
 
 				// If the seller shouldn't reuse the token later, delete the token
 				DB::table('password-resets')->where('email', $seller->email)->delete();
-				$response->status(HttpOkay)->message('Password has been reset successfully');
+				$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Password has been reset successfully');
 
 			} catch (ModelNotFoundException $exception) {
 
-				$response->status(HttpResourceNotFound)->message('Could not find seller for that key.');
+				$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find seller for that key.');
 
 			} catch (Throwable $exception) {
-				$response->status(HttpServerError)->message($exception->getMessage());
+				$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 			}
 		}
 		return $response->send();
@@ -140,7 +140,7 @@ class AuthController extends BaseAuthController
 
 		if ($validator->fails()) {
 
-			$response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($validator->errors()->first());
 			return $response->send();
 		} else {
 			try {
@@ -171,10 +171,10 @@ class AuthController extends BaseAuthController
 				//  	
 
 				//  } 
-				$response->status(HttpOkay)->message('Great! Please Check Your Email for Password reset!')->setValue('data', $dataSet);
+				$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Great! Please Check Your Email for Password reset!')->setValue('data', $dataSet);
 
 			} catch (Throwable $exception) {
-				$response->status(HttpServerError)->message($exception->getMessage());
+				$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 
 			} finally {
 				return $response->send();
@@ -197,7 +197,7 @@ class AuthController extends BaseAuthController
 
 		if ($validator->fails()) {
 
-			$response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($validator->errors()->first());
 			return $response->send();
 		} else {
 			try {
@@ -218,10 +218,10 @@ class AuthController extends BaseAuthController
 				// 		->subject('Change Your Password!');
 				// });
 
-				$response->status(HttpOkay)->message('Great! Please check your new email for change email')->setValue('data', $dataSet);
+				$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Great! Please check your new email for change email')->setValue('data', $dataSet);
 
 			} catch (Throwable $exception) {
-				$response->status(HttpServerError)->message($exception->getMessage());
+				$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 
 			} finally {
 				return $response->send();
@@ -241,7 +241,7 @@ class AuthController extends BaseAuthController
 		];
 		$validator = Validator::make($input, $rules);
 		if ($validator->fails()) {
-			$response->status(HttpInvalidRequestFormat)->message($validator->errors()->first());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($validator->errors()->first());
 		} else {
 			try {
 
@@ -255,11 +255,11 @@ class AuthController extends BaseAuthController
 				if (!empty($tokenData)) {
 					$seller = Seller::where('email', $tokenData->email)->first();
 					if (!$seller) {
-						$response->status(HttpResourceNotFound)->message('Invalid seller current email.');
+						$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Invalid seller current email.');
 						return $response->send();
 					}
 				} else {
-					$response->status(HttpResourceNotFound)->message('Invalid token or Current Email.');
+					$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Invalid token or Current Email.');
 					return $response->send();
 				}
 				//or wherever you want
@@ -269,14 +269,14 @@ class AuthController extends BaseAuthController
 
 				// If the seller shouldn't reuse the token later, delete the token
 				DB::table('change-emails')->where('email', $oldEmail)->delete();
-				$response->status(HttpOkay)->message('Email has been changed successfully');
+				$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Email has been changed successfully');
 
 			} catch (ModelNotFoundException $exception) {
 
-				$response->status(HttpResourceNotFound)->message('Could not find seller for that key.');
+				$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find seller for that key.');
 
 			} catch (Throwable $exception) {
-				$response->status(HttpServerError)->message($exception->getMessage());
+				$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 			}
 		}
 		return $response->send();

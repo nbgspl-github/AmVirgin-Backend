@@ -27,14 +27,14 @@ class CreateBankDetailsTable extends Migration{
 			$table->string('pan')->nullable();
 			$table->boolean('panVerified')->default(false);
 			$table->string('addressProofType')->nullable();
-			$table->string('addressProofDocument', \App\Constants\Constants::MaxFilePathLength)->nullable();
+			$table->string('addressProofDocument', \App\Library\Enums\Common\Constants::MaxFilePathLength)->nullable();
 			$table->boolean('addressProofVerified')->default(false);
-			$table->string('cancelledCheque', \App\Constants\Constants::MaxFilePathLength)->nullable();
+			$table->string('cancelledCheque', \App\Library\Enums\Common\Constants::MaxFilePathLength)->nullable();
 			$table->boolean('cancelledChequeVerified')->default(false);
 			$table->timestamps();
 
 			if (appEnvironment(AppEnvironmentProduction)) {
-				$table->foreign('sellerId')->references('id')->on(\App\Interfaces\Tables::Sellers)->onDelete('cascade');
+				$table->foreign('sellerId')->references('id')->on(\App\Library\Enums\Common\Tables::Sellers)->onDelete('cascade');
 			}
 		});
 	}

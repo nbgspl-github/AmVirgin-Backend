@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Classes\Arrays;
-use App\Classes\Str;
-use App\Interfaces\Directories;
+use App\Library\Enums\Common\Directories;
+use App\Library\Utils\Extensions\Arrays;
+use App\Library\Utils\Extensions\Str;
 use App\Queries\CategoryQuery;
 use App\Storage\SecuredDisk;
 use App\Traits\DynamicAttributeNamedMethods;

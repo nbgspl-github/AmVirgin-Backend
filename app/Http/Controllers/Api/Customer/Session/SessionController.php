@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api\Customer\Session;
 
-use App\Classes\Str;
 use App\Http\Controllers\BaseController;
+use App\Library\Utils\Extensions\Str;
 use App\Models\CartSession;
 use App\Traits\FluentResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -24,7 +24,7 @@ class SessionController extends BaseController
 			'sessionId' => Str::uuid()->toString(),
 			'customerId' => null,
 		]);
-		return $this->responseApp()->status(HttpOkay)->message('Session initialized successfully.')->
+		return $this->responseApp()->status(\Illuminate\Http\Response::HTTP_OK)->message('Session initialized successfully.')->
 		setValue('session', $session->sessionId)->send();
 	}
 
@@ -33,11 +33,11 @@ class SessionController extends BaseController
 		$response = $this->responseApp();
 		try {
 			$session = CartSession::query()->where('sessionId', $sessionId)->firstOrFail();
-			$response->status(HttpOkay)->message('Session token is valid.')->setValue('valid', true);
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Session token is valid.')->setValue('valid', true);
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Session token is invalid or expired.')->setValue('valid', false);
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Session token is invalid or expired.')->setValue('valid', false);
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage())->setValue('valid', false);
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage())->setValue('valid', false);
 		} finally {
 			return $response->send();
 		}

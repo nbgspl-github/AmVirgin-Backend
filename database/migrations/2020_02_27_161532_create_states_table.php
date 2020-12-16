@@ -18,7 +18,7 @@ class CreateStatesTable extends Migration{
 			$table->timestamps();
 
 			if (appEnvironment(AppEnvironmentProduction)) {
-				$table->foreign('countryId')->references('id')->on(\App\Interfaces\Tables::Countries)->onDelete('cascade');
+				$table->foreign('countryId')->references('id')->on(\App\Library\Enums\Common\Tables::Countries)->onDelete('cascade');
 			}
 		});
 	}

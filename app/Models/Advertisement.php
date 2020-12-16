@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\Advertisements\Status;
+use App\Library\Enums\Advertisements\Status;
 use App\Models\Auth\Seller;
 use App\Queries\Seller\AdvertisementQuery;
 use App\Traits\DynamicAttributeNamedMethods;

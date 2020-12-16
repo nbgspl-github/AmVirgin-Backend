@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\Seller\Manifest;
 
-use App\Enums\Orders\Status;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\Manifests\UpdateRequest;
+use App\Library\Enums\Orders\Status;
 use App\Models\SubOrder;
 use App\Resources\Manifest\Seller\ListResource;
 use App\Traits\ValidatesRequest;
@@ -39,7 +39,7 @@ class ManifestController extends ApiController
 			}
 		});
 		$resourceCollection = ListResource::collection($orders);
-		$response->status(HttpOkay)->message('Successfully processed all orders.')->payload($resourceCollection);
+		$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Successfully processed all orders.')->payload($resourceCollection);
 		return $response->send();
 	}
 

@@ -32,15 +32,15 @@
 									@endif
 								</td>
 								<td class="text-center">{{$product->name()}}</td>
-								<td class="text-center">{{\App\Classes\Str::ellipsis($product->shortDescription(),40)}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::ellipsis($product->shortDescription(),40)}}</td>
 								<td class="text-center">{{$product->originalPrice()}}</td>
 								<td class="text-center">{{$product->offerValue()}}</td>
 								<td class="text-center">
-									@if($product->offerType()==\App\Constants\OfferTypes::NoOffer)
+									@if($product->offerType()==\App\Library\Enums\Products\OfferTypes::None)
 										{{'No offer'}}
-									@elseif ($product->offerType()==\App\Constants\OfferTypes::FlatRate)
+									@elseif ($product->offerType()==\App\Library\Enums\Products\OfferTypes::FlatRate)
 										{{'Fixed amount'}}
-									@elseif($product->offerType()==\App\Constants\OfferTypes::Percentage)
+									@elseif($product->offerType()==\App\Library\Enums\Products\OfferTypes::Percentage)
 										{{'Percentage off'}}
 									@endif
 								</td>

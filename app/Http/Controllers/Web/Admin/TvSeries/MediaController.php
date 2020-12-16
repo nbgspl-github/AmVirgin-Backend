@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Web\Admin\TvSeries;
 
 use App\Classes\WebResponse;
-use App\Interfaces\Directories;
+use App\Library\Enums\Common\Directories;
 use App\Models\Video;
 use App\Storage\SecuredDisk;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -72,11 +72,11 @@ class MediaController extends TvSeriesBase
 				$tvSeries->setTrailer(SecuredDisk::access()->putFile(Directories::Trailers, request()->file('trailer')));
 			}
 			$tvSeries->save();
-			$response->status(HttpOkay)->message('Successfully uploaded/updated media for tv series.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Successfully uploaded/updated media for tv series.');
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find tv series for that key.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find tv series for that key.');
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

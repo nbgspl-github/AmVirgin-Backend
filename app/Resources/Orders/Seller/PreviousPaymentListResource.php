@@ -2,18 +2,18 @@
 
 namespace App\Resources\Orders\Seller;
 
-use App\Classes\Str;
-use App\Classes\Time;
+use App\Library\Utils\Extensions\Str;
+use App\Library\Utils\Extensions\Time;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PreviousPaymentListResource extends JsonResource
 {
-    public function __construct($resource)
-    {
-        parent::__construct($resource);
-    }
+	public function __construct ($resource)
+	{
+		parent::__construct($resource);
+	}
 
-    public function toArray($request)
+	public function toArray ($request)
     {
         $sellerBank = $this->sellerBank;
         $order = $this->order;

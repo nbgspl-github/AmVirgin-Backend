@@ -2,7 +2,7 @@
 
 namespace App\Resources\Products\Seller;
 
-use App\Classes\Arrays;
+use App\Library\Utils\Extensions\Arrays;
 use App\Models\Product;
 use App\Storage\SecuredDisk;
 

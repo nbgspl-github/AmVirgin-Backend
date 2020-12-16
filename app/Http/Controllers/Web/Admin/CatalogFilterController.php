@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
-use App\Classes\Arrays;
-use App\Classes\Rule;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\StoreCategoryFilter;
-use App\Interfaces\Tables;
+use App\Library\Enums\Common\Tables;
+use App\Library\Utils\Extensions\Arrays;
+use App\Library\Utils\Extensions\Rule;
 use App\Models\AttributeSetItem;
 use App\Models\CatalogFilter;
 use App\Models\Category;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 use Throwable;
 
 class CatalogFilterController extends BaseController
@@ -129,14 +128,14 @@ class CatalogFilterController extends BaseController
 					return $item->attribute;
 				});
 				$attributes = $attributes->where('predefined', true)->values();
-				$response->setValue('options', view('admin.filters.catalog.attributeOptions')->with('attributes', $attributes)->render())->status(HttpOkay)->message('Attributes retrieved successfully.');
+				$response->setValue('options', view('admin.filters.catalog.attributeOptions')->with('attributes', $attributes)->render())->status(\Illuminate\Http\Response::HTTP_OK)->message('Attributes retrieved successfully.');
 			} else {
-				$response->setValue('options', view('admin.filters.catalog.attributeOptions'))->status(HttpNoContent)->message('No attribute set found for category.');
+				$response->setValue('options', view('admin.filters.catalog.attributeOptions'))->status(\Illuminate\Http\Response::HTTP_NO_CONTENT)->message('No attribute set found for category.');
 			}
 		} catch (ModelNotFoundException $exception) {
-			$response->setValue('options')->status(HttpResourceNotFound)->message('Could not find category for that key.');
+			$response->setValue('options')->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find category for that key.');
 		} catch (Throwable $exception) {
-			$response->setValue('options')->status(HttpServerError)->message($exception->getMessage());
+			$response->setValue('options')->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

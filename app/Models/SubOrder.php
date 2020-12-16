@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\Orders\Status;
+use App\Library\Enums\Orders\Status;
 use App\Models\Auth\Customer;
 use App\Models\Auth\Seller;
 use App\Queries\SubOrderQuery;
@@ -10,7 +10,6 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * Class SubOrder

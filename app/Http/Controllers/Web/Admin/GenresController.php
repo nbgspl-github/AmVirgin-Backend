@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Web\Admin;
 
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
-use App\Interfaces\Directories;
-use App\Interfaces\Tables;
+use App\Library\Enums\Common\Tables;
+use App\Library\Enums\Common\Directories;
 use App\Models\Genre;
 use App\Traits\ValidatesRequest;
 use Exception;

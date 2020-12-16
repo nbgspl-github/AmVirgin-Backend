@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Web\Admin\TvSeries;
 
 use App\Classes\WebResponse;
-use App\Constants\PageSectionType;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
-use App\Interfaces\VideoTypes;
+use App\Library\Enums\Common\PageSectionType;
+use App\Library\Enums\Videos\Types;
 use App\Models\Genre;
 use App\Models\MediaLanguage;
 use App\Models\MediaQuality;
@@ -100,7 +100,7 @@ class TvSeriesBase extends BaseController
 				'sectionId' => $validated['sectionId'],
 				'rating' => $validated['rating'],
 				'pgRating' => $validated['pgRating'],
-				'type' => VideoTypes::Series,
+				'type' => Types::Series,
 				'hits' => 0,
 				'trending' => request()->has('trending'),
 				'rank' => is_null($validated['rank']) ? 0 : $validated['rank'],
@@ -112,7 +112,7 @@ class TvSeriesBase extends BaseController
 			$video->save();
 			$response = $this->success()->message('Tv series details were successfully saved. Please proceed to next step.')->setValue('route', route('admin.tv-series.edit.action', $video->getKey()));
 		} catch (ValidationException $exception) {
-			$response = $this->failed()->message($exception->getError())->status(HttpInvalidRequestFormat);
+			$response = $this->failed()->message($exception->getError())->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST);
 		} catch (Throwable $exception) {
 			$response = $this->error()->message($exception->getTraceAsString());
 		} finally {

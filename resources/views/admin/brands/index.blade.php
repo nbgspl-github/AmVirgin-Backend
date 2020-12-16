@@ -26,7 +26,7 @@
                                 <td class="text-center">{{$loop->index+1}}</td>
                                 <td class="text-center">{{$brand->name()}}</td>
                                 <td class="text-center">{{$brand->logo()}}</td>
-                                <td class="text-center">{{\App\Classes\Str::stringifyBoolean($brand->active())}}</td>
+                                <td class="text-center">{{\App\Library\Utils\Extensions\Str::stringifyBoolean($brand->active())}}</td>
                                 <td class="text-center">{{$brand->status()}}</td>
                                 <td class="text-center">
                                     <div class="btn-toolbar" role="toolbar">

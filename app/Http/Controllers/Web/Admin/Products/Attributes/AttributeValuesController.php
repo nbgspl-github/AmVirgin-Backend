@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Web\Admin\Products\Attributes;
 
-use App\Classes\Str;
 use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;

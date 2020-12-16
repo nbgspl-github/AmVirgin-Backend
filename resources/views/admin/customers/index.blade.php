@@ -22,9 +22,9 @@
 						@foreach ($users as $user)
 							<tr>
 								<td class="text-center">{{$loop->index+1}}</td>
-								<td class="text-center">{{\App\Classes\Str::ellipsis($user->name,25)}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::ellipsis($user->name,25)}}</td>
 								<td class="text-center">{{$user->mobile}}</td>
-								<td class="text-center">{{\App\Classes\Str::ellipsis($user->email,50)}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::ellipsis($user->email,50)}}</td>
 								<td class="text-center">{{$user->active()?'Active':'Inactive'}}</td>
 								<td class="text-center">
 									<div class="btn-toolbar" role="toolbar">

@@ -23,7 +23,7 @@ class ValueController extends ApiController
 			$sellerInterfaceType = $attribute->sellerInterfaceType();
 			$hasValues = $attribute->predefined();
 			if ($hasValues) {
-				$response->status(HttpInvalidRequestFormat)->message('This attribute does not have a default value or set of values. Your should instead provide a value yourself.');
+				$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message('This attribute does not have a default value or set of values. Your should instead provide a value yourself.');
 			} else {
 				$values = $attribute->values;
 				$values->transform(function (AttributeValue $attribute) {
@@ -32,14 +32,14 @@ class ValueController extends ApiController
 						'value' => $attribute->value(),
 					];
 				});
-				$response->status(HttpOkay)->message(function () use ($values) {
+				$response->status(\Illuminate\Http\Response::HTTP_OK)->message(function () use ($values) {
 					return sprintf('Listing %d values for the attribute.', $values->count());
 				})->setValue('data', $values);
 			}
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find attribute for that key.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find attribute for that key.');
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

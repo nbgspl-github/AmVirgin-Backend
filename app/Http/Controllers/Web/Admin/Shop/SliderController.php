@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Web\Admin\Shop;
 use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
-use App\Interfaces\Directories;
-use App\Interfaces\Tables;
+use App\Library\Enums\Common\Directories;
+use App\Library\Enums\Common\Tables;
 use App\Models\ShopSlider;
 use App\Models\Slider;
 use App\Storage\SecuredDisk;
@@ -104,11 +104,11 @@ class SliderController extends BaseController
 		try {
 			$slider = ShopSlider::retrieveThrows($id);
 			$slider->delete();
-			$response->status(HttpOkay)->message('Shop slider deleted successfully.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Shop slider deleted successfully.');
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find shop slider for that key.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find shop slider for that key.');
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -155,11 +155,11 @@ class SliderController extends BaseController
 			$slider = ShopSlider::retrieve($validated->id);
 			$slider->setActive($validated->active);
 			$slider->save();
-			$response->status(HttpOkay)->message('Status updated successfully.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Status updated successfully.');
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find shop slider for that key.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find shop slider for that key.');
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

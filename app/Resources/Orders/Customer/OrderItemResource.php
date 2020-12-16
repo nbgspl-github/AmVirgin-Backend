@@ -33,7 +33,7 @@ class OrderItemResource extends JsonResource
 
 	protected function returnable () : bool
 	{
-		$pending = $this->returns()->whereNotIn('status', [\App\Enums\Orders\Returns\Status::Completed])->exists();
+		$pending = $this->returns()->whereNotIn('status', [\App\Library\Enums\Orders\Returns\Status::Completed])->exists();
 		return (
 			!empty($this->subOrder->fulfilled_at) && !$pending && $this->returnable
 		);

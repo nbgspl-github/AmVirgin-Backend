@@ -3,18 +3,17 @@
 namespace App\Http\Controllers\Api\Customer\Cart;
 
 use App\Classes\Cart\CartItem;
-use App\Classes\Rule;
 use App\Classes\Singletons\RazorpayClient;
-use App\Constants\CartStatus;
-use App\Enums\Orders\Payments\Methods;
-use App\Enums\Transactions\Status;
 use App\Exceptions\CartAlreadySubmittedException;
 use App\Exceptions\CartItemNotFoundException;
 use App\Exceptions\MaxAllowedQuantityReachedException;
 use App\Exceptions\OutOfStockException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Api\ApiController;
-use App\Interfaces\Tables;
+use App\Library\Enums\Common\Tables;
+use App\Library\Enums\Orders\Payments\Methods;
+use App\Library\Enums\Transactions\Status;
+use App\Library\Utils\Extensions\Rule;
 use App\Models\Cart;
 use App\Models\CustomerWishlist;
 use App\Models\Order;
@@ -97,27 +96,27 @@ class QuoteController extends ApiController
 			$cartItem = new CartItem($cart, $validated->key);
 			$cart->addItem($cartItem);
 			$cart->save();
-			$response->status(HttpOkay)->message('Item added to cart successfully.')->setValue('data', $cart->render());
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Item added to cart successfully.')->setValue('data', $cart->render());
 		} catch (CartAlreadySubmittedException $exception) {
-			$response->status(HttpDeniedAccess)->message($exception->getMessage())->setValue('data');
+			$response->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message($exception->getMessage())->setValue('data');
 		} catch (OutOfStockException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage())->setValue('data', $cart->render());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage())->setValue('data', $cart->render());
 		} catch (MaxAllowedQuantityReachedException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage())->setValue('data', $cart->render());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage())->setValue('data', $cart->render());
 		} catch (ModelNotFoundException $exception) {
 			Cart::query()->create([
 				'sessionId' => $validated->sessionId,
-				'status' => CartStatus::Pending,
+				'status' => Status::Pending,
 			]);
 			$cart = Cart::retrieve($validated->sessionId);
 			$cartItem = new CartItem($cart, $validated->key);
 			$cart->addItem($cartItem);
 			$cart->save();
-			$response->status(HttpOkay)->message('Cart initialized and item added to cart successfully.')->setValue('data', $cart->render());
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Cart initialized and item added to cart successfully.')->setValue('data', $cart->render());
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -130,15 +129,15 @@ class QuoteController extends ApiController
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['retrieve']);
 			$cart = Cart::retrieveThrows($validated->sessionId);
-			$response->status(HttpOkay)->message('Cart retrieved successfully.')->setValue('data', $cart->render());
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Cart retrieved successfully.')->setValue('data', $cart->render());
 		} catch (CartAlreadySubmittedException $exception) {
-			$response->status(HttpDeniedAccess)->message($exception->getMessage())->setValue('data');
+			$response->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message($exception->getMessage())->setValue('data');
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpOkay)->message('No cart was found for that session.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('No cart was found for that session.');
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -156,19 +155,19 @@ class QuoteController extends ApiController
 			$cartItem->setQuantity($validated->quantity);
 			$cart->updateItem($cartItem);
 			$cart->save();
-			$response->status(HttpOkay)->message('Item added to cart successfully.')->setValue('data', $cart->render());
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Item added to cart successfully.')->setValue('data', $cart->render());
 		} catch (CartAlreadySubmittedException $exception) {
-			$response->status(HttpDeniedAccess)->message($exception->getMessage())->setValue('data');
+			$response->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message($exception->getMessage())->setValue('data');
 		} catch (OutOfStockException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage())->setValue('data', $cart->render());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage())->setValue('data', $cart->render());
 		} catch (MaxAllowedQuantityReachedException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage())->setValue('data', $cart->render());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage())->setValue('data', $cart->render());
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('No cart found for that session');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('No cart found for that session');
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -185,17 +184,17 @@ class QuoteController extends ApiController
 			$cartItem = new CartItem($cart, $validated->key);
 			$cart->removeItem($cartItem);
 			$cart->save();
-			$response->status(HttpOkay)->message('Item removed from cart successfully.')->setValue('data', $cart->render());
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Item removed from cart successfully.')->setValue('data', $cart->render());
 		} catch (CartAlreadySubmittedException $exception) {
-			$response->status(HttpDeniedAccess)->message($exception->getMessage())->setValue('data');
+			$response->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message($exception->getMessage())->setValue('data');
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpOkay)->message('No cart was found for that session.')->setValue('data', $cart->render());
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('No cart was found for that session.')->setValue('data', $cart->render());
 		} catch (CartItemNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage())->setValue('data', $cart->render());
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message($exception->getMessage())->setValue('data', $cart->render());
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -212,17 +211,17 @@ class QuoteController extends ApiController
 			$cartItem = new CartItem($cart, $validated->key);
 			$cart->destroyItem($cartItem);
 			$cart->save();
-			$response->status(HttpOkay)->message('Item destroyed from cart successfully.')->setValue('data', $cart->render());
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Item destroyed from cart successfully.')->setValue('data', $cart->render());
 		} catch (CartAlreadySubmittedException $exception) {
-			$response->status(HttpDeniedAccess)->message($exception->getMessage())->setValue('data');
+			$response->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message($exception->getMessage())->setValue('data');
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpOkay)->message('No cart was found for that session.')->setValue('data', $cart->render());
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('No cart was found for that session.')->setValue('data', $cart->render());
 		} catch (CartItemNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage())->setValue('data', $cart->render());
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message($exception->getMessage())->setValue('data', $cart->render());
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -250,22 +249,22 @@ class QuoteController extends ApiController
 						]);
 						$cart->destroyItem($cartItem);
 						$cart->save();
-						$response->status(HttpOkay)->message('Item moved to wishlist.');
+						$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Item moved to wishlist.');
 					} else {
-						$response->status(HttpResourceNotFound)->message('Cart does not contain the item you specified.');
+						$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Cart does not contain the item you specified.');
 					}
 				} catch (ModelNotFoundException $exception) {
-					$response->status(HttpOkay)->message('No cart was found for that session.');
+					$response->status(\Illuminate\Http\Response::HTTP_OK)->message('No cart was found for that session.');
 				} catch (CartAlreadySubmittedException $exception) {
-					$response->status(HttpDeniedAccess)->message($exception->getMessage());
+					$response->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message($exception->getMessage());
 				}
 			} else {
-				$response->status(HttpResourceAlreadyExists)->message('Item already exists in wishlist.');
+				$response->status(\Illuminate\Http\Response::HTTP_CONFLICT)->message('Item already exists in wishlist.');
 			}
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -283,17 +282,17 @@ class QuoteController extends ApiController
 			$validated = (object)$this->requestValid(request(), $this->rules['checkout']);
 			$cart = Cart::retrieveThrows($validated->sessionId);
 			$transaction = $this->createNewTransaction($cart);
-			$response->status(HttpOkay)
+			$response->status(\Illuminate\Http\Response::HTTP_OK)
 				->message('We\'ve prepared your order for checkout.')
 				->payload(['rzpOrderId' => $transaction->rzpOrderId]);
 		} catch (CartAlreadySubmittedException $exception) {
-			$response->status(HttpDeniedAccess)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message($exception->getMessage());
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('No cart was found for that session.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('No cart was found for that session.');
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -320,10 +319,10 @@ class QuoteController extends ApiController
 			$verified = $this->verify($order, $transaction);
 			if ($verified) {
 				$order->update([
-					'status' => \App\Enums\Orders\Status::Placed
+					'status' => \App\Library\Enums\Orders\Status::Placed
 				]);
 				$order->subOrders()->update([
-					'status' => \App\Enums\Orders\Status::Placed
+					'status' => \App\Library\Enums\Orders\Status::Placed
 				]);
 				$transaction->update([
 					'paymentId' => $transaction->paymentId,
@@ -331,24 +330,24 @@ class QuoteController extends ApiController
 					'verified' => true,
 					'status' => Status::Paid
 				]);
-				$response->status(HttpCreated)
+				$response->status(\Illuminate\Http\Response::HTTP_CREATED)
 					->message('Your order was placed successfully!')
 					->payload(['pending' => false, 'orderId' => $order->id])
 					->setValue('orderNumber', $order->orderNumber);
 			} else {
-				$response->status(HttpOkay)
+				$response->status(\Illuminate\Http\Response::HTTP_OK)
 					->message('We could not verify the payment status at this time. Please allow up to 30 minutes before trying again.')
 					->payload(['pending' => true, 'orderId' => null])
 					->setValue('orderNumber');
 			}
 		} catch (CartAlreadySubmittedException $exception) {
-			$response->status(HttpDeniedAccess)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message($exception->getMessage());
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message($exception->getMessage());
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

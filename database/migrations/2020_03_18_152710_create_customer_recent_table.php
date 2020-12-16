@@ -13,7 +13,7 @@ class CreateCustomerRecentTable extends Migration {
 		Schema::create('customer-recent', function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->unsignedBigInteger('customerId');
-			$table->enum('type', [\App\Constants\PageSectionType::Shop, \App\Constants\PageSectionType::Entertainment]);
+			$table->enum('type', [\App\Library\Enums\Common\PageSectionType::Shop, \App\Library\Enums\Common\PageSectionType::Entertainment]);
 			$table->unsignedBigInteger('key');
 			$table->timestamps();
 		});

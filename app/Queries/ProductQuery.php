@@ -2,12 +2,12 @@
 
 namespace App\Queries;
 
-use App\Classes\Time;
 use App\Filters\BrandFilter;
 use App\Filters\CategoryFilter;
 use App\Filters\DiscountFilter;
 use App\Filters\GenderFilter;
 use App\Filters\PriceRangeFilter;
+use App\Library\Utils\Extensions\Time;
 use App\Models\CatalogFilter;
 use App\Models\Category;
 use App\Models\Product;

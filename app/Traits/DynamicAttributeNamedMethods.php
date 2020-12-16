@@ -2,8 +2,7 @@
 
 namespace App\Traits;
 
-use App\Classes\Arrays;
-use App\Classes\Str;
+use App\Library\Utils\Extensions\Arrays;
 
 trait DynamicAttributeNamedMethods{
 	public function __call($name, $arguments){

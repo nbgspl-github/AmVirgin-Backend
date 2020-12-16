@@ -1,6 +1,6 @@
 <?php
 
-use App\Constants\Constants;
+use App\Library\Enums\Common\Constants;
 use App\Models\PageSection;
 use App\Models\Slider;
 use Illuminate\Database\Migrations\Migration;

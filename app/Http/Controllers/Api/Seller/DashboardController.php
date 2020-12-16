@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Api\Seller;
 
-use App\Enums\Seller\OrderStatus;
 use App\Http\Controllers\Api\ApiController;
+use App\Library\Enums\Orders\Status;
 use App\Models\Auth\Seller;
 use App\Models\SubOrder;
 use Illuminate\Http\JsonResponse;
 
 class DashboardController extends ApiController
 {
-	public function index (): JsonResponse
+	public function index () : JsonResponse
 	{
 		/**
 		 * @var $seller Seller
@@ -25,22 +25,22 @@ class DashboardController extends ApiController
 			'products' => $seller->products()->count(),
 			'sales' => $sales,
 			'orders' => $seller->orders()->count('id'),
-			'new' => $seller->orders()->where('status', OrderStatus::Placed)->count('id'),
-			'delivered' => $seller->orders()->where('status', OrderStatus::Delivered)->count('id'),
-			'cancelled' => $seller->orders()->where('status', OrderStatus::Cancelled)->count('id'),
-			'pending' => $seller->orders()->where('status', OrderStatus::Pending)->count('id'),
+			'new' => $seller->orders()->where('status', Status::Placed)->count('id'),
+			'delivered' => $seller->orders()->where('status', Status::Delivered)->count('id'),
+			'cancelled' => $seller->orders()->where('status', Status::Cancelled)->count('id'),
+			'pending' => $seller->orders()->where('status', Status::Pending)->count('id'),
 			'grossRevenue' => $this->revenue($sales)
 		];
-		return $response->status(HttpOkay)->message('Listing dashboard statistics.')->setValue('payload', $payload)->send();
+		return $response->status(\Illuminate\Http\Response::HTTP_OK)->message('Listing dashboard statistics.')->setValue('payload', $payload)->send();
 	}
 
-	protected function revenue ($sales): float
+	protected function revenue ($sales) : float
 	{
 		$commission = $this->commission($sales);
 		return $sales - $commission;
 	}
 
-	protected function commission ($sales): float
+	protected function commission ($sales) : float
 	{
 		return 0.33 * $sales;
 	}

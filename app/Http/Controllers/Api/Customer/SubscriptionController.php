@@ -14,7 +14,7 @@ class SubscriptionController extends ApiController
 			['active', true],
 		])->get();
 		$subscriptions = SubscriptionResource::collection($subscriptions);
-		return responseApp()->status(HttpOkay)->message('Listing all available subscriptions.')->setValue('data', $subscriptions)->send();
+		return responseApp()->status(\Illuminate\Http\Response::HTTP_OK)->message('Listing all available subscriptions.')->setValue('data', $subscriptions)->send();
 	}
 
 	protected function guard ()

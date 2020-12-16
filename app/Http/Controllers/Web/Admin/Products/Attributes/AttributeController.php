@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers\Web\Admin\Products\Attributes;
 
-use App\Classes\Arrays;
-use App\Classes\Rule;
-use App\Classes\Str;
 use App\Exceptions\AttributeNameConflictException;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
-use App\Interfaces\Tables;
+use App\Library\Utils\Extensions\Arrays;
+use App\Library\Utils\Extensions\Str;
 use App\Models\Attribute;
-use App\Models\AttributeValue;
 use App\Models\Category;
 use App\Models\PrimitiveType;
 use App\Traits\ValidatesRequest;

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
-use App\Classes\Rule;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
-use App\Interfaces\Directories;
-use App\Interfaces\Tables;
+use App\Library\Enums\Common\Directories;
+use App\Library\Enums\Common\Tables;
+use App\Library\Utils\Extensions\Rule;
 use App\Models\Slider;
 use App\Models\Video;
 use App\Storage\SecuredDisk;
@@ -99,12 +99,12 @@ class SliderController extends BaseController
 		if ($slider == null) {
 			return $this->failed()->
 			message('Could not find slide for that key.')->
-			status(HttpResourceNotFound)->
+			status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->
 			send();
 		} else {
 			$slider->delete();
 			return $this->success()->
-			status(HttpOkay)->
+			status(\Illuminate\Http\Response::HTTP_OK)->
 			message('Successfully deleted slide.')->
 			send();
 		}
@@ -148,14 +148,14 @@ class SliderController extends BaseController
 		if ($validator->fails()) {
 			return $this->failed()->
 			message($validator->errors()->first())->
-			status(HttpResourceNotFound)->
+			status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->
 			send();
 		} else {
 			Slider::find($request->id)->
 			setActive($request->active)->
 			save();
 			return $this->success()->
-			status(HttpOkay)->
+			status(\Illuminate\Http\Response::HTTP_OK)->
 			message('Successfully updated active status.')->
 			send();
 		}

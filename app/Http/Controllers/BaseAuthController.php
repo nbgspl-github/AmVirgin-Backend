@@ -7,7 +7,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\ResourceConflictException;
 use App\Exceptions\ValidationException;
-use App\Interfaces\Directories;
+use App\Library\Enums\Common\Directories;
 use App\Models\Auth\Seller;
 use App\Resources\Auth\Seller\AuthProfileResource;
 use App\Storage\SecuredDisk;
@@ -176,12 +176,12 @@ abstract class BaseAuthController extends BaseController
 			$conditions = $this->conditionsExists(request());
 			$user = $this->check($conditions);
 			if ($user != null) {
-				return $this->success()->status(HttpOkay)->message($this->checkSuccess())->send();
+				return $this->success()->status(\Illuminate\Http\Response::HTTP_OK)->message($this->checkSuccess())->send();
 			} else {
-				return $this->success()->status(HttpResourceNotFound)->message($this->checkFailed())->send();
+				return $this->success()->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message($this->checkFailed())->send();
 			}
 		} catch (ValidationException $exception) {
-			return $this->failed()->status(HttpInvalidRequestFormat)->message($exception->getError())->send();
+			return $this->failed()->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError())->send();
 		} catch (Throwable $exception) {
 			return $this->error()->message($exception->getMessage())->send();
 		}
@@ -195,17 +195,17 @@ abstract class BaseAuthController extends BaseController
 			$conditions = $this->conditionsLogin($request);
 			$seller = $this->throwIfNotFound($conditions);
 			if ($this->shouldAllowOnlyActiveUsers() && !$seller->isActive()) {
-				return $this->failed()->status(HttpDeniedAccess)->message($this->deniedAccess())->send();
+				return $this->failed()->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message($this->deniedAccess())->send();
 			}
 			$token = $this->guard()->attempt($this->credentials($request));
 			if (!$token)
-				return $this->failed()->message($this->loginFailed())->status(HttpUnauthorized)->send();
+				return $this->failed()->message($this->loginFailed())->status(\Illuminate\Http\Response::HTTP_UNAUTHORIZED)->send();
 			else
 				return $this->success()->message($this->loginSuccess())->setValue('data', $this->loginPayload($seller, $token))->send();
 		} catch (ModelNotFoundException $exception) {
-			return $this->failed()->status(HttpResourceNotFound)->send();
+			return $this->failed()->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->send();
 		} catch (ValidationException $exception) {
-			return $this->failed()->message($exception->getError())->status(HttpInvalidRequestFormat)->send();
+			return $this->failed()->message($exception->getError())->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->send();
 		} catch (Throwable $exception) {
 			return $this->error()->message($exception->getTraceAsString())->send();
 		}
@@ -253,11 +253,11 @@ abstract class BaseAuthController extends BaseController
 			if (!$token)
 				return $this->failed()->message($this->registerFailed())->send();
 			else
-				return $this->success()->message($this->registerSuccess())->status(HttpCreated)->setValue('data', $this->registerPayload($user, $token))->send();
+				return $this->success()->message($this->registerSuccess())->status(\Illuminate\Http\Response::HTTP_CREATED)->setValue('data', $this->registerPayload($user, $token))->send();
 		} catch (ResourceConflictException $exception) {
-			return $this->failed()->status(HttpResourceAlreadyExists)->message($this->registerTaken())->send();
+			return $this->failed()->status(\Illuminate\Http\Response::HTTP_CONFLICT)->message($this->registerTaken())->send();
 		} catch (ValidationException $exception) {
-			return $this->failed()->message($exception->getError())->status(HttpInvalidRequestFormat)->send();
+			return $this->failed()->message($exception->getError())->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->send();
 		} catch (Throwable $exception) {
 			return $this->error()->message($exception->getMessage())->send();
 		}
@@ -300,11 +300,11 @@ abstract class BaseAuthController extends BaseController
 			$validated = $this->requestValid(request(), $this->rulesUpdateProfile());
 			$user = $this->guard()->user();
 			$user->update($validated);
-			$response->status(HttpOkay)->message('Profile was updated successfully.')->setValue('payload', $user instanceof Seller ? new AuthProfileResource($user) : new \App\Resources\Auth\Customer\AuthProfileResource($user));
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Profile was updated successfully.')->setValue('payload', $user instanceof Seller ? new AuthProfileResource($user) : new \App\Resources\Auth\Customer\AuthProfileResource($user));
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -320,11 +320,11 @@ abstract class BaseAuthController extends BaseController
 			$user->update([
 				'avatar' => SecuredDisk::access()->putFile($user instanceof Seller ? Directories::SellerAvatars : Directories::CustomerAvatars, \request()->file('avatar')),
 			]);
-			$response->status(HttpOkay)->message('Avatar updated successfully.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Avatar updated successfully.');
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -337,16 +337,16 @@ abstract class BaseAuthController extends BaseController
 			$validated = $this->requestValid(\request(), $this->rulesUpdatePassword());
 			$user = $this->guard()->user();
 			if (!Hash::check($validated['current'], $user->password())) {
-				$response->status(HttpDeniedAccess)->message('Your given current password does not match with the one in you account.');
+				$response->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message('Your given current password does not match with the one in you account.');
 			} else {
 				$user->password(Hash::make($validated['new']));
 				$user->save();
-				$response->status(HttpOkay)->message('Password updated successfully.');
+				$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Password updated successfully.');
 			}
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

@@ -2,11 +2,8 @@
 
 namespace App\Queries;
 
-use App\Classes\Time;
 use App\Models\PageSection;
-use App\Models\Product;
 use App\Models\Slider;
-use Illuminate\Database\Eloquent\Builder;
 
 class SliderQuery extends AbstractQuery{
 	public static function begin(): self{

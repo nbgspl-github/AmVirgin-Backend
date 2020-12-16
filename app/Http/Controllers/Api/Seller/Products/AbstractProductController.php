@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Api\Seller\Products;
 
-use App\Classes\Arrays;
-use App\Classes\Rule;
-use App\Classes\Str;
-use App\Classes\Time;
-use App\Constants\WarrantyServiceType;
 use App\Exceptions\TokenInvalidException;
 use App\Http\Controllers\Api\ApiController;
-use App\Interfaces\Directories;
-use App\Interfaces\Tables;
+use App\Library\Enums\Common\Directories;
+use App\Library\Enums\Common\Tables;
+use App\Library\Enums\Products\WarrantyServiceType;
+use App\Library\Utils\Extensions\Arrays;
+use App\Library\Utils\Extensions\Rule;
+use App\Library\Utils\Extensions\Str;
+use App\Library\Utils\Extensions\Time;
 use App\Models\Attribute;
 use App\Models\Brand;
 use App\Models\Category;

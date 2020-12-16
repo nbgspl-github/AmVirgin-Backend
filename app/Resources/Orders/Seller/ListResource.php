@@ -2,9 +2,8 @@
 
 namespace App\Resources\Orders\Seller;
 
-use App\Classes\Time;
-use App\Enums\Orders\Status;
-use App\Enums\Seller\OrderStatus;
+use App\Library\Enums\Orders\Status;
+use App\Library\Utils\Extensions\Time;
 use App\Models\Auth\Seller;
 use App\Models\Order;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -20,7 +19,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class ListResource extends JsonResource
 {
-	public function toArray ($request): array
+	public function toArray ($request) : array
 	{
 		return [
 			'key' => $this->id,
@@ -28,11 +27,11 @@ class ListResource extends JsonResource
 			'status' => $this->status,
 			'quantity' => $this->quantity,
 			'customer' => new OrderCustomerResource($this->customer),
-			'cancellationReason' => $this->when($this->status->is(OrderStatus::Cancelled), $this->cancellationReason),
-			'cancelledBy' => $this->when($this->status->is(OrderStatus::Cancelled), $this->cancelledBy),
-			'cancelledOn' => $this->when($this->status->is(OrderStatus::Cancelled), Time::mysqlStamp(strtotime($this->cancelledOn))),
-			'dispatchedOn' => $this->when($this->status->is(OrderStatus::Dispatched) || $this->status->is(OrderStatus::ReadyForDispatch), Time::mysqlStamp(strtotime($this->dispatchedOn))),
-			'deliveredOn' => $this->when($this->status->is(OrderStatus::Delivered), Time::mysqlStamp(strtotime($this->deliveredOn))),
+			'cancellationReason' => $this->when($this->status->is(Status::Cancelled), $this->cancellationReason),
+			'cancelledBy' => $this->when($this->status->is(Status::Cancelled), $this->cancelledBy),
+			'cancelledOn' => $this->when($this->status->is(Status::Cancelled), Time::mysqlStamp(strtotime($this->cancelledOn))),
+			'dispatchedOn' => $this->when($this->status->is(Status::Dispatched) || $this->status->is(Status::ReadyForDispatch), Time::mysqlStamp(strtotime($this->dispatchedOn))),
+			'deliveredOn' => $this->when($this->status->is(Status::Delivered), Time::mysqlStamp(strtotime($this->deliveredOn))),
 		];
 	}
 }

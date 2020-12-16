@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Web\Admin;
 
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
-use App\Interfaces\Tables;
+use App\Library\Enums\Common\Tables;
 use App\Models\Auth\Customer;
 use App\Traits\ValidatesRequest;
 use Exception;
@@ -65,11 +65,11 @@ class CustomerController extends BaseController
 	{
 		try {
 			$customer = Customer::retrieveThrows($id);
-			return responseApp()->status(HttpOkay)->message('Showing user details.')->setValue('payload')->send();
+			return responseApp()->status(\Illuminate\Http\Response::HTTP_OK)->message('Showing user details.')->setValue('payload')->send();
 		} catch (ModelNotFoundException $e) {
-			return responseApp()->status(HttpResourceNotFound)->message($e->getMessage())->send();
+			return responseApp()->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message($e->getMessage())->send();
 		} catch (\Throwable $e) {
-			return responseApp()->status(HttpResourceNotFound)->message($e->getMessage())->send();
+			return responseApp()->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message($e->getMessage())->send();
 		}
 	}
 

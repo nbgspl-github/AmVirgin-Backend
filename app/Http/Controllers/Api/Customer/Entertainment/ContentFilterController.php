@@ -23,9 +23,9 @@ class ContentFilterController extends ApiController
 				'filters' => (new ContentFilterResource(null))->toArray(null),
 				'watchLater' => (ListResource::collection($this->guard()->user()->watchLater)->toArray(null))
 			];
-			$response->status(HttpOkay)->payload($payload);
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->payload($payload);
 		} catch (\Throwable $exception) {
-			$response->status(HttpServerError)->payload()->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->payload()->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

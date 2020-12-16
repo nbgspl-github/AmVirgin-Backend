@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
-use App\Classes\Rule;
 use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
-use App\Interfaces\Directories;
-use App\Interfaces\Tables;
+use App\Library\Enums\Common\Directories;
+use App\Library\Enums\Common\Tables;
+use App\Library\Utils\Extensions\Rule;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Storage\SecuredDisk;

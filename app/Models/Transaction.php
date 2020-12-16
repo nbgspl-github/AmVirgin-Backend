@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\Transactions\Status;
+use App\Library\Enums\Transactions\Status;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 

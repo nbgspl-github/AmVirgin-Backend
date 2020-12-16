@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
-use App\Contracts\FluentConstructor;
+use App\Traits\FluentConstructor;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class Genre extends Model implements FluentConstructor {
+class Genre extends Model
+{
 	use RetrieveResource;
 	use RetrieveCollection;
+	use FluentConstructor;
 
 	protected $fillable = [
 		'name',
@@ -24,17 +26,10 @@ class Genre extends Model implements FluentConstructor {
 	];
 
 	/**
-	 *  Makes a new instance and returns it.
-	 * @return Genre
-	 */
-	public static function instance() {
-		return new self();
-	}
-
-	/**
 	 * @return string
 	 */
-	public function getName(): string{
+	public function getName () : string
+	{
 		return $this->name;
 	}
 
@@ -42,7 +37,8 @@ class Genre extends Model implements FluentConstructor {
 	 * @param string $name
 	 * @return Genre
 	 */
-	public function setName(string $name): Genre{
+	public function setName (string $name) : Genre
+	{
 		$this->name = $name;
 		return $this;
 	}
@@ -50,7 +46,8 @@ class Genre extends Model implements FluentConstructor {
 	/**
 	 * @return string|null
 	 */
-	public function getDescription(): ?string{
+	public function getDescription () : ?string
+	{
 		return $this->description;
 	}
 
@@ -58,7 +55,8 @@ class Genre extends Model implements FluentConstructor {
 	 * @param string|null $description
 	 * @return Genre
 	 */
-	public function setDescription(?string $description): Genre{
+	public function setDescription (?string $description) : Genre
+	{
 		$this->description = $description;
 		return $this;
 	}
@@ -66,7 +64,8 @@ class Genre extends Model implements FluentConstructor {
 	/**
 	 * @return string|null
 	 */
-	public function getPoster(): ?string{
+	public function getPoster () : ?string
+	{
 		return $this->poster;
 	}
 
@@ -74,7 +73,8 @@ class Genre extends Model implements FluentConstructor {
 	 * @param string|null $poster
 	 * @return Genre
 	 */
-	public function setPoster(?string $poster): Genre{
+	public function setPoster (?string $poster) : Genre
+	{
 		$this->poster = $poster;
 		return $this;
 	}
@@ -82,7 +82,8 @@ class Genre extends Model implements FluentConstructor {
 	/**
 	 * @return bool
 	 */
-	public function getStatus(): bool{
+	public function getStatus () : bool
+	{
 		return $this->status;
 	}
 
@@ -90,7 +91,8 @@ class Genre extends Model implements FluentConstructor {
 	 * @param bool $status
 	 * @return Genre
 	 */
-	public function setStatus(bool $status): Genre{
+	public function setStatus (bool $status) : Genre
+	{
 		$this->status = $status;
 		return $this;
 	}

@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Web\Admin;
 use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
-use App\Interfaces\Directories;
-use App\Interfaces\Tables;
+use App\Library\Enums\Common\Directories;
+use App\Library\Enums\Common\Tables;
 use App\Models\SubscriptionPlan;
 use App\Storage\SecuredDisk;
 use App\Traits\FluentResponse;
@@ -118,11 +118,11 @@ class SubscriptionPlansController extends BaseController
 		try {
 			$plan = SubscriptionPlan::retrieveThrows($id);
 			$plan->delete();
-			$response->status(HttpOkay)->message('Successfully deleted subscription plan.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Successfully deleted subscription plan.');
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find subscription plan for that key.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find subscription plan for that key.');
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Api\Customer;
 
-use App\Classes\Rule;
-use App\Classes\Str;
-use App\Constants\PageSectionType;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Api\ApiController;
-use App\Interfaces\Tables;
+use App\Library\Enums\Common\PageSectionType;
+use App\Library\Enums\Common\Tables;
+use App\Library\Utils\Extensions\Rule;
+use App\Library\Utils\Extensions\Str;
 use App\Models\Product;
 use App\Models\Video;
 use App\Resources\GlobalSearch\ProductResultResource;
 use App\Resources\GlobalSearch\VideoResultResource;
 use App\Traits\ValidatesRequest;
+use Illuminate\Http\JsonResponse;
 use Throwable;
 
 class GlobalSearchController extends ApiController
@@ -34,7 +35,7 @@ class GlobalSearchController extends ApiController
 		];
 	}
 
-	public function search ()
+	public function search () : JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -46,7 +47,7 @@ class GlobalSearchController extends ApiController
 				}
 				$query->search($validated->keyword, 'title');
 				$results = VideoResultResource::collection($query->get());
-				$response->status($results->count() > 0 ? HttpOkay : HttpNoContent)
+				$response->status($results->count() > 0 ? \Illuminate\Http\Response::HTTP_OK : \Illuminate\Http\Response::HTTP_NO_CONTENT)
 					->message('Listing videos matching keywords.')
 					->setValue('data', $results);
 			} else {
@@ -56,14 +57,14 @@ class GlobalSearchController extends ApiController
 				}
 				$query->search($validated->keyword, 'name');
 				$results = ProductResultResource::collection($query->get());
-				$response->status($results->count() > 0 ? HttpOkay : HttpNoContent)
+				$response->status($results->count() > 0 ? \Illuminate\Http\Response::HTTP_OK : \Illuminate\Http\Response::HTTP_NO_CONTENT)
 					->message('Listing products matching keywords.')
 					->setValue('data', $results);
 			}
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

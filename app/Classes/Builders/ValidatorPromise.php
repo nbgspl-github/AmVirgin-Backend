@@ -6,7 +6,7 @@
 
 namespace App\Classes\Builders;
 
-use App\Contracts\FluentConstructor;
+use App\Traits\FluentConstructor;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -15,7 +15,9 @@ use Illuminate\Support\Facades\Validator;
  * Implementation of a Validator using Laravel's inbuilt validator with callbacks for appropriate events.
  * @package App\Classes\Builders
  */
-class ValidatorPromise implements FluentConstructor {
+class ValidatorPromise
+{
+	use FluentConstructor;
 
 	/**
 	 * @var Request
@@ -55,7 +57,8 @@ class ValidatorPromise implements FluentConstructor {
 	/**
 	 * ValidatorPromise constructor.
 	 */
-	private function __construct() {
+	private function __construct ()
+	{
 	}
 
 	/**
@@ -63,7 +66,8 @@ class ValidatorPromise implements FluentConstructor {
 	 * @param Request $request
 	 * @return $this
 	 */
-	public function setRequest(Request $request) {
+	public function setRequest (Request $request)
+	{
 		$this->request = $request;
 		return $this;
 	}
@@ -73,7 +77,8 @@ class ValidatorPromise implements FluentConstructor {
 	 * @param array $rules
 	 * @return $this
 	 */
-	public function setRuleset(array $rules = []) {
+	public function setRuleset (array $rules = [])
+	{
 		$this->rules = $rules;
 		return $this;
 	}
@@ -84,7 +89,8 @@ class ValidatorPromise implements FluentConstructor {
 	 * @param callable $callableRuleset
 	 * @return ValidatorPromise
 	 */
-	public function setRulesetCallable(callable $callableRuleset) {
+	public function setRulesetCallable (callable $callableRuleset)
+	{
 		$this->callableRuleset = $callableRuleset;
 		return $this;
 	}
@@ -94,7 +100,8 @@ class ValidatorPromise implements FluentConstructor {
 	 * @param callable $customEvaluator
 	 * @return $this
 	 */
-	public function setCustomEvaluator(callable $customEvaluator) {
+	public function setCustomEvaluator (callable $customEvaluator)
+	{
 		$this->customEvaluator = $customEvaluator;
 		return $this;
 	}
@@ -104,7 +111,8 @@ class ValidatorPromise implements FluentConstructor {
 	 * @param callable $callable
 	 * @return $this
 	 */
-	public function onSuccess(callable $callable) {
+	public function onSuccess (callable $callable)
+	{
 		$this->callableSuccess = $callable;
 		return $this;
 	}
@@ -114,7 +122,8 @@ class ValidatorPromise implements FluentConstructor {
 	 * @param callable $callable
 	 * @return $this
 	 */
-	public function onFailure(callable $callable) {
+	public function onFailure (callable $callable)
+	{
 		$this->callableFailure = $callable;
 		return $this;
 	}
@@ -123,7 +132,8 @@ class ValidatorPromise implements FluentConstructor {
 	 * Runs validation on given request using provided ruleset.
 	 * @return JsonResponse
 	 */
-	public function validate() {
+	public function validate ()
+	{
 		$response = null;
 		if ($this->customEvaluator != null) {
 			$result = call_user_func($this->customEvaluator, $this->request);
@@ -143,13 +153,5 @@ class ValidatorPromise implements FluentConstructor {
 				$response = call_user_func($this->callableFailure, $this->validator);
 		}
 		return $response;
-	}
-
-	/**
-	 *  Makes a new instance and returns it.
-	 * @return ValidatorPromise
-	 */
-	public static function instance() {
-		return new self();
 	}
 }

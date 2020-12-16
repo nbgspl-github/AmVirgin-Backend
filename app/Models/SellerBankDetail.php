@@ -2,15 +2,11 @@
 
 namespace App\Models;
 
-use App\Classes\Arrays;
 use App\Classes\Eloquent\ModelExtended;
-use App\Classes\Rule;
-use App\Interfaces\Directories;
-use App\Interfaces\Tables;
+use App\Library\Enums\Common\Directories;
 use App\Queries\Seller\BankDetailQuery;
 use App\Storage\SecuredDisk;
 use App\Traits\DynamicAttributeNamedMethods;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SellerBankDetail extends ModelExtended{

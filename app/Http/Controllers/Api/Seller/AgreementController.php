@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\Seller;
 
-use App\Classes\Str;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Api\ApiController;
+use App\Library\Utils\Extensions\Str;
 use App\Models\Settings;
 use App\Traits\ValidatesRequest;
 use Illuminate\Http\JsonResponse;
@@ -19,9 +19,9 @@ class AgreementController extends ApiController
 		$response = responseApp();
 		try {
 			$agreed = $this->guard()->user()->mouAgreed();
-			$response->status(HttpOkay)->message('Retrieved seller agreed status.')->setValue('agreed', $agreed);
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Retrieved seller agreed status.')->setValue('agreed', $agreed);
 		} catch (Throwable $exception) {
-			$response->status(HttpOkay)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -32,9 +32,9 @@ class AgreementController extends ApiController
 		$response = responseApp();
 		try {
 			$agreement = Settings::get('mou', Str::Empty);
-			$response->status(HttpOkay)->message('Showing MOU.')->setValue('payload', $agreement);
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Showing MOU.')->setValue('payload', $agreement);
 		} catch (Throwable $exception) {
-			$response->status(HttpOkay)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -46,11 +46,11 @@ class AgreementController extends ApiController
 		try {
 			$validated = $this->requestValid(request(), ['agreed' => 'bail|required|boolean']);
 			$this->guard()->user()->update(['mouAgreed' => $validated['agreed']]);
-			$response->status(HttpOkay)->message('Updated agreement status successfully.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Updated agreement status successfully.');
 		} catch (ValidationException $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

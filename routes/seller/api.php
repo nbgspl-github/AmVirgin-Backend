@@ -1,6 +1,5 @@
 <?php
 
-use App\Classes\Str;
 use App\Http\Controllers\Api\Seller\Attributes\ListController;
 use App\Http\Controllers\Api\Seller\Attributes\ProductAttributeController;
 use App\Http\Controllers\Api\Seller\Attributes\ValueController;
@@ -15,6 +14,7 @@ use App\Http\Controllers\Api\Seller\ProductImageController;
 use App\Http\Controllers\Api\Seller\Products\ProductController;
 use App\Http\Controllers\Api\Seller\StateController;
 use App\Http\Controllers\Api\Seller\TwoFactorAuthController;
+use App\Library\Utils\Extensions\Str;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix(Str::Empty)->group(static function () {
@@ -104,7 +104,6 @@ Route::prefix('orders')->middleware('auth:seller-api')->group(function () {
 	Route::get('{order}', [\App\Http\Controllers\Api\Seller\Orders\OrderController::class, 'show']);
 	Route::put('{order}/status', [\App\Http\Controllers\Api\Seller\Orders\Status\ActionController::class, 'handle']);
 	Route::put('status', [\App\Http\Controllers\Api\Seller\Orders\Status\BulkStatusController::class, 'update']);
-	Route::put('status/batch-update', [OrderController::class, 'updateStatusBulk']);
 });
 
 Route::prefix('hsn')->group(function () {
@@ -133,7 +132,7 @@ Route::prefix('support')->group(static function () {
 Route::prefix('payments')->group(static function () {
 	Route::get('overview', [\App\Http\Controllers\Api\Seller\Payments\PaymentController::class, 'show']);
 	Route::get('previous', [\App\Http\Controllers\Api\Seller\Payments\HistoryController::class, 'index']);
-	Route::get('transaction', [OrderController::class, 'getPaymentsTransaction'])->middleware(AUTH_SELLER_API);
+	Route::get('transaction', [\App\Http\Controllers\Api\Seller\Payments\TransactionController::class, 'index']);
 });
 
 Route::prefix('sales')->group(static function () {

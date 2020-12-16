@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Web\Admin\TvSeries;
 
 use App\Classes\WebResponse;
 use App\Events\Admin\TvSeries\TvSeriesUpdated;
-use App\Interfaces\Directories;
+use App\Library\Enums\Common\Directories;
 use App\Models\MediaLanguage;
 use App\Models\MediaQuality;
 use App\Models\Video;
@@ -85,7 +85,7 @@ class ContentController extends TvSeriesBase
 				try {
 					$source = VideoSource::retrieveThrows($sources[$i]);
 				} catch (ModelNotFoundException $exception) {
-					$source = VideoSource::newObject();
+					$source = VideoSource::instance();
 					$source->setVideoId($id);
 				} finally {
 					if (isset($titles[$i]))
@@ -132,11 +132,11 @@ class ContentController extends TvSeriesBase
 					$source->save();
 				}
 			}
-			$response->status(HttpOkay)->message('Episodes were updated successfully.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Episodes were updated successfully.');
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find tv series for that key.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find tv series for that key.');
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			event(new TvSeriesUpdated($id));
 			return $response->send();
@@ -149,11 +149,11 @@ class ContentController extends TvSeriesBase
 		try {
 			$videoSnap = VideoSource::retrieveThrows($subId);
 			$videoSnap->delete();
-			$response->status(HttpOkay)->message('Episode deleted successfully.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Episode deleted successfully.');
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find episode for that key.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find episode for that key.');
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			event(new TvSeriesUpdated($id));
 			return $response->send();

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api\Customer;
 
-use App\Classes\Rule;
 use App\Classes\Sorting\AbstractSorts;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Api\ApiController;
-use App\Interfaces\Tables;
+use App\Library\Enums\Common\Tables;
+use App\Library\Utils\Extensions\Rule;
 use App\Models\Category;
 use App\Models\Product;
 use App\Resources\Products\Customer\CatalogListResource;
@@ -67,13 +67,13 @@ class CatalogController extends ApiController
 					'items' => ['total' => $total, 'chunk' => $itemsPerPage],
 				],
 			];
-			$response->status(HttpOkay)->message('Listing products for given category.')
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Listing products for given category.')
 				->setValue('meta', $meta)
 				->setValue('payload', $products);
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -85,11 +85,11 @@ class CatalogController extends ApiController
 		try {
 			$product = Product::startQuery()->displayable()->key($id)->firstOrFail();
 			$product = new ProductResource($product);
-			$response->status(HttpOkay)->message('Listing details of product.')->setValue('payload', $product);
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Listing details of product.')->setValue('payload', $product);
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find the product for that key.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find the product for that key.');
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\Orders\Returns\Status;
+use App\Library\Enums\Orders\Returns\Status;
 use App\Models\Auth\Customer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\Seller;
 
-use App\Classes\Arrays;
-use App\Classes\Rule;
 use App\Exceptions\ValidationException;
-use App\Interfaces\Tables;
+use App\Library\Enums\Common\Tables;
+use App\Library\Utils\Extensions\Arrays;
+use App\Library\Utils\Extensions\Rule;
 use App\Models\SellerBankDetail;
 use App\Models\SellerBusinessDetail;
 use App\Resources\Auth\Seller\BusinessDetailResource;
@@ -50,11 +50,11 @@ class BusinessDetailController extends \App\Http\Controllers\WebServices\ApiCont
 		try {
 			$businessDetails = SellerBusinessDetail::startQuery()->useAuth()->firstOrFail();
 			$resource = new BusinessDetailResource($businessDetails);
-			$response->status(HttpOkay)->message('Listing business details.')->setValue('payload', $resource);
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Listing business details.')->setValue('payload', $resource);
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message($exception->getMessage());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -70,11 +70,11 @@ class BusinessDetailController extends \App\Http\Controllers\WebServices\ApiCont
 				'sellerId' => $this->guard()->id(),
 			], $validated);
 			$resource = new BusinessDetailResource($payload);
-			$response->status(HttpOkay)->message('Business details updated successfully.')->setValue('payload', $resource);
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Business details updated successfully.')->setValue('payload', $resource);
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

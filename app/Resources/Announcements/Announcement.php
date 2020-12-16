@@ -2,7 +2,7 @@
 
 namespace App\Resources\Announcements;
 
-use App\Classes\Arrays;
+use App\Library\Utils\Extensions\Arrays;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class Announcement extends JsonResource

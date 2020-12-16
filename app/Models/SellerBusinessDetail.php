@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Classes\Eloquent\ModelExtended;
-use App\Interfaces\Directories;
+use App\Library\Enums\Common\Directories;
 use App\Queries\Seller\BusinessDetailQuery;
 use App\Storage\SecuredDisk;
 use App\Traits\DynamicAttributeNamedMethods;

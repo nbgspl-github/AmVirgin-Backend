@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api\Customer;
 
-use App\Classes\Arrays;
 use App\Http\Controllers\Api\ApiController;
+use App\Library\Utils\Extensions\Arrays;
 use Illuminate\Http\JsonResponse;
 
 class SortController extends ApiController
@@ -19,7 +19,7 @@ class SortController extends ApiController
 			]);
 		}
 		return responseApp()
-			->status(HttpOkay)
+			->status(\Illuminate\Http\Response::HTTP_OK)
 			->message('Listing all available sorting methods.')
 			->setValue('data', $sorts)->send();
 	}

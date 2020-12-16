@@ -1,7 +1,6 @@
 <?php
 
 use App\Classes\Methods;
-use App\Classes\Str;
 use App\Http\Controllers\Web\Admin\Auth\LoginController;
 use App\Http\Controllers\Web\Admin\CategoriesBanner;
 use App\Http\Controllers\Web\Admin\CategoryController;
@@ -24,6 +23,7 @@ use App\Http\Controllers\Web\Admin\TvSeries\MediaController;
 use App\Http\Controllers\Web\Admin\TvSeries\SnapsController;
 use App\Http\Controllers\Web\Admin\TvSeries\TvSeriesBase;
 use App\Http\Controllers\Web\Admin\Videos\VideosBase;
+use App\Library\Utils\Extensions\Str;
 use App\Models\Category;
 use App\Models\Genre;
 use App\Models\Slider;

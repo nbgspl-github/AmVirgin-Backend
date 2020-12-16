@@ -16,7 +16,7 @@ class CategoryController extends ApiController
 		$categoryCollection = NewsCategory::all();
 		$resourceCollection = CategoryListResource::collection($categoryCollection);
 		return responseApp()
-			->status($resourceCollection->count() > 0 ? HttpOkay : HttpNoContent)
+			->status($resourceCollection->count() > 0 ? \Illuminate\Http\Response::HTTP_OK : \Illuminate\Http\Response::HTTP_NO_CONTENT)
 			->setValue('payload', $resourceCollection)->send();
 	}
 
@@ -30,11 +30,11 @@ class CategoryController extends ApiController
 			$newsCategory = NewsCategory::query()->whereKey($id)->firstOrFail();
 			$newsCollection = $newsCategory->items()->paginate();
 			$resourceCollection = ItemListResource::collection($newsCollection);
-			$response->status($resourceCollection->count() > 0 ? HttpOkay : HttpNoContent)->setValue('payload', $resourceCollection->response()->getData(true));
+			$response->status($resourceCollection->count() > 0 ? \Illuminate\Http\Response::HTTP_OK : \Illuminate\Http\Response::HTTP_NO_CONTENT)->setValue('payload', $resourceCollection->response()->getData(true));
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message($exception->getMessage());
 		} catch (\Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

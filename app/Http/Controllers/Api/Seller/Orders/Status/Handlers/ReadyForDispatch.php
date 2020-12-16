@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\Seller\Orders\Status\Handlers;
 
 use App\Classes\Builders\ResponseBuilder;
-use App\Enums\Orders\Status;
 use App\Http\Controllers\Api\Seller\Orders\Status\Contracts\Action;
+use App\Library\Enums\Orders\Status;
 use App\Models\Auth\Seller;
 use App\Models\SubOrder;
 use Illuminate\Http\Response;

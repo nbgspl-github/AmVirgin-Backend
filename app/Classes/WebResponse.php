@@ -2,9 +2,11 @@
 
 namespace App\Classes;
 
-use App\Contracts\FluentConstructor;
+use App\Traits\FluentConstructor;
 
-class WebResponse implements FluentConstructor{
+class WebResponse
+{
+	use FluentConstructor;
 
 	private $route = 'back';
 
@@ -20,64 +22,67 @@ class WebResponse implements FluentConstructor{
 
 	private $payload = [];
 
-	/**
-	 * @inheritDoc
-	 */
-	public static function instance(){
-		return new self();
-	}
-
-	public function back(){
+	public function back ()
+	{
 		$this->route = 'back';
 		return $this;
 	}
 
-	public function route(string $route, string $parameter = null){
+	public function route (string $route, string $parameter = null)
+	{
 		$this->route = $route;
 		$this->parameter = $parameter;
 		return $this;
 	}
 
-	public function view(string $view){
+	public function view (string $view)
+	{
 		$this->view = $view;
 		return $this;
 	}
 
-	public function payload(string $key, string $value){
+	public function payload (string $key, string $value)
+	{
 		$this->payload[$key] = $value;
 		return $this;
 	}
 
-	public function error(string $message){
+	public function error (string $message)
+	{
 		$this->type = 'error';
 		$this->message = $message;
 		return $this;
 	}
 
-	public function success(string $message){
+	public function success (string $message)
+	{
 		$this->type = 'success';
 		$this->message = $message;
 		return $this;
 	}
 
-	public function info(string $message){
+	public function info (string $message)
+	{
 		$this->type = 'info';
 		$this->message = $message;
 		return $this;
 	}
 
-	public function warning(string $message){
+	public function warning (string $message)
+	{
 		$this->type = 'warning';
 		$this->message = $message;
 		return $this;
 	}
 
-	public function data(array $data){
+	public function data (array $data)
+	{
 		$this->flashData = $data;
 		return $this;
 	}
 
-	public function send(){
+	public function send ()
+	{
 		if ($this->message != null) {
 			switch ($this->type) {
 				case 'error':
@@ -99,28 +104,23 @@ class WebResponse implements FluentConstructor{
 		}
 		if ($this->view != null) {
 
-		}
-		else {
+		} else {
 			if ($this->route == 'back') {
 				if (count($this->flashData) > 0)
 					return redirect()->back()->withInput($this->flashData);
 				else
 					return redirect()->back();
-			}
-			else {
+			} else {
 				if (count($this->flashData) > 0) {
 					if ($this->parameter != null) {
 						return redirect(route($this->route, $this->parameter))->withInput($this->flashData);
-					}
-					else {
+					} else {
 						return redirect(route($this->route))->withInput($this->flashData);
 					}
-				}
-				else {
+				} else {
 					if ($this->parameter != null) {
 						return redirect(route($this->route, $this->parameter));
-					}
-					else {
+					} else {
 						return redirect(route($this->route));
 					}
 				}

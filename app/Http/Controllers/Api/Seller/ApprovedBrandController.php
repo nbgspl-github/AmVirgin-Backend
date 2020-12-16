@@ -27,9 +27,9 @@ class ApprovedBrandController extends ApiController
 		try {
 			$brands = Brand::startQuery()->seller($this->userId())->get();
 			$brandCollection = ListResource::collection($brands);
-			$response->status(HttpOkay)->message('Listing all brands by you.')->setValue('payload', $brandCollection);
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Listing all brands by you.')->setValue('payload', $brandCollection);
 		} catch (\Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Interfaces\StatusCodes;
 use Closure;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
@@ -31,7 +30,7 @@ class Authenticate extends Middleware
 				case 'seller-api':
 				case 'customer-api':
 				case 'admin-api':
-					return response()->json(['message' => 'Unauthorized'], HttpUnauthorized);
+					return response()->json(['message' => 'Unauthorized'], \Illuminate\Http\Response::HTTP_UNAUTHORIZED);
 					break;
 			}
 		}

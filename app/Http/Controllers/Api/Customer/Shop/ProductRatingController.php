@@ -35,11 +35,11 @@ class ProductRatingController extends ApiController
 			 */
 			$product = Product::startQuery()->displayable()->key($id)->firstOrFail();
 			$reviewCollection = ReviewResource::collection($product->reviews);
-			$response->status($reviewCollection->count() > 0 ? HttpOkay : HttpNoContent)->setValue('payload', $reviewCollection);
+			$response->status($reviewCollection->count() > 0 ? \Illuminate\Http\Response::HTTP_OK : \Illuminate\Http\Response::HTTP_NO_CONTENT)->setValue('payload', $reviewCollection);
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage())->setValue('payload');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message($exception->getMessage())->setValue('payload');
 		} catch (\Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage())->setValue('payload');
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage())->setValue('payload');
 		} finally {
 			return $response->send();
 		}
@@ -56,9 +56,9 @@ class ProductRatingController extends ApiController
 		$reviewExists = $product->ratings()->where('customerId', $this->guard()->id())->exists();
 		if (!$reviewExists) {
 			$product->ratings()->create($validated);
-			$response->status(HttpOkay)->message('Product ratings updated successfully.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Product ratings updated successfully.');
 		} else {
-			$response->status(HttpResourceAlreadyExists)->message('Customer has already rated/reviewed the product.');
+			$response->status(\Illuminate\Http\Response::HTTP_CONFLICT)->message('Customer has already rated/reviewed the product.');
 		}
 		return $response->send();
 	}

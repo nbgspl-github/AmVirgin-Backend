@@ -2,7 +2,7 @@
 
 namespace App\Resources\Sliders;
 
-use App\Classes\Str;
+use App\Library\Utils\Extensions\Str;
 use App\Models\Slider;
 use App\Resources\Search\Customer\Entertainment\VideoResource;
 use Illuminate\Http\Resources\Json\JsonResource;

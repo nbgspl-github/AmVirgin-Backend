@@ -15,12 +15,12 @@ class CreateBrandsTable extends Migration{
 			$table->bigIncrements('id');
 			$table->string('name');
 			$table->string('slug', 500);
-			$table->string('logo', \App\Constants\Constants::MaxFilePathLength)->nullable();
+			$table->string('logo', \App\Library\Enums\Common\Constants::MaxFilePathLength)->nullable();
 			$table->string('website', 2048)->nullable();
 			$table->string('productSaleMarketPlace')->nullable();
-			$table->string('sampleMRPTagImage', \App\Constants\Constants::MaxFilePathLength)->nullable();
+			$table->string('sampleMRPTagImage', \App\Library\Enums\Common\Constants::MaxFilePathLength)->nullable();
 			$table->boolean('isBrandOwner')->default(false);
-			$table->string('documentProof', \App\Constants\Constants::MaxFilePathLength)->nullable();
+			$table->string('documentProof', \App\Library\Enums\Common\Constants::MaxFilePathLength)->nullable();
 			$table->string('documentType')->nullable();
 			$table->json('documentExtras');
 			$table->unsignedBigInteger('categoryId')->comment('Category to which this brand belongs.');
@@ -30,8 +30,8 @@ class CreateBrandsTable extends Migration{
 			$table->timestamps();
 
 			if (appEnvironment(AppEnvironmentProduction)) {
-				$table->foreign('categoryId')->references('id')->on(\App\Interfaces\Tables::Categories)->onDelete('cascade');
-				$table->foreign('createdBy')->references('id')->on(\App\Interfaces\Tables::Sellers)->onDelete('cascade');
+				$table->foreign('categoryId')->references('id')->on(\App\Library\Enums\Common\Tables::Categories)->onDelete('cascade');
+				$table->foreign('createdBy')->references('id')->on(\App\Library\Enums\Common\Tables::Sellers)->onDelete('cascade');
 			}
 		});
 	}

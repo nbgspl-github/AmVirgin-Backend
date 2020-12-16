@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Web\Admin\TvSeries;
 
 use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
-use App\Interfaces\Directories;
+use App\Library\Enums\Common\Directories;
 use App\Models\Video;
 use App\Models\VideoSnap;
 use App\Storage\SecuredDisk;
@@ -49,19 +49,19 @@ class SnapsController extends TvSeriesBase
 			$video = Video::retrieveThrows($id);
 			$payload = $this->requestValid(request(), $this->rules('store'));
 			collect($payload['image'])->each(function (UploadedFile $file) use ($video) {
-				VideoSnap::newObject()->
+				VideoSnap::instance()->
 				setVideoId($video->getKey())->
 				setFile(SecuredDisk::access()->putFile(Directories::VideoSnaps, $file, 'private'))->
 				setDescription('Special snaps')->
 				save();
 			});
-			$response->status(HttpOkay)->message('Snapshots uploaded/updated successfully.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Snapshots uploaded/updated successfully.');
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find tv-series for that key.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find tv-series for that key.');
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -73,11 +73,11 @@ class SnapsController extends TvSeriesBase
 		try {
 			$videoSnap = VideoSnap::retrieveThrows($subId);
 			$videoSnap->delete();
-			$response->status(HttpOkay)->message('Snapshot deleted successfully.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Snapshot deleted successfully.');
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find snapshot for that key.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find snapshot for that key.');
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

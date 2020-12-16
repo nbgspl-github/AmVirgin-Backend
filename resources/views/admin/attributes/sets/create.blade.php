@@ -97,7 +97,9 @@
 															</td>
 															<td>{{$attribute->name()}}</td>
 															<td>{{$attribute->code()}}</td>
-															<td><span class="badge badge-secondary font-14">{{\App\Classes\Str::join(', ',$attribute->values())}}</span></td>
+															<td>
+																<span class="badge badge-secondary font-14">{{\App\Library\Utils\Extensions\Str::join(', ',$attribute->values())}}</span>
+															</td>
 															<td>
 																<select name="groups[]" id="{{$attribute->id()}}" class="form-control" disabled>
 																	@foreach(\App\Models\AttributeSet::Groups as $group)

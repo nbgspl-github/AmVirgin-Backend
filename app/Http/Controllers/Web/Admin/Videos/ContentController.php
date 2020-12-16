@@ -7,7 +7,7 @@ use App\Events\Admin\TvSeries\TvSeriesUpdated;
 use App\Events\Admin\Videos\VideoUpdated;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Web\Admin\TvSeries\TvSeriesBase;
-use App\Interfaces\Directories;
+use App\Library\Enums\Common\Directories;
 use App\Models\MediaLanguage;
 use App\Models\MediaQuality;
 use App\Models\Video;
@@ -84,7 +84,7 @@ class ContentController extends VideosBase
 				try {
 					$source = VideoSource::retrieveThrows($sources[$i]);
 				} catch (ModelNotFoundException $exception) {
-					$source = VideoSource::newObject();
+					$source = VideoSource::instance();
 					$source->setVideoId($id);
 				} finally {
 					if (isset($titles[$i]))
@@ -122,13 +122,13 @@ class ContentController extends VideosBase
 					$source->save();
 				}
 			}
-			$response->status(HttpOkay)->message('Video sources were updated successfully.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Video sources were updated successfully.');
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find video for that key.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find video for that key.');
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			event(new TvSeriesUpdated($id));
 			return $response->send();
@@ -141,11 +141,11 @@ class ContentController extends VideosBase
 		try {
 			$videoSnap = VideoSource::retrieveThrows($subId);
 			$videoSnap->delete();
-			$response->status(HttpOkay)->message('Video source deleted successfully.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Video source deleted successfully.');
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find video source for that key.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find video source for that key.');
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			event(new VideoUpdated($id));
 			return $response->send();

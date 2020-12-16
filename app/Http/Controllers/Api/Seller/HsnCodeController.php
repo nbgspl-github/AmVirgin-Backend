@@ -18,7 +18,7 @@ class HsnCodeController extends ApiController
 		$hsnCodes->transform(function (HsnCode $hsnCode) {
 			return $hsnCode->hsnCode;
 		});
-		return responseApp()->status(HttpOkay)->message('Listing all available HSN codes.')->setValue('data', $hsnCodes)->send();
+		return responseApp()->status(\Illuminate\Http\Response::HTTP_OK)->message('Listing all available HSN codes.')->setValue('data', $hsnCodes)->send();
 	}
 
 	protected function guard ()

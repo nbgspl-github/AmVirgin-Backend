@@ -20,11 +20,11 @@ class ProductAttributeController extends ApiController
 		try {
 			$productAttribute = ProductAttribute::retrieveThrows($id);
 			$productAttribute->delete();
-			$response->status(HttpOkay)->message('Product attribute deleted successfully.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Product attribute deleted successfully.');
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find product attribute for that key.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find product attribute for that key.');
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

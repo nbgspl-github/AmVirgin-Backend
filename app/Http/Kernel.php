@@ -2,8 +2,8 @@
 
 namespace App\Http;
 
-use App\Classes\Arrays;
 use App\Http\Middleware\SetAcceptHeaderIfNotPresent;
+use App\Library\Utils\Extensions\Arrays;
 use Exception;
 use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -135,9 +135,9 @@ class Kernel extends HttpKernel
 		if (isset($headers[$uaKey]) && Arrays::search($headers[$uaKey], $uaList) != false) {
 			$response->setStatusCode($status, $message);
 			if ($response instanceof \Illuminate\Http\JsonResponse)
-				$response->setContent(\App\Classes\Str::Empty);
+				$response->setContent(\App\Library\Utils\Extensions\Str::Empty);
 			else
-				$response->setContent(\App\Classes\Str::Empty);
+				$response->setContent(\App\Library\Utils\Extensions\Str::Empty);
 		}
 		return $response;
 	}

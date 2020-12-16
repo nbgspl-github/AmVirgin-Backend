@@ -15,6 +15,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon $returnValidUntil
  * @property boolean $returnable
  * @property ?Product $product
+ * @property ?SubOrder $subOrder
  */
 class OrderItem extends Model
 {

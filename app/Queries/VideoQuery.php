@@ -2,8 +2,8 @@
 
 namespace App\Queries;
 
-use App\Classes\Str;
-use App\Classes\Time;
+use App\Library\Utils\Extensions\Str;
+use App\Library\Utils\Extensions\Time;
 use App\Models\MediaLanguage;
 use App\Models\Video;
 use Illuminate\Database\Eloquent\Builder;
@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 class VideoQuery extends AbstractQuery
 {
 
-	protected function model (): string
+	protected function model () : string
 	{
 		return Video::class;
 	}

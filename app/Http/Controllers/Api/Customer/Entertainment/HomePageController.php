@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\Customer\Entertainment;
 
-use App\Classes\Arrays;
-use App\Classes\Str;
-use App\Constants\PageSectionType;
 use App\Http\Controllers\Api\ApiController;
+use App\Library\Enums\Common\PageSectionType;
+use App\Library\Utils\Extensions\Arrays;
+use App\Library\Utils\Extensions\Str;
 use App\Models\PageSection;
 use App\Models\Product;
 use App\Models\Slider;
@@ -95,9 +95,9 @@ class HomePageController extends ApiController
 			$trendingNow = TrendingNowVideoResource::collection($trendingNow);
 			$data['trendingNow'] = $trendingNow;
 
-			return responseApp()->status(HttpOkay)->message('Successfully retrieved entertainment homepage resources.')->setValue('data', $data)->send();
+			return responseApp()->status(\Illuminate\Http\Response::HTTP_OK)->message('Successfully retrieved entertainment homepage resources.')->setValue('data', $data)->send();
 		} catch (Throwable $throwable) {
-			return responseApp()->status(HttpServerError)->message($throwable->getMessage())->setValue('data')->send();
+			return responseApp()->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($throwable->getMessage())->setValue('data')->send();
 		}
 	}
 
@@ -112,11 +112,11 @@ class HomePageController extends ApiController
 				$contents = Product::startQuery()->displayable()->promoted()->take($pageSection->visibleItemCount)->get();
 			}
 			$contents = TopPickResource::collection($contents);
-			$response->status(HttpOkay)->message(sprintf('Found %d items under %s.', $contents->count(), $pageSection->title))->setValue('data', $contents);
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message(sprintf('Found %d items under %s.', $contents->count(), $pageSection->title))->setValue('data', $contents);
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message('Could not find section for that key.');
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find section for that key.');
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -134,10 +134,10 @@ class HomePageController extends ApiController
 			}
 			$data['trendingNow'] = $trendingNow;
 
-			return responseApp()->status(HttpOkay)->message($msg)->setValue('data', $data)->send();
+			return responseApp()->status(\Illuminate\Http\Response::HTTP_OK)->message($msg)->setValue('data', $data)->send();
 
 		} catch (Throwable $e) {
-			return responseApp()->status(HttpServerError)->message($e)->setValue('data')->send();
+			return responseApp()->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($e)->setValue('data')->send();
 
 		}
 	}
@@ -152,9 +152,9 @@ class HomePageController extends ApiController
 				$msg = 'Successfully retrieved entertainment recommended video.';
 			}
 			$data['recommended'] = $trendingNow;
-			return responseApp()->status(HttpOkay)->message($msg)->setValue('data', $data)->send();
+			return responseApp()->status(\Illuminate\Http\Response::HTTP_OK)->message($msg)->setValue('data', $data)->send();
 		} catch (Throwable $e) {
-			return responseApp()->status(HttpServerError)->message($e)->setValue('data')->send();
+			return responseApp()->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($e)->setValue('data')->send();
 		}
 	}
 

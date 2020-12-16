@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api\Seller;
 
-use App\Classes\Arrays;
-use App\Classes\Rule;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Api\ApiController;
-use App\Interfaces\Directories;
-use App\Interfaces\Tables;
+use App\Library\Enums\Common\Directories;
+use App\Library\Enums\Common\Tables;
+use App\Library\Utils\Extensions\Arrays;
+use App\Library\Utils\Extensions\Rule;
 use App\Models\Brand;
 use App\Resources\Brands\Seller\AvailableListResource;
 use App\Resources\Brands\Seller\OwnedBrandResource;
@@ -70,12 +70,12 @@ class BrandController extends ApiController
 				$brands = Brand::startQuery()->search($validated['name'])->category($validated['category'])->get();
 //                $brands = Brand::startQuery()->search($validated['name'])->get();
 				$resource = AvailableListResource::collection($brands);
-				$response->status($resource->count() > 0 ? HttpOkay : HttpNoContent)->message('Listing brands matching your search query.')->setValue('data', $resource);
+				$response->status($resource->count() > 0 ? \Illuminate\Http\Response::HTTP_OK : \Illuminate\Http\Response::HTTP_NO_CONTENT)->message('Listing brands matching your search query.')->setValue('data', $resource);
 			}
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -90,9 +90,9 @@ class BrandController extends ApiController
 			$ownedBrands = Brand::startQuery()->seller($this->guard()->id())->category($payload['category'])->get();
 //			$ownedBrands = Brand::startQuery()->seller($this->guard()->id())->get();
 			$resource = OwnedBrandResource::collection($ownedBrands);
-			$response->status(HttpOkay)->message('Listing all brands approved for you.')->setValue('data', $resource)->send();
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Listing all brands approved for you.')->setValue('data', $resource)->send();
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -110,14 +110,14 @@ class BrandController extends ApiController
 				// Verify if any other seller owns this brand or it exclusively belongs to this seller.
 				if ($brand->createdBy() == $this->guard()->id()) {
 					if ($brand->status == Brand::Status['Approved']) {
-						$response->status(HttpOkay)->message('You are already approved to sell under this brand.')->setValue('payload', ['status' => $brand->status()]);
+						$response->status(\Illuminate\Http\Response::HTTP_OK)->message('You are already approved to sell under this brand.')->setValue('payload', ['status' => $brand->status()]);
 					} else if ($brand->status == Brand::Status['Rejected']) {
-						$response->status(HttpOkay)->message('Your approval request was rejected, so you\'re not allowed to sell under this brand name.')->setValue('payload', ['status' => $brand->status()]);
+						$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Your approval request was rejected, so you\'re not allowed to sell under this brand name.')->setValue('payload', ['status' => $brand->status()]);
 					} else {
-						$response->status(HttpOkay)->message('Your approval request is pending. Please check back shortly to get an update.')->setValue('payload', ['status' => $brand->status()]);
+						$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Your approval request is pending. Please check back shortly to get an update.')->setValue('payload', ['status' => $brand->status()]);
 					}
 				} else {
-					$response->status(HttpResourceAlreadyExists)->message('Your proposed brand name is already taken by another seller. Please try again with a different one.');
+					$response->status(\Illuminate\Http\Response::HTTP_CONFLICT)->message('Your proposed brand name is already taken by another seller. Please try again with a different one.');
 				}
 			} else {
 				if ($payload['documentType'] == Brand::DocumentType['TrademarkCertificate']) {
@@ -151,12 +151,12 @@ class BrandController extends ApiController
 					'logo' => isset($payload['logo']) ? SecuredDisk::access()->putFile(Directories::Brands, $payload['logo']) : null,
 				]);
 				$brand = Brand::create($payload);
-				$response->status(HttpOkay)->message('Your request has been queued. Please check back shortly to get an update.')->setValue('payload', ['status' => $brand->status()]);
+				$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Your request has been queued. Please check back shortly to get an update.')->setValue('payload', ['status' => $brand->status()]);
 			}
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

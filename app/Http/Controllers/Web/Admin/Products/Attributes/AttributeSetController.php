@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Web\Admin\Products\Attributes;
 
-use App\Classes\Arrays;
-use App\Classes\Rule;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
-use App\Interfaces\Tables;
+use App\Library\Enums\Common\Tables;
+use App\Library\Utils\Extensions\Arrays;
+use App\Library\Utils\Extensions\Rule;
 use App\Models\Attribute;
 use App\Models\AttributeSet;
 use App\Models\AttributeSetItem;

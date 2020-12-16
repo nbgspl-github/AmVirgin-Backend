@@ -1,6 +1,6 @@
 <?php
 
-use App\Constants\Constants;
+use App\Library\Enums\Common\Constants;
 use App\Models\Category;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -29,7 +29,7 @@ class CreateCategoriesTable extends Migration{
 			$table->timestamps();
 
 			if (appEnvironment(AppEnvironmentProduction)) {
-				$table->foreign('parentId')->references('id')->on(\App\Interfaces\Tables::Categories)->onDelete('cascade');
+				$table->foreign('parentId')->references('id')->on(\App\Library\Enums\Common\Tables::Categories)->onDelete('cascade');
 			}
 		});
 	}

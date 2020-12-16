@@ -21,7 +21,7 @@ class CurrencyController extends BaseController
 		$currency->transform(function (Currency $currency) {
 			return $currency->code;
 		});
-		return $this->responseApp()->status(HttpOkay)->setValue('data', $currency)->message(function () use ($currency) {
+		return $this->responseApp()->status(\Illuminate\Http\Response::HTTP_OK)->setValue('data', $currency)->message(function () use ($currency) {
 			return sprintf('Found %d currencies.', $currency->count());
 		})->send();
 	}

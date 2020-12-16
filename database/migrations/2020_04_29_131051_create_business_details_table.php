@@ -20,10 +20,10 @@ class CreateBusinessDetailsTable extends Migration
             $table->boolean('nameVerified')->default(false);
             $table->string('tan')->nullable()->comment('Tax Deduction & Account Number');
             $table->string('gstIN')->nullable()->comment('GST Identification number');
-            $table->string('gstCertificate', \App\Constants\Constants::MaxFilePathLength)->nullable();
-            $table->boolean('gstINVerified')->default(false);
-            $table->string('signature', \App\Constants\Constants::MaxFilePathLength)->nullable();
-            $table->boolean('signatureVerified')->default(false);
+	        $table->string('gstCertificate', \App\Library\Enums\Common\Constants::MaxFilePathLength)->nullable();
+	        $table->boolean('gstINVerified')->default(false);
+	        $table->string('signature', \App\Library\Enums\Common\Constants::MaxFilePathLength)->nullable();
+	        $table->boolean('signatureVerified')->default(false);
             $table->string('rbaFirstLine')->nullable();
             $table->string('rbaSecondLine')->nullable();
             $table->string('rbaPinCode')->nullable();
@@ -33,7 +33,7 @@ class CreateBusinessDetailsTable extends Migration
             $table->timestamps();
 
             if (appEnvironment(AppEnvironmentProduction)) {
-                $table->foreign('sellerId')->references('id')->on(\App\Interfaces\Tables::Sellers)->onDelete('cascade');
+	            $table->foreign('sellerId')->references('id')->on(\App\Library\Enums\Common\Tables::Sellers)->onDelete('cascade');
             }
         });
     }

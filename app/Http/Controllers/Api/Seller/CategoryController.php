@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api\Seller;
 
-use App\Classes\Str;
 use App\Http\Controllers\Api\ApiController;
+use App\Library\Utils\Extensions\Str;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Sujip\Guid\Facades\Guid;
@@ -66,7 +66,7 @@ class CategoryController extends ApiController
 				],
 			];
 		});
-		return responseApp()->status($category->count() > 0 ? HttpOkay : HttpNoContent)->setValue('data', $category)->message('Listing all available categories.')->send();
+		return responseApp()->status($category->count() > 0 ? \Illuminate\Http\Response::HTTP_OK : \Illuminate\Http\Response::HTTP_NO_CONTENT)->setValue('data', $category)->message('Listing all available categories.')->send();
 	}
 
 	protected function guard ()

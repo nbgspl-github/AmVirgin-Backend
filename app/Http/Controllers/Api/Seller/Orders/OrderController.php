@@ -21,9 +21,9 @@ class OrderController extends ApiController
 				$query->where('status', request('status'));
 			}
 			$resourceCollection = ListResource::collection($query->paginate());
-			$response->status(HttpOkay)->payload($resourceCollection->response()->getData());
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->payload($resourceCollection->response()->getData());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -35,12 +35,12 @@ class OrderController extends ApiController
 		try {
 			if ($order->seller != null && $order->seller->is($this->user())) {
 				$resource = new OrderResource($order);
-				$response->status(HttpOkay)->message('Listing order details for given key.')->payload($resource);
+				$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Listing order details for given key.')->payload($resource);
 			} else {
 				$response->status(Response::HTTP_FORBIDDEN)->message('View details is not available for this order.')->payload();
 			}
 		} catch (Throwable $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\Seller\Products;
 
-use App\Classes\Arrays;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Api\ApiController;
-use App\Interfaces\Directories;
+use App\Library\Enums\Common\Directories;
+use App\Library\Utils\Extensions\Arrays;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Storage\SecuredDisk;
@@ -61,11 +61,11 @@ class BulkImageController extends ApiController
 			if (count($notMatched) > 0) {
 				$string .= ' Some images did not match the requested format.';
 			}
-			$response->status(HttpOkay)->message($string)->setValue('notMatched', $notMatched);
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message($string)->setValue('notMatched', $notMatched);
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
 		} catch (\Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

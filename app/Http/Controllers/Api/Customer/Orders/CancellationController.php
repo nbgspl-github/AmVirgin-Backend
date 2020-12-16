@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\Customer\Orders;
 
-use App\Enums\Orders\Status;
 use App\Http\Controllers\Api\ApiController;
-use App\Models\Order;
+use App\Library\Enums\Orders\Status;
+use App\Models\SubOrder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
@@ -17,31 +17,28 @@ class CancellationController extends ApiController
 		parent::__construct();
 	}
 
-	public function cancel (Order $order): JsonResponse
+	public function cancel (SubOrder $order) : JsonResponse
 	{
 		$response = responseApp();
-		try {
-			if ($order->customer != null && $order->customer->is($this->user()) && $this->cancellationAllowed($order)) {
-				$this->performCancellation($order);
-				$response->status(Response::HTTP_OK)->message('Your order was cancelled successfully!');
-			} else {
-				$response->status(Response::HTTP_NOT_MODIFIED)->message('Cancellation is not allowed on this order.');
-			}
-		} catch (\Throwable $e) {
-			$response->status(Response::HTTP_INTERNAL_SERVER_ERROR)->message($e->getMessage());
-		} finally {
-			return $response->send();
+		if ($order->customer != null && $order->customer->is($this->user()) && $this->cancellationAllowed($order)) {
+			$this->performCancellation($order);
+			$response->status(Response::HTTP_OK)->message('Your order was cancelled successfully!');
+		} else {
+			$response->status(Response::HTTP_NOT_MODIFIED)->message('Cancellation is not allowed on this order.');
 		}
+		return $response->send();
 	}
 
-	protected function cancellationAllowed (Order $order): bool
+	protected function cancellationAllowed (SubOrder $order) : bool
 	{
-		return !($order->status->is(Status::Cancelled) || $order->status->is(Status::Delivered));
+		return !($order->status->is(Status::Cancelled) || $order->status->is(Status::Delivered)) && empty($order->fulfilled_at);
 	}
 
-	protected function performCancellation (Order $order)
+	protected function performCancellation (SubOrder $order)
 	{
-
+		$order->update([
+			'status' => Status::Cancelled
+		]);
 	}
 
 	protected function guard ()

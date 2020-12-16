@@ -2,9 +2,7 @@
 
 namespace App\Classes\Eloquent;
 
-use App\Classes\Arrays;
-use App\Classes\Str;
-use App\Storage\SecuredDisk;
+use App\Library\Utils\Extensions\Str;
 use Illuminate\Support\Collection as BaseCollection;
 
 class ModelExtended extends \Illuminate\Database\Eloquent\Model{

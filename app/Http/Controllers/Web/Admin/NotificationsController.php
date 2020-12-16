@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Web\Admin;
 
 use App\Http\Controllers\BaseController;
-use App\Interfaces\Roles;
 use App\Models\Auth\Customer;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,7 +15,7 @@ class NotificationsController extends BaseController
 		return view('admin.notifications.create');
 	}
 
-	public function send (Request $request)
+	public function send (Request $request) : JsonResponse
 	{
 		$validator = Validator::make($request->all(), [
 			'title' => ['bail', 'required', 'string', 'min:1', 'max:75'],
@@ -27,7 +27,7 @@ class NotificationsController extends BaseController
 				'message' => $validator->errors()->first(),
 			], 400);
 		} else {
-			$customers = Customer::where('role', Roles::Customer)->chunk(100, function (Customer $chunk) {
+			$customers = Customer::query()->chunk(100, function (Customer $chunk) {
 				$chunk->each(function (Customer $customer) {
 
 				});

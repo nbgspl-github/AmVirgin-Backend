@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Classes\Time;
+use App\Library\Utils\Extensions\Time;
 use App\Models\Auth\Admin;
 use Illuminate\Database\Seeder;
 

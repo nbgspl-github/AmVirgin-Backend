@@ -40,11 +40,11 @@ class ContactUsController extends \App\Http\Controllers\WebServices\ApiControlle
 			$validated = $this->requestValid(request(), $this->rules['store']);
 			if ($user != null) $validated['customerId'] = $user->id();
 			CustomerQuery::create($validated);
-			$response->status(HttpOkay)->message('We have received your query and will respond to you shortly.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('We have received your query and will respond to you shortly.');
 		} catch (ValidationException $exception) {
-			$response->status(HttpOkay)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message($exception->getMessage());
 		} catch (Throwable $exception) {
-			$response->status(HttpOkay)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

@@ -2,9 +2,7 @@
 
 namespace App\Resources\Shop\Customer\Catalog\Filters;
 
-use App\Classes\Arrays;
-use App\Queries\ProductQuery;
-use Illuminate\Http\Resources\Json\JsonResource;
+use App\Library\Utils\Extensions\Arrays;
 use Illuminate\Support\Collection;
 
 class PriceRangeResource extends AbstractBuiltInResource{

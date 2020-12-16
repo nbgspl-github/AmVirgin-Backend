@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
-use App\Enums\Seller\OrderStatus;
 use App\Http\Controllers\BaseController;
+use App\Library\Enums\Orders\Status;
 use App\Models\Auth\Customer;
 use App\Models\Auth\Seller;
 use App\Models\Order;
@@ -30,9 +30,9 @@ class HomeController extends BaseController
 		$sellerCount = Seller::query()->count();
 		$productCount = Product::startQuery()->displayable()->count();
 		$orderCount = Order::query()->count();
-		$pendingOrders = Order::query()->where('status', OrderStatus::Pending)->count();
-		$cancelledOrders = Order::query()->where('status', OrderStatus::Cancelled)->count();
-		$deliveredOrders = Order::query()->where('status', OrderStatus::Delivered)->count();
+		$pendingOrders = Order::query()->where('status', Status::Pending)->count();
+		$cancelledOrders = Order::query()->where('status', Status::Cancelled)->count();
+		$deliveredOrders = Order::query()->where('status', Status::Delivered)->count();
 		$payload = [
 			'video' => $videoCount,
 			'series' => $seriesCount,

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Constants\PageSectionType;
+use App\Library\Enums\Common\PageSectionType;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\RetrieveCollection;
 use App\Traits\RetrieveResource;

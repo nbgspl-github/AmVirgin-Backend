@@ -2,7 +2,7 @@
 
 namespace App\Resources\Shop\Customer\Catalog\Filters;
 
-use App\Classes\Arrays;
+use App\Library\Utils\Extensions\Arrays;
 use Illuminate\Support\Collection;
 
 class DiscountResource extends AbstractBuiltInResource{

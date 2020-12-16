@@ -14,11 +14,11 @@ class CreateProductImagesTable extends Migration{
 		Schema::create('product-images', function (Blueprint $table){
 			$table->bigIncrements('id');
 			$table->unsignedBigInteger('productId')->comment('Product to which these images belong');
-			$table->string('path', \App\Constants\Constants::MaxFilePathLength)->comment('Relative path of the file on the specified disk');
+			$table->string('path', \App\Library\Enums\Common\Constants::MaxFilePathLength)->comment('Relative path of the file on the specified disk');
 			$table->timestamps();
 
 			if (appEnvironment(AppEnvironmentProduction)) {
-				$table->foreign('productId')->references('id')->on(\App\Interfaces\Tables::Products)->onDelete('cascade');
+				$table->foreign('productId')->references('id')->on(\App\Library\Enums\Common\Tables::Products)->onDelete('cascade');
 			}
 		});
 	}

@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Web\Admin;
 
 use App\Classes\ColumnNavigator;
-use App\Classes\Rule;
-use App\Classes\Str;
 use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
-use App\Interfaces\Directories;
-use App\Interfaces\Tables;
+use App\Library\Enums\Common\Directories;
+use App\Library\Enums\Common\Tables;
+use App\Library\Utils\Extensions\Rule;
+use App\Library\Utils\Extensions\Str;
 use App\Models\AttributeSetItem;
 use App\Models\Category;
 use App\Storage\SecuredDisk;
@@ -302,11 +302,11 @@ class CategoryController extends BaseController
 		try {
 			$category = Category::retrieveThrows($id);
 			$category->delete();
-			$response->message('Category deleted successfully.')->status(HttpOkay)->send();
+			$response->message('Category deleted successfully.')->status(\Illuminate\Http\Response::HTTP_OK)->send();
 		} catch (ModelNotFoundException $exception) {
-			$response->message($exception->getMessage())->status(HttpResourceNotFound)->send();
+			$response->message($exception->getMessage())->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->send();
 		} catch (Throwable $exception) {
-			$response->message($exception->getMessage())->status(HttpServerError)->send();
+			$response->message($exception->getMessage())->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->send();
 		} finally {
 			return $response->send();
 		}

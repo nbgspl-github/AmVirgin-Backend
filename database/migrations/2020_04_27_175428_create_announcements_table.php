@@ -15,7 +15,7 @@ class CreateAnnouncementsTable extends Migration{
 			$table->bigIncrements('id');
 			$table->string('title')->default('Important announcement!');
 			$table->string('content', 5000)->nullable();
-			$table->string('banner', \App\Constants\Constants::MaxFilePathLength)->nullable();
+			$table->string('banner', \App\Library\Enums\Common\Constants::MaxFilePathLength)->nullable();
 			$table->timestamp('validFrom')->nullable();
 			$table->timestamp('validUntil')->nullable();
 			$table->json('readBy');

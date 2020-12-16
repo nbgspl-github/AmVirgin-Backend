@@ -29,16 +29,16 @@ class ProductTrailerController extends AbstractProductController
 						'trailer' => $uri,
 					]);
 				});
-				$response->status(HttpOkay)->message('Trailer uploaded successfully.');
+				$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Trailer uploaded successfully.');
 			} else {
-				$response->status(HttpInvalidRequestFormat)->message('There are no products available for this token. Please upload trailer post product creation.');
+				$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message('There are no products available for this token. Please upload trailer post product creation.');
 			}
 		} catch (TokenInvalidException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
 		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

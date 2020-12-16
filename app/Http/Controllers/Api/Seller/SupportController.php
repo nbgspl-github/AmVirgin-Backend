@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\Seller;
 
-use App\Classes\Rule;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Api\ApiController;
+use App\Library\Utils\Extensions\Rule;
 use App\Models\SupportTicket;
 use App\Resources\Support\Seller\TicketResource;
 use App\Traits\ValidatesRequest;
@@ -54,9 +54,9 @@ class SupportController extends ApiController
 				$query->where('subIssue', $validated['subIssue']);
 			$tickets = $query->get();
 			$resourceCollection = TicketResource::collection($tickets);
-			$response->status($tickets->count() > 0 ? HttpOkay : HttpNoContent)->message('Listing all support tickets for seller.')->setValue('payload', $resourceCollection);
+			$response->status($tickets->count() > 0 ? \Illuminate\Http\Response::HTTP_OK : \Illuminate\Http\Response::HTTP_NO_CONTENT)->message('Listing all support tickets for seller.')->setValue('payload', $resourceCollection);
 		} catch (\Throwable $exception) {
-			$response->status(HttpOkay)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
@@ -71,11 +71,11 @@ class SupportController extends ApiController
 			$validated['status'] = 'open';
 			$ticket = SupportTicket::create($validated);
 			$resource = new TicketResource($ticket);
-			$response->status(HttpOkay)->message('Support ticket created successfully.')->setValue('payload', $resource);
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Support ticket created successfully.')->setValue('payload', $resource);
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
 		} catch (\Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Api\Seller\Payments;
 
-use App\Enums\Orders\Status;
-use App\Enums\Seller\OrderStatus;
 use App\Http\Controllers\Api\ApiController;
+use App\Library\Enums\Orders\Status;
 use App\Models\SellerOrder;
 use App\Models\SubOrder;
 use Illuminate\Http\JsonResponse;
@@ -18,7 +17,7 @@ class OverviewController extends ApiController
 		parent::__construct();
 	}
 
-	public function show (): JsonResponse
+	public function show () : JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -59,15 +58,15 @@ class OverviewController extends ApiController
 			});
 			$last = $previous->sort()->last();
 			$payload['previous']['date'] = !empty($last) ? date("F j, Y, g:i a", $last) : '<N/A>';
-			$response->status(HttpOkay)->message('Payment overview details retrieved successfully.')->setValue('payload', $payload);
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Payment overview details retrieved successfully.')->setValue('payload', $payload);
 		} catch (\Throwable $exception) {
-			$response->status(HttpOkay)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}
 	}
 
-	public function totalSales (): JsonResponse
+	public function totalSales () : JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -77,7 +76,7 @@ class OverviewController extends ApiController
 			if (!empty(request('days'))) {
 				$orderC->useWhere('created_at', '>=', $today->subDays(request('days')));
 			}
-			$orderCollection = $orderC->status((new OrderStatus(OrderStatus::Delivered)))->get();
+			$orderCollection = $orderC->status((new Status(Status::Delivered)))->get();
 			$datSet = array();
 			if (!empty(count($orderCollection))) {
 				$i = 0;
@@ -88,9 +87,9 @@ class OverviewController extends ApiController
 				}
 				$datSet['salesInRupees'] = $salesInRupee;
 			}
-			$response->status(HttpOkay)->message('Sales in last ' . request('days') . ' days retrieved successfully.')->setValue('payload', $datSet);
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Sales in last ' . request('days') . ' days retrieved successfully.')->setValue('payload', $datSet);
 		} catch (\Throwable $exception) {
-			$response->status(HttpOkay)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Web\Admin;
 
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
-use App\Interfaces\Directories;
+use App\Library\Enums\Common\Directories;
 use App\Models\CategoryBanner;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
@@ -137,9 +137,9 @@ class CategoriesBanner extends BaseController
 			}
 			$category->delete();
 
-			return $this->success()->message('Category deleted successfully.')->status(HttpOkay)->send();
+			return $this->success()->message('Category deleted successfully.')->status(\Illuminate\Http\Response::HTTP_OK)->send();
 		} catch (ModelNotFoundException $exception) {
-			return $this->failed()->message($exception->getMessage())->status(HttpResourceNotFound)->send();
+			return $this->failed()->message($exception->getMessage())->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->send();
 		}
 	}
 }

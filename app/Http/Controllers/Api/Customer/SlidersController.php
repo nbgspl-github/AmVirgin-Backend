@@ -22,12 +22,12 @@ class SlidersController extends ApiController
 				return $payload;
 			});
 			if ($all->count() > 0) {
-				$response->status(HttpOkay)->setValue('data', $all);
+				$response->status(\Illuminate\Http\Response::HTTP_OK)->setValue('data', $all);
 			} else {
-				$response->status(HttpNoContent);
+				$response->status(\Illuminate\Http\Response::HTTP_NO_CONTENT);
 			}
 		} catch (\Throwable $exception) {
-			$response->status(HttpServerError);
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR);
 		} finally {
 			return $response->send();
 		}

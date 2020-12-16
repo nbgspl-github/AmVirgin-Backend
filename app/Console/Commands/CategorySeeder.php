@@ -110,7 +110,7 @@ class CategorySeeder extends Command{
 			'specials' => [],
 		]);
 		foreach ($this->categories as $key => $value) {
-			$category = Category::newObject();
+			$category = Category::instance();
 			$category->name = $key;
 			$category->description = sprintf('%s is a really cool trend. There\'s a whole lot more inside so be sure to follow.', $key);
 			$category->parentId = $root->id();
@@ -120,7 +120,7 @@ class CategorySeeder extends Command{
 			$category->save();
 			if (is_array($value) && count($value) > 0) {
 				foreach ($value as $innerCategory => $innerValue) {
-					$inner = Category::newObject();
+					$inner = Category::instance();
 					$inner->name = $innerCategory;
 					$inner->description = sprintf('%s is a really cool trend. There\'s a whole lot more inside so be sure to follow.', $innerCategory);
 					$inner->parentId = $category->id();
@@ -130,7 +130,7 @@ class CategorySeeder extends Command{
 					$inner->save();
 					if (is_array($innerValue) && count($innerValue) > 0) {
 						foreach ($innerValue as $subInnerCategory => $subInnerValue) {
-							$subInner = Category::newObject();
+							$subInner = Category::instance();
 							$subInner->name = $subInnerValue;
 							$subInner->description = sprintf('%s is a really cool trend. There\'s a whole lot more inside so be sure to follow.', $subInnerValue);
 							$subInner->parentId = $inner->id();

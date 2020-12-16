@@ -6,8 +6,8 @@ use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\Videos\VideoResource;
-use App\Interfaces\Directories;
-use App\Interfaces\VideoTypes;
+use App\Library\Enums\Common\Directories;
+use App\Library\Enums\Videos\Types;
 use App\Models\Genre;
 use App\Models\MediaLanguage;
 use App\Models\MediaQuality;
@@ -90,7 +90,7 @@ class VideosController extends BaseController
 				'genreId' => $validated['genreId'],
 				'rating' => $validated['rating'],
 				'pgRating' => $validated['pgRating'],
-				'type' => VideoTypes::Movie,
+				'type' => Types::Movie,
 				'hits' => 0,
 				'trending' => request()->has('trending'),
 				'rank' => is_null($validated['rank']) ? 0 : $validated['rank'],
@@ -160,7 +160,7 @@ class VideosController extends BaseController
 
 			$response = $this->success()->message('Your video was successfully uploaded.');
 		} catch (ValidationException $exception) {
-			$response = $this->failed()->message($exception->getError())->status(HttpInvalidRequestFormat);
+			$response = $this->failed()->message($exception->getError())->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST);
 		} catch (Throwable $exception) {
 			$response = $this->error()->message($exception->getMessage());
 		} finally {

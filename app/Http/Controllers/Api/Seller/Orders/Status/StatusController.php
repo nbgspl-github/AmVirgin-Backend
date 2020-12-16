@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Api\Seller\Orders\Status;
 
-use App\Classes\Rule;
-use App\Enums\Orders\Status;
 use App\Exceptions\ValidationException;
+use App\Library\Enums\Orders\Status;
+use App\Library\Utils\Extensions\Rule;
 use App\Models\SubOrder;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 
 class StatusController extends AbstractStatusController
 {
-	public function update (SubOrder $order): JsonResponse
+	public function update (SubOrder $order) : JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -26,14 +26,14 @@ class StatusController extends AbstractStatusController
 			$current = $order->status;
 			if ($this->statusAllowed($current, $new)) {
 				$this->performStatusUpdate($order, $new, $validated);
-				$response->status(HttpOkay)->message('Order status updated successfully.');
+				$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Order status updated successfully.');
 			} else {
-				$response->status(HttpNotModified)->message('Requested order status is invalid for current active status.');
+				$response->status(\Illuminate\Http\Response::HTTP_NOT_MODIFIED)->message('Requested order status is invalid for current active status.');
 			}
 		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
+			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
 		} catch (Throwable $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message($exception->getMessage());
 		} finally {
 			return $response->send();
 		}

@@ -2,7 +2,7 @@
 
 namespace App\Resources\Advertisements\Seller;
 
-use App\Classes\Time;
+use App\Library\Utils\Extensions\Time;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ListResource extends JsonResource

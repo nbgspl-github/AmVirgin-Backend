@@ -25,11 +25,11 @@ class BrandController extends ApiController
 		try {
 			$brand = Brand::retrieveThrows($id);
 			$brand = new BrandResource($brand);
-			$response->status(HttpOkay)->setValue('data', $brand)->message('Found brand for that key.');
+			$response->status(\Illuminate\Http\Response::HTTP_OK)->setValue('data', $brand)->message('Found brand for that key.');
 		} catch (ModelNotFoundException $e) {
-			$response->status(HttpResourceNotFound)->message($e->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message($e->getMessage());
 		} catch (\Throwable $e) {
-			$response->status(HttpServerError)->message($e->getMessage());
+			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($e->getMessage());
 		} finally {
 			return $response->send();
 		}

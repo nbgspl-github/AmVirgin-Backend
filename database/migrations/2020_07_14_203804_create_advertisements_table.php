@@ -1,6 +1,6 @@
 <?php
 
-use App\Constants\Constants;
+use App\Library\Enums\Common\Constants;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

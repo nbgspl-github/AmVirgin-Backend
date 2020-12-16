@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Web\Admin\Videos;
 
 use App\Classes\WebResponse;
-use App\Constants\PageSectionType;
 use App\Exceptions\ValidationException;
+use App\Library\Enums\Common\PageSectionType;
 use App\Models\Genre;
 use App\Models\MediaLanguage;
 use App\Models\MediaQuality;
