@@ -41,7 +41,7 @@ class BulkStatusController extends AbstractStatusController
 					$failed->push($order->id);
 				}
 			});
-			$response->status(HttpOkay)->message('Successfully processed all orders.')->setPayload(['failed' => $failed, 'succeeded' => $succeeded, 'unchanged' => $unchanged]);
+			$response->status(HttpOkay)->message('Successfully processed all orders.')->payload(['failed' => $failed, 'succeeded' => $succeeded, 'unchanged' => $unchanged]);
 		} catch (ValidationException $exception) {
 			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
 		} catch (Throwable $exception) {

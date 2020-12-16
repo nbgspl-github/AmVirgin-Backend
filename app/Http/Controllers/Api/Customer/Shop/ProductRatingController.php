@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\Customer\Shop;
 
-use App\Exceptions\ValidationException;
 use App\Http\Controllers\Api\ApiController;
 use App\Models\Product;
 use App\Resources\Reviews\Customer\Products\ReviewResource;
@@ -27,9 +26,9 @@ class ProductRatingController extends ApiController
 		];
 	}
 
-	public function show ($id): JsonResponse
+	public function show ($id) : JsonResponse
 	{
-		$response = $this->response();
+		$response = $this->responseApp();
 		try {
 			/**
 			 * @var $product Product
@@ -46,31 +45,22 @@ class ProductRatingController extends ApiController
 		}
 	}
 
-	public function store ($id): JsonResponse
+	public function store ($id) : JsonResponse
 	{
-		$response = $this->response();
-		try {
-			/**
-			 * @var $product Product
-			 */
-			$product = Product::startQuery()->displayable()->key($id)->firstOrFail();
-			$validated = $this->requestValid(request(), $this->rules['store']);
-			$reviewExists = $product->reviews()->where('customerId', $this->guard()->id())->exists();
-			if (!$reviewExists) {
-				$product->reviews()->create($validated);
-				$response->status(HttpOkay)->message('Product ratings updated successfully.');
-			} else {
-				$response->status(HttpResourceAlreadyExists)->message('Customer has already rated/reviewed the product.');
-			}
-		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage());
-		} catch (ValidationException $exception) {
-			$response->status(HttpInvalidRequestFormat)->message($exception->getError());
-		} catch (\Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
-		} finally {
-			return $response->send();
+		$response = $this->responseApp();
+		/**
+		 * @var $product Product
+		 */
+		$product = Product::startQuery()->displayable()->key($id)->firstOrFail();
+		$validated = $this->requestValid(request(), $this->rules['store']);
+		$reviewExists = $product->ratings()->where('customerId', $this->guard()->id())->exists();
+		if (!$reviewExists) {
+			$product->ratings()->create($validated);
+			$response->status(HttpOkay)->message('Product ratings updated successfully.');
+		} else {
+			$response->status(HttpResourceAlreadyExists)->message('Customer has already rated/reviewed the product.');
 		}
+		return $response->send();
 	}
 
 	protected function guard ()

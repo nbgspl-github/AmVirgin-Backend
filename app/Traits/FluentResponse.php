@@ -4,20 +4,25 @@ namespace App\Traits;
 
 use App\Classes\Builders\ResponseBuilder;
 
-trait FluentResponse{
-	private function success(){
+trait FluentResponse
+{
+	private function success () : ResponseBuilder
+	{
 		return ResponseBuilder::asSuccess();
 	}
 
-	private function failed(){
+	private function failed () : ResponseBuilder
+	{
 		return ResponseBuilder::asFailure();
 	}
 
-	private function error(){
+	private function error () : ResponseBuilder
+	{
 		return ResponseBuilder::asError();
 	}
 
-	public function response(){
+	public function responseApp () : ResponseBuilder
+	{
 		return ResponseBuilder::instance();
 	}
 }

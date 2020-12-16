@@ -285,7 +285,7 @@ class QuoteController extends ApiController
 			$transaction = $this->createNewTransaction($cart);
 			$response->status(HttpOkay)
 				->message('We\'ve prepared your order for checkout.')
-				->setPayload(['rzpOrderId' => $transaction->rzpOrderId]);
+				->payload(['rzpOrderId' => $transaction->rzpOrderId]);
 		} catch (CartAlreadySubmittedException $exception) {
 			$response->status(HttpDeniedAccess)->message($exception->getMessage());
 		} catch (ModelNotFoundException $exception) {
@@ -333,12 +333,12 @@ class QuoteController extends ApiController
 				]);
 				$response->status(HttpCreated)
 					->message('Your order was placed successfully!')
-					->setPayload(['pending' => false, 'orderId' => $order->id])
+					->payload(['pending' => false, 'orderId' => $order->id])
 					->setValue('orderNumber', $order->orderNumber);
 			} else {
 				$response->status(HttpOkay)
 					->message('We could not verify the payment status at this time. Please allow up to 30 minutes before trying again.')
-					->setPayload(['pending' => true, 'orderId' => null])
+					->payload(['pending' => true, 'orderId' => null])
 					->setValue('orderNumber');
 			}
 		} catch (CartAlreadySubmittedException $exception) {

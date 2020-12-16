@@ -10,7 +10,7 @@ class GenreListController extends ApiController
 	public function index ()
 	{
 		$genres = Genre::all();
-		return $this->response()->status(HttpOkay)->message('Listing available genres.')->setValue('payload', $genres)->send();
+		return $this->responseApp()->status(HttpOkay)->message('Listing available genres.')->setValue('payload', $genres)->send();
 	}
 
 	protected function guard ()

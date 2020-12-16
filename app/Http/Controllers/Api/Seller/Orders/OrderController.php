@@ -21,7 +21,7 @@ class OrderController extends ApiController
 				$query->where('status', request('status'));
 			}
 			$resourceCollection = ListResource::collection($query->paginate());
-			$response->status(HttpOkay)->setPayload($resourceCollection->response()->getData());
+			$response->status(HttpOkay)->payload($resourceCollection->response()->getData());
 		} catch (Throwable $exception) {
 			$response->status(HttpServerError)->message($exception->getMessage());
 		} finally {
@@ -35,9 +35,9 @@ class OrderController extends ApiController
 		try {
 			if ($order->seller != null && $order->seller->is($this->user())) {
 				$resource = new OrderResource($order);
-				$response->status(HttpOkay)->message('Listing order details for given key.')->setPayload($resource);
+				$response->status(HttpOkay)->message('Listing order details for given key.')->payload($resource);
 			} else {
-				$response->status(Response::HTTP_FORBIDDEN)->message('View details is not available for this order.')->setPayload();
+				$response->status(Response::HTTP_FORBIDDEN)->message('View details is not available for this order.')->payload();
 			}
 		} catch (Throwable $exception) {
 			$response->status(HttpResourceNotFound)->message($exception->getMessage());

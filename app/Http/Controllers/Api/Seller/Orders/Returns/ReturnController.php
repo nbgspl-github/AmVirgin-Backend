@@ -22,9 +22,9 @@ class ReturnController extends ApiController
 		try {
 			$itemCollection = Returns::query()->whereNotIn('status', [Status::Completed])->where('seller_id', $this->guard()->id())->orderBy('updated_at', 'desc')->simplePaginate();
 			$resourceCollection = ListResource::collection($itemCollection);
-			$response->status($resourceCollection->count() > 0 ? HttpOkay : HttpNoContent)->setPayload($resourceCollection);
+			$response->status($resourceCollection->count() > 0 ? HttpOkay : HttpNoContent)->payload($resourceCollection);
 		} catch (\Throwable $e) {
-			$response->status(HttpServerError)->message($e->getMessage())->setPayload();
+			$response->status(HttpServerError)->message($e->getMessage())->payload();
 		} finally {
 			return $response->send();
 		}
@@ -38,12 +38,12 @@ class ReturnController extends ApiController
 				$return->update([
 					'status' => Status::Approved
 				]);
-				$response->status(HttpOkay)->setPayload(['status' => $return->status])->message('Return request was approved successfully!');
+				$response->status(HttpOkay)->payload(['status' => $return->status])->message('Return request was approved successfully!');
 			} else {
-				$response->status(HttpNotModified)->setPayload(['status' => $return->status])->message('Return request is already processed.');
+				$response->status(HttpNotModified)->payload(['status' => $return->status])->message('Return request is already processed.');
 			}
 		} catch (\Throwable $e) {
-			$response->status(HttpServerError)->message($e->getMessage())->setPayload();
+			$response->status(HttpServerError)->message($e->getMessage())->payload();
 		} finally {
 			return $response->send();
 		}
@@ -57,12 +57,12 @@ class ReturnController extends ApiController
 				$return->update([
 					'status' => Status::Disapproved
 				]);
-				$response->status(HttpOkay)->setPayload(['status' => $return->status])->message('Return request was disapproved successfully!');
+				$response->status(HttpOkay)->payload(['status' => $return->status])->message('Return request was disapproved successfully!');
 			} else {
-				$response->status(HttpNotModified)->setPayload(['status' => $return->status])->message('Return request is already processed.');
+				$response->status(HttpNotModified)->payload(['status' => $return->status])->message('Return request is already processed.');
 			}
 		} catch (\Throwable $e) {
-			$response->status(HttpServerError)->message($e->getMessage())->setPayload();
+			$response->status(HttpServerError)->message($e->getMessage())->payload();
 		} finally {
 			return $response->send();
 		}

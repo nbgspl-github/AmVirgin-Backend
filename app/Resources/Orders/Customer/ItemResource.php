@@ -2,17 +2,18 @@
 
 namespace App\Resources\Orders\Customer;
 
-use App\Models\SubOrder;
+use App\Enums\Orders\Returns\Status;
+use App\Models\Returns;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * Class OrderItemResource
+ * Class ItemResource
  * @package App\Resources\Orders\Customer
- * @property ?SubOrder $subOrder
+ * @property Returns[] $returns
  * @method HasMany returns
  */
-class OrderItemResource extends JsonResource
+class ItemResource extends JsonResource
 {
 	public function toArray ($request) : array
 	{
@@ -22,7 +23,7 @@ class OrderItemResource extends JsonResource
 			'quantity' => $this->quantity,
 			'price' => $this->price,
 			'total' => $this->total,
-			'options' => $this->options,
+//			'options' => $this->options,
 			'return' => [
 				'allowed' => $this->returnable(),
 				'period' => $this->returnPeriod,
@@ -33,7 +34,7 @@ class OrderItemResource extends JsonResource
 
 	protected function returnable () : bool
 	{
-		$pending = $this->returns()->whereNotIn('status', [\App\Enums\Orders\Returns\Status::Completed])->exists();
+		$pending = $this->returns()->whereNotIn('status', [Status::Completed])->exists();
 		return (
 			!empty($this->subOrder->fulfilled_at) && !$pending && $this->returnable
 		);

@@ -65,7 +65,7 @@ class VideosController extends BaseController
 
 	public function store ()
 	{
-		$response = $this->response();
+		$response = $this->responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->ruleSet['store']);
 			$trailer = Storage::disk('secured')->putFile(Directories::Trailers, request()->file('trailer'), 'public');
@@ -203,7 +203,7 @@ class VideosController extends BaseController
 	public function delete ($id)
 	{
 		$video = null;
-		$response = $this->response();
+		$response = $this->responseApp();
 		try {
 			$video = Video::findOrFail($id);
 			$meta = VideoMeta::where('videoId', $video->getKey())->get();

@@ -131,9 +131,9 @@ Route::prefix('support')->group(static function () {
 });
 
 Route::prefix('payments')->group(static function () {
-	Route::get('overview', [\App\Http\Controllers\Api\Seller\Payments\PaymentController::class, 'show'])->middleware(AUTH_SELLER_API);
+	Route::get('overview', [\App\Http\Controllers\Api\Seller\Payments\PaymentController::class, 'show']);
+	Route::get('previous', [\App\Http\Controllers\Api\Seller\Payments\HistoryController::class, 'index']);
 	Route::get('transaction', [OrderController::class, 'getPaymentsTransaction'])->middleware(AUTH_SELLER_API);
-	Route::get('previous', [OrderController::class, 'getPreviousPayments'])->middleware(AUTH_SELLER_API);
 });
 
 Route::prefix('sales')->group(static function () {

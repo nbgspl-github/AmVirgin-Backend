@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Customer\Orders;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Models\Order;
+use App\Resources\Orders\Customer\ListResource;
 use App\Resources\Orders\Customer\OrderResource;
 use App\Resources\Orders\Customer\OrderTrackingResource;
 use Illuminate\Http\JsonResponse;
@@ -19,10 +20,10 @@ class OrderController extends ApiController
 	public function index () : JsonResponse
 	{
 		$response = responseApp();
-		$resourceCollection = OrderResource::collection($this->user()->orders()->paginate($this->paginationChunk()));
+		$resourceCollection = ListResource::collection($this->user()->orders()->paginate($this->paginationChunk()));
 		$response->status(Response::HTTP_OK)
 			->message("Found {$resourceCollection->count()} orders.")
-			->setPayload($resourceCollection->response()->getData());
+			->payload($resourceCollection->response()->getData());
 		return $response->send();
 	}
 

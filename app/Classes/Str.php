@@ -9,12 +9,12 @@ class Str extends \Illuminate\Support\Str
 	const NewLine = PHP_EOL;
 	const WhiteSpace = ' ';
 
-	public static function equals (string $first = null, string $second = null)
+	public static function equals (string $first = null, string $second = null) : bool
 	{
 		return strcmp($first, $second) == 0;
 	}
 
-	public static function split ($delimiter, $string, $trim = false): array
+	public static function split ($delimiter, $string, $trim = false) : array
 	{
 		if (!$trim)
 			return explode($delimiter, $string);
@@ -22,12 +22,7 @@ class Str extends \Illuminate\Support\Str
 			return preg_split("@{$delimiter}@", $string, NULL, PREG_SPLIT_NO_EMPTY);
 	}
 
-	public static function splitNoBlanks ($delimiter, $string): array
-	{
-		return explode($delimiter, $string);
-	}
-
-	public static function join ($separator, array $pieces): string
+	public static function join ($separator, array $pieces) : string
 	{
 		return implode($separator, $pieces);
 	}
@@ -37,7 +32,7 @@ class Str extends \Illuminate\Support\Str
 		return preg_replace('/\s+/', ' ', $string);
 	}
 
-	public static function ellipsis (string $value, $threshold = 50)
+	public static function ellipsis (string $value, $threshold = 50) : string
 	{
 		return strlen($value) > $threshold ? substr($value, 0, $threshold) . "..." : $value;
 	}
@@ -48,7 +43,7 @@ class Str extends \Illuminate\Support\Str
 		return Str::equals($value, $key) ? $default : $value;
 	}
 
-	public static function makeUuid ()
+	public static function makeUuid () : string
 	{
 		$segmentX = Str::random();
 		$segmentY = Str::uuid()->toString();

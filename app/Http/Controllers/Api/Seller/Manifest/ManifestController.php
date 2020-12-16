@@ -39,7 +39,7 @@ class ManifestController extends ApiController
 			}
 		});
 		$resourceCollection = ListResource::collection($orders);
-		$response->status(HttpOkay)->message('Successfully processed all orders.')->setPayload($resourceCollection);
+		$response->status(HttpOkay)->message('Successfully processed all orders.')->payload($resourceCollection);
 		return $response->send();
 	}
 

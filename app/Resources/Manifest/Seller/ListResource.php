@@ -17,7 +17,6 @@ class ListResource extends JsonResource
 	public function toArray ($request) : array
 	{
 		$payload = [];
-		$payload['orderId'] = $this->id;
 		$payload['time'] = date("F j, Y, g:i a");
 		if ($this->seller != null) {
 			$payload['seller'] = new BusinessDetailResource($this->seller->businessDetails);

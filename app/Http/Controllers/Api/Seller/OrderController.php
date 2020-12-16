@@ -7,7 +7,7 @@ use App\Classes\Rule;
 use App\Enums\Seller\OrderStatus;
 use App\Http\Controllers\Api\ApiController;
 use App\Models\Order;
-use App\Models\ReviewRating;
+use App\Models\ProductRating;
 use App\Models\SellerOrder;
 use App\Resources\Orders\Seller\PaymentListResource;
 use App\Resources\Orders\Seller\PreviousPaymentListResource;
@@ -166,7 +166,7 @@ class OrderController extends ApiController
 		try {
 			// $ratingC = SellerOrder::startQuery()->withRelations('order')->withRelations('sellerBank:id,accountHolderName,accountHolderName,bankName,branch,ifsc')->useAuth();
 			$today = Carbon::today();
-			$ratingC = ReviewRating::with('customer')->where('sellerId', auth('seller-api')->id());
+			$ratingC = ProductRating::with('customer')->where('sellerId', auth('seller-api')->id());
 			if (!empty(request()->get('status'))) {
 				$ratingC->withWhere('status', request()->get('status'));
 			}

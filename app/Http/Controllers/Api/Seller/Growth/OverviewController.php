@@ -2,79 +2,79 @@
 
 namespace App\Http\Controllers\Api\Seller\Growth;
 
-use App\Enums\Seller\OrderStatus;
+use App\Enums\Orders\Status;
+use App\Exceptions\ValidationException;
 use App\Http\Controllers\Api\ApiController;
-use App\Models\ReviewRating;
-use App\Models\SellerOrder;
+use App\Models\ProductRating;
+use App\Traits\ValidatesRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
-use Throwable;
+use Illuminate\Support\Collection;
 
 class OverviewController extends ApiController
 {
+	use ValidatesRequest;
+
 	protected array $rules;
+
+	protected const DAYS_IN_PAST = 7;
 
 	public function __construct ()
 	{
 		parent::__construct();
 		$this->rules = [
 			'show' => [
-				'chunk' => ['bail', 'nullable', 'numeric', 'min:1', 'max:1000'],
-				'page' => ['bail', 'nullable', 'numeric', 'min:1'],
+				'days' => ['bail', 'sometimes', 'numeric', 'gte:1']
 			]
 		];
 	}
 
-	public function show (): JsonResponse
+	/**
+	 * @return JsonResponse
+	 * @throws ValidationException
+	 */
+	public function show () : JsonResponse
 	{
 		$response = responseApp();
-		try {
-			$today = Carbon::today();
-			$ratingC = ReviewRating::with('customer')->where('sellerId', auth('seller-api')->id());
-			if (!empty(request()->get('status'))) {
-				$ratingC->where('status', request()->get('status'));
-			}
-			if (!empty(request()->get('query'))) {
-				$keywords = request()->get('query');
-				$ratingC->where('orderNumber', 'LIKE', "%{$keywords}%");
-				$ratingC->orWhere('commentMsg', 'LIKE', "%{$keywords}%");
-				$ratingC->orWhere('rate', 'LIKE', "%{$keywords}%");
-			}
-			if (!empty(request('days'))) {
-				$ratingC->where('created_at', '>=', $today->subDays(request('days')));
-			}
-			if (!empty(request()->get('from')) && !empty(request()->get('to'))) {
-				$from = request()->get('from');
-				$toDate = request()->get('to');
-				$ratingC->whereBetween('created_at', [$from, $toDate]);
-			}
-			$orderCollectionRating = $ratingC->get();
-			$today = Carbon::today();
-			$current = Carbon::now()->timestamp;
-			$orderC = SellerOrder::startQuery()->useAuth()->withRelations('order');
-			if (!empty(request('days'))) {
-				$orderC->useWhere('created_at', '>=', $today->subDays(request('days')));
-			}
-			$orderCollection = $orderC->status((new OrderStatus(OrderStatus::Delivered)))->get();
-			$dataSet = array();
-			$dataSet['salesInUnit'] = count($orderCollection);
-			$salesInRupee = 0;
-			foreach ($orderCollection as $key => $value) {
-				$salesInRupee += $value->order->total;
-			}
-			$dataSet['salesInRupees'] = $salesInRupee;
-			$average = $orderCollectionRating->avg('rate') ?? "0";
-			$meta = [
-				'averageRating' => $average,
-				'customerReturns' => mt_rand(10, 100),
-				'sales' => $dataSet
+		$validated = $this->requestValid(request(), $this->rules['show']);
+		$days = $validated['days'] ?? self::DAYS_IN_PAST;
+		$range = [
+			Carbon::now()->subDays($days)->startOfDay()->format('Y-m-d H:i:s'),
+			Carbon::now()->endOfDay()->format('Y-m-d H:i:s'),
+		];
+		$payload = [
+			'sales' => [
+				'amount' => $this->seller()->orders()->where('status', Status::Delivered)->whereBetween('created_at', $range)->sum('total'),
+				'units' => $this->seller()->orders()->where('status', Status::Delivered)->whereBetween('created_at', $range)->sum('quantity')
+			],
+			'product' => $this->bestRatedProduct($this->seller()->productRatings()->whereBetween('created_at', $range)->get()),
+			'customerReturns' => $this->seller()->returns()->whereBetween('created_at', $range)->count()
+		];
+		$response->status(Response::HTTP_OK)->message("Growth details calculated for {$days} days!")->payload($payload);
+		return $response->send();
+	}
+
+	protected function bestRatedProduct (Collection $collection) : array
+	{
+		$collection = $collection->groupBy(function (ProductRating $rating) {
+			return $rating->product_id;
+		});
+		$collection->transform(function (Collection $collection, int $productId) {
+			$count = $collection->count();
+			$total = $collection->sum(function (ProductRating $rating) {
+				return $rating->stars ?? 0;
+			});
+			$average = $total / (float)$count;
+			return [
+				'key' => $productId,
+				'average' => $average
 			];
-			$response->status(HttpOkay)->message('Listing all rating and performance stats.')->setValue('payload', $meta);
-		} catch (Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
-		} finally {
-			return $response->send();
-		}
+		});
+		return [
+			'item' => null,
+			'rating' => $collection
+		];
 	}
 
 	protected function guard ()

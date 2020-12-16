@@ -16,11 +16,11 @@ class NewsController extends ApiController
 		try {
 			$newsItem = NewsItem::query()->whereKey($id)->firstOrFail();
 			$newsResource = new ItemResource($newsItem);
-			$response->status(HttpNoContent)->setPayload($newsResource);
+			$response->status(HttpNoContent)->payload($newsResource);
 		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->setPayload();
+			$response->status(HttpResourceNotFound)->payload();
 		} catch (\Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage())->setPayload();
+			$response->status(HttpServerError)->message($exception->getMessage())->payload();
 		} finally {
 			return $response->send();
 		}

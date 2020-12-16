@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Customer;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Api\ApiController;
 use App\Interfaces\Tables;
-use App\Models\ShippingAddress;
+use App\Models\Address;
 use App\Resources\Addresses\Customer\ShippingAddressResource;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -53,7 +53,7 @@ class ShippingAddressesController extends ApiController
 
 	public function index ()
 	{
-		$shippingAddresses = ShippingAddress::where('customerId', $this->guard()->id())->get();
+		$shippingAddresses = Address::where('customerId', $this->guard()->id())->get();
 		$shippingAddresses = ShippingAddressResource::collection($shippingAddresses);
 		return responseApp()->status(HttpOkay)->message(function () use ($shippingAddresses) {
 			return sprintf('Found %d addresses for this customer', $shippingAddresses->count());
@@ -67,7 +67,7 @@ class ShippingAddressesController extends ApiController
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['store']);
 			try {
-				$address = ShippingAddress::where([
+				$address = Address::where([
 					['type', $validated->type],
 					['customerId', $this->guard()->id()],
 				])->firstOrFail();
@@ -85,7 +85,7 @@ class ShippingAddressesController extends ApiController
 				]);
 				$response->status(HttpOkay)->message('Shipping address updated successfully.');
 			} catch (ModelNotFoundException $exception) {
-				ShippingAddress::create([
+				Address::create([
 					'customerId' => $this->guard()->id(),
 					'name' => $validated->name,
 					'mobile' => $validated->mobile,
@@ -115,7 +115,7 @@ class ShippingAddressesController extends ApiController
 		$response = responseApp();
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['update']);
-			$address = ShippingAddress::where([
+			$address = Address::where([
 				['customerId', $this->guard()->id()],
 				['id', $id],
 			])->firstOrFail();
@@ -147,7 +147,7 @@ class ShippingAddressesController extends ApiController
 	{
 		$response = responseApp();
 		try {
-			$address = ShippingAddress::where([
+			$address = Address::where([
 				['customerId', $this->guard()->id()],
 				['id', $id],
 			])->firstOrFail();

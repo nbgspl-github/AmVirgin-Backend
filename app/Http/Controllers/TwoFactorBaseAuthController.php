@@ -47,7 +47,7 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController
 	{
 		$request = request();
 		$type = $request->type;
-		$response = $this->response();
+		$response = $this->responseApp();
 		$payload = null;
 		try {
 			$payload = $this->requestValid($request, $this->rulesExists());
@@ -94,7 +94,7 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController
 	{
 		$request = request();
 		$type = $request->type;
-		$response = $this->response();
+		$response = $this->responseApp();
 		$payload = null;
 		try {
 			$payload = $this->requestValid($request, $this->rulesLogin());
@@ -136,7 +136,7 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController
 	{
 		$request = request();
 		$type = $request->type;
-		$response = $this->response();
+		$response = $this->responseApp();
 		$payload = null;
 		try {
 			$payload = $this->requestValid($request, $this->rulesRegister());
@@ -173,7 +173,7 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController
 
 	protected function socialLogin ()
 	{
-		$response = $this->response();
+		$response = $this->responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rulesSocialLogin());
 			$user = $this->authTarget()::where('email', $validated['email'])->first();

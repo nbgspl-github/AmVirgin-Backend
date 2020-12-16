@@ -82,7 +82,7 @@ class TvSeriesBase extends BaseController
 
 	public function store ()
 	{
-		$response = $this->response();
+		$response = $this->responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules('store'));
 			if (request()->has('trending')) {
@@ -136,7 +136,7 @@ class TvSeriesBase extends BaseController
 	public function delete ($id, $subId = null)
 	{
 		$tvSeries = null;
-		$response = $this->response();
+		$response = $this->responseApp();
 		try {
 			$tvSeries = Video::findOrFail($id);
 			$meta = VideoMeta::where('videoId', $tvSeries->getKey())->get();

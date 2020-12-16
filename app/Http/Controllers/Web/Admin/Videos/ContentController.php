@@ -67,7 +67,7 @@ class ContentController extends VideosBase
 
 	public function update ($id)
 	{
-		$response = $this->response();
+		$response = $this->responseApp();
 		try {
 			$video = Video::retrieveThrows($id);
 			$payload = $this->requestValid(request(), $this->rules('update'));
@@ -137,7 +137,7 @@ class ContentController extends VideosBase
 
 	public function delete ($id, $subId = null)
 	{
-		$response = $this->response();
+		$response = $this->responseApp();
 		try {
 			$videoSnap = VideoSource::retrieveThrows($subId);
 			$videoSnap->delete();

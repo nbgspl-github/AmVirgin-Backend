@@ -23,7 +23,7 @@ class LanguageListController extends ApiController
 			}
 		});
 		$availableLanguages = $availableLanguages->filter()->values();
-		return $this->response()->status(HttpOkay)->message('Listing available media languages.')->setValue('payload', $availableLanguages)->send();
+		return $this->responseApp()->status(HttpOkay)->message('Listing available media languages.')->setValue('payload', $availableLanguages)->send();
 	}
 
 	protected function guard ()

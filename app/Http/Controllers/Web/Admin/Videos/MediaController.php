@@ -38,7 +38,7 @@ class MediaController extends VideosBase
 
 	public function update ($id)
 	{
-		$response = $this->response();
+		$response = $this->responseApp();
 		try {
 			$video = Video::retrieveThrows($id);
 			$this->requestValid(request(), $this->rules('update'));

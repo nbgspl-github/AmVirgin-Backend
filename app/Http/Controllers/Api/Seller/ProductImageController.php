@@ -12,7 +12,7 @@ class ProductImageController extends ApiController
 {
 	public function delete ($id)
 	{
-		$response = $this->response();
+		$response = $this->responseApp();
 		try {
 			$image = ProductImage::retrieveThrows($id);
 			SecuredDisk::deleteIfExists($image->path);

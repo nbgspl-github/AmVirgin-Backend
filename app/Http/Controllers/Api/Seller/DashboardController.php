@@ -20,7 +20,7 @@ class DashboardController extends ApiController
 		$seller->orders()->each(function (SubOrder $sellerOrder) use (&$sales) {
 			$sales += $sellerOrder->total;
 		});
-		$response = $this->response();
+		$response = $this->responseApp();
 		$payload = [
 			'products' => $seller->products()->count(),
 			'sales' => $sales,

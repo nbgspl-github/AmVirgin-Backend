@@ -12,7 +12,7 @@ class PopularPicksController extends ApiController
 {
 	public function index ()
 	{
-		$response = $this->response();
+		$response = $this->responseApp();
 		try {
 			$popular = Video::where([
 				['trending', true],

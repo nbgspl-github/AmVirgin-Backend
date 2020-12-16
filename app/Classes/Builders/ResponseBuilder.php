@@ -9,6 +9,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Response;
 
 /**
  * Builder class to create responses, supports chained method class for easy one line responses.
@@ -127,7 +128,7 @@ class ResponseBuilder
 	 * @param null $payload
 	 * @return $this
 	 */
-	public function setPayload ($payload = null)
+	public function payload ($payload = null)
 	{
 		$this->items['payload'] = $payload;
 		return $this;
@@ -190,5 +191,13 @@ class ResponseBuilder
 			$response[$key] = $value;
 		}
 		return $response;
+	}
+
+	public function prepare ($payload, $status = Response::HTTP_OK, $message = null) : JsonResponse
+	{
+		if (empty($message))
+			return self::payload($payload)->status($status)->send();
+		else
+			return self::payload($payload)->status($status)->message($message)->send();
 	}
 }

@@ -18,6 +18,7 @@ class PaymentController extends ApiController
 	public function __construct ()
 	{
 		parent::__construct();
+		$this->middleware(AUTH_SELLER_API);
 	}
 
 	public function show () : JsonResponse
@@ -30,7 +31,7 @@ class PaymentController extends ApiController
 				$payload->total->postpaid += $order->total;
 				$payload->total->total += $order->total;
 			});
-			$response->status(Response::HTTP_OK)->setPayload($payload);
+			$response->status(Response::HTTP_OK)->payload($payload);
 		} catch (\Throwable $e) {
 			$response->status(Response::HTTP_INTERNAL_SERVER_ERROR)->message($e->getMessage());
 		} finally {

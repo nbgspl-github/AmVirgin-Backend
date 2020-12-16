@@ -4,7 +4,7 @@ namespace App\Models\Auth;
 
 use App\Models\CustomerWishlist;
 use App\Models\Order;
-use App\Models\ShippingAddress;
+use App\Models\Address;
 use App\Models\Video;
 use App\Traits\ActiveStatus;
 use App\Traits\BroadcastPushNotifications;
@@ -50,7 +50,7 @@ class Customer extends Authenticatable implements JWTSubject
 
 	public function addresses (): HasMany
 	{
-		return $this->hasMany(ShippingAddress::class, 'customerId');
+		return $this->hasMany(Address::class, 'customerId');
 	}
 
 	public function orders (): HasMany

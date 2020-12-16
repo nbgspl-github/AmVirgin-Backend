@@ -53,7 +53,7 @@ class TvSeriesController extends BaseController
 
 	public function store ()
 	{
-		$response = $this->response();
+		$response = $this->responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules('store'));
 			$trailer = Storage::disk('secured')->putFile(Directories::Trailers, request()->file('trailer'), 'public');
@@ -126,7 +126,7 @@ class TvSeriesController extends BaseController
 	public function delete ($id)
 	{
 		$tvSeries = null;
-		$response = $this->response();
+		$response = $this->responseApp();
 		try {
 			$tvSeries = Video::findOrFail($id);
 			$meta = VideoMeta::where('videoId', $tvSeries->getKey())->get();
@@ -273,7 +273,7 @@ class TvSeriesController extends BaseController
 
 	private function updateContent ($id)
 	{
-		$response = $this->response();
+		$response = $this->responseApp();
 		try {
 			$video = Video::retrieveThrows($id);
 			$payload = $this->requestValid(request(), $this->rules('update')['content']);

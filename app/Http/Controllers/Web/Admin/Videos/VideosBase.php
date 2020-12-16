@@ -86,7 +86,7 @@ class VideosBase extends BaseController
 
 	public function store ()
 	{
-		$response = $this->response();
+		$response = $this->responseApp();
 		try {
 			$payload = $this->requestValid(request(), $this->rules('store'));
 			$video = Video::create([
@@ -124,7 +124,7 @@ class VideosBase extends BaseController
 	public function delete ($id, $subId = null)
 	{
 		$tvSeries = null;
-		$response = $this->response();
+		$response = $this->responseApp();
 		try {
 			$tvSeries = Video::findOrFail($id);
 			$meta = VideoMeta::where('videoId', $tvSeries->getKey())->get();

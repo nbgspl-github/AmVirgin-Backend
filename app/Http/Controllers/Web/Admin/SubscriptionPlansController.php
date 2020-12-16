@@ -114,7 +114,7 @@ class SubscriptionPlansController extends BaseController
 
 	public function delete ($id)
 	{
-		$response = $this->response();
+		$response = $this->responseApp();
 		try {
 			$plan = SubscriptionPlan::retrieveThrows($id);
 			$plan->delete();

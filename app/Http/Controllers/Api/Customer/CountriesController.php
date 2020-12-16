@@ -25,7 +25,7 @@ class CountriesController extends BaseController
 				'initials' => $country->initials,
 			];
 		});
-		return $this->response()->status(HttpOkay)->setValue('data', $categories)->message(function () use ($categories) {
+		return $this->responseApp()->status(HttpOkay)->setValue('data', $categories)->message(function () use ($categories) {
 			return sprintf('Found %d countries.', $categories->count());
 		})->send();
 	}

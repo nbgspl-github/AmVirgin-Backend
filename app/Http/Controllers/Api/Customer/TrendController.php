@@ -16,7 +16,7 @@ class TrendController extends ApiController
 
 	public function index ()
 	{
-		$response = $this->response();
+		$response = $this->responseApp();
 		try {
 			$trending = Video::where([
 				['trending', true],
