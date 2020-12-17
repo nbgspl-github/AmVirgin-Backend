@@ -7,6 +7,7 @@ return [
 			\App\Library\Enums\Orders\Status::Delivered => \App\Http\Controllers\Api\Seller\Orders\Status\Handlers\Delivered::class,
 			\App\Library\Enums\Orders\Status::PendingDispatch => \App\Http\Controllers\Api\Seller\Orders\Status\Handlers\PendingDispatch::class,
 			\App\Library\Enums\Orders\Status::OutForDelivery => \App\Http\Controllers\Api\Seller\Orders\Status\Handlers\OutForDelivery::class,
+			\App\Library\Enums\Orders\Status::Cancelled => \App\Http\Controllers\Api\Seller\Orders\Status\Handlers\OutForDelivery::class,
 		]
 	]
 ];

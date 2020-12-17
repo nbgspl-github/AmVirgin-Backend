@@ -14,7 +14,7 @@ class UpdateRequest extends FormRequest
 	 *
 	 * @return bool
 	 */
-	public function authorize (): bool
+	public function authorize () : bool
 	{
 		return true;
 	}
@@ -24,15 +24,15 @@ class UpdateRequest extends FormRequest
 	 *
 	 * @return array
 	 */
-	public function rules (): array
+	public function rules () : array
 	{
 		return [
 
 		];
 	}
 
-	public function orders (): Collection
+	public function orders () : Collection
 	{
-		return SubOrder::startQuery()->useAuth()->whereIn('id', Str::split(',', request('key', Str::Empty)))->get();
+		return SubOrder::startQuery()->withRelations('seller')->whereIn('id', Str::split(',', request('key', Str::Empty)))->get();
 	}
 }
