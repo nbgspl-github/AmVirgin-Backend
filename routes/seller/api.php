@@ -21,20 +21,20 @@ Route::prefix(Str::Empty)->group(static function () {
 	Route::get(Str::Empty, [TwoFactorAuthController::class, 'exists']);
 	Route::post('login', [TwoFactorAuthController::class, 'login']);
 	Route::post('register', [TwoFactorAuthController::class, 'register']);
-	Route::post('logout', [AuthController::class, 'logout'])->middleware(AUTH_SELLER_API);
+	Route::post('logout', [AuthController::class, 'logout'])->middleware(AUTH_SELLER);
 
 	Route::prefix('profile')->group(static function () {
-		Route::get(Str::Empty, [AuthController::class, 'profile'])->middleware(AUTH_SELLER_API);
-		Route::put(Str::Empty, [AuthController::class, 'updateProfile'])->middleware(AUTH_SELLER_API);
-		Route::post('avatar', [AuthController::class, 'updateAvatar'])->middleware(AUTH_SELLER_API);
-		Route::put('password', [AuthController::class, 'updatePassword'])->middleware(AUTH_SELLER_API);
+		Route::get(Str::Empty, [AuthController::class, 'profile'])->middleware(AUTH_SELLER);
+		Route::put(Str::Empty, [AuthController::class, 'updateProfile'])->middleware(AUTH_SELLER);
+		Route::post('avatar', [AuthController::class, 'updateAvatar'])->middleware(AUTH_SELLER);
+		Route::put('password', [AuthController::class, 'updatePassword'])->middleware(AUTH_SELLER);
 
-		Route::prefix('business-details')->middleware(AUTH_SELLER_API)->group(static function () {
+		Route::prefix('business-details')->middleware(AUTH_SELLER)->group(static function () {
 			Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\BusinessDetailController::class, 'show']);
 			Route::post(Str::Empty, [\App\Http\Controllers\Api\Seller\BusinessDetailController::class, 'update']);
 		});
 
-		Route::prefix('bank-details')->middleware(AUTH_SELLER_API)->group(static function () {
+		Route::prefix('bank-details')->middleware(AUTH_SELLER)->group(static function () {
 			Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\BankDetailController::class, 'show']);
 			Route::post(Str::Empty, [\App\Http\Controllers\Api\Seller\BankDetailController::class, 'update']);
 		});
@@ -49,15 +49,15 @@ Route::prefix(Str::Empty)->group(static function () {
 
 		Route::prefix('mou')->group(static function () {
 			Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\AgreementController::class, 'show']);
-			Route::get('status', [\App\Http\Controllers\Api\Seller\AgreementController::class, 'index'])->middleware(AUTH_SELLER_API);
-			Route::put(Str::Empty, [\App\Http\Controllers\Api\Seller\AgreementController::class, 'update'])->middleware(AUTH_SELLER_API);
+			Route::get('status', [\App\Http\Controllers\Api\Seller\AgreementController::class, 'index'])->middleware(AUTH_SELLER);
+			Route::put(Str::Empty, [\App\Http\Controllers\Api\Seller\AgreementController::class, 'update'])->middleware(AUTH_SELLER);
 		});
 	});
 });
-Route::post('change-password', [AuthController::class, 'changePassword'])->middleware(AUTH_SELLER_API);
+Route::post('change-password', [AuthController::class, 'changePassword'])->middleware(AUTH_SELLER);
 Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
-Route::post('change-email', [AuthController::class, 'changeEmail'])->middleware(AUTH_SELLER_API);
-Route::post('change-email-token', [AuthController::class, 'getChangeEmailToken'])->middleware(AUTH_SELLER_API);
+Route::post('change-email', [AuthController::class, 'changeEmail'])->middleware(AUTH_SELLER);
+Route::post('change-email-token', [AuthController::class, 'getChangeEmailToken'])->middleware(AUTH_SELLER);
 Route::post('reset-password-token', [AuthController::class, 'getResetPasswordToken']);
 
 Route::prefix('categories')->group(function () {
@@ -69,7 +69,7 @@ Route::prefix('attributes')->group(function () {
 	Route::get('/{attributeId}/values', [ValueController::class, 'show']);
 });
 
-Route::middleware(AUTH_SELLER_API)->prefix('products')->group(function () {
+Route::middleware(AUTH_SELLER)->prefix('products')->group(function () {
 	Route::get('/', [ProductController::class, 'index'])->name('seller.products.index');
 	Route::post(Str::Empty, [ProductController::class, 'store'])->name('seller.products.store');
 	Route::get('{id}', [ProductController::class, 'show'])->name('seller.products.show');
@@ -118,32 +118,32 @@ Route::prefix('brands')->middleware('auth:seller-api')->group(function () {
 });
 
 Route::prefix('announcements')->group(function () {
-	Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\AnnouncementController::class, 'index'])->middleware(AUTH_SELLER_API);
-	Route::put('{id}/mark', [\App\Http\Controllers\Api\Seller\AnnouncementController::class, 'mark'])->middleware(AUTH_SELLER_API);
+	Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\AnnouncementController::class, 'index'])->middleware(AUTH_SELLER);
+	Route::put('{id}/mark', [\App\Http\Controllers\Api\Seller\AnnouncementController::class, 'mark'])->middleware(AUTH_SELLER);
 });
 
 Route::prefix('support')->group(static function () {
 	Route::prefix('tickets')->group(static function () {
-		Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\SupportController::class, 'index'])->middleware(AUTH_SELLER_API);
-		Route::post(Str::Empty, [\App\Http\Controllers\Api\Seller\SupportController::class, 'store'])->middleware(AUTH_SELLER_API);
+		Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\SupportController::class, 'index'])->middleware(AUTH_SELLER);
+		Route::post(Str::Empty, [\App\Http\Controllers\Api\Seller\SupportController::class, 'store'])->middleware(AUTH_SELLER);
 	});
 });
 
 Route::prefix('payments')->group(static function () {
-	Route::get('overview', [\App\Http\Controllers\Api\Seller\Payments\PaymentController::class, 'show']);
+	Route::get('overview', [\App\Http\Controllers\Api\Seller\Payments\PaymentController::class, 'index']);
 	Route::get('previous', [\App\Http\Controllers\Api\Seller\Payments\HistoryController::class, 'index']);
-	Route::get('transaction', [\App\Http\Controllers\Api\Seller\Payments\TransactionController::class, 'index']);
+	Route::get('transactions', [\App\Http\Controllers\Api\Seller\Payments\TransactionController::class, 'index']);
 });
 
 Route::prefix('sales')->group(static function () {
-	Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\Payments\OverviewController::class, 'totalSales'])->middleware(AUTH_SELLER_API);
+	Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\Payments\OverviewController::class, 'totalSales'])->middleware(AUTH_SELLER);
 });
 
 Route::prefix('growth')->group(static function () {
-	Route::get('overview', [\App\Http\Controllers\Api\Seller\Growth\OverviewController::class, 'show'])->middleware(AUTH_SELLER_API);
+	Route::get('overview', [\App\Http\Controllers\Api\Seller\Growth\OverviewController::class, 'show'])->middleware(AUTH_SELLER);
 });
 
-Route::prefix('promotions')->middleware(AUTH_SELLER_API)->group(static function () {
+Route::prefix('promotions')->middleware(AUTH_SELLER)->group(static function () {
 	Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\AdvertisementController::class, 'index']);
 	Route::post(Str::Empty, [\App\Http\Controllers\Api\Seller\AdvertisementController::class, 'store']);
 	Route::get('{advertisement}', [\App\Http\Controllers\Api\Seller\AdvertisementController::class, 'show']);
@@ -153,7 +153,7 @@ Route::prefix('promotions')->middleware(AUTH_SELLER_API)->group(static function 
 
 Route::prefix('bulk')->group(static function () {
 	Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\Products\BulkTemplateController::class, 'show']);
-	Route::post(Str::Empty, [\App\Http\Controllers\Api\Seller\Products\BulkProductController::class, 'store'])->middleware(AUTH_SELLER_API);
+	Route::post(Str::Empty, [\App\Http\Controllers\Api\Seller\Products\BulkProductController::class, 'store'])->middleware(AUTH_SELLER);
 	Route::post('images', [\App\Http\Controllers\Api\Seller\Products\BulkImageController::class, 'store']);
 });
 
@@ -162,7 +162,7 @@ Route::prefix('manifest')->group(static function () {
 });
 
 Route::prefix('dashboard')->group(static function () {
-	Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\DashboardController::class, 'index'])->middleware(AUTH_SELLER_API);
+	Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\DashboardController::class, 'index'])->middleware(AUTH_SELLER);
 });
 
 Route::prefix('returns')->group(function () {

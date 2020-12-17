@@ -8,35 +8,31 @@ use App\Models\OrderItem;
 use App\Models\SubOrder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 
 class PaymentController extends ApiController
 {
-	const PIVOT_DAY = 10;
+	const PIVOT_DAY = 26;
 
 	public function __construct ()
 	{
 		parent::__construct();
-		$this->middleware(AUTH_SELLER_API);
+		$this->middleware(AUTH_SELLER);
 	}
 
-	public function show () : JsonResponse
+	public function index () : JsonResponse
 	{
-		$response = responseApp();
-		try {
-			$payload = $this->makePayload();
-			$this->query()->each(function (SubOrder $order) use (&$payload) {
-				$payload->total->prepaid += $order->total;
-				$payload->total->postpaid += $order->total;
-				$payload->total->total += $order->total;
-			});
-			$response->status(Response::HTTP_OK)->payload($payload);
-		} catch (\Throwable $e) {
-			$response->status(Response::HTTP_INTERNAL_SERVER_ERROR)->message($e->getMessage());
-		} finally {
-			return $response->send();
-		}
+		$payload = $this->makePayload();
+
+		$this->query()->each(function (SubOrder $order) use (&$payload) {
+			$payload->total->prepaid += $order->total;
+			$payload->total->postpaid += $order->total;
+			$payload->total->total += $order->total;
+		});
+
+		return responseApp()->prepare(
+			$payload
+		);
 	}
 
 	protected function query () : HasMany
@@ -78,13 +74,13 @@ class PaymentController extends ApiController
 	{
 		return (object)[
 			'next' => [
-				'date' => null,
+				'date' => Carbon::now()->format('Y-m-d'),
 				'prepaid' => 0,
 				'postpaid' => 0,
 				'total' => 0
 			],
 			'previous' => [
-				'date' => null,
+				'date' => Carbon::now()->subDays(45)->format('Y-m-d'),
 				'prepaid' => 0,
 				'postpaid' => 0,
 				'total' => 0
@@ -123,13 +119,18 @@ class PaymentController extends ApiController
 
 	}
 
+	protected function lastPaymentDate ()
+	{
+		/**
+		 * Unless there's a last payment date available,
+		 * we consider the starting period on the day seller
+		 * registered on our portal
+		 */
+		return $this->seller()->created_at;
+	}
+
 	protected function guard ()
 	{
 		return auth(self::SELLER_API);
-	}
-
-	public function durations ()
-	{
-
 	}
 }

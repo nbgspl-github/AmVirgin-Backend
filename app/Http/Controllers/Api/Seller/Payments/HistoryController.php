@@ -19,7 +19,7 @@ class HistoryController extends ApiController
 	public function __construct ()
 	{
 		parent::__construct();
-		$this->middleware(AUTH_SELLER_API);
+		$this->middleware(AUTH_SELLER);
 		$this->rules = [
 			'index' => [
 				'neft_id' => ['bail', 'sometimes', 'string', 'min:2', 'max:25']

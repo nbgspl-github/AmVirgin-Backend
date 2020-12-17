@@ -21,7 +21,7 @@ class ReturnController extends ApiController
 	public function __construct ()
 	{
 		parent::__construct();
-		$this->middleware(AUTH_CUSTOMER_API);
+		$this->middleware(AUTH_CUSTOMER);
 		$this->rules = [
 			'return' => [
 				'action' => ['bail', 'required', Rule::in(['refund', 'replacement'])]

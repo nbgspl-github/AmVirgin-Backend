@@ -8,16 +8,12 @@ ini_set('precision', 14);
 use App\Classes\ValidationRuleset;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\ResponseTrait;
 use Illuminate\Routing\Controller;
 
 class BaseController extends Controller
 {
-	use AuthorizesRequests;
-	use DispatchesJobs;
-	use ValidatesRequests;
-	use ResponseTrait;
+	use AuthorizesRequests, DispatchesJobs, ResponseTrait;
 
 	/**
 	 * @var ValidationRuleset
