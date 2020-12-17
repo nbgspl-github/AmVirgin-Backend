@@ -22,7 +22,7 @@ class ListResource extends JsonResource
 	{
 		return [
 			'key' => $this->id,
-			'orderDate' => $this->created_at,
+			'orderDate' => $this->created_at->format('Y-m-d H:i:s'),
 			'status' => $this->status,
 			'quantity' => $this->quantity,
 			'customer' => new OrderCustomerResource($this->customer),

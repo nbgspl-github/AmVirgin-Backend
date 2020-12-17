@@ -18,7 +18,7 @@ class Dispatched implements Action
 	public function rules () : array
 	{
 		return [
-			'fulfilledBy' => ['bail', Rule::in(['seller', 'amvirgin'])],
+			'fulfilledBy' => ['bail', 'required', Rule::in(['seller', 'amvirgin'])],
 			'courierName' => ['bail', 'required_if:fulfilledBy,seller', 'nullable', 'string', 'max:255'],
 			'airwayBillNumber' => ['bail', 'required_if:fulfilledBy,seller', 'nullable', 'string', 'max:255'],
 		];
