@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Web\Admin\Videos;
 
 use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\Web\Admin\TvSeries\TvSeriesBase;
 use App\Library\Enums\Common\Directories;
+use App\Library\Utils\Uploads;
 use App\Models\Video;
 use App\Models\VideoSnap;
-use App\Storage\SecuredDisk;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\UploadedFile;
 use Throwable;
@@ -52,7 +51,7 @@ class SnapsController extends VideosBase
 			collect($payload['image'])->each(function (UploadedFile $file) use ($video) {
 				VideoSnap::instance()->
 				setVideoId($video->getKey())->
-				setFile(SecuredDisk::access()->putFile(Directories::VideoSnaps, $file, 'private'))->
+				setFile(Uploads::access()->putFile(Directories::VideoSnaps, $file, 'private'))->
 				setDescription('Special snaps')->
 				save();
 			});

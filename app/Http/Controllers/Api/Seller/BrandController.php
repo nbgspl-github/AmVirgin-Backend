@@ -8,10 +8,10 @@ use App\Library\Enums\Common\Directories;
 use App\Library\Enums\Common\Tables;
 use App\Library\Utils\Extensions\Arrays;
 use App\Library\Utils\Extensions\Rule;
+use App\Library\Utils\Uploads;
 use App\Models\Brand;
 use App\Resources\Brands\Seller\AvailableListResource;
 use App\Resources\Brands\Seller\OwnedBrandResource;
-use App\Storage\SecuredDisk;
 use App\Traits\ValidatesRequest;
 use Illuminate\Http\JsonResponse;
 use Throwable;
@@ -148,7 +148,7 @@ class BrandController extends ApiController
 					'createdBy' => $this->guard()->id(),
 					'status' => Brand::Status['Pending'],
 					'documentExtras' => $extras,
-					'logo' => isset($payload['logo']) ? SecuredDisk::access()->putFile(Directories::Brands, $payload['logo']) : null,
+					'logo' => isset($payload['logo']) ? Uploads::access()->putFile(Directories::Brands, $payload['logo']) : null,
 				]);
 				$brand = Brand::create($payload);
 				$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Your request has been queued. Please check back shortly to get an update.')->setValue('payload', ['status' => $brand->status()]);

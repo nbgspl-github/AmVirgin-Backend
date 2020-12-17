@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\Seller;
 
 use App\Http\Controllers\Api\ApiController;
+use App\Library\Utils\Uploads;
 use App\Models\ProductImage;
-use App\Storage\SecuredDisk;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
@@ -15,7 +15,7 @@ class ProductImageController extends ApiController
 		$response = $this->responseApp();
 		try {
 			$image = ProductImage::retrieveThrows($id);
-			SecuredDisk::deleteIfExists($image->path);
+			Uploads::deleteIfExists($image->path);
 			$image->delete();
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Product image deleted successfully.');
 		} catch (ModelNotFoundException $exception) {

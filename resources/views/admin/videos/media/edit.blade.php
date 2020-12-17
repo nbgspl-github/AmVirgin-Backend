@@ -27,13 +27,14 @@
 																<div class="row">
 																	<div class="col-12 text-center">
 																		<span class="text-center my-auto" id="blankPoster"><i class="ion ion-image text-muted" style="font-size: 80px"></i></span>
-																		@if(\App\Storage\SecuredDisk::access()->exists($payload->getPoster()))
-																			<img id="previewPoster" class="img-fluid" style="max-height: 660px!important; min-height: 660px; object-fit: contain" src="{{\App\Storage\SecuredDisk::access()->url($payload->getPoster())}}"/>
+																		@if(\App\Library\Utils\Uploads::access()->exists($payload->getPoster()))
+																			<img id="previewPoster" class="img-fluid" style="max-height: 660px!important; min-height: 660px; object-fit: contain" src="{{\App\Library\Utils\Uploads::access()->url($payload->getPoster())}}"/>
 																		@else
 																			<img id="previewPoster" class="img-fluid" style="max-height: 660px!important; min-height: 660px; object-fit: contain"/>
 																		@endif
 																		<input type="file" class="d-none" onchange="handlePoster(event)" name="poster" id="posterInput" accept=".jpg, .png, .jpeg"/>
-																		<button type="button" onclick="handlePosterDialog();" class="btn btn-danger position-absolute shadow-sm shadow-danger" style="bottom: 16px; right: 30px; border-radius: 70px; width: auto; height: 50px;">Poster &nbsp;&nbsp;<i class="fa fa-camera-retro"></i></button>
+																		<button type="button" onclick="handlePosterDialog();" class="btn btn-danger position-absolute shadow-sm shadow-danger" style="bottom: 16px; right: 30px; border-radius: 70px; width: auto; height: 50px;">Poster &nbsp;&nbsp;<i class="fa fa-camera-retro"></i>
+																		</button>
 																	</div>
 																</div>
 															</div>
@@ -47,13 +48,14 @@
 																		<div class="row">
 																			<div class="col-12 text-center">
 																				<span class="text-center my-auto" id="blankBackdrop"><i class="ion ion-image text-muted" style="font-size: 80px"></i></span>
-																				@if(\App\Storage\SecuredDisk::access()->exists($payload->getBackdrop()))
-																					<img id="previewBackdrop" class="img-fluid" style="max-height: 325px!important; min-height: 325px; object-fit: scale-down" src="{{\App\Storage\SecuredDisk::access()->url($payload->getBackdrop())}}"/>
+																				@if(\App\Library\Utils\Uploads::access()->exists($payload->getBackdrop()))
+																					<img id="previewBackdrop" class="img-fluid" style="max-height: 325px!important; min-height: 325px; object-fit: scale-down" src="{{\App\Library\Utils\Uploads::access()->url($payload->getBackdrop())}}"/>
 																				@else
 																					<img id="previewBackdrop" class="img-fluid" style="max-height: 325px!important; min-height: 325px; object-fit: scale-down"/>
 																				@endif
 																				<input type="file" class="d-none" onchange="handleBackdrop(event)" name="backdrop" id="backdropInput" accept=".jpg, .png, .jpeg"/>
-																				<button type="button" onclick="handleBackdropDialog();" class="btn btn-danger position-absolute shadow-sm shadow-danger" style="bottom: 16px; right: 30px; border-radius: 70px; width: auto; height: 50px;">Backdrop &nbsp;&nbsp;<i class="fa fa-camera-retro"></i></button>
+																				<button type="button" onclick="handleBackdropDialog();" class="btn btn-danger position-absolute shadow-sm shadow-danger" style="bottom: 16px; right: 30px; border-radius: 70px; width: auto; height: 50px;">Backdrop &nbsp;&nbsp;<i class="fa fa-camera-retro"></i>
+																				</button>
 																			</div>
 																		</div>
 																	</div>
@@ -68,8 +70,8 @@
 																			<div class="col-12 text-center">
 																				<input type="file" class="d-none" onchange="handleTrailer(event)" id="trailerInput" name="trailer" accept=".mp4, .avi"/>
 																				<div class="embed-responsive embed-responsive-16by9 rounded-lg border" style=" max-height: 325px!important; min-height: 325px;">
-																					@if(\App\Storage\SecuredDisk::access()->exists($payload->getTrailer()))
-																						<iframe class="embed-responsive-item" src="{{\App\Storage\SecuredDisk::access()->url($payload->getTrailer())}}" id="trailer" style=" max-height: 325px!important; min-height: 325px;">
+																					@if(\App\Library\Utils\Uploads::access()->exists($payload->getTrailer()))
+																						<iframe class="embed-responsive-item" src="{{\App\Library\Utils\Uploads::access()->url($payload->getTrailer())}}" id="trailer" style=" max-height: 325px!important; min-height: 325px;">
 																							<span class="text-center my-auto" id="blankVideo"><i class="ion ion-videocamera text-muted" style="font-size: 80px;"></i></span>
 																						</iframe>
 																					@else
@@ -78,7 +80,8 @@
 																						</iframe>
 																					@endif
 																				</div>
-																				<button type="button" onclick="handleTrailerDialog();" class="btn btn-danger position-absolute shadow-sm shadow-danger" style="top: 16px; right: 30px; border-radius: 70px; width: auto; height: 50px;">Trailer &nbsp;&nbsp;<i class="fa fa-video-camera"></i></button>
+																				<button type="button" onclick="handleTrailerDialog();" class="btn btn-danger position-absolute shadow-sm shadow-danger" style="top: 16px; right: 30px; border-radius: 70px; width: auto; height: 50px;">Trailer &nbsp;&nbsp;<i class="fa fa-video-camera"></i>
+																				</button>
 																			</div>
 																		</div>
 																	</div>

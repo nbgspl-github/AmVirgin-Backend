@@ -2,7 +2,6 @@
 
 namespace App\Resources\Shop\Customer\HomePage;
 
-use App\Storage\SecuredDisk;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class EntertainmentSliderResource extends JsonResource{

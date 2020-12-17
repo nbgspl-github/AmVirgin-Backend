@@ -11,12 +11,12 @@ use App\Library\Utils\Extensions\Arrays;
 use App\Library\Utils\Extensions\Rule;
 use App\Library\Utils\Extensions\Str;
 use App\Library\Utils\Extensions\Time;
+use App\Library\Utils\Uploads;
 use App\Models\Attribute;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductToken;
-use App\Storage\SecuredDisk;
 use App\Traits\ValidatesRequest;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
@@ -189,7 +189,7 @@ class AbstractProductController extends ApiController
 
 	protected function storeTrailer (UploadedFile $file): ?string
 	{
-		return SecuredDisk::access()->putFile(Directories::Trailers, $file);
+		return Uploads::access()->putFile(Directories::Trailers, $file);
 	}
 
 	protected function isVariantType (): bool

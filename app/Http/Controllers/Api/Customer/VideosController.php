@@ -6,11 +6,11 @@ use App\Http\Controllers\Api\ApiController;
 use App\Http\Resources\Videos\VideoResource;
 use App\Library\Enums\Videos\Types;
 use App\Library\Utils\Extensions\Str;
+use App\Library\Utils\Uploads;
 use App\Models\Video;
 use App\Models\VideoSource;
 use App\Models\WatchLaterVideo;
 use App\Resources\Shop\Customer\HomePage\TrendingNowVideoResource;
-use App\Storage\SecuredDisk;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -44,10 +44,10 @@ class VideosController extends ApiController
 								return [
 									'language' => $source->language()->first()->getName(),
 									'quality' => $source->mediaQuality()->first()->getName(),
-									'url' => SecuredDisk::access()->url($source->getFile()),
+									'url' => Uploads::access()->url($source->getFile()),
 									'subtitle' => [
-										'available' => SecuredDisk::access()->exists($source->getSubtitle()),
-										'url' => SecuredDisk::access()->exists($source->getSubtitle()) ? SecuredDisk::access()->url($source->getSubtitle()) : Str::Empty,
+										'available' => Uploads::access()->exists($source->getSubtitle()),
+										'url' => Uploads::access()->exists($source->getSubtitle()) ? Uploads::access()->url($source->getSubtitle()) : Str::Empty,
 									],
 								];
 							})->values(),
@@ -70,10 +70,10 @@ class VideosController extends ApiController
 						'description' => $source->description,
 						'language' => $source->language->name,
 						'quality' => $source->mediaQuality->name,
-						'url' => SecuredDisk::access()->url($source->file),
+						'url' => Uploads::access()->url($source->file),
 						'subtitle' => [
-							'available' => SecuredDisk::access()->exists($source->subtitle),
-							'url' => SecuredDisk::access()->exists($source->subtitle) ? SecuredDisk::access()->url($source->subtitle) : Str::Empty,
+							'available' => Uploads::access()->exists($source->subtitle),
+							'url' => Uploads::access()->exists($source->subtitle) ? Uploads::access()->url($source->subtitle) : Str::Empty,
 						],
 					];
 				})->values();

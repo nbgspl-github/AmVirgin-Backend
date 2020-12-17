@@ -5,8 +5,8 @@ namespace App\Models;
 use App\Library\Enums\Common\Directories;
 use App\Library\Utils\Extensions\Arrays;
 use App\Library\Utils\Extensions\Str;
+use App\Library\Utils\Uploads;
 use App\Queries\CategoryQuery;
-use App\Storage\SecuredDisk;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\FluentConstructor;
 use App\Traits\GenerateSlugs;
@@ -122,7 +122,7 @@ class Category extends Model
     public function setCatalogAttribute($value): void
     {
         if ($value instanceof UploadedFile) {
-            $this->attributes['catalog'] = SecuredDisk::access()->putFile(Directories::Catalogs, $value);
+	        $this->attributes['catalog'] = Uploads::access()->putFile(Directories::Catalogs, $value);
         } else {
             $this->attributes['catalog'] = $value;
         }
@@ -130,7 +130,7 @@ class Category extends Model
 
     public function getCatalogAttribute($value): ?string
     {
-        return SecuredDisk::existsUrl($this->attributes['catalog']);
+	    return Uploads::existsUrl($this->attributes['catalog']);
     }
 
     public function getSlugOptions(): SlugOptions

@@ -7,8 +7,8 @@ use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Library\Enums\Common\Directories;
 use App\Library\Enums\Common\Tables;
+use App\Library\Utils\Uploads;
 use App\Models\SubscriptionPlan;
-use App\Storage\SecuredDisk;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -67,7 +67,7 @@ class SubscriptionPlansController extends BaseController
 		try {
 			$payload = $this->requestValid(request(), $this->rules('store'));
 			$payload['slug'] = Str::slug($payload['name']);
-			$payload['banner'] = SecuredDisk::access()->putFile(Directories::SubscriptionPlans, request()->file('banner'));
+			$payload['banner'] = Uploads::access()->putFile(Directories::SubscriptionPlans, request()->file('banner'));
 			SubscriptionPlan::create($payload);
 			$response->route('admin.subscription-plans.index')->success('Subscription plan created successfully.');
 		} catch (ValidationException $exception) {
@@ -91,8 +91,8 @@ class SubscriptionPlansController extends BaseController
 			$payload['slug'] = Str::slug($payload['name']);
 			$payload = collect($payload)->filter()->toArray();
 			if (request()->hasFile('banner')) {
-				SecuredDisk::deleteIfExists($plan->getBanner());
-				$payload['banner'] = SecuredDisk::access()->putFile(Directories::SubscriptionPlans, request()->file('banner'));
+				Uploads::deleteIfExists($plan->getBanner());
+				$payload['banner'] = Uploads::access()->putFile(Directories::SubscriptionPlans, request()->file('banner'));
 			}
 			$plan->update($payload);
 			$response->route('admin.subscription-plans.index')->success('Plan details updated successfully.');

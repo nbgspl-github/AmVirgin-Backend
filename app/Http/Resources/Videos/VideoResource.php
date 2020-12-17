@@ -2,10 +2,8 @@
 
 namespace App\Http\Resources\Videos;
 
-use App\Http\Resources\VideoSource\VideoSourceResource;
-use App\Storage\SecuredDisk;
+use App\Library\Utils\Uploads;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 class VideoResource extends JsonResource
 {
@@ -24,9 +22,9 @@ class VideoResource extends JsonResource
 			'released' => $this->released,
 			'cast' => $this->cast,
 			'director' => $this->director,
-			'trailer' => SecuredDisk::existsUrl($this->trailer),
-			'poster' => SecuredDisk::existsUrl($this->getPoster()),
-			'backdrop' => SecuredDisk::existsUrl($this->getBackdrop()),
+			'trailer' => Uploads::existsUrl($this->trailer),
+			'poster' => Uploads::existsUrl($this->getPoster()),
+			'backdrop' => Uploads::existsUrl($this->getBackdrop()),
 			'genre' => $this->genre->getName(),
 			'rating' => $this->rating,
 			'pgRating' => $this->pgRating,

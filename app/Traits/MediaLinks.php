@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use App\Storage\SecuredDisk;
+use App\Library\Utils\Uploads;
 use Illuminate\Http\UploadedFile;
 
 trait MediaLinks
@@ -14,7 +14,7 @@ trait MediaLinks
 	 */
 	protected function storeMedia (string $directory, UploadedFile $media)
 	{
-		return SecuredDisk::access()->putFile($directory, $media);
+		return Uploads::access()->putFile($directory, $media);
 	}
 
 	/**
@@ -23,6 +23,6 @@ trait MediaLinks
 	 */
 	protected function retrieveMedia (?string $relativePath)
 	{
-		return SecuredDisk::existsUrl($relativePath);
+		return Uploads::existsUrl($relativePath);
 	}
 }

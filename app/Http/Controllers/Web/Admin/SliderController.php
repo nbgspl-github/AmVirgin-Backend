@@ -7,9 +7,9 @@ use App\Http\Controllers\BaseController;
 use App\Library\Enums\Common\Directories;
 use App\Library\Enums\Common\Tables;
 use App\Library\Utils\Extensions\Rule;
+use App\Library\Utils\Uploads;
 use App\Models\Slider;
 use App\Models\Video;
-use App\Storage\SecuredDisk;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Illuminate\Http\Request;
@@ -81,7 +81,7 @@ class SliderController extends BaseController
 		try {
 			$validated = $this->requestValid($request, $this->rules['store']);
 			$validated['target'] = $validated['type'] == Slider::TargetType['ExternalLink'] ? $validated['targetLink'] : $validated['targetKey'];
-			$validated['banner'] = request()->hasFile('banner') ? SecuredDisk::access()->putFile(Directories::Sliders, $request->file('banner')) : null;
+			$validated['banner'] = request()->hasFile('banner') ? Uploads::access()->putFile(Directories::Sliders, $request->file('banner')) : null;
 			Slider::create($validated);
 			$response->route('admin.sliders.index')->success('Slider created successfully.');
 		} catch (ValidationException $exception) {
@@ -126,7 +126,7 @@ class SliderController extends BaseController
 				'active' => $validated['active'],
 			]);
 			if ($request->hasFile('banner')) {
-				$banner = SecuredDisk::access()->putFile(Directories::Sliders, $request->file('banner'));
+				$banner = Uploads::access()->putFile(Directories::Sliders, $request->file('banner'));
 				$slide->update(['banner' => $banner]);
 			}
 			$response->route('admin.sliders.index')->success('Slider updated successfully.');

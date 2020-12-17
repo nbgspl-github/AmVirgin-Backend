@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Web\Admin\Videos;
 
 use App\Classes\WebResponse;
-use App\Http\Controllers\Web\Admin\TvSeries\TvSeriesBase;
 use App\Library\Enums\Common\Directories;
+use App\Library\Utils\Uploads;
 use App\Models\Video;
-use App\Storage\SecuredDisk;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
@@ -43,24 +42,24 @@ class MediaController extends VideosBase
 			$video = Video::retrieveThrows($id);
 			$this->requestValid(request(), $this->rules('update'));
 			if (request()->hasFile('poster')) {
-				if (SecuredDisk::access()->exists($video->getPoster())) {
-					SecuredDisk::access()->delete($video->getPoster());
+				if (Uploads::access()->exists($video->getPoster())) {
+					Uploads::access()->delete($video->getPoster());
 				}
-				$video->setPoster(SecuredDisk::access()->putFile(Directories::Posters, request()->file('poster'), 'private'));
+				$video->setPoster(Uploads::access()->putFile(Directories::Posters, request()->file('poster'), 'private'));
 			}
 
 			if (request()->hasFile('backdrop')) {
-				if (SecuredDisk::access()->exists($video->getBackdrop())) {
-					SecuredDisk::access()->delete($video->getBackdrop());
+				if (Uploads::access()->exists($video->getBackdrop())) {
+					Uploads::access()->delete($video->getBackdrop());
 				}
-				$video->setBackdrop(SecuredDisk::access()->putFile(Directories::Backdrops, request()->file('backdrop'), 'private'));
+				$video->setBackdrop(Uploads::access()->putFile(Directories::Backdrops, request()->file('backdrop'), 'private'));
 			}
 
 			if (request()->hasFile('trailer')) {
-				if (SecuredDisk::access()->exists($video->getTrailer())) {
-					SecuredDisk::access()->delete($video->getTrailer());
+				if (Uploads::access()->exists($video->getTrailer())) {
+					Uploads::access()->delete($video->getTrailer());
 				}
-				$video->setTrailer(SecuredDisk::access()->putFile(Directories::Trailers, request()->file('trailer'), 'private'));
+				$video->setTrailer(Uploads::access()->putFile(Directories::Trailers, request()->file('trailer'), 'private'));
 			}
 			$video->save();
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Successfully uploaded/updated media for video.');

@@ -4,8 +4,8 @@ namespace App\Models;
 
 use App\Classes\Eloquent\ModelExtended;
 use App\Library\Enums\Common\Directories;
+use App\Library\Utils\Uploads;
 use App\Queries\Seller\BankDetailQuery;
-use App\Storage\SecuredDisk;
 use App\Traits\DynamicAttributeNamedMethods;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -45,13 +45,15 @@ class SellerBankDetail extends ModelExtended{
 		'PhoneBill' => 'pbone-bill',
 	];
 
-	public function setAddressProofDocumentAttribute($value){
-		$this->attributes['addressProofDocument'] = SecuredDisk::access()->putFile(Directories::SellerDocuments, $value);
+	public function setAddressProofDocumentAttribute($value)
+	{
+		$this->attributes['addressProofDocument'] = Uploads::access()->putFile(Directories::SellerDocuments, $value);
 		return $this->attributes['addressProofDocument'];
 	}
 
-	public function setCancelledChequeAttribute($value){
-		$this->attributes['cancelledCheque'] = SecuredDisk::access()->putFile(Directories::SellerDocuments, $value);
+	public function setCancelledChequeAttribute($value)
+	{
+		$this->attributes['cancelledCheque'] = Uploads::access()->putFile(Directories::SellerDocuments, $value);
 		return $this->attributes['cancelledCheque'];
 	}
 

@@ -2,7 +2,7 @@
 
 namespace App\Resources\Products\Customer;
 
-use App\Storage\SecuredDisk;
+use App\Library\Utils\Uploads;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ImageResource extends JsonResource{
@@ -10,7 +10,8 @@ class ImageResource extends JsonResource{
 		return true;
 	}
 
-	public function toArray($request){
-		return $this->when(SecuredDisk::access()->exists($this->path) == true, SecuredDisk::access()->url($this->path));
+	public function toArray($request)
+	{
+		return $this->when(Uploads::access()->exists($this->path) == true, Uploads::access()->url($this->path));
 	}
 }

@@ -6,13 +6,12 @@ use App\Classes\WebResponse;
 use App\Events\Admin\TvSeries\TvSeriesUpdated;
 use App\Events\Admin\Videos\VideoUpdated;
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\Web\Admin\TvSeries\TvSeriesBase;
 use App\Library\Enums\Common\Directories;
+use App\Library\Utils\Uploads;
 use App\Models\MediaLanguage;
 use App\Models\MediaQuality;
 use App\Models\Video;
 use App\Models\VideoSource;
-use App\Storage\SecuredDisk;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use stdClass;
 use Throwable;
@@ -106,17 +105,17 @@ class ContentController extends VideosBase
 						$source->setDuration($durations[$i]);
 
 					if (isset($subtitles[$i])) {
-						if (SecuredDisk::access()->exists($source->getSubtitle())) {
-							SecuredDisk::access()->delete($source->getSubtitle());
+						if (Uploads::access()->exists($source->getSubtitle())) {
+							Uploads::access()->delete($source->getSubtitle());
 						}
-						$source->setSubtitle(SecuredDisk::access()->putFile(Directories::Subtitles, $subtitles[$i]));
+						$source->setSubtitle(Uploads::access()->putFile(Directories::Subtitles, $subtitles[$i]));
 					}
 
 					if (isset($videos[$i])) {
-						if (SecuredDisk::access()->exists($source->getFile())) {
-							SecuredDisk::access()->delete($source->getFile());
+						if (Uploads::access()->exists($source->getFile())) {
+							Uploads::access()->delete($source->getFile());
 						}
-						$source->setFile(SecuredDisk::access()->putFile(Directories::Videos, $videos[$i]));
+						$source->setFile(Uploads::access()->putFile(Directories::Videos, $videos[$i]));
 					}
 
 					$source->save();

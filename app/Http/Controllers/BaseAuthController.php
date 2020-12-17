@@ -8,9 +8,9 @@ namespace App\Http\Controllers;
 use App\Exceptions\ResourceConflictException;
 use App\Exceptions\ValidationException;
 use App\Library\Enums\Common\Directories;
+use App\Library\Utils\Uploads;
 use App\Models\Auth\Seller;
 use App\Resources\Auth\Seller\AuthProfileResource;
-use App\Storage\SecuredDisk;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Exception;
@@ -316,9 +316,9 @@ abstract class BaseAuthController extends BaseController
 		try {
 			$this->requestValid(request(), $this->rulesUpdateAvatar());
 			$user = $this->guard()->user();
-			SecuredDisk::deleteIfExists($user->avatar());
+			Uploads::deleteIfExists($user->avatar());
 			$user->update([
-				'avatar' => SecuredDisk::access()->putFile($user instanceof Seller ? Directories::SellerAvatars : Directories::CustomerAvatars, \request()->file('avatar')),
+				'avatar' => Uploads::access()->putFile($user instanceof Seller ? Directories::SellerAvatars : Directories::CustomerAvatars, \request()->file('avatar')),
 			]);
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Avatar updated successfully.');
 		} catch (ValidationException $exception) {

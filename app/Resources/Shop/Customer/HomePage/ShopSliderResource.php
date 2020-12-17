@@ -2,7 +2,7 @@
 
 namespace App\Resources\Shop\Customer\HomePage;
 
-use App\Storage\SecuredDisk;
+use App\Library\Utils\Uploads;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ShopSliderResource extends JsonResource {
@@ -10,7 +10,7 @@ class ShopSliderResource extends JsonResource {
 		return [
 			'title' => $this->title,
 			'description' => $this->description,
-			'banner' => SecuredDisk::existsUrl($this->banner),
+			'banner' => Uploads::existsUrl($this->banner),
 			'target' => $this->target,
 			'rating' => $this->rating,
 		];

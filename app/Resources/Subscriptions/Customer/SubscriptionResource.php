@@ -2,7 +2,7 @@
 
 namespace App\Resources\Subscriptions\Customer;
 
-use App\Storage\SecuredDisk;
+use App\Library\Utils\Uploads;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SubscriptionResource extends JsonResource {
@@ -13,7 +13,7 @@ class SubscriptionResource extends JsonResource {
 			'description' => $this->description,
 			'originalPrice' => $this->originalPrice,
 			'discountedPrice' => $this->offerPrice,
-			'banner' => SecuredDisk::existsUrl($this->banner),
+			'banner' => Uploads::existsUrl($this->banner),
 			'duration' => $this->duration,
 		];
 	}

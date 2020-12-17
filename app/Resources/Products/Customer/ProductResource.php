@@ -3,8 +3,8 @@
 namespace App\Resources\Products\Customer;
 
 use App\Library\Utils\Extensions\Arrays;
+use App\Library\Utils\Uploads;
 use App\Models\Product;
-use App\Storage\SecuredDisk;
 
 class ProductResource extends AbstractProductResource{
 	protected ?CategoryResource $categoryResource;
@@ -51,7 +51,7 @@ class ProductResource extends AbstractProductResource{
 			'warranty' => $this->warranty,
 			'maxQuantity' => $this->maxQuantityPerOrder(),
 			'media' => [
-				'trailer' => SecuredDisk::existsUrl($this->trailer()),
+				'trailer' => Uploads::existsUrl($this->trailer()),
 				'gallery' => ImageResource::collection($this->images),
 			],
 			'details' => DetailResource::collection($this->specs),

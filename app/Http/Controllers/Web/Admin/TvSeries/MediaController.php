@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Web\Admin\TvSeries;
 
 use App\Classes\WebResponse;
 use App\Library\Enums\Common\Directories;
+use App\Library\Utils\Uploads;
 use App\Models\Video;
-use App\Storage\SecuredDisk;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
@@ -52,24 +52,24 @@ class MediaController extends TvSeriesBase
 			$tvSeries = Video::retrieveThrows($id);
 			$this->requestValid(request(), $this->rules('update'));
 			if (request()->hasFile('poster')) {
-				if (SecuredDisk::access()->exists($tvSeries->getPoster())) {
-					SecuredDisk::access()->delete($tvSeries->getPoster());
+				if (Uploads::access()->exists($tvSeries->getPoster())) {
+					Uploads::access()->delete($tvSeries->getPoster());
 				}
-				$tvSeries->setPoster(SecuredDisk::access()->putFile(Directories::Posters, request()->file('poster')));
+				$tvSeries->setPoster(Uploads::access()->putFile(Directories::Posters, request()->file('poster')));
 			}
 
 			if (request()->hasFile('backdrop')) {
-				if (SecuredDisk::access()->exists($tvSeries->getBackdrop())) {
-					SecuredDisk::access()->delete($tvSeries->getBackdrop());
+				if (Uploads::access()->exists($tvSeries->getBackdrop())) {
+					Uploads::access()->delete($tvSeries->getBackdrop());
 				}
-				$tvSeries->setBackdrop(SecuredDisk::access()->putFile(Directories::Backdrops, request()->file('backdrop')));
+				$tvSeries->setBackdrop(Uploads::access()->putFile(Directories::Backdrops, request()->file('backdrop')));
 			}
 
 			if (request()->hasFile('trailer')) {
-				if (SecuredDisk::access()->exists($tvSeries->getTrailer())) {
-					SecuredDisk::access()->delete($tvSeries->getTrailer());
+				if (Uploads::access()->exists($tvSeries->getTrailer())) {
+					Uploads::access()->delete($tvSeries->getTrailer());
 				}
-				$tvSeries->setTrailer(SecuredDisk::access()->putFile(Directories::Trailers, request()->file('trailer')));
+				$tvSeries->setTrailer(Uploads::access()->putFile(Directories::Trailers, request()->file('trailer')));
 			}
 			$tvSeries->save();
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Successfully uploaded/updated media for tv series.');

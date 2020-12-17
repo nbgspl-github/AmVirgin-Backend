@@ -9,9 +9,9 @@
 				<div class="card-body animatable">
 					<div class="jumbotron bg-white animated zoomIn" style="background-image: url({{\Illuminate\Support\Facades\Storage::disk('secured')->url($payload->getBackdrop())}});">
 						<div style="background-color: rgba(0,0,0,0.75); border-radius: 8px;" class="row shadow w-100">
-							@if(\App\Storage\SecuredDisk::access()->exists($payload->getPoster()))
+							@if(\App\Library\Utils\Uploads::access()->exists($payload->getPoster()))
 								<div class="col-auto my-auto">
-									<img src="{{\App\Storage\SecuredDisk::access()->url($payload->getPoster())}}" alt="" class="img-fluid" style="max-height: 200px;"/>
+									<img src="{{\App\Library\Utils\Uploads::access()->url($payload->getPoster())}}" alt="" class="img-fluid" style="max-height: 200px;"/>
 								</div>
 								<div class="col-10">
 									<div>

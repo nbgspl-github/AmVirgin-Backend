@@ -2,7 +2,7 @@
 
 namespace App\Resources\Orders\Customer;
 
-use App\Storage\SecuredDisk;
+use App\Library\Utils\Uploads;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CartProductResource extends JsonResource
@@ -19,7 +19,7 @@ class CartProductResource extends JsonResource
 				'selling' => $this->sellingPrice,
 			],
 			'rating' => $this->rating,
-			'image' => SecuredDisk::existsUrl($this->primaryImage),
+			'image' => Uploads::existsUrl($this->primaryImage),
 		];
 	}
 }

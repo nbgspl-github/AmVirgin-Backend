@@ -2,7 +2,7 @@
 
 namespace App\Resources\Auth\Seller;
 
-use App\Storage\SecuredDisk;
+use App\Library\Utils\Uploads;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AuthProfileResource extends JsonResource
@@ -27,7 +27,7 @@ class AuthProfileResource extends JsonResource
 				'firstLine' => $this->addressFirstLine,
 				'secondLine' => $this->addressSecondLine,
 			],
-			'avatar' => SecuredDisk::existsUrl($this->avatar),
+			'avatar' => Uploads::existsUrl($this->avatar),
 			'statistics' => [
 				'brands' => [
 					'approved' => 1,

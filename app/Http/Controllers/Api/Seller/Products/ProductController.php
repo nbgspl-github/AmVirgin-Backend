@@ -9,12 +9,12 @@ use App\Exceptions\ValidationException;
 use App\Library\Enums\Common\Directories;
 use App\Library\Utils\Extensions\Arrays;
 use App\Library\Utils\Extensions\Str;
+use App\Library\Utils\Uploads;
 use App\Models\HsnCode;
 use App\Models\Product;
 use App\Models\ProductToken;
 use App\Resources\Products\Seller\CatalogListResource;
 use App\Resources\Products\Seller\ProductResource;
-use App\Storage\SecuredDisk;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
@@ -138,7 +138,7 @@ class ProductController extends AbstractProductController
 			$primaryIndex = $product['primaryImageIndex'];
 			$currentIndex = 0;
 			$images = collect($product['files'] ?? [])->transform(function (UploadedFile $file) use (&$currentIndex, $primaryIndex, &$product) {
-				$file = SecuredDisk::access()->putFile(Directories::ProductImage, $file);
+				$file = Uploads::access()->putFile(Directories::ProductImage, $file);
 				if ($currentIndex++ === $primaryIndex) {
 					$product['primaryImage'] = $file;
 				}
@@ -185,7 +185,7 @@ class ProductController extends AbstractProductController
 			$primaryIndex = $payload['primaryImageIndex'] ?? 0;
 			$currentIndex = 0;
 			$images = collect($payload['files'] ?? [])->transform(function (UploadedFile $file) use (&$currentIndex, $primaryIndex, &$product) {
-				$file = SecuredDisk::access()->putFile(Directories::ProductImage, $file);
+				$file = Uploads::access()->putFile(Directories::ProductImage, $file);
 				if ($currentIndex++ === $primaryIndex) {
 					$product['primaryImage'] = $file;
 				}

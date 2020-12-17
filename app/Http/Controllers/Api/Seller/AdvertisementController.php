@@ -6,9 +6,9 @@ use App\Exceptions\ValidationException;
 use App\Http\Controllers\Api\ApiController;
 use App\Library\Enums\Advertisements\Status;
 use App\Library\Enums\Common\Directories;
+use App\Library\Utils\Uploads;
 use App\Models\Advertisement;
 use App\Resources\Advertisements\Seller\ListResource;
-use App\Storage\SecuredDisk;
 use App\Traits\ValidatesRequest;
 use Illuminate\Http\JsonResponse;
 use Throwable;
@@ -65,7 +65,7 @@ class AdvertisementController extends ApiController
 		$response = responseApp();
 		try {
 			$payload = $this->requestValid(request(), $this->rules['store']);
-			$payload['banner'] = \request()->hasFile('banner') ? SecuredDisk::access()->putFile(Directories::Advertisement, \request()->file('banner')) : null;
+			$payload['banner'] = \request()->hasFile('banner') ? Uploads::access()->putFile(Directories::Advertisement, \request()->file('banner')) : null;
 			$payload['sellerId'] = $this->guard()->id();
 			$advertisement = Advertisement::query()->create($payload);
 			$resource = new ListResource($advertisement);

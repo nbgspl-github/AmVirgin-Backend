@@ -10,9 +10,9 @@ use App\Library\Enums\Common\Directories;
 use App\Library\Enums\Common\Tables;
 use App\Library\Utils\Extensions\Rule;
 use App\Library\Utils\Extensions\Str;
+use App\Library\Utils\Uploads;
 use App\Models\AttributeSetItem;
 use App\Models\Category;
-use App\Storage\SecuredDisk;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -261,7 +261,7 @@ class CategoryController extends BaseController
 		$response = responseWeb();
 		try {
 			$payload = $this->requestValid(request(), $this->rules['store']);
-			$payload['icon'] = \request()->hasFile('icon') ? SecuredDisk::access()->putFile(Directories::Categories, \request()->file('icon')) : null;
+			$payload['icon'] = \request()->hasFile('icon') ? Uploads::access()->putFile(Directories::Categories, \request()->file('icon')) : null;
 			$payload['specials'] = [];
 			Category::query()->create($payload);
 			$response->route('admin.categories.index')->success('Created category successfully.');
@@ -281,7 +281,7 @@ class CategoryController extends BaseController
 			$category = Category::retrieveThrows($id);
 			$payload = $this->requestValid(\request(), $this->rules['update']);
 			if (\request()->hasFile('icon')) {
-				$payload['icon'] = SecuredDisk::access()->putFile(Directories::Categories, \request()->file('icon'));
+				$payload['icon'] = Uploads::access()->putFile(Directories::Categories, \request()->file('icon'));
 			}
 			$category->update($payload);
 			$response->route('admin.categories.index')->success('Updated category successfully.');
@@ -324,7 +324,7 @@ class CategoryController extends BaseController
 				preg_match('/data:image\/(?<mime>.*?)\;/', $src, $groups);
 				$mimeType = $groups['mime'];
 				$path = 'summary-images/' . Str::makeUuid() . '.' . $mimeType;
-				SecuredDisk::access()->put($path, file_get_contents($src));
+				Uploads::access()->put($path, file_get_contents($src));
 				$image->removeAttribute('src');
 				$image->setAttribute('src', storage_path('app/public/' . $path));
 			}
@@ -344,9 +344,9 @@ class CategoryController extends BaseController
 				preg_match('/data:image\/(?<mime>.*?)\;/', $src, $groups);
 				$mimeType = $groups['mime'];
 				$path = 'summary-images/' . Str::makeUuid() . '.' . $mimeType;
-				SecuredDisk::access()->put($path, file_get_contents($src));
+				Uploads::access()->put($path, file_get_contents($src));
 				$image->removeAttribute('src');
-				$image->setAttribute('src', SecuredDisk::access()->url($path));
+				$image->setAttribute('src', Uploads::access()->url($path));
 			}
 		}
 		return $dom->saveHTML();

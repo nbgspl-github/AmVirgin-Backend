@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Library\Utils\Uploads;
 use App\Queries\SliderQuery;
-use App\Storage\SecuredDisk;
 use App\Traits\ActiveStatus;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\QueryProvider;
@@ -42,7 +42,7 @@ class Slider extends Model
 
 	public function getBannerAttribute (): ?string
 	{
-		return SecuredDisk::existsUrl($this->attributes['banner']);
+		return Uploads::existsUrl($this->attributes['banner']);
 	}
 
 	public function video (): HasOne

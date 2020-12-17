@@ -100,7 +100,7 @@ function countRequiredPages (int $total, int $perPage)
 
 function makeUrl ($path) : ?string
 {
-	return \App\Storage\SecuredDisk::existsUrl($path);
+	return \App\Library\Utils\Uploads::existsUrl($path);
 }
 
 function slack ($message)

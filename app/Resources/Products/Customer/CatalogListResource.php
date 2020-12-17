@@ -2,8 +2,7 @@
 
 namespace App\Resources\Products\Customer;
 
-use App\Models\Product;
-use App\Storage\SecuredDisk;
+use App\Library\Utils\Uploads;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CatalogListResource extends JsonResource{
@@ -18,7 +17,7 @@ class CatalogListResource extends JsonResource{
 				'selling' => $this->sellingPrice(),
 			],
 			'rating' => $this->rating(),
-			'image' => SecuredDisk::existsUrl($this->primaryImage()),
+			'image' => Uploads::existsUrl($this->primaryImage()),
 			'gallery' => ImageResource::collection($this->images),
 			'options' => CatalogListOptionResource::collection($this->options()->where('showInCatalogListing', true)->get()),
 		];

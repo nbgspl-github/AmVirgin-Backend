@@ -2,7 +2,7 @@
 
 namespace App\Resources\GlobalSearch;
 
-use App\Storage\SecuredDisk;
+use App\Library\Utils\Uploads;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class VideoResultResource extends JsonResource{
@@ -11,7 +11,7 @@ class VideoResultResource extends JsonResource{
 			'key' => $this->id(),
 			'title' => $this->title(),
 			'description' => $this->description(),
-			'poster' => SecuredDisk::existsUrl($this->poster()),
+			'poster' => Uploads::existsUrl($this->poster()),
 		];
 	}
 }

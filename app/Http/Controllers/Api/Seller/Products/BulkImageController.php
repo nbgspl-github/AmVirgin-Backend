@@ -6,9 +6,9 @@ use App\Exceptions\ValidationException;
 use App\Http\Controllers\Api\ApiController;
 use App\Library\Enums\Common\Directories;
 use App\Library\Utils\Extensions\Arrays;
+use App\Library\Utils\Uploads;
 use App\Models\Product;
 use App\Models\ProductImage;
-use App\Storage\SecuredDisk;
 use App\Traits\ValidatesRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
@@ -47,7 +47,7 @@ class BulkImageController extends ApiController
 					$product = Product::query()->where('sku', $sku)->first();
 					if ($product != null) {
 						ProductImage::query()->create([
-							'path' => SecuredDisk::access()->putFile(Directories::ProductImage, $file, 'public'),
+							'path' => Uploads::access()->putFile(Directories::ProductImage, $file, 'public'),
 							'productId' => $product->getKey()
 						]);
 					} else {

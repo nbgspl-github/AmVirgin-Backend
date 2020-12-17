@@ -3,8 +3,8 @@
 namespace App\Resources\Products\Seller;
 
 use App\Library\Utils\Extensions\Arrays;
+use App\Library\Utils\Uploads;
 use App\Models\Product;
-use App\Storage\SecuredDisk;
 
 class ProductResource extends AbstractProductResource
 {
@@ -38,27 +38,27 @@ class ProductResource extends AbstractProductResource
             'brand' => $this->brandResource,
             'listingStatus' => $this->listingStatus(),
             'type' => $this->type(),
-            'idealFor' => $this->idealFor(),
-            'originalPrice' => $this->originalPrice(),
-            'sellingPrice' => $this->sellingPrice(),
-            'fulfillmentBy' => $this->fulfillmentBy(),
-            'hsn' => $this->hsn(),
-            'currency' => $this->currency(),
-            'stock' => $this->stock(),
-            'lowStockThreshold' => $this->lowStockThreshold(),
-            'sku' => $this->sku(),
-            'styleCode' => $this->styleCode(),
-            'trailer' => SecuredDisk::existsUrl($this->trailer()),
-            'procurementSla' => $this->procurementSla(),
-            'localShippingCost' => $this->localShippingCost(),
-            'zonalShippingCost' => $this->zonalShippingCost(),
-            'internationalShippingCost' => $this->internationalShippingCost(),
-            'packageWeight' => $this->packageWeight(),
-            'packageLength' => $this->packageLength(),
-            'packageBreadth' => $this->packageBreadth(),
-            'packageHeight' => $this->packageHeight(),
-            'domesticWarranty' => $this->domesticWarranty(),
-            'internationalWarranty' => $this->internationalWarranty(),
+	        'idealFor' => $this->idealFor(),
+	        'originalPrice' => $this->originalPrice(),
+	        'sellingPrice' => $this->sellingPrice(),
+	        'fulfillmentBy' => $this->fulfillmentBy(),
+	        'hsn' => $this->hsn(),
+	        'currency' => $this->currency(),
+	        'stock' => $this->stock(),
+	        'lowStockThreshold' => $this->lowStockThreshold(),
+	        'sku' => $this->sku(),
+	        'styleCode' => $this->styleCode(),
+	        'trailer' => Uploads::existsUrl($this->trailer()),
+	        'procurementSla' => $this->procurementSla(),
+	        'localShippingCost' => $this->localShippingCost(),
+	        'zonalShippingCost' => $this->zonalShippingCost(),
+	        'internationalShippingCost' => $this->internationalShippingCost(),
+	        'packageWeight' => $this->packageWeight(),
+	        'packageLength' => $this->packageLength(),
+	        'packageBreadth' => $this->packageBreadth(),
+	        'packageHeight' => $this->packageHeight(),
+	        'domesticWarranty' => $this->domesticWarranty(),
+	        'internationalWarranty' => $this->internationalWarranty(),
             'warrantySummary' => $this->warrantySummary(),
             'warrantyServiceType' => $this->serviceType(),
             'coveredInWarranty' => $this->coveredInWarranty(),

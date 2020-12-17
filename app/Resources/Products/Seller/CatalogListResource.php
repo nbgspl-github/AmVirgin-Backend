@@ -3,8 +3,8 @@
 namespace App\Resources\Products\Seller;
 
 use App\Library\Utils\Extensions\Time;
+use App\Library\Utils\Uploads;
 use App\Models\Product;
-use App\Storage\SecuredDisk;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CatalogListResource extends JsonResource
@@ -24,7 +24,7 @@ class CatalogListResource extends JsonResource
 			'idealFor' => $this->idealFor,
 			'originalPrice' => $this->originalPrice,
 			'sellingPrice' => $this->sellingPrice,
-			'image' => SecuredDisk::existsUrl($this->primaryImage),
+			'image' => Uploads::existsUrl($this->primaryImage),
 			'options' => CatalogListOptionResource::collection($this->options()->where('showInCatalogListing', true)->get()),
 			'variants' => $this->when($this->type == Product::Type['Variant'], VariantItemResource::collection($this->variants)),
 		];

@@ -27,7 +27,7 @@
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">
 									@if($slide->banner!=null)
-										<img src="{{\App\Storage\SecuredDisk::access()->url($slide->banner)}}" style="width: 100px; height: 60px" alt="{{$slide->title}}"/>
+										<img src="{{\App\Library\Utils\Uploads::access()->url($slide->banner)}}" style="width: 100px; height: 60px" alt="{{$slide->title}}"/>
 									@else
 										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 90px"></i>
 									@endif

@@ -2,7 +2,7 @@
 
 namespace App\Resources\Videos\Customer\WatchLater;
 
-use App\Storage\SecuredDisk;
+use App\Library\Utils\Uploads;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ListResource extends JsonResource
@@ -18,10 +18,10 @@ class ListResource extends JsonResource
 			'duration' => $this->duration,
 			'released' => $this->released,
 			'director' => $this->director,
-			'trailer' => SecuredDisk::existsUrl($this->trailer),
+			'trailer' => Uploads::existsUrl($this->trailer),
 			'rating' => $this->rating,
-			'poster' => SecuredDisk::existsUrl($this->poster),
-			'backdrop' => SecuredDisk::existsUrl($this->backdrop),
+			'poster' => Uploads::existsUrl($this->poster),
+			'backdrop' => Uploads::existsUrl($this->backdrop),
 			'pgRating' => $this->pgRating,
 			'subscriptionType' => $this->subscriptionType,
 			'hasSeasons' => boolval($this->hasSeasons),

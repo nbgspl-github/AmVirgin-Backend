@@ -7,15 +7,11 @@ use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Library\Enums\Common\Directories;
 use App\Library\Enums\Common\Tables;
+use App\Library\Utils\Uploads;
 use App\Models\ShopSlider;
-use App\Models\Slider;
-use App\Storage\SecuredDisk;
 use App\Traits\ValidatesRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Throwable;
 
@@ -86,7 +82,7 @@ class SliderController extends BaseController
 		$response = responseWeb();
 		try {
 			$payload = $this->requestValid(request(), $this->rules['store']);
-			$payload['banner'] = \request()->hasFile('banner') ? SecuredDisk::access()->putFile(Directories::ShopSliders, request()->file('banner')) : null;
+			$payload['banner'] = \request()->hasFile('banner') ? Uploads::access()->putFile(Directories::ShopSliders, request()->file('banner')) : null;
 			ShopSlider::create($payload);
 			$response->route('admin.shop.sliders.index')->success('Shop slider created successfully.');
 		} catch (ValidationException $exception) {
@@ -129,8 +125,8 @@ class SliderController extends BaseController
 				'active' => $validated->active,
 			]);
 			if (request()->hasFile('banner')) {
-				SecuredDisk::deleteIfExists($slide->banner);
-				$banner = SecuredDisk::access()->putFile(Directories::Sliders, request()->file('banner'));
+				Uploads::deleteIfExists($slide->banner);
+				$banner = Uploads::access()->putFile(Directories::Sliders, request()->file('banner'));
 				$slide->update([
 					'banner' => $banner,
 				]);

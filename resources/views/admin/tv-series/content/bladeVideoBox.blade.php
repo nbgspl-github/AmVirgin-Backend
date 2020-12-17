@@ -2,15 +2,17 @@
 	<div class="card" style="border: 1px solid #aeb4ba;">
 		<div class="card-body rounded">
 			<input type="hidden" name="source[]" value="{{$payload->sourceId}}">
-			<button data-id="{{$id}}" data-key="{{$payload->sourceId}}" type="button" onclick="handleAsyncDelete(this.getAttribute('data-id'),this.getAttribute('data-key'));" class="btn btn-primary position-absolute shadow-sm shadow-primary" style="top: -15px; right:-15px;border-radius: 32px; width: 50px; height: 50px; z-index: 10;"><i class="ion-close-round font-20 pt-1"></i>
+			<button data-id="{{$id}}" data-key="{{$payload->sourceId}}" type="button" onclick="handleAsyncDelete(this.getAttribute('data-id'),this.getAttribute('data-key'));" class="btn btn-primary position-absolute shadow-sm shadow-primary" style="top: -15px; right:-15px;border-radius: 32px; width: 50px; height: 50px; z-index: 10;">
+				<i class="ion-close-round font-20 pt-1"></i>
 			</button>
 			<div class="row my-auto">
 				<div class="col-6 my-auto">
 					<div class="embed-responsive embed-responsive-16by9 border-dark" style=" max-height: 500px!important; min-height: 500px; border-radius: 4px">
-						<button data-id="{{$id}}" type="button" onclick="handleFileDialog(this.getAttribute('data-id'));" class="btn btn-danger position-absolute shadow-sm shadow-danger" style="bottom: 32px; left:47%;border-radius: 32px; width: 50px; height: 50px; z-index: 10;"><i class="ion-videocamera font-20 pt-1"></i>
+						<button data-id="{{$id}}" type="button" onclick="handleFileDialog(this.getAttribute('data-id'));" class="btn btn-danger position-absolute shadow-sm shadow-danger" style="bottom: 32px; left:47%;border-radius: 32px; width: 50px; height: 50px; z-index: 10;">
+							<i class="ion-videocamera font-20 pt-1"></i>
 						</button>
 						<input type="file" data-id="{{$id}}" class="d-none" onchange="handleVideo(event,this.getAttribute('data-id'))" id="input_{{$id}}" name="video[]" accept=".mp4, .avi" data-type="server"/>
-						<iframe class="embed-responsive-item my-auto" src="{{\App\Storage\SecuredDisk::access()->url($payload->video)}}" id="preview_{{$id}}" style=" max-height: 325px!important; min-height: 325px;">
+						<iframe class="embed-responsive-item my-auto" src="{{\App\Library\Utils\Uploads::access()->url($payload->video)}}" id="preview_{{$id}}" style=" max-height: 325px!important; min-height: 325px;">
 							<span class="text-center my-auto" id="blankVideo"><i class="ion ion-videocamera text-muted" style="font-size: 80px;"></i></span>
 						</iframe>
 					</div>

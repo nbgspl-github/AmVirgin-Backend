@@ -8,9 +8,9 @@ use App\Http\Controllers\BaseController;
 use App\Library\Enums\Common\Directories;
 use App\Library\Enums\Common\Tables;
 use App\Library\Utils\Extensions\Rule;
+use App\Library\Utils\Uploads;
 use App\Models\Brand;
 use App\Models\Category;
-use App\Storage\SecuredDisk;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
@@ -103,7 +103,7 @@ class BrandController extends BaseController
 		$response = responseWeb();
 		try {
 			$validated = $this->requestValid(request(), $this->rules['store']);
-			$validated['logo'] = SecuredDisk::access()->putFile(Directories::Brands, request()->file('logo'));
+			$validated['logo'] = Uploads::access()->putFile(Directories::Brands, request()->file('logo'));
 			$validated['active'] = request()->has('active');
 			Brand::query()->create($validated);
 			$response->success('Added brand successfully.')->route('admin.brands.index');
@@ -127,7 +127,7 @@ class BrandController extends BaseController
 			])->first();
 			if (!empty($brand)) throw new \Exception('Your given brand name is already taken. Try again with a different one.');
 			$brand = Brand::retrieveThrows($id);
-			if (request()->hasFile('logo')) $validated['logo'] = SecuredDisk::access()->putFile(Directories::Brands, request()->file('logo'));
+			if (request()->hasFile('logo')) $validated['logo'] = Uploads::access()->putFile(Directories::Brands, request()->file('logo'));
 			$validated['active'] = request()->has('active');
 			$brand->update($validated);
 			$response->success('Updated brand details successfully.')->route('admin.brands.index');

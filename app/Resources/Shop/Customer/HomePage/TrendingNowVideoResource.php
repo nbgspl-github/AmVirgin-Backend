@@ -2,7 +2,7 @@
 
 namespace App\Resources\Shop\Customer\HomePage;
 
-use App\Storage\SecuredDisk;
+use App\Library\Utils\Uploads;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class TrendingNowVideoResource extends JsonResource{
@@ -16,10 +16,10 @@ class TrendingNowVideoResource extends JsonResource{
 			'duration' => $this->duration,
 			'released' => $this->released,
 			'director' => $this->director,
-			'trailer' => SecuredDisk::existsUrl($this->trailer),
+			'trailer' => Uploads::existsUrl($this->trailer),
 			'rating' => $this->rating,
-			'poster' => SecuredDisk::existsUrl($this->poster),
-			'backdrop' => SecuredDisk::existsUrl($this->backdrop),
+			'poster' => Uploads::existsUrl($this->poster),
+			'backdrop' => Uploads::existsUrl($this->backdrop),
 			'pgRating' => $this->pgRating,
 			'subscriptionType' => $this->subscriptionType,
 			'hasSeasons' => boolval($this->hasSeasons),

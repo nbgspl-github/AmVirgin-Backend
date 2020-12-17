@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Library\Enums\Common\Directories;
 use App\Library\Utils\Extensions\Arrays;
-use App\Storage\SecuredDisk;
+use App\Library\Utils\Uploads;
 use App\Traits\DynamicAttributeNamedMethods;
 use Illuminate\Database\Eloquent\Model;
 
@@ -30,7 +30,7 @@ class SupportTicket extends Model
 		if (is_array($value) && count($value) > 0) {
 			$files = Arrays::Empty;
 			foreach ($value as $file) {
-				Arrays::push($files, SecuredDisk::access()->putFile(Directories::SellerSupportAttachments, $file));
+				Arrays::push($files, Uploads::access()->putFile(Directories::SellerSupportAttachments, $file));
 			}
 			$this->attributes['attachments'] = jsonEncode($files);
 		}
@@ -41,7 +41,7 @@ class SupportTicket extends Model
 		if (is_array($decoded) && count($decoded) > 0) {
 			$paths = Arrays::Empty;
 			foreach ($decoded as $file) {
-				$path = SecuredDisk::existsUrl($file);
+				$path = Uploads::existsUrl($file);
 				if ($path != null)
 					Arrays::push($paths, $path);
 			}
