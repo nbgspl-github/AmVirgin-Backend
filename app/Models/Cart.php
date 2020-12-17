@@ -29,7 +29,7 @@ class Cart extends Model
 		parent::__construct($attributes);
 	}
 
-	public static function retrieve (string $sessionId, int $customerId = 0): self
+	public static function retrieve (string $sessionId, int $customerId = 0) : self
 	{
 		if ($customerId == 0) {
 			$model = self::where('sessionId', $sessionId)->first();
@@ -42,7 +42,7 @@ class Cart extends Model
 		}
 	}
 
-	public static function retrieveThrows (string $sessionId, int $customerId = 0): self
+	public static function retrieveThrows (string $sessionId, int $customerId = 0) : self
 	{
 		if ($customerId == 0) {
 			$model = self::where('sessionId', $sessionId)->firstOrFail();
@@ -173,7 +173,7 @@ class Cart extends Model
 	 * @return Order|Model
 	 * @throws CartAlreadySubmittedException
 	 */
-	public function submit (Transaction $transaction): Order
+	public function submit (Transaction $transaction) : Order
 	{
 		/**
 		 * 1.) WE create the main order which will act as the parent order for all the subsequent vendor orders.

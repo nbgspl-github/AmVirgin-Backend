@@ -30,7 +30,7 @@ class ListResource extends JsonResource
 			'cancellationReason' => $this->when($this->status->is(Status::Cancelled), $this->cancellationReason),
 			'cancelledBy' => $this->when($this->status->is(Status::Cancelled), $this->cancelledBy),
 			'cancelledOn' => $this->when($this->status->is(Status::Cancelled), Time::mysqlStamp(strtotime($this->cancelledOn))),
-			'dispatchedOn' => $this->when($this->status->is(Status::Dispatched) || $this->status->is(Status::ReadyForDispatch), Time::mysqlStamp(strtotime($this->dispatchedOn))),
+			'dispatchedOn' => $this->when($this->status->is(Status::Dispatched) || $this->status->is(Status::ReadyForDispatch), Time::mysqlStamp(strtotime($this->dispatched_at))),
 			'deliveredOn' => $this->when($this->status->is(Status::Delivered), Time::mysqlStamp(strtotime($this->deliveredOn))),
 		];
 	}

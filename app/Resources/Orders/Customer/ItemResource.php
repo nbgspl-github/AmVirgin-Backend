@@ -23,7 +23,6 @@ class ItemResource extends JsonResource
 			'quantity' => $this->quantity,
 			'price' => $this->price,
 			'total' => $this->total,
-//			'options' => $this->options,
 			'return' => [
 				'allowed' => $this->returnable(),
 				'period' => $this->returnPeriod,
@@ -36,7 +35,9 @@ class ItemResource extends JsonResource
 	{
 		$pending = $this->returns()->whereNotIn('status', [Status::Completed])->exists();
 		return (
-			!empty($this->subOrder->fulfilled_at) && !$pending && $this->returnable
+			!empty($this->subOrder->fulfilled_at) &&
+			$this->subOrder->status->is(\App\Library\Enums\Orders\Status::Delivered) &&
+			!$pending && $this->returnable
 		);
 	}
 }

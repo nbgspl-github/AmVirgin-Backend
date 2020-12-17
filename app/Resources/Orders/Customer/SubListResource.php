@@ -2,8 +2,14 @@
 
 namespace App\Resources\Orders\Customer;
 
+use App\Library\Enums\Orders\Status;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * Class SubListResource
+ * @package App\Resources\Orders\Customer
+ * @property Status $status
+ */
 class SubListResource extends JsonResource
 {
 	public function toArray ($request) : array
@@ -20,7 +26,11 @@ class SubListResource extends JsonResource
 			'items' => ItemResource::collection($this->items),
 			'cancel' => [
 				'allowed' => $this->cancellable(),
-			]
+			],
+			'fulfillment' => $this->when(!empty($this->dispatched_at), [
+				'expected' => $this->expected_at,
+				'shipment' => new ShipmentResource($this->shipment)
+			])
 		];
 	}
 
@@ -31,6 +41,10 @@ class SubListResource extends JsonResource
 	 */
 	protected function cancellable () : bool
 	{
-		return empty($this->fulfilled_at);
+		return (
+			empty($this->fulfilled_at) &&
+			$this->status->isNot(Status::Delivered) &&
+			$this->status->isNot(Status::Cancelled)
+		);
 	}
 }

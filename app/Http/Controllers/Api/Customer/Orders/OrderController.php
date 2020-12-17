@@ -26,11 +26,11 @@ class OrderController extends ApiController
 
 	public function show (Order $order) : JsonResponse
 	{
-		if ($order->customer != null && $order->customer->is($this->customer()))
+//		if ($order->customer != null && $order->customer->is($this->customer()))
 			return responseApp()->prepare(
 				new OrderResource($order)
 			);
-		throw new ActionNotAllowedException();
+//		throw new ActionNotAllowedException();
 	}
 
 	public function track (Order $order) : JsonResponse

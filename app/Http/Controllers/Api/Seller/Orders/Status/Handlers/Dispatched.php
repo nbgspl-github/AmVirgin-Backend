@@ -11,6 +11,7 @@ use App\Models\Auth\Seller;
 use App\Models\Shipment;
 use App\Models\SubOrder;
 use Illuminate\Http\Response;
+use Illuminate\Support\Carbon;
 
 class Dispatched implements Action
 {
@@ -18,8 +19,8 @@ class Dispatched implements Action
 	{
 		return [
 			'shippingMethod' => ['bail', Rule::in(['seller', 'seller-smart'])],
-			'courierName' => ['bail', 'required_if:shippingMethod,seller', 'nullable', 'string', 'max:255'],
-			'airwayBillNumber' => ['bail', 'required_if:shippingMethod,seller', 'nullable', 'string', 'max:255'],
+			'courierName' => ['bail', 'required_if:shippingMethod,seller', 'string', 'max:255'],
+			'airwayBillNumber' => ['bail', 'required_if:shippingMethod,seller', 'string', 'max:255'],
 		];
 	}
 
@@ -38,6 +39,7 @@ class Dispatched implements Action
 		$order->update([
 			'status' => $next->value,
 			'dispatched_at' => Time::mysqlStamp(),
+			'expected_at' => $this->expectedAt()
 		]);
 		return responseApp()->status(Response::HTTP_OK)->message('Action performed successfully!');
 	}
@@ -51,12 +53,16 @@ class Dispatched implements Action
 	{
 		if ($extra['shippingMethod'] == 'seller-smart') {
 			return [
-				'courierName' => $extra['courierName'],
-				'awb' => $extra['airwayBillNumber'],
+				'courierName' => 'AmVirgin',
 				'dispatched' => Time::mysqlStamp(),
 				'shippingMethod' => $extra['shippingMethod'],
 			];
 		}
 		return $extra;
+	}
+
+	protected function expectedAt () : string
+	{
+		return Carbon::now()->addDays(7)->format('Y-m-d H:i:s');
 	}
 }
