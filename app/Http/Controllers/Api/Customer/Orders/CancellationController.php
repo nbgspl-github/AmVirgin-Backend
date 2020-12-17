@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\Customer\Orders;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Library\Enums\Orders\Status;
+use App\Library\Utils\Extensions\Time;
+use App\Models\Order;
 use App\Models\SubOrder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -34,10 +36,22 @@ class CancellationController extends ApiController
 		return !($order->status->is(Status::Cancelled) || $order->status->is(Status::Delivered)) && empty($order->fulfilled_at);
 	}
 
-	protected function performCancellation (SubOrder $order)
+	protected function performCancellation (SubOrder $subOrder)
+	{
+		$subOrder->update([
+			'status' => Status::Cancelled
+		]);
+		$order = $subOrder->order;
+		if ($order != null && ($order->subOrders()->where('status', Status::Cancelled)->count() == $order->subOrders()->count())) {
+			$this->cancelMainOrder($order);
+		}
+	}
+
+	protected function cancelMainOrder (Order $order)
 	{
 		$order->update([
-			'status' => Status::Cancelled
+			'status' => Status::Cancelled,
+			'cancelled_at' => Time::mysqlStamp()
 		]);
 	}
 

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api\Customer\Orders;
 
+use App\Exceptions\ActionNotAllowedException;
 use App\Http\Controllers\Api\ApiController;
 use App\Models\Order;
 use App\Resources\Orders\Customer\ListResource;
 use App\Resources\Orders\Customer\OrderResource;
 use App\Resources\Orders\Customer\OrderTrackingResource;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 
 class OrderController extends ApiController
 {
@@ -19,30 +19,27 @@ class OrderController extends ApiController
 
 	public function index () : JsonResponse
 	{
-		$response = responseApp();
-		$resourceCollection = ListResource::collection($this->user()->orders()->paginate($this->paginationChunk()));
-		$response->status(Response::HTTP_OK)
-			->message("Found {$resourceCollection->count()} orders.")
-			->payload($resourceCollection->response()->getData());
-		return $response->send();
+		return responseApp()->prepare(
+			ListResource::collection($this->user()->orders()->paginate($this->paginationChunk()))->response()->getData(),
+		);
 	}
 
 	public function show (Order $order) : JsonResponse
 	{
-		$response = responseApp();
-		$order = new OrderResource($order);
-		$response->status(Response::HTTP_OK)
-			->message('Order details retrieved successfully.')
-			->setValue('data', $order);
-		return $response->send();
+		if ($order->customer != null && $order->customer->is($this->customer()))
+			return responseApp()->prepare(
+				new OrderResource($order)
+			);
+		throw new ActionNotAllowedException();
 	}
 
 	public function track (Order $order) : JsonResponse
 	{
-		$response = responseApp();
-		$order = new OrderTrackingResource($order);
-		$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Tracking details retrieved successfully.')->setValue('data', $order);
-		return $response->send();
+		if ($order->customer != null && $order->customer->is($this->customer()))
+			return responseApp()->prepare(
+				new OrderTrackingResource($order)
+			);
+		throw new ActionNotAllowedException();
 	}
 
 	protected function guard ()
