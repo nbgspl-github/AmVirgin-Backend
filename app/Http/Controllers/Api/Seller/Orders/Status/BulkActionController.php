@@ -12,7 +12,6 @@ use App\Models\SubOrder;
 use BenSampo\Enum\Enum;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use Illuminate\Support\Collection;
 
 class BulkActionController extends ApiController
 {
@@ -23,7 +22,7 @@ class BulkActionController extends ApiController
 		parent::__construct();
 		$this->middleware(AUTH_SELLER);
 		$this->rules = [
-			'status' => ['bail', 'required', Rule::in(Status::getValues())]
+			'status' => ['bail', 'required', Rule::in($this->allowed())]
 		];
 		$this->handlers = config('handlers.orders.seller');
 	}
@@ -38,18 +37,30 @@ class BulkActionController extends ApiController
 		$action = $this->action();
 		$handler = $this->handler($action->value);
 		$extra = $this->validateExtra($handler->rules());
-		$failed = new Collection();
-		$request->orders()->each(function (SubOrder $order) use (&$handler, &$action, &$extra, &$failed) {
+		$collection = $request->orders()->transform(function (SubOrder $order) use (&$handler, &$action, &$extra) {
 			if (!$handler->authorize($order, $this->seller())) {
-				$failed = $failed->push([$order->id => 'This action is not allowed for this user at this time.']);
+				return [
+					'key' => $order->id,
+					'code' => Response::HTTP_FORBIDDEN,
+					'description' => 'This action is not allowed for this user at this time.'
+				];
 			} elseif (!$handler->allowed($order, $order->status, $action)) {
-				$failed = $failed->push([$order->id => 'This status is invalid/unavailable for this order at this time.']);
+				return [
+					'key' => $order->id,
+					'code' => Response::HTTP_NOT_MODIFIED,
+					'description' => 'This status is invalid/unavailable for this order at this time.'
+				];
 			} else {
 				$handler->handle($order, $action, $extra);
+				return [
+					'key' => $order->id,
+					'code' => Response::HTTP_OK,
+					'description' => 'Successful.'
+				];
 			}
 		});
 		return responseApp()->prepare(
-			['failed' => $failed],
+			$collection,
 			Response::HTTP_OK,
 			'Successfully processed all orders!'
 		);
@@ -85,6 +96,21 @@ class BulkActionController extends ApiController
 	protected function validateExtra (array $rules) : array
 	{
 		return $this->validate($rules);
+	}
+
+	/**
+	 * Enlist the actions for which bulk functionality can be invoked.
+	 * @return array
+	 */
+	protected function allowed () : array
+	{
+		return [
+			\App\Library\Enums\Orders\Status::ReadyForDispatch,
+			\App\Library\Enums\Orders\Status::PendingDispatch,
+			\App\Library\Enums\Orders\Status::OutForDelivery,
+			\App\Library\Enums\Orders\Status::Cancelled,
+			\App\Library\Enums\Orders\Status::Delivered,
+		];
 	}
 
 	protected function guard ()

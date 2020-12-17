@@ -22,7 +22,7 @@ class ActionController extends ApiController
 		parent::__construct();
 		$this->middleware(AUTH_SELLER);
 		$this->rules = [
-			'status' => ['bail', 'required', Rule::in(Status::getValues())]
+			'status' => ['bail', 'required', Rule::in($this->allowed())]
 		];
 		$this->handlers = config('handlers.orders.seller');
 	}
@@ -77,6 +77,22 @@ class ActionController extends ApiController
 	protected function validateExtra (array $rules) : array
 	{
 		return $this->validate($rules);
+	}
+
+	/**
+	 * Enlist the actions for which bulk functionality can be invoked.
+	 * @return array
+	 */
+	protected function allowed () : array
+	{
+		return [
+			\App\Library\Enums\Orders\Status::ReadyForDispatch,
+			\App\Library\Enums\Orders\Status::PendingDispatch,
+			\App\Library\Enums\Orders\Status::Dispatched,
+			\App\Library\Enums\Orders\Status::OutForDelivery,
+			\App\Library\Enums\Orders\Status::Cancelled,
+			\App\Library\Enums\Orders\Status::Delivered,
+		];
 	}
 
 	protected function guard ()
