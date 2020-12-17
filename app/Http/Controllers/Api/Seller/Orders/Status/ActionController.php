@@ -10,17 +10,12 @@ use App\Http\Controllers\Api\Seller\Orders\Status\Contracts\Action;
 use App\Library\Enums\Orders\Status;
 use App\Library\Utils\Extensions\Rule;
 use App\Models\SubOrder;
-use App\Traits\ValidatesRequest;
 use BenSampo\Enum\Enum;
 use Illuminate\Http\JsonResponse;
 
 class ActionController extends ApiController
 {
-	use ValidatesRequest;
-
 	protected array $handlers = [];
-
-	protected array $rules = [];
 
 	public function __construct ()
 	{
@@ -58,7 +53,7 @@ class ActionController extends ApiController
 	 */
 	protected function action ()
 	{
-		return Status::coerce(($this->requestValid(request(), $this->rules))['status']);
+		return Status::coerce(($this->validate($this->rules))['status']);
 	}
 
 	/**
@@ -81,7 +76,7 @@ class ActionController extends ApiController
 	 */
 	protected function validateExtra (array $rules) : array
 	{
-		return $this->requestValid(request(), $rules);
+		return $this->validate($rules);
 	}
 
 	protected function guard ()

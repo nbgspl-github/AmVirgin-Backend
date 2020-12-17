@@ -27,7 +27,12 @@ class SubListResource extends JsonResource
 			'cancel' => [
 				'allowed' => $this->cancellable(),
 			],
-			'fulfillment' => $this->when(!empty($this->dispatched_at), [
+			'fulfillment' => $this->when((
+				!empty($this->dispatched_at) &&
+				empty($this->fulfilled_at) &&
+				$this->status->isNot(Status::Delivered) &&
+				$this->status->isNot(Status::Cancelled)
+			), [
 				'expected' => $this->expected_at,
 				'shipment' => new ShipmentResource($this->shipment)
 			])
