@@ -29,7 +29,7 @@ class BulkActionController extends ApiController
 
 	/**
 	 * @param UpdateRequest $request
-	 * @return JsonResponse|void
+	 * @return JsonResponse
 	 * @throws \Exception
 	 */
 	public function handle (UpdateRequest $request) : JsonResponse
@@ -60,9 +60,7 @@ class BulkActionController extends ApiController
 			}
 		});
 		return responseApp()->prepare(
-			$collection,
-			Response::HTTP_OK,
-			'Successfully processed all orders!'
+			$collection
 		);
 	}
 
