@@ -73,7 +73,7 @@ class OverviewController extends ApiController
 		});
 		return [
 			'item' => null,
-			'rating' => $collection
+			'rating' => 0
 		];
 	}
 

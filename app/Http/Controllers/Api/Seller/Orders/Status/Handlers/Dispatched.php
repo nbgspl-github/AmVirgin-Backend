@@ -18,9 +18,9 @@ class Dispatched implements Action
 	public function rules () : array
 	{
 		return [
-			'shippingMethod' => ['bail', Rule::in(['seller', 'seller-smart'])],
-			'courierName' => ['bail', 'required_if:shippingMethod,seller', 'string', 'max:255'],
-			'airwayBillNumber' => ['bail', 'required_if:shippingMethod,seller', 'string', 'max:255'],
+			'fulfilledBy' => ['bail', Rule::in(['seller', 'amvirgin'])],
+			'courierName' => ['bail', 'required_if:fulfilledBy,seller', 'nullable', 'string', 'max:255'],
+			'airwayBillNumber' => ['bail', 'required_if:fulfilledBy,seller', 'nullable', 'string', 'max:255'],
 		];
 	}
 
@@ -51,11 +51,11 @@ class Dispatched implements Action
 
 	protected function courier (array $extra) : array
 	{
-		if ($extra['shippingMethod'] == 'seller-smart') {
+		if ($extra['fulfilledBy'] == 'amvirgin') {
 			return [
 				'courierName' => 'AmVirgin',
 				'dispatched' => Time::mysqlStamp(),
-				'shippingMethod' => $extra['shippingMethod'],
+				'fulfilled_by' => $extra['fulfilledBy'],
 			];
 		}
 		return $extra;

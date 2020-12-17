@@ -39,7 +39,8 @@ class CancellationController extends ApiController
 	protected function performCancellation (SubOrder $subOrder)
 	{
 		$subOrder->update([
-			'status' => Status::Cancelled
+			'status' => Status::Cancelled,
+			'cancelled_at' => Time::mysqlStamp()
 		]);
 		$order = $subOrder->order;
 		if ($order != null && ($order->subOrders()->where('status', Status::Cancelled)->count() == $order->subOrders()->count())) {
