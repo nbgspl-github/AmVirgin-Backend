@@ -7,7 +7,7 @@ use Illuminate\Support\Carbon;
 /**
  * Extends the base class provided by Laravel to
  * provide some boilerplate code.
- * @package App\Library\Utils\Extensions
+ * @package App\Library\Extensions
  * @property int|string $id
  * @property Carbon $created_at
  * @property Carbon $updated_at
