@@ -43,7 +43,7 @@ class TvSeriesController extends BaseController
 		$genrePayload = Genre::all();
 		$languagePayload = MediaLanguage::all()->sortBy('name')->all();
 		$serverPayload = MediaServer::all();
-		$qualityPayload = MediaQuality::retrieveAll();
+		$qualityPayload = MediaQuality::all();
 		return view('admin.tv-series.create')->
 		with('genres', $genrePayload)->
 		with('languages', $languagePayload)->
@@ -53,7 +53,7 @@ class TvSeriesController extends BaseController
 
 	public function store ()
 	{
-		$response = $this->responseApp();
+		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules('store'));
 			$trailer = Storage::disk('secured')->putFile(Directories::Trailers, request()->file('trailer'), 'public');
@@ -126,7 +126,7 @@ class TvSeriesController extends BaseController
 	public function delete ($id)
 	{
 		$tvSeries = null;
-		$response = $this->responseApp();
+		$response = responseApp();
 		try {
 			$tvSeries = Video::findOrFail($id);
 			$meta = VideoMeta::where('videoId', $tvSeries->getKey())->get();
@@ -165,7 +165,7 @@ class TvSeriesController extends BaseController
 			$genrePayload = Genre::all();
 			$languagePayload = MediaLanguage::all()->sortBy('name')->all();
 			$serverPayload = MediaServer::all();
-			$qualityPayload = MediaQuality::retrieveAll();
+			$qualityPayload = MediaQuality::all();
 			$payload = Video::findOrFail($id);
 			$response = view('admin.tv-series.edit.attributes')->
 			with('payload', $payload)->
@@ -192,7 +192,7 @@ class TvSeriesController extends BaseController
 		$response = responseWeb();
 		$video = null;
 		try {
-			$video = Video::retrieveThrows($id);
+			$video = Video::findOrFail($id);
 			$validated = $this->requestValid(request(), $this->rules('update'));
 			if (request()->has('trending')) {
 				$this->replaceTrendingItem($validated['rank']);
@@ -231,9 +231,9 @@ class TvSeriesController extends BaseController
 	{
 		$response = responseWeb();
 		try {
-			$video = Video::retrieveThrows($id);
+			$video = Video::findOrFail($id);
 			$languages = MediaLanguage::all()->sortBy('name')->all();
-			$qualities = MediaQuality::retrieveAll();
+			$qualities = MediaQuality::all();
 			$contentPayload = [];
 			$sources = $video->sources();
 			$sources = $sources->get();
@@ -273,9 +273,9 @@ class TvSeriesController extends BaseController
 
 	private function updateContent ($id)
 	{
-		$response = $this->responseApp();
+		$response = responseApp();
 		try {
-			$video = Video::retrieveThrows($id);
+			$video = Video::findOrFail($id);
 			$payload = $this->requestValid(request(), $this->rules('update')['content']);
 			$sources = isset($payload['source']) ? $payload['source'] : [];
 			$videos = isset($payload['video']) ? $payload['video'] : [];

@@ -31,7 +31,7 @@ class CartItem extends stdClass implements JsonSerializable{
 
 	public function __construct(Cart $cart, int $key){
 		$this->setKey($key);
-		$this->setProduct(Product::retrieve($this->getKey()));
+		$this->setProduct(Product::find($this->getKey()));
 		$this->setMinAllowedQuantity(1);
 		$this->setMaxAllowedQuantity($this->getCalculatedMaxAllowedQuantity());
 		$this->setCart($cart);

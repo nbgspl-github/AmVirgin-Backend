@@ -19,7 +19,7 @@ class ValueController extends ApiController
 	{
 		$response = responseApp();
 		try {
-			$attribute = Attribute::retrieveThrows($attributeId);
+			$attribute = Attribute::findOrFail($attributeId);
 			$sellerInterfaceType = $attribute->sellerInterfaceType();
 			$hasValues = $attribute->predefined();
 			if ($hasValues) {

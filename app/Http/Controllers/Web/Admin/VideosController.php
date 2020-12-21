@@ -55,7 +55,7 @@ class VideosController extends BaseController
 		$genrePayload = Genre::all();
 		$languagePayload = MediaLanguage::all()->sortBy('name')->all();
 		$serverPayload = MediaServer::all();
-		$qualityPayload = MediaQuality::retrieveAll();
+		$qualityPayload = MediaQuality::all();
 		return view('admin.videos.create')->
 		with('genres', $genrePayload)->
 		with('languages', $languagePayload)->
@@ -65,7 +65,7 @@ class VideosController extends BaseController
 
 	public function store ()
 	{
-		$response = $this->responseApp();
+		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->ruleSet['store']);
 			$trailer = Storage::disk('secured')->putFile(Directories::Trailers, request()->file('trailer'), 'public');
@@ -203,7 +203,7 @@ class VideosController extends BaseController
 	public function delete ($id)
 	{
 		$video = null;
-		$response = $this->responseApp();
+		$response = responseApp();
 		try {
 			$video = Video::findOrFail($id);
 			$meta = VideoMeta::where('videoId', $video->getKey())->get();
@@ -242,7 +242,7 @@ class VideosController extends BaseController
 			$genrePayload = Genre::all();
 			$languagePayload = MediaLanguage::all()->sortBy('name')->all();
 			$serverPayload = MediaServer::all();
-			$qualityPayload = MediaQuality::retrieveAll();
+			$qualityPayload = MediaQuality::all();
 			$payload = Video::findOrFail($id);
 			$response = view('admin.videos.edit.attributes')->
 			with('payload', $payload)->
@@ -267,7 +267,7 @@ class VideosController extends BaseController
 		$response = responseWeb();
 		$video = null;
 		try {
-			$video = Video::retrieveThrows($id);
+			$video = Video::findOrFail($id);
 			$validated = $this->requestValid(request(), $this->ruleSet['update']);
 			if (request()->has('trending')) {
 				$this->replaceTrendingItem($validated['rank']);
@@ -307,12 +307,12 @@ class VideosController extends BaseController
 		$response = responseWeb();
 		try {
 			$languagePayload = MediaLanguage::all()->sortBy('name')->all();
-			$qualityPayload = MediaQuality::retrieveAll();
+			$qualityPayload = MediaQuality::all();
 			$payloadChosen = new stdClass();
 			$payloadChosen->season = null;
 			$payloadChosen->episode = null;
 			$payloadChosen->languageId = null;
-			$payload = Video::retrieveThrows($id);
+			$payload = Video::findOrFail($id);
 			$payload = $payload->sources();
 			dd($payload->first());
 			$content = [];

@@ -6,8 +6,6 @@ use App\Library\Enums\Orders\Payments\Methods;
 use App\Library\Enums\Orders\Status;
 use App\Models\Auth\Customer;
 use App\Traits\DynamicAttributeNamedMethods;
-use App\Traits\RetrieveResource;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -21,9 +19,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property ?Address $billingAddress
  * @property Methods $paymentMode
  */
-class Order extends Model
+class Order extends \App\Library\Extensions\ModelExtended
 {
-	use DynamicAttributeNamedMethods, RetrieveResource;
+	use DynamicAttributeNamedMethods;
 
 	protected $guarded = ['id'];
 	protected $casts = ['status' => Status::class, 'paymentMode' => Methods::class];

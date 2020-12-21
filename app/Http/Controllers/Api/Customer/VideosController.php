@@ -30,7 +30,7 @@ class VideosController extends ApiController
 	{
 		$response = responseApp();
 		try {
-			$video = Video::retrieveThrows($id);
+			$video = Video::findOrFail($id);
 			$payload = new VideoResource($video);
 			$payload = $payload->jsonSerialize();
 			$payload['content'] = $payload['recommended'] = [];

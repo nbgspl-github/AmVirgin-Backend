@@ -2,12 +2,14 @@
 
 namespace App\Traits;
 
-trait ActiveStatus{
+trait ActiveStatus
+{
 	/**
 	 * Gets whether a user is active and is allowed to access services.
 	 * @return bool
 	 */
-	public function isActive(){
+	public function isActive () : bool
+	{
 		return $this->active;
 	}
 
@@ -16,7 +18,8 @@ trait ActiveStatus{
 	 * @param bool $active
 	 * @return $this
 	 */
-	public function setActive(bool $active){
+	public function setActive (bool $active)
+	{
 		$this->active = $active;
 		return $this;
 	}

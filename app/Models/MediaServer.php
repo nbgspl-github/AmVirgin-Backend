@@ -2,14 +2,10 @@
 
 namespace App\Models;
 
-use App\Traits\RetrieveCollection;
-use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class MediaServer extends Model {
-	use RetrieveCollection;
-	use RetrieveResource;
-
+class MediaServer extends Model
+{
 	protected $table = 'media-servers';
 
 	protected $fillable = [
@@ -27,7 +23,8 @@ class MediaServer extends Model {
 	/**
 	 * @return string
 	 */
-	public function getName(): string {
+	public function getName () : string
+	{
 		return $this->name;
 	}
 
@@ -35,7 +32,8 @@ class MediaServer extends Model {
 	 * @param string $name
 	 * @return MediaServer
 	 */
-	public function setName(string $name): MediaServer{
+	public function setName (string $name) : MediaServer
+	{
 		$this->name = $name;
 		return $this;
 	}
@@ -43,7 +41,8 @@ class MediaServer extends Model {
 	/**
 	 * @return string
 	 */
-	public function getIpAddress(): ?string{
+	public function getIpAddress () : ?string
+	{
 		return $this->ipAddress;
 	}
 
@@ -51,7 +50,8 @@ class MediaServer extends Model {
 	 * @param string $ipAddress
 	 * @return MediaServer
 	 */
-	public function setIpAddress(string $ipAddress): MediaServer{
+	public function setIpAddress (string $ipAddress) : MediaServer
+	{
 		$this->ipAddress = $ipAddress;
 		return $this;
 	}
@@ -59,7 +59,8 @@ class MediaServer extends Model {
 	/**
 	 * @return bool
 	 */
-	public function getUsesAuth(): bool{
+	public function getUsesAuth () : bool
+	{
 		return $this->useAuth;
 	}
 
@@ -67,7 +68,8 @@ class MediaServer extends Model {
 	 * @param bool $useAuth
 	 * @return MediaServer
 	 */
-	public function setUsesAuth(bool $useAuth): MediaServer{
+	public function setUsesAuth (bool $useAuth) : MediaServer
+	{
 		$this->useAuth = $useAuth;
 		return $this;
 	}
@@ -75,7 +77,8 @@ class MediaServer extends Model {
 	/**
 	 * @return string|null
 	 */
-	public function getBasePath(): ?string{
+	public function getBasePath () : ?string
+	{
 		return $this->basePath;
 	}
 
@@ -83,7 +86,8 @@ class MediaServer extends Model {
 	 * @param string|null $basePath
 	 * @return MediaServer
 	 */
-	public function setBasePath(?string $basePath): MediaServer{
+	public function setBasePath (?string $basePath) : MediaServer
+	{
 		$this->basePath = $basePath;
 		return $this;
 	}

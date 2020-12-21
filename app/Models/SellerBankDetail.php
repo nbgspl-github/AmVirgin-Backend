@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use App\Classes\Eloquent\ModelExtended;
 use App\Library\Enums\Common\Directories;
 use App\Library\Utils\Uploads;
 use App\Queries\Seller\BankDetailQuery;
 use App\Traits\DynamicAttributeNamedMethods;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class SellerBankDetail extends ModelExtended{
+class SellerBankDetail extends \Illuminate\Database\Eloquent\Model
+{
 	use DynamicAttributeNamedMethods;
 
 	protected $fillable = [
@@ -45,31 +45,35 @@ class SellerBankDetail extends ModelExtended{
 		'PhoneBill' => 'pbone-bill',
 	];
 
-	public function setAddressProofDocumentAttribute($value)
+	public function setAddressProofDocumentAttribute ($value)
 	{
 		$this->attributes['addressProofDocument'] = Uploads::access()->putFile(Directories::SellerDocuments, $value);
 		return $this->attributes['addressProofDocument'];
 	}
 
-	public function setCancelledChequeAttribute($value)
+	public function setCancelledChequeAttribute ($value)
 	{
 		$this->attributes['cancelledCheque'] = Uploads::access()->putFile(Directories::SellerDocuments, $value);
 		return $this->attributes['cancelledCheque'];
 	}
 
-	public function state(): BelongsTo{
+	public function state () : BelongsTo
+	{
 		return $this->belongsTo(State::class, 'stateId');
 	}
 
-	public function city(): BelongsTo{
+	public function city () : BelongsTo
+	{
 		return $this->belongsTo(City::class, 'cityId');
 	}
 
-	public function country(){
+	public function country ()
+	{
 		return Country::where('initials', 'IN')->first();
 	}
 
-	public static function startQuery(): BankDetailQuery{
+	public static function startQuery () : BankDetailQuery
+	{
 		return BankDetailQuery::begin();
 	}
 }

@@ -24,9 +24,9 @@ class CategoryResource extends AbstractBuiltInResource{
 	}
 
 	public function descendants(int $categoryId): array{
-		$category = Category::retrieve($categoryId);
+		$category = Category::find($categoryId);
 		$descendants = $category->descendants()->where('type', 'vertical');
-		return $descendants->transform(function ($item){
+		return $descendants->transform(function ($item) {
 			return [
 				'key' => $item['id'],
 				'name' => $item['name'],

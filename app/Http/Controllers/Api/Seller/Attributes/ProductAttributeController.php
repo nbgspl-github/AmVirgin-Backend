@@ -18,7 +18,7 @@ class ProductAttributeController extends ApiController
 	{
 		$response = responseApp();
 		try {
-			$productAttribute = ProductAttribute::retrieveThrows($id);
+			$productAttribute = ProductAttribute::findOrFail($id);
 			$productAttribute->delete();
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Product attribute deleted successfully.');
 		} catch (ModelNotFoundException $exception) {

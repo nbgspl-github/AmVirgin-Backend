@@ -3,11 +3,10 @@
 namespace App\Models;
 
 use App\Traits\FluentConstructor;
-use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class SellerOtp extends Model {
-	use RetrieveResource;
+class SellerOtp extends Model
+{
 	use FluentConstructor;
 
 	protected $table = 'otp-sellers';
@@ -18,7 +17,8 @@ class SellerOtp extends Model {
 	/**
 	 * @return string
 	 */
-	public function getMobile(): string {
+	public function getMobile () : string
+	{
 		return $this->mobile;
 	}
 
@@ -26,7 +26,8 @@ class SellerOtp extends Model {
 	 * @param string $mobile
 	 * @return CustomerOtp
 	 */
-	public function setMobile(string $mobile): SellerOtp{
+	public function setMobile (string $mobile) : SellerOtp
+	{
 		$this->mobile = $mobile;
 		return $this;
 	}
@@ -34,7 +35,8 @@ class SellerOtp extends Model {
 	/**
 	 * @return string
 	 */
-	public function getOtp(): string{
+	public function getOtp () : string
+	{
 		return $this->otp;
 	}
 
@@ -42,7 +44,8 @@ class SellerOtp extends Model {
 	 * @param string $otp
 	 * @return CustomerOtp
 	 */
-	public function setOtp(string $otp): SellerOtp{
+	public function setOtp (string $otp) : SellerOtp
+	{
 		$this->otp = $otp;
 		return $this;
 	}

@@ -22,7 +22,7 @@ class ServersController extends BaseController
 
 	public function index ()
 	{
-		$payload = MediaServer::retrieveAll();
+		$payload = MediaServer::all();
 		return view('admin.servers.index')->with('servers', $payload);
 	}
 
@@ -34,7 +34,7 @@ class ServersController extends BaseController
 	public function edit ($id)
 	{
 		try {
-			$payload = MediaServer::retrieveThrows($id);
+			$payload = MediaServer::findOrFail($id);
 			return view('admin.servers.edit')->with('server', $payload);
 		} catch (ModelNotFoundException $exception) {
 			return responseWeb()->route('admin.servers.index')->error($exception->getMessage())->send();
@@ -61,7 +61,7 @@ class ServersController extends BaseController
 	{
 		$response = responseWeb();
 		try {
-			$server = MediaServer::retrieveThrows($id);
+			$server = MediaServer::findOrFail($id);
 			$payload = $this->requestValid(request(), $this->ruleSet['update']);
 			$server->update($payload);
 			$response->success(__('strings.server.store.success'))->route('admin.servers.index');

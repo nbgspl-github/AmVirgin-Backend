@@ -21,7 +21,7 @@ class MediaController extends VideosBase
 	{
 		$response = responseWeb();
 		try {
-			$video = Video::retrieveThrows($id);
+			$video = Video::findOrFail($id);
 			$response = view('admin.videos.media.edit')->with('payload', $video);
 		} catch (ModelNotFoundException $exception) {
 			$response->route('admin.videos.index')->error('Could not find video for that key.');
@@ -37,9 +37,9 @@ class MediaController extends VideosBase
 
 	public function update ($id)
 	{
-		$response = $this->responseApp();
+		$response = responseApp();
 		try {
-			$video = Video::retrieveThrows($id);
+			$video = Video::findOrFail($id);
 			$this->requestValid(request(), $this->rules('update'));
 			if (request()->hasFile('poster')) {
 				if (Uploads::access()->exists($video->getPoster())) {

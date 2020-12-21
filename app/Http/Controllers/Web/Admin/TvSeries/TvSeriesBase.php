@@ -70,7 +70,7 @@ class TvSeriesBase extends BaseController
 		$genrePayload = Genre::all();
 		$languagePayload = MediaLanguage::all()->sortBy('name')->all();
 		$serverPayload = MediaServer::all();
-		$qualityPayload = MediaQuality::retrieveAll();
+		$qualityPayload = MediaQuality::all();
 		$sections = PageSection::where('type', PageSectionType::Entertainment)->get();
 		return view('admin.tv-series.create')->
 		with('genres', $genrePayload)->
@@ -82,7 +82,7 @@ class TvSeriesBase extends BaseController
 
 	public function store ()
 	{
-		$response = $this->responseApp();
+		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules('store'));
 			if (request()->has('trending')) {
@@ -136,7 +136,7 @@ class TvSeriesBase extends BaseController
 	public function delete ($id, $subId = null)
 	{
 		$tvSeries = null;
-		$response = $this->responseApp();
+		$response = responseApp();
 		try {
 			$tvSeries = Video::findOrFail($id);
 			$meta = VideoMeta::where('videoId', $tvSeries->getKey())->get();

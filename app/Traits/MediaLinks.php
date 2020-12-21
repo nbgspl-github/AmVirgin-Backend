@@ -21,7 +21,7 @@ trait MediaLinks
 	 * @param ?string $relativePath
 	 * @return ?string
 	 */
-	protected function retrieveMedia (?string $relativePath)
+	protected function retrieveMedia (?string $relativePath) : ?string
 	{
 		return Uploads::existsUrl($relativePath);
 	}

@@ -29,7 +29,7 @@ class AttributesController extends TvSeriesBase
 			$genrePayload = Genre::all();
 			$languagePayload = MediaLanguage::all()->sortBy('name')->all();
 			$serverPayload = MediaServer::all();
-			$qualityPayload = MediaQuality::retrieveAll();
+			$qualityPayload = MediaQuality::all();
 			$payload = Video::findOrFail($id);
 			$response = view('admin.tv-series.attributes.edit')->
 			with('payload', $payload)->
@@ -54,7 +54,7 @@ class AttributesController extends TvSeriesBase
 		$response = responseWeb();
 		$video = null;
 		try {
-			$video = Video::retrieveThrows($id);
+			$video = Video::findOrFail($id);
 			$validated = $this->requestValid(request(), $this->rules('update'));
 			if (request()->has('trending')) {
 				$this->replaceTrending($validated['rank']);

@@ -61,7 +61,7 @@ class VideosBase extends BaseController
 		$genres = Genre::all();
 		$languages = MediaLanguage::all()->sortBy('name')->all();
 		$servers = MediaServer::all();
-		$quality = MediaQuality::retrieveAll();
+		$quality = MediaQuality::all();
 		$sections = PageSection::where('type', PageSectionType::Entertainment)->get();
 		return view('admin.videos.create')->
 		with('genres', $genres)->
@@ -86,7 +86,7 @@ class VideosBase extends BaseController
 
 	public function store ()
 	{
-		$response = $this->responseApp();
+		$response = responseApp();
 		try {
 			$payload = $this->requestValid(request(), $this->rules('store'));
 			$video = Video::create([
@@ -124,7 +124,7 @@ class VideosBase extends BaseController
 	public function delete ($id, $subId = null)
 	{
 		$tvSeries = null;
-		$response = $this->responseApp();
+		$response = responseApp();
 		try {
 			$tvSeries = Video::findOrFail($id);
 			$meta = VideoMeta::where('videoId', $tvSeries->getKey())->get();

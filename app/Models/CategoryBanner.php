@@ -1,12 +1,12 @@
 <?php
-namespace App\Models;
-use App\Traits\GenerateUrls;
-use App\Traits\RetrieveResource;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class CategoryBanner extends Model {
-	use RetrieveResource;
+namespace App\Models;
+
+use App\Traits\GenerateUrls;
+use Illuminate\Database\Eloquent\Model;
+
+class CategoryBanner extends Model
+{
 	use GenerateUrls;
 
 	protected $table = 'category-banner';

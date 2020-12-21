@@ -80,7 +80,7 @@ class CategoriesBanner extends BaseController
 
 		$response = null;
 		try {
-			$category = CategoryBanner::retrieveThrows($id);
+			$category = CategoryBanner::findOrFail($id);
 			$images = [];
 			//update Directory new image
 			if (count($request->file('image')) > 0) {
@@ -125,7 +125,7 @@ class CategoriesBanner extends BaseController
 		$categories = CategoryBanner::whereid($id)->first();
 		try {
 
-			$category = CategoryBanner::retrieveThrows($id);
+			$category = CategoryBanner::findOrFail($id);
 			if (!empty($categories->image)) {
 				$images = explode(",", $categories->image);
 				$image_path = [];

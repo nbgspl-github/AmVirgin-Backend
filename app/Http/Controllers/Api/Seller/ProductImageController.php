@@ -12,9 +12,9 @@ class ProductImageController extends ApiController
 {
 	public function delete ($id)
 	{
-		$response = $this->responseApp();
+		$response = responseApp();
 		try {
-			$image = ProductImage::retrieveThrows($id);
+			$image = ProductImage::findOrFail($id);
 			Uploads::deleteIfExists($image->path);
 			$image->delete();
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Product image deleted successfully.');

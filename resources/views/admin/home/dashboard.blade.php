@@ -207,26 +207,26 @@
 
 @section('javascript')
 	<script>
-		let token = null;
-		$(document).ready(() => {
-			anime.timeline({loop: false}).add({
-				targets: ['.animatableX'],
-				translateX: [-40, 0],
-				translateZ: 0,
-				opacity: [0, 1],
-				easing: "easeOutExpo",
-				duration: 1000,
-				delay: (el, i) => 100 * i
-			});
-			anime.timeline({loop: false}).add({
-				targets: ['.animatable'],
-				translateY: [-40, 0],
-				translateZ: 0,
-				opacity: [0, 1],
-				easing: "easeOutExpo",
-				duration: 2000,
-				delay: (el, i) => 200 * i
-			});
-		});
+		// let token = null;
+		// $(document).ready(() => {
+		// 	anime.timeline({loop: false}).add({
+		// 		targets: ['.animatableX'],
+		// 		translateX: [-40, 0],
+		// 		translateZ: 0,
+		// 		opacity: [0, 1],
+		// 		easing: "easeOutExpo",
+		// 		duration: 1000,
+		// 		delay: (el, i) => 100 * i
+		// 	});
+		// 	anime.timeline({loop: false}).add({
+		// 		targets: ['.animatable'],
+		// 		translateY: [-40, 0],
+		// 		translateZ: 0,
+		// 		opacity: [0, 1],
+		// 		easing: "easeOutExpo",
+		// 		duration: 2000,
+		// 		delay: (el, i) => 200 * i
+		// 	});
+		// });
 	</script>
 @stop

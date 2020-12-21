@@ -3,13 +3,10 @@
 namespace App\Models;
 
 use App\Traits\FluentConstructor;
-use App\Traits\RetrieveCollection;
-use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class MediaQuality extends Model {
-	use RetrieveResource;
-	use RetrieveCollection;
+class MediaQuality extends Model
+{
 	use FluentConstructor;
 
 	protected $table = 'media-qualities';
@@ -17,7 +14,8 @@ class MediaQuality extends Model {
 	/**
 	 * @return string
 	 */
-	public function getName(): string {
+	public function getName () : string
+	{
 		return $this->name;
 	}
 
@@ -25,7 +23,8 @@ class MediaQuality extends Model {
 	 * @param string $name
 	 * @return MediaQuality
 	 */
-	public function setName(string $name): MediaQuality{
+	public function setName (string $name) : MediaQuality
+	{
 		$this->name = $name;
 		return $this;
 	}
@@ -33,7 +32,8 @@ class MediaQuality extends Model {
 	/**
 	 * @return int|null
 	 */
-	public function getMinimumRequiredBandwidth(): ?int{
+	public function getMinimumRequiredBandwidth () : ?int
+	{
 		return $this->minimumRequiredBandwidth;
 	}
 
@@ -41,7 +41,8 @@ class MediaQuality extends Model {
 	 * @param int|null $minimumRequiredBandwidth
 	 * @return MediaQuality
 	 */
-	public function setMinimumRequiredBandwidth(?int $minimumRequiredBandwidth): MediaQuality{
+	public function setMinimumRequiredBandwidth (?int $minimumRequiredBandwidth) : MediaQuality
+	{
 		$this->minimumRequiredBandwidth = $minimumRequiredBandwidth;
 		return $this;
 	}

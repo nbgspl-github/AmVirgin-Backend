@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Traits\DynamicAttributeNamedMethods;
-use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -19,24 +18,24 @@ use Illuminate\Support\Carbon;
  */
 class OrderItem extends Model
 {
-	use DynamicAttributeNamedMethods, RetrieveResource;
+	use DynamicAttributeNamedMethods;
 
 	protected $guarded = ['id'];
 	protected $casts = ['options' => 'array', 'returnable' => 'bool'];
 	protected $dates = ['returnValidUntil'];
 
 
-	public function product (): \Illuminate\Database\Eloquent\Relations\HasOne
+	public function product () : \Illuminate\Database\Eloquent\Relations\HasOne
 	{
 		return $this->hasOne(Product::class, 'id', 'productId')->with('images');
 	}
 
-	public function returns (): HasMany
+	public function returns () : HasMany
 	{
 		return $this->hasMany(Returns::class);
 	}
 
-	public function subOrder (): BelongsTo
+	public function subOrder () : BelongsTo
 	{
 		return $this->belongsTo(SubOrder::class, 'subOrderId');
 	}

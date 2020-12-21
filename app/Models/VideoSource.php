@@ -4,13 +4,12 @@ namespace App\Models;
 
 use App\Traits\ActiveStatus;
 use App\Traits\FluentConstructor;
-use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class VideoSource extends Model {
+class VideoSource extends Model
+{
 	use ActiveStatus;
-	use RetrieveResource;
 	use FluentConstructor;
 
 	protected $table = 'video-sources';
@@ -38,7 +37,8 @@ class VideoSource extends Model {
 	/**
 	 * @return string
 	 */
-	public function getTitle(): string {
+	public function getTitle () : string
+	{
 		return $this->title;
 	}
 
@@ -46,7 +46,8 @@ class VideoSource extends Model {
 	 * @param string $title
 	 * @return VideoSource
 	 */
-	public function setTitle(string $title): VideoSource{
+	public function setTitle (string $title) : VideoSource
+	{
 		$this->title = $title;
 		return $this;
 	}
@@ -54,7 +55,8 @@ class VideoSource extends Model {
 	/**
 	 * @return string
 	 */
-	public function getDescription(): string{
+	public function getDescription () : string
+	{
 		return $this->description;
 	}
 
@@ -62,7 +64,8 @@ class VideoSource extends Model {
 	 * @param string $description
 	 * @return VideoSource
 	 */
-	public function setDescription(string $description): VideoSource{
+	public function setDescription (string $description) : VideoSource
+	{
 		$this->description = $description;
 		return $this;
 	}
@@ -70,7 +73,8 @@ class VideoSource extends Model {
 	/**
 	 * @return string
 	 */
-	public function getDuration(): string{
+	public function getDuration () : string
+	{
 		return $this->duration;
 	}
 
@@ -78,7 +82,8 @@ class VideoSource extends Model {
 	 * @param string $duration
 	 * @return VideoSource
 	 */
-	public function setDuration(string $duration): VideoSource{
+	public function setDuration (string $duration) : VideoSource
+	{
 		$this->duration = $duration;
 		return $this;
 	}
@@ -86,7 +91,8 @@ class VideoSource extends Model {
 	/**
 	 * @return int
 	 */
-	public function getVideoId(): int{
+	public function getVideoId () : int
+	{
 		return $this->videoId;
 	}
 
@@ -94,7 +100,8 @@ class VideoSource extends Model {
 	 * @param int $videoId
 	 * @return VideoSource
 	 */
-	public function setVideoId(int $videoId): VideoSource{
+	public function setVideoId (int $videoId) : VideoSource
+	{
 		$this->videoId = $videoId;
 		return $this;
 	}
@@ -102,7 +109,8 @@ class VideoSource extends Model {
 	/**
 	 * @return int|null
 	 */
-	public function getSeason(): ?int{
+	public function getSeason () : ?int
+	{
 		return $this->season;
 	}
 
@@ -110,7 +118,8 @@ class VideoSource extends Model {
 	 * @param int $seasonIndex
 	 * @return VideoSource
 	 */
-	public function setSeason(int $season): VideoSource{
+	public function setSeason (int $season) : VideoSource
+	{
 		$this->season = $season;
 		return $this;
 	}
@@ -118,7 +127,8 @@ class VideoSource extends Model {
 	/**
 	 * @return int
 	 */
-	public function getSortingIndex(): int{
+	public function getSortingIndex () : int
+	{
 		return $this->sortingIndex;
 	}
 
@@ -126,7 +136,8 @@ class VideoSource extends Model {
 	 * @param int $sortingIndex
 	 * @return VideoSource
 	 */
-	public function setSortingIndex(int $sortingIndex): VideoSource{
+	public function setSortingIndex (int $sortingIndex) : VideoSource
+	{
 		$this->sortingIndex = $sortingIndex;
 		return $this;
 	}
@@ -134,7 +145,8 @@ class VideoSource extends Model {
 	/**
 	 * @return int|null
 	 */
-	public function getEpisode(): ?int{
+	public function getEpisode () : ?int
+	{
 		return $this->episode;
 	}
 
@@ -142,7 +154,8 @@ class VideoSource extends Model {
 	 * @param int $episode
 	 * @return VideoSource
 	 */
-	public function setEpisode(int $episode): VideoSource{
+	public function setEpisode (int $episode) : VideoSource
+	{
 		$this->episode = $episode;
 		return $this;
 	}
@@ -150,7 +163,8 @@ class VideoSource extends Model {
 	/**
 	 * @return int
 	 */
-	public function getHits(): int{
+	public function getHits () : int
+	{
 		return $this->hits;
 	}
 
@@ -158,7 +172,8 @@ class VideoSource extends Model {
 	 * @param int $hits
 	 * @return VideoSource
 	 */
-	public function setHits(int $hits): VideoSource{
+	public function setHits (int $hits) : VideoSource
+	{
 		$this->hits = $hits;
 		return $this;
 	}
@@ -166,7 +181,8 @@ class VideoSource extends Model {
 	/**
 	 * @return string|null
 	 */
-	public function getFile(): ?string{
+	public function getFile () : ?string
+	{
 		return $this->file;
 	}
 
@@ -174,7 +190,8 @@ class VideoSource extends Model {
 	 * @param string $file
 	 * @return VideoSource
 	 */
-	public function setFile(string $file): VideoSource{
+	public function setFile (string $file) : VideoSource
+	{
 		$this->file = $file;
 		return $this;
 	}
@@ -183,7 +200,8 @@ class VideoSource extends Model {
 	 * @param string $file
 	 * @return VideoSource
 	 */
-	public function setSubtitle(string $file): VideoSource{
+	public function setSubtitle (string $file) : VideoSource
+	{
 		$this->subtitle = $file;
 		return $this;
 	}
@@ -191,21 +209,24 @@ class VideoSource extends Model {
 	/**
 	 * @return string|null
 	 */
-	public function getSubtitle(){
+	public function getSubtitle ()
+	{
 		return $this->subtitle;
 	}
 
 	/**
 	 * @return BelongsTo
 	 */
-	public function language(){
+	public function language ()
+	{
 		return $this->belongsTo('App\Models\MediaLanguage', 'mediaLanguageId');
 	}
 
 	/**
 	 * @return BelongsTo
 	 */
-	public function mediaQuality(){
+	public function mediaQuality ()
+	{
 		return $this->belongsTo('App\Models\MediaQuality', 'mediaQualityId');
 	}
 }

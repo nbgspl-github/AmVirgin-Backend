@@ -290,7 +290,7 @@ class HomePageController extends BaseController
 	{
 		$response = responseApp();
 		try {
-			$product = Product::retrieveThrows($id);
+			$product = Product::findOrFail($id);
 			$seller = $product->seller;
 			$category = $product->category;
 			if ($seller == null) {

@@ -92,7 +92,7 @@ class QuoteController extends ApiController
 		$cart = null;
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['add']);
-			$cart = Cart::retrieveThrows($validated->sessionId);
+			$cart = Cart::findOrFail($validated->sessionId);
 			$cartItem = new CartItem($cart, $validated->key);
 			$cart->addItem($cartItem);
 			$cart->save();
@@ -108,7 +108,7 @@ class QuoteController extends ApiController
 				'sessionId' => $validated->sessionId,
 				'status' => Status::Pending,
 			]);
-			$cart = Cart::retrieve($validated->sessionId);
+			$cart = Cart::find($validated->sessionId);
 			$cartItem = new CartItem($cart, $validated->key);
 			$cart->addItem($cartItem);
 			$cart->save();
@@ -128,7 +128,7 @@ class QuoteController extends ApiController
 		$validated = null;
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['retrieve']);
-			$cart = Cart::retrieveThrows($validated->sessionId);
+			$cart = Cart::findOrFail($validated->sessionId);
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Cart retrieved successfully.')->setValue('data', $cart->render());
 		} catch (CartAlreadySubmittedException $exception) {
 			$response->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message($exception->getMessage())->setValue('data');
@@ -150,7 +150,7 @@ class QuoteController extends ApiController
 		$cart = null;
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['update']);
-			$cart = Cart::retrieveThrows($validated->sessionId);
+			$cart = Cart::findOrFail($validated->sessionId);
 			$cartItem = new CartItem($cart, $validated->key);
 			$cartItem->setQuantity($validated->quantity);
 			$cart->updateItem($cartItem);
@@ -180,7 +180,7 @@ class QuoteController extends ApiController
 		$cart = null;
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['remove']);
-			$cart = Cart::retrieveThrows($validated->sessionId);
+			$cart = Cart::findOrFail($validated->sessionId);
 			$cartItem = new CartItem($cart, $validated->key);
 			$cart->removeItem($cartItem);
 			$cart->save();
@@ -207,7 +207,7 @@ class QuoteController extends ApiController
 		$cart = null;
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['destroy']);
-			$cart = Cart::retrieveThrows($validated->sessionId);
+			$cart = Cart::findOrFail($validated->sessionId);
 			$cartItem = new CartItem($cart, $validated->key);
 			$cart->destroyItem($cartItem);
 			$cart->save();
@@ -240,7 +240,7 @@ class QuoteController extends ApiController
 			])->first();
 			if ($wishlistItem == null) {
 				try {
-					$cart = Cart::retrieveThrows($validated->sessionId);
+					$cart = Cart::findOrFail($validated->sessionId);
 					$cartItem = new CartItem($cart, $productId);
 					if ($cart->contains($cartItem)) {
 						CustomerWishlist::query()->create([
@@ -280,7 +280,7 @@ class QuoteController extends ApiController
 			 * @var $order Order
 			 */
 			$validated = (object)$this->requestValid(request(), $this->rules['checkout']);
-			$cart = Cart::retrieveThrows($validated->sessionId);
+			$cart = Cart::findOrFail($validated->sessionId);
 			$transaction = $this->createNewTransaction($cart);
 			$response->status(\Illuminate\Http\Response::HTTP_OK)
 				->message('We\'ve prepared your order for checkout.')
@@ -309,7 +309,7 @@ class QuoteController extends ApiController
 			 * @var $transaction Transaction
 			 */
 			$validated = (object)$this->requestValid(request(), $this->rules['submit']);
-			$cart = Cart::retrieveThrows($validated->sessionId);
+			$cart = Cart::findOrFail($validated->sessionId);
 			$cart->customerId = $this->guard()->id();
 			$cart->addressId = $validated->addressId;
 			$cart->billingAddressId = $validated->billingAddressId ?? $validated->addressId;

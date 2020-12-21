@@ -14,7 +14,7 @@ class ProductEditResource extends JsonResource {
 	}
 
 	public function toArray($request) {
-		$category = Category::retrieve($this->categoryId);
+		$category = Category::find($this->categoryId);
 		$attributes = $this->attributes;
 		$distinctIds = $attributes->unique('attributeId')->values();
 		$distinctIds->transform(function ($id) {
@@ -26,7 +26,7 @@ class ProductEditResource extends JsonResource {
 					'value' => $value->value,
 				];
 			});
-			$attribute = Attribute::retrieve($id->attributeId);
+			$attribute = Attribute::find($id->attributeId);
 			return [
 				'key' => $attribute->id,
 				'name' => $attribute->name,

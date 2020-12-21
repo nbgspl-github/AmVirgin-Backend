@@ -13,13 +13,10 @@ use App\Models\SellerPayment;
 use App\Models\State;
 use App\Models\SubOrder;
 use App\Traits\ActiveStatus;
-use App\Traits\BroadcastPushNotifications;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\FluentConstructor;
 use App\Traits\JWTAuthDefaultSetup;
 use App\Traits\OtpVerificationSupport;
-use App\Traits\RetrieveCollection;
-use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -29,7 +26,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Seller extends Authenticatable implements JWTSubject
 {
-	use Notifiable, BroadcastPushNotifications, FluentConstructor, ActiveStatus, RetrieveResource, RetrieveCollection, OtpVerificationSupport, JWTAuthDefaultSetup, DynamicAttributeNamedMethods;
+	use Notifiable, FluentConstructor, ActiveStatus, OtpVerificationSupport, JWTAuthDefaultSetup, DynamicAttributeNamedMethods;
 
 	protected $fillable = [
 		'name',

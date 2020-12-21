@@ -3,14 +3,10 @@
 namespace App\Models;
 
 use App\Traits\FluentConstructor;
-use App\Traits\RetrieveCollection;
-use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
 class Genre extends Model
 {
-	use RetrieveResource;
-	use RetrieveCollection;
 	use FluentConstructor;
 
 	protected $fillable = [

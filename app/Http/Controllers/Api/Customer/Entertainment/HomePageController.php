@@ -105,7 +105,7 @@ class HomePageController extends ApiController
 	{
 		$response = responseApp();
 		try {
-			$pageSection = PageSection::retrieve($id);
+			$pageSection = PageSection::find($id);
 			if (Str::equals($pageSection->type, PageSectionType::Entertainment)) {
 				$contents = Video::startQuery()->displayable()->section($pageSection->id)->take($pageSection->visibleItemCount)->get();
 			} else {

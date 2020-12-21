@@ -51,7 +51,7 @@ class AuthController extends BaseAuthController
 		} else {
 			try {
 
-				$seller = Seller::retrieveThrows($this->guard()->id());
+				$seller = Seller::findOrFail($this->guard()->id());
 
 				if ((Hash::check(request('old_password'), $seller->password)) == false) {
 

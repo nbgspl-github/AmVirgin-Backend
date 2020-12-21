@@ -39,7 +39,7 @@ class CustomerWishlistController extends AppController
 	{
 		$wishList = CustomerWishlist::where('customerId', $this->guard()->id())->get();
 		$wishList->transform(function (CustomerWishlist $item) {
-			return new CatalogListResource(Product::retrieve($item->productId));
+			return new CatalogListResource(Product::find($item->productId));
 		});
 		return responseApp()->status(\Illuminate\Http\Response::HTTP_OK)->setValue('data', $wishList)->message(function () use ($wishList) {
 			return sprintf('Found %d items in the wishlist.', $wishList->count());
@@ -60,7 +60,7 @@ class CustomerWishlistController extends AppController
 			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
 		} catch (ModelNotFoundException $exception) {
 			try {
-				Product::retrieveThrows($productId);
+				Product::findOrFail($productId);
 				CustomerWishlist::create([
 					'customerId' => $this->guard()->id(),
 					'productId' => $productId,
@@ -107,7 +107,7 @@ class CustomerWishlistController extends AppController
 				['productId', $productId],
 			])->firstOrFail();
 			try {
-				$cart = Cart::retrieveThrows($validated->sessionId);
+				$cart = Cart::findOrFail($validated->sessionId);
 				$cartItem = new CartItem($cart, $productId);
 				if (!$cart->contains($cartItem)) {
 					$wishlistItem->delete();
@@ -122,7 +122,7 @@ class CustomerWishlistController extends AppController
 					'sessionId' => $validated->sessionId,
 					'status' => Status::Pending,
 				]);
-				$cart = Cart::retrieveThrows($validated->sessionId);
+				$cart = Cart::findOrFail($validated->sessionId);
 				$cartItem = new CartItem($cart, $productId);
 				$wishlistItem->delete();
 				$cart->addItem($cartItem);

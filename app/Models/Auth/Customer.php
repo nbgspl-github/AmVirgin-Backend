@@ -7,15 +7,12 @@ use App\Models\CustomerWishlist;
 use App\Models\Order;
 use App\Models\Video;
 use App\Traits\ActiveStatus;
-use App\Traits\BroadcastPushNotifications;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\FluentConstructor;
 use App\Traits\HashPasswords;
 use App\Traits\JWTAuthDefaultSetup;
 use App\Traits\MediaLinks;
 use App\Traits\OtpVerificationSupport;
-use App\Traits\RetrieveCollection;
-use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -25,13 +22,18 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 /**
  * Class Customer
  * @package App\Models\Auth
+ * @property ?string $name
+ * @property ?string $email
+ * @property ?string $mobile
+ * @property ?string $password
  * @property Order[] $orders
  */
 class Customer extends Authenticatable implements JWTSubject
 {
-	use Notifiable, BroadcastPushNotifications, HashPasswords, RetrieveResource, RetrieveCollection;
+	use Notifiable, HashPasswords;
 	use FluentConstructor, ActiveStatus, OtpVerificationSupport, DynamicAttributeNamedMethods, JWTAuthDefaultSetup;
 	use MediaLinks;
+	use \Illuminate\Database\Eloquent\SoftDeletes;
 
 	protected $fillable = [
 		'name', 'email', 'password', 'mobile', 'active', 'avatar',

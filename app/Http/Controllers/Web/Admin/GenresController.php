@@ -73,7 +73,7 @@ class GenresController extends BaseController
 	public function update (Request $request, $id)
 	{
 		$response = responseWeb();
-		$genre = Genre::retrieve($id);
+		$genre = Genre::find($id);
 		try {
 			if ($genre == null)
 				throw new ModelNotFoundException(__('strings.genre.not-found'));

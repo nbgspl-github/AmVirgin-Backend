@@ -44,9 +44,9 @@ class SnapsController extends TvSeriesBase
 
 	public function update ($id)
 	{
-		$response = $this->responseApp();
+		$response = responseApp();
 		try {
-			$video = Video::retrieveThrows($id);
+			$video = Video::findOrFail($id);
 			$payload = $this->requestValid(request(), $this->rules('store'));
 			collect($payload['image'])->each(function (UploadedFile $file) use ($video) {
 				VideoSnap::instance()->
@@ -69,9 +69,9 @@ class SnapsController extends TvSeriesBase
 
 	public function delete ($id, $subId = null)
 	{
-		$response = $this->responseApp();
+		$response = responseApp();
 		try {
-			$videoSnap = VideoSnap::retrieveThrows($subId);
+			$videoSnap = VideoSnap::findOrFail($subId);
 			$videoSnap->delete();
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Snapshot deleted successfully.');
 		} catch (ModelNotFoundException $exception) {

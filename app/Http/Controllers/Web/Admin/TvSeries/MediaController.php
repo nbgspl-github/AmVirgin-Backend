@@ -26,7 +26,7 @@ class MediaController extends TvSeriesBase
 	{
 		$response = responseWeb();
 		try {
-			$tvSeries = Video::retrieveThrows($id);
+			$tvSeries = Video::findOrFail($id);
 			$response = view('admin.tv-series.media.edit')->with('payload', $tvSeries);
 		} catch (ModelNotFoundException $exception) {
 			$response->route('admin.tv-series.index')->error('Could not find tv series for that key.');
@@ -47,9 +47,9 @@ class MediaController extends TvSeriesBase
 
 	public function update ($id)
 	{
-		$response = $this->responseApp();
+		$response = responseApp();
 		try {
-			$tvSeries = Video::retrieveThrows($id);
+			$tvSeries = Video::findOrFail($id);
 			$this->requestValid(request(), $this->rules('update'));
 			if (request()->hasFile('poster')) {
 				if (Uploads::access()->exists($tvSeries->getPoster())) {

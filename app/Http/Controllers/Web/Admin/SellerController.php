@@ -27,7 +27,7 @@ class SellerController extends BaseController
 
 	public function index ()
 	{
-		$payload = Seller::retrieveAll();
+		$payload = Seller::all();
 		return view('admin.sellers.index')->with('sellers', $payload);
 	}
 
@@ -38,7 +38,7 @@ class SellerController extends BaseController
 
 	public function edit ($id = null)
 	{
-		$seller = Seller::retrieve($id);
+		$seller = Seller::find($id);
 		if ($seller != null) {
 			return view('admin.sellers.edit')->with('seller', $seller);
 		} else {
@@ -65,7 +65,7 @@ class SellerController extends BaseController
 	public function update (Request $request, $id = null)
 	{
 		$response = null;
-		$seller = Seller::retrieve($id);
+		$seller = Seller::find($id);
 		try {
 			if ($seller == null)
 				throw new ModelNotFoundException(__('strings.sellers.not-found'));

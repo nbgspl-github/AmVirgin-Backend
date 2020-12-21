@@ -2,12 +2,10 @@
 
 namespace App\Models;
 
-use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class WatchLaterVideo extends Model {
-	use RetrieveResource;
-	// protected $table = '';
+class WatchLaterVideo extends Model
+{
 	protected $fillable = [
 		'customer_id',
 		'video_id',
@@ -15,12 +13,13 @@ class WatchLaterVideo extends Model {
 		'customer_type',
 		'customer_ip',
 		'customer_user_agent',
-		'video_count', 
+		'video_count',
 	];
-	 
 
-	public function video() {
+
+	public function video ()
+	{
 		return $this->belongsTo('App\Models\Video', 'video_id');
-	} 
-	 
+	}
+
 }

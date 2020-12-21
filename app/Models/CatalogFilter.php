@@ -9,13 +9,13 @@ use App\Resources\Shop\Customer\Catalog\Filters\DiscountResource;
 use App\Resources\Shop\Customer\Catalog\Filters\GenderResource;
 use App\Resources\Shop\Customer\Catalog\Filters\PriceRangeResource;
 use App\Traits\DynamicAttributeNamedMethods;
-use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class CatalogFilter extends Model{
-	use DynamicAttributeNamedMethods, RetrieveResource;
+class CatalogFilter extends Model
+{
+	use DynamicAttributeNamedMethods;
+
 	protected $table = 'catalog-filters';
 	protected $fillable = [
 		'label',
@@ -58,15 +58,18 @@ class CatalogFilter extends Model{
 		'price' => PriceRangeResource::class,
 	];
 
-	public function attribute(): BelongsTo{
+	public function attribute () : BelongsTo
+	{
 		return $this->belongsTo(Attribute::class, 'attributeId');
 	}
 
-	public function category(): BelongsTo{
+	public function category () : BelongsTo
+	{
 		return $this->belongsTo(Category::class, 'categoryId');
 	}
 
-	public static function startQuery(): CatalogFilterQuery{
+	public static function startQuery () : CatalogFilterQuery
+	{
 		return CatalogFilterQuery::begin();
 	}
 }

@@ -51,7 +51,7 @@ class BrandController extends BaseController
 	{
 		$response = responseWeb();
 		try {
-			$brand = Brand::retrieveThrows($id);
+			$brand = Brand::findOrFail($id);
 			$response = view('admin.brands.edit')->with('payload', $brand);
 		} catch (ModelNotFoundException $exception) {
 			$response->error($exception->getMessage())->data(request()->all())->back();
@@ -69,7 +69,7 @@ class BrandController extends BaseController
 	{
 		$response = responseWeb();
 		try {
-			$brand = Brand::retrieveThrows($id);
+			$brand = Brand::findOrFail($id);
 			/**
 			 * @var Category $category
 			 */
@@ -126,7 +126,7 @@ class BrandController extends BaseController
 				['id', '!=', $id],
 			])->first();
 			if (!empty($brand)) throw new \Exception('Your given brand name is already taken. Try again with a different one.');
-			$brand = Brand::retrieveThrows($id);
+			$brand = Brand::findOrFail($id);
 			if (request()->hasFile('logo')) $validated['logo'] = Uploads::access()->putFile(Directories::Brands, request()->file('logo'));
 			$validated['active'] = request()->has('active');
 			$brand->update($validated);

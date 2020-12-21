@@ -201,7 +201,7 @@ class CategoryController extends BaseController
 
 	public function edit ($id)
 	{
-		$category = Category::retrieve($id);
+		$category = Category::find($id);
 		$roots = Category::startQuery()->isRoot()->get();
 		$roots->transform(function (Category $root) {
 			$category = $root->children()->get();
@@ -278,7 +278,7 @@ class CategoryController extends BaseController
 	{
 		$response = responseWeb();
 		try {
-			$category = Category::retrieveThrows($id);
+			$category = Category::findOrFail($id);
 			$payload = $this->requestValid(\request(), $this->rules['update']);
 			if (\request()->hasFile('icon')) {
 				$payload['icon'] = Uploads::access()->putFile(Directories::Categories, \request()->file('icon'));
@@ -300,7 +300,7 @@ class CategoryController extends BaseController
 	{
 		$response = responseApp();
 		try {
-			$category = Category::retrieveThrows($id);
+			$category = Category::findOrFail($id);
 			$category->delete();
 			$response->message('Category deleted successfully.')->status(\Illuminate\Http\Response::HTTP_OK)->send();
 		} catch (ModelNotFoundException $exception) {

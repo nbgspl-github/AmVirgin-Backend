@@ -47,7 +47,7 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController
 	{
 		$request = request();
 		$type = $request->type;
-		$response = $this->responseApp();
+		$response = responseApp();
 		$payload = null;
 		try {
 			$payload = $this->requestValid($request, $this->rulesExists());
@@ -94,7 +94,7 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController
 	{
 		$request = request();
 		$type = $request->type;
-		$response = $this->responseApp();
+		$response = responseApp();
 		$payload = null;
 		try {
 			$payload = $this->requestValid($request, $this->rulesLogin());
@@ -136,14 +136,14 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController
 	{
 		$request = request();
 		$type = $request->type;
-		$response = $this->responseApp();
+		$response = responseApp();
 		$payload = null;
 		try {
 			$payload = $this->requestValid($request, $this->rulesRegister());
 			$conditions = $this->conditionsExists(request());
 			$this->throwIfFound($conditions);
 			if (!$this->shouldVerifyOtpBeforeRegister()) {
-				throw_if((is_null($userOtp = $this->otpTarget()::retrieve($payload['mobile']))), new OtpNotFoundException());
+				throw_if((is_null($userOtp = $this->otpTarget()::find($payload['mobile']))), new OtpNotFoundException());
 				throw_if(($payload['otp'] != $userOtp->getOtp()), new OtpMismatchException());
 			}
 			$user = $this->create($request);
@@ -173,7 +173,7 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController
 
 	protected function socialLogin ()
 	{
-		$response = $this->responseApp();
+		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rulesSocialLogin());
 			$user = $this->authTarget()::where('email', $validated['email'])->first();

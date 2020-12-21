@@ -9,9 +9,6 @@ use App\Traits\FluentConstructor;
 use App\Traits\GenerateSlugs;
 use App\Traits\HasInventoryStocks;
 use App\Traits\HasSpecialAttributes;
-use App\Traits\QueryProvider;
-use App\Traits\RetrieveCollection;
-use App\Traits\RetrieveResource;
 use BinaryCats\Sku\HasSku;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,7 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Product extends Model
 {
-	use FluentConstructor, RetrieveResource, RetrieveCollection, DynamicAttributeNamedMethods, HasSpecialAttributes, GenerateSlugs, SoftDeletes, HasSku, QueryProvider, HasInventoryStocks;
+	use FluentConstructor, DynamicAttributeNamedMethods, HasSpecialAttributes, GenerateSlugs, SoftDeletes, HasSku, HasInventoryStocks;
 
 	protected $guarded = ['id'];
 	protected $hidden = [

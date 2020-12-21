@@ -13,14 +13,14 @@ class UpdateVideoSlugs{
 	}
 
 	public function handle(TvSeriesUpdated $event){
-		$series = Video::retrieve($event->eventData());
+		$series = Video::find($event->eventData());
 		if (!is_null($series)) {
 			$languages = $series->sources()->get()->unique('mediaLanguageId');
-			$languages->transform(function (VideoSource $source){
+			$languages->transform(function (VideoSource $source) {
 				return MediaLanguage::find($source->mediaLanguageId);
 			});
 			$qualities = $series->sources()->get()->unique('mediaQualityId');
-			$qualities->transform(function (VideoSource $source){
+			$qualities->transform(function (VideoSource $source) {
 				return MediaQuality::find($source->mediaQualityId);
 			});
 			$series->setLanguageSlug($languages);

@@ -125,7 +125,7 @@ class AbstractProductController extends ApiController
 		}
 		$attributesCollection = new Collection();
 		collect($payload)->each(function ($payload) use ($product, $attributesCollection) {
-			$attribute = Attribute::retrieve($payload['key']);
+			$attribute = Attribute::find($payload['key']);
 			$group = $this->items->where('attributeId', $attribute->id())->pluck('group')->first();
 			$value = $payload['value'];
 			$created = null;
@@ -169,12 +169,12 @@ class AbstractProductController extends ApiController
 
 	protected function category (): Category
 	{
-		return Category::retrieve(request('categoryId'));
+		return Category::find(request('categoryId'));
 	}
 
 	protected function brand (): Brand
 	{
-		return Brand::retrieve(request('brandId'));
+		return Brand::find(request('brandId'));
 	}
 
 	protected function isInvalidCategory (Category $category): bool

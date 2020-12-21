@@ -28,7 +28,7 @@ class ProductRatingController extends ApiController
 
 	public function show ($id) : JsonResponse
 	{
-		$response = $this->responseApp();
+		$response = responseApp();
 		try {
 			/**
 			 * @var $product Product
@@ -47,7 +47,7 @@ class ProductRatingController extends ApiController
 
 	public function store ($id) : JsonResponse
 	{
-		$response = $this->responseApp();
+		$response = responseApp();
 		/**
 		 * @var $product Product
 		 */

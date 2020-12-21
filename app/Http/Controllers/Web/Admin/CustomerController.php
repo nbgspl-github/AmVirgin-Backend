@@ -43,7 +43,7 @@ class CustomerController extends BaseController
 
 	public function show (Customer $customer) : \Illuminate\Contracts\Support\Renderable
 	{
-
+		return view();
 	}
 
 	public function update (UpdateRequest $request, Customer $customer) : \Illuminate\Http\RedirectResponse

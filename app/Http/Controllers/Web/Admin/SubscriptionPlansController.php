@@ -42,7 +42,7 @@ class SubscriptionPlansController extends BaseController
 	{
 		$response = responseWeb();
 		try {
-			$plan = SubscriptionPlan::retrieveThrows($id);
+			$plan = SubscriptionPlan::findOrFail($id);
 			$response = view('admin.subscription-plans.edit')->with('plan', $plan);
 		} catch (ModelNotFoundException $exception) {
 			$response->route('admin.subscription-plans.index')->error('Could not find a subscription plan for that key.');
@@ -83,7 +83,7 @@ class SubscriptionPlansController extends BaseController
 	{
 		$response = responseWeb();
 		try {
-			$plan = SubscriptionPlan::retrieveThrows($id);
+			$plan = SubscriptionPlan::findOrFail($id);
 			$additional = [
 				'name' => [Rule::unique(Tables::SubscriptionPlans, 'name')->ignore($id)],
 			];
@@ -114,9 +114,9 @@ class SubscriptionPlansController extends BaseController
 
 	public function delete ($id)
 	{
-		$response = $this->responseApp();
+		$response = responseApp();
 		try {
-			$plan = SubscriptionPlan::retrieveThrows($id);
+			$plan = SubscriptionPlan::findOrFail($id);
 			$plan->delete();
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Successfully deleted subscription plan.');
 		} catch (ModelNotFoundException $exception) {

@@ -21,7 +21,7 @@ class ListController extends ApiController
 	{
 		$response = responseApp();
 		try {
-			$category = Category::retrieveThrows($categoryId);
+			$category = Category::findOrFail($categoryId);
 			$attributeSet = $category->attributeSet;
 			if ($attributeSet != null) {
 				$attributeSetItems = $attributeSet->items;

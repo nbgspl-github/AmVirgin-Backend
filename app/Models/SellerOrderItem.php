@@ -3,13 +3,11 @@
 namespace App\Models;
 
 use App\Traits\DynamicAttributeNamedMethods;
-use App\Traits\RetrieveCollection;
-use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
 class SellerOrderItem extends Model
 {
-	use DynamicAttributeNamedMethods, RetrieveResource, RetrieveCollection;
+	use DynamicAttributeNamedMethods;
 
 	protected $guarded = [
 		'id'

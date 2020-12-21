@@ -20,7 +20,7 @@ class ProductsBase extends BaseController
 
 	protected function getThrows ($id)
 	{
-		return Product::retrieveThrows($id);
+		return Product::findOrFail($id);
 	}
 
 	protected function model ()

@@ -26,9 +26,9 @@ class ContentController extends TvSeriesBase
 	{
 		$response = responseWeb();
 		try {
-			$video = Video::retrieveThrows($id);
+			$video = Video::findOrFail($id);
 			$languages = MediaLanguage::all()->sortBy('name')->all();
-			$qualities = MediaQuality::retrieveAll();
+			$qualities = MediaQuality::all();
 			$contentPayload = [];
 			$sources = $video->sources()->get();
 			$sources->transform(function (VideoSource $videoSource) use ($qualities, $languages) {
@@ -66,9 +66,9 @@ class ContentController extends TvSeriesBase
 
 	public function update ($id)
 	{
-		$response = $this->responseApp();
+		$response = responseApp();
 		try {
-			$video = Video::retrieveThrows($id);
+			$video = Video::findOrFail($id);
 			$payload = $this->requestValid(request(), $this->rules('update'));
 			$sources = $payload['source'];
 			$videos = isset($payload['video']) ? $payload['video'] : [];
@@ -83,7 +83,7 @@ class ContentController extends TvSeriesBase
 			$count = count($sources);
 			for ($i = 0; $i < $count; $i++) {
 				try {
-					$source = VideoSource::retrieveThrows($sources[$i]);
+					$source = VideoSource::findOrFail($sources[$i]);
 				} catch (ModelNotFoundException $exception) {
 					$source = VideoSource::instance();
 					$source->setVideoId($id);
@@ -145,9 +145,9 @@ class ContentController extends TvSeriesBase
 
 	public function delete ($id, $subId = null)
 	{
-		$response = $this->responseApp();
+		$response = responseApp();
 		try {
-			$videoSnap = VideoSource::retrieveThrows($subId);
+			$videoSnap = VideoSource::findOrFail($subId);
 			$videoSnap->delete();
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Episode deleted successfully.');
 		} catch (ModelNotFoundException $exception) {

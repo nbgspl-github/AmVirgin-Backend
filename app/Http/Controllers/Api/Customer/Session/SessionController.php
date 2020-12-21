@@ -24,13 +24,13 @@ class SessionController extends BaseController
 			'sessionId' => Str::uuid()->toString(),
 			'customerId' => null,
 		]);
-		return $this->responseApp()->status(\Illuminate\Http\Response::HTTP_OK)->message('Session initialized successfully.')->
+		return responseApp()->status(\Illuminate\Http\Response::HTTP_OK)->message('Session initialized successfully.')->
 		setValue('session', $session->sessionId)->send();
 	}
 
 	public function check ($sessionId)
 	{
-		$response = $this->responseApp();
+		$response = responseApp();
 		try {
 			$session = CartSession::query()->where('sessionId', $sessionId)->firstOrFail();
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Session token is valid.')->setValue('valid', true);

@@ -3,13 +3,10 @@
 namespace App\Models;
 
 use App\Traits\FluentConstructor;
-use App\Traits\RetrieveCollection;
-use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
-class VideoSnap extends Model {
-	use RetrieveResource;
-	use RetrieveCollection;
+class VideoSnap extends Model
+{
 	use FluentConstructor;
 
 	protected $table = 'video-snapshots';
@@ -22,7 +19,8 @@ class VideoSnap extends Model {
 	/**
 	 * @return int
 	 */
-	public function getVideoId(): int {
+	public function getVideoId () : int
+	{
 		return $this->videoId;
 	}
 
@@ -30,7 +28,8 @@ class VideoSnap extends Model {
 	 * @param int $videoId
 	 * @return VideoSnap
 	 */
-	public function setVideoId(int $videoId): VideoSnap {
+	public function setVideoId (int $videoId) : VideoSnap
+	{
 		$this->videoId = $videoId;
 		return $this;
 	}
@@ -38,7 +37,8 @@ class VideoSnap extends Model {
 	/**
 	 * @return string
 	 */
-	public function getFile(): string {
+	public function getFile () : string
+	{
 		return $this->file;
 	}
 
@@ -46,7 +46,8 @@ class VideoSnap extends Model {
 	 * @param string $file
 	 * @return VideoSnap
 	 */
-	public function setFile(string $file): VideoSnap {
+	public function setFile (string $file) : VideoSnap
+	{
 		$this->file = $file;
 		return $this;
 	}
@@ -54,7 +55,8 @@ class VideoSnap extends Model {
 	/**
 	 * @return string|null
 	 */
-	public function getDescription(): ?string {
+	public function getDescription () : ?string
+	{
 		return $this->description;
 	}
 
@@ -62,7 +64,8 @@ class VideoSnap extends Model {
 	 * @param string|null $description
 	 * @return VideoSnap
 	 */
-	public function setDescription(?string $description): VideoSnap {
+	public function setDescription (?string $description) : VideoSnap
+	{
 		$this->description = $description;
 		return $this;
 	}

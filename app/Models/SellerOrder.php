@@ -6,13 +6,11 @@ use App\Models\Auth\Customer;
 use App\Models\Auth\Seller;
 use App\Queries\SellerOrderQuery;
 use App\Traits\DynamicAttributeNamedMethods;
-use App\Traits\RetrieveCollection;
-use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 
 class SellerOrder extends Model
 {
-	use DynamicAttributeNamedMethods, RetrieveResource, RetrieveCollection;
+	use DynamicAttributeNamedMethods;
 
 	protected $guarded = [
 		'id'
@@ -54,7 +52,7 @@ class SellerOrder extends Model
 		return $this->belongsTo(SellerBankDetail::class, 'sellerId');
 	}
 
-	public static function startQuery (): SellerOrderQuery
+	public static function startQuery () : SellerOrderQuery
 	{
 		return SellerOrderQuery::begin();
 	}

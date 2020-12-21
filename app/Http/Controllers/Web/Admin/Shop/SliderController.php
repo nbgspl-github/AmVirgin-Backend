@@ -63,7 +63,7 @@ class SliderController extends BaseController
 	{
 		$response = responseWeb();
 		try {
-			$slider = ShopSlider::retrieveThrows($id);
+			$slider = ShopSlider::findOrFail($id);
 			$response = view('admin.shop.sliders.edit')->with('slide', $slider);
 		} catch (ModelNotFoundException $exception) {
 			$response->error('Could not find shop slider for that key.')->route('admin.shop.sliders.index');
@@ -98,7 +98,7 @@ class SliderController extends BaseController
 	{
 		$response = responseApp();
 		try {
-			$slider = ShopSlider::retrieveThrows($id);
+			$slider = ShopSlider::findOrFail($id);
 			$slider->delete();
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Shop slider deleted successfully.');
 		} catch (ModelNotFoundException $exception) {
@@ -116,7 +116,7 @@ class SliderController extends BaseController
 		$banner = null;
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['update']);
-			$slide = ShopSlider::retrieveThrows($id);
+			$slide = ShopSlider::findOrFail($id);
 			$slide->update([
 				'title' => $validated->title,
 				'description' => $validated->description,
@@ -148,7 +148,7 @@ class SliderController extends BaseController
 		$response = responseApp();
 		try {
 			$validated = (object)$this->requestValid(\request(), $this->rules['updateStatus']);
-			$slider = ShopSlider::retrieve($validated->id);
+			$slider = ShopSlider::find($validated->id);
 			$slider->setActive($validated->active);
 			$slider->save();
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Status updated successfully.');

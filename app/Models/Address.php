@@ -3,13 +3,12 @@
 namespace App\Models;
 
 use App\Traits\DynamicAttributeNamedMethods;
-use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Address extends Model
 {
-	use RetrieveResource, DynamicAttributeNamedMethods;
+	use DynamicAttributeNamedMethods;
 
 	protected $guarded = ['id'];
 	protected $casts = [

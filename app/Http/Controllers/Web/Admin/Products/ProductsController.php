@@ -25,7 +25,7 @@ class ProductsController extends BaseController
 	{
 		$response = responseWeb();
 		try {
-			$product = Product::retrieveThrows($id);
+			$product = Product::findOrFail($id);
 			$product->update([
 				'approved' => true,
 				'approvedBy' => auth('admin')->id(),

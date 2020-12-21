@@ -10,7 +10,6 @@ use App\Library\Enums\Cart\Status;
 use App\Library\Utils\Extensions\Str;
 use App\Models\Auth\Customer;
 use App\Resources\Products\Customer\OptionResource;
-use App\Traits\RetrieveResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -18,8 +17,6 @@ use stdClass;
 
 class Cart extends Model
 {
-	use RetrieveResource;
-
 	const TaxRate = 0.25;
 	protected $guarded = ['id'];
 	protected CartItemCollection $itemCollection;

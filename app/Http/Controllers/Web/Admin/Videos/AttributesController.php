@@ -26,11 +26,11 @@ class AttributesController extends VideosBase
 	{
 		$response = responseWeb();
 		try {
-			$payload = Video::retrieveThrows($id);
+			$payload = Video::findOrFail($id);
 			$genrePayload = Genre::all();
 			$languagePayload = MediaLanguage::all()->sortBy('name')->all();
 			$serverPayload = MediaServer::all();
-			$qualityPayload = MediaQuality::retrieveAll();
+			$qualityPayload = MediaQuality::all();
 			$sectionsPayload = PageSection::where('type', PageSectionType::Entertainment)->get();
 			$response = view('admin.videos.attributes.edit')->
 			with('payload', $payload)->
@@ -55,7 +55,7 @@ class AttributesController extends VideosBase
 	{
 		$response = responseWeb();
 		try {
-			$video = Video::retrieveThrows($id);
+			$video = Video::findOrFail($id);
 			$validated = $this->requestValid(request(), $this->rules('update'));
 			if (request()->has('trending')) {
 				$this->replaceTrending($validated['rank']);

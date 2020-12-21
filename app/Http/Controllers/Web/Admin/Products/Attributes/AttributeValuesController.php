@@ -34,7 +34,7 @@ class AttributeValuesController extends BaseController
 	{
 		$response = responseWeb();
 		try {
-			$attribute = Attribute::retrieveThrows($attributeId);
+			$attribute = Attribute::findOrFail($attributeId);
 			if ($attribute->predefined()) {
 				$parents = [];
 				$parent = $attribute->category;
@@ -66,7 +66,7 @@ class AttributeValuesController extends BaseController
 	{
 		$response = responseWeb();
 		try {
-			$attribute = Attribute::retrieveThrows($attributeId);
+			$attribute = Attribute::findOrFail($attributeId);
 			$validated = (object)$this->requestValid(request(), $this->rules['store']);
 			AttributeValue::where([
 				['attributeId', $attributeId],
