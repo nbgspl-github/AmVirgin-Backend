@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 const AUTH_SELLER = 'auth:seller-api';
 const AUTH_CUSTOMER = 'auth:customer-api';
+const AUTH_ADMIN = 'auth:admin';
 
 /**
  * App is in production stage and is deployed to production servers.

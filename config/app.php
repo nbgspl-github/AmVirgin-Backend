@@ -225,4 +225,5 @@ return [
 		'Zip' => ZanySoft\Zip\ZipFacade::class,
 		'FFMpeg' => ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::class
 	],
+
 ];

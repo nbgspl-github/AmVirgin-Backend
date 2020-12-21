@@ -4,7 +4,8 @@ namespace App\Traits;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-trait RetrieveResource{
+trait RetrieveResource
+{
 	protected static string $throwsMessage = 'Could not find %s for given key.';
 
 	/**
@@ -12,7 +13,8 @@ trait RetrieveResource{
 	 * @param null $id
 	 * @return static
 	 */
-	public static function retrieve($id = null){
+	public static function retrieve ($id = null) : self
+	{
 		return self::find($id);
 	}
 
@@ -23,7 +25,8 @@ trait RetrieveResource{
 	 * @throws ModelNotFoundException
 	 * @throws \Throwable
 	 */
-	public static function retrieveThrows($id = null){
+	public static function retrieveThrows ($id = null) : self
+	{
 		$model = self::retrieve($id);
 		$modelName = __modelNameFromSlug(self::class);
 		$msg = sprintf(self::$throwsMessage, lcfirst($modelName));

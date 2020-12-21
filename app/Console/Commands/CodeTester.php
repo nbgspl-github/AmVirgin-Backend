@@ -37,7 +37,7 @@ class CodeTester extends Command
 		parent::__construct();
 	}
 
-	public function handle () : void
+	public function handleX () : void
 	{
 		$source = 'public/videos/video.mp4';
 		$destination = 'public/videos/video_converted_playlist.m3u8';
@@ -57,5 +57,14 @@ class CodeTester extends Command
 		} catch (\Throwable$exception) {
 			dd($exception);
 		}
+	}
+
+	public function handle ()
+	{
+		$prefix = 'AVG';
+		$major = date('Ymd');
+		$minor = date('His');
+		$suffix = mt_rand(100, 999);
+		echo("{$prefix}-{$major}-{$minor}-{$suffix}");
 	}
 }

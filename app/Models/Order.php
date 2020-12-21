@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * Class Order
+ * Represents the top level order element of an order placed by a customer.
  * @package App\Models
  * @property Status $status
  * @property ?Customer $customer
@@ -33,7 +33,11 @@ class Order extends Model
 	{
 		parent::boot();
 		self::creating(function ($order) {
-			$order->orderNumber = sprintf('AVG%d%d', time(), rand(1, 1000));
+			$prefix = 'AVG';
+			$major = date('Ymd');
+			$minor = date('His');
+			$suffix = mt_rand(100, 999);
+			$order->orderNumber = ("{$prefix}-{$major}-{$minor}-{$suffix}");
 		});
 	}
 

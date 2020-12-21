@@ -57,8 +57,13 @@ class Handler extends ExceptionHandler
 			} else {
 				return response()->json(['status' => Response::HTTP_INTERNAL_SERVER_ERROR, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_OK);
 			}
+		} else if (!$request->expectsJson()) {
+			if ($e instanceof \Illuminate\Validation\ValidationException) {
+				return responseWeb()->back()->data($request->all())->error($e->validator->errors()->first());
+			}
+		} else {
+			return parent::render($request, $e);
 		}
-		return parent::render($request, $e);
 	}
 
 	protected function unauthenticated ($request, AuthenticationException $exception)
