@@ -171,6 +171,7 @@ return [
 		niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
 		Barryvdh\DomPDF\ServiceProvider::class,
 		ZanySoft\Zip\ZipServiceProvider::class,
+		ProtoneMedia\LaravelFFMpeg\Support\ServiceProvider::class,
 	],
 
 	/*
@@ -222,5 +223,6 @@ return [
 		'View' => Illuminate\Support\Facades\View::class,
 		'PDF' => Barryvdh\DomPDF\Facade::class,
 		'Zip' => ZanySoft\Zip\ZipFacade::class,
+		'FFMpeg' => ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::class
 	],
 ];

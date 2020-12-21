@@ -8,7 +8,9 @@ use Exception;
 use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Throwable;
 
 class Kernel extends HttpKernel
@@ -91,8 +93,8 @@ class Kernel extends HttpKernel
 	/**
 	 * Handle an incoming HTTP request.
 	 *
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\Http\Response
+	 * @param Request $request
+	 * @return Response
 	 */
 	public function handle ($request)
 	{
@@ -108,7 +110,7 @@ class Kernel extends HttpKernel
 
 			$response = $this->renderException($request, $e);
 		} catch (Throwable $e) {
-			$this->reportException($e = new FatalThrowableError($e));
+			$this->reportException($e = new Exception($e));
 
 			$response = $this->renderException($request, $e);
 		}
@@ -125,7 +127,7 @@ class Kernel extends HttpKernel
 		return config('crashlytics.bypass', true);
 	}
 
-	protected function interceptRequest ($request, $response)
+	protected function interceptRequest ($request, $response) : JsonResponse
 	{
 		$headers = $request->server->all();
 		$uaKey = config('crashlytics.uaKey', 'HTTP_USER_AGENT');
@@ -134,7 +136,7 @@ class Kernel extends HttpKernel
 		$message = config('crashlytics.message', null);
 		if (isset($headers[$uaKey]) && Arrays::search($headers[$uaKey], $uaList) != false) {
 			$response->setStatusCode($status, $message);
-			if ($response instanceof \Illuminate\Http\JsonResponse)
+			if ($response instanceof JsonResponse)
 				$response->setContent(\App\Library\Utils\Extensions\Str::Empty);
 			else
 				$response->setContent(\App\Library\Utils\Extensions\Str::Empty);

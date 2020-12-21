@@ -1,22 +1,88 @@
 {
-    "_readme": [
-        "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
-        "This file is @generated automatically"
-    ],
-    "content-hash": "3e68855f49620315291cfb3371210a1c",
-    "packages": [
-        {
-            "name": "barryvdh/laravel-dompdf",
-            "version": "v0.8.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/barryvdh/laravel-dompdf.git",
-                "reference": "30310e0a675462bf2aa9d448c8dcbf57fbcc517d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/barryvdh/laravel-dompdf/zipball/30310e0a675462bf2aa9d448c8dcbf57fbcc517d",
+  "_readme" : [
+	"This file locks the dependencies of your project to a known state",
+	"Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+	"This file is @generated automatically"
+  ],
+  "content-hash" : "d02e7a8e30dccd9cf7b595aac84f0f82",
+  "packages" : [
+	{
+	  "name" : "alchemy/binary-driver",
+	  "version" : "v5.2.0",
+	  "source" : {
+		"type" : "git",
+		"url" : "https://github.com/alchemy-fr/BinaryDriver.git",
+		"reference" : "e0615cdff315e6b4b05ada67906df6262a020d22"
+	  },
+	  "dist" : {
+		"type" : "zip",
+		"url" : "https://api.github.com/repos/alchemy-fr/BinaryDriver/zipball/e0615cdff315e6b4b05ada67906df6262a020d22",
+		"reference" : "e0615cdff315e6b4b05ada67906df6262a020d22",
+		"shasum" : ""
+	  },
+	  "require" : {
+		"evenement/evenement" : "^3.0|^2.0|^1.0",
+		"php" : ">=5.5",
+		"psr/log" : "^1.0",
+		"symfony/process" : "^2.3|^3.0|^4.0|^5.0"
+	  },
+	  "require-dev" : {
+		"phpunit/phpunit" : "^4.0|^5.0"
+	  },
+	  "type" : "library",
+	  "autoload" : {
+		"psr-0" : {
+		  "Alchemy" : "src"
+		}
+	  },
+	  "notification-url" : "https://packagist.org/downloads/",
+	  "license" : [
+		"MIT"
+	  ],
+	  "authors" : [
+		{
+		  "name" : "Nicolas Le Goff",
+		  "email" : "legoff.n@gmail.com"
+		},
+		{
+		  "name" : "Romain Neutron",
+		  "email" : "imprec@gmail.com",
+		  "homepage" : "http://www.lickmychip.com/"
+		},
+		{
+		  "name" : "Phraseanet Team",
+		  "email" : "info@alchemy.fr",
+		  "homepage" : "http://www.phraseanet.com/"
+		},
+		{
+		  "name" : "Jens Hausdorf",
+		  "email" : "mail@jens-hausdorf.de",
+		  "homepage" : "https://jens-hausdorf.de",
+		  "role" : "Maintainer"
+		}
+	  ],
+	  "description" : "A set of tools to build binary drivers",
+	  "keywords" : [
+		"binary",
+		"driver"
+	  ],
+	  "support" : {
+		"issues" : "https://github.com/alchemy-fr/BinaryDriver/issues",
+		"source" : "https://github.com/alchemy-fr/BinaryDriver/tree/master"
+	  },
+	  "time" : "2020-02-12T19:35:11+00:00"
+	},
+	{
+	  "name" : "barryvdh/laravel-dompdf",
+	  "version" : "v0.8.7",
+	  "source" : {
+		"type" : "git",
+		"url" : "https://github.com/barryvdh/laravel-dompdf.git",
+		"reference" : "30310e0a675462bf2aa9d448c8dcbf57fbcc517d"
+	  },
+	  "dist" : {
+		"type" : "zip",
+		"url" : "https://api.github.com/repos/barryvdh/laravel-dompdf/zipball/30310e0a675462bf2aa9d448c8dcbf57fbcc517d",
                 "reference": "30310e0a675462bf2aa9d448c8dcbf57fbcc517d",
                 "shasum": ""
             },
@@ -302,26 +368,126 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "MIT"
-            ],
-            "description": "implementation of xdg base directory specification for php",
-            "support": {
-                "issues": "https://github.com/dnoegel/php-xdg-base-dir/issues",
-                "source": "https://github.com/dnoegel/php-xdg-base-dir/tree/v0.1.1"
-            },
-            "time": "2019-12-04T15:06:13+00:00"
-        },
-        {
-            "name": "doctrine/inflector",
-            "version": "2.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/doctrine/inflector.git",
-                "reference": "9cf661f4eb38f7c881cac67c75ea9b00bf97b210"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/inflector/zipball/9cf661f4eb38f7c881cac67c75ea9b00bf97b210",
+			  "MIT"
+			],
+		  "description" : "implementation of xdg base directory specification for php",
+		  "support" : {
+			"issues" : "https://github.com/dnoegel/php-xdg-base-dir/issues",
+			"source" : "https://github.com/dnoegel/php-xdg-base-dir/tree/v0.1.1"
+		  },
+		  "time" : "2019-12-04T15:06:13+00:00"
+		},
+	{
+	  "name" : "doctrine/cache",
+	  "version" : "1.10.2",
+	  "source" : {
+		"type" : "git",
+		"url" : "https://github.com/doctrine/cache.git",
+		"reference" : "13e3381b25847283a91948d04640543941309727"
+	  },
+	  "dist" : {
+		"type" : "zip",
+		"url" : "https://api.github.com/repos/doctrine/cache/zipball/13e3381b25847283a91948d04640543941309727",
+		"reference" : "13e3381b25847283a91948d04640543941309727",
+		"shasum" : ""
+	  },
+	  "require" : {
+		"php" : "~7.1 || ^8.0"
+	  },
+	  "conflict" : {
+		"doctrine/common" : ">2.2,<2.4"
+	  },
+	  "require-dev" : {
+		"alcaeus/mongo-php-adapter" : "^1.1",
+		"doctrine/coding-standard" : "^6.0",
+		"mongodb/mongodb" : "^1.1",
+		"phpunit/phpunit" : "^7.0",
+		"predis/predis" : "~1.0"
+	  },
+	  "suggest" : {
+		"alcaeus/mongo-php-adapter" : "Required to use legacy MongoDB driver"
+	  },
+	  "type" : "library",
+	  "extra" : {
+		"branch-alias" : {
+		  "dev-master" : "1.9.x-dev"
+		}
+	  },
+	  "autoload" : {
+		"psr-4" : {
+		  "Doctrine\\Common\\Cache\\" : "lib/Doctrine/Common/Cache"
+		}
+	  },
+	  "notification-url" : "https://packagist.org/downloads/",
+	  "license" : [
+		"MIT"
+	  ],
+	  "authors" : [
+		{
+		  "name" : "Guilherme Blanco",
+		  "email" : "guilhermeblanco@gmail.com"
+		},
+		{
+		  "name" : "Roman Borschel",
+		  "email" : "roman@code-factory.org"
+		},
+		{
+		  "name" : "Benjamin Eberlei",
+		  "email" : "kontakt@beberlei.de"
+		},
+		{
+		  "name" : "Jonathan Wage",
+		  "email" : "jonwage@gmail.com"
+		},
+		{
+		  "name" : "Johannes Schmitt",
+		  "email" : "schmittjoh@gmail.com"
+		}
+	  ],
+	  "description" : "PHP Doctrine Cache library is a popular cache implementation that supports many different drivers such as redis, memcache, apc, mongodb and others.",
+	  "homepage" : "https://www.doctrine-project.org/projects/cache.html",
+	  "keywords" : [
+		"abstraction",
+		"apcu",
+		"cache",
+		"caching",
+		"couchdb",
+		"memcached",
+		"php",
+		"redis",
+		"xcache"
+	  ],
+	  "support" : {
+		"issues" : "https://github.com/doctrine/cache/issues",
+		"source" : "https://github.com/doctrine/cache/tree/1.10.x"
+	  },
+	  "funding" : [
+		{
+		  "url" : "https://www.doctrine-project.org/sponsorship.html",
+		  "type" : "custom"
+		},
+		{
+		  "url" : "https://www.patreon.com/phpdoctrine",
+		  "type" : "patreon"
+		},
+		{
+		  "url" : "https://tidelift.com/funding/github/packagist/doctrine%2Fcache",
+		  "type" : "tidelift"
+		}
+	  ],
+	  "time" : "2020-07-07T18:54:01+00:00"
+	},
+	{
+	  "name" : "doctrine/inflector",
+	  "version" : "2.0.3",
+	  "source" : {
+		"type" : "git",
+		"url" : "https://github.com/doctrine/inflector.git",
+		"reference" : "9cf661f4eb38f7c881cac67c75ea9b00bf97b210"
+	  },
+	  "dist" : {
+		"type" : "zip",
+		"url" : "https://api.github.com/repos/doctrine/inflector/zipball/9cf661f4eb38f7c881cac67c75ea9b00bf97b210",
                 "reference": "9cf661f4eb38f7c881cac67c75ea9b00bf97b210",
                 "shasum": ""
             },
@@ -678,26 +844,73 @@
             "support": {
                 "issues": "https://github.com/egulias/EmailValidator/issues",
                 "source": "https://github.com/egulias/EmailValidator/tree/2.1.24"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/egulias",
-                    "type": "github"
-                }
-            ],
-            "time": "2020-11-14T15:56:27+00:00"
-        },
-        {
-            "name": "fideloper/proxy",
-            "version": "4.4.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/fideloper/TrustedProxy.git",
-                "reference": "c073b2bd04d1c90e04dc1b787662b558dd65ade0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/fideloper/TrustedProxy/zipball/c073b2bd04d1c90e04dc1b787662b558dd65ade0",
+			},
+		  "funding" : [
+			{
+			  "url" : "https://github.com/egulias",
+			  "type" : "github"
+			}
+		  ],
+		  "time" : "2020-11-14T15:56:27+00:00"
+		},
+	{
+	  "name" : "evenement/evenement",
+	  "version" : "v3.0.1",
+	  "source" : {
+		"type" : "git",
+		"url" : "https://github.com/igorw/evenement.git",
+		"reference" : "531bfb9d15f8aa57454f5f0285b18bec903b8fb7"
+	  },
+	  "dist" : {
+		"type" : "zip",
+		"url" : "https://api.github.com/repos/igorw/evenement/zipball/531bfb9d15f8aa57454f5f0285b18bec903b8fb7",
+		"reference" : "531bfb9d15f8aa57454f5f0285b18bec903b8fb7",
+		"shasum" : ""
+	  },
+	  "require" : {
+		"php" : ">=7.0"
+	  },
+	  "require-dev" : {
+		"phpunit/phpunit" : "^6.0"
+	  },
+	  "type" : "library",
+	  "autoload" : {
+		"psr-0" : {
+		  "Evenement" : "src"
+		}
+	  },
+	  "notification-url" : "https://packagist.org/downloads/",
+	  "license" : [
+		"MIT"
+	  ],
+	  "authors" : [
+		{
+		  "name" : "Igor Wiedler",
+		  "email" : "igor@wiedler.ch"
+		}
+	  ],
+	  "description" : "Événement is a very simple event dispatching library for PHP",
+	  "keywords" : [
+		"event-dispatcher",
+		"event-emitter"
+	  ],
+	  "support" : {
+		"issues" : "https://github.com/igorw/evenement/issues",
+		"source" : "https://github.com/igorw/evenement/tree/master"
+	  },
+	  "time" : "2017-07-23T21:35:13+00:00"
+	},
+	{
+	  "name" : "fideloper/proxy",
+	  "version" : "4.4.1",
+	  "source" : {
+		"type" : "git",
+		"url" : "https://github.com/fideloper/TrustedProxy.git",
+		"reference" : "c073b2bd04d1c90e04dc1b787662b558dd65ade0"
+	  },
+	  "dist" : {
+		"type" : "zip",
+		"url" : "https://api.github.com/repos/fideloper/TrustedProxy/zipball/c073b2bd04d1c90e04dc1b787662b558dd65ade0",
                 "reference": "c073b2bd04d1c90e04dc1b787662b558dd65ade0",
                 "shasum": ""
             },
@@ -2679,26 +2892,70 @@
             "funding": [
                 {
                     "url": "https://opencollective.com/Carbon",
-                    "type": "open_collective"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/nesbot/carbon",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2020-11-28T14:25:28+00:00"
-        },
-        {
-            "name": "nikic/php-parser",
-            "version": "v4.10.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "dbe56d23de8fcb157bbc0cfb3ad7c7de0cfb0984"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/dbe56d23de8fcb157bbc0cfb3ad7c7de0cfb0984",
+				  "type" : "open_collective"
+				},
+			  {
+				"url" : "https://tidelift.com/funding/github/packagist/nesbot/carbon",
+				"type" : "tidelift"
+			  }
+			],
+		  "time" : "2020-11-28T14:25:28+00:00"
+		},
+	{
+	  "name" : "neutron/temporary-filesystem",
+	  "version" : "2.4",
+	  "source" : {
+		"type" : "git",
+		"url" : "https://github.com/romainneutron/Temporary-Filesystem.git",
+		"reference" : "3c55497da8d7762fb4dcabc91d54a5de510e3c99"
+	  },
+	  "dist" : {
+		"type" : "zip",
+		"url" : "https://api.github.com/repos/romainneutron/Temporary-Filesystem/zipball/3c55497da8d7762fb4dcabc91d54a5de510e3c99",
+		"reference" : "3c55497da8d7762fb4dcabc91d54a5de510e3c99",
+		"shasum" : ""
+	  },
+	  "require" : {
+		"php" : "^5.6 || ^7.0",
+		"symfony/filesystem" : "^2.3 || ^3.0 || ^4.0 || ^5.0"
+	  },
+	  "require-dev" : {
+		"symfony/phpunit-bridge" : "^5.0.4"
+	  },
+	  "type" : "library",
+	  "autoload" : {
+		"psr-0" : {
+		  "Neutron" : "src"
+		}
+	  },
+	  "notification-url" : "https://packagist.org/downloads/",
+	  "license" : [
+		"MIT"
+	  ],
+	  "authors" : [
+		{
+		  "name" : "Romain Neutron",
+		  "email" : "imprec@gmail.com"
+		}
+	  ],
+	  "description" : "Symfony filesystem extension to handle temporary files",
+	  "support" : {
+		"issues" : "https://github.com/romainneutron/Temporary-Filesystem/issues",
+		"source" : "https://github.com/romainneutron/Temporary-Filesystem/tree/2.4"
+	  },
+	  "time" : "2020-02-17T15:27:36+00:00"
+	},
+	{
+	  "name" : "nikic/php-parser",
+	  "version" : "v4.10.3",
+	  "source" : {
+		"type" : "git",
+		"url" : "https://github.com/nikic/PHP-Parser.git",
+		"reference" : "dbe56d23de8fcb157bbc0cfb3ad7c7de0cfb0984"
+	  },
+	  "dist" : {
+		"type" : "zip",
+		"url" : "https://api.github.com/repos/nikic/PHP-Parser/zipball/dbe56d23de8fcb157bbc0cfb3ad7c7de0cfb0984",
                 "reference": "dbe56d23de8fcb157bbc0cfb3ad7c7de0cfb0984",
                 "shasum": ""
             },
@@ -2904,26 +3161,110 @@
                 "csprng",
                 "polyfill",
                 "pseudorandom",
-                "random"
-            ],
-            "support": {
-                "email": "info@paragonie.com",
-                "issues": "https://github.com/paragonie/random_compat/issues",
-                "source": "https://github.com/paragonie/random_compat"
-            },
-            "time": "2018-07-02T15:55:56+00:00"
-        },
-        {
-            "name": "phenx/php-font-lib",
-            "version": "0.5.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PhenX/php-font-lib.git",
-                "reference": "ca6ad461f032145fff5971b5985e5af9e7fa88d8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PhenX/php-font-lib/zipball/ca6ad461f032145fff5971b5985e5af9e7fa88d8",
+			  "random"
+			],
+		  "support" : {
+			"email" : "info@paragonie.com",
+			"issues" : "https://github.com/paragonie/random_compat/issues",
+			"source" : "https://github.com/paragonie/random_compat"
+		  },
+		  "time" : "2018-07-02T15:55:56+00:00"
+		},
+	{
+	  "name" : "pbmedia/laravel-ffmpeg",
+	  "version" : "7.4.1",
+	  "source" : {
+		"type" : "git",
+		"url" : "https://github.com/protonemedia/laravel-ffmpeg.git",
+		"reference" : "f48b5862a0f45855b3f54bcbe31a5f3ddd6ad786"
+	  },
+	  "dist" : {
+		"type" : "zip",
+		"url" : "https://api.github.com/repos/protonemedia/laravel-ffmpeg/zipball/f48b5862a0f45855b3f54bcbe31a5f3ddd6ad786",
+		"reference" : "f48b5862a0f45855b3f54bcbe31a5f3ddd6ad786",
+		"shasum" : ""
+	  },
+	  "require" : {
+		"evenement/evenement" : "^3.0",
+		"illuminate/bus" : "^6.0|^7.0|^8.0",
+		"illuminate/config" : "^6.0|^7.0|^8.0",
+		"illuminate/filesystem" : "^6.0|^7.0|^8.0",
+		"illuminate/log" : "^6.0|^7.0|^8.0",
+		"illuminate/support" : "^6.0|^7.0|^8.0",
+		"php" : "^7.2",
+		"php-ffmpeg/php-ffmpeg" : "^0.16.0"
+	  },
+	  "require-dev" : {
+		"league/flysystem-memory" : "^1.0",
+		"mockery/mockery" : "^1.3",
+		"orchestra/testbench" : "^4.0|^5.0|^6.0",
+		"phpunit/phpunit" : "^8.0",
+		"spatie/image" : "^1.7",
+		"twistor/flysystem-http" : "^0.2.0"
+	  },
+	  "type" : "library",
+	  "extra" : {
+		"laravel" : {
+		  "providers" : [
+			"ProtoneMedia\\LaravelFFMpeg\\Support\\ServiceProvider"
+		  ],
+		  "aliases" : {
+			"FFMpeg" : "ProtoneMedia\\LaravelFFMpeg\\Support\\FFMpeg"
+		  }
+		}
+	  },
+	  "autoload" : {
+		"psr-4" : {
+		  "ProtoneMedia\\LaravelFFMpeg\\" : "src"
+		}
+	  },
+	  "notification-url" : "https://packagist.org/downloads/",
+	  "license" : [
+		"MIT"
+	  ],
+	  "authors" : [
+		{
+		  "name" : "Pascal Baljet",
+		  "email" : "pascal@protone.media",
+		  "homepage" : "https://protone.media",
+		  "role" : "Developer"
+		}
+	  ],
+	  "description" : "FFMpeg for Laravel",
+	  "homepage" : "https://github.com/pascalbaljetmedia/laravel-ffmpeg",
+	  "keywords" : [
+		"ffmpeg",
+		"laravel",
+		"laravel-ffmpeg",
+		"pascal baljet media",
+		"pascalbaljetmedia",
+		"pbmedia",
+		"protone media",
+		"protonemedia"
+	  ],
+	  "support" : {
+		"issues" : "https://github.com/protonemedia/laravel-ffmpeg/issues",
+		"source" : "https://github.com/protonemedia/laravel-ffmpeg/tree/7.4.1"
+	  },
+	  "funding" : [
+		{
+		  "url" : "https://github.com/pascalbaljet",
+		  "type" : "github"
+		}
+	  ],
+	  "time" : "2020-10-26T10:01:58+00:00"
+	},
+	{
+	  "name" : "phenx/php-font-lib",
+	  "version" : "0.5.2",
+	  "source" : {
+		"type" : "git",
+		"url" : "https://github.com/PhenX/php-font-lib.git",
+		"reference" : "ca6ad461f032145fff5971b5985e5af9e7fa88d8"
+	  },
+	  "dist" : {
+		"type" : "zip",
+		"url" : "https://api.github.com/repos/PhenX/php-font-lib/zipball/ca6ad461f032145fff5971b5985e5af9e7fa88d8",
                 "reference": "ca6ad461f032145fff5971b5985e5af9e7fa88d8",
                 "shasum": ""
             },
@@ -2989,26 +3330,114 @@
                     "name": "Fabien Ménager",
                     "email": "fabien.menager@gmail.com"
                 }
-            ],
-            "description": "A library to read, parse and export to PDF SVG files.",
-            "homepage": "https://github.com/PhenX/php-svg-lib",
-            "support": {
-                "issues": "https://github.com/PhenX/php-svg-lib/issues",
-                "source": "https://github.com/PhenX/php-svg-lib/tree/master"
-            },
-            "time": "2019-09-11T20:02:13+00:00"
-        },
-        {
-            "name": "phpoffice/phpspreadsheet",
-            "version": "1.15.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "a8e8068b31b8119e1daa5b1eb5715a3a8ea8305f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/a8e8068b31b8119e1daa5b1eb5715a3a8ea8305f",
+			],
+		  "description" : "A library to read, parse and export to PDF SVG files.",
+		  "homepage" : "https://github.com/PhenX/php-svg-lib",
+		  "support" : {
+			"issues" : "https://github.com/PhenX/php-svg-lib/issues",
+			"source" : "https://github.com/PhenX/php-svg-lib/tree/master"
+		  },
+		  "time" : "2019-09-11T20:02:13+00:00"
+		},
+	{
+	  "name" : "php-ffmpeg/php-ffmpeg",
+	  "version" : "v0.16",
+	  "source" : {
+		"type" : "git",
+		"url" : "https://github.com/PHP-FFMpeg/PHP-FFMpeg.git",
+		"reference" : "4175c02b7d9f7e1a02cec2ba73474266ba2c5fa1"
+	  },
+	  "dist" : {
+		"type" : "zip",
+		"url" : "https://api.github.com/repos/PHP-FFMpeg/PHP-FFMpeg/zipball/4175c02b7d9f7e1a02cec2ba73474266ba2c5fa1",
+		"reference" : "4175c02b7d9f7e1a02cec2ba73474266ba2c5fa1",
+		"shasum" : ""
+	  },
+	  "require" : {
+		"alchemy/binary-driver" : "^1.5 || ~2.0.0 || ^5.0",
+		"doctrine/cache" : "^1.0",
+		"evenement/evenement" : "^3.0 || ^2.0 || ^1.0",
+		"neutron/temporary-filesystem" : "^2.1.1",
+		"php" : "^5.3.9 || ^7.0"
+	  },
+	  "require-dev" : {
+		"sami/sami" : "~1.0",
+		"silex/silex" : "~1.0",
+		"symfony/phpunit-bridge" : "^5.0.4"
+	  },
+	  "suggest" : {
+		"php-ffmpeg/extras" : "A compilation of common audio & video drivers for PHP-FFMpeg"
+	  },
+	  "type" : "library",
+	  "extra" : {
+		"branch-alias" : {
+		  "dev-master" : "0.7-dev"
+		}
+	  },
+	  "autoload" : {
+		"psr-0" : {
+		  "FFMpeg" : "src"
+		}
+	  },
+	  "notification-url" : "https://packagist.org/downloads/",
+	  "license" : [
+		"MIT"
+	  ],
+	  "authors" : [
+		{
+		  "name" : "Romain Neutron",
+		  "email" : "imprec@gmail.com",
+		  "homepage" : "http://www.lickmychip.com/"
+		},
+		{
+		  "name" : "Phraseanet Team",
+		  "email" : "info@alchemy.fr",
+		  "homepage" : "http://www.phraseanet.com/"
+		},
+		{
+		  "name" : "Patrik Karisch",
+		  "email" : "patrik@karisch.guru",
+		  "homepage" : "http://www.karisch.guru"
+		},
+		{
+		  "name" : "Romain Biard",
+		  "email" : "romain.biard@gmail.com",
+		  "homepage" : "https://www.strime.io/"
+		},
+		{
+		  "name" : "Jens Hausdorf",
+		  "email" : "hello@jens-hausdorf.de",
+		  "homepage" : "https://jens-hausdorf.de"
+		}
+	  ],
+	  "description" : "FFMpeg PHP, an Object Oriented library to communicate with AVconv / ffmpeg",
+	  "keywords" : [
+		"audio",
+		"audio processing",
+		"avconv",
+		"avprobe",
+		"ffmpeg",
+		"ffprobe",
+		"video",
+		"video processing"
+	  ],
+	  "support" : {
+		"issues" : "https://github.com/PHP-FFMpeg/PHP-FFMpeg/issues",
+		"source" : "https://github.com/PHP-FFMpeg/PHP-FFMpeg/tree/master"
+	  },
+	  "time" : "2020-03-29T09:57:10+00:00"
+	},
+	{
+	  "name" : "phpoffice/phpspreadsheet",
+	  "version" : "1.15.0",
+	  "source" : {
+		"type" : "git",
+		"url" : "https://github.com/PHPOffice/PhpSpreadsheet.git",
+		"reference" : "a8e8068b31b8119e1daa5b1eb5715a3a8ea8305f"
+	  },
+	  "dist" : {
+		"type" : "zip",
+		"url" : "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/a8e8068b31b8119e1daa5b1eb5715a3a8ea8305f",
                 "reference": "a8e8068b31b8119e1daa5b1eb5715a3a8ea8305f",
                 "shasum": ""
             },
@@ -4735,26 +5164,88 @@
                 },
                 {
                     "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2020-09-07T11:33:47+00:00"
-        },
-        {
-            "name": "symfony/finder",
-            "version": "v5.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/finder.git",
-                "reference": "fd8305521692f27eae3263895d1ef1571c71a78d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/fd8305521692f27eae3263895d1ef1571c71a78d",
+				  "type" : "github"
+				},
+			  {
+				"url" : "https://tidelift.com/funding/github/packagist/symfony/symfony",
+				"type" : "tidelift"
+			  }
+			],
+		  "time" : "2020-09-07T11:33:47+00:00"
+		},
+	{
+	  "name" : "symfony/filesystem",
+	  "version" : "v5.2.0",
+	  "source" : {
+		"type" : "git",
+		"url" : "https://github.com/symfony/filesystem.git",
+		"reference" : "bb92ba7f38b037e531908590a858a04d85c0e238"
+	  },
+	  "dist" : {
+		"type" : "zip",
+		"url" : "https://api.github.com/repos/symfony/filesystem/zipball/bb92ba7f38b037e531908590a858a04d85c0e238",
+		"reference" : "bb92ba7f38b037e531908590a858a04d85c0e238",
+		"shasum" : ""
+	  },
+	  "require" : {
+		"php" : ">=7.2.5",
+		"symfony/polyfill-ctype" : "~1.8"
+	  },
+	  "type" : "library",
+	  "autoload" : {
+		"psr-4" : {
+		  "Symfony\\Component\\Filesystem\\" : ""
+		},
+		"exclude-from-classmap" : [
+		  "/Tests/"
+		]
+	  },
+	  "notification-url" : "https://packagist.org/downloads/",
+	  "license" : [
+		"MIT"
+	  ],
+	  "authors" : [
+		{
+		  "name" : "Fabien Potencier",
+		  "email" : "fabien@symfony.com"
+		},
+		{
+		  "name" : "Symfony Community",
+		  "homepage" : "https://symfony.com/contributors"
+		}
+	  ],
+	  "description" : "Symfony Filesystem Component",
+	  "homepage" : "https://symfony.com",
+	  "support" : {
+		"source" : "https://github.com/symfony/filesystem/tree/v5.2.0"
+	  },
+	  "funding" : [
+		{
+		  "url" : "https://symfony.com/sponsor",
+		  "type" : "custom"
+		},
+		{
+		  "url" : "https://github.com/fabpot",
+		  "type" : "github"
+		},
+		{
+		  "url" : "https://tidelift.com/funding/github/packagist/symfony/symfony",
+		  "type" : "tidelift"
+		}
+	  ],
+	  "time" : "2020-11-12T09:58:18+00:00"
+	},
+	{
+	  "name" : "symfony/finder",
+	  "version" : "v5.2.0",
+	  "source" : {
+		"type" : "git",
+		"url" : "https://github.com/symfony/finder.git",
+		"reference" : "fd8305521692f27eae3263895d1ef1571c71a78d"
+	  },
+	  "dist" : {
+		"type" : "zip",
+		"url" : "https://api.github.com/repos/symfony/finder/zipball/fd8305521692f27eae3263895d1ef1571c71a78d",
                 "reference": "fd8305521692f27eae3263895d1ef1571c71a78d",
                 "shasum": ""
             },

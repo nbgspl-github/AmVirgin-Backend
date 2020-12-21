@@ -6,6 +6,7 @@ use App\Http\Controllers\BaseController;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class LoginController extends BaseController
 {
@@ -48,7 +49,7 @@ class LoginController extends BaseController
 		$name = \auth('admin')->user()->name();
 		$this->guard()->logout();
 		$request->session()->invalidate();
-		notify()->success('Goodbye ' . $name . '!');
+		notify()->success("Goodbye {$name}!");
 		return redirect(route('admin.login'));
 	}
 
