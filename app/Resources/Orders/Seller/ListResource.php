@@ -25,7 +25,7 @@ class ListResource extends JsonResource
 			'orderDate' => $this->created_at->format('Y-m-d H:i:s'),
 			'status' => $this->status,
 			'quantity' => $this->quantity,
-			'customer' => new OrderCustomerResource($this->customer),
+			'customer' => new CustomerResource($this->customer),
 			'cancellationReason' => $this->when($this->status->is(Status::Cancelled), $this->cancellationReason),
 			'cancelledBy' => $this->when($this->status->is(Status::Cancelled), $this->cancelledBy),
 			'cancelledOn' => $this->when($this->status->is(Status::Cancelled), $this->cancelled_at),

@@ -26,7 +26,7 @@ class PaymentListResource extends JsonResource{
 			'total' => $order->total ?? '',
 			'paymentMode' => $order->paymentMode ?? '',
 			'quantity' => $this->items()->sum('quantity'),
-			'customer' => new OrderCustomerResource($this->customer),
+			'customer' => new CustomerResource($this->customer),
 		];
 	}
 }

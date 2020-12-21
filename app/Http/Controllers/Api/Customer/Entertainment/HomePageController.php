@@ -25,7 +25,7 @@ class HomePageController extends ApiController
 		parent::__construct();
 	}
 
-	public function index ()
+	public function index () : JsonResponse
 	{
 		/**
 		 * We need to send the following stuff for the homepage.
@@ -101,7 +101,7 @@ class HomePageController extends ApiController
 		}
 	}
 
-	public function showAllItemsInSection ($id): JsonResponse
+	public function showAllItemsInSection ($id) : JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -122,7 +122,7 @@ class HomePageController extends ApiController
 		}
 	}
 
-	public function trendingNow (): JsonResponse
+	public function trendingNow () : JsonResponse
 	{
 		$data = [];
 		try {
@@ -142,7 +142,7 @@ class HomePageController extends ApiController
 		}
 	}
 
-	public function recommendedVideo (): JsonResponse
+	public function recommendedVideo () : JsonResponse
 	{
 		try {
 			$trendingNow = Video::startQuery()->displayable()->orderByDescending('rating')->limit(15)->get();

@@ -49,4 +49,9 @@ class SubOrder extends Model
 	{
 		return $this->belongsTo(Shipment::class, 'shipmentId', 'id');
 	}
+
+	public function order () : BelongsTo
+	{
+		return $this->belongsTo(Order::class, 'orderId');
+	}
 }

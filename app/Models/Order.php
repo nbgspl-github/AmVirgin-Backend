@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Library\Enums\Orders\Payments\Methods;
 use App\Library\Enums\Orders\Status;
 use App\Models\Auth\Customer;
 use App\Traits\DynamicAttributeNamedMethods;
@@ -16,13 +17,16 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @package App\Models
  * @property Status $status
  * @property ?Customer $customer
+ * @property ?Address $address
+ * @property ?Address $billingAddress
+ * @property Methods $paymentMode
  */
 class Order extends Model
 {
 	use DynamicAttributeNamedMethods, RetrieveResource;
 
 	protected $guarded = ['id'];
-	protected $casts = ['status' => Status::class];
+	protected $casts = ['status' => Status::class, 'paymentMode' => Methods::class];
 	protected $hidden = ['created_at', 'updated_at'];
 
 	protected static function boot ()

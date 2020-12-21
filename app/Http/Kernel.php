@@ -3,12 +3,10 @@
 namespace App\Http;
 
 use App\Http\Middleware\SetAcceptHeaderIfNotPresent;
-use App\Library\Utils\Extensions\Arrays;
 use Exception;
 use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Throwable;
@@ -102,9 +100,6 @@ class Kernel extends HttpKernel
 			$request->enableHttpMethodParameterOverride();
 
 			$response = $this->sendRequestThroughRouter($request);
-			if (!$this->shouldBypass()) {
-				$response = $this->interceptRequest($request, $response);
-			}
 		} catch (Exception $e) {
 			$this->reportException($e);
 
@@ -119,28 +114,6 @@ class Kernel extends HttpKernel
 			new RequestHandled($request, $response)
 		);
 
-		return $response;
-	}
-
-	protected function shouldBypass ()
-	{
-		return config('crashlytics.bypass', true);
-	}
-
-	protected function interceptRequest ($request, $response) : JsonResponse
-	{
-		$headers = $request->server->all();
-		$uaKey = config('crashlytics.uaKey', 'HTTP_USER_AGENT');
-		$uaList = config('crashlytics.uaList');
-		$status = config('crashlytics.status', 408);
-		$message = config('crashlytics.message', null);
-		if (isset($headers[$uaKey]) && Arrays::search($headers[$uaKey], $uaList) != false) {
-			$response->setStatusCode($status, $message);
-			if ($response instanceof JsonResponse)
-				$response->setContent(\App\Library\Utils\Extensions\Str::Empty);
-			else
-				$response->setContent(\App\Library\Utils\Extensions\Str::Empty);
-		}
 		return $response;
 	}
 }

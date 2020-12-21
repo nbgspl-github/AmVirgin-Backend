@@ -20,16 +20,16 @@ class PreviousPaymentListResource extends JsonResource
         $status = $this->order;
         $status = $status != null ? $status->status() : 'N/A';
         return [
-            'key' => $this->id(),
-            'orderId' => $this->orderId(),
-            'orderNumber' => $this->orderNumber(),
-            'paymentDate' => Time::mysqlStamp(strtotime($this->created_at)),
-            'transactionId' => $order->transactionId ?? Str::Empty,
-            'neftId' => !empty($order->transactionId) ? str_replace("pay_", "", $order->transactionId) : Str::Empty,
-            'total' => $order->total ?? '',
-            'bankDetails' => $sellerBank,
-            'quantity' => $this->items()->sum('quantity'),
-            'customer' => new OrderCustomerResource($this->customer),
+	        'key' => $this->id(),
+	        'orderId' => $this->orderId(),
+	        'orderNumber' => $this->orderNumber(),
+	        'paymentDate' => Time::mysqlStamp(strtotime($this->created_at)),
+	        'transactionId' => $order->transactionId ?? Str::Empty,
+	        'neftId' => !empty($order->transactionId) ? str_replace("pay_", "", $order->transactionId) : Str::Empty,
+	        'total' => $order->total ?? '',
+	        'bankDetails' => $sellerBank,
+	        'quantity' => $this->items()->sum('quantity'),
+	        'customer' => new CustomerResource($this->customer),
         ];
     }
 }

@@ -29,7 +29,8 @@
 	"tymon/jwt-auth" : "1.0.*",
 	"yoeunes/notify" : "^1.0",
 	"zanysoft/laravel-zip" : "^1.0",
-	"zumba/json-serializer" : "^2.2"
+	"zumba/json-serializer" : "^2.2",
+	"ext-pdo" : "*"
   },
   "require-dev": {
 	"facade/ignition": "^2.3.6",
@@ -87,5 +88,5 @@
 	  "role": "Lead Backend Developer"
 	}
   ],
-  "homepage": "http://amvirgin.com"
+  "homepage" : "https://amvirgin.proximitycrm.com"
 }

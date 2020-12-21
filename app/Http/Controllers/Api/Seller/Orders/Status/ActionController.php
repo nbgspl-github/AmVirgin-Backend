@@ -11,8 +11,8 @@ use App\Library\Enums\Orders\Status;
 use App\Library\Utils\Extensions\Rule;
 use App\Models\SubOrder;
 use BenSampo\Enum\Enum;
+use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 
 class ActionController extends ApiController
 {
@@ -32,7 +32,7 @@ class ActionController extends ApiController
 	 * @param SubOrder $order
 	 * @return JsonResponse|void
 	 * @throws ValidationException|ActionNotAllowedException|ActionInvalidException
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function handle (SubOrder $order) : JsonResponse
 	{
@@ -60,14 +60,14 @@ class ActionController extends ApiController
 	/**
 	 * @param $status
 	 * @return Action
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	protected function handler ($status) : Action
 	{
 		$handler = $this->handlers[$status] ?? null;
 		if ($handler != null)
 			return new $handler();
-		throw new \Exception('No handler is defined for this order action.');
+		throw new Exception('No handler is defined for this order action.');
 	}
 
 	/**
@@ -87,12 +87,12 @@ class ActionController extends ApiController
 	protected function allowed () : array
 	{
 		return [
-			\App\Library\Enums\Orders\Status::ReadyForDispatch,
-			\App\Library\Enums\Orders\Status::PendingDispatch,
-			\App\Library\Enums\Orders\Status::Dispatched,
-			\App\Library\Enums\Orders\Status::OutForDelivery,
-			\App\Library\Enums\Orders\Status::Cancelled,
-			\App\Library\Enums\Orders\Status::Delivered,
+			Status::ReadyForDispatch,
+			Status::PendingDispatch,
+			Status::Dispatched,
+			Status::OutForDelivery,
+			Status::Cancelled,
+			Status::Delivered,
 		];
 	}
 

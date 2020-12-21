@@ -99,7 +99,7 @@ Route::prefix('countries')->group(function () {
 	Route::get('states/{stateId}/cities', [CityController::class, 'index'])->name('seller.states.index');
 });
 
-Route::prefix('orders')->middleware('auth:seller-api')->group(function () {
+Route::prefix('orders')->group(function () {
 	Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\Orders\OrderController::class, 'index']);
 	Route::get('{order}', [\App\Http\Controllers\Api\Seller\Orders\OrderController::class, 'show']);
 	Route::put('{order}/status', [\App\Http\Controllers\Api\Seller\Orders\Status\ActionController::class, 'handle']);

@@ -17,6 +17,7 @@ class OrderController extends ApiController
 	public function __construct ()
 	{
 		parent::__construct();
+		$this->middleware(AUTH_SELLER);
 		$this->rules = [
 			'index' => [
 				'status' => ['bail', 'sometimes', Rule::in(Status::getValues())]
