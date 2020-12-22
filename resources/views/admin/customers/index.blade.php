@@ -31,7 +31,7 @@
 										<div class="btn-group mx-auto" role="group">
 											<a class="btn btn-outline-danger" href="javascript:showDetails('{{$user->id}}')" @include('admin.extras.tooltip.bottom', ['title' => 'View customer details'])><i class="mdi mdi-lightbulb-outline"></i></a>
 											<a class="btn btn-outline-danger" href="{{route('admin.customers.edit',$user->id)}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit customer details'])><i class="mdi mdi-pencil"></i></a>
-											<a class="btn btn-outline-primary" href="{{route('admin.customers.delete',$user->id)}}" @include('admin.extras.tooltip.bottom', ['title' => 'Delete customer'])><i class="mdi mdi-trash-can"></i></a>
+											<a class="btn btn-outline-primary" href="{{route('admin.customers.delete',$user->id)}}" @include('admin.extras.tooltip.bottom', ['title' => 'Delete customer'])><i class="mdi fa-trash-o"></i></a>
 										</div>
 									</div>
 								</td>
