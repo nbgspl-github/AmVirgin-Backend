@@ -48,7 +48,7 @@ Route::prefix('admin')->group(function () {
 			Route::post(Str::Empty, [CustomerController::class, Methods::Store])->name('admin.customers.store');
 			Route::post('{customer}', [CustomerController::class, Methods::Update])->name('admin.customers.update');
 			Route::put('{customer}/status', [CustomerController::class, Methods::UpdateStatus])->name('admin.customers.update.status');
-			Route::delete('{customer}', [CustomerController::class, Methods::Delete])->name('admin.customers.delete');
+			Route::delete('{customer}', [CustomerController::class, 'destroy'])->name('admin.customers.delete');
 		});
 
 		// Seller's Route(s)
