@@ -55,4 +55,17 @@ class CustomerController extends BaseController
 			'admin.customers.index'
 		);
 	}
+
+	/**
+	 * @param Customer $customer
+	 * @return \Illuminate\Http\RedirectResponse
+	 * @throws \Exception
+	 */
+	public function destroy (Customer $customer) : \Illuminate\Http\RedirectResponse
+	{
+		$customer->delete();
+		return redirect()->route(
+			'admin.customers.index'
+		);
+	}
 }
