@@ -10,7 +10,7 @@ use App\Traits\ActiveStatus;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\FluentConstructor;
 use App\Traits\HashPasswords;
-use App\Traits\JWTAuthDefaultSetup;
+use App\Traits\JsonWebTokens;
 use App\Traits\MediaLinks;
 use App\Traits\OtpVerificationSupport;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -31,7 +31,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class Customer extends Authenticatable implements JWTSubject
 {
 	use Notifiable, HashPasswords;
-	use FluentConstructor, ActiveStatus, OtpVerificationSupport, DynamicAttributeNamedMethods, JWTAuthDefaultSetup;
+	use FluentConstructor, ActiveStatus, OtpVerificationSupport, DynamicAttributeNamedMethods, JsonWebTokens;
 	use MediaLinks;
 	use \Illuminate\Database\Eloquent\SoftDeletes;
 

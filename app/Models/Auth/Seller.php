@@ -15,7 +15,7 @@ use App\Models\SubOrder;
 use App\Traits\ActiveStatus;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\FluentConstructor;
-use App\Traits\JWTAuthDefaultSetup;
+use App\Traits\JsonWebTokens;
 use App\Traits\OtpVerificationSupport;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -26,7 +26,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Seller extends Authenticatable implements JWTSubject
 {
-	use Notifiable, FluentConstructor, ActiveStatus, OtpVerificationSupport, JWTAuthDefaultSetup, DynamicAttributeNamedMethods;
+	use Notifiable, FluentConstructor, ActiveStatus, OtpVerificationSupport, JsonWebTokens, DynamicAttributeNamedMethods;
 
 	protected $fillable = [
 		'name',
