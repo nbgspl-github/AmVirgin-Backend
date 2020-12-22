@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Cart;
 
-use Illuminate\Database\Eloquent\Model;
-
-class CartSession extends Model {
+class Session extends \App\Library\Database\Eloquent\Model
+{
 	protected $table = 'cart-sessions';
 	protected $fillable = [
 		'sessionId',

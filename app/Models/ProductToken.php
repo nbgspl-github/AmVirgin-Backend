@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use App\Traits\DynamicAttributeNamedMethods;
-use Illuminate\Database\Eloquent\Model;
 
-class ProductToken extends Model{
+class ProductToken extends \App\Library\Database\Eloquent\Model
+{
 	use DynamicAttributeNamedMethods;
+
 	protected $table = 'product-tokens';
 	protected $fillable = [
 		'token',

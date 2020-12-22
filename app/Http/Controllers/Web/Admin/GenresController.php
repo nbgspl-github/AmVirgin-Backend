@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Web\Admin;
 
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
-use App\Library\Enums\Common\Tables;
 use App\Library\Enums\Common\Directories;
-use App\Models\Genre;
+use App\Library\Enums\Common\Tables;
+use App\Models\Video\Genre;
 use App\Traits\ValidatesRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

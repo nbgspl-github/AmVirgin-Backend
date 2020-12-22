@@ -11,7 +11,6 @@ use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\FluentConstructor;
 use App\Traits\GenerateSlugs;
 use App\Traits\HasSpecialAttributes;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -23,7 +22,7 @@ use Spatie\Sluggable\SlugOptions;
  * Category defines a logical grouping of products which share similar traits.
  * @package App\Models
  */
-class Category extends Model
+class Category extends \App\Library\Database\Eloquent\Model
 {
 	use  FluentConstructor, HasSpecialAttributes, DynamicAttributeNamedMethods, GenerateSlugs;
 
@@ -44,7 +43,7 @@ class Category extends Model
 
 	public function attributes () : HasMany
 	{
-		return $this->hasMany('App\Models\Attribute', 'categoryId');
+		return $this->hasMany(Attribute::class, 'categoryId');
 	}
 
 	public function attributeSet () : HasOne

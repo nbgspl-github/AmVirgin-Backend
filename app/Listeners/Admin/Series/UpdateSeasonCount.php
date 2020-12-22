@@ -3,7 +3,7 @@
 namespace App\Listeners\Admin\Series;
 
 use App\Events\Admin\TvSeries\TvSeriesUpdated;
-use App\Models\Video;
+use App\Models\Video\Video;
 
 class UpdateSeasonCount{
 	public function __construct(){

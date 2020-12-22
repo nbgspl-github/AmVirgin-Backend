@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use App\Library\Utils\Uploads;
+use App\Models\Video\Video;
 use App\Queries\SliderQuery;
 use App\Traits\ActiveStatus;
 use App\Traits\DynamicAttributeNamedMethods;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Slider extends Model
+class Slider extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods;
 	use ActiveStatus;

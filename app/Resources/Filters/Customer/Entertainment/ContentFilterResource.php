@@ -3,8 +3,8 @@
 namespace App\Resources\Filters\Customer\Entertainment;
 
 use App\Models\Country;
-use App\Models\Genre;
-use App\Models\VideoSource;
+use App\Models\Video\Genre;
+use App\Models\Video\Source;
 use App\Resources\Filters\Customer\Entertainment\Country\ListResource as CountryList;
 use App\Resources\Filters\Customer\Entertainment\Genre\ListResource as GenreList;
 use App\Resources\Filters\Customer\Entertainment\Language\ListResource as LanguageList;
@@ -13,7 +13,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ContentFilterResource extends JsonResource
 {
-	public function toArray ($request): array
+	public function toArray ($request) : array
 	{
 		return [
 			'age' => $this->age(),
@@ -68,8 +68,8 @@ class ContentFilterResource extends JsonResource
 
 	protected function languages (): AnonymousResourceCollection
 	{
-		$availableLanguages = VideoSource::query()->select('mediaLanguageId')->distinct()->get();
-		$availableLanguages->transform(function (VideoSource $videoSource) {
+		$availableLanguages = Source::query()->select('mediaLanguageId')->distinct()->get();
+		$availableLanguages->transform(function (Source $videoSource) {
 			return $videoSource->language;
 		});
 		$availableLanguages = $availableLanguages->filter()->values();

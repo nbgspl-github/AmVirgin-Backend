@@ -2,7 +2,7 @@
 
 namespace App\Classes\Cart;
 
-use App\Models\Cart;
+use App\Models\Cart\Cart;
 use Illuminate\Support\Collection;
 
 class CartItemCollection

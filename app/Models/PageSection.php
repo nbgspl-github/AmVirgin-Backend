@@ -5,9 +5,8 @@ namespace App\Models;
 use App\Library\Enums\Common\PageSectionType;
 use App\Traits\DynamicAttributeNamedMethods;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
-class PageSection extends Model
+class PageSection extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods;
 

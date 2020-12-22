@@ -8,7 +8,6 @@ use App\Queries\Seller\AdvertisementQuery;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\FluentConstructor;
 use App\Traits\MediaLinks;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\UploadedFile;
 
@@ -19,7 +18,7 @@ use Illuminate\Http\UploadedFile;
  * @property ?Seller $seller
  * @property Status $status
  */
-class Advertisement extends Model
+class Advertisement extends \App\Library\Database\Eloquent\Model
 {
 	use  FluentConstructor, DynamicAttributeNamedMethods;
 	use MediaLinks;

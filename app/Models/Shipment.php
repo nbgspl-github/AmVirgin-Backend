@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Shipment extends Model
+class Shipment extends \App\Library\Database\Eloquent\Model
 {
 	protected $guarded = ['id'];
 

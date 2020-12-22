@@ -1,22 +1,21 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Order;
 
 use App\Traits\DynamicAttributeNamedMethods;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
  * Class OrderItem
- * @package App\Models
+ * @package App\Models\Order
  * @property Carbon $returnValidUntil
  * @property boolean $returnable
- * @property ?Product $product
- * @property ?SubOrder $subOrder
+ * @property ?\App\Models\Product $product
+ * @property ?\App\Models\SubOrder $subOrder
  */
-class OrderItem extends Model
+class Item extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods;
 
@@ -27,16 +26,16 @@ class OrderItem extends Model
 
 	public function product () : \Illuminate\Database\Eloquent\Relations\HasOne
 	{
-		return $this->hasOne(Product::class, 'id', 'productId')->with('images');
+		return $this->hasOne(\App\Models\Product::class, 'id', 'productId')->with('images');
 	}
 
 	public function returns () : HasMany
 	{
-		return $this->hasMany(Returns::class);
+		return $this->hasMany(\App\Models\Returns::class);
 	}
 
 	public function subOrder () : BelongsTo
 	{
-		return $this->belongsTo(SubOrder::class, 'subOrderId');
+		return $this->belongsTo(\App\Models\SubOrder::class, 'subOrderId');
 	}
 }

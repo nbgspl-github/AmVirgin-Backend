@@ -4,10 +4,9 @@ namespace App\Models;
 
 use App\Queries\NewsItemQuery;
 use App\Traits\MediaLinks;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 
-class NewsItem extends Model
+class NewsItem extends \App\Library\Database\Eloquent\Model
 {
 	use MediaLinks;
 
@@ -28,7 +27,7 @@ class NewsItem extends Model
 		return $this->retrieveMedia($this->attributes['image']);
 	}
 
-	public static function startQuery (): NewsItemQuery
+	public static function startQuery () : NewsItemQuery
 	{
 		return NewsItemQuery::begin();
 	}

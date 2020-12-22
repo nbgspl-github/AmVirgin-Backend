@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Library\Enums\Orders\Returns\Status;
 use App\Models\Auth\Customer;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Order\Item;
 use Illuminate\Support\Carbon;
 
 /**
@@ -15,7 +15,7 @@ use Illuminate\Support\Carbon;
  * @property ?SubOrder $segment
  * @property Status $status
  */
-class Returns extends Model
+class Returns extends \App\Library\Database\Eloquent\Model
 {
 	protected $guarded = ['id'];
 
@@ -35,6 +35,6 @@ class Returns extends Model
 
 	public function item ()
 	{
-		return $this->belongsTo(OrderItem::class, 'order_item_id');
+		return $this->belongsTo(Item::class, 'order_item_id');
 	}
 }

@@ -5,9 +5,10 @@ namespace App\Models;
 use App\Library\Enums\Orders\Status;
 use App\Models\Auth\Customer;
 use App\Models\Auth\Seller;
+use App\Models\Order\Item;
+use App\Models\Order\Order;
 use App\Queries\SubOrderQuery;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -17,9 +18,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property ?Order $order
  * @property ?Seller $seller
  * @property Status $status
- * @property Arrayable|OrderItem[] $items
+ * @property Arrayable|Item[] $items
  */
-class SubOrder extends Model
+class SubOrder extends \App\Library\Database\Eloquent\Model
 {
 	protected $guarded = ['id'];
 
@@ -27,7 +28,7 @@ class SubOrder extends Model
 
 	public function items () : HasMany
 	{
-		return $this->hasMany(OrderItem::class, 'subOrderId');
+		return $this->hasMany(Item::class, 'subOrderId');
 	}
 
 	public function customer () : BelongsTo

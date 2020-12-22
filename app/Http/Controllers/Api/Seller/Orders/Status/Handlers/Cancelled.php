@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\Seller\Orders\Status\Handlers;
 
-use App\Classes\Builders\ResponseBuilder;
 use App\Http\Controllers\Api\Seller\Orders\Status\Contracts\Action;
 use App\Library\Enums\Orders\Status;
+use App\Library\Http\Response\AppResponse;
 use App\Library\Utils\Extensions\Time;
 use App\Models\Auth\Seller;
 use App\Models\SubOrder;
@@ -30,7 +30,7 @@ class Cancelled implements Action
 		);
 	}
 
-	public function handle (SubOrder $order, Status $next, array $extra = []) : ResponseBuilder
+	public function handle (SubOrder $order, Status $next, array $extra = []) : AppResponse
 	{
 		$order->update([
 			'status' => Status::Cancelled,

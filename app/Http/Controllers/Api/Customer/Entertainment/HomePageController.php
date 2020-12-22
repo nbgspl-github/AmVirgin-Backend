@@ -9,7 +9,7 @@ use App\Library\Utils\Extensions\Str;
 use App\Models\PageSection;
 use App\Models\Product;
 use App\Models\Slider;
-use App\Models\Video;
+use App\Models\Video\Video;
 use App\Resources\Shop\Customer\HomePage\EntertainmentProductResource;
 use App\Resources\Shop\Customer\HomePage\EntertainmentSliderResource;
 use App\Resources\Shop\Customer\HomePage\TopPickResource;

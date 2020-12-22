@@ -6,7 +6,7 @@ use App\Http\Controllers\TwoFactorBaseAuthController;
 use App\Models\Auth\Customer;
 use App\Models\CustomerOtp;
 use App\Resources\Auth\Customer\AuthProfileResource;
-use Illuminate\Database\Eloquent\Model;
+
 use Illuminate\Support\Facades\Auth;
 
 /**

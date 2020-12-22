@@ -1,13 +1,9 @@
 <?php
 
-namespace App\Classes;
-
-use App\Traits\FluentConstructor;
+namespace App\Library\Http\Response;
 
 class WebResponse
 {
-	use FluentConstructor;
-
 	private $route = 'back';
 
 	private $message = null;
@@ -21,6 +17,11 @@ class WebResponse
 	private $parameter = null;
 
 	private $payload = [];
+
+	public static function instance () : self
+	{
+		return new self();
+	}
 
 	public function back ()
 	{

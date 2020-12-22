@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class CustomerRecent extends Model {
+class CustomerRecent extends \App\Library\Database\Eloquent\Model
+{
 	protected $table = 'customer-recent';
 	protected $fillable = [
 		'customerId',

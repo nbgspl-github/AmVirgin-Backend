@@ -2,9 +2,8 @@
 
 namespace App\Exceptions;
 
-use App\Models\Cart;
+use App\Models\Cart\Cart;
 use Exception;
-use Throwable;
 
 class CartAlreadySubmittedException extends Exception {
 	public function __construct(Cart $cart) {

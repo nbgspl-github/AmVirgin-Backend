@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Web\Admin\Products\Attributes;
 
-use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
+use App\Library\Http\Response\WebResponse;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
 use App\Traits\ValidatesRequest;

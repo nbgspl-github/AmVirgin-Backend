@@ -1,9 +1,12 @@
 <?php
+
 namespace Database\Seeders;
+
 use App\Models\Category;
 use Illuminate\Database\Seeder;
 
-class CategorySeeder extends Seeder{
+class CategorySeeder extends Seeder
+{
 	protected array $categories = [
 		'New Arrivals' => [
 
@@ -113,7 +116,8 @@ class CategorySeeder extends Seeder{
 	 *
 	 * @return void
 	 */
-	public function run(){
+	public function run ()
+	{
 		Category::truncate();
 		$root = Category::query()->updateOrCreate([
 			'name' => 'Root',
@@ -125,7 +129,7 @@ class CategorySeeder extends Seeder{
 			'specials' => [],
 		]);
 		foreach ($this->categories as $key => $value) {
-			$category = Category::instance();
+			$category = new Category();
 			$category->name = $key;
 			$category->description = sprintf('%s is a really cool trend. There\'s a whole lot more inside so be sure to follow.', $key);
 			$category->parentId = $root->id();
@@ -135,7 +139,7 @@ class CategorySeeder extends Seeder{
 			$category->save();
 			if (is_array($value) && count($value) > 0) {
 				foreach ($value as $innerCategory => $innerValue) {
-					$inner = Category::instance();
+					$inner = new Category();
 					$inner->name = $innerCategory;
 					$inner->description = sprintf('%s is a really cool trend. There\'s a whole lot more inside so be sure to follow.', $innerCategory);
 					$inner->parentId = $category->id();
@@ -145,7 +149,7 @@ class CategorySeeder extends Seeder{
 					$inner->save();
 					if (is_array($innerValue) && count($innerValue) > 0) {
 						foreach ($innerValue as $subInnerCategory => $subInnerValue) {
-							$subInner = Category::instance();
+							$subInner = new Category();
 							$subInner->name = $subInnerValue;
 							$subInner->description = sprintf('%s is a really cool trend. There\'s a whole lot more inside so be sure to follow.', $subInnerValue);
 							$subInner->parentId = $inner->id();

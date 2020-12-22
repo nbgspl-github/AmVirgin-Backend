@@ -6,9 +6,8 @@ use App\Library\Enums\Common\Directories;
 use App\Library\Utils\Extensions\Arrays;
 use App\Library\Utils\Uploads;
 use App\Traits\DynamicAttributeNamedMethods;
-use Illuminate\Database\Eloquent\Model;
 
-class SupportTicket extends Model
+class SupportTicket extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods;
 
@@ -26,7 +25,8 @@ class SupportTicket extends Model
 		'orderId' => 'array', 'attachments' => 'array',
 	];
 
-	public function setAttachmentsAttribute ($value) : void {
+	public function setAttachmentsAttribute ($value) : void
+	{
 		if (is_array($value) && count($value) > 0) {
 			$files = Arrays::Empty;
 			foreach ($value as $file) {
@@ -36,7 +36,8 @@ class SupportTicket extends Model
 		}
 	}
 
-	public function getAttachmentsAttribute ($value) : array {
+	public function getAttachmentsAttribute ($value) : array
+	{
 		$decoded = jsonDecodeArray($this->attributes['attachments']);
 		if (is_array($decoded) && count($decoded) > 0) {
 			$paths = Arrays::Empty;
@@ -46,8 +47,7 @@ class SupportTicket extends Model
 					Arrays::push($paths, $path);
 			}
 			return $paths;
-		}
-		else {
+		} else {
 			return Arrays::Empty;
 		}
 	}

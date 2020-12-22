@@ -2,9 +2,8 @@
 
 namespace App\Listeners\Admin\Videos;
 
-use App\Events\Admin\TvSeries\TvSeriesUpdated;
 use App\Events\Admin\Videos\VideoUpdated;
-use App\Models\Video;
+use App\Models\Video\Video;
 
 class UpdatePendingStatus {
 	public function __construct() {

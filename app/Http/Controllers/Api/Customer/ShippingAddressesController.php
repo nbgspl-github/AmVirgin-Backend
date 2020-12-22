@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Customer;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\Api\ApiController;
 use App\Library\Enums\Common\Tables;
-use App\Models\Address;
+use App\Models\Address\Address;
 use App\Resources\Addresses\Customer\ShippingAddressResource;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

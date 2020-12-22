@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use App\Traits\ActiveStatus;
-use Illuminate\Database\Eloquent\Model;
 
-class SubscriptionPlan extends Model
+class SubscriptionPlan extends \App\Library\Database\Eloquent\Model
 {
 	use ActiveStatus;
 

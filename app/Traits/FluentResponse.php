@@ -2,27 +2,27 @@
 
 namespace App\Traits;
 
-use App\Classes\Builders\ResponseBuilder;
+use App\Library\Http\Response\AppResponse;
 
 trait FluentResponse
 {
-	private function success () : ResponseBuilder
+	private function success () : AppResponse
 	{
-		return ResponseBuilder::asSuccess();
+		return AppResponse::asSuccess();
 	}
 
-	private function failed () : ResponseBuilder
+	private function failed () : AppResponse
 	{
-		return ResponseBuilder::asFailure();
+		return AppResponse::asFailure();
 	}
 
-	private function error () : ResponseBuilder
+	private function error () : AppResponse
 	{
-		return ResponseBuilder::asError();
+		return AppResponse::asError();
 	}
 
-	public function responseApp () : ResponseBuilder
+	public function responseApp () : AppResponse
 	{
-		return ResponseBuilder::instance();
+		return AppResponse::instance();
 	}
 }

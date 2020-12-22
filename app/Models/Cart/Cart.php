@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Cart;
 
 use App\Classes\Cart\CartItem;
 use App\Classes\Cart\CartItemCollection;
@@ -9,13 +9,13 @@ use App\Exceptions\CartItemNotFoundException;
 use App\Library\Enums\Cart\Status;
 use App\Library\Utils\Extensions\Str;
 use App\Models\Auth\Customer;
+use App\Models\Order\Order;
 use App\Resources\Products\Customer\OptionResource;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use stdClass;
 
-class Cart extends Model
+class Cart extends \App\Library\Database\Eloquent\Model
 {
 	const TaxRate = 0.25;
 	protected $guarded = ['id'];
@@ -134,7 +134,7 @@ class Cart extends Model
 
 	public function session ()
 	{
-		return $this->hasOne(CartSession::class, 'sessionId', 'sessionId');
+		return $this->hasOne(\App\Models\Cart\Session::class, 'sessionId', 'sessionId');
 	}
 
 	public function customer ()
@@ -166,11 +166,11 @@ class Cart extends Model
 	}
 
 	/**
-	 * @param Transaction $transaction
+	 * @param \App\Models\Transaction $transaction
 	 * @return Order|Model
 	 * @throws CartAlreadySubmittedException
 	 */
-	public function submit (Transaction $transaction) : Order
+	public function submit (\App\Models\Transaction $transaction) : Order
 	{
 		/**
 		 * 1.) WE create the main order which will act as the parent order for all the subsequent vendor orders.
@@ -203,7 +203,7 @@ class Cart extends Model
 			});
 			$total = $subTotal;
 			/**
-			 * @var $subOrder SubOrder
+			 * @var $subOrder \App\Models\SubOrder
 			 */
 			$subOrder = $order->subOrders()->create([
 				'sellerId' => $sellerId,
@@ -246,7 +246,7 @@ class Cart extends Model
 
 	public function transaction ()
 	{
-		return $this->belongsTo(Transaction::class, 'transactionId');
+		return $this->belongsTo(\App\Models\Transaction::class, 'transactionId');
 	}
 
 	protected function handleItemsUpdated ()

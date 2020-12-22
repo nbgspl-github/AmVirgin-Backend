@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use App\Traits\GenerateUrls;
-use Illuminate\Database\Eloquent\Model;
 
-class CategoryBanner extends Model
+class CategoryBanner extends \App\Library\Database\Eloquent\Model
 {
 	use GenerateUrls;
 

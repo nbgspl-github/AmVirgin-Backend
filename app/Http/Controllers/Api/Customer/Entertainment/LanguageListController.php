@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Api\Customer\Entertainment;
 
 use App\Http\Controllers\Api\ApiController;
-use App\Models\VideoSource;
+use App\Models\Video\Source;
 
 class LanguageListController extends ApiController
 {
 	public function index ()
 	{
-		$availableLanguages = VideoSource::query()->select('mediaLanguageId')->distinct()->get();
-		$availableLanguages->transform(function (VideoSource $videoSource) {
+		$availableLanguages = Source::query()->select('mediaLanguageId')->distinct()->get();
+		$availableLanguages->transform(function (Source $videoSource) {
 			$language = $videoSource->language;
 			if ($language != null) {
 				return (object)[

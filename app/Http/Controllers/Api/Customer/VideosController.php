@@ -7,9 +7,9 @@ use App\Http\Resources\Videos\VideoResource;
 use App\Library\Enums\Videos\Types;
 use App\Library\Utils\Extensions\Str;
 use App\Library\Utils\Uploads;
-use App\Models\Video;
-use App\Models\VideoSource;
-use App\Models\WatchLaterVideo;
+use App\Models\Video\Source;
+use App\Models\Video\Video;
+use App\Models\Video\WatchLater;
 use App\Resources\Shop\Customer\HomePage\TrendingNowVideoResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -40,7 +40,7 @@ class VideosController extends ApiController
 						return [
 							'title' => $episode->first()->getTitle(),
 							'description' => $episode->first()->getDescription(),
-							'options' => $episode->transform(function (VideoSource $source) {
+							'options' => $episode->transform(function (Source $source) {
 								return [
 									'language' => $source->language()->first()->getName(),
 									'quality' => $source->mediaQuality()->first()->getName(),
@@ -64,7 +64,7 @@ class VideosController extends ApiController
 				})->values();
 				$payload['content'] = $seasons;
 			} elseif ($video->getType() == 'movie') {
-				$sources = $video->sources->transform(function (VideoSource $source) {
+				$sources = $video->sources->transform(function (Source $source) {
 					return [
 						'title' => $source->title,
 						'description' => $source->description,
@@ -118,13 +118,13 @@ class VideosController extends ApiController
 				$dataSet['video_type'] = !empty($request->video_type) ? $request->video_type : '';
 				$dataSet['video_count'] = 1;
 
-				$videoData = WatchLaterVideo::where(['customer_id' => $id, 'video_id' => $videoId])->first();
+				$videoData = WatchLater::where(['customer_id' => $id, 'video_id' => $videoId])->first();
 
 				if (!empty($videoData)) {
 					$response->status(Response::HTTP_OK)->message('This video is already added in list');
 					return $response->send();
 				} else {
-					$res = WatchLaterVideo::create($dataSet);
+					$res = WatchLater::create($dataSet);
 					$response->status(Response::HTTP_OK)->message('Successfully added in list');
 					return $response->send();
 				}
@@ -146,7 +146,7 @@ class VideosController extends ApiController
 		try {
 
 			$cId = $this->guard()->id();
-			$videoData = WatchLaterVideo::where(['customer_id' => $cId, 'video_id' => $id])->first();
+			$videoData = WatchLater::where(['customer_id' => $cId, 'video_id' => $id])->first();
 
 			if (!empty($videoData)) {
 				$videoData->delete();
@@ -173,7 +173,7 @@ class VideosController extends ApiController
 		try {
 
 			$cId = $this->guard()->id();
-			$dataSet = WatchLaterVideo::with('video')
+			$dataSet = WatchLater::with('video')
 				->where(['customer_id' => $cId])
 				->get();
 

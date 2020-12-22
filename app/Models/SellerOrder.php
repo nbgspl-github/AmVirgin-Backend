@@ -4,11 +4,11 @@ namespace App\Models;
 
 use App\Models\Auth\Customer;
 use App\Models\Auth\Seller;
+use App\Models\Order\Order;
 use App\Queries\SellerOrderQuery;
 use App\Traits\DynamicAttributeNamedMethods;
-use Illuminate\Database\Eloquent\Model;
 
-class SellerOrder extends Model
+class SellerOrder extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods;
 

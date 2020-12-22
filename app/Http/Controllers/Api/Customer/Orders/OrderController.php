@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\Api\Customer\Orders;
 
-use App\Exceptions\ActionNotAllowedException;
 use App\Http\Controllers\Api\ApiController;
-use App\Models\Order;
+use App\Models\Order\Order;
 use App\Resources\Orders\Customer\ListResource;
 use App\Resources\Orders\Customer\OrderResource;
-use App\Resources\Orders\Customer\OrderTrackingResource;
 use Illuminate\Http\JsonResponse;
 
 class OrderController extends ApiController

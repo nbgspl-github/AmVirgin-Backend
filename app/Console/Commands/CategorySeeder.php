@@ -5,7 +5,8 @@ namespace App\Console\Commands;
 use App\Models\Category;
 use Illuminate\Console\Command;
 
-class CategorySeeder extends Command{
+class CategorySeeder extends Command
+{
 	protected $signature = 'category:seed';
 
 	protected $description = 'Command description';
@@ -95,11 +96,13 @@ class CategorySeeder extends Command{
 		],
 	];
 
-	public function __construct(){
+	public function __construct ()
+	{
 		parent::__construct();
 	}
 
-	public function handle(){
+	public function handle ()
+	{
 		$root = Category::query()->updateOrCreate([
 			'name' => 'Root',
 		], [
@@ -110,7 +113,7 @@ class CategorySeeder extends Command{
 			'specials' => [],
 		]);
 		foreach ($this->categories as $key => $value) {
-			$category = Category::instance();
+			$category = new Category();
 			$category->name = $key;
 			$category->description = sprintf('%s is a really cool trend. There\'s a whole lot more inside so be sure to follow.', $key);
 			$category->parentId = $root->id();
@@ -120,7 +123,7 @@ class CategorySeeder extends Command{
 			$category->save();
 			if (is_array($value) && count($value) > 0) {
 				foreach ($value as $innerCategory => $innerValue) {
-					$inner = Category::instance();
+					$inner = new Category();
 					$inner->name = $innerCategory;
 					$inner->description = sprintf('%s is a really cool trend. There\'s a whole lot more inside so be sure to follow.', $innerCategory);
 					$inner->parentId = $category->id();
@@ -130,7 +133,7 @@ class CategorySeeder extends Command{
 					$inner->save();
 					if (is_array($innerValue) && count($innerValue) > 0) {
 						foreach ($innerValue as $subInnerCategory => $subInnerValue) {
-							$subInner = Category::instance();
+							$subInner = new Category();
 							$subInner->name = $subInnerValue;
 							$subInner->description = sprintf('%s is a really cool trend. There\'s a whole lot more inside so be sure to follow.', $subInnerValue);
 							$subInner->parentId = $inner->id();

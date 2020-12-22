@@ -2,7 +2,7 @@
 
 namespace App\Events\Orders\Status;
 
-use App\Models\Order;
+use App\Models\Order\Order;
 use App\Traits\ExposeEventData;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;

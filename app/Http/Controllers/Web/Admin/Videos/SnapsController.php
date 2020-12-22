@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Web\Admin\Videos;
 
-use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
 use App\Library\Enums\Common\Directories;
+use App\Library\Http\Response\WebResponse;
 use App\Library\Utils\Uploads;
-use App\Models\Video;
-use App\Models\VideoSnap;
+use App\Models\Video\Snap;
+use App\Models\Video\Video;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\UploadedFile;
 use Throwable;
@@ -49,7 +49,7 @@ class SnapsController extends VideosBase
 			$video = Video::findOrFail($id);
 			$payload = $this->requestValid(request(), $this->rules('store'));
 			collect($payload['image'])->each(function (UploadedFile $file) use ($video) {
-				VideoSnap::instance()->
+				(new Snap())->
 				setVideoId($video->getKey())->
 				setFile(Uploads::access()->putFile(Directories::VideoSnaps, $file, 'private'))->
 				setDescription('Special snaps')->
@@ -71,7 +71,7 @@ class SnapsController extends VideosBase
 	{
 		$response = responseApp();
 		try {
-			$videoSnap = VideoSnap::findOrFail($subId);
+			$videoSnap = Snap::findOrFail($subId);
 			$videoSnap->delete();
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Snapshot deleted successfully.');
 		} catch (ModelNotFoundException $exception) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Order;
 
 use App\Library\Enums\Orders\Payments\Methods;
 use App\Library\Enums\Orders\Status;
@@ -12,11 +12,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * Represents the top level order element of an order placed by a customer.
- * @package App\Models
+ * @package App\Models\Order
  * @property Status $status
  * @property ?Customer $customer
- * @property ?Address $address
- * @property ?Address $billingAddress
+ * @property ?\App\Models\Address\Address $address
+ * @property ?\App\Models\Address\Address $billingAddress
  * @property Methods $paymentMode
  */
 class Order extends \App\Library\Database\Eloquent\Model
@@ -41,7 +41,7 @@ class Order extends \App\Library\Database\Eloquent\Model
 
 	public function items () : HasMany
 	{
-		return $this->hasMany(OrderItem::class, 'orderId')->with('product');
+		return $this->hasMany(\App\Models\Order\Item::class, 'orderId')->with('product');
 	}
 
 	public function customer () : BelongsTo
@@ -51,36 +51,36 @@ class Order extends \App\Library\Database\Eloquent\Model
 
 	public function products () : BelongsTo
 	{
-		return $this->belongsTo(Product::class, OrderItem::class, 'id', 'productId');
+		return $this->belongsTo(\App\Models\Product::class, \App\Models\Order\Item::class, 'id', 'productId');
 	}
 
 	public function address () : BelongsTo
 	{
-		return $this->belongsTo(Address::class, 'addressId')->with('city', 'state');
+		return $this->belongsTo(\App\Models\Address\Address::class, 'addressId')->with('city', 'state');
 	}
 
 	public function billingAddress () : BelongsTo
 	{
-		return $this->belongsTo(Address::class, 'billingAddressId')->with('city', 'state');
+		return $this->belongsTo(\App\Models\Address\Address::class, 'billingAddressId')->with('city', 'state');
 	}
 
 	public function sellerOrder () : HasOne
 	{
-		return $this->hasOne(SellerOrder::class, 'orderId', 'id');
+		return $this->hasOne(\App\Models\SellerOrder::class, 'orderId', 'id');
 	}
 
 	public function transaction () : HasOne
 	{
-		return $this->hasOne(Transaction::class, 'orderId');
+		return $this->hasOne(\App\Models\Transaction::class, 'orderId');
 	}
 
 	public function subOrders () : HasMany
 	{
-		return $this->hasMany(SubOrder::class, 'orderId');
+		return $this->hasMany(\App\Models\SubOrder::class, 'orderId');
 	}
 
 	public function timeline () : HasMany
 	{
-		return $this->hasMany(OrderTimeline::class, 'orderId');
+		return $this->hasMany(\App\Models\Order\Timeline::class, 'orderId');
 	}
 }

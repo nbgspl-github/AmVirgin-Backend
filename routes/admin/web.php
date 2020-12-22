@@ -25,8 +25,8 @@ use App\Http\Controllers\Web\Admin\TvSeries\TvSeriesBase;
 use App\Http\Controllers\Web\Admin\Videos\VideosBase;
 use App\Library\Utils\Extensions\Str;
 use App\Models\Category;
-use App\Models\Genre;
 use App\Models\Slider;
+use App\Models\Video\Genre;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 

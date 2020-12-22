@@ -6,9 +6,9 @@ use App\Http\Controllers\BaseController;
 use App\Library\Enums\Orders\Status;
 use App\Models\Auth\Customer;
 use App\Models\Auth\Seller;
-use App\Models\Order;
+use App\Models\Order\Order;
 use App\Models\Product;
-use App\Models\Video;
+use App\Models\Video\Video;
 
 class HomeController extends BaseController
 {

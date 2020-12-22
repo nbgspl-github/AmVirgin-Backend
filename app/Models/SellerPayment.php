@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class SellerPayment extends Model
+class SellerPayment extends \App\Library\Database\Eloquent\Model
 {
 	protected $guarded = ['id'];
 }

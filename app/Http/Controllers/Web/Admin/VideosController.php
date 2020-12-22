@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
-use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Http\Resources\Videos\VideoResource;
 use App\Library\Enums\Common\Directories;
 use App\Library\Enums\Videos\Types;
-use App\Models\Genre;
-use App\Models\MediaLanguage;
-use App\Models\MediaQuality;
-use App\Models\MediaServer;
-use App\Models\Video;
-use App\Models\VideoMeta;
-use App\Models\VideoSource;
+use App\Library\Http\Response\WebResponse;
+use App\Models\Video\Genre;
+use App\Models\Video\MediaLanguage;
+use App\Models\Video\MediaQuality;
+use App\Models\Video\MediaServer;
+use App\Models\Video\Meta;
+use App\Models\Video\Source;
+use App\Models\Video\Video;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -100,7 +100,7 @@ class VideosController extends BaseController
 				'hasSeasons' => false,
 			]);
 
-			VideoSource::create([
+			Source::create([
 				'videoId' => $video->getKey(),
 				'seasonId' => null,
 				'description' => $video->getDescription(),
@@ -111,7 +111,7 @@ class VideosController extends BaseController
 			]);
 
 			if (request()->hasFile('videoB')) {
-				VideoSource::create([
+				Source::create([
 					'videoId' => $video->getKey(),
 					'seasonId' => null,
 					'description' => $video->getDescription(),
@@ -123,7 +123,7 @@ class VideosController extends BaseController
 			}
 
 			if (request()->hasFile('videoC')) {
-				VideoSource::create([
+				Source::create([
 					'videoId' => $video->getKey(),
 					'seasonId' => null,
 					'description' => $video->getDescription(),
@@ -135,7 +135,7 @@ class VideosController extends BaseController
 			}
 
 			if (request()->hasFile('videoD')) {
-				VideoSource::create([
+				Source::create([
 					'videoId' => $video->getKey(),
 					'seasonId' => null,
 					'description' => $video->getDescription(),
@@ -147,7 +147,7 @@ class VideosController extends BaseController
 			}
 
 			if (request()->hasFile('videoE')) {
-				VideoSource::create([
+				Source::create([
 					'videoId' => $video->getKey(),
 					'seasonId' => null,
 					'description' => $video->getDescription(),
@@ -206,12 +206,12 @@ class VideosController extends BaseController
 		$response = responseApp();
 		try {
 			$video = Video::findOrFail($id);
-			$meta = VideoMeta::where('videoId', $video->getKey())->get();
-			$meta->each(function (VideoMeta $meta) {
+			$meta = Meta::where('videoId', $video->getKey())->get();
+			$meta->each(function (Meta $meta) {
 				$meta->delete();
 			});
-			$sources = VideoSource::where('videoId', $video->getKey())->get();
-			$sources->each(function (VideoSource $videoSource) {
+			$sources = Source::where('videoId', $video->getKey())->get();
+			$sources->each(function (Source $videoSource) {
 				$videoSource->delete();
 			});
 			$video->delete();

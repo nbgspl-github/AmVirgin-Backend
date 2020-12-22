@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use App\Traits\FluentConstructor;
-use Illuminate\Database\Eloquent\Model;
 
-class SellerOtp extends Model
+class SellerOtp extends \App\Library\Database\Eloquent\Model
 {
 	use FluentConstructor;
 

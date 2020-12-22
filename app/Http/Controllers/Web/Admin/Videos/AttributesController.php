@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Web\Admin\Videos;
 
-use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
 use App\Library\Enums\Common\PageSectionType;
-use App\Models\Genre;
-use App\Models\MediaLanguage;
-use App\Models\MediaQuality;
-use App\Models\MediaServer;
+use App\Library\Http\Response\WebResponse;
 use App\Models\PageSection;
-use App\Models\Video;
+use App\Models\Video\Genre;
+use App\Models\Video\MediaLanguage;
+use App\Models\Video\MediaQuality;
+use App\Models\Video\MediaServer;
+use App\Models\Video\Video;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 

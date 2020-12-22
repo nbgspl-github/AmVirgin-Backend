@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use App\Traits\DynamicAttributeNamedMethods;
-use Illuminate\Database\Eloquent\Model;
 
-class HsnCode extends Model{
+class HsnCode extends \App\Library\Database\Eloquent\Model
+{
 	use DynamicAttributeNamedMethods;
+
 	protected $table = 'hsn-codes';
 	protected $primaryKey = 'hsnCode';
 	protected $fillable = [

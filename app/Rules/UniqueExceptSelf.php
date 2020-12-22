@@ -2,9 +2,7 @@
 
 namespace App\Rules;
 
-use App\Models\Genre;
 use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Database\Eloquent\Model;
 
 class UniqueExceptSelf implements Rule {
 	/**

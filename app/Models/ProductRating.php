@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use App\Models\Auth\Customer;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Order\Order;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ProductRating extends Model
+class ProductRating extends \App\Library\Database\Eloquent\Model
 {
 	use SoftDeletes;
 

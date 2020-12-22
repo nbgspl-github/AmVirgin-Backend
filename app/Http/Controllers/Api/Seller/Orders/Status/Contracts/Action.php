@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api\Seller\Orders\Status\Contracts;
 
-use App\Classes\Builders\ResponseBuilder;
 use App\Library\Enums\Orders\Status;
+use App\Library\Http\Response\AppResponse;
 use App\Models\Auth\Seller;
 use App\Models\SubOrder;
 
@@ -33,7 +33,7 @@ interface Action
 	 * @param SubOrder $order
 	 * @param Status $next
 	 * @param array $extra
-	 * @return ResponseBuilder
+	 * @return AppResponse
 	 */
-	public function handle (SubOrder $order, Status $next, array $extra) : ResponseBuilder;
+	public function handle (SubOrder $order, Status $next, array $extra) : AppResponse;
 }

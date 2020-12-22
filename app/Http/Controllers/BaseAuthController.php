@@ -14,7 +14,7 @@ use App\Resources\Auth\Seller\AuthProfileResource;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Exception;
-use Illuminate\Database\Eloquent\Model;
+
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;

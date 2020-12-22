@@ -10,7 +10,6 @@ use App\Traits\GenerateSlugs;
 use App\Traits\HasInventoryStocks;
 use App\Traits\HasSpecialAttributes;
 use BinaryCats\Sku\HasSku;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,7 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * Product is an entity that can be sold, purchased, created, updated and deleted.
  * @package App\Models
  */
-class Product extends Model
+class Product extends \App\Library\Database\Eloquent\Model
 {
 	use FluentConstructor, DynamicAttributeNamedMethods, HasSpecialAttributes, GenerateSlugs, SoftDeletes, HasSku, HasInventoryStocks;
 

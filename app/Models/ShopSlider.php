@@ -5,9 +5,8 @@ namespace App\Models;
 use App\Queries\ShopSliderQuery;
 use App\Traits\ActiveStatus;
 use App\Traits\DynamicAttributeNamedMethods;
-use Illuminate\Database\Eloquent\Model;
 
-class ShopSlider extends Model
+class ShopSlider extends \App\Library\Database\Eloquent\Model
 {
 	use ActiveStatus;
 	use DynamicAttributeNamedMethods;

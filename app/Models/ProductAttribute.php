@@ -3,14 +3,13 @@
 namespace App\Models;
 
 use App\Traits\DynamicAttributeNamedMethods;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Defines a value for a particular trait of a product.
  * @package App\Models
  */
-class ProductAttribute extends Model
+class ProductAttribute extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods;
 

@@ -4,7 +4,7 @@ namespace App\Resources\Orders\Seller;
 
 use App\Library\Enums\Orders\Payments\Methods;
 use App\Library\Enums\Orders\Status;
-use App\Models\Order;
+use App\Models\Order\Order;
 use App\Resources\Orders\Customer\AddressResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 

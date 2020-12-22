@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use App\Traits\DynamicAttributeNamedMethods;
-use Illuminate\Database\Eloquent\Model;
 
-class SellerOrderItem extends Model
+class SellerOrderItem extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods;
 

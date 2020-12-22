@@ -4,7 +4,6 @@ namespace App\Traits;
 
 use App\Exceptions\OtpPushException;
 use App\Models\Settings;
-use Illuminate\Database\Eloquent\Model;
 
 trait GuestOtpVerificationSupport{
 	public function generateOtp($length){

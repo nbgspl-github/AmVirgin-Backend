@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Video;
 
-use Illuminate\Database\Eloquent\Model;
-
-class MediaServer extends Model
+class MediaServer extends \App\Library\Database\Eloquent\Model
 {
 	protected $table = 'media-servers';
 

@@ -14,5 +14,7 @@ use Illuminate\Support\Carbon;
  */
 class Model extends \Illuminate\Database\Eloquent\Model
 {
+	use \App\Traits\MediaLinks;
+
 	protected $guarded = ['id'];
 }

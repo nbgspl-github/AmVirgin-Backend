@@ -3,7 +3,7 @@
  * Copyright (c) 2019. Aviral Singh
  */
 
-namespace App\Classes\Builders;
+namespace App\Library\Http\Response;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\JsonResponse;
@@ -15,7 +15,7 @@ use Illuminate\Http\Response;
  * Builder class to create responses, supports chained method class for easy one line responses.
  * @package App\Utils
  */
-class ResponseBuilder
+class AppResponse
 {
 
 	/**
@@ -54,11 +54,11 @@ class ResponseBuilder
 
 	/**
 	 * Returns an instance of AppResponse setting its status to 1.
-	 * @return ResponseBuilder
+	 * @return AppResponse
 	 */
 	public static function asSuccess ()
 	{
-		$object = new ResponseBuilder();
+		$object = new AppResponse();
 		$object->message = 'Success';
 		$object->status = 1;
 		return $object;
@@ -66,11 +66,11 @@ class ResponseBuilder
 
 	/**
 	 * Returns an instance of AppResponse setting its status to 0.
-	 * @return ResponseBuilder
+	 * @return AppResponse
 	 */
 	public static function asFailure ()
 	{
-		$object = new ResponseBuilder();
+		$object = new AppResponse();
 		$object->message = 'Failed';
 		$object->status = 0;
 		return $object;
@@ -78,11 +78,11 @@ class ResponseBuilder
 
 	/**
 	 * Returns an instance of AppResponse setting its status to 0.
-	 * @return ResponseBuilder
+	 * @return AppResponse
 	 */
 	public static function asError ()
 	{
-		$object = new ResponseBuilder();
+		$object = new AppResponse();
 		$object->message = 'Failed';
 		$object->status = 0;
 		$object->statusCode = \Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR;
@@ -91,13 +91,13 @@ class ResponseBuilder
 
 	public static function instance ()
 	{
-		return new ResponseBuilder();
+		return new AppResponse();
 	}
 
 	/**
 	 * Sets the message field for this response.
 	 * @param $message string|callable|Validator
-	 * @return ResponseBuilder
+	 * @return AppResponse
 	 */
 	public function message ($message)
 	{

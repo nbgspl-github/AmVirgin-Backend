@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\ApiController;
 use App\Library\Enums\Orders\Returns\Status;
 use App\Library\Utils\Extensions\Rule;
 use App\Library\Utils\Extensions\Time;
-use App\Models\OrderItem;
+use App\Models\Order\Item;
 use App\Traits\ValidatesRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -30,11 +30,11 @@ class ReturnController extends ApiController
 	}
 
 	/**
-	 * @param OrderItem $item
+	 * @param Item $item
 	 * @return JsonResponse
 	 * @throws ValidationException
 	 */
-	public function return (OrderItem $item) : JsonResponse
+	public function return (Item $item) : JsonResponse
 	{
 		$response = responseApp();
 		$pending = $item->returns()->whereNotIn('status', [Status::Completed])->exists();

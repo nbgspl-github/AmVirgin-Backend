@@ -5,10 +5,9 @@ namespace App\Models;
 use App\Queries\BrandQuery;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\GenerateSlugs;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Brand extends Model
+class Brand extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods, GenerateSlugs;
 

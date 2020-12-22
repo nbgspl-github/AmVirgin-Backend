@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\ApiController;
 use App\Http\Resources\Videos\JustAddedVideoResource;
 use App\Http\Resources\Videos\TopPicksVideoResource;
 use App\Http\Resources\Videos\TrendingPicksVideoResource;
-use App\Models\Video;
+use App\Models\Video\Video;
 use App\Traits\FluentResponse;
 use Throwable;
 

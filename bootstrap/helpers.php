@@ -1,7 +1,7 @@
 <?php
 
-use App\Classes\Builders\ResponseBuilder;
-use App\Classes\WebResponse;
+use App\Library\Http\Response\AppResponse;
+use App\Library\Http\Response\WebResponse;
 use App\Library\Utils\Extensions\Str;
 use Illuminate\Support\Facades\Log;
 
@@ -68,9 +68,9 @@ function responseWeb () : WebResponse
 	return WebResponse::instance();
 }
 
-function responseApp () : ResponseBuilder
+function responseApp () : AppResponse
 {
-	return ResponseBuilder::instance();
+	return AppResponse::instance();
 }
 
 /**

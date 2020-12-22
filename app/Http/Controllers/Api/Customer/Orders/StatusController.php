@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\API\Customer\Orders;
 
 use App\Http\Controllers\AppController;
-use App\Models\Order;
-use App\Models\OrderItem;
+use App\Models\Order\Order;
+use App\Models\Order\Item;
 
 class StatusController extends AppController
 {
@@ -13,17 +13,17 @@ class StatusController extends AppController
 		parent::__construct();
 	}
 
-	public function return (OrderItem $order)
+	public function return (Item $order)
 	{
 
 	}
 
-	public function cancel (OrderItem $order)
+	public function cancel (Item $order)
 	{
 
 	}
 
-	public function reschedule (OrderItem $order)
+	public function reschedule (Item $order)
 	{
 
 	}

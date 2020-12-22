@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Customer\Entertainment;
 
 use App\Http\Controllers\Api\ApiController;
-use App\Models\Genre;
+use App\Models\Video\Genre;
 
 class GenreListController extends ApiController
 {

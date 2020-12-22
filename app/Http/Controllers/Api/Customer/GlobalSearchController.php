@@ -9,7 +9,7 @@ use App\Library\Enums\Common\Tables;
 use App\Library\Utils\Extensions\Rule;
 use App\Library\Utils\Extensions\Str;
 use App\Models\Product;
-use App\Models\Video;
+use App\Models\Video\Video;
 use App\Resources\GlobalSearch\ProductResultResource;
 use App\Resources\GlobalSearch\VideoResultResource;
 use App\Traits\ValidatesRequest;

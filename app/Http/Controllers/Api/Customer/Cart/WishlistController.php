@@ -6,7 +6,7 @@ use App\Classes\Cart\CartItem;
 use App\Exceptions\ValidationException;
 use App\Library\Enums\Cart\Status;
 use App\Library\Enums\Common\Tables;
-use App\Models\Cart;
+use App\Models\Cart\Cart;
 use App\Models\CustomerWishlist;
 use App\Models\Product;
 use App\Resources\Products\Customer\CatalogListResource;
@@ -117,7 +117,7 @@ class WishlistController extends \App\Http\Controllers\Api\ApiController
 					$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Cart already contains the item you specified.');
 				}
 			} catch (ModelNotFoundException $exception) {
-				\App\Models\Cart::create([
+				\App\Models\Cart\Cart::create([
 					'sessionId' => $validated->sessionId,
 					'status' => Status::Pending,
 				]);

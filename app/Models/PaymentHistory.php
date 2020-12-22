@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-class PaymentHistory extends Model
+
+class PaymentHistory extends \App\Library\Database\Eloquent\Model
 {
-    use SoftDeletes;
+	use SoftDeletes;
 }

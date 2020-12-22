@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Web\Admin\TvSeries;
 
-use App\Classes\WebResponse;
 use App\Library\Enums\Common\Directories;
+use App\Library\Http\Response\WebResponse;
 use App\Library\Utils\Uploads;
-use App\Models\Video;
+use App\Models\Video\Video;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 

@@ -1,24 +1,25 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Video;
 
-use Illuminate\Database\Eloquent\Model;
-
-class MediaLanguage extends Model {
+class MediaLanguage extends \App\Library\Database\Eloquent\Model
+{
 	public $timestamps = false;
 	protected $table = 'media-languages';
 
 	/**
 	 * @return string
 	 */
-	public function getName(): string {
+	public function getName () : string
+	{
 		return $this->name;
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getCode(): string{
+	public function getCode () : string
+	{
 		return $this->code;
 	}
 

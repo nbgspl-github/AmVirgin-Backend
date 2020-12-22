@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\Seller\Payments;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Library\Enums\Orders\Status;
-use App\Models\OrderItem;
+use App\Models\Order\Item;
 use App\Models\SubOrder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
@@ -61,7 +61,7 @@ class PaymentController extends ApiController
 		return $this->shippingCost($order->items);
 	}
 
-	protected function shippingCost (OrderItem ...$items) : float
+	protected function shippingCost (Item ...$items) : float
 	{
 		$cost = 0.0;
 		foreach ($items as $item) {

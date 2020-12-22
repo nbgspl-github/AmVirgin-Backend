@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\Customer;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Resources\Videos\PopularVideosResource;
-use App\Models\Video;
+use App\Models\Video\Video;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
 

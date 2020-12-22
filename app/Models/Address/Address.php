@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Address;
 
 use App\Traits\DynamicAttributeNamedMethods;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Address extends Model
+class Address extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods;
 
-	protected $guarded = ['id'];
+	protected $table = 'addresses';
+
 	protected $casts = [
 		'saturdayWorking' => 'boolean',
 		'sundayWorking' => 'boolean',
@@ -19,16 +19,16 @@ class Address extends Model
 
 	public function state () : BelongsTo
 	{
-		return $this->belongsTo(State::class, 'stateId');
+		return $this->belongsTo(\App\Models\State::class, 'stateId');
 	}
 
 	public function city () : BelongsTo
 	{
-		return $this->belongsTo(City::class, 'cityId');
+		return $this->belongsTo(\App\Models\City::class, 'cityId');
 	}
 
 	public function country ()
 	{
-		return Country::query()->where('initials', 'IN')->first();
+		return \App\Models\Country::query()->where('initials', 'IN')->first();
 	}
 }

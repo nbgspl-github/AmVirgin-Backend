@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
-use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Library\Enums\Common\Directories;
 use App\Library\Enums\Videos\Types;
-use App\Models\Genre;
-use App\Models\MediaLanguage;
-use App\Models\MediaQuality;
-use App\Models\MediaServer;
-use App\Models\Video;
-use App\Models\VideoMeta;
-use App\Models\VideoSource;
+use App\Library\Http\Response\WebResponse;
+use App\Models\Video\Genre;
+use App\Models\Video\MediaLanguage;
+use App\Models\Video\MediaQuality;
+use App\Models\Video\MediaServer;
+use App\Models\Video\Meta;
+use App\Models\Video\Source;
+use App\Models\Video\Video;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -129,12 +129,12 @@ class TvSeriesController extends BaseController
 		$response = responseApp();
 		try {
 			$tvSeries = Video::findOrFail($id);
-			$meta = VideoMeta::where('videoId', $tvSeries->getKey())->get();
-			$meta->each(function (VideoMeta $meta) {
+			$meta = Meta::where('videoId', $tvSeries->getKey())->get();
+			$meta->each(function (Meta $meta) {
 				$meta->delete();
 			});
-			$sources = VideoSource::where('videoId', $tvSeries->getKey())->get();
-			$sources->each(function (VideoSource $videoSource) {
+			$sources = Source::where('videoId', $tvSeries->getKey())->get();
+			$sources->each(function (Source $videoSource) {
 				$videoSource->delete();
 			});
 			$tvSeries->delete();
@@ -237,7 +237,7 @@ class TvSeriesController extends BaseController
 			$contentPayload = [];
 			$sources = $video->sources();
 			$sources = $sources->get();
-			$sources->transform(function (VideoSource $videoSource) use ($qualities, $languages) {
+			$sources->transform(function (Source $videoSource) use ($qualities, $languages) {
 				$payload = new stdClass();
 				$payload->title = $videoSource->getTitle();
 				$payload->description = $videoSource->getDescription();
@@ -288,7 +288,7 @@ class TvSeriesController extends BaseController
 			$durations = $payload['duration'];
 			$count = count($videos);
 			for ($i = 0; $i < $count; $i++) {
-				$source = isset($sources[$i]) ? VideoSource::find($sources[$i]) : null;
+				$source = isset($sources[$i]) ? Source::find($sources[$i]) : null;
 				if ($source != null) {
 					$fields = [
 						'title' => $titles[$i],
@@ -307,7 +307,7 @@ class TvSeriesController extends BaseController
 					}
 					$source->update($fields);
 				} else {
-					VideoSource::create([
+					Source::create([
 						'title' => $titles[$i],
 						'description' => $descriptions[$i],
 						'duration' => $durations[$i],
@@ -322,12 +322,12 @@ class TvSeriesController extends BaseController
 					]);
 				}
 			}
-			$seasonCount = VideoSource::distinct('season')->count('season');
-			$mediaLanguages = VideoSource::select('mediaLanguageId')->where('videoId', $video->getKey())->get();
+			$seasonCount = Source::distinct('season')->count('season');
+			$mediaLanguages = Source::select('mediaLanguageId')->where('videoId', $video->getKey())->get();
 			$mediaLanguages->transform(function ($obj) {
 				return MediaLanguage::find($obj->mediaLanguageId);
 			});
-			$mediaQualities = VideoSource::select('mediaQualityId')->where('videoId', $video->getKey())->get();
+			$mediaQualities = Source::select('mediaQualityId')->where('videoId', $video->getKey())->get();
 			$mediaQualities->transform(function ($obj) {
 				return MediaQuality::find($obj->mediaQualityId);
 			});

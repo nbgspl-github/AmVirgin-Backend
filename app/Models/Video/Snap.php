@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Video;
 
 use App\Traits\FluentConstructor;
-use Illuminate\Database\Eloquent\Model;
 
-class VideoSnap extends Model
+class Snap extends \App\Library\Database\Eloquent\Model
 {
 	use FluentConstructor;
 
@@ -26,9 +25,9 @@ class VideoSnap extends Model
 
 	/**
 	 * @param int $videoId
-	 * @return VideoSnap
+	 * @return Snap
 	 */
-	public function setVideoId (int $videoId) : VideoSnap
+	public function setVideoId (int $videoId) : Snap
 	{
 		$this->videoId = $videoId;
 		return $this;
@@ -44,9 +43,9 @@ class VideoSnap extends Model
 
 	/**
 	 * @param string $file
-	 * @return VideoSnap
+	 * @return Snap
 	 */
-	public function setFile (string $file) : VideoSnap
+	public function setFile (string $file) : Snap
 	{
 		$this->file = $file;
 		return $this;
@@ -62,9 +61,9 @@ class VideoSnap extends Model
 
 	/**
 	 * @param string|null $description
-	 * @return VideoSnap
+	 * @return Snap
 	 */
-	public function setDescription (?string $description) : VideoSnap
+	public function setDescription (?string $description) : Snap
 	{
 		$this->description = $description;
 		return $this;

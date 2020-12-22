@@ -4,10 +4,11 @@ namespace App\Models;
 
 use App\Queries\SellerBrandQuery;
 use App\Traits\DynamicAttributeNamedMethods;
-use Illuminate\Database\Eloquent\Model;
 
-class SellerBrand extends Model{
+class SellerBrand extends \App\Library\Database\Eloquent\Model
+{
 	use DynamicAttributeNamedMethods;
+
 	protected $table = 'seller-brands';
 	protected $fillable = ['sellerId', 'brandId'];
 	protected $casts = ['approved' => 'boolean'];
@@ -17,7 +18,8 @@ class SellerBrand extends Model{
 		'Received' => 'received',
 	];
 
-	public static function startQuery(): SellerBrandQuery{
+	public static function startQuery () : SellerBrandQuery
+	{
 		return SellerBrandQuery::begin();
 	}
 }

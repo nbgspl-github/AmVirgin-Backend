@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
-use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Library\Enums\Common\Directories;
 use App\Library\Enums\Common\Tables;
+use App\Library\Http\Response\WebResponse;
 use App\Library\Utils\Extensions\Rule;
 use App\Library\Utils\Uploads;
 use App\Models\Brand;

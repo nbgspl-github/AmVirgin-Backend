@@ -9,10 +9,9 @@ use App\Resources\Shop\Customer\Catalog\Filters\DiscountResource;
 use App\Resources\Shop\Customer\Catalog\Filters\GenderResource;
 use App\Resources\Shop\Customer\Catalog\Filters\PriceRangeResource;
 use App\Traits\DynamicAttributeNamedMethods;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class CatalogFilter extends Model
+class CatalogFilter extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods;
 

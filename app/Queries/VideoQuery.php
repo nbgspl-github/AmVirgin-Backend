@@ -4,8 +4,8 @@ namespace App\Queries;
 
 use App\Library\Utils\Extensions\Str;
 use App\Library\Utils\Extensions\Time;
-use App\Models\MediaLanguage;
-use App\Models\Video;
+use App\Models\Video\MediaLanguage;
+use App\Models\Video\Video;
 use Illuminate\Database\Eloquent\Builder;
 
 class VideoQuery extends AbstractQuery

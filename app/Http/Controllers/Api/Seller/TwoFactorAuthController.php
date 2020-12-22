@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Seller;
 use App\Http\Controllers\TwoFactorBaseAuthController;
 use App\Models\Auth\Seller;
 use App\Models\SellerOtp;
-use Illuminate\Database\Eloquent\Model;
+
 use Illuminate\Support\Facades\Auth;
 
 /**

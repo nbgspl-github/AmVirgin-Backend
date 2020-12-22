@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\Web\Admin\TvSeries;
 
-use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
 use App\Library\Enums\Common\PageSectionType;
 use App\Library\Enums\Videos\Types;
-use App\Models\Genre;
-use App\Models\MediaLanguage;
-use App\Models\MediaQuality;
-use App\Models\MediaServer;
+use App\Library\Http\Response\WebResponse;
 use App\Models\PageSection;
-use App\Models\Video;
-use App\Models\VideoMeta;
-use App\Models\VideoSource;
+use App\Models\Video\Genre;
+use App\Models\Video\MediaLanguage;
+use App\Models\Video\MediaQuality;
+use App\Models\Video\MediaServer;
+use App\Models\Video\Meta;
+use App\Models\Video\Source;
+use App\Models\Video\Video;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -139,12 +139,12 @@ class TvSeriesBase extends BaseController
 		$response = responseApp();
 		try {
 			$tvSeries = Video::findOrFail($id);
-			$meta = VideoMeta::where('videoId', $tvSeries->getKey())->get();
-			$meta->each(function (VideoMeta $meta) {
+			$meta = Meta::where('videoId', $tvSeries->getKey())->get();
+			$meta->each(function (Meta $meta) {
 				$meta->delete();
 			});
-			$sources = VideoSource::where('videoId', $tvSeries->getKey())->get();
-			$sources->each(function (VideoSource $videoSource) {
+			$sources = Source::where('videoId', $tvSeries->getKey())->get();
+			$sources->each(function (Source $videoSource) {
 				$videoSource->delete();
 			});
 			$tvSeries->delete();

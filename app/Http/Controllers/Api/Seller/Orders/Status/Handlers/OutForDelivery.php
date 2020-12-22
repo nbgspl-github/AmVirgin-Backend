@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\Seller\Orders\Status\Handlers;
 
-use App\Classes\Builders\ResponseBuilder;
 use App\Http\Controllers\Api\Seller\Orders\Status\Contracts\Action;
 use App\Library\Enums\Orders\Status;
+use App\Library\Http\Response\AppResponse;
 use App\Models\Auth\Seller;
 use App\Models\SubOrder;
 use Illuminate\Http\Response;
@@ -23,7 +23,7 @@ class OutForDelivery implements Action
 		return $action->isNot($next);
 	}
 
-	public function handle (SubOrder $order, Status $next, array $extra = []) : ResponseBuilder
+	public function handle (SubOrder $order, Status $next, array $extra = []) : AppResponse
 	{
 		$order->update(array_merge(['status' => $next->value], $extra));
 		return responseApp()->status(Response::HTTP_OK)->message('Action performed successfully!');

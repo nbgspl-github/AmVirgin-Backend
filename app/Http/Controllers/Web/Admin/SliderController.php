@@ -9,7 +9,7 @@ use App\Library\Enums\Common\Tables;
 use App\Library\Utils\Extensions\Rule;
 use App\Library\Utils\Uploads;
 use App\Models\Slider;
-use App\Models\Video;
+use App\Models\Video\Video;
 use App\Traits\FluentResponse;
 use App\Traits\ValidatesRequest;
 use Illuminate\Http\Request;

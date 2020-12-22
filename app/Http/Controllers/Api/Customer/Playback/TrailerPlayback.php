@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Customer\Playback;
 
 use App\Models\Product;
-use App\Models\Video;
+use App\Models\Video\Video;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class TrailerPlayback extends PlaybackBase

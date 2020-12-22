@@ -63,7 +63,7 @@
 								@else
 									<td class="text-center">
 										@php
-											$video=\App\Models\Video::find($slide->target());
+											$video=\App\Models\Video\Video::find($slide->target());
 										@endphp
 										<button class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig">{{$video!=null?$video->title():'N/A'}}</button>
 									</td>

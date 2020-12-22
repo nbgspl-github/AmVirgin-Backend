@@ -1,24 +1,25 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Video;
 
-use Illuminate\Database\Eloquent\Model;
-
-class VideoMeta extends Model {
+class Meta extends \App\Library\Database\Eloquent\Model
+{
 	protected $table = 'video-meta';
 
 	/**
 	 * @return int
 	 */
-	public function getVideoId(): int {
+	public function getVideoId () : int
+	{
 		return $this->videoId;
 	}
 
 	/**
 	 * @param int $videoId
-	 * @return VideoMeta
+	 * @return Meta
 	 */
-	public function setVideoId(int $videoId): VideoMeta{
+	public function setVideoId (int $videoId) : Meta
+	{
 		$this->videoId = $videoId;
 		return $this;
 	}
@@ -26,15 +27,17 @@ class VideoMeta extends Model {
 	/**
 	 * @return string
 	 */
-	public function getName(): string{
+	public function getName () : string
+	{
 		return $this->name;
 	}
 
 	/**
 	 * @param string $name
-	 * @return VideoMeta
+	 * @return Meta
 	 */
-	public function setName(string $name): VideoMeta{
+	public function setName (string $name) : Meta
+	{
 		$this->name = $name;
 		return $this;
 	}
@@ -42,15 +45,17 @@ class VideoMeta extends Model {
 	/**
 	 * @return string
 	 */
-	public function getDisplayName(): string{
+	public function getDisplayName () : string
+	{
 		return $this->displayName;
 	}
 
 	/**
 	 * @param string $displayName
-	 * @return VideoMeta
+	 * @return Meta
 	 */
-	public function setDisplayName(string $displayName): VideoMeta{
+	public function setDisplayName (string $displayName) : Meta
+	{
 		$this->displayName = $displayName;
 		return $this;
 	}
@@ -58,15 +63,17 @@ class VideoMeta extends Model {
 	/**
 	 * @return string
 	 */
-	public function getValue(): string{
+	public function getValue () : string
+	{
 		return $this->value;
 	}
 
 	/**
 	 * @param string $value
-	 * @return VideoMeta
+	 * @return Meta
 	 */
-	public function setValue(string $value): VideoMeta{
+	public function setValue (string $value) : Meta
+	{
 		$this->value = $value;
 		return $this;
 	}

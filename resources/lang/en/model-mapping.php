@@ -1,5 +1,5 @@
 <?php
 
 return [
-	\App\Models\MediaServer::class => 'Media server',
+	\App\Models\Video\MediaServer::class => 'Media server',
 ];

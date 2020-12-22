@@ -14,40 +14,16 @@ use App\Models\State;
 use App\Models\SubOrder;
 use App\Traits\ActiveStatus;
 use App\Traits\DynamicAttributeNamedMethods;
-use App\Traits\FluentConstructor;
-use App\Traits\JsonWebTokens;
 use App\Traits\OtpVerificationSupport;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Seller extends Authenticatable implements JWTSubject
+class Seller extends \App\Library\Database\Eloquent\AuthEntity
 {
-	use Notifiable, FluentConstructor, ActiveStatus, OtpVerificationSupport, JsonWebTokens, DynamicAttributeNamedMethods;
+	use ActiveStatus, OtpVerificationSupport, DynamicAttributeNamedMethods;
 
-	protected $fillable = [
-		'name',
-		'email',
-		'password',
-		'mobile',
-		'avatar',
-		'businessName',
-		'description',
-		'pinCode',
-		'addressFirstLine',
-		'addressSecondLine',
-		'countryId',
-		'stateId',
-		'cityId',
-		'mouAgreed',
-	];
-	protected $hidden = [
-		'password',
-		'remember_token',
-	];
 	protected $casts = [
 		'id' => 'integer',
 		'name' => 'string',

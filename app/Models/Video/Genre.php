@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Video;
 
 use App\Traits\FluentConstructor;
-use Illuminate\Database\Eloquent\Model;
 
-class Genre extends Model
+class Genre extends \App\Library\Database\Eloquent\Model
 {
 	use FluentConstructor;
 

@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use App\Traits\DynamicAttributeNamedMethods;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class AttributeSetItem extends Model{
+class AttributeSetItem extends \App\Library\Database\Eloquent\Model
+{
 	use DynamicAttributeNamedMethods;
+
 	protected $table = 'attribute-set-items';
 	protected $fillable = [
 		'attributeSetId',
@@ -15,11 +16,13 @@ class AttributeSetItem extends Model{
 		'group',
 	];
 
-	public function attribute(): BelongsTo{
+	public function attribute () : BelongsTo
+	{
 		return $this->belongsTo(Attribute::class, 'attributeId');
 	}
 
-	public function attributeSet(): BelongsTo{
+	public function attributeSet () : BelongsTo
+	{
 		return $this->belongsTo(AttributeSet::class, 'attributeSetId');
 	}
 }

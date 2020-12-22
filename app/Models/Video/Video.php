@@ -1,51 +1,23 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Video;
 
 use App\Queries\VideoQuery;
 use App\Traits\ActiveStatus;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\FluentConstructor;
 use App\Traits\GenerateSlugs;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 use Spatie\Sluggable\SlugOptions;
 
-class Video extends Model
+class Video extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods, FluentConstructor, ActiveStatus, GenerateSlugs;
 	use SoftDeletes;
 
-	protected $fillable = [
-		'title',
-		'slug',
-		'description',
-		'duration',
-		'released',
-		'cast',
-		'director',
-		'trailer',
-		'poster',
-		'backdrop',
-		'genreId',
-		'sectionId',
-		'rating',
-		'pgRating',
-		'type',
-		'hits',
-		'trending',
-		'rank',
-		'topPick',
-		'showOnHome',
-		'subscriptionType',
-		'price',
-		'hasSeasons',
-		'seasons',
-		'active',
-	];
 	protected $hidden = [
 		'created_at',
 		'updated_at',
@@ -482,7 +454,7 @@ class Video extends Model
 	public function setQualitySlug (Collection $mediaQualities)
 	{
 		$mediaQualities = $mediaQualities->unique('name');
-		$mediaQualities->transform(function (MediaQuality $quality) {
+		$mediaQualities->transform(function (\App\Models\Video\MediaQuality $quality) {
 			return $quality->getName();
 		});
 		$this->qualitySlug = implode('/', $mediaQualities->toArray());
@@ -504,7 +476,7 @@ class Video extends Model
 	public function setLanguageSlug (Collection $mediaLanguages)
 	{
 		$mediaLanguages = $mediaLanguages->unique('name');
-		$mediaLanguages->transform(function (MediaLanguage $language) {
+		$mediaLanguages->transform(function (\App\Models\Video\MediaLanguage $language) {
 			return $language->getName();
 		});
 		$this->languageSlug = implode('/', $mediaLanguages->toArray());
@@ -516,7 +488,7 @@ class Video extends Model
 	 */
 	public function genre ()
 	{
-		return $this->belongsTo('App\Models\Genre', 'genreId');
+		return $this->belongsTo(\App\Models\Video\Genre::class, 'genreId');
 	}
 
 	/**
@@ -524,7 +496,7 @@ class Video extends Model
 	 */
 	public function sources () : HasMany
 	{
-		return $this->hasMany(VideoSource::class, 'videoId');
+		return $this->hasMany(\App\Models\Video\Source::class, 'videoId');
 	}
 
 	/**
@@ -532,7 +504,7 @@ class Video extends Model
 	 */
 	public function snaps ()
 	{
-		return $this->hasMany(VideoSnap::class, 'videoId');
+		return $this->hasMany(\App\Models\Video\Snap::class, 'videoId');
 	}
 
 	public function getSlugOptions () : SlugOptions

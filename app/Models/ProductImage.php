@@ -3,14 +3,13 @@
 namespace App\Models;
 
 use App\Traits\DynamicAttributeNamedMethods;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Refers to one or more images associated with a product.
  * @package App\Models
  */
-class ProductImage extends Model
+class ProductImage extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods;
 

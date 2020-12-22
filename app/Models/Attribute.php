@@ -5,13 +5,12 @@ namespace App\Models;
 use App\Queries\AttributeQuery;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\FluentConstructor;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * Attribute refers to a particular trait of a product such as size, color etc.
  * @package App\Models
  */
-class Attribute extends Model
+class Attribute extends \App\Library\Database\Eloquent\Model
 {
 	use FluentConstructor, DynamicAttributeNamedMethods;
 

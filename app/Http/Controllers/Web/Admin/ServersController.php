@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Web\Admin;
 
 use App\Exceptions\ValidationException;
 use App\Http\Controllers\BaseController;
-use App\Models\MediaServer;
+use App\Models\Video\MediaServer;
 use App\Traits\ValidatesRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

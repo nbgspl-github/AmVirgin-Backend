@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Web\Admin\Videos;
 
-use App\Classes\WebResponse;
 use App\Events\Admin\TvSeries\TvSeriesUpdated;
 use App\Events\Admin\Videos\VideoUpdated;
 use App\Exceptions\ValidationException;
 use App\Library\Enums\Common\Directories;
+use App\Library\Http\Response\WebResponse;
 use App\Library\Utils\Uploads;
-use App\Models\MediaLanguage;
-use App\Models\MediaQuality;
-use App\Models\Video;
-use App\Models\VideoSource;
+use App\Models\Video\MediaLanguage;
+use App\Models\Video\MediaQuality;
+use App\Models\Video\Source;
+use App\Models\Video\Video;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use stdClass;
 use Throwable;
@@ -33,7 +33,7 @@ class ContentController extends VideosBase
 			$qualities = MediaQuality::all();
 			$contentPayload = [];
 			$sources = $video->sources()->get();
-			$sources->transform(function (VideoSource $videoSource) use ($qualities, $languages) {
+			$sources->transform(function (Source $videoSource) use ($qualities, $languages) {
 				$payload = new stdClass();
 				$payload->title = $videoSource->getTitle();
 				$payload->description = $videoSource->getDescription();
@@ -81,9 +81,9 @@ class ContentController extends VideosBase
 			$count = count($sources);
 			for ($i = 0; $i < $count; $i++) {
 				try {
-					$source = VideoSource::findOrFail($sources[$i]);
+					$source = Source::findOrFail($sources[$i]);
 				} catch (ModelNotFoundException $exception) {
-					$source = VideoSource::instance();
+					$source = new Source();
 					$source->setVideoId($id);
 				} finally {
 					if (isset($titles[$i]))
@@ -138,7 +138,7 @@ class ContentController extends VideosBase
 	{
 		$response = responseApp();
 		try {
-			$videoSnap = VideoSource::findOrFail($subId);
+			$videoSnap = Source::findOrFail($subId);
 			$videoSnap->delete();
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Video source deleted successfully.');
 		} catch (ModelNotFoundException $exception) {

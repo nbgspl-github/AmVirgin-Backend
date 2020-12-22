@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Web\Admin\TvSeries;
 
-use App\Classes\WebResponse;
 use App\Exceptions\ValidationException;
 use App\Library\Enums\Common\Directories;
-use App\Models\Genre;
-use App\Models\MediaLanguage;
-use App\Models\MediaQuality;
-use App\Models\MediaServer;
-use App\Models\Video;
+use App\Library\Http\Response\WebResponse;
+use App\Models\Video\Genre;
+use App\Models\Video\MediaLanguage;
+use App\Models\Video\MediaQuality;
+use App\Models\Video\MediaServer;
+use App\Models\Video\Video;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Storage;
 use Throwable;

@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class ProductCart extends Model
+class ProductCart extends \App\Library\Database\Eloquent\Model
 {
 
 	protected $table = 'cart';
@@ -30,7 +29,7 @@ class ProductCart extends Model
 	 */
 	public function images ()
 	{
-		return $this->hasMany('\App\Models\ProductImage', 'productId');
+		return $this->hasMany(ProductImage::class, 'productId');
 	}
 
 
