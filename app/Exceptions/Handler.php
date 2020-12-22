@@ -60,6 +60,8 @@ class Handler extends ExceptionHandler
 		} else if (!$request->expectsJson()) {
 			if ($e instanceof \Illuminate\Validation\ValidationException) {
 				return responseWeb()->back()->data($request->all())->error($e->validator->errors()->first());
+			} else {
+				return parent::render($request, $e);
 			}
 		} else {
 			return parent::render($request, $e);

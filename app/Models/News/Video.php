@@ -3,16 +3,11 @@
 namespace App\Models\News;
 
 use App\Traits\MediaLinks;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 
-class Video extends Model
+class Video extends \App\Library\Database\Eloquent\Model
 {
 	use MediaLinks;
-
-	protected $fillable = [
-		'title', 'thumbnail', 'video'
-	];
 
 	public function setThumbnailAttribute ($value)
 	{
@@ -23,7 +18,7 @@ class Video extends Model
 		}
 	}
 
-	public function getThumbnailAttribute ($value)
+	public function getThumbnailAttribute ($value) : ?string
 	{
 		return $this->retrieveMedia($this->attributes['thumbnail']);
 	}
@@ -37,7 +32,7 @@ class Video extends Model
 		}
 	}
 
-	public function getVideoAttribute ($value)
+	public function getVideoAttribute ($value) : ?string
 	{
 		return $this->retrieveMedia($this->attributes['video']);
 	}

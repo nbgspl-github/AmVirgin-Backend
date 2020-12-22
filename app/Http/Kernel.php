@@ -47,7 +47,7 @@ class Kernel extends HttpKernel
 		'api' => [
 			'throttle:500,1',
 			'bindings',
-			SetAcceptHeaderIfNotPresent::class
+//			SetAcceptHeaderIfNotPresent::class
 		],
 	];
 
