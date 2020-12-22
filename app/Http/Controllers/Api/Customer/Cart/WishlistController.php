@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\API\Customer\Cart;
+namespace App\Http\Controllers\Api\Customer\Cart;
 
 use App\Classes\Cart\CartItem;
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\AppController;
 use App\Library\Enums\Cart\Status;
 use App\Library\Enums\Common\Tables;
 use App\Models\Cart;
@@ -16,7 +15,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\Rule;
 use Throwable;
 
-class CustomerWishlistController extends AppController
+class WishlistController extends \App\Http\Controllers\Api\ApiController
 {
 	use ValidatesRequest;
 
@@ -35,7 +34,7 @@ class CustomerWishlistController extends AppController
 		];
 	}
 
-	public function index ()
+	public function index () : \Illuminate\Http\JsonResponse
 	{
 		$wishList = CustomerWishlist::where('customerId', $this->guard()->id())->get();
 		$wishList->transform(function (CustomerWishlist $item) {
@@ -46,7 +45,7 @@ class CustomerWishlistController extends AppController
 		})->send();
 	}
 
-	public function store ($productId)
+	public function store ($productId) : \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		$validated = null;
@@ -76,7 +75,7 @@ class CustomerWishlistController extends AppController
 		}
 	}
 
-	public function delete ($productId)
+	public function delete ($productId) : \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -95,7 +94,7 @@ class CustomerWishlistController extends AppController
 		}
 	}
 
-	public function moveToCart ($productId)
+	public function moveToCart ($productId) : \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		$validated = null;

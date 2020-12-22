@@ -2,15 +2,12 @@
 
 namespace App\Resources\News\Item\Customer;
 
-use App\Library\Utils\Extensions\Time;
 use App\Models\NewsItem;
-use App\Models\NewsVideo;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Collection;
 
 class ItemResource extends JsonResource
 {
-	public function toArray ($request)
+	public function toArray ($request) : array
 	{
 		return [
 			'key' => $this->id,
@@ -18,7 +15,7 @@ class ItemResource extends JsonResource
 			'content' => $this->content,
 			'image' => $this->image,
 			'uploadedBy' => $this->uploadedBy,
-			'uploadedOn' => Time::mysqlStamp(strtotime($this->created_at)),
+			'uploadedOn' => $this->created_at->format('Y-m-d H:i:s'),
 			'trending' => TrendingListResource::collection(NewsItem::startQuery()->displayable()->trending()->orderByTrending()->get()),
 			'recommended' => [
 				'videos' => $this->recommendedVideos(),
@@ -27,13 +24,13 @@ class ItemResource extends JsonResource
 		];
 	}
 
-	protected function recommendedVideos ()
+	protected function recommendedVideos () : \Illuminate\Http\Resources\Json\AnonymousResourceCollection
 	{
-		return RecommendedVideosListResource::collection(NewsVideo::all());
+		return RecommendedVideosListResource::collection(\App\Models\News\Video::all());
 	}
 
-	protected function recommendedArticles ()
+	protected function recommendedArticles () : \Illuminate\Http\Resources\Json\AnonymousResourceCollection
 	{
-		return RecommendedArticlesListResource::collection(new Collection());
+		return RecommendedArticlesListResource::collection(\App\Models\News\Article::all());
 	}
 }

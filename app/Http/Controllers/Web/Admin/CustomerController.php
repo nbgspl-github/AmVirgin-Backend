@@ -17,7 +17,7 @@ class CustomerController extends BaseController
 
 	public function index ()
 	{
-		$users = Customer::all();
+		$users = Customer::query()->paginate();
 		return view('admin.customers.index')->with('users', $users);
 	}
 
@@ -28,7 +28,7 @@ class CustomerController extends BaseController
 
 	public function edit (Customer $customer)
 	{
-		return view('admin.customers.edit')->with('customer', $customer);
+		return view('admin.customers.show')->with('customer', $customer);
 	}
 
 	public function store (StoreRequest $request) : \Illuminate\Http\RedirectResponse
@@ -41,9 +41,11 @@ class CustomerController extends BaseController
 		);
 	}
 
-	public function show (Customer $customer) : \Illuminate\Contracts\Support\Renderable
+	public function show (Customer $customer) : \Illuminate\Http\JsonResponse
 	{
-		return view();
+		return response()->json(
+			view('admin.customers.show')->with('customer', $customer)->render()
+		);
 	}
 
 	public function update (UpdateRequest $request, Customer $customer) : \Illuminate\Http\RedirectResponse
@@ -58,14 +60,14 @@ class CustomerController extends BaseController
 
 	/**
 	 * @param Customer $customer
-	 * @return \Illuminate\Http\RedirectResponse
+	 * @return \Illuminate\Http\JsonResponse
 	 * @throws \Exception
 	 */
-	public function destroy (Customer $customer) : \Illuminate\Http\RedirectResponse
+	public function destroy (Customer $customer) : \Illuminate\Http\JsonResponse
 	{
 		$customer->delete();
-		return redirect()->route(
-			'admin.customers.index'
+		return response()->json(
+			[]
 		);
 	}
 }

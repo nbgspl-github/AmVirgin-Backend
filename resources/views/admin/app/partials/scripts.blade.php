@@ -62,6 +62,36 @@
 <script src="{{asset("assets/admin/js/app.js")}}"></script>
 
 <script>
+	dialog = bootbox.dialog({
+		size: 'small',
+		title: '<span class="text-center mb-0 font-weight-bolder">Please wait!</span>',
+		message: (
+			`<div class="rounded progress-bar progress-bar-striped progress-bar-animated shadow-primary" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%; height: 8px;"></div>`
+		),
+		closeButton: false,
+		show: false,
+		centerVertical: true,
+		className: 'zoomIn animated'
+	});
+	dialog.find('.modal-dialog').css({'max-width': '180px'});
+	dialog.find('.modal-header').addClass('mx-auto');
+	dialog.find('.modal-content').addClass('shadow-lg');
+
+	setLoading = (loading, ready = null) => {
+		dialog.modal(loading ? 'show' : 'hide');
+		if (ready !== null && typeof ready === "function") {
+			dialog.one('shown.bs.modal', (e) => {
+				console.log('OnShown called');
+				ready();
+			});
+		}
+		dialog.shown = loading;
+	};
+
+	isLoading = () => {
+		return dialog.shown;
+	};
+
 	window.onload = () => {
 		// window.onInitialize();
 	};

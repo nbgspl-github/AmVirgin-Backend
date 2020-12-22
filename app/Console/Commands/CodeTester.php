@@ -9,7 +9,7 @@ use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
 class CodeTester extends Command
 {
-	use GenerateUrls;
+
 
 	const TwoHours = 7200;
 

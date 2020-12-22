@@ -10,3 +10,9 @@
 <link href="{{asset('assets/admin/css/Notyf.css')}}" rel="stylesheet" type="text/css">
 <link href="{{asset('assets/admin/css/Selectize.css')}}" rel="stylesheet" type="text/css">
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<style>
+    .progress-bar-animated {
+        -webkit-animation: progress-bar-stripes 0.25s linear infinite;
+        animation: progress-bar-stripes 0.25s linear infinite;
+    }
+</style>

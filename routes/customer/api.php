@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\Customer\AuthController;
-use App\Http\Controllers\Api\Customer\Cart\CustomerWishlistController;
 use App\Http\Controllers\Api\Customer\Cart\QuoteController;
+use App\Http\Controllers\Api\Customer\Cart\WishlistController;
 use App\Http\Controllers\Api\Customer\CatalogController;
 use App\Http\Controllers\Api\Customer\CitiesController;
 use App\Http\Controllers\Api\Customer\CountriesController;
@@ -70,17 +70,12 @@ Route::prefix('cart')->middleware([])->group(function () {
 	Route::post('{order}/verify', [QuoteController::class, 'verify'])->middleware('auth:customer-api');
 });
 
-Route::prefix('checkout/{order}')->group(function () {
-	Route::post('initiate', [\App\Http\Controllers\Api\Customer\Cart\CheckoutController::class, 'initiate']);
-	Route::post('verify', [\App\Http\Controllers\Api\Customer\Cart\CheckoutController::class, 'verify']);
-});
-
 Route::prefix('wishlist')->middleware('auth:customer-api')->group(function () {
-	Route::get('/', [CustomerWishlistController::class, 'index']);
-	Route::put('/{productId}', [CustomerWishlistController::class, 'store']);
-	Route::delete('/{product}', [CustomerWishlistController::class, 'delete']);
-	Route::delete('/{productId}', [CustomerWishlistController::class, 'move']);
-	Route::put('cart/{productId}', [CustomerWishlistController::class, 'moveToCart']);
+	Route::get(Str::Empty, [WishlistController::class, 'index']);
+	Route::put('{productId}', [WishlistController::class, 'store']);
+	Route::delete('{product}', [WishlistController::class, 'delete']);
+	Route::delete('{productId}', [WishlistController::class, 'move']);
+	Route::put('cart/{productId}', [WishlistController::class, 'moveToCart']);
 
 });
 
@@ -175,7 +170,11 @@ Route::prefix('news-categories')->group(static function () {
 
 Route::prefix('news')->group(static function () {
 	Route::get(Str::Empty, [\App\Http\Controllers\Api\Customer\News\Categories\NewsController::class, 'index']);
-	Route::get('{id}/show', [\App\Http\Controllers\Api\Customer\News\Categories\NewsController::class, 'show']);
+	Route::get('{item}/show', [\App\Http\Controllers\Api\Customer\News\Categories\NewsController::class, 'show']);
+
+	Route::prefix('articles')->group(static function () {
+		Route::get('{article}', [\App\Http\Controllers\Api\Customer\News\Articles\ArticleController::class, 'show']);
+	});
 });
 
 Route::prefix('test-routes')->group(function () {

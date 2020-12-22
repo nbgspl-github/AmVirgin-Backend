@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -37,5 +38,8 @@ class AppServiceProvider extends ServiceProvider
 				return $this->where($attribute, 'LIKE', "%{$searchTerm}%");
 			return $this;
 		});
+
+		Paginator::useBootstrap();
+		Paginator::defaultView('pagination::bootstrap-4');
 	}
 }

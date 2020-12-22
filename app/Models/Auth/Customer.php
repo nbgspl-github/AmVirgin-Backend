@@ -45,6 +45,14 @@ class Customer extends Authenticatable implements JWTSubject
 		'active' => 'bool',
 	];
 
+//	public function setAvatarAttribute ($value) : void
+//	{
+//		if ($value instanceof \Illuminate\Http\UploadedFile) {
+//			$this->attributes['avatar'] = $this->storeMedia('avatars', $value);
+//		} else
+//			$this->attributes['avatar'] = $value;
+//	}
+
 	public function getAvatarAttribute ($value) : ?string
 	{
 		return $this->retrieveMedia($this->attributes['avatar']);

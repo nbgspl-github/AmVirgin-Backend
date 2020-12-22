@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\News;
 
 use App\Traits\MediaLinks;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 
-class NewsVideo extends Model
+class Video extends Model
 {
 	use MediaLinks;
 

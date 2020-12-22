@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property ?Address $billingAddress
  * @property Methods $paymentMode
  */
-class Order extends \App\Library\Extensions\ModelExtended
+class Order extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods;
 

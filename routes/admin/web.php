@@ -43,7 +43,7 @@ Route::prefix('admin')->group(function () {
 		Route::prefix('customers')->group(function () {
 			Route::get(Str::Empty, [CustomerController::class, Methods::Index])->name('admin.customers.index');
 			Route::get('create', [CustomerController::class, Methods::Create])->name('admin.customers.create');
-			Route::get('{customer}/edit', [CustomerController::class, Methods::Edit])->name('admin.customers.edit');
+			Route::get('{customer}/edit', [CustomerController::class, 'edit'])->name('admin.customers.edit');
 			Route::get('{customer}', [CustomerController::class, Methods::Show])->name('admin.customers.show');
 			Route::post(Str::Empty, [CustomerController::class, Methods::Store])->name('admin.customers.store');
 			Route::post('{customer}', [CustomerController::class, Methods::Update])->name('admin.customers.update');
