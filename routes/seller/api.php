@@ -9,7 +9,6 @@ use App\Http\Controllers\Api\Seller\CityController;
 use App\Http\Controllers\Api\Seller\CountryController;
 use App\Http\Controllers\Api\Seller\CurrencyController;
 use App\Http\Controllers\Api\Seller\HsnCodeController;
-use App\Http\Controllers\Api\Seller\OrderController;
 use App\Http\Controllers\Api\Seller\ProductImageController;
 use App\Http\Controllers\Api\Seller\Products\ProductController;
 use App\Http\Controllers\Api\Seller\StateController;

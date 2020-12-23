@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 
-class BusinessDetailController extends \App\Http\Controllers\WebServices\ApiController
+class BusinessDetailController extends \App\Http\Controllers\Api\ApiController
 {
 	use ValidatesRequest;
 
@@ -44,7 +44,7 @@ class BusinessDetailController extends \App\Http\Controllers\WebServices\ApiCont
 		];
 	}
 
-	public function show (): JsonResponse
+	public function show () : JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -60,7 +60,7 @@ class BusinessDetailController extends \App\Http\Controllers\WebServices\ApiCont
 		}
 	}
 
-	public function update (): JsonResponse
+	public function update () : JsonResponse
 	{
 		$response = responseApp();
 		try {

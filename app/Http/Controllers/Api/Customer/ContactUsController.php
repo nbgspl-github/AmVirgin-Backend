@@ -8,7 +8,7 @@ use App\Traits\ValidatesRequest;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 
-class ContactUsController extends \App\Http\Controllers\WebServices\ApiController
+class ContactUsController extends \App\Http\Controllers\Api\ApiController
 {
 	use ValidatesRequest;
 
