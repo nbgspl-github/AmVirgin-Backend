@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Web\Admin\Products;
 
-use App\Http\Controllers\BaseController;
-use App\Library\Http\Response\WebResponse;
+use App\Http\Modules\Shared\Controllers\BaseController;
+use App\Library\Http\WebResponse;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;

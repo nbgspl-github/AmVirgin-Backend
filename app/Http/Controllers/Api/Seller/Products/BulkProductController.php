@@ -144,7 +144,7 @@ class BulkProductController extends ApiController
 		];
 	}
 
-	public function store (): JsonResponse
+	public function store () : JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -227,7 +227,7 @@ class BulkProductController extends ApiController
 		}
 	}
 
-	protected function validateHeaderRow (Worksheet $worksheet): bool
+	protected function validateHeaderRow (Worksheet $worksheet) : bool
 	{
 		for ($x = 0; $x < count($this->keyColumns); $x++) {
 			if ($worksheet->getCell($this->keyColumns[$x]['cell'])->getValue() !== $this->keyColumns[$x]['title']) {
@@ -237,7 +237,7 @@ class BulkProductController extends ApiController
 		return true;
 	}
 
-	protected function payloadFromRow (Worksheet $worksheet, int $rowNumber, array $attributes): array
+	protected function payloadFromRow (Worksheet $worksheet, int $rowNumber, array $attributes) : array
 	{
 		$character = 65;
 		$payload = [];
@@ -299,7 +299,7 @@ class BulkProductController extends ApiController
 	 * @return array
 	 * @throws ValidationException
 	 */
-	protected function validatePayload (array $payload): array
+	protected function validatePayload (array $payload) : array
 	{
 		return $this->arrayValid($payload, $this->rules['product']);
 	}

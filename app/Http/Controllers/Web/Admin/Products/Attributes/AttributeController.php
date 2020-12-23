@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Web\Admin\Products\Attributes;
 
 use App\Exceptions\AttributeNameConflictException;
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\BaseController;
+use App\Http\Modules\Shared\Controllers\BaseController;
 use App\Library\Utils\Extensions\Arrays;
 use App\Library\Utils\Extensions\Str;
 use App\Models\Attribute;

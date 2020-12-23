@@ -15,6 +15,7 @@ class UpdateRequest extends FormRequest
 			'mobile' => ['bail', 'required', 'digits:10', \Illuminate\Validation\Rule::unique(Tables::Customers, 'mobile')->ignore($this->route('customer'))],
 			'email' => ['bail', 'required', 'email', Rule::unique(Tables::Customers, 'email')->ignore($this->route('customer'))],
 			'active' => ['bail', 'required', Rule::in([0, 1])],
+			'avatar' => ['bail', 'nullable', 'image', 'max:2048']
 		];
 	}
 }

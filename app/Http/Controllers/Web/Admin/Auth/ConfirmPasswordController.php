@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Web\Admin\Auth;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Modules\Shared\Controllers\BaseController;
 use Illuminate\Foundation\Auth\ConfirmsPasswords;
 
 class ConfirmPasswordController extends BaseController

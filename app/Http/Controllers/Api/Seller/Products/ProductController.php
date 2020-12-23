@@ -24,7 +24,7 @@ use Throwable;
 
 class ProductController extends AbstractProductController
 {
-	public function index (): JsonResponse
+	public function index () : JsonResponse
 	{
 		$per_page = request()->get('per_page') ?? '';
 		$per_no = request()->get('page') ?? '1';
@@ -73,7 +73,7 @@ class ProductController extends AbstractProductController
 			->send();
 	}
 
-	public function edit ($id): JsonResponse
+	public function edit ($id) : JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -89,7 +89,7 @@ class ProductController extends AbstractProductController
 		}
 	}
 
-	public function show ($id): JsonResponse
+	public function show ($id) : JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -105,7 +105,7 @@ class ProductController extends AbstractProductController
 		}
 	}
 
-	public function store (): JsonResponse
+	public function store () : JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -175,7 +175,7 @@ class ProductController extends AbstractProductController
 		}
 	}
 
-	public function update ($id): JsonResponse
+	public function update ($id) : JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -204,7 +204,7 @@ class ProductController extends AbstractProductController
 		}
 	}
 
-	public function delete ($id): JsonResponse
+	public function delete ($id) : JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -241,7 +241,7 @@ class ProductController extends AbstractProductController
 		])->status(\Illuminate\Http\Response::HTTP_OK)->message('Token generated successfully.')->send();
 	}
 
-	public function changeStatus (int $id): JsonResponse
+	public function changeStatus (int $id) : JsonResponse
 	{
 		$response = responseApp();
 		try {

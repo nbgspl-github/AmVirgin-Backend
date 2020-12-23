@@ -39,12 +39,12 @@ class StatusController extends AbstractStatusController
 		}
 	}
 
-	protected function statusAllowed (string $current, string $next): bool
+	protected function statusAllowed (string $current, string $next) : bool
 	{
 		return true;
 	}
 
-	protected function rulesByStatus ($status): array
+	protected function rulesByStatus ($status) : array
 	{
 		$map = [
 			Status::ReadyForDispatch => [
@@ -61,7 +61,7 @@ class StatusController extends AbstractStatusController
 		return $map[$status] ?? ['status' => ['bail', 'required', Rule::in(Status::getValues())]];
 	}
 
-	protected function closures (): array
+	protected function closures () : array
 	{
 		return [
 			Status::Dispatched => function (SubOrder $order, array $payload) {

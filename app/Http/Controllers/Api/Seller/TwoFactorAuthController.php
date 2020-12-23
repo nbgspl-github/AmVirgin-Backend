@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Api\Seller;
 
-use App\Http\Controllers\TwoFactorBaseAuthController;
+use App\Http\Modules\Shared\Controllers\Auth\TwoFactorBaseAuthController;
 use App\Models\Auth\Seller;
 use App\Models\SellerOtp;
-
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -22,17 +21,17 @@ class TwoFactorAuthController extends TwoFactorBaseAuthController
 		$this->ruleSet = config('rules.auth.seller');
 	}
 
-	protected function authTarget (): string
+	protected function authTarget () : string
 	{
 		return Seller::class;
 	}
 
-	protected function rulesExists (): array
+	protected function rulesExists () : array
 	{
 		return $this->ruleSet['exists'];
 	}
 
-	protected function rulesLogin (): array
+	protected function rulesLogin () : array
 	{
 		return $this->ruleSet['login'];
 	}
@@ -42,7 +41,7 @@ class TwoFactorAuthController extends TwoFactorBaseAuthController
 		return $this->ruleSet['register'];
 	}
 
-	protected function otpTarget (): string
+	protected function otpTarget () : string
 	{
 		return SellerOtp::class;
 	}
@@ -52,12 +51,12 @@ class TwoFactorAuthController extends TwoFactorBaseAuthController
 		return Auth::guard('seller-api');
 	}
 
-	protected function shouldVerifyOtpBeforeRegister (): bool
+	protected function shouldVerifyOtpBeforeRegister () : bool
 	{
 		return true;
 	}
 
-	protected function shouldVerifyOtpBeforeLogin (): bool
+	protected function shouldVerifyOtpBeforeLogin () : bool
 	{
 		return true;
 	}

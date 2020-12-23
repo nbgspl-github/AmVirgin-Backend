@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Web\Admin\TvSeries;
 
 use App\Exceptions\ValidationException;
 use App\Library\Enums\Common\Directories;
-use App\Library\Http\Response\WebResponse;
+use App\Library\Http\WebResponse;
 use App\Library\Utils\Uploads;
 use App\Models\Video\Snap;
 use App\Models\Video\Video;

@@ -14,7 +14,7 @@ class AgreementController extends ApiController
 {
 	use ValidatesRequest;
 
-	public function index (): JsonResponse
+	public function index () : JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -27,7 +27,7 @@ class AgreementController extends ApiController
 		}
 	}
 
-	public function show (): JsonResponse
+	public function show () : JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -40,7 +40,7 @@ class AgreementController extends ApiController
 		}
 	}
 
-	public function update (): JsonResponse
+	public function update () : JsonResponse
 	{
 		$response = responseApp();
 		try {

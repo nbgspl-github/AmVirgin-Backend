@@ -42,7 +42,7 @@ class AdvertisementController extends ApiController
 		];
 	}
 
-	public function index (): JsonResponse
+	public function index () : JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -60,7 +60,7 @@ class AdvertisementController extends ApiController
 		}
 	}
 
-	public function store (): JsonResponse
+	public function store () : JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -79,7 +79,7 @@ class AdvertisementController extends ApiController
 		}
 	}
 
-	public function show (Advertisement $advertisement): JsonResponse
+	public function show (Advertisement $advertisement) : JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -92,7 +92,7 @@ class AdvertisementController extends ApiController
 		}
 	}
 
-	public function update (Advertisement $advertisement): JsonResponse
+	public function update (Advertisement $advertisement) : JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -112,7 +112,7 @@ class AdvertisementController extends ApiController
 		}
 	}
 
-	public function delete (Advertisement $advertisement): JsonResponse
+	public function delete (Advertisement $advertisement) : JsonResponse
 	{
 		$response = responseApp();
 		try {

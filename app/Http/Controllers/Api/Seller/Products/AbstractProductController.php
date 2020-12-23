@@ -113,12 +113,12 @@ class AbstractProductController extends ApiController
 		];
 	}
 
-	protected function storeProduct (array $payload): Product
+	protected function storeProduct (array $payload) : Product
 	{
 		return Product::create($payload);
 	}
 
-	protected function storeAttribute (Product $product, array $payload): Collection
+	protected function storeAttribute (Product $product, array $payload) : Collection
 	{
 		if (!$this->items) {
 			$this->items = $product->category->attributeSet->items;
@@ -155,7 +155,7 @@ class AbstractProductController extends ApiController
 		return $attributesCollection;
 	}
 
-	protected function storeImages (Product $product, array $payload): Collection
+	protected function storeImages (Product $product, array $payload) : Collection
 	{
 		$images = new Collection();
 		foreach ($payload as $image) {
@@ -167,17 +167,17 @@ class AbstractProductController extends ApiController
 		return $images;
 	}
 
-	protected function category (): Category
+	protected function category () : Category
 	{
 		return Category::find(request('categoryId'));
 	}
 
-	protected function brand (): Brand
+	protected function brand () : Brand
 	{
 		return Brand::find(request('brandId'));
 	}
 
-	protected function isInvalidCategory (Category $category): bool
+	protected function isInvalidCategory (Category $category) : bool
 	{
 		return !Str::equals($category->type(), Category::Types['Vertical']);
 	}
@@ -187,17 +187,17 @@ class AbstractProductController extends ApiController
 		return Brand::startQuery()->seller($this->guard()->id())->displayable()->key($brand->id())->first() !== null;
 	}
 
-	protected function storeTrailer (UploadedFile $file): ?string
+	protected function storeTrailer (UploadedFile $file) : ?string
 	{
 		return Uploads::access()->putFile(Directories::Trailers, $file);
 	}
 
-	protected function isVariantType (): bool
+	protected function isVariantType () : bool
 	{
 		return request('type') == Product::Type['Variant'];
 	}
 
-	protected function calculateDiscount (int $originalPrice, int $sellingPrice): int
+	protected function calculateDiscount (int $originalPrice, int $sellingPrice) : int
 	{
 		$difference = $originalPrice - $sellingPrice;
 		if ($difference == 0)
@@ -207,27 +207,27 @@ class AbstractProductController extends ApiController
 		}
 	}
 
-	protected function validateOuter (): array
+	protected function validateOuter () : array
 	{
 		return $this->requestValid(request(), $this->rules['store']['outer']);
 	}
 
-	protected function validateProductPayload (array $payload): array
+	protected function validateProductPayload (array $payload) : array
 	{
 		return $this->arrayValid($payload, $this->rules['store']['product']);
 	}
 
-	protected function validateAttributePayload (array $payload): array
+	protected function validateAttributePayload (array $payload) : array
 	{
 		return $this->arrayValid($payload, $this->rules['store']['attribute']);
 	}
 
-	protected function validateTrailerPayload (array $payload): array
+	protected function validateTrailerPayload (array $payload) : array
 	{
 		return $this->arrayValid($payload, $this->rules['store']['trailer']);
 	}
 
-	protected function sessionUuid (): string
+	protected function sessionUuid () : string
 	{
 		return Str::makeUuid();
 	}
@@ -263,7 +263,7 @@ class AbstractProductController extends ApiController
 			return $productToken->token();
 	}
 
-	protected function validateUpdate (): array
+	protected function validateUpdate () : array
 	{
 		return $this->requestValid(request(), $this->rules['update']);
 	}

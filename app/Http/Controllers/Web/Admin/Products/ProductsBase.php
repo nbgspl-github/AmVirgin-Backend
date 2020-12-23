@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Web\Admin\Products;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Modules\Shared\Controllers\BaseController;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Builder;
 

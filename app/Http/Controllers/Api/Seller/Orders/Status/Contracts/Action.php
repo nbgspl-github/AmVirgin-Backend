@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Seller\Orders\Status\Contracts;
 
 use App\Library\Enums\Orders\Status;
-use App\Library\Http\Response\AppResponse;
+use App\Library\Http\AppResponse;
 use App\Models\Auth\Seller;
 use App\Models\Order\SubOrder;
 

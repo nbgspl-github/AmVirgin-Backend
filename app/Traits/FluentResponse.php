@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use App\Library\Http\Response\AppResponse;
+use App\Library\Http\AppResponse;
 
 trait FluentResponse
 {
@@ -19,10 +19,5 @@ trait FluentResponse
 	private function error () : AppResponse
 	{
 		return AppResponse::asError();
-	}
-
-	public function responseApp () : AppResponse
-	{
-		return AppResponse::instance();
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Modules\Shared\Controllers\BaseController;
 use App\Http\Requests\Admin\Customers\StoreRequest;
 use App\Http\Requests\Admin\Customers\UpdateRequest;
 use App\Models\Auth\Customer;
@@ -17,7 +17,7 @@ class CustomerController extends BaseController
 
 	public function index ()
 	{
-		$users = Customer::query()->paginate();
+		$users = Customer::query()->latest()->paginate();
 		return view('admin.customers.index')->with('users', $users);
 	}
 
@@ -28,7 +28,7 @@ class CustomerController extends BaseController
 
 	public function edit (Customer $customer)
 	{
-		return view('admin.customers.show')->with('customer', $customer);
+		return view('admin.customers.edit')->with('customer', $customer);
 	}
 
 	public function store (StoreRequest $request) : \Illuminate\Http\RedirectResponse
@@ -55,7 +55,7 @@ class CustomerController extends BaseController
 		);
 		return redirect()->route(
 			'admin.customers.index'
-		);
+		)->with('success', 'Updated!');
 	}
 
 	/**

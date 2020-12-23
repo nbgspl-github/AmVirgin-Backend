@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Web\Admin\TvSeries;
 
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\BaseController;
+use App\Http\Modules\Shared\Controllers\BaseController;
 use App\Library\Enums\Common\PageSectionType;
 use App\Library\Enums\Videos\Types;
-use App\Library\Http\Response\WebResponse;
+use App\Library\Http\WebResponse;
 use App\Models\PageSection;
 use App\Models\Video\Genre;
 use App\Models\Video\MediaLanguage;

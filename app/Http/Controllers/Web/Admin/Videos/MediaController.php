@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Web\Admin\Videos;
 
 use App\Library\Enums\Common\Directories;
-use App\Library\Http\Response\WebResponse;
+use App\Library\Http\WebResponse;
 use App\Library\Utils\Uploads;
 use App\Models\Video\Video;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

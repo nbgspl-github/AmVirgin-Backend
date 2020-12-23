@@ -30,7 +30,7 @@ abstract class AbstractStatusController extends ApiController
 		$this->closures = $this->closures();
 	}
 
-	protected function statusAllowed (string $current, string $next): bool
+	protected function statusAllowed (string $current, string $next) : bool
 	{
 		return true;
 	}
@@ -49,9 +49,9 @@ abstract class AbstractStatusController extends ApiController
 		]);
 	}
 
-	protected abstract function rulesByStatus ($status): array;
+	protected abstract function rulesByStatus ($status) : array;
 
-	protected abstract function closures (): array;
+	protected abstract function closures () : array;
 
 	protected function guard ()
 	{

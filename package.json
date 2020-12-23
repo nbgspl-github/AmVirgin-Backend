@@ -27,6 +27,7 @@
 	},
 	"dependencies": {
 	  "bootbox" : "^5.5.2",
+	  "dropify" : "^0.2.2",
 	  "react-bootstrap" : "^1.0.0-beta.16",
 	  "react-dom" : "^16.12.0"
 	}

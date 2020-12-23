@@ -58,10 +58,14 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
 
+<script src="{{asset("assets/admin/plugins/dropify/dist/js/dropify.min.js")}}"></script>
+<script src="{{asset("assets/admin/plugins/Notiflix/notiflix-aio-2.7.0.min.js")}}"></script>
 {{--<!-- App js -->--}}
 <script src="{{asset("assets/admin/js/app.js")}}"></script>
+<script src="{{asset("js/app.js")}}"></script>
 
 <script>
+	Notiflix.Loading.Init({svgColor: "#c63232",});
 	dialog = bootbox.dialog({
 		size: 'small',
 		title: '<span class="text-center mb-0 font-weight-bolder">Please wait!</span>',
@@ -70,6 +74,7 @@
 		),
 		closeButton: false,
 		show: false,
+		animate: false,
 		centerVertical: true,
 		className: 'zoomIn animated'
 	});
@@ -95,4 +100,13 @@
 	window.onload = () => {
 		// window.onInitialize();
 	};
+	@if($message=Session::get('success'))
+	{{--alertify.alert("{{$message}}");--}}
+	Notiflix.Notify.Success('{{$message}}');
+	@endif
+
+	@if($message=Session::get('error'))
+	{{--alertify.alert("{{$message}}");--}}
+	Notiflix.Notify.Failure('{{$message}}');
+	@endif
 </script>

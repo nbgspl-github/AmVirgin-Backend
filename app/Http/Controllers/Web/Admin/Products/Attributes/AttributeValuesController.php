@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Web\Admin\Products\Attributes;
 
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\BaseController;
-use App\Library\Http\Response\WebResponse;
+use App\Http\Modules\Shared\Controllers\BaseController;
+use App\Library\Http\WebResponse;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
 use App\Traits\ValidatesRequest;

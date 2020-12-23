@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Web\Admin;
 
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\BaseController;
+use App\Http\Modules\Shared\Controllers\BaseController;
 use App\Library\Enums\Common\Tables;
-use App\Models\Auth\Customer;
 use App\Models\Auth\Seller;
 use App\Traits\ValidatesRequest;
 use Exception;

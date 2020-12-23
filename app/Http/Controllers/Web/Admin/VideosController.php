@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Web\Admin;
 
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\BaseController;
+use App\Http\Modules\Shared\Controllers\BaseController;
 use App\Http\Resources\Videos\VideoResource;
 use App\Library\Enums\Common\Directories;
 use App\Library\Enums\Videos\Types;
-use App\Library\Http\Response\WebResponse;
+use App\Library\Http\WebResponse;
 use App\Models\Video\Genre;
 use App\Models\Video\MediaLanguage;
 use App\Models\Video\MediaQuality;

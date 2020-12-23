@@ -9,7 +9,7 @@
 				<div class="card-body animatable">
 					<div class="row">
 						<div class="col-md-6 mx-auto">
-							<form action="{{route('admin.customers.update',$customer->id)}}" data-parsley-validate="true" method="POST">
+							<form action="{{route('admin.customers.update',$customer->id)}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
 								@csrf
 								<div class="form-group">
 									<label>Name</label>
@@ -37,7 +37,7 @@
 								</div>
 								<div class="form-group">
 									<label>Avatar</label>
-									<input name="avatar" type="file" id="input-file-now" class="dropify form-control file-gallery" data-allowed-file-extensions="png jpg jpeg" data-max-file-size="2M" data-default-file=""/>
+									<input name="avatar" type="file" id="input-file-now" class="dropify form-control file-gallery" data-allowed-file-extensions="png jpg jpeg" data-max-file-size="2M" data-default-file="{{$customer->avatar}}"/>
 								</div>
 								<div class="form-group mb-0">
 									<div class="row">
@@ -63,8 +63,8 @@
 @stop
 @section('javascript')
 	<script>
-		// $(document).ready(() => {
-		// 	const gallery = $('.file-gallery').dropify({});
-		// })
+		$(document).ready(() => {
+			const gallery = $('.file-gallery').dropify({});
+		})
 	</script>
 @endsection

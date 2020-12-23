@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Web\Admin\Products\Attributes;
 
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\BaseController;
+use App\Http\Modules\Shared\Controllers\BaseController;
 use App\Library\Enums\Common\Tables;
 use App\Library\Utils\Extensions\Arrays;
 use App\Library\Utils\Extensions\Rule;

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\Seller;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Modules\Shared\Controllers\BaseController;
 use App\Models\Currency;
 use App\Traits\FluentResponse;
 

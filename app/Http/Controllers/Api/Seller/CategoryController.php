@@ -15,7 +15,7 @@ class CategoryController extends ApiController
 		parent::__construct();
 	}
 
-	public function index (): JsonResponse
+	public function index () : JsonResponse
 	{
 		$category = Category::startQuery()->isCategory()->get();
 		$category->transform(function (Category $category) {

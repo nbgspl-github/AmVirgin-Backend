@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\Seller;
 
-use App\Http\Controllers\BaseAuthController;
+use App\Http\Modules\Shared\Controllers\Auth\BaseAuthController;
 use App\Library\Enums\Common\Tables;
 use App\Library\Utils\Extensions\Rule;
 use App\Mail\SendMail;
@@ -282,7 +282,7 @@ class AuthController extends BaseAuthController
 		return $response->send();
 	}
 
-	protected function authTarget (): string
+	protected function authTarget () : string
 	{
 		return Seller::class;
 	}
@@ -329,12 +329,12 @@ class AuthController extends BaseAuthController
 		return Auth::guard('seller-api');
 	}
 
-	protected function shouldAllowOnlyActiveUsers (): bool
+	protected function shouldAllowOnlyActiveUsers () : bool
 	{
 		return true;
 	}
 
-	protected function rulesUpdatePassword (): array
+	protected function rulesUpdatePassword () : array
 	{
 		return [
 			'current' => ['bail', 'required', 'string', 'min:4', 'max:64'],

@@ -21,7 +21,7 @@ class ApprovedBrandController extends ApiController
 		];
 	}
 
-	public function index (): JsonResponse
+	public function index () : JsonResponse
 	{
 		$response = responseApp();
 		try {

@@ -33,7 +33,7 @@ class BulkImageController extends ApiController
 		];
 	}
 
-	public function store (): JsonResponse
+	public function store () : JsonResponse
 	{
 		$response = responseApp();
 		try {

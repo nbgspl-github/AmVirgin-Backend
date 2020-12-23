@@ -4,10 +4,10 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Customers','action'=>['link'=>route('admin.customers.create'),'text'=>'Add']])
+					@include('admin.extras.header', ['title'=>'Customers','action'=>null])
 				</div>
 				<div class="card-body animatable">
-					<table id="datatable" class="table table-bordered pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 						<thead>
 						<tr>
 							<th>#</th>
@@ -54,21 +54,21 @@
 
 		showDetails = key => {
 			setLoading(true, () => {
-				axios.get(`/admin/customers/${key}`)
-					.then(response => {
-						setLoading(false);
-						bootbox.dialog({
-							title: 'Customer Details',
-							message: response.data,
-							centerVertical: false,
-							size: 'medium',
-							scrollable: true,
-						});
-					})
-					.catch(error => {
-						setLoading(false);
-						toastr.error('Something went wrong. Please try again in a while.');
-					});
+				// axios.get(`/admin/customers/${key}`)
+				// 	.then(response => {
+				// 		setLoading(false);
+				// 		bootbox.dialog({
+				// 			title: 'Details',
+				// 			message: response.data,
+				// 			centerVertical: false,
+				// 			size: 'small',
+				// 			scrollable: true,
+				// 		});
+				// 	})
+				// 	.catch(error => {
+				// 		setLoading(false);
+				// 		toastr.error('Something went wrong. Please try again in a while.');
+				// 	});
 			});
 		}
 

@@ -15,6 +15,7 @@ class StoreRequest extends FormRequest
 			'email' => ['bail', 'required', 'email', Rule::unique('customers', 'email')],
 			'password' => ['bail', 'required', 'string', 'min:4', 'max:128'],
 			'active' => ['bail', 'required', Rule::in([0, 1])],
+			'avatar' => ['bail', 'nullable', 'image', 'max:2048']
 		];
 	}
 }

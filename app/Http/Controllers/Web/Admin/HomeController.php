@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Modules\Shared\Controllers\BaseController;
 use App\Library\Enums\Orders\Status;
 use App\Models\Auth\Customer;
 use App\Models\Auth\Seller;

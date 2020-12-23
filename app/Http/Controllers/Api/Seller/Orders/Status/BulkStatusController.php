@@ -51,7 +51,7 @@ class BulkStatusController extends AbstractStatusController
 		}
 	}
 
-	protected function rulesByStatus ($status): array
+	protected function rulesByStatus ($status) : array
 	{
 		return [
 			'status' => ['bail', 'required', Rule::in(Status::getValues())],
@@ -59,7 +59,7 @@ class BulkStatusController extends AbstractStatusController
 	}
 
 
-	protected function closures (): array
+	protected function closures () : array
 	{
 		return [
 			Status::Dispatched => function (SubOrder $order, array $payload) {

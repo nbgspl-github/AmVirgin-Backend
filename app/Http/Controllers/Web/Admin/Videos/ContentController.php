@@ -6,7 +6,7 @@ use App\Events\Admin\TvSeries\TvSeriesUpdated;
 use App\Events\Admin\Videos\VideoUpdated;
 use App\Exceptions\ValidationException;
 use App\Library\Enums\Common\Directories;
-use App\Library\Http\Response\WebResponse;
+use App\Library\Http\WebResponse;
 use App\Library\Utils\Uploads;
 use App\Models\Video\MediaLanguage;
 use App\Models\Video\MediaQuality;

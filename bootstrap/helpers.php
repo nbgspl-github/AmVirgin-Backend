@@ -1,7 +1,7 @@
 <?php
 
-use App\Library\Http\Response\AppResponse;
-use App\Library\Http\Response\WebResponse;
+use App\Library\Http\AppResponse;
+use App\Library\Http\WebResponse;
 use App\Library\Utils\Extensions\Str;
 use Illuminate\Support\Facades\Log;
 

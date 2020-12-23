@@ -60,7 +60,7 @@ class BrandController extends ApiController
 		];
 	}
 
-	public function index (): JsonResponse
+	public function index () : JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -81,7 +81,7 @@ class BrandController extends ApiController
 		}
 	}
 
-	public function show (): JsonResponse
+	public function show () : JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -98,7 +98,7 @@ class BrandController extends ApiController
 		}
 	}
 
-	public function store (): JsonResponse
+	public function store () : JsonResponse
 	{
 		$response = responseApp();
 		try {

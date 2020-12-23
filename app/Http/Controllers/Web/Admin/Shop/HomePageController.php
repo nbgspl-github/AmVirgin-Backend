@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Web\Admin\Shop;
 
 use App\Exceptions\ValidationException;
-use App\Http\Controllers\BaseController;
+use App\Http\Modules\Shared\Controllers\BaseController;
 use App\Library\Utils\Extensions\Str;
 use App\Models\Category;
 use App\Models\Product;

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Web\Admin\Videos;
 
 use App\Exceptions\ValidationException;
 use App\Library\Enums\Common\PageSectionType;
-use App\Library\Http\Response\WebResponse;
+use App\Library\Http\WebResponse;
 use App\Models\PageSection;
 use App\Models\Video\Genre;
 use App\Models\Video\MediaLanguage;

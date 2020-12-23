@@ -1,16 +1,13 @@
-<div class="card" style="width: 18rem;">
-	<img class="card-img-top" src="{{$user->avatar}}" alt="Card image cap">
+<div class="card shadow-none mx-auto">
+	@if($customer->avatar!=null)
+		<img class="card-img-top" src="{{$customer->avatar}}">
+	@endif
 	<div class="card-body">
-		<h5 class="card-title">{$customer->name</h5>
-		<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+		<h5 class="card-title mt-0">{{$customer->name}}</h5>
 	</div>
-	{{--	<ul class="list-group list-group-flush">--}}
-	{{--		<li class="list-group-item">Cras justo odio</li>--}}
-	{{--		<li class="list-group-item">Dapibus ac facilisis in</li>--}}
-	{{--		<li class="list-group-item">Vestibulum at eros</li>--}}
-	{{--	</ul>--}}
-	{{--	<div class="card-body">--}}
-	{{--		<a href="#" class="card-link">Card link</a>--}}
-	{{--		<a href="#" class="card-link">Another link</a>--}}
-	{{--	</div>--}}
+	<ul class="list-group list-group-flush">
+		<li class="list-group-item">Email : {{$customer->email}}</li>
+		<li class="list-group-item">Mobile : {{$customer->email}}</li>
+		<li class="list-group-item">Registered : {{$customer->created_at->format('d/m/Y')}}</li>
+	</ul>
 </div>
