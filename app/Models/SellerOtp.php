@@ -2,12 +2,8 @@
 
 namespace App\Models;
 
-use App\Traits\FluentConstructor;
-
 class SellerOtp extends \App\Library\Database\Eloquent\Model
 {
-	use FluentConstructor;
-
 	protected $table = 'otp-sellers';
 	protected $fillable = ['mobile', 'otp'];
 	protected $primaryKey = 'mobile';

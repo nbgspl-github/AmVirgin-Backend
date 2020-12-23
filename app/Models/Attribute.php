@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Queries\AttributeQuery;
 use App\Traits\DynamicAttributeNamedMethods;
-use App\Traits\FluentConstructor;
 
 /**
  * Attribute refers to a particular trait of a product such as size, color etc.
@@ -12,26 +11,9 @@ use App\Traits\FluentConstructor;
  */
 class Attribute extends \App\Library\Database\Eloquent\Model
 {
-	use FluentConstructor, DynamicAttributeNamedMethods;
+	use DynamicAttributeNamedMethods;
 
 	protected $table = 'attributes';
-	protected $fillable = [
-		'name',
-		'description',
-		'code',
-		'required',
-		'useToCreateVariants',
-		'showInCatalogListing',
-		'useInLayeredNavigation',
-		'combineMultipleValues',
-		'visibleToCustomers',
-		'predefined',
-		'multiValue',
-		'minValues',
-		'maxValues',
-		'interface',
-		'values',
-	];
 	protected $hidden = [
 		'created_at',
 		'updated_at',

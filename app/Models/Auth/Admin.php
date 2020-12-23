@@ -3,7 +3,6 @@
 namespace App\Models\Auth;
 
 use App\Traits\DynamicAttributeNamedMethods;
-use App\Traits\FluentConstructor;
 use App\Traits\HashPasswords;
 use Illuminate\Notifications\Notifiable;
 

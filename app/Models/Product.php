@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Models\Auth\Seller;
 use App\Queries\ProductQuery;
 use App\Traits\DynamicAttributeNamedMethods;
-use App\Traits\FluentConstructor;
 use App\Traits\GenerateSlugs;
 use App\Traits\HasInventoryStocks;
 use App\Traits\HasSpecialAttributes;
@@ -20,9 +19,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Product extends \App\Library\Database\Eloquent\Model
 {
-	use FluentConstructor, DynamicAttributeNamedMethods, HasSpecialAttributes, GenerateSlugs, SoftDeletes, HasSku, HasInventoryStocks;
+	use DynamicAttributeNamedMethods, HasSpecialAttributes, GenerateSlugs, SoftDeletes, HasSku, HasInventoryStocks;
 
-	protected $guarded = ['id'];
 	protected $hidden = [
 		'id',
 		'deletedAt',

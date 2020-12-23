@@ -8,7 +8,6 @@ use App\Library\Utils\Extensions\Str;
 use App\Library\Utils\Uploads;
 use App\Queries\CategoryQuery;
 use App\Traits\DynamicAttributeNamedMethods;
-use App\Traits\FluentConstructor;
 use App\Traits\GenerateSlugs;
 use App\Traits\HasSpecialAttributes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,10 +23,9 @@ use Spatie\Sluggable\SlugOptions;
  */
 class Category extends \App\Library\Database\Eloquent\Model
 {
-	use  FluentConstructor, HasSpecialAttributes, DynamicAttributeNamedMethods, GenerateSlugs;
+	use HasSpecialAttributes, DynamicAttributeNamedMethods, GenerateSlugs;
 
 	protected $table = 'categories';
-	protected $fillable = ['name', 'parentId', 'description', 'type', 'order', 'icon', 'listingStatus', 'specials', 'summary', 'summary_excel', 'catalog'];
 	protected $casts = ['specials' => 'array', 'order' => 'int'];
 	protected $hidden = ['created_at', 'updated_at'];
 	public const Types = [

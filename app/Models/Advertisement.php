@@ -6,8 +6,6 @@ use App\Library\Enums\Advertisements\Status;
 use App\Models\Auth\Seller;
 use App\Queries\Seller\AdvertisementQuery;
 use App\Traits\DynamicAttributeNamedMethods;
-use App\Traits\FluentConstructor;
-use App\Traits\MediaLinks;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\UploadedFile;
 
@@ -20,8 +18,7 @@ use Illuminate\Http\UploadedFile;
  */
 class Advertisement extends \App\Library\Database\Eloquent\Model
 {
-	use  FluentConstructor, DynamicAttributeNamedMethods;
-	use MediaLinks;
+	use DynamicAttributeNamedMethods;
 
 	protected $guarded = [
 		'id'

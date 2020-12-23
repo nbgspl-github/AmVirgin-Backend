@@ -2,12 +2,8 @@
 
 namespace App\Models;
 
-use App\Traits\FluentConstructor;
-
 class CustomerOtp extends \App\Library\Database\Eloquent\Model
 {
-	use FluentConstructor;
-
 	public $incrementing = false;
 	protected $table = 'otp-customers';
 	protected $primaryKey = 'mobile';
