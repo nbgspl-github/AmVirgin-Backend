@@ -154,17 +154,17 @@ abstract class BaseAuthController extends BaseController
 			return $model;
 	}
 
-	protected function verified (Model $user)
+	protected function verified (\App\Library\Database\Eloquent\AuthEntity $user)
 	{
 		return $user->account_verified;
 	}
 
-	protected function generateAuthToken (Request $request, Model $user)
+	protected function generateAuthToken (Request $request, \App\Library\Database\Eloquent\AuthEntity $user)
 	{
 		return auth()->guard('api')->attempt(['email' => $user->email, 'password' => $request->password]);
 	}
 
-	protected function generateToken (Model $user)
+	protected function generateToken (\App\Library\Database\Eloquent\AuthEntity $user)
 	{
 		return JWTAuth::fromUser($user);
 	}
@@ -222,22 +222,22 @@ abstract class BaseAuthController extends BaseController
 		}
 	}
 
-	protected function loginPayload (Model $user, string $token)
+	protected function loginPayload (\App\Library\Database\Eloquent\AuthEntity $user, string $token)
 	{
 		return [
-			'name' => $user->name(),
-			'email' => $user->email(),
-			'mobile' => $user->mobile(),
+			'name' => $user->name,
+			'email' => $user->email,
+			'mobile' => $user->mobile,
 			'token' => $token,
 		];
 	}
 
-	protected function registerPayload (Model $user, string $token)
+	protected function registerPayload (\App\Library\Database\Eloquent\AuthEntity $user, string $token)
 	{
 		return [
-			'name' => $user->name(),
-			'email' => $user->email(),
-			'mobile' => $user->mobile(),
+			'name' => $user->name,
+			'email' => $user->email,
+			'mobile' => $user->mobile,
 			'token' => $token,
 		];
 	}
@@ -316,7 +316,7 @@ abstract class BaseAuthController extends BaseController
 		try {
 			$this->requestValid(request(), $this->rulesUpdateAvatar());
 			$user = $this->guard()->user();
-			Uploads::deleteIfExists($user->avatar());
+			Uploads::deleteIfExists($user->avatar);
 			$user->update([
 				'avatar' => Uploads::access()->putFile($user instanceof Seller ? Directories::SellerAvatars : Directories::CustomerAvatars, \request()->file('avatar')),
 			]);

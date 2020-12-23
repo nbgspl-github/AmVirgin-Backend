@@ -72,22 +72,22 @@ class TwoFactorAuthController extends TwoFactorBaseAuthController
 		return $this->ruleSet['update']['profile'];
 	}
 
-	protected function loginPayload (Model $user, string $token)
+	protected function loginPayload (\App\Library\Database\Eloquent\AuthEntity $user, string $token)
 	{
 		return (new \App\Resources\Auth\Seller\AuthProfileResource($user))->token($token);
 	}
 
-	protected function registerPayload (Model $user, string $token)
+	protected function registerPayload (\App\Library\Database\Eloquent\AuthEntity $user, string $token)
 	{
 		return (new \App\Resources\Auth\Seller\AuthProfileResource($user))->token($token);
 	}
 
-	protected function rulesUpdatePassword (): array
+	protected function rulesUpdatePassword () : array
 	{
 		// TODO: Implement rulesUpdatePassword() method.
 	}
 
-	protected function rulesSocialLogin (): array
+	protected function rulesSocialLogin () : array
 	{
 		return [
 			'email' => 'bail|required|email|max:255',
