@@ -15,12 +15,9 @@ class SellerBusinessDetail extends \Illuminate\Database\Eloquent\Model
 
 	protected $table = 'seller_business_details';
 	protected $casts = [
-		'signature' => 'uri',
-		'addressProofDocument' => 'uri',
 		'signatureVerified' => 'bool',
 		'gstINVerified' => 'bool',
 		'panVerified' => 'bool',
-		'panProofDocument' => 'uri',
 		'nameVerified' => 'bool',
 	];
 
@@ -51,7 +48,7 @@ class SellerBusinessDetail extends \Illuminate\Database\Eloquent\Model
 		return $this->attributes['gstCertificate'];
 	}
 
-	public function getGstCertificateAttribute ($value)
+	public function getGstCertificateAttribute ($value) : ?string
 	{
 		return Uploads::existsUrl($this->attributes['gstCertificate']);
 	}
