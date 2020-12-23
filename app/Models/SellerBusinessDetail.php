@@ -2,12 +2,9 @@
 
 namespace App\Models;
 
-use App\Library\Enums\Common\Directories;
-use App\Library\Utils\Uploads;
 use App\Queries\Seller\BusinessDetailQuery;
 use App\Traits\DynamicAttributeNamedMethods;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Http\UploadedFile;
 
 class SellerBusinessDetail extends \App\Library\Database\Eloquent\Model
 {
@@ -23,34 +20,50 @@ class SellerBusinessDetail extends \App\Library\Database\Eloquent\Model
 
 	public function setSignatureAttribute ($value)
 	{
-		$this->attributes['signature'] = Uploads::access()->putFile(Directories::SellerDocuments, $value);
-		return $this->attributes['signature'];
+		($value instanceof \Illuminate\Http\UploadedFile)
+			? $this->attributes['signature'] = $this->storeMedia('seller-documents', $value)
+			: $this->attributes['signature'] = $value;
+	}
+
+	public function getSignatureAttribute () : ?string
+	{
+		return $this->retrieveMedia($this->attributes['signature']);
 	}
 
 	public function setPanProofDocumentAttribute ($value)
 	{
-		$this->attributes['panProofDocument'] = Uploads::access()->putFile(Directories::SellerDocuments, $value);
-		return $this->attributes['panProofDocument'];
+		($value instanceof \Illuminate\Http\UploadedFile)
+			? $this->attributes['panProofDocument'] = $this->storeMedia('seller-documents', $value)
+			: $this->attributes['panProofDocument'] = $value;
+	}
+
+	public function getPanProofDocumentAttribute () : ?string
+	{
+		return $this->retrieveMedia($this->attributes['panProofDocument']);
 	}
 
 	public function setAddressProofDocumentAttribute ($value)
 	{
-		$this->attributes['addressProofDocument'] = Uploads::access()->putFile(Directories::SellerDocuments, $value);
-		return $this->attributes['addressProofDocument'];
+		($value instanceof \Illuminate\Http\UploadedFile)
+			? $this->attributes['addressProofDocument'] = $this->storeMedia('seller-documents', $value)
+			: $this->attributes['addressProofDocument'] = $value;
+	}
+
+	public function getAddressProofDocumentAttribute () : ?string
+	{
+		return $this->retrieveMedia($this->attributes['addressProofDocument']);
 	}
 
 	public function setGstCertificateAttribute ($value)
 	{
-		if ($value instanceof UploadedFile)
-			$this->attributes['gstCertificate'] = Uploads::access()->putFile(Directories::SellerDocuments, $value);
-		else
-			$this->attributes['gstCertificate'] = $value;
-		return $this->attributes['gstCertificate'];
+		($value instanceof \Illuminate\Http\UploadedFile)
+			? $this->attributes['gstCertificate'] = $this->storeMedia('seller-documents', $value)
+			: $this->attributes['gstCertificate'] = $value;
 	}
 
 	public function getGstCertificateAttribute ($value) : ?string
 	{
-		return Uploads::existsUrl($this->attributes['gstCertificate']);
+		return $this->retrieveMedia($this->attributes['gstCertificate']);
 	}
 
 	public function state () : BelongsTo

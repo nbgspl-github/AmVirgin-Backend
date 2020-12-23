@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Library\Enums\Common\Directories;
-use App\Library\Utils\Uploads;
 use App\Queries\Seller\BankDetailQuery;
 use App\Traits\DynamicAttributeNamedMethods;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,14 +28,26 @@ class SellerBankDetail extends \App\Library\Database\Eloquent\Model
 
 	public function setAddressProofDocumentAttribute ($value)
 	{
-		$this->attributes['addressProofDocument'] = Uploads::access()->putFile(Directories::SellerDocuments, $value);
-		return $this->attributes['addressProofDocument'];
+		($value instanceof \Illuminate\Http\UploadedFile)
+			? $this->attributes['addressProofDocument'] = $this->storeMedia('seller-documents', $value)
+			: $this->attributes['addressProofDocument'] = $value;
+	}
+
+	public function getAddressProofDocumentAttribute () : ?string
+	{
+		return $this->retrieveMedia($this->attributes['addressProofDocument']);
 	}
 
 	public function setCancelledChequeAttribute ($value)
 	{
-		$this->attributes['cancelledCheque'] = Uploads::access()->putFile(Directories::SellerDocuments, $value);
-		return $this->attributes['cancelledCheque'];
+		($value instanceof \Illuminate\Http\UploadedFile)
+			? $this->attributes['cancelledCheque'] = $this->storeMedia('seller-documents', $value)
+			: $this->attributes['cancelledCheque'] = $value;
+	}
+
+	public function getCancelledChequeAttribute () : ?string
+	{
+		return $this->retrieveMedia($this->attributes['cancelledCheque']);
 	}
 
 	public function state () : BelongsTo
