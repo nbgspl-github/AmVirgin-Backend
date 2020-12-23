@@ -7,7 +7,7 @@ class ArticleController extends \App\Http\Controllers\Api\ApiController
 	public function index () : \Illuminate\Http\JsonResponse
 	{
 		return responseApp()->prepare(
-			(new \App\Resources\News\Articles\ArticleCollection(\App\Models\News\Article::query()->paginate($this->paginationChunk())))->response()->getData()
+			\App\Resources\News\Articles\ArticleCollection::collection(\App\Models\News\Article::query()->paginate($this->paginationChunk()))->response()->getData()
 		);
 	}
 
