@@ -22,8 +22,8 @@ class SellerBankDetail extends \App\Library\Database\Eloquent\Model
 		'AadharCard' => 'aadhar-card',
 		'VoterID' => 'voter-id',
 		'DrivingLicense' => 'driving-license',
-		'ElectrycityBill' => 'electrycity-bill',
-		'PhoneBill' => 'pbone-bill',
+		'ElectricityBill' => 'electricity-bill',
+		'PhoneBill' => 'phone-bill',
 	];
 
 	public function setAddressProofDocumentAttribute ($value)
