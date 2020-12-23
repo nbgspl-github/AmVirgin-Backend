@@ -16,6 +16,8 @@ class Model extends \Illuminate\Database\Eloquent\Model
 {
 	use \App\Traits\MediaLinks;
 
+	use \Illuminate\Database\Eloquent\Factories\HasFactory;
+
 	protected $guarded = ['id'];
 
 	public function __construct (array $attributes = [])
