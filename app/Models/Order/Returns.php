@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Order;
 
 use App\Library\Enums\Orders\Returns\Status;
 use App\Models\Auth\Customer;
-use App\Models\Order\Item;
 use Illuminate\Support\Carbon;
 
 /**
@@ -23,17 +22,17 @@ class Returns extends \App\Library\Database\Eloquent\Model
 
 	protected $casts = ['status' => Status::class];
 
-	public function customer ()
+	public function customer () : \Illuminate\Database\Eloquent\Relations\BelongsTo
 	{
 		return $this->belongsTo(Customer::class);
 	}
 
-	public function segment ()
+	public function segment () : \Illuminate\Database\Eloquent\Relations\BelongsTo
 	{
 		return $this->belongsTo(SubOrder::class, 'order_segment_id');
 	}
 
-	public function item ()
+	public function item () : \Illuminate\Database\Eloquent\Relations\BelongsTo
 	{
 		return $this->belongsTo(Item::class, 'order_item_id');
 	}

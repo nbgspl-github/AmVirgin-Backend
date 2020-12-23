@@ -8,8 +8,8 @@ use App\Library\Http\Response\AppResponse;
 use App\Library\Utils\Extensions\Rule;
 use App\Library\Utils\Extensions\Time;
 use App\Models\Auth\Seller;
-use App\Models\Shipment;
-use App\Models\SubOrder;
+use App\Models\Order\Shipment;
+use App\Models\Order\SubOrder;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 

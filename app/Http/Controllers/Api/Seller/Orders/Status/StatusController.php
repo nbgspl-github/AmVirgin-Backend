@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Seller\Orders\Status;
 use App\Exceptions\ValidationException;
 use App\Library\Enums\Orders\Status;
 use App\Library\Utils\Extensions\Rule;
-use App\Models\SubOrder;
+use App\Models\Order\SubOrder;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 

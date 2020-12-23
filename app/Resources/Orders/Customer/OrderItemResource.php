@@ -2,7 +2,7 @@
 
 namespace App\Resources\Orders\Customer;
 
-use App\Models\SubOrder;
+use App\Models\Order\SubOrder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Resources\Json\JsonResource;
 

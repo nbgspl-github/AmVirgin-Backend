@@ -38,12 +38,6 @@ class CopyTxnIds extends Command
      */
     public function handle()
     {
-        SellerOrder::query()->with('order')->get()->each(function (SellerOrder $sellerOrder) {
-            if ($sellerOrder->order()->exists()) {
-                $sellerOrder->update([
-                    'neftId' => str_replace("pay_", "", $sellerOrder->order->transactionId)
-                ]);
-            }
-        });
+
     }
 }

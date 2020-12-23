@@ -7,7 +7,7 @@ use App\Library\Enums\Orders\Status;
 use App\Library\Http\Response\AppResponse;
 use App\Library\Utils\Extensions\Time;
 use App\Models\Auth\Seller;
-use App\Models\SubOrder;
+use App\Models\Order\SubOrder;
 use Illuminate\Http\Response;
 
 class Cancelled implements Action

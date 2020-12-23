@@ -6,7 +6,7 @@ use App\Exceptions\ValidationException;
 use App\Http\Requests\Orders\Status\Bulk\UpdateRequest;
 use App\Library\Enums\Orders\Status;
 use App\Library\Utils\Extensions\Rule;
-use App\Models\SubOrder;
+use App\Models\Order\SubOrder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Throwable;

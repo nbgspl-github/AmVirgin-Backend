@@ -5,20 +5,19 @@ namespace App\Models\Auth;
 use App\Models\Brand;
 use App\Models\City;
 use App\Models\Country;
+use App\Models\Order\Returns;
+use App\Models\Order\SubOrder;
 use App\Models\Product;
 use App\Models\ProductRating;
-use App\Models\Returns;
 use App\Models\SellerBusinessDetail;
 use App\Models\SellerPayment;
 use App\Models\State;
-use App\Models\SubOrder;
 use App\Traits\ActiveStatus;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\OtpVerificationSupport;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Notifications\Notifiable;
 
 class Seller extends \App\Library\Database\Eloquent\AuthEntity
 {

@@ -135,10 +135,6 @@ Route::prefix('payments')->group(static function () {
 	Route::get('transactions', [\App\Http\Controllers\Api\Seller\Payments\TransactionController::class, 'index']);
 });
 
-Route::prefix('sales')->group(static function () {
-	Route::get(Str::Empty, [\App\Http\Controllers\Api\Seller\Payments\OverviewController::class, 'totalSales'])->middleware(AUTH_SELLER);
-});
-
 Route::prefix('growth')->group(static function () {
 	Route::get('overview', [\App\Http\Controllers\Api\Seller\Growth\OverviewController::class, 'show'])->middleware(AUTH_SELLER);
 });

@@ -13,13 +13,14 @@ use Illuminate\Support\Carbon;
  * @property Carbon $returnValidUntil
  * @property boolean $returnable
  * @property ?\App\Models\Product $product
- * @property ?\App\Models\SubOrder $subOrder
+ * @property ?\App\Models\Order\SubOrder $subOrder
  */
 class Item extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods;
 
-	protected $guarded = ['id'];
+	protected $table = 'order_items';
+
 	protected $casts = ['options' => 'array', 'returnable' => 'bool'];
 	protected $dates = ['returnValidUntil'];
 
@@ -31,11 +32,11 @@ class Item extends \App\Library\Database\Eloquent\Model
 
 	public function returns () : HasMany
 	{
-		return $this->hasMany(\App\Models\Returns::class);
+		return $this->hasMany(\App\Models\Order\Returns::class);
 	}
 
 	public function subOrder () : BelongsTo
 	{
-		return $this->belongsTo(\App\Models\SubOrder::class, 'subOrderId');
+		return $this->belongsTo(\App\Models\Order\SubOrder::class, 'subOrderId');
 	}
 }

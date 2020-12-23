@@ -8,7 +8,7 @@ use App\Http\Controllers\Api\Seller\Orders\Status\Contracts\Action;
 use App\Http\Requests\Orders\Status\Bulk\UpdateRequest;
 use App\Library\Enums\Orders\Status;
 use App\Library\Utils\Extensions\Rule;
-use App\Models\SubOrder;
+use App\Models\Order\SubOrder;
 use BenSampo\Enum\Enum;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;

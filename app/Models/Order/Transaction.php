@@ -1,15 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Order;
 
 use App\Library\Enums\Transactions\Status;
-use App\Models\Order\Order;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Transaction extends \App\Library\Database\Eloquent\Model
 {
-	protected $guarded = ['id'];
-
+	protected $table = 'transactions';
 	protected $casts = ['verified' => 'bool'];
 
 	public function isComplete () : bool

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\Seller\Orders\Returns;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Library\Enums\Orders\Returns\Status;
-use App\Models\Returns;
+use App\Models\Order\Returns;
 use App\Resources\Orders\Returns\Seller\ListResource;
 use Illuminate\Http\JsonResponse;
 

@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\ApiController;
 use App\Library\Enums\Orders\Status;
 use App\Library\Utils\Extensions\Rule;
 use App\Library\Utils\Extensions\Str;
-use App\Models\SubOrder;
+use App\Models\Order\SubOrder;
 use App\Resources\Orders\Seller\ListResource;
 use App\Resources\Orders\Seller\OrderResource;
 use Illuminate\Http\JsonResponse;

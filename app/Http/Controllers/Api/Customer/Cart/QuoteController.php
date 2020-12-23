@@ -17,7 +17,7 @@ use App\Library\Utils\Extensions\Rule;
 use App\Models\Cart\Cart;
 use App\Models\CustomerWishlist;
 use App\Models\Order\Order;
-use App\Models\Transaction;
+use App\Models\Order\Transaction;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Resources\ConditionallyLoadsAttributes;

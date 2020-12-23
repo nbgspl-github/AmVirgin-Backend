@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Orders\Status\Bulk;
 
 use App\Library\Utils\Extensions\Str;
-use App\Models\SubOrder;
+use App\Models\Order\SubOrder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Collection;
 

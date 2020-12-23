@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\Seller\Orders\Status\Contracts\Action;
 use App\Library\Enums\Orders\Status;
 use App\Library\Http\Response\AppResponse;
 use App\Models\Auth\Seller;
-use App\Models\SubOrder;
+use App\Models\Order\SubOrder;
 use Illuminate\Http\Response;
 
 class ReadyForDispatch implements Action

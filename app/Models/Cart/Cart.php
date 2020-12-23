@@ -166,11 +166,11 @@ class Cart extends \App\Library\Database\Eloquent\Model
 	}
 
 	/**
-	 * @param \App\Models\Transaction $transaction
+	 * @param \App\Models\Order\Transaction $transaction
 	 * @return Order|Model
 	 * @throws CartAlreadySubmittedException
 	 */
-	public function submit (\App\Models\Transaction $transaction) : Order
+	public function submit (\App\Models\Order\Transaction $transaction) : Order
 	{
 		/**
 		 * 1.) WE create the main order which will act as the parent order for all the subsequent vendor orders.
@@ -203,7 +203,7 @@ class Cart extends \App\Library\Database\Eloquent\Model
 			});
 			$total = $subTotal;
 			/**
-			 * @var $subOrder \App\Models\SubOrder
+			 * @var $subOrder \App\Models\Order\SubOrder
 			 */
 			$subOrder = $order->subOrders()->create([
 				'sellerId' => $sellerId,
@@ -246,7 +246,7 @@ class Cart extends \App\Library\Database\Eloquent\Model
 
 	public function transaction ()
 	{
-		return $this->belongsTo(\App\Models\Transaction::class, 'transactionId');
+		return $this->belongsTo(\App\Models\Order\Transaction::class, 'transactionId');
 	}
 
 	protected function handleItemsUpdated ()

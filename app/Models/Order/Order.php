@@ -66,17 +66,17 @@ class Order extends \App\Library\Database\Eloquent\Model
 
 	public function sellerOrder () : HasOne
 	{
-		return $this->hasOne(\App\Models\SellerOrder::class, 'orderId', 'id');
+		return $this->hasOne(SubOrder::class, 'orderId', 'id');
 	}
 
 	public function transaction () : HasOne
 	{
-		return $this->hasOne(\App\Models\Transaction::class, 'orderId');
+		return $this->hasOne(\App\Models\Order\Transaction::class, 'orderId');
 	}
 
 	public function subOrders () : HasMany
 	{
-		return $this->hasMany(\App\Models\SubOrder::class, 'orderId');
+		return $this->hasMany(\App\Models\Order\SubOrder::class, 'orderId');
 	}
 
 	public function timeline () : HasMany

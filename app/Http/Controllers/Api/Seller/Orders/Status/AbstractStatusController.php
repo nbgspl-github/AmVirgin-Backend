@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Seller\Orders\Status;
 
 use App\Http\Controllers\Api\ApiController;
-use App\Models\SubOrder;
+use App\Models\Order\SubOrder;
 use App\Traits\ValidatesRequest;
 
 abstract class AbstractStatusController extends ApiController

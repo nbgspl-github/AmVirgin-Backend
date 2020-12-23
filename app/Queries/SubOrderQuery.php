@@ -3,7 +3,7 @@
 namespace App\Queries;
 
 use App\Library\Enums\Orders\Status;
-use App\Models\SubOrder;
+use App\Models\Order\SubOrder;
 
 class SubOrderQuery extends AbstractQuery
 {

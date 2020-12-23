@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Seller;
 use App\Http\Controllers\Api\ApiController;
 use App\Library\Enums\Orders\Status;
 use App\Models\Auth\Seller;
-use App\Models\SubOrder;
+use App\Models\Order\SubOrder;
 use Illuminate\Http\JsonResponse;
 
 class DashboardController extends ApiController

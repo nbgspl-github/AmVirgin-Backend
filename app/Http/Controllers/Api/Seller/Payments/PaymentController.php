@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Seller\Payments;
 use App\Http\Controllers\Api\ApiController;
 use App\Library\Enums\Orders\Status;
 use App\Models\Order\Item;
-use App\Models\SubOrder;
+use App\Models\Order\SubOrder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
@@ -119,7 +119,7 @@ class PaymentController extends ApiController
 
 	}
 
-	protected function lastPaymentDate ()
+	protected function lastPaymentDate () : Carbon
 	{
 		/**
 		 * Unless there's a last payment date available,

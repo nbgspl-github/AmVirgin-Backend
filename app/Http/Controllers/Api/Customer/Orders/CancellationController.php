@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\ApiController;
 use App\Library\Enums\Orders\Status;
 use App\Library\Utils\Extensions\Time;
 use App\Models\Order\Order;
-use App\Models\SubOrder;
+use App\Models\Order\SubOrder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 

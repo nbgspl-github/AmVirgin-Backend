@@ -9,7 +9,7 @@ use App\Http\Controllers\Api\ApiController;
 use App\Http\Controllers\Api\Seller\Orders\Status\Contracts\Action;
 use App\Library\Enums\Orders\Status;
 use App\Library\Utils\Extensions\Rule;
-use App\Models\SubOrder;
+use App\Models\Order\SubOrder;
 use BenSampo\Enum\Enum;
 use Exception;
 use Illuminate\Http\JsonResponse;

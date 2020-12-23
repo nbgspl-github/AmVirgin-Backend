@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Seller\Manifest;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\Manifests\UpdateRequest;
 use App\Library\Enums\Orders\Status;
-use App\Models\SubOrder;
+use App\Models\Order\SubOrder;
 use App\Resources\Manifest\Seller\ListResource;
 use App\Traits\ValidatesRequest;
 use Illuminate\Http\JsonResponse;

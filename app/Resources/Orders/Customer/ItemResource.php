@@ -3,7 +3,7 @@
 namespace App\Resources\Orders\Customer;
 
 use App\Library\Enums\Orders\Returns\Status;
-use App\Models\Returns;
+use App\Models\Order\Returns;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Resources\Json\JsonResource;
 

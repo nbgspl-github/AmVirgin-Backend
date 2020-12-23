@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Order;
 
 use App\Library\Enums\Orders\Status;
 use App\Models\Auth\Customer;
 use App\Models\Auth\Seller;
-use App\Models\Order\Item;
-use App\Models\Order\Order;
 use App\Queries\SubOrderQuery;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class SubOrder
- * @package App\Models
+ * @package App\Models\Order
  * @property ?Order $order
  * @property ?Seller $seller
  * @property Status $status
@@ -22,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class SubOrder extends \App\Library\Database\Eloquent\Model
 {
-	protected $guarded = ['id'];
+	protected $table = 'sub_orders';
 
 	protected $casts = ['status' => Status::class];
 
@@ -48,7 +46,7 @@ class SubOrder extends \App\Library\Database\Eloquent\Model
 
 	public function shipment () : BelongsTo
 	{
-		return $this->belongsTo(Shipment::class, 'shipmentId', 'id');
+		return $this->belongsTo(\App\Models\Order\Shipment::class, 'shipmentId', 'id');
 	}
 
 	public function order () : BelongsTo
