@@ -11,7 +11,7 @@ class ArticleCollection extends \Illuminate\Http\Resources\Json\JsonResource
 			'title' => $this->title,
 			'poster' => $this->poster,
 			'author' => $this->author,
-			'published' => $this->published_at
+			'published' => $this->published_at->format('Y-m-d H:i:s')
 		];
 	}
 }
