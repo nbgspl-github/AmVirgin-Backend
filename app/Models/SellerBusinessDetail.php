@@ -13,28 +13,7 @@ class SellerBusinessDetail extends \Illuminate\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods;
 
-	protected $fillable = [
-		'sellerId',
-		'name',
-		'nameVerified',
-		'tan',
-		'gstIN',
-		'gstCertificate',
-		'gstINVerified',
-		'signature',
-		'signatureVerified',
-		'rbaFirstLine',
-		'rbaSecondLine',
-		'rbaPinCode',
-		'rbaCityId',
-		'rbaStateId',
-		'rbaCountryId',
-		'pan',
-		'panVerified',
-		'panProofDocument',
-		'addressProofType',
-		'addressProofDocument',
-	];
+	protected $table = 'seller_business_details';
 	protected $casts = [
 		'signature' => 'uri',
 		'addressProofDocument' => 'uri',

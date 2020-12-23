@@ -12,22 +12,7 @@ class SellerBankDetail extends \Illuminate\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods;
 
-	protected $fillable = [
-		'sellerId',
-		'accountHolderName',
-		'accountNumber',
-		'bankName',
-		'cityId',
-		'stateId',
-		'countryId',
-		'branch',
-		'ifsc',
-		'businessType',
-		'pan',
-		'addressProofType',
-		'addressProofDocument',
-		'cancelledCheque',
-	];
+	protected $table = 'seller_bank_details';
 	protected $casts = [
 		'addressProofDocument' => 'uri',
 		'cancelledCheque' => 'uri',
