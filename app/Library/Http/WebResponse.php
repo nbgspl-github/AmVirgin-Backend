@@ -2,7 +2,7 @@
 
 namespace App\Library\Http;
 
-class WebResponse extends Response
+class WebResponse
 {
 	private $route = 'back';
 

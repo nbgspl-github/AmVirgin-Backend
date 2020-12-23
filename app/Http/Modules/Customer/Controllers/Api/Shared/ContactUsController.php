@@ -49,9 +49,4 @@ class ContactUsController extends \App\Http\Modules\Customer\Controllers\Api\Api
 			return $response->send();
 		}
 	}
-
-	protected function guard ()
-	{
-		return auth(self::CUSTOMER_API);
-	}
 }

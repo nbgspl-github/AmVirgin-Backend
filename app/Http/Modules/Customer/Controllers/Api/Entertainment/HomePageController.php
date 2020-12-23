@@ -156,9 +156,4 @@ class HomePageController extends \App\Http\Modules\Customer\Controllers\Api\ApiC
 			return responseApp()->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($e)->setValue('data')->send();
 		}
 	}
-
-	protected function guard ()
-	{
-		return auth('customer-api');
-	}
 }

@@ -14,9 +14,4 @@ class NewsController extends \App\Http\Modules\Customer\Controllers\Api\ApiContr
 			new ItemResource($item)
 		);
 	}
-
-	protected function guard ()
-	{
-		return auth(self::CUSTOMER_API);
-	}
 }

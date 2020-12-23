@@ -59,9 +59,4 @@ class FilterController extends \App\Http\Modules\Customer\Controllers\Api\ApiCon
 		// Convert the resource to array instance.
 		return (new $resourceClass($catalogFilter))->withValues($values);
 	}
-
-	protected function guard ()
-	{
-		return auth(self::CUSTOMER_API);
-	}
 }

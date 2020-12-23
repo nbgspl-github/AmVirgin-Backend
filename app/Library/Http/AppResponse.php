@@ -15,7 +15,7 @@ use Illuminate\Http\Response;
  * Builder class to create responses, supports chained method class for easy one line responses.
  * @package App\Utils
  */
-class AppResponse extends \App\Library\Http\Response
+class AppResponse
 {
 
 	/**

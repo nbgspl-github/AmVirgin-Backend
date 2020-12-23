@@ -22,17 +22,17 @@ class TwoFactorAuthController extends TwoFactorBaseAuthController
 		$this->ruleSet = config('rules.auth.customer');
 	}
 
-	protected function authTarget (): string
+	protected function authTarget () : string
 	{
 		return Customer::class;
 	}
 
-	protected function rulesExists (): array
+	protected function rulesExists () : array
 	{
 		return $this->ruleSet['exists'];
 	}
 
-	protected function rulesLogin (): array
+	protected function rulesLogin () : array
 	{
 		return $this->ruleSet['login'];
 	}
@@ -42,7 +42,7 @@ class TwoFactorAuthController extends TwoFactorBaseAuthController
 		return $this->ruleSet['register'];
 	}
 
-	protected function otpTarget (): string
+	protected function otpTarget () : string
 	{
 		return CustomerOtp::class;
 	}
@@ -52,12 +52,12 @@ class TwoFactorAuthController extends TwoFactorBaseAuthController
 		return Auth::guard('customer-api');
 	}
 
-	protected function shouldVerifyOtpBeforeRegister (): bool
+	protected function shouldVerifyOtpBeforeRegister () : bool
 	{
 		return true;
 	}
 
-	protected function shouldVerifyOtpBeforeLogin (): bool
+	protected function shouldVerifyOtpBeforeLogin () : bool
 	{
 		return true;
 	}
@@ -72,12 +72,12 @@ class TwoFactorAuthController extends TwoFactorBaseAuthController
 		// TODO: Implement rulesUpdateAvatar() method.
 	}
 
-	protected function loginPayload (\App\Http\Controllers\Api\Customer\Model $user, string $token)
+	protected function loginPayload (\App\Library\Database\Eloquent\Model $user, string $token)
 	{
 		return (new AuthProfileResource($user))->token($token);
 	}
 
-	protected function registerPayload (\App\Http\Controllers\Api\Customer\Model $user, string $token)
+	protected function registerPayload (\App\Library\Database\Eloquent\Model $user, string $token)
 	{
 		return (new \App\Resources\Auth\Customer\AuthProfileResource($user))->token($token);
 	}
