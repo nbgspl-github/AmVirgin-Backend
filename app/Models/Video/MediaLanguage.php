@@ -5,7 +5,7 @@ namespace App\Models\Video;
 class MediaLanguage extends \App\Library\Database\Eloquent\Model
 {
 	public $timestamps = false;
-	protected $table = 'media-languages';
+	protected $table = 'media_languages';
 
 	/**
 	 * @return string

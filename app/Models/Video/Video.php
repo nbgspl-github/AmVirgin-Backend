@@ -5,7 +5,6 @@ namespace App\Models\Video;
 use App\Queries\VideoQuery;
 use App\Traits\ActiveStatus;
 use App\Traits\DynamicAttributeNamedMethods;
-use App\Traits\FluentConstructor;
 use App\Traits\GenerateSlugs;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,8 +14,9 @@ use Spatie\Sluggable\SlugOptions;
 
 class Video extends \App\Library\Database\Eloquent\Model
 {
-	use DynamicAttributeNamedMethods, FluentConstructor, ActiveStatus, GenerateSlugs;
-	use SoftDeletes;
+	use DynamicAttributeNamedMethods, ActiveStatus, GenerateSlugs, SoftDeletes;
+
+	protected $table = 'videos';
 
 	protected $hidden = [
 		'created_at',

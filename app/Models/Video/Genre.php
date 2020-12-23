@@ -2,19 +2,9 @@
 
 namespace App\Models\Video;
 
-use App\Traits\FluentConstructor;
-
 class Genre extends \App\Library\Database\Eloquent\Model
 {
-	use FluentConstructor;
-
-	protected $fillable = [
-		'name',
-		'description',
-		'poster',
-		'status',
-	];
-
+	protected $table = 'video_genres';
 	protected $hidden = [
 		'created_at',
 		'updated_at',

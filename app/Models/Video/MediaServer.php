@@ -4,14 +4,7 @@ namespace App\Models\Video;
 
 class MediaServer extends \App\Library\Database\Eloquent\Model
 {
-	protected $table = 'media-servers';
-
-	protected $fillable = [
-		'name',
-		'ipAddress',
-		'useAuth',
-		'basePath',
-	];
+	protected $table = 'media_servers';
 
 	protected $hidden = [
 		'created_at',

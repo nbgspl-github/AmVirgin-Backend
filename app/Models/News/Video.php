@@ -2,12 +2,13 @@
 
 namespace App\Models\News;
 
-use App\Traits\MediaLinks;
 use Illuminate\Http\UploadedFile;
 
-class Video extends \App\Library\Database\Eloquent\Model
+class Video extends \Illuminate\Database\Eloquent\Model
 {
-	use MediaLinks;
+	use \App\Traits\MediaLinks;
+
+	protected $table = 'news_videos';
 
 	public function setThumbnailAttribute ($value)
 	{

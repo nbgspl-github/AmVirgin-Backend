@@ -2,18 +2,9 @@
 
 namespace App\Models\Video;
 
-use App\Traits\FluentConstructor;
-
 class Snap extends \App\Library\Database\Eloquent\Model
 {
-	use FluentConstructor;
-
-	protected $table = 'video-snapshots';
-	protected $fillable = [
-		'videoId',
-		'file',
-		'description',
-	];
+	protected $table = 'video_snapshots';
 
 	/**
 	 * @return int

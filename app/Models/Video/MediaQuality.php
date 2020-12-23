@@ -2,13 +2,9 @@
 
 namespace App\Models\Video;
 
-use App\Traits\FluentConstructor;
-
 class MediaQuality extends \App\Library\Database\Eloquent\Model
 {
-	use FluentConstructor;
-
-	protected $table = 'media-qualities';
+	protected $table = 'media_qualities';
 
 	/**
 	 * @return string

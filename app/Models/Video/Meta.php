@@ -4,7 +4,7 @@ namespace App\Models\Video;
 
 class Meta extends \App\Library\Database\Eloquent\Model
 {
-	protected $table = 'video-meta';
+	protected $table = 'video_meta';
 
 	/**
 	 * @return int

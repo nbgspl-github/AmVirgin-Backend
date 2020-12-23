@@ -3,30 +3,13 @@
 namespace App\Models\Video;
 
 use App\Traits\ActiveStatus;
-use App\Traits\FluentConstructor;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Source extends \App\Library\Database\Eloquent\Model
 {
 	use ActiveStatus;
-	use FluentConstructor;
 
-	protected $table = 'video-sources';
-
-	protected $fillable = [
-		'title',
-		'description',
-		'duration',
-		'videoId',
-		'sortingIndex',
-		'season',
-		'episode',
-		'hits',
-		'mediaLanguageId',
-		'mediaQualityId',
-		'file',
-		'subtitle',
-	];
+	protected $table = 'video_sources';
 
 	protected $hidden = [
 		'created_at',
