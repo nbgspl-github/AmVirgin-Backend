@@ -4,7 +4,7 @@ namespace App\Models\News;
 
 use Illuminate\Http\UploadedFile;
 
-class Video extends \Illuminate\Database\Eloquent\Model
+class Video extends \App\Library\Database\Eloquent\Model
 {
 	use \App\Traits\MediaLinks;
 

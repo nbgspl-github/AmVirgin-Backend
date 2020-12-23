@@ -17,4 +17,11 @@ class Model extends \Illuminate\Database\Eloquent\Model
 	use \App\Traits\MediaLinks;
 
 	protected $guarded = ['id'];
+
+	protected $attributes = [];
+
+	public function __construct (array $attributes = [])
+	{
+		parent::__construct($attributes);
+	}
 }
