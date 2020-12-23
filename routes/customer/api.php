@@ -173,6 +173,7 @@ Route::prefix('news')->group(static function () {
 	Route::get('{item}/show', [\App\Http\Controllers\Api\Customer\News\Categories\NewsController::class, 'show']);
 
 	Route::prefix('articles')->group(static function () {
+		Route::get(Str::Empty, [\App\Http\Controllers\Api\Customer\News\Articles\ArticleController::class, 'index']);
 		Route::get('{article}', [\App\Http\Controllers\Api\Customer\News\Articles\ArticleController::class, 'show']);
 	});
 });
