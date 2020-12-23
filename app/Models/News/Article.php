@@ -8,9 +8,9 @@ class Article extends \App\Library\Database\Eloquent\Model
 
 	public function setPosterAttribute ($value) : void
 	{
-		($value instanceof \Illuminate\Http\UploadedFile) ?
-			$this->attributes['poster'] = $this->storeMedia('news/articles/images', $value) :
-			$this->attributes['poster'] = $value;
+		($value instanceof \Illuminate\Http\UploadedFile)
+			? $this->attributes['poster'] = $this->storeMedia('news/articles/images', $value)
+			: $this->attributes['poster'] = $value;
 	}
 
 	public function getPosterAttribute () : ?string

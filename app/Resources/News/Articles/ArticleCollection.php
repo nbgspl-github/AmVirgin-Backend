@@ -2,12 +2,16 @@
 
 namespace App\Resources\News\Articles;
 
-class ArticleCollection extends \Illuminate\Http\Resources\Json\ResourceCollection
+class ArticleCollection extends \Illuminate\Http\Resources\Json\JsonResource
 {
 	public function toArray ($request) : array
 	{
 		return [
-			'data' => $this->collection
+			'key' => $this->id,
+			'title' => $this->title,
+			'poster' => $this->poster,
+			'author' => $this->author,
+			'published' => $this->published_at
 		];
 	}
 }
