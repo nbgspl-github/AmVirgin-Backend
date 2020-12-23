@@ -8,7 +8,7 @@ use App\Queries\Seller\BankDetailQuery;
 use App\Traits\DynamicAttributeNamedMethods;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class SellerBankDetail extends \Illuminate\Database\Eloquent\Model
+class SellerBankDetail extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods;
 

@@ -9,7 +9,7 @@ use App\Traits\DynamicAttributeNamedMethods;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\UploadedFile;
 
-class SellerBusinessDetail extends \Illuminate\Database\Eloquent\Model
+class SellerBusinessDetail extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods;
 
