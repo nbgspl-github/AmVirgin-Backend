@@ -6,6 +6,8 @@ class Article extends \App\Library\Database\Eloquent\Model
 {
 	protected $table = 'news_articles';
 
+	protected $dates = ['published_at'];
+
 	public function setPosterAttribute ($value) : void
 	{
 		($value instanceof \Illuminate\Http\UploadedFile)
