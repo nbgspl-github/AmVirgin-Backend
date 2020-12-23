@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\App\Seller;
+namespace App\Http\Controllers\Api\Seller;
 
-use App\Classes\Arrays;
-use App\Classes\Rule;
-use App\Exceptions\ValidationException;
+use App\Library\Utils\Extensions\Arrays;
+use App\Library\Utils\Extensions\Rule;
 use App\Models\Announcement;
 use App\Traits\ValidatesRequest;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 
-class AnnouncementController extends \App\Http\Controllers\WebServices\ApiController
+class AnnouncementController extends \App\Http\Controllers\Api\ApiController
 {
 	use ValidatesRequest;
 
@@ -26,61 +24,55 @@ class AnnouncementController extends \App\Http\Controllers\WebServices\ApiContro
 		];
 	}
 
-	public function index (): JsonResponse
+	public function index () : JsonResponse
 	{
 		$announcementCollection = Announcement::startQuery()->displayable()->excludeDeleted()->get();
 		$resourceCollection = \App\Resources\Announcements\Announcement::collection($announcementCollection);
-		return responseApp()->status(HttpOkay)
+		return responseApp()->status(\Illuminate\Http\Response::HTTP_OK)
 			->message('Listing all announcements.')
 			->setValue('payload', $resourceCollection)
 			->send();
 	}
 
-	public function mark ($id)
+	public function mark ($id) : JsonResponse
 	{
 		$response = responseApp();
-		try {
-			$validated = $this->requestValid(request(), $this->rules['mark']);
-			$announcement = Announcement::startQuery()->key($id)->excludeDeleted()->firstOrFail();
-			switch ($validated['action']) {
-				case 'read':
-					$readBy = $announcement->readBy();
-					if (!Arrays::containsValueIndexed($readBy, $this->guard()->id())) {
-						Arrays::push($readBy, $this->guard()->id());
-					}
-					$announcement->readBy($readBy);
-					$announcement->save();
-					break;
+		$validated = $this->requestValid(request(), $this->rules['mark']);
+		$announcement = Announcement::startQuery()->key($id)->excludeDeleted()->firstOrFail();
+		switch ($validated['action']) {
+			case 'read':
+				$readBy = $announcement->readBy();
+				if (!Arrays::contains($readBy, $this->guard()->id())) {
+					Arrays::push($readBy, $this->guard()->id());
+				}
+				$announcement->readBy($readBy);
+				$announcement->save();
+				break;
 
-				case 'unread':
-					$readBy = $announcement->readBy();
-					$id = $this->guard()->id();
-					$readBy = collect($readBy)->filter(function ($value, $key) use ($id) {
-						return $value != $id;
-					})->toArray();
-					$announcement->readBy($readBy);
-					$announcement->save();
-					break;
+			case 'unread':
+				$readBy = $announcement->readBy();
+				$id = $this->guard()->id();
+				$readBy = collect($readBy)->filter(function ($value, $key) use ($id) {
+					return $value != $id;
+				})->toArray();
+				$announcement->readBy($readBy);
+				$announcement->save();
+				break;
 
-				case 'delete':
-					$deletedBy = $announcement->deletedBy();
-					if (!Arrays::containsValueIndexed($deletedBy, $this->guard()->id())) {
-						Arrays::push($deletedBy, $this->guard()->id());
-					}
-					$announcement->deletedBy($deletedBy);
-					$announcement->save();
-					break;
-			}
-			$response->status(HttpOkay)->message('Marked announcement status successfully.');
-		} catch (ValidationException $exception) {
-			$response->status(HttpOkay)->message($exception->getMessage());
-		} catch (ModelNotFoundException $exception) {
-			$response->status(HttpResourceNotFound)->message($exception->getMessage());
-		} catch (\Throwable $exception) {
-			$response->status(HttpServerError)->message($exception->getMessage());
-		} finally {
-			return $response->send();
+			case 'delete':
+				$deletedBy = $announcement->deletedBy();
+				if (!Arrays::contains($deletedBy, $this->guard()->id())) {
+					Arrays::push($deletedBy, $this->guard()->id());
+				}
+				$announcement->deletedBy($deletedBy);
+				$announcement->save();
+				break;
 		}
+		return responseApp()->prepare(
+			null,
+			\Illuminate\Http\Response::HTTP_OK,
+			'Marked announcement status successfully.'
+		);
 	}
 
 	protected function guard ()
