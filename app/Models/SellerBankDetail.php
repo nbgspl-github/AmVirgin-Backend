@@ -14,8 +14,6 @@ class SellerBankDetail extends \Illuminate\Database\Eloquent\Model
 
 	protected $table = 'seller_bank_details';
 	protected $casts = [
-		'addressProofDocument' => 'uri',
-		'cancelledCheque' => 'uri',
 		'accountNumberVerified' => 'bool',
 		'panVerified' => 'bool',
 		'addressProofVerified' => 'bool',
