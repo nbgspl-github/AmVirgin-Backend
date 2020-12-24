@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Modules\Seller\Controllers\Api;
+namespace App\Http\Modules\Seller\Controllers\Api\Shared;
 
-use App\Http\Modules\Shared\Controllers\BaseController;
 use App\Models\Currency;
 use App\Traits\FluentResponse;
 

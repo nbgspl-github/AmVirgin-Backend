@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Modules\Seller\Controllers\Api;
+namespace App\Http\Modules\Seller\Controllers\Api\Announcements;
 
 use App\Library\Utils\Extensions\Arrays;
 use App\Library\Utils\Extensions\Rule;

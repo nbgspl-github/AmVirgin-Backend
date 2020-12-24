@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Modules\Seller\Controllers\Api;
+namespace App\Http\Modules\Seller\Controllers\Api\Dashboard;
 
 use App\Library\Enums\Orders\Status;
 use App\Models\Auth\Seller;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Modules\Seller\Controllers\Api;
+namespace App\Http\Modules\Seller\Controllers\Api\Products;
 
 use App\Models\HsnCode;
 

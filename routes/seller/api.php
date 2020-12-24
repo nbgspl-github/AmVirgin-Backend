@@ -5,14 +5,14 @@ use App\Http\Modules\Seller\Controllers\Api\Attributes\ProductAttributeControlle
 use App\Http\Modules\Seller\Controllers\Api\Attributes\ValueController;
 use App\Http\Modules\Seller\Controllers\Api\Auth\AuthController;
 use App\Http\Modules\Seller\Controllers\Api\Auth\TwoFactorAuthController;
-use App\Http\Modules\Seller\Controllers\Api\CategoryController;
-use App\Http\Modules\Seller\Controllers\Api\CityController;
-use App\Http\Modules\Seller\Controllers\Api\CountryController;
-use App\Http\Modules\Seller\Controllers\Api\CurrencyController;
-use App\Http\Modules\Seller\Controllers\Api\HsnCodeController;
-use App\Http\Modules\Seller\Controllers\Api\ProductImageController;
+use App\Http\Modules\Seller\Controllers\Api\Products\CategoryController;
+use App\Http\Modules\Seller\Controllers\Api\Products\HsnCodeController;
 use App\Http\Modules\Seller\Controllers\Api\Products\ProductController;
-use App\Http\Modules\Seller\Controllers\Api\StateController;
+use App\Http\Modules\Seller\Controllers\Api\Products\ProductImageController;
+use App\Http\Modules\Seller\Controllers\Api\Shared\CityController;
+use App\Http\Modules\Seller\Controllers\Api\Shared\CountryController;
+use App\Http\Modules\Seller\Controllers\Api\Shared\CurrencyController;
+use App\Http\Modules\Seller\Controllers\Api\Shared\StateController;
 use App\Library\Utils\Extensions\Str;
 use Illuminate\Support\Facades\Route;
 
@@ -29,13 +29,13 @@ Route::prefix(Str::Empty)->group(static function () {
 		Route::put('password', [AuthController::class, 'updatePassword'])->middleware(AUTH_SELLER);
 
 		Route::prefix('business-details')->middleware(AUTH_SELLER)->group(static function () {
-			Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\BusinessDetailController::class, 'show']);
-			Route::post(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\BusinessDetailController::class, 'update']);
+			Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\Profile\BusinessDetailController::class, 'show']);
+			Route::post(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\Profile\BusinessDetailController::class, 'update']);
 		});
 
 		Route::prefix('bank-details')->middleware(AUTH_SELLER)->group(static function () {
-			Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\BankDetailController::class, 'show']);
-			Route::post(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\BankDetailController::class, 'update']);
+			Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\Profile\BankDetailController::class, 'show']);
+			Route::post(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\Profile\BankDetailController::class, 'update']);
 		});
 
 		Route::prefix('contact-details')->group(static function () {
@@ -47,9 +47,9 @@ Route::prefix(Str::Empty)->group(static function () {
 		});
 
 		Route::prefix('mou')->group(static function () {
-			Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\AgreementController::class, 'show']);
-			Route::get('status', [\App\Http\Modules\Seller\Controllers\Api\AgreementController::class, 'index'])->middleware(AUTH_SELLER);
-			Route::put(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\AgreementController::class, 'update'])->middleware(AUTH_SELLER);
+			Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Agreements\AgreementController::class, 'show']);
+			Route::get('status', [\App\Http\Modules\Seller\Controllers\Api\Agreements\AgreementController::class, 'index'])->middleware(AUTH_SELLER);
+			Route::put(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Agreements\AgreementController::class, 'update'])->middleware(AUTH_SELLER);
 		});
 	});
 });
@@ -110,21 +110,21 @@ Route::prefix('hsn')->group(function () {
 });
 
 Route::prefix('brands')->middleware('auth:seller-api')->group(function () {
-	Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\BrandController::class, 'index']);
-	Route::get('approved', [\App\Http\Modules\Seller\Controllers\Api\BrandController::class, 'show']);
-	Route::get('all', [\App\Http\Modules\Seller\Controllers\Api\ApprovedBrandController::class, 'index']);
-	Route::post('approval', [\App\Http\Modules\Seller\Controllers\Api\BrandController::class, 'store']);
+	Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Products\BrandController::class, 'index']);
+	Route::get('approved', [\App\Http\Modules\Seller\Controllers\Api\Products\BrandController::class, 'show']);
+	Route::get('all', [\App\Http\Modules\Seller\Controllers\Api\Products\ApprovedBrandController::class, 'index']);
+	Route::post('approval', [\App\Http\Modules\Seller\Controllers\Api\Products\BrandController::class, 'store']);
 });
 
 Route::prefix('announcements')->group(function () {
-	Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\AnnouncementController::class, 'index'])->middleware(AUTH_SELLER);
-	Route::put('{id}/mark', [\App\Http\Modules\Seller\Controllers\Api\AnnouncementController::class, 'mark'])->middleware(AUTH_SELLER);
+	Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Announcements\AnnouncementController::class, 'index'])->middleware(AUTH_SELLER);
+	Route::put('{id}/mark', [\App\Http\Modules\Seller\Controllers\Api\Announcements\AnnouncementController::class, 'mark'])->middleware(AUTH_SELLER);
 });
 
 Route::prefix('support')->group(static function () {
 	Route::prefix('tickets')->group(static function () {
-		Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\SupportController::class, 'index'])->middleware(AUTH_SELLER);
-		Route::post(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\SupportController::class, 'store'])->middleware(AUTH_SELLER);
+		Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Support\SupportController::class, 'index'])->middleware(AUTH_SELLER);
+		Route::post(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Support\SupportController::class, 'store'])->middleware(AUTH_SELLER);
 	});
 });
 
@@ -139,11 +139,11 @@ Route::prefix('growth')->group(static function () {
 });
 
 Route::prefix('promotions')->middleware(AUTH_SELLER)->group(static function () {
-	Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\AdvertisementController::class, 'index']);
-	Route::post(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\AdvertisementController::class, 'store']);
-	Route::get('{advertisement}', [\App\Http\Modules\Seller\Controllers\Api\AdvertisementController::class, 'show']);
-	Route::post('{advertisement}/update', [\App\Http\Modules\Seller\Controllers\Api\AdvertisementController::class, 'update']);
-	Route::delete('{advertisement}', [\App\Http\Modules\Seller\Controllers\Api\AdvertisementController::class, 'delete']);
+	Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Advertisements\AdvertisementController::class, 'index']);
+	Route::post(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Advertisements\AdvertisementController::class, 'store']);
+	Route::get('{advertisement}', [\App\Http\Modules\Seller\Controllers\Api\Advertisements\AdvertisementController::class, 'show']);
+	Route::post('{advertisement}/update', [\App\Http\Modules\Seller\Controllers\Api\Advertisements\AdvertisementController::class, 'update']);
+	Route::delete('{advertisement}', [\App\Http\Modules\Seller\Controllers\Api\Advertisements\AdvertisementController::class, 'delete']);
 });
 
 Route::prefix('bulk')->group(static function () {
@@ -157,7 +157,7 @@ Route::prefix('manifest')->group(static function () {
 });
 
 Route::prefix('dashboard')->group(static function () {
-	Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\DashboardController::class, 'index'])->middleware(AUTH_SELLER);
+	Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Dashboard\DashboardController::class, 'index'])->middleware(AUTH_SELLER);
 });
 
 Route::prefix('returns')->group(function () {

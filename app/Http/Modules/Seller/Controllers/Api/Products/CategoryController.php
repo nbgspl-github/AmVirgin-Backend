@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Modules\Seller\Controllers\Api;
+namespace App\Http\Modules\Seller\Controllers\Api\Products;
 
 use App\Library\Utils\Extensions\Str;
 use App\Models\Category;

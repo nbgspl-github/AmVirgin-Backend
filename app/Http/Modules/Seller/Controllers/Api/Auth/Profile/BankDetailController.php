@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Modules\Seller\Controllers\Api;
+namespace App\Http\Modules\Seller\Controllers\Api\Auth\Profile;
 
 use App\Exceptions\ValidationException;
 use App\Library\Enums\Common\Tables;

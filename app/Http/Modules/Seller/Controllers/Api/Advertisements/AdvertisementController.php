@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Modules\Seller\Controllers\Api;
+namespace App\Http\Modules\Seller\Controllers\Api\Advertisements;
 
 use App\Exceptions\ValidationException;
 use App\Library\Enums\Advertisements\Status;

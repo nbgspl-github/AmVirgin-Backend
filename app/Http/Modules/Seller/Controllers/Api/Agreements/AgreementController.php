@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Modules\Seller\Controllers\Api;
+namespace App\Http\Modules\Seller\Controllers\Api\Agreements;
 
 use App\Exceptions\ValidationException;
 use App\Library\Utils\Extensions\Str;
