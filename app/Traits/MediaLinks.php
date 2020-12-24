@@ -18,6 +18,19 @@ trait MediaLinks
 	}
 
 	/**
+	 * Store media file only when it's valid instance of UploadedFile.
+	 * @param string $directory
+	 * @param $value
+	 * @return bool|mixed|string
+	 */
+	protected function storeWhenUploadedCorrectly (string $directory, $value)
+	{
+		return ($value instanceof UploadedFile)
+			? $this->storeMedia($directory, $value)
+			: $value;
+	}
+
+	/**
 	 * @param ?string $relativePath
 	 * @return ?string
 	 */

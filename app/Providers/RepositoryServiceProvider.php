@@ -21,6 +21,10 @@ class RepositoryServiceProvider extends ServiceProvider
 			\App\Http\Modules\Admin\Repository\Videos\VideoRepositoryInterface::class,
 			\App\Http\Modules\Admin\Repository\Videos\VideoRepository::class
 		);
+		$this->app->bind(
+			\App\Http\Modules\Admin\Repository\User\Customer\Contracts\CustomerRepository::class,
+			\App\Http\Modules\Admin\Repository\User\Customer\CustomerRepository::class
+		);
 	}
 
 	/**

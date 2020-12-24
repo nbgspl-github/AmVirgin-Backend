@@ -23,4 +23,15 @@ class BaseRepository implements RepositoryInterface
 	{
 		return $this->model->create($attributes);
 	}
+
+	public function update (\App\Library\Database\Eloquent\Model $model, array $attributes) : \App\Library\Database\Eloquent\Model
+	{
+		$model->update($attributes);
+		return $model->refresh();
+	}
+
+	public function delete (\App\Library\Database\Eloquent\Model $model) : bool
+	{
+		return $model->delete();
+	}
 }

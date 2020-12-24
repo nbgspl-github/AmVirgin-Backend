@@ -3,6 +3,7 @@
 namespace App\Http\Modules\Admin\Controllers\Web\Videos;
 
 use App\Exceptions\ValidationException;
+use App\Http\Modules\Admin\Repository\Videos\VideoRepositoryInterface;
 use App\Http\Modules\Shared\Controllers\BaseController;
 use App\Library\Enums\Common\PageSectionType;
 use App\Library\Enums\Videos\Types;
@@ -27,15 +28,16 @@ class VideosBase extends BaseController
 	use ValidatesRequest;
 
 	/**
-	 * @var \App\Http\Modules\Admin\Repository\Videos\VideoRepositoryInterface
+	 * @var VideoRepositoryInterface
 	 */
 	protected $repository;
 
-	public function __construct (\App\Http\Modules\Admin\Repository\Videos\VideoRepositoryInterface $repository)
+	public function __construct (VideoRepositoryInterface $repository)
 	{
 		parent::__construct();
 		$this->middleware(AUTH_ADMIN);
 		$this->ruleSet->load('rules.admin.videos');
+		$this->repository = $repository;
 	}
 
 	public function index ()

@@ -2,22 +2,27 @@
 
 namespace App\Http\Modules\Admin\Controllers\Web\Users;
 
+use App\Http\Modules\Admin\Repository\User\Customer\Contracts\CustomerRepository;
 use App\Http\Requests\Admin\Customers\StoreRequest;
 use App\Http\Requests\Admin\Customers\UpdateRequest;
 use App\Models\Auth\Customer;
 
 class CustomerController extends \App\Http\Modules\Admin\Controllers\Web\WebController
 {
-	public function __construct ()
+	protected CustomerRepository $repository;
+
+	public function __construct (CustomerRepository $repository)
 	{
 		parent::__construct();
 		$this->middleware(AUTH_ADMIN);
+		$this->repository = $repository;
 	}
 
 	public function index ()
 	{
-		$users = Customer::query()->latest()->paginate($this->paginationChunk());
-		return view('admin.customers.index')->with('users', $users);
+		return view('admin.customers.index')->with(
+			'users', $this->repository->recentPaginated($this->paginationChunk())
+		);
 	}
 
 	public function create ()
@@ -32,9 +37,7 @@ class CustomerController extends \App\Http\Modules\Admin\Controllers\Web\WebCont
 
 	public function store (StoreRequest $request) : \Illuminate\Http\RedirectResponse
 	{
-		Customer::query()->create(
-			$request->validated()
-		);
+		$this->repository->create($request->validated());
 		return redirect()->route(
 			'admin.customers.index'
 		);
@@ -49,9 +52,7 @@ class CustomerController extends \App\Http\Modules\Admin\Controllers\Web\WebCont
 
 	public function update (UpdateRequest $request, Customer $customer) : \Illuminate\Http\RedirectResponse
 	{
-		$customer->update(
-			$request->validated()
-		);
+		$this->repository->update($customer, $request->validated());
 		return redirect()->route(
 			'admin.customers.index'
 		)->with('success', 'Customer details updated successfully.');
@@ -64,7 +65,7 @@ class CustomerController extends \App\Http\Modules\Admin\Controllers\Web\WebCont
 	 */
 	public function destroy (Customer $customer) : \Illuminate\Http\JsonResponse
 	{
-		$customer->delete();
+		$this->repository->delete($customer);
 		return response()->json(
 			[]
 		);

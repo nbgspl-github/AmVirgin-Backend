@@ -23,25 +23,25 @@
 
 						<tbody>
 						@foreach($videos as $video)
-							<tr id="content_row_{{$video->getKey()}}">
+							<tr id="content_row_{{$video->id}}">
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">
-									@if($video->getPoster()!=null)
-										<img src="{{\App\Library\Utils\Uploads::access()->url($video->getPoster())}}" style="width: 100px; height: 150px; filter: drop-shadow(2px 2px 8px black)" alt="{{$video->getTitle()}}"/>
+									@if($video->poster!=null)
+										<img src="{{$video->poster}}" style="width: 100px; height: 150px; filter: drop-shadow(2px 2px 8px black)" alt="{{$video->title}}"/>
 									@else
 										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 25px"></i>
 									@endif
 								</td>
-								<td class="text-center">{{$video->getTitle()}}</td>
-								<td class="text-center">{{\App\Library\Utils\Extensions\Str::ellipsis($video->getDescription(),100)}}</td>
-								<td class="text-center">{{$video->getRating()}}</td>
+								<td class="text-center">{{$video->title}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::ellipsis($video->description,50)}}</td>
+								<td class="text-center">{{$video->rating}}</td>
 								<td class="text-center">{{\App\Library\Utils\Extensions\Str::stringifyBoolean($video->trending)}}</td>
 								<td class="text-center">{{\App\Library\Utils\Extensions\Str::stringifyBoolean($video->pending)}}</td>
 								<td class="text-center">
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group mx-auto" role="group">
-											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.videos.edit.action',$video->getKey())}}" @include('admin.extras.tooltip.left', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
-											<a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);" onclick="deleteMovie('{{$video->getKey()}}');" @include('admin.extras.tooltip.right', ['title' => 'Delete this video'])><i class="mdi mdi-delete"></i></a>
+											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.videos.edit.action',$video->id)}}" @include('admin.extras.tooltip.left', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
+											<a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);" onclick="deleteMovie('{{$video->id}}');" @include('admin.extras.tooltip.right', ['title' => 'Delete this video'])><i class="mdi mdi-delete"></i></a>
 										</div>
 									</div>
 								</td>
