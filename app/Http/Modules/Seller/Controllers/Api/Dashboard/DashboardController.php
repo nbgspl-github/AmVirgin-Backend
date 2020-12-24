@@ -15,22 +15,29 @@ class DashboardController extends \App\Http\Modules\Seller\Controllers\Api\ApiCo
 		 * @var $seller Seller
 		 */
 		$seller = $this->guard()->user();
+		$now = \Illuminate\Support\Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
+		$past = \Illuminate\Support\Carbon::now()->subDays(7)->startOfDay()->format('Y-m-d H:i:s');
 		$sales = 0;
-		$seller->orders()->each(function (SubOrder $sellerOrder) use (&$sales) {
+		$seller->orders()->whereBetween('created_at', [$past, $now])->each(function (SubOrder $sellerOrder) use (&$sales) {
 			$sales += $sellerOrder->total;
 		});
-		$response = responseApp();
 		$payload = [
 			'products' => $seller->products()->count(),
 			'sales' => $sales,
-			'orders' => $seller->orders()->count('id'),
-			'new' => $seller->orders()->where('status', Status::Placed)->count('id'),
-			'delivered' => $seller->orders()->where('status', Status::Delivered)->count('id'),
-			'cancelled' => $seller->orders()->where('status', Status::Cancelled)->count('id'),
-			'pending' => $seller->orders()->where('status', Status::Pending)->count('id'),
-			'grossRevenue' => $this->revenue($sales)
+			'orders' => $seller->orders()->whereBetween('created_at', [$past, $now])->count('id'),
+			'new' => $seller->orders()->whereBetween('created_at', [$past, $now])->where('status', Status::Placed)->count('id'),
+			'delivered' => $seller->orders()->whereBetween('created_at', [$past, $now])->where('status', Status::Delivered)->count('id'),
+			'cancelled' => $seller->orders()->whereBetween('created_at', [$past, $now])->where('status', Status::Cancelled)->count('id'),
+			'pending' => $seller->orders()->whereBetween('created_at', [$past, $now])->where('status', Status::Pending)->count('id'),
+			'grossRevenue' => $this->revenue($sales),
+			'range' => [
+				'from' => $past,
+				'to' => $now
+			]
 		];
-		return $response->status(\Illuminate\Http\Response::HTTP_OK)->message('Listing dashboard statistics.')->setValue('payload', $payload)->send();
+		return responseApp()->prepare(
+			$payload,
+		);
 	}
 
 	protected function revenue ($sales) : float

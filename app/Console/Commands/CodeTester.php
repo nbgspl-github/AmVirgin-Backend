@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\Traits\GenerateUrls;
 use FFMpeg\Format\Video\X264;
 use Illuminate\Console\Command;
-use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
 class CodeTester extends Command
 {
@@ -44,12 +43,6 @@ class CodeTester extends Command
 		$lowBitrate = (new X264('aac'))->setKiloBitrate(250);
 		$midBitrate = (new X264('aac'))->setKiloBitrate(500);
 		$highBitrate = (new X264('aac'))->setKiloBitrate(1000);
-
-		try {
-			FFMpeg::open($source)->export()->addFormatOutputMapping($lowBitrate)
-		} catch (\Throwable$exception) {
-			dd($exception);
-		}
 	}
 
 	public function handleX ()

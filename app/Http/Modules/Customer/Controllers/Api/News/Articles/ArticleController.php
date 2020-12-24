@@ -11,10 +11,15 @@ class ArticleController extends \App\Http\Modules\Customer\Controllers\Api\ApiCo
 		);
 	}
 
-	public function show (\App\Models\News\Article $article) : \Illuminate\Http\JsonResponse
+	public function show (\App\Models\News\Article $article)
 	{
-		return responseApp()->prepare(
-			new \App\Resources\News\Articles\ArticleResource($article)
+		if ($article->type->is(\App\Library\Enums\News\Article\Types::Video)) {
+			return responseApp()->prepare(
+				new \App\Resources\News\Articles\VideoResource($article)
+			);
+		}
+		return response(
+			$article->content
 		);
 	}
 }

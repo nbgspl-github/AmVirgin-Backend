@@ -158,23 +158,15 @@ Route::prefix('genres')->group(static function () {
 	Route::get(Str::Empty, [\App\Http\Modules\Customer\Controllers\Api\Entertainment\GenreListController::class, 'index']);
 });
 
-Route::prefix('news-categories')->group(static function () {
-	Route::get(Str::Empty, [\App\Http\Modules\Customer\Controllers\Api\News\Categories\CategoryController::class, 'index']);
-	Route::prefix('{category}')->group(static function () {
-		Route::get(Str::Empty, [\App\Http\Modules\Customer\Controllers\Api\News\Categories\CategoryController::class, 'show']);
-	});
-});
-
 Route::prefix('news')->group(static function () {
-	Route::get(Str::Empty, [\App\Http\Modules\Customer\Controllers\Api\News\Categories\NewsController::class, 'index']);
-	Route::get('{item}/show', [\App\Http\Modules\Customer\Controllers\Api\News\Categories\NewsController::class, 'show']);
-
+	Route::prefix('categories')->group(static function () {
+		Route::get(Str::Empty, [\App\Http\Modules\Customer\Controllers\Api\News\Categories\CategoryController::class, 'index']);
+		Route::prefix('{category}')->group(static function () {
+			Route::get(Str::Empty, [\App\Http\Modules\Customer\Controllers\Api\News\Categories\CategoryController::class, 'show']);
+		});
+	});
 	Route::prefix('articles')->group(static function () {
 		Route::get(Str::Empty, [\App\Http\Modules\Customer\Controllers\Api\News\Articles\ArticleController::class, 'index']);
 		Route::get('{article}', [\App\Http\Modules\Customer\Controllers\Api\News\Articles\ArticleController::class, 'show']);
 	});
-});
-
-Route::prefix('test-routes')->group(function () {
-	Route::get('payment', [QuoteController::class, 'test']);
 });
