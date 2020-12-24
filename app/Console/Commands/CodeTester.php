@@ -37,29 +37,22 @@ class CodeTester extends Command
 		parent::__construct();
 	}
 
-	public function handleX () : void
+	public function handle () : void
 	{
 		$source = 'public/videos/video.mp4';
-		$destination = 'public/videos/video_converted_playlist.m3u8';
+		$destination = 'public/videos/video_converted.mp4';
 		$lowBitrate = (new X264('aac'))->setKiloBitrate(250);
 		$midBitrate = (new X264('aac'))->setKiloBitrate(500);
 		$highBitrate = (new X264('aac'))->setKiloBitrate(1000);
 
 		try {
-			FFMpeg::open($source)
-				->exportForHLS()
-				->setSegmentLength(10) // optional
-				->setKeyFrameInterval(48) // optional
-				->addFormat($lowBitrate)
-				->addFormat($midBitrate)
-				->addFormat($highBitrate)
-				->save($destination);
+			FFMpeg::open($source)->export()->addFormatOutputMapping($lowBitrate)
 		} catch (\Throwable$exception) {
 			dd($exception);
 		}
 	}
 
-	public function handle ()
+	public function handleX ()
 	{
 		$prefix = 'AVG';
 		$major = date('Ymd');

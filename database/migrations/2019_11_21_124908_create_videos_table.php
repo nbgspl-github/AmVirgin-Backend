@@ -4,25 +4,27 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVideosTable extends Migration{
+class CreateVideosTable extends Migration
+{
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
-	public function up(){
-		Schema::create('videos', function (Blueprint $table){
+	public function up ()
+	{
+		Schema::create('videos', function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->string('title', 500);
 			$table->string('slug', 600);
 			$table->string('description', 2000);
-			$table->time('duration')->comment('Duration of movie');
-			$table->date('released')->comment('Release date');
+			$table->time('duration')->nullable();
+			$table->date('released');
 			$table->string('cast', 500);
 			$table->string('director')->nullable();
-			$table->string('trailer', 512);
-			$table->string('poster', 512);
-			$table->string('backdrop', 512);
+			$table->string('trailer', 1024);
+			$table->string('poster', 1024);
+			$table->string('backdrop', 1024);
 			$table->unsignedBigInteger('genreId');
 			$table->string('qualitySlug', 500)->nullable();
 			$table->string('languageSlug', 500)->nullable();
@@ -49,7 +51,8 @@ class CreateVideosTable extends Migration{
 	 *
 	 * @return void
 	 */
-	public function down(){
+	public function down ()
+	{
 		Schema::dropIfExists('videos');
 	}
 }

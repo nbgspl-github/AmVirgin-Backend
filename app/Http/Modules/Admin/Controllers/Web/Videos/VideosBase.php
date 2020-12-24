@@ -35,8 +35,7 @@ class VideosBase extends BaseController
 
 	public function index ()
 	{
-		$videos = Video::where('hasSeasons', false)->get();
-		return view('admin.videos.index')->with('videos', $videos);
+		return view('admin.videos.index')->with('videos', Video::startQuery()->movie()->paginate($this->paginationChunk()));
 	}
 
 	public function choose ($id)

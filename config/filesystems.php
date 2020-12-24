@@ -43,7 +43,6 @@ return [
 
 	'disks' => [
 
-
 		'local' => [
 			'driver' => 'local',
 			'root' => storage_path('app'),
@@ -82,8 +81,16 @@ return [
 			'url' => env('AWS_URL'),
 		],
 
-		'media' => [
+		'videos' => [
+			'uploaded' => [
 
+			],
+			'downloadable' => [
+
+			],
+			'streamable' => [
+
+			],
 		]
 	],
 

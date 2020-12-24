@@ -13,6 +13,7 @@ class RecommendedVideosListResource extends JsonResource
 			'title' => $this->title,
 			'thumbnail' => $this->thumbnail,
 			'video' => $this->video,
+			'duration' => $this->duration,
 			'author' => 'Admin',
 			'published' => $this->created_at->format('Y-m-d H:i:s')
 		];

@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class Order extends \App\Library\Database\Eloquent\Model
 {
-	use DynamicAttributeNamedMethods;
+	use DynamicAttributeNamedMethods, \BenSampo\Enum\Traits\CastsEnums;
 
 	protected $guarded = ['id'];
 	protected $casts = ['status' => Status::class, 'paymentMode' => Methods::class];
