@@ -26,7 +26,12 @@ class VideosBase extends BaseController
 	use FluentResponse;
 	use ValidatesRequest;
 
-	public function __construct ()
+	/**
+	 * @var \App\Http\Modules\Admin\Repository\Videos\VideoRepositoryInterface
+	 */
+	protected $repository;
+
+	public function __construct (\App\Http\Modules\Admin\Repository\Videos\VideoRepositoryInterface $repository)
 	{
 		parent::__construct();
 		$this->middleware(AUTH_ADMIN);
@@ -35,7 +40,7 @@ class VideosBase extends BaseController
 
 	public function index ()
 	{
-		return view('admin.videos.index')->with('videos', Video::startQuery()->movie()->paginate($this->paginationChunk()));
+		return view('admin.videos.index')->with('videos', $this->repository->allMoviesPaginated());
 	}
 
 	public function choose ($id)

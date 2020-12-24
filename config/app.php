@@ -167,6 +167,8 @@ return [
 		App\Providers\EventServiceProvider::class,
 		App\Providers\RouteServiceProvider::class,
 
+		\App\Providers\RepositoryServiceProvider::class,
+
 		Yoeunes\Notify\NotifyServiceProvider::class,
 		niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
 		Barryvdh\DomPDF\ServiceProvider::class,

@@ -46,7 +46,7 @@ class Kernel extends HttpKernel
 		'api' => [
 			'throttle:500,1',
 			'bindings',
-//			SetAcceptHeaderIfNotPresent::class
+			\App\Http\Modules\Shared\Middleware\EnforceJsonResponse::class
 		],
 	];
 

@@ -53,6 +53,8 @@ class Handler extends ExceptionHandler
 				return response()->json(['status' => Response::HTTP_INTERNAL_SERVER_ERROR, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_OK);
 			} else if ($e instanceof ValidationException) {
 				return response()->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => $e->getError(), 'payload' => null], Response::HTTP_OK);
+			} else if ($e instanceof \Illuminate\Validation\ValidationException) {
+				return response()->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => $e->validator->errors()->first(), 'payload' => null], Response::HTTP_OK);
 			} else {
 				return response()->json(['status' => Response::HTTP_INTERNAL_SERVER_ERROR, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_INTERNAL_SERVER_ERROR);
 			}

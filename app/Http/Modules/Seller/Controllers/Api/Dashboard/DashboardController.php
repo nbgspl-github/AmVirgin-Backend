@@ -3,27 +3,24 @@
 namespace App\Http\Modules\Seller\Controllers\Api\Dashboard;
 
 use App\Library\Enums\Orders\Status;
-use App\Models\Auth\Seller;
-use App\Models\Order\SubOrder;
 use Illuminate\Http\JsonResponse;
 
 class DashboardController extends \App\Http\Modules\Seller\Controllers\Api\ApiController
 {
-	public function index () : JsonResponse
+	/**
+	 * Number of days to go back when filtering records.
+	 */
+	protected const DAYS_IN_PAST = 7;
+
+	public function index (\App\Http\Modules\Seller\Requests\Dashboard\IndexRequest $request) : JsonResponse
 	{
-		/**
-		 * @var $seller Seller
-		 */
-		$seller = $this->guard()->user();
+		$seller = $this->user();
 		$now = \Illuminate\Support\Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
-		$past = \Illuminate\Support\Carbon::now()->subDays(7)->startOfDay()->format('Y-m-d H:i:s');
-		$sales = 0;
-		$seller->orders()->whereBetween('created_at', [$past, $now])->each(function (SubOrder $sellerOrder) use (&$sales) {
-			$sales += $sellerOrder->total;
-		});
+		$past = \Illuminate\Support\Carbon::now()->subDays($request->days ?? self::DAYS_IN_PAST)->startOfDay()->format('Y-m-d H:i:s');
+		$sales = $seller->orders()->whereBetween('created_at', [$past, $now])->sum('total');
 		$payload = [
 			'products' => $seller->products()->count(),
-			'sales' => $sales,
+			'sales' => intval($sales),
 			'orders' => $seller->orders()->whereBetween('created_at', [$past, $now])->count('id'),
 			'new' => $seller->orders()->whereBetween('created_at', [$past, $now])->where('status', Status::Placed)->count('id'),
 			'delivered' => $seller->orders()->whereBetween('created_at', [$past, $now])->where('status', Status::Delivered)->count('id'),
