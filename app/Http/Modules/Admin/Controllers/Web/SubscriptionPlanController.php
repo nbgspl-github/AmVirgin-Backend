@@ -16,7 +16,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Throwable;
 
-class SubscriptionPlansController extends BaseController
+class SubscriptionPlanController extends BaseController
 {
 	use ValidatesRequest;
 	use FluentResponse;

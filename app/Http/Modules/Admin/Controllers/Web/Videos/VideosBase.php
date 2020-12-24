@@ -29,6 +29,7 @@ class VideosBase extends BaseController
 	public function __construct ()
 	{
 		parent::__construct();
+		$this->middleware(AUTH_ADMIN);
 		$this->ruleSet->load('rules.admin.videos');
 	}
 

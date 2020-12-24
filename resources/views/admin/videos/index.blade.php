@@ -7,10 +7,10 @@
 					@include('admin.extras.header', ['title'=>'Videos','action'=>['link'=>route('admin.videos.create'),'text'=>'Add a Video/Movie']])
 				</div>
 				<div class="card-body animatable">
-					<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 						<thead>
 						<tr>
-							<th class="text-center">No.</th>
+							<th class="text-center">#</th>
 							<th class="text-center">Poster</th>
 							<th class="text-center">Title</th>
 							<th class="text-center">Description</th>
@@ -60,11 +60,11 @@
 		let dataTable = null;
 
 		$(document).ready(() => {
-			dataTable = $('#datatable').DataTable({
-				initComplete: function () {
-					$('#datatable_wrapper').addClass('px-0 mx-0');
-				}
-			});
+			// dataTable = $('#datatable').DataTable({
+			// 	initComplete: function () {
+			// 		$('#datatable_wrapper').addClass('px-0 mx-0');
+			// 	}
+			// });
 		});
 
 		/**

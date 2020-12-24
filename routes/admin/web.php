@@ -15,7 +15,7 @@ use App\Http\Modules\Admin\Controllers\Web\SettingsController;
 use App\Http\Modules\Admin\Controllers\Web\Shop\HomePageController;
 use App\Http\Modules\Admin\Controllers\Web\Shop\SliderController as ShopSliderController;
 use App\Http\Modules\Admin\Controllers\Web\SliderController;
-use App\Http\Modules\Admin\Controllers\Web\SubscriptionPlansController;
+use App\Http\Modules\Admin\Controllers\Web\SubscriptionPlanController;
 use App\Http\Modules\Admin\Controllers\Web\TvSeries\AttributesController;
 use App\Http\Modules\Admin\Controllers\Web\TvSeries\ContentController;
 use App\Http\Modules\Admin\Controllers\Web\TvSeries\MediaController;
@@ -258,14 +258,14 @@ Route::prefix('admin')->group(function () {
 
 		// Subscription Plan Route(s)
 		Route::prefix('subscription-plans')->middleware('auth:admin')->group(function () {
-			Route::get('', [SubscriptionPlansController::class, Methods::Index])->name('admin.subscription-plans.index');
-			Route::get('create', [SubscriptionPlansController::class, Methods::Create])->name('admin.subscription-plans.create');
-			Route::get('{id}/edit', [SubscriptionPlansController::class, Methods::Edit])->name('admin.subscription-plans.edit');
-			Route::get('{id}', [SubscriptionPlansController::class, Methods::Show])->name('admin.subscription-plans.show');
-			Route::post('', [SubscriptionPlansController::class, Methods::Store])->name('admin.subscription-plans.store');
-			Route::post('{id}', [SubscriptionPlansController::class, Methods::Update])->name('admin.subscription-plans.update');
-			Route::put('{id}/status', [SubscriptionPlansController::class, Methods::UpdateStatus])->name('admin.subscription-plans.update.status');
-			Route::delete('{id}', [SubscriptionPlansController::class, Methods::Delete])->name('admin.subscription-plans.delete');
+			Route::get('', [SubscriptionPlanController::class, Methods::Index])->name('admin.subscription-plans.index');
+			Route::get('create', [SubscriptionPlanController::class, Methods::Create])->name('admin.subscription-plans.create');
+			Route::get('{id}/edit', [SubscriptionPlanController::class, Methods::Edit])->name('admin.subscription-plans.edit');
+			Route::get('{id}', [SubscriptionPlanController::class, Methods::Show])->name('admin.subscription-plans.show');
+			Route::post('', [SubscriptionPlanController::class, Methods::Store])->name('admin.subscription-plans.store');
+			Route::post('{id}', [SubscriptionPlanController::class, Methods::Update])->name('admin.subscription-plans.update');
+			Route::put('{id}/status', [SubscriptionPlanController::class, Methods::UpdateStatus])->name('admin.subscription-plans.update.status');
+			Route::delete('{id}', [SubscriptionPlanController::class, Methods::Delete])->name('admin.subscription-plans.delete');
 		});
 
 		// Products Route(s)
