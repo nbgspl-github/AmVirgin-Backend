@@ -2,7 +2,6 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Response;
@@ -60,6 +59,8 @@ class Handler extends ExceptionHandler
 		} else if (!$request->expectsJson()) {
 			if ($e instanceof \Illuminate\Validation\ValidationException) {
 				return responseWeb()->back()->data($request->all())->error($e->validator->errors()->first())->send();
+			} elseif ($e instanceof ModelNotFoundException) {
+				return responseWeb()->back()->error('The resource you\'re trying to access does not exist.')->send();
 			} else {
 				return parent::render($request, $e);
 			}
@@ -68,23 +69,23 @@ class Handler extends ExceptionHandler
 		}
 	}
 
-	protected function unauthenticated ($request, AuthenticationException $exception)
+	protected function unauthenticated ($request, Throwable $exception)
 	{
 		if ($request->expectsJson()) {
-			return response()->json(['error' => 'Unauthenticated.'], 401);
+			return response()->json(['error' => 'Unauthenticated . '], 401);
 		}
 		$guard = $exception->guards()[0];
 		switch ($guard) {
 			case 'admin':
-				$login = 'admin.login';
+				$login = 'admin . login';
 				break;
 
 			case 'seller':
-				$login = 'seller.login';
+				$login = 'seller . login';
 				break;
 
 			default:
-				$login = 'customer.login';
+				$login = 'customer . login';
 				break;
 		}
 		return redirect()->guest(route($login));

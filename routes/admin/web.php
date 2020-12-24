@@ -1,28 +1,28 @@
 <?php
 
 use App\Classes\Methods;
-use App\Http\Controllers\Web\Admin\Auth\LoginController;
-use App\Http\Controllers\Web\Admin\CategoriesBanner;
-use App\Http\Controllers\Web\Admin\CategoryController;
-use App\Http\Controllers\Web\Admin\GenresController;
-use App\Http\Controllers\Web\Admin\HomeController;
-use App\Http\Controllers\Web\Admin\NotificationsController;
-use App\Http\Controllers\Web\Admin\Products\DeletedProductsController;
-use App\Http\Controllers\Web\Admin\Products\ProductsController;
-use App\Http\Controllers\Web\Admin\SellerController;
-use App\Http\Controllers\Web\Admin\ServersController;
-use App\Http\Controllers\Web\Admin\SettingsController;
-use App\Http\Controllers\Web\Admin\Shop\HomePageController;
-use App\Http\Controllers\Web\Admin\Shop\SliderController as ShopSliderController;
-use App\Http\Controllers\Web\Admin\SliderController;
-use App\Http\Controllers\Web\Admin\SubscriptionPlansController;
-use App\Http\Controllers\Web\Admin\TvSeries\AttributesController;
-use App\Http\Controllers\Web\Admin\TvSeries\ContentController;
-use App\Http\Controllers\Web\Admin\TvSeries\MediaController;
-use App\Http\Controllers\Web\Admin\TvSeries\SnapsController;
-use App\Http\Controllers\Web\Admin\TvSeries\TvSeriesBase;
-use App\Http\Controllers\Web\Admin\Videos\VideosBase;
+use App\Http\Modules\Admin\Controllers\Web\Auth\LoginController;
+use App\Http\Modules\Admin\Controllers\Web\CategoriesBanner;
+use App\Http\Modules\Admin\Controllers\Web\CategoryController;
+use App\Http\Modules\Admin\Controllers\Web\GenresController;
+use App\Http\Modules\Admin\Controllers\Web\HomeController;
+use App\Http\Modules\Admin\Controllers\Web\NotificationsController;
+use App\Http\Modules\Admin\Controllers\Web\Products\DeletedProductsController;
+use App\Http\Modules\Admin\Controllers\Web\Products\ProductsController;
+use App\Http\Modules\Admin\Controllers\Web\SellerController;
+use App\Http\Modules\Admin\Controllers\Web\ServersController;
+use App\Http\Modules\Admin\Controllers\Web\SettingsController;
+use App\Http\Modules\Admin\Controllers\Web\Shop\HomePageController;
+use App\Http\Modules\Admin\Controllers\Web\Shop\SliderController as ShopSliderController;
+use App\Http\Modules\Admin\Controllers\Web\SliderController;
+use App\Http\Modules\Admin\Controllers\Web\SubscriptionPlansController;
+use App\Http\Modules\Admin\Controllers\Web\TvSeries\AttributesController;
+use App\Http\Modules\Admin\Controllers\Web\TvSeries\ContentController;
+use App\Http\Modules\Admin\Controllers\Web\TvSeries\MediaController;
+use App\Http\Modules\Admin\Controllers\Web\TvSeries\SnapsController;
+use App\Http\Modules\Admin\Controllers\Web\TvSeries\TvSeriesBase;
 use App\Http\Modules\Admin\Controllers\Web\Users\CustomerController;
+use App\Http\Modules\Admin\Controllers\Web\Videos\VideosBase;
 use App\Library\Utils\Extensions\Str;
 use App\Models\Category;
 use App\Models\Slider;
@@ -91,22 +91,22 @@ Route::prefix('admin')->group(function () {
 			Route::get('create', [VideosBase::class, 'create'])->name('admin.videos.create');
 			Route::get('/{slug}', [VideosBase::class, 'show'])->name('admin.videos.show');
 			Route::prefix('edit/{id}')->group(function () {
-				Route::get('attributes', [\App\Http\Controllers\Web\Admin\Videos\AttributesController::class, 'edit'])->name('admin.videos.edit.attributes');
-				Route::get('content', [\App\Http\Controllers\Web\Admin\Videos\ContentController::class, 'edit'])->name('admin.videos.edit.content');
-				Route::get('media', [\App\Http\Controllers\Web\Admin\Videos\MediaController::class, 'edit'])->name('admin.videos.edit.media');
-				Route::get('snaps', [\App\Http\Controllers\Web\Admin\Videos\SnapsController::class, 'edit'])->name('admin.videos.edit.snaps');
+				Route::get('attributes', [\App\Http\Modules\Admin\Controllers\Web\Videos\AttributesController::class, 'edit'])->name('admin.videos.edit.attributes');
+				Route::get('content', [\App\Http\Modules\Admin\Controllers\Web\Videos\ContentController::class, 'edit'])->name('admin.videos.edit.content');
+				Route::get('media', [\App\Http\Modules\Admin\Controllers\Web\Videos\MediaController::class, 'edit'])->name('admin.videos.edit.media');
+				Route::get('snaps', [\App\Http\Modules\Admin\Controllers\Web\Videos\SnapsController::class, 'edit'])->name('admin.videos.edit.snaps');
 			});
 			Route::prefix('{id}/update')->group(function () {
-				Route::post('attributes', [\App\Http\Controllers\Web\Admin\Videos\AttributesController::class, 'update'])->name('admin.videos.update.attributes');
-				Route::post('content', [\App\Http\Controllers\Web\Admin\Videos\ContentController::class, 'update'])->name('admin.videos.update.content');
-				Route::post('media', [\App\Http\Controllers\Web\Admin\Videos\MediaController::class, 'update'])->name('admin.videos.update.media');
-				Route::post('snaps', [\App\Http\Controllers\Web\Admin\Videos\SnapsController::class, 'update'])->name('admin.videos.update.snaps');
+				Route::post('attributes', [\App\Http\Modules\Admin\Controllers\Web\Videos\AttributesController::class, 'update'])->name('admin.videos.update.attributes');
+				Route::post('content', [\App\Http\Modules\Admin\Controllers\Web\Videos\ContentController::class, 'update'])->name('admin.videos.update.content');
+				Route::post('media', [\App\Http\Modules\Admin\Controllers\Web\Videos\MediaController::class, 'update'])->name('admin.videos.update.media');
+				Route::post('snaps', [\App\Http\Modules\Admin\Controllers\Web\Videos\SnapsController::class, 'update'])->name('admin.videos.update.snaps');
 			});
 			Route::post('store', [VideosBase::class, Methods::Store])->name('admin.videos.store');
 			Route::prefix('{id}')->group(function () {
 				Route::delete('', [VideosBase::class, 'delete'])->name('admin.videos.delete');
-				Route::delete('content/{contentId}', [\App\Http\Controllers\Web\Admin\Videos\ContentController::class, 'delete'])->name('admin.videos.delete.content');
-				Route::delete('snaps/{snapId}', [\App\Http\Controllers\Web\Admin\Videos\SnapsController::class, 'delete'])->name('admin.videos.delete.snaps');
+				Route::delete('content/{contentId}', [\App\Http\Modules\Admin\Controllers\Web\Videos\ContentController::class, 'delete'])->name('admin.videos.delete.content');
+				Route::delete('snaps/{snapId}', [\App\Http\Modules\Admin\Controllers\Web\Videos\SnapsController::class, 'delete'])->name('admin.videos.delete.snaps');
 			});
 		});
 
@@ -277,30 +277,30 @@ Route::prefix('admin')->group(function () {
 
 		// Attributes Route(s)
 		Route::prefix('attributes')->group(function () {
-			Route::get(Str::Empty, [\App\Http\Controllers\Web\Admin\Products\Attributes\AttributeController::class, 'index'])->name('admin.products.attributes.index');
-			Route::get('create', [\App\Http\Controllers\Web\Admin\Products\Attributes\AttributeController::class, 'create'])->name('admin.products.attributes.create');
-			Route::post(Str::Empty, [\App\Http\Controllers\Web\Admin\Products\Attributes\AttributeController::class, 'store'])->name('admin.products.attributes.store');
+			Route::get(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\Products\Attributes\AttributeController::class, 'index'])->name('admin.products.attributes.index');
+			Route::get('create', [\App\Http\Modules\Admin\Controllers\Web\Products\Attributes\AttributeController::class, 'create'])->name('admin.products.attributes.create');
+			Route::post(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\Products\Attributes\AttributeController::class, 'store'])->name('admin.products.attributes.store');
 
 			Route::prefix('sets')->group(function () {
-				Route::get(Str::Empty, [\App\Http\Controllers\Web\Admin\Products\Attributes\AttributeSetController::class, 'index'])->name('admin.attributes.sets.index');
-				Route::get('create', [\App\Http\Controllers\Web\Admin\Products\Attributes\AttributeSetController::class, 'create'])->name('admin.attributes.sets.create');
-				Route::post(Str::Empty, [\App\Http\Controllers\Web\Admin\Products\Attributes\AttributeSetController::class, 'store'])->name('admin.attributes.sets.store');
+				Route::get(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\Products\Attributes\AttributeSetController::class, 'index'])->name('admin.attributes.sets.index');
+				Route::get('create', [\App\Http\Modules\Admin\Controllers\Web\Products\Attributes\AttributeSetController::class, 'create'])->name('admin.attributes.sets.create');
+				Route::post(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\Products\Attributes\AttributeSetController::class, 'store'])->name('admin.attributes.sets.store');
 			});
 
 			Route::prefix('values')->group(function () {
-				Route::get('{attributeId}/edit', [\App\Http\Controllers\Web\Admin\Products\Attributes\AttributeValuesController::class, 'edit'])->name('admin.products.attributes.values.edit');
-				Route::post('{attributeId}', [\App\Http\Controllers\Web\Admin\Products\Attributes\AttributeValuesController::class, 'store'])->name('admin.products.attributes.values.store');
+				Route::get('{attributeId}/edit', [\App\Http\Modules\Admin\Controllers\Web\Products\Attributes\AttributeValuesController::class, 'edit'])->name('admin.products.attributes.values.edit');
+				Route::post('{attributeId}', [\App\Http\Modules\Admin\Controllers\Web\Products\Attributes\AttributeValuesController::class, 'store'])->name('admin.products.attributes.values.store');
 			});
 		});
 
 		// Brand Route(s)
 		Route::prefix('brands')->middleware('auth:admin')->group(function () {
-			Route::get(Str::Empty, [\App\Http\Controllers\Web\Admin\BrandController::class, 'index'])->name('admin.brands.index');
-			Route::get('create', [\App\Http\Controllers\Web\Admin\BrandController::class, 'create'])->name('admin.brands.create');
-			Route::get('{id}/edit', [\App\Http\Controllers\Web\Admin\BrandController::class, 'edit'])->name('admin.brands.edit');
-			Route::get('{id}/approve', [\App\Http\Controllers\Web\Admin\BrandController::class, 'approve'])->name('admin.brands.approve');
-			Route::post(Str::Empty, [\App\Http\Controllers\Web\Admin\BrandController::class, 'store'])->name('admin.brands.store');
-			Route::post('{id}', [\App\Http\Controllers\Web\Admin\BrandController::class, 'update'])->name('admin.brands.update');
+			Route::get(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'index'])->name('admin.brands.index');
+			Route::get('create', [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'create'])->name('admin.brands.create');
+			Route::get('{id}/edit', [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'edit'])->name('admin.brands.edit');
+			Route::get('{id}/approve', [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'approve'])->name('admin.brands.approve');
+			Route::post(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'store'])->name('admin.brands.store');
+			Route::post('{id}', [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'update'])->name('admin.brands.update');
 		});
 
 		// Settings Route(s)
@@ -311,10 +311,10 @@ Route::prefix('admin')->group(function () {
 		// Filters Route(s)
 		Route::prefix('filters')->middleware('auth:admin')->group(function () {
 			Route::prefix('catalog')->group(function () {
-				Route::get(Str::Empty, [\App\Http\Controllers\Web\Admin\CatalogFilterController::class, 'index'])->name('admin.filters.catalog.index');
-				Route::get('create', [\App\Http\Controllers\Web\Admin\CatalogFilterController::class, 'create'])->name('admin.filters.catalog.create');
-				Route::get('category/{id}/attributes', [\App\Http\Controllers\Web\Admin\CatalogFilterController::class, 'attributes'])->name('admin.filters.catalog.category.attributes');
-				Route::post(Str::Empty, [\App\Http\Controllers\Web\Admin\CatalogFilterController::class, 'store'])->name('admin.filters.catalog.store');
+				Route::get(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\CatalogFilterController::class, 'index'])->name('admin.filters.catalog.index');
+				Route::get('create', [\App\Http\Modules\Admin\Controllers\Web\CatalogFilterController::class, 'create'])->name('admin.filters.catalog.create');
+				Route::get('category/{id}/attributes', [\App\Http\Modules\Admin\Controllers\Web\CatalogFilterController::class, 'attributes'])->name('admin.filters.catalog.category.attributes');
+				Route::post(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\CatalogFilterController::class, 'store'])->name('admin.filters.catalog.store');
 			});
 		});
 	});
