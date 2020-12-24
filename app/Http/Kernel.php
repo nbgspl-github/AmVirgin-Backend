@@ -93,7 +93,7 @@ class Kernel extends HttpKernel
 	 * @param Request $request
 	 * @return Response
 	 */
-	public function handle ($request) : Response
+	public function handle ($request)
 	{
 		try {
 			$request->enableHttpMethodParameterOverride();
