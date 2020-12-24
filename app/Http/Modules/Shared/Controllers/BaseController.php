@@ -19,6 +19,8 @@ abstract class BaseController extends Controller
 	 */
 	protected $ruleSet;
 
+	protected const PAGINATION_CHUNK = 15;
+
 	public function __construct ()
 	{
 		$this->ruleSet = new ValidationRuleset();
@@ -27,5 +29,14 @@ abstract class BaseController extends Controller
 	protected function rules (string $key)
 	{
 		return $this->ruleSet->rules($key);
+	}
+
+	/**
+	 * Returns the number of items to be displayed for the current pagination request.
+	 * @return int
+	 */
+	protected function paginationChunk () : int
+	{
+		return request('per_page', self::PAGINATION_CHUNK);
 	}
 }

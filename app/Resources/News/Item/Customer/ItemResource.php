@@ -14,8 +14,8 @@ class ItemResource extends JsonResource
 			'title' => $this->title,
 			'content' => $this->content,
 			'image' => $this->image,
-			'uploadedBy' => $this->uploadedBy,
-			'uploadedOn' => $this->created_at->format('Y-m-d H:i:s'),
+			'author' => $this->author,
+			'published' => $this->created_at->format('Y-m-d H:i:s'),
 			'trending' => TrendingListResource::collection(NewsItem::startQuery()->displayable()->trending()->orderByTrending()->get()),
 			'recommended' => [
 				'videos' => $this->recommendedVideos(),

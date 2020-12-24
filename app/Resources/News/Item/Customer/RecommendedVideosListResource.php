@@ -12,7 +12,9 @@ class RecommendedVideosListResource extends JsonResource
 			'key' => $this->id,
 			'title' => $this->title,
 			'thumbnail' => $this->thumbnail,
-			'video' => $this->video
+			'video' => $this->video,
+			'author' => 'Admin',
+			'published' => $this->created_at->format('Y-m-d H:i:s')
 		];
 	}
 }

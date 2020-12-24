@@ -6,14 +6,14 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ListResource extends JsonResource
 {
-	public function toArray ($request)
+	public function toArray ($request) : array
 	{
 		return [
 			'key' => $this->id,
 			'title' => $this->title,
 			'image' => $this->image,
-			'uploadedBy' => $this->uploadedBy,
-			'uploadedOn' => date('Y-m-d H:i:s', strtotime($this->created_at))
+			'author' => $this->author,
+			'published' => $this->created_at->format('Y-m-d H:i:s')
 		];
 	}
 }

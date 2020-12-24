@@ -65,7 +65,6 @@
 <script src="{{asset("js/app.js")}}"></script>
 
 <script>
-	Notiflix.Loading.Init({svgColor: "#c63232",});
 	dialog = bootbox.dialog({
 		size: 'small',
 		title: '<span class="text-center mb-0 font-weight-bolder">Please wait!</span>',
@@ -74,7 +73,7 @@
 		),
 		closeButton: false,
 		show: false,
-		animate: false,
+		// animate: false,
 		centerVertical: true,
 		className: 'zoomIn animated'
 	});
@@ -101,12 +100,12 @@
 		// window.onInitialize();
 	};
 	@if($message=Session::get('success'))
-	{{--alertify.alert("{{$message}}");--}}
-	Notiflix.Notify.Success('{{$message}}');
+	alertify.alert("{{$message}}");
+	{{--toastr.success('{{$message}}');--}}
 	@endif
 
 	@if($message=Session::get('error'))
-	{{--alertify.alert("{{$message}}");--}}
-	Notiflix.Notify.Failure('{{$message}}');
+	alertify.alert("{{$message}}");
+	{{--toastr.error('{{$message}}');--}}
 	@endif
 </script>

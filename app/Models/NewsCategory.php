@@ -6,12 +6,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class NewsCategory extends \App\Library\Database\Eloquent\Model
 {
-	protected $fillable = [
-		'name', 'description', 'parentId', 'order'
-	];
+	protected $table = 'news_categories';
 
 	public function items () : HasMany
 	{
-		return $this->hasMany(NewsItem::class, 'categoryId');
+		return $this->hasMany(NewsItem::class, 'category_id');
 	}
 }

@@ -11,12 +11,14 @@ class CategoryController extends \App\Http\Modules\Customer\Controllers\Api\ApiC
 {
 	public function index () : JsonResponse
 	{
+		$categories = CategoryListResource::collection(NewsCategory::all())->toArray(null);
+		\App\Library\Utils\Extensions\Arrays::push($categories, [
+			'key' => -1,
+			'name' => 'Articles',
+			'description' => 'Get all articles'
+		]);
 		return responseApp()->prepare([
-			'categories' => CategoryListResource::collection(NewsCategory::all()->push([
-				'key' => -1,
-				'name' => 'Articles',
-				'description' => 'Get all articles'
-			])),
+			'categories' => $categories,
 			'articles' => \App\Resources\News\Articles\ArticleCollection::collection(\App\Models\News\Article::query()->paginate($this->paginationChunk()))->response()->getData()
 		]);
 	}

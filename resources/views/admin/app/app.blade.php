@@ -7,7 +7,7 @@
 	@notify_css
 </head>
 
-<body class="fixed-left">
+<body class="fixed-left pr-0">
 @include('admin.app.partials.body')
 @include('admin.app.partials.scripts')
 @yield('javascript')

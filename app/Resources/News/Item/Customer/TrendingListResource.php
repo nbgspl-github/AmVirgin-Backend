@@ -6,13 +6,14 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class TrendingListResource extends JsonResource
 {
-	public function toArray ($request)
+	public function toArray ($request) : array
 	{
 		return [
 			'key' => $this->id,
 			'title' => $this->title,
-			'uploadedBy' => $this->uploadedBy,
-			'uploadedOn' => $this->uploadedOn
+			'image' => $this->image,
+			'author' => $this->author,
+			'published' => $this->created_at->format('Y-m-d H:i:s')
 		];
 	}
 }

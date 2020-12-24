@@ -54,21 +54,23 @@
 
 		showDetails = key => {
 			setLoading(true, () => {
-				// axios.get(`/admin/customers/${key}`)
-				// 	.then(response => {
-				// 		setLoading(false);
-				// 		bootbox.dialog({
-				// 			title: 'Details',
-				// 			message: response.data,
-				// 			centerVertical: false,
-				// 			size: 'small',
-				// 			scrollable: true,
-				// 		});
-				// 	})
-				// 	.catch(error => {
-				// 		setLoading(false);
-				// 		toastr.error('Something went wrong. Please try again in a while.');
-				// 	});
+				axios.get(`/admin/customers/${key}`)
+					.then(response => {
+						setLoading(false);
+						bootbox.dialog({
+							title: 'Details',
+							message: response.data,
+							centerVertical: false,
+							size: 'small',
+							scrollable: true,
+						});
+					})
+					.catch(error => {
+						setLoading(false);
+						alertify.confirm('Something went wrong. Retry?', yes => {
+							showDetails(key);
+						});
+					});
 			});
 		}
 
@@ -78,7 +80,9 @@
 					axios.delete(`/admin/customers/${key}`).then(response => {
 						location.reload();
 					}).catch(e => {
-						toastr.error('Something went wrong. Please retry!');
+						alertify.confirm('Something went wrong. Retry?', yes => {
+							showDetails(key);
+						});
 					});
 				}
 			)
