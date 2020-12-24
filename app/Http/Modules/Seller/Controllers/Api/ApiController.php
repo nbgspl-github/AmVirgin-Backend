@@ -2,7 +2,7 @@
 
 namespace App\Http\Modules\Seller\Controllers\Api;
 
-class ApiController extends \App\Http\Controllers\Api\ApiController
+class ApiController extends \App\Http\Modules\Shared\Controllers\Api\ApiController
 {
 	protected function guard ()
 	{
