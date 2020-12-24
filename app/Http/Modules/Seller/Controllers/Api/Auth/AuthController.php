@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Modules\Seller\Controllers\Api;
+namespace App\Http\Modules\Seller\Controllers\Api\Auth;
 
 use App\Http\Modules\Shared\Controllers\Auth\BaseAuthController;
 use App\Library\Enums\Common\Tables;
