@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Modules\Admin\Controllers\Web;
+namespace App\Http\Modules\Admin\Controllers\Web\Users;
 
 use App\Exceptions\ValidationException;
 use App\Library\Enums\Common\Tables;

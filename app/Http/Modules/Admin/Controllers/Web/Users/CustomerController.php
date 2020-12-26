@@ -20,6 +20,8 @@ class CustomerController extends \App\Http\Modules\Admin\Controllers\Web\WebCont
 
 	public function index ()
 	{
+
+		dd($this->repository->recentPaginated($this->paginationChunk()));
 		return view('admin.customers.index')->with(
 			'users', $this->repository->recentPaginated($this->paginationChunk())
 		);
