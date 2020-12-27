@@ -7,7 +7,7 @@ use App\Http\Modules\Admin\Controllers\Web\CategoryController;
 use App\Http\Modules\Admin\Controllers\Web\GenresController;
 use App\Http\Modules\Admin\Controllers\Web\HomeController;
 use App\Http\Modules\Admin\Controllers\Web\NotificationsController;
-use App\Http\Modules\Admin\Controllers\Web\Products\DeletedProductsController;
+use App\Http\Modules\Admin\Controllers\Web\Products\DeletedProductController;
 use App\Http\Modules\Admin\Controllers\Web\Products\ProductController;
 use App\Http\Modules\Admin\Controllers\Web\ServersController;
 use App\Http\Modules\Admin\Controllers\Web\SettingsController;
@@ -52,7 +52,7 @@ Route::prefix('admin')->group(function () {
 		});
 
 		// Seller's Route(s)
-		Route::prefix('sellers')->middleware('auth:admin')->group(function () {
+		Route::prefix('sellers')->group(function () {
 			Route::get('', [SellerController::class, Methods::Index])->name('admin.sellers.index');
 			Route::get('create', [SellerController::class, Methods::Create])->name('admin.sellers.create');
 			Route::get('{id}/edit', [SellerController::class, Methods::Edit])->name('admin.sellers.edit');
@@ -82,6 +82,11 @@ Route::prefix('admin')->group(function () {
 			Route::post('{id}', [CategoryController::class, Methods::Update])->name('admin.categories.update');
 			Route::delete('{id}', [CategoryController::class, Methods::Delete])->name('admin.categories.delete');
 			Route::get('{id}/download', [CategoryController::class, 'downloadTemplate'])->name('admin.categories.download');
+		});
+
+		// Orders Route(s)
+		Route::prefix('orders')->group(function () {
+			Route::get(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\Orders\OrderController::class, 'index'])->name('admin.orders.index');
 		});
 
 		// Videos Route(s)
@@ -271,7 +276,7 @@ Route::prefix('admin')->group(function () {
 		// Products Route(s)
 		Route::prefix('products')->middleware('auth:admin')->group(function () {
 			Route::get(Str::Empty, [ProductController::class, Methods::Index])->name('admin.products.index');
-			Route::get('/deleted', [DeletedProductsController::class, Methods::Index])->name('admin.products.deleted.index');
+			Route::get('/deleted', [DeletedProductController::class, Methods::Index])->name('admin.products.deleted.index');
 			Route::get('{id}/approve', [ProductController::class, 'approve'])->name('admin.products.approve');
 		});
 

@@ -33,6 +33,10 @@ class RepositoryServiceProvider extends ServiceProvider
 			\App\Http\Modules\Admin\Repository\Products\Contracts\ProductRepository::class,
 			\App\Http\Modules\Admin\Repository\Products\ProductRepository::class
 		);
+		$this->app->bind(
+			\App\Http\Modules\Admin\Repository\Orders\Contracts\OrderRepository::class,
+			\App\Http\Modules\Admin\Repository\Orders\OrderRepository::class
+		);
 	}
 
 	/**

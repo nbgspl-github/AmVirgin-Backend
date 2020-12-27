@@ -4,37 +4,45 @@
 		<div class="col-12">
 			<div class="card shadow-sm custom-card">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Products'])
+					@include('admin.extras.header', ['title'=>'Orders'])
 				</div>
 				<div class="card-body animatable">
 					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 						<thead>
 						<tr>
 							<th>#</th>
-							<th>Name</th>
-							<th>Description</th>
-							<th>Original Price</th>
-							<th>Selling Price</th>
+							<th>Number</th>
+							<th>Customer</th>
+							<th>Seller(s)</th>
+							<th>Quantity</th>
+							<th>Sub Total</th>
+							<th>Total</th>
 							<th>Status</th>
 							<th>Action(s)</th>
 						</tr>
 						</thead>
 
 						<tbody>
-						@foreach($products as $product)
-							<tr id="content_row_{{$product->getKey()}}">
+						@foreach($orders as $order)
+							<tr id="content_row_{{$order->getKey()}}">
 								<td>{{$loop->index+1}}</td>
-								<td>{{$product->name}}</td>
-								<td>{{\App\Library\Utils\Extensions\Str::ellipsis($product->description,40)}}</td>
-								<td>{{$product->originalPrice}}</td>
-								<td>{{$product->sellingPrice}}</td>
-								<td>{{$product->approved?'Approved':'Pending'}}</td>
+								<td>{{$order->orderNumber}}</td>
+								<td>{{$order->customer->name??\App\Library\Utils\Extensions\Str::NotAvailable}}</td>
+								<td>
+									@foreach($order->subOrders as $subOrder)
+										{{$subOrder->seller->name}},
+									@endforeach
+								</td>
+								<td>{{$order->quantity}}</td>
+								<td>{{$order->subTotal}}</td>
+								<td>{{$order->total}}</td>
+								<td>{{$order->status->description}}</td>
 								<td>
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group" role="group">
-											<a class="btn btn-outline-danger" href="javascript:showDetails('{{$user->id}}')" @include('admin.extras.tooltip.bottom', ['title' => 'View customer details'])><i class="mdi mdi-lightbulb-outline"></i></a>
-											<a class="btn btn-outline-danger" href="{{route('admin.customers.edit',$user->id)}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit customer details'])><i class="mdi mdi-pencil"></i></a>
-											<a class="btn btn-outline-primary" href="javascript:deleteCustomer('{{$user->id}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete customer'])><i class="mdi mdi-minus-circle-outline"></i></a>
+											<a class="btn btn-outline-danger" href="javascript:showDetails('{{$order->id}}')" @include('admin.extras.tooltip.bottom', ['title' => 'View customer details'])><i class="mdi mdi-lightbulb-outline"></i></a>
+											<a class="btn btn-outline-danger" href="{{route('admin.customers.edit',$order->id)}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit customer details'])><i class="mdi mdi-pencil"></i></a>
+											<a class="btn btn-outline-primary" href="javascript:deleteCustomer('{{$order->id}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete customer'])><i class="mdi mdi-minus-circle-outline"></i></a>
 										</div>
 									</div>
 								</td>
@@ -43,7 +51,7 @@
 						</tbody>
 					</table>
 
-					{{$products->links()}}
+					{{$orders->links()}}
 				</div>
 			</div>
 		</div>

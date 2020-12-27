@@ -11,7 +11,6 @@ use App\Traits\HasSpecialAttributes;
 use BinaryCats\Sku\HasSku;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Product is an entity that can be sold, purchased, created, updated and deleted.
@@ -19,15 +18,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Product extends \App\Library\Database\Eloquent\Model
 {
-	use DynamicAttributeNamedMethods, HasSpecialAttributes, GenerateSlugs, SoftDeletes, HasSku, HasInventoryStocks;
+	use DynamicAttributeNamedMethods, HasSpecialAttributes, GenerateSlugs, HasSku, HasInventoryStocks;
+	use \Illuminate\Database\Eloquent\SoftDeletes;
 
-	protected $hidden = [
-		'id',
-		'deletedAt',
-		'createdAt',
-		'updatedAt',
-		'sellerId',
-	];
 	protected $casts = [
 		'draft' => 'bool',
 	];

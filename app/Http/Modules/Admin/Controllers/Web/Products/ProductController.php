@@ -23,7 +23,7 @@ class ProductController extends \App\Http\Modules\Admin\Controllers\Web\WebContr
 
 	public function index ()
 	{
-		return view('admin.products.index')->with('products', $this->repository->allProductsPaginated());
+		return view('admin.products.index')->with('products', $this->repository->allProductsPaginated($this->paginationChunk()));
 	}
 
 	public function approve ($id)
