@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Admin\Customers;
+namespace App\Http\Modules\Admin\Requests\Users\Customer;
 
 use App\Library\Utils\Extensions\Rule;
 use Illuminate\Foundation\Http\FormRequest;

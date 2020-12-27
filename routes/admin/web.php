@@ -8,7 +8,7 @@ use App\Http\Modules\Admin\Controllers\Web\GenresController;
 use App\Http\Modules\Admin\Controllers\Web\HomeController;
 use App\Http\Modules\Admin\Controllers\Web\NotificationsController;
 use App\Http\Modules\Admin\Controllers\Web\Products\DeletedProductsController;
-use App\Http\Modules\Admin\Controllers\Web\Products\ProductsController;
+use App\Http\Modules\Admin\Controllers\Web\Products\ProductController;
 use App\Http\Modules\Admin\Controllers\Web\ServersController;
 use App\Http\Modules\Admin\Controllers\Web\SettingsController;
 use App\Http\Modules\Admin\Controllers\Web\Shop\HomePageController;
@@ -270,9 +270,9 @@ Route::prefix('admin')->group(function () {
 
 		// Products Route(s)
 		Route::prefix('products')->middleware('auth:admin')->group(function () {
-			Route::get(Str::Empty, [ProductsController::class, Methods::Index])->name('admin.products.index');
+			Route::get(Str::Empty, [ProductController::class, Methods::Index])->name('admin.products.index');
 			Route::get('/deleted', [DeletedProductsController::class, Methods::Index])->name('admin.products.deleted.index');
-			Route::get('{id}/approve', [ProductsController::class, 'approve'])->name('admin.products.approve');
+			Route::get('{id}/approve', [ProductController::class, 'approve'])->name('admin.products.approve');
 		});
 
 		// Attributes Route(s)

@@ -2,31 +2,27 @@
 
 namespace App\Http\Modules\Admin\Controllers\Web\Users;
 
-use App\Exceptions\ValidationException;
-use App\Library\Enums\Common\Tables;
+use App\Http\Modules\Admin\Repository\User\Seller\Contracts\SellerRepository;
+use App\Http\Modules\Admin\Requests\Users\Seller\StoreRequest;
+use App\Http\Modules\Admin\Requests\Users\Seller\UpdateRequest;
 use App\Models\Auth\Seller;
-use App\Traits\ValidatesRequest;
-use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class SellerController extends \App\Http\Modules\Admin\Controllers\Web\WebController
 {
-	use ValidatesRequest;
+	protected SellerRepository $repository;
 
-	protected $ruleSet;
-
-	public function __construct ()
+	public function __construct (SellerRepository $repository)
 	{
 		parent::__construct();
-		$this->ruleSet = config('rules.admin.sellers');
+		$this->middleware(AUTH_ADMIN);
+		$this->repository = $repository;
 	}
 
 	public function index ()
 	{
-		$payload = Seller::all();
-		return view('admin.sellers.index')->with('sellers', $payload);
+		return view('admin.sellers.index')->with('users',
+			$this->repository->recentPaginated($this->paginationChunk())
+		);
 	}
 
 	public function create ()
@@ -34,54 +30,40 @@ class SellerController extends \App\Http\Modules\Admin\Controllers\Web\WebContro
 		return view('admin.sellers.create');
 	}
 
-	public function edit ($id = null)
+	public function edit (Seller $seller)
 	{
-		$seller = Seller::find($id);
-		if ($seller != null) {
-			return view('admin.sellers.edit')->with('seller', $seller);
-		} else {
-			return responseWeb()->route('admin.sellers.index')->error(trans('admin.sellers.not-found'))->send();
-		}
+		return view('admin.sellers.edit')->with('seller', $seller);
 	}
 
-	public function store (Request $request)
+
+	public function show (Seller $seller) : \Illuminate\Http\JsonResponse
 	{
-		$response = null;
-		try {
-			$payload = $this->requestValid($request, $this->ruleSet['store']);
-			Seller::create($payload);
-			$response = responseWeb()->route('admin.sellers.index')->success(__('strings.sellers.store.success'));
-		} catch (ValidationException $exception) {
-			$response = responseWeb()->back()->data($request->all())->error($exception->getMessage());
-		} catch (Exception $exception) {
-			$response = responseWeb()->back()->data($request->all())->error($exception->getMessage());
-		} finally {
-			return $response->send();
-		}
+		return response()->json(
+			view('admin.sellers.show')->with('seller', $seller)->render()
+		);
 	}
 
-	public function update (Request $request, $id = null)
+	public function store (StoreRequest $request) : \Illuminate\Http\RedirectResponse
 	{
-		$response = null;
-		$seller = Seller::find($id);
-		try {
-			if ($seller == null)
-				throw new ModelNotFoundException(__('strings.sellers.not-found'));
-			$additional = [
-				'mobile' => [Rule::unique(Tables::Sellers, 'mobile')->ignore($seller->getKey())],
-				'email' => [Rule::unique(Tables::Sellers, 'email')->ignore($seller->getKey())],
-			];
-			$payload = $this->requestValid($request, $this->ruleSet['update'], $additional);
-			$seller->update($payload);
-			$response = responseWeb()->route('admin.sellers.index')->success(__('strings.seller.update.success'));
-		} catch (ModelNotFoundException $exception) {
-			$response = responseWeb()->route('admin.sellers.index')->error($exception->getMessage());
-		} catch (ValidationException $exception) {
-			$response = responseWeb()->back()->data($request->all())->error($exception->getError());
-		} catch (Exception $exception) {
-			$response = responseWeb()->route('admin.sellers.index')->error($exception->getMessage());
-		} finally {
-			return $response->send();
-		}
+		$this->repository->create($request->validated());
+		return redirect()->route(
+			'admin.sellers.index'
+		);
+	}
+
+	public function update (UpdateRequest $request, Seller $seller) : \Illuminate\Http\RedirectResponse
+	{
+		$this->repository->update($seller, $request->validated());
+		return redirect()->route(
+			'admin.sellers.index'
+		)->with('success', 'Seller details updated successfully.');
+	}
+
+	public function destroy (Seller $seller) : \Illuminate\Http\JsonResponse
+	{
+		$this->repository->delete($seller);
+		return response()->json(
+			[]
+		);
 	}
 }

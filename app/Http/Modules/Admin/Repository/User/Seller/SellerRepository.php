@@ -2,7 +2,7 @@
 
 namespace App\Http\Modules\Admin\Repository\User\Seller;
 
-class SellerRepository extends \App\Http\Modules\Shared\Repository\BaseRepository implements \App\Http\Modules\Admin\Repository\User\Customer\Contracts\CustomerRepository
+class SellerRepository extends \App\Http\Modules\Shared\Repository\BaseRepository implements \App\Http\Modules\Admin\Repository\User\Seller\Contracts\SellerRepository
 {
 	public function __construct (\App\Models\Auth\Seller $model)
 	{

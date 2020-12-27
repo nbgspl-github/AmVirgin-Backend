@@ -7,10 +7,10 @@
 					@include('admin.extras.header', ['title'=>'Products'])
 				</div>
 				<div class="card-body animatable">
-					<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 						<thead>
 						<tr>
-							<th class="text-center">No.</th>
+							<th class="text-center">#</th>
 							<th class="text-center">Name</th>
 							<th class="text-center">Description</th>
 							<th class="text-center">Original Price</th>
@@ -23,10 +23,10 @@
 						@foreach($products as $product)
 							<tr id="content_row_{{$product->getKey()}}">
 								<td class="text-center">{{$loop->index+1}}</td>
-								<td class="text-center">{{$product->name()}}</td>
-								<td class="text-center">{{\App\Library\Utils\Extensions\Str::ellipsis($product->description(),40)}}</td>
-								<td class="text-center">{{$product->originalPrice()}}</td>
-								<td class="text-center">{{$product->approved==true?'approved':'pending'}}</td>
+								<td class="text-center">{{$product->name}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::ellipsis($product->description,40)}}</td>
+								<td class="text-center">{{$product->originalPrice}}</td>
+								<td class="text-center">{{$product->approved==true?'Approved':'Pending'}}</td>
 								<td class="text-center">
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group mx-auto" role="group">
@@ -46,50 +46,46 @@
 
 @section('javascript')
 	<script type="application/javascript">
-        let dataTable = null;
+		let dataTable = null;
 
-        $(document).ready(() => {
-            dataTable = $('#datatable').DataTable({
-                initComplete: function () {
-                    $('#datatable_wrapper').addClass('px-0 mx-0');
-                }
-            });
-        });
+		$(document).ready(() => {
 
-        /**
-         * Returns route for Resource/Delete route.
-         * @param id
-         * @returns {string}
-         */
-        deleteRoute = (id) => {
-            return 'subscription-plans/' + id;
-        };
+		});
 
-        /**
-         * Callback for delete resource trigger.
-         * @param id
-         */
-        deleteResource = (id) => {
-            window.genreId = id;
-            alertify.confirm("Are you sure you want to delete this subscription plan? ",
-                (ev) => {
-                    ev.preventDefault();
-                    axios.delete(deleteRoute(id))
-                        .then(response => {
-                            if (response.status === 200) {
-                                dataTable.rows('#content_row_' + id).remove().draw();
-                                toastr.success(response.data.message);
-                            } else {
-                                toastr.error(response.data.message);
-                            }
-                        })
-                        .catch(error => {
-                            toastr.error('Something went wrong. Please try again in a while.');
-                        });
-                },
-                (ev) => {
-                    ev.preventDefault();
-                });
-        }
+		/**
+		 * Returns route for Resource/Delete route.
+		 * @param id
+		 * @returns {string}
+		 */
+		deleteRoute = (id) => {
+			return 'subscription-plans/' + id;
+		};
+
+		/**
+		 * Callback for delete resource trigger.
+		 * @param id
+		 */
+		deleteResource = (id) => {
+			window.genreId = id;
+			alertify.confirm("Are you sure you want to delete this subscription plan? ",
+				(ev) => {
+					ev.preventDefault();
+					axios.delete(deleteRoute(id))
+						.then(response => {
+							if (response.status === 200) {
+								dataTable.rows('#content_row_' + id).remove().draw();
+								toastr.success(response.data.message);
+							} else {
+								toastr.error(response.data.message);
+							}
+						})
+						.catch(error => {
+							toastr.error('Something went wrong. Please try again in a while.');
+						});
+				},
+				(ev) => {
+					ev.preventDefault();
+				});
+		}
 	</script>
 @stop

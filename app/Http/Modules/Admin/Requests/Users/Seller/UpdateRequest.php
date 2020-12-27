@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Admin\Customers;
+namespace App\Http\Modules\Admin\Requests\Users\Seller;
 
 use App\Library\Enums\Common\Tables;
 use App\Library\Utils\Extensions\Rule;

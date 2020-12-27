@@ -6,10 +6,8 @@ use App\Models\Address\Address;
 use App\Models\CustomerWishlist;
 use App\Models\Order\Order;
 use App\Models\Video\Video;
-use App\Traits\ActiveStatus;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\HashPasswords;
-use App\Traits\MediaLinks;
 use App\Traits\OtpVerificationSupport;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -26,8 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Customer extends \App\Library\Database\Eloquent\AuthEntity
 {
 	use HashPasswords;
-	use ActiveStatus, OtpVerificationSupport, DynamicAttributeNamedMethods;
-	use MediaLinks;
+	use OtpVerificationSupport, DynamicAttributeNamedMethods;
 	use \Illuminate\Database\Eloquent\SoftDeletes;
 
 	protected $table = 'customers';

@@ -3,8 +3,8 @@
 namespace App\Http\Modules\Admin\Controllers\Web\Users;
 
 use App\Http\Modules\Admin\Repository\User\Customer\Contracts\CustomerRepository;
-use App\Http\Requests\Admin\Customers\StoreRequest;
-use App\Http\Requests\Admin\Customers\UpdateRequest;
+use App\Http\Modules\Admin\Requests\Users\Customer\StoreRequest;
+use App\Http\Modules\Admin\Requests\Users\Customer\UpdateRequest;
 use App\Models\Auth\Customer;
 
 class CustomerController extends \App\Http\Modules\Admin\Controllers\Web\WebController
@@ -20,8 +20,6 @@ class CustomerController extends \App\Http\Modules\Admin\Controllers\Web\WebCont
 
 	public function index ()
 	{
-
-		dd($this->repository->recentPaginated($this->paginationChunk()));
 		return view('admin.customers.index')->with(
 			'users', $this->repository->recentPaginated($this->paginationChunk())
 		);

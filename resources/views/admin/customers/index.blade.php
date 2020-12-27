@@ -21,7 +21,7 @@
 						<tbody>
 						@foreach ($users as $user)
 							<tr>
-								<td>{{$loop->index+1}}</td>
+								<td>{{($users->firstItem()+$loop->index)}}</td>
 								<td>{{\App\Library\Utils\Extensions\Str::ellipsis($user->name,25)}}</td>
 								<td>{{$user->mobile}}</td>
 								<td>{{\App\Library\Utils\Extensions\Str::ellipsis($user->email,50)}}</td>
@@ -75,7 +75,7 @@
 		}
 
 		deleteCustomer = key => {
-			alertify.confirm("Are you sure you want to delete this customer? ",
+			alertify.confirm("Are you sure? This action is irreversible!",
 				yes => {
 					axios.delete(`/admin/customers/${key}`).then(response => {
 						location.reload();

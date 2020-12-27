@@ -2,23 +2,28 @@
 
 namespace App\Http\Modules\Admin\Controllers\Web\Products;
 
-use App\Http\Modules\Shared\Controllers\BaseController;
+use App\Http\Modules\Admin\Repository\Products\Contracts\ProductRepository;
 use App\Library\Http\WebResponse;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class ProductsController extends BaseController
+class ProductController extends \App\Http\Modules\Admin\Controllers\Web\WebController
 {
-	public function __construct ()
+	/**
+	 * @var ProductRepository
+	 */
+	protected $repository;
+
+	public function __construct (ProductRepository $repository)
 	{
 		parent::__construct();
+		$this->repository = $repository;
 	}
 
 	public function index ()
 	{
-		$products = Product::startQuery()->get();
-		return view('admin.products.index')->with('products', $products);
+		return view('admin.products.index')->with('products', $this->repository->allProductsPaginated());
 	}
 
 	public function approve ($id)
