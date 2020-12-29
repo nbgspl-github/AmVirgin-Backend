@@ -1,0 +1,36 @@
+<?php
+
+namespace App\Http\Modules\Admin\Requests\Users\Videos;
+
+use App\Library\Utils\Extensions\Rule;
+
+class StoreRequest extends \Illuminate\Foundation\Http\FormRequest
+{
+	public function rules () : array
+	{
+		return [
+			'title' => ['bail', 'required', 'string', 'min:1', 'max:500'],
+			'description' => ['bail', 'required', 'string', 'min:1', 'max:2000'],
+			'duration' => ['bail', 'required', 'regex:/^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$/'],
+			'released' => ['bail', 'required', 'date'],
+			'cast' => ['bail', 'required', 'string', 'min:1', 'max:500'],
+			'director' => ['bail', 'required', 'string', 'min:1', 'max:256'],
+			'genre_id' => ['bail', 'required', 'exists:genres,id'],
+			'section_id' => ['bail', 'required', 'exists:page-sections,id'],
+			'rating' => ['bail', 'required', 'numeric', 'min:0.00', 'max:5.00'],
+			'pg_rating' => ['bail', 'required', Rule::in(['G', 'PG', 'PG-13', 'R', 'NC-17'])],
+			'subscription_type' => ['bail', 'required', Rule::in(['free', 'paid', 'subscription'])],
+			'price' => ['bail', 'nullable', 'required_unless:subscriptionType,free,subscription', 'numeric', 'min:0.01', 'max:10000.00'],
+			'rank' => ['bail', 'nullable', 'gte:1', 'lt:11'],
+		];
+	}
+
+	public function validated () : array
+	{
+		$validated = parent::validated();
+		return array_merge($validated, [
+			'type' => \App\Library\Enums\Videos\Types::Movie,
+			'rank' => $validated['rank'] ?? 0
+		]);
+	}
+}

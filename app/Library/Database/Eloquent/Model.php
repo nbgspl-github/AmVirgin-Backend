@@ -12,7 +12,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
-class Model extends \Illuminate\Database\Eloquent\Model
+abstract class Model extends \Illuminate\Database\Eloquent\Model
 {
 	use \App\Traits\MediaLinks;
 
@@ -23,5 +23,14 @@ class Model extends \Illuminate\Database\Eloquent\Model
 	public function __construct (array $attributes = [])
 	{
 		parent::__construct($attributes);
+	}
+
+	/**
+	 * Gets the name of table bound to this model.
+	 * @return string
+	 */
+	public static function tableName () : string
+	{
+		return with(new static)->getTable();
 	}
 }

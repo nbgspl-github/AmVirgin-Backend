@@ -32,7 +32,7 @@ class Item extends \App\Library\Database\Eloquent\Model
 
 	public function returns () : HasMany
 	{
-		return $this->hasMany(\App\Models\Order\Returns::class);
+		return $this->hasMany(\App\Models\Order\Returns::class, 'order_item_id');
 	}
 
 	public function subOrder () : BelongsTo

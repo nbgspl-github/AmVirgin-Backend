@@ -12,5 +12,5 @@
 @include('admin.app.partials.scripts')
 @yield('javascript')
 </body>
-@notify_render
+{{--@notify_render--}}
 </html>

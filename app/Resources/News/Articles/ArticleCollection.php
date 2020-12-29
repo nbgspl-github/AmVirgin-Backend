@@ -31,6 +31,7 @@ class ArticleCollection extends \Illuminate\Http\Resources\Json\JsonResource
 			'key' => $this->id,
 			'title' => $this->title,
 			'thumbnail' => $this->thumbnail,
+			'video' => $this->video,
 			'published' => $this->created_at->format('Y-m-d H:i:s'),
 			'views' => $this->views,
 			'duration' => $this->duration,

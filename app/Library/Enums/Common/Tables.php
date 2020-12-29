@@ -14,11 +14,11 @@ class Tables extends Enum
 	const Videos = 'videos';
 	const SubscriptionPlans = 'subscription-plans';
 	const Products = 'products';
-	const CartSessions = 'cart-sessions';
+	const CartSessions = 'cart_sessions';
 	const ShopBanner = 'home_page_banner';
 	const States = 'states';
 	const Cities = 'cities';
-	const ShippingAddresses = 'shipping-addresses';
+	const ShippingAddresses = 'addresses';
 	const Countries = 'countries';
 	const Categories = 'categories';
 	const Currencies = 'currencies';

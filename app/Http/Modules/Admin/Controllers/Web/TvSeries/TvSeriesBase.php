@@ -7,7 +7,7 @@ use App\Http\Modules\Shared\Controllers\BaseController;
 use App\Library\Enums\Common\PageSectionType;
 use App\Library\Enums\Videos\Types;
 use App\Library\Http\WebResponse;
-use App\Models\PageSection;
+use App\Models\Section;
 use App\Models\Video\Genre;
 use App\Models\Video\MediaLanguage;
 use App\Models\Video\MediaQuality;
@@ -71,7 +71,7 @@ class TvSeriesBase extends BaseController
 		$languagePayload = MediaLanguage::all()->sortBy('name')->all();
 		$serverPayload = MediaServer::all();
 		$qualityPayload = MediaQuality::all();
-		$sections = PageSection::where('type', PageSectionType::Entertainment)->get();
+		$sections = Section::where('type', PageSectionType::Entertainment)->get();
 		return view('admin.tv-series.create')->
 		with('genres', $genrePayload)->
 		with('languages', $languagePayload)->

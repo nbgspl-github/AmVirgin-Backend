@@ -18,7 +18,7 @@ class RepositoryServiceProvider extends ServiceProvider
 			\App\Http\Modules\Shared\Repository\BaseRepository::class
 		);
 		$this->app->bind(
-			\App\Http\Modules\Admin\Repository\Videos\VideoRepositoryInterface::class,
+			\App\Http\Modules\Admin\Repository\Videos\Contracts\VideoRepository::class,
 			\App\Http\Modules\Admin\Repository\Videos\VideoRepository::class
 		);
 		$this->app->bind(

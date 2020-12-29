@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\UploadedFile;
 use Throwable;
 
-class SnapsController extends VideosBase
+class SnapsController extends VideoController
 {
 	public function __construct ()
 	{
@@ -67,7 +67,7 @@ class SnapsController extends VideosBase
 		}
 	}
 
-	public function delete ($id, $subId = null)
+	public function delete ($id)
 	{
 		$response = responseApp();
 		try {

@@ -5,7 +5,7 @@ namespace App\Http\Modules\Customer\Controllers\Api\Entertainment;
 use App\Library\Enums\Common\PageSectionType;
 use App\Library\Utils\Extensions\Arrays;
 use App\Library\Utils\Extensions\Str;
-use App\Models\PageSection;
+use App\Models\Section;
 use App\Models\Product;
 use App\Models\Slider;
 use App\Models\Video\Video;
@@ -58,8 +58,8 @@ class HomePageController extends \App\Http\Modules\Customer\Controllers\Api\ApiC
 			/**
 			 * Page Sections
 			 */
-			$sections = PageSection::entertainment()->get();
-			$sections->transform(function (PageSection $pageSection) {
+			$sections = Section::entertainment()->get();
+			$sections->transform(function (Section $pageSection) {
 				$contents = Video::startQuery()
 					->displayable()
 					->section($pageSection->id)
@@ -104,7 +104,7 @@ class HomePageController extends \App\Http\Modules\Customer\Controllers\Api\ApiC
 	{
 		$response = responseApp();
 		try {
-			$pageSection = PageSection::find($id);
+			$pageSection = Section::find($id);
 			if (Str::equals($pageSection->type, PageSectionType::Entertainment)) {
 				$contents = Video::startQuery()->displayable()->section($pageSection->id)->take($pageSection->visibleItemCount)->get();
 			} else {

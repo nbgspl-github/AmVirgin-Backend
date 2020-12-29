@@ -41,7 +41,7 @@
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group mx-auto" role="group">
 											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.videos.edit.action',$video->id)}}" @include('admin.extras.tooltip.left', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
-											<a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);" onclick="deleteMovie('{{$video->id}}');" @include('admin.extras.tooltip.right', ['title' => 'Delete this video'])><i class="mdi mdi-delete"></i></a>
+											<a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);" onclick="deleteVideo('{{$video->id}}');" @include('admin.extras.tooltip.right', ['title' => 'Delete this video'])><i class="mdi mdi-delete"></i></a>
 										</div>
 									</div>
 								</td>
@@ -58,50 +58,19 @@
 
 @section('javascript')
 	<script type="application/javascript">
-		let dataTable = null;
-
-		$(document).ready(() => {
-			// dataTable = $('#datatable').DataTable({
-			// 	initComplete: function () {
-			// 		$('#datatable_wrapper').addClass('px-0 mx-0');
-			// 	}
-			// });
-		});
-
-		/**
-		 * Returns route for Genre/Delete route.
-		 * @param id
-		 * @returns {string}
-		 */
-		deleteRoute = (id) => {
-			return 'videos/' + id;
-		};
-
-		/**
-		 * Callback for delete slide trigger.
-		 * @param id
-		 */
-		deleteMovie = (id) => {
-			window.genreId = id;
-			alertify.confirm("Are you sure you want to delete this video? ",
-				(ev) => {
-					ev.preventDefault();
-					axios.delete(deleteRoute(id))
-						.then(response => {
-							if (response.status === 200) {
-								$('#content_row_' + id).remove();
-								toastr.success(response.data.message);
-							} else {
-								toastr.error(response.data.message);
-							}
-						})
-						.catch(error => {
-							toastr.error('Something went wrong. Please try again in a while.');
+		deleteVideo = key => {
+			alertify.confirm("Are you sure? This action is irreversible!",
+				yes => {
+					axios.delete(`/admin/videos/${key}`).then(response => {
+						console.log(response.data);
+						location.reload();
+					}).catch(e => {
+						alertify.confirm('Something went wrong. Retry?', yes => {
+							deleteVideo(key);
 						});
-				},
-				(ev) => {
-					ev.preventDefault();
-				});
+					});
+				}
+			)
 		}
 	</script>
 @stop

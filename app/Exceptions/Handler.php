@@ -42,7 +42,7 @@ class Handler extends ExceptionHandler
 
 	public function render ($request, Throwable $e)
 	{
-		if ($request->expectsJson()) {
+		if ($this->respondWithJson($request)) {
 			if ($e instanceof ModelNotFoundException) {
 				return response()->json(['status' => Response::HTTP_NOT_FOUND, 'payload' => null], Response::HTTP_NOT_FOUND);
 			} elseif ($e instanceof ActionNotAllowedException) {
@@ -58,16 +58,18 @@ class Handler extends ExceptionHandler
 			} else {
 				return response()->json(['status' => Response::HTTP_INTERNAL_SERVER_ERROR, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_INTERNAL_SERVER_ERROR);
 			}
-		} else if (!$request->expectsJson()) {
+		} else {
 			if ($e instanceof \Illuminate\Validation\ValidationException) {
-				return responseWeb()->back()->data($request->all())->error($e->validator->errors()->first())->send();
+				return redirect()->back()->with('error', $e->validator->errors()->all());
 			} elseif ($e instanceof ModelNotFoundException) {
-				return responseWeb()->back()->error('The resource you\'re trying to access does not exist.')->send();
+				if ($request->ajax()) {
+					echo "AJAX";
+					return redirect()->with('error', 'The resource you\'re trying to access does not exist.');
+				} else
+					return redirect()->back()->with('error', 'The resource you\'re trying to access does not exist.');
 			} else {
 				return parent::render($request, $e);
 			}
-		} else {
-			return parent::render($request, $e);
 		}
 	}
 
@@ -91,5 +93,16 @@ class Handler extends ExceptionHandler
 				break;
 		}
 		return redirect()->guest(route($login));
+	}
+
+	protected function respondWithJson (\Illuminate\Http\Request $request) : bool
+	{
+		return ($request->expectsJson() || $request->wantsJson())
+			|| $this->hasApiMiddleware($request);
+	}
+
+	protected function hasApiMiddleware (\Illuminate\Http\Request $request) : bool
+	{
+		return \App\Library\Utils\Extensions\Arrays::contains($request->route()->middleware(), 'api');
 	}
 }

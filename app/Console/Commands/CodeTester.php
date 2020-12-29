@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Traits\GenerateUrls;
 use FFMpeg\Format\Video\X264;
 use Illuminate\Console\Command;
 
@@ -36,7 +35,7 @@ class CodeTester extends Command
 		parent::__construct();
 	}
 
-	public function handle () : void
+	public function handleX () : void
 	{
 		$source = 'public/videos/video.mp4';
 		$destination = 'public/videos/video_converted.mp4';
@@ -45,12 +44,13 @@ class CodeTester extends Command
 		$highBitrate = (new X264('aac'))->setKiloBitrate(1000);
 	}
 
-	public function handleX ()
+	public function handle ()
 	{
-		$prefix = 'AVG';
-		$major = date('Ymd');
-		$minor = date('His');
-		$suffix = mt_rand(100, 999);
-		echo("{$prefix}-{$major}-{$minor}-{$suffix}");
+//		$prefix = 'AVG';
+//		$major = date('Ymd');
+//		$minor = date('His');
+//		$suffix = mt_rand(100, 999);
+//		echo("{$prefix}-{$major}-{$minor}-{$suffix}");
+		dd(app(\App\Models\Auth\Customer::class)::tableName());
 	}
 }

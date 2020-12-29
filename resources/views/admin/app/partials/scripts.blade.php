@@ -59,7 +59,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
 
 <script src="{{asset("assets/admin/plugins/dropify/dist/js/dropify.min.js")}}"></script>
-<script src="{{asset("assets/admin/plugins/Notiflix/notiflix-aio-2.7.0.min.js")}}"></script>
+<script src="{{asset("assets/admin/plugins/bootstrap-select/js/bootstrap-select.min.js")}}"></script>
 {{--<!-- App js -->--}}
 <script src="{{asset("assets/admin/js/app.js")}}"></script>
 <script src="{{asset("js/app.js")}}"></script>

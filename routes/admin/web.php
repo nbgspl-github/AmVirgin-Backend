@@ -22,7 +22,7 @@ use App\Http\Modules\Admin\Controllers\Web\TvSeries\SnapsController;
 use App\Http\Modules\Admin\Controllers\Web\TvSeries\TvSeriesBase;
 use App\Http\Modules\Admin\Controllers\Web\Users\CustomerController;
 use App\Http\Modules\Admin\Controllers\Web\Users\SellerController;
-use App\Http\Modules\Admin\Controllers\Web\Videos\VideosBase;
+use App\Http\Modules\Admin\Controllers\Web\Videos\VideoController;
 use App\Library\Utils\Extensions\Str;
 use App\Models\Category;
 use App\Models\Slider;
@@ -91,11 +91,10 @@ Route::prefix('admin')->group(function () {
 
 		// Videos Route(s)
 		Route::prefix('videos')->middleware('auth:admin')->group(function () {
-			Route::get('', [VideosBase::class, 'index'])->name('admin.videos.index');
-			Route::get('actions/{id}', [VideosBase::class, 'choose'])->name('admin.videos.edit.action');
-			Route::get('create', [VideosBase::class, 'create'])->name('admin.videos.create');
-			Route::get('/{slug}', [VideosBase::class, 'show'])->name('admin.videos.show');
-			Route::prefix('edit/{id}')->group(function () {
+			Route::get('', [VideoController::class, 'index'])->name('admin.videos.index');
+			Route::get('actions/{video}', [VideoController::class, 'choose'])->name('admin.videos.edit.action');
+			Route::get('create', [VideoController::class, 'create'])->name('admin.videos.create');
+			Route::prefix('edit/{video}')->group(function () {
 				Route::get('attributes', [\App\Http\Modules\Admin\Controllers\Web\Videos\AttributesController::class, 'edit'])->name('admin.videos.edit.attributes');
 				Route::get('content', [\App\Http\Modules\Admin\Controllers\Web\Videos\ContentController::class, 'edit'])->name('admin.videos.edit.content');
 				Route::get('media', [\App\Http\Modules\Admin\Controllers\Web\Videos\MediaController::class, 'edit'])->name('admin.videos.edit.media');
@@ -107,9 +106,9 @@ Route::prefix('admin')->group(function () {
 				Route::post('media', [\App\Http\Modules\Admin\Controllers\Web\Videos\MediaController::class, 'update'])->name('admin.videos.update.media');
 				Route::post('snaps', [\App\Http\Modules\Admin\Controllers\Web\Videos\SnapsController::class, 'update'])->name('admin.videos.update.snaps');
 			});
-			Route::post('store', [VideosBase::class, Methods::Store])->name('admin.videos.store');
-			Route::prefix('{id}')->group(function () {
-				Route::delete('', [VideosBase::class, 'delete'])->name('admin.videos.delete');
+			Route::post('store', [VideoController::class, Methods::Store])->name('admin.videos.store');
+			Route::prefix('{video}')->group(function () {
+				Route::delete('', [VideoController::class, 'destroy'])->name('admin.videos.delete');
 				Route::delete('content/{contentId}', [\App\Http\Modules\Admin\Controllers\Web\Videos\ContentController::class, 'delete'])->name('admin.videos.delete.content');
 				Route::delete('snaps/{snapId}', [\App\Http\Modules\Admin\Controllers\Web\Videos\SnapsController::class, 'delete'])->name('admin.videos.delete.snaps');
 			});

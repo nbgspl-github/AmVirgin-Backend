@@ -2,7 +2,7 @@
 
 namespace App\Queries;
 
-use App\Models\PageSection;
+use App\Models\Section;
 use App\Models\Slider;
 
 class SliderQuery extends AbstractQuery{
@@ -15,13 +15,15 @@ class SliderQuery extends AbstractQuery{
 		return $this;
 	}
 
-	public function shopSection(): self{
-		$this->query->where('section', PageSection::Type['Shop']);
+	public function shopSection(): self
+	{
+		$this->query->where('section', Section::Type['Shop']);
 		return $this;
 	}
 
-	public function entertainmentSection(): self{
-		$this->query->where('section', PageSection::Type['Entertainment']);
+	public function entertainmentSection(): self
+	{
+		$this->query->where('section', Section::Type['Entertainment']);
 		return $this;
 	}
 

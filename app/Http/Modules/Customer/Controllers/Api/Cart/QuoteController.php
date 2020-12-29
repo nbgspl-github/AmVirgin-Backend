@@ -8,148 +8,82 @@ use App\Exceptions\CartAlreadySubmittedException;
 use App\Exceptions\CartItemNotFoundException;
 use App\Exceptions\MaxAllowedQuantityReachedException;
 use App\Exceptions\OutOfStockException;
-use App\Exceptions\ValidationException;
-use App\Library\Enums\Common\Tables;
 use App\Library\Enums\Orders\Payments\Methods;
 use App\Library\Enums\Transactions\Status;
-use App\Library\Utils\Extensions\Rule;
 use App\Models\Cart\Cart;
 use App\Models\CustomerWishlist;
 use App\Models\Order\Order;
 use App\Models\Order\Transaction;
-use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 use Razorpay\Api\Api;
-use Throwable;
 
 class QuoteController extends \App\Http\Modules\Customer\Controllers\Api\ApiController
 {
-	use ValidatesRequest;
-	use ConditionallyLoadsAttributes;
-
-	protected array $rules;
-
 	protected Api $client;
 
 	public function __construct ()
 	{
 		parent::__construct();
 		$this->client = RazorpayClient::make();
-		$this->rules = [
-			'add' => [
-				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
-				'key' => ['bail', 'required', Rule::existsPrimary(Tables::Products)->whereNull('deleted_at')],
-			],
-			'remove' => [
-				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
-				'key' => ['bail', 'required', Rule::existsPrimary(Tables::Products)->whereNull('deleted_at')],
-			],
-			'retrieve' => [
-				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
-			],
-			'update' => [
-				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
-				'key' => ['bail', 'required', Rule::existsPrimary(Tables::Products)->whereNull('deleted_at')],
-				'quantity' => ['bail', 'required', 'numeric', 'min:1', 'max:100'],
-			],
-			'destroy' => [
-				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
-				'key' => ['bail', 'required', Rule::existsPrimary(Tables::Products)->whereNull('deleted_at')],
-			],
-			'moveToWishlist' => [
-				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
-			],
-			'moveToCart' => [
-				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
-			],
-			'checkout' => [
-				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
-				'paymentMode' => ['bail', 'required', Rule::in(Methods::getValues())],
-			],
-			'submit' => [
-				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
-				'addressId' => ['bail', 'required', Rule::exists(Tables::ShippingAddresses, 'id')],
-				'billingAddressId' => ['bail', 'sometimes', Rule::exists(Tables::ShippingAddresses, 'id')],
-				'paymentMode' => ['bail', 'required', Rule::in(Methods::getValues())],
-				'paymentId' => ['bail', 'required_unless:paymentMode,cash-on-delivery', 'string', 'min:16', 'max:50'],
-				'orderId' => ['bail', 'required', 'string', 'min:16', 'max:50'],
-				'signature' => ['bail', 'required_unless:paymentMode,cash-on-delivery', 'string', 'max:128'],
-			],
-			'verify' => [
-				'paymentId' => ['bail', 'required', 'string', 'min:16', 'max:50'],
-				'orderId' => ['bail', 'required', 'string', 'min:16', 'max:50'],
-				'signature' => ['bail', 'required', 'string', 'max:128']
-			]
-		];
 	}
 
-	public function add () : \Illuminate\Http\JsonResponse
+	public function add (\App\Http\Modules\Customer\Requests\Cart\AddRequest $request) : \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		$validated = null;
 		$cart = null;
 		try {
-			$validated = (object)$this->requestValid(request(), $this->rules['add']);
-			$cart = Cart::findOrFail($validated->sessionId);
+			$validated = (object)$request->validated();
+			$cart = Cart::retrieveThrows($validated->sessionId);
 			$cartItem = new CartItem($cart, $validated->key);
 			$cart->addItem($cartItem);
 			$cart->save();
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Item added to cart successfully.')->setValue('data', $cart->render());
 		} catch (CartAlreadySubmittedException $exception) {
 			$response->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message($exception->getMessage())->setValue('data');
-		} catch (OutOfStockException $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage())->setValue('data', $cart->render());
-		} catch (MaxAllowedQuantityReachedException $exception) {
+		} catch (OutOfStockException | MaxAllowedQuantityReachedException $exception) {
 			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage())->setValue('data', $cart->render());
 		} catch (ModelNotFoundException $exception) {
+			/**
+			 * @var Cart $cart
+			 */
 			Cart::query()->create([
 				'sessionId' => $validated->sessionId,
-				'status' => Status::Pending,
+				'status' => \App\Library\Enums\Cart\Status::Pending,
 			]);
-			$cart = Cart::find($validated->sessionId);
+			$cart = Cart::retrieve($validated->sessionId);
 			$cartItem = new CartItem($cart, $validated->key);
 			$cart->addItem($cartItem);
 			$cart->save();
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Cart initialized and item added to cart successfully.')->setValue('data', $cart->render());
-		} catch (ValidationException $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
-		} catch (Throwable $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
-		} finally {
-			return $response->send();
 		}
+		return $response->send();
 	}
 
-	public function retrieve () : \Illuminate\Http\JsonResponse
+	public function retrieve (\App\Http\Modules\Customer\Requests\Cart\RetrieveRequest $request) : \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		$validated = null;
 		try {
-			$validated = (object)$this->requestValid(request(), $this->rules['retrieve']);
-			$cart = Cart::findOrFail($validated->sessionId);
+			$validated = (object)$request->validated();
+			$cart = Cart::retrieveThrows($validated->sessionId);
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Cart retrieved successfully.')->setValue('data', $cart->render());
 		} catch (CartAlreadySubmittedException $exception) {
 			$response->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message($exception->getMessage())->setValue('data');
 		} catch (ModelNotFoundException $exception) {
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('No cart was found for that session.');
-		} catch (ValidationException $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
-		} catch (Throwable $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
-		} finally {
-			return $response->send();
 		}
+		return $response->send();
 	}
 
-	public function update () : \Illuminate\Http\JsonResponse
+	public function update (\App\Http\Modules\Customer\Requests\Cart\UpdateRequest $request) : \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		$validated = null;
 		$cart = null;
 		try {
-			$validated = (object)$this->requestValid(request(), $this->rules['update']);
-			$cart = Cart::findOrFail($validated->sessionId);
+			$validated = (object)$request->validated();
+			$cart = Cart::retrieveThrows($validated->sessionId);
 			$cartItem = new CartItem($cart, $validated->key);
 			$cartItem->setQuantity($validated->quantity);
 			$cart->updateItem($cartItem);
@@ -157,29 +91,22 @@ class QuoteController extends \App\Http\Modules\Customer\Controllers\Api\ApiCont
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Item added to cart successfully.')->setValue('data', $cart->render());
 		} catch (CartAlreadySubmittedException $exception) {
 			$response->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message($exception->getMessage())->setValue('data');
-		} catch (OutOfStockException $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage())->setValue('data', $cart->render());
-		} catch (MaxAllowedQuantityReachedException $exception) {
+		} catch (OutOfStockException | MaxAllowedQuantityReachedException $exception) {
 			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage())->setValue('data', $cart->render());
 		} catch (ModelNotFoundException $exception) {
 			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('No cart found for that session');
-		} catch (ValidationException $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
-		} catch (Throwable $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
-		} finally {
-			return $response->send();
 		}
+		return $response->send();
 	}
 
-	public function remove () : \Illuminate\Http\JsonResponse
+	public function remove (\App\Http\Modules\Customer\Requests\Cart\RemoveRequest $request) : \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		$validated = null;
 		$cart = null;
 		try {
-			$validated = (object)$this->requestValid(request(), $this->rules['remove']);
-			$cart = Cart::findOrFail($validated->sessionId);
+			$validated = (object)$request->validated();
+			$cart = Cart::retrieveThrows($validated->sessionId);
 			$cartItem = new CartItem($cart, $validated->key);
 			$cart->removeItem($cartItem);
 			$cart->save();
@@ -190,23 +117,18 @@ class QuoteController extends \App\Http\Modules\Customer\Controllers\Api\ApiCont
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('No cart was found for that session.')->setValue('data', $cart->render());
 		} catch (CartItemNotFoundException $exception) {
 			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message($exception->getMessage())->setValue('data', $cart->render());
-		} catch (ValidationException $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
-		} catch (Throwable $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
-		} finally {
-			return $response->send();
 		}
+		return $response->send();
 	}
 
-	public function destroy () : \Illuminate\Http\JsonResponse
+	public function destroy (\App\Http\Modules\Customer\Requests\Cart\DestroyRequest $request) : \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		$validated = null;
 		$cart = null;
 		try {
-			$validated = (object)$this->requestValid(request(), $this->rules['destroy']);
-			$cart = Cart::findOrFail($validated->sessionId);
+			$validated = (object)$request->validated();
+			$cart = Cart::retrieveThrows($validated->sessionId);
 			$cartItem = new CartItem($cart, $validated->key);
 			$cart->destroyItem($cartItem);
 			$cart->save();
@@ -217,59 +139,46 @@ class QuoteController extends \App\Http\Modules\Customer\Controllers\Api\ApiCont
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('No cart was found for that session.')->setValue('data', $cart->render());
 		} catch (CartItemNotFoundException $exception) {
 			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message($exception->getMessage())->setValue('data', $cart->render());
-		} catch (ValidationException $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
-		} catch (Throwable $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
-		} finally {
-			return $response->send();
 		}
+		return $response->send();
 	}
 
-	public function moveToWishlist ($productId) : \Illuminate\Http\JsonResponse
+	public function moveToWishlist (\App\Http\Modules\Customer\Requests\Cart\MoveToWishlistRequest $request, $productId) : \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		$validated = null;
 		$cart = null;
-		try {
-			$validated = (object)$this->requestValid(request(), $this->rules['moveToWishlist']);
-			$wishlistItem = CustomerWishlist::query()->where([
-				['customerId', $this->guard()->id()],
-				['productId', $productId],
-			])->first();
-			if ($wishlistItem == null) {
-				try {
-					$cart = Cart::findOrFail($validated->sessionId);
-					$cartItem = new CartItem($cart, $productId);
-					if ($cart->contains($cartItem)) {
-						CustomerWishlist::query()->create([
-							'customerId' => $this->guard()->id(),
-							'productId' => $productId,
-						]);
-						$cart->destroyItem($cartItem);
-						$cart->save();
-						$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Item moved to wishlist.');
-					} else {
-						$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Cart does not contain the item you specified.');
-					}
-				} catch (ModelNotFoundException $exception) {
-					$response->status(\Illuminate\Http\Response::HTTP_OK)->message('No cart was found for that session.');
-				} catch (CartAlreadySubmittedException $exception) {
-					$response->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message($exception->getMessage());
+		$validated = (object)$request->validated();
+		$wishlistItem = CustomerWishlist::query()->where([
+			['customerId', $this->guard()->id()],
+			['productId', $productId],
+		])->first();
+		if ($wishlistItem == null) {
+			try {
+				$cart = Cart::retrieveThrows($validated->sessionId);
+				$cartItem = new CartItem($cart, $productId);
+				if ($cart->contains($cartItem)) {
+					CustomerWishlist::query()->create([
+						'customerId' => $this->guard()->id(),
+						'productId' => $productId,
+					]);
+					$cart->destroyItem($cartItem);
+					$cart->save();
+					$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Item moved to wishlist.');
+				} else {
+					$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Cart does not contain the item you specified.');
 				}
-			} else {
-				$response->status(\Illuminate\Http\Response::HTTP_CONFLICT)->message('Item already exists in wishlist.');
+			} catch (ModelNotFoundException $exception) {
+				$response->status(\Illuminate\Http\Response::HTTP_OK)->message('No cart was found for that session.');
+			} catch (CartAlreadySubmittedException $exception) {
+				$response->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message($exception->getMessage());
 			}
-		} catch (ValidationException $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
-		} catch (Throwable $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
-		} finally {
-			return $response->send();
+		} else {
+			$response->status(\Illuminate\Http\Response::HTTP_CONFLICT)->message('Item already exists in wishlist.');
 		}
 	}
 
-	public function checkout () : \Illuminate\Http\JsonResponse
+	public function checkout (\App\Http\Modules\Customer\Requests\Cart\CheckoutRequest $request) : \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		$validated = null;
@@ -278,8 +187,8 @@ class QuoteController extends \App\Http\Modules\Customer\Controllers\Api\ApiCont
 			/**
 			 * @var $order Order
 			 */
-			$validated = (object)$this->requestValid(request(), $this->rules['checkout']);
-			$cart = Cart::findOrFail($validated->sessionId);
+			$validated = (object)$request->validated();
+			$cart = Cart::retrieveThrows($validated->sessionId);
 			$transaction = $this->createNewTransaction($cart);
 			$response->status(\Illuminate\Http\Response::HTTP_OK)
 				->message('We\'ve prepared your order for checkout.')
@@ -288,16 +197,11 @@ class QuoteController extends \App\Http\Modules\Customer\Controllers\Api\ApiCont
 			$response->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message($exception->getMessage());
 		} catch (ModelNotFoundException $exception) {
 			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('No cart was found for that session.');
-		} catch (ValidationException $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
-		} catch (Throwable $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
-		} finally {
-			return $response->send();
 		}
+		return $response->send();
 	}
 
-	public function submit () : \Illuminate\Http\JsonResponse
+	public function submit (\App\Http\Modules\Customer\Requests\Cart\SubmitRequest $request) : \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		$validated = null;
@@ -307,8 +211,8 @@ class QuoteController extends \App\Http\Modules\Customer\Controllers\Api\ApiCont
 			 * @var $order Order
 			 * @var $transaction Transaction
 			 */
-			$validated = (object)$this->requestValid(request(), $this->rules['submit']);
-			$cart = Cart::findOrFail($validated->sessionId);
+			$validated = (object)$request->validated();
+			$cart = Cart::retrieveThrows($validated->sessionId);
 			$cart->customerId = $this->guard()->id();
 			$cart->addressId = $validated->addressId;
 			$cart->billingAddressId = $validated->billingAddressId ?? $validated->addressId;
@@ -343,13 +247,8 @@ class QuoteController extends \App\Http\Modules\Customer\Controllers\Api\ApiCont
 			$response->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message($exception->getMessage());
 		} catch (ModelNotFoundException $exception) {
 			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message($exception->getMessage());
-		} catch (ValidationException $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
-		} catch (Throwable $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
-		} finally {
-			return $response->send();
 		}
+		return $response->send();
 	}
 
 	protected function verify (Order $order, Transaction $transaction) : bool

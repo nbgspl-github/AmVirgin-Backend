@@ -6,20 +6,10 @@ use App\Library\Enums\Common\PageSectionType;
 use App\Traits\DynamicAttributeNamedMethods;
 use Illuminate\Database\Eloquent\Builder;
 
-class PageSection extends \App\Library\Database\Eloquent\Model
+class Section extends \App\Library\Database\Eloquent\Model
 {
-	use DynamicAttributeNamedMethods;
+	protected $table = 'video_sections';
 
-	protected $table = 'page-sections';
-	protected $fillable = [
-		'title',
-		'type',
-		'visibleItemCount',
-	];
-	protected $hidden = [
-		'created_at',
-		'updated_at',
-	];
 	public const Type = [
 		'Entertainment' => 'entertainment',
 		'Shop' => 'shop',

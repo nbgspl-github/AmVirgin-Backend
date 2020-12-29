@@ -42,21 +42,19 @@
 										</div>
 										<div class="form-group">
 											<label for="genre">Choose a genre<span class="text-primary">*</span></label>
-											<select id="genre" name="genreId" class="form-control" required>
-												<option value="" disabled selected>Choose...</option>
-												@foreach($genres as $genre)
+											<select id="genre" name="genre_id" class="form-control selectpicker" title="Choose..." required>
+												@foreach($appGenres as $genre)
 													@if(old('genreId',-1)==$genre->getKey())
-														<option value="{{$genre->getKey()}}" selected>{{$genre->getName()}}</option>
+														<option value="{{$genre->getKey()}}" selected>{{$genre->name}}</option>
 													@else
-														<option value="{{$genre->getKey()}}">{{$genre->getName()}}</option>
+														<option value="{{$genre->getKey()}}">{{$genre->name}}</option>
 													@endif
 												@endforeach
 											</select>
 										</div>
 										<div class="form-group">
 											<label for="sectionId">Choose containing section<span class="text-primary">*</span></label>
-											<select id="sectionId" name="sectionId" class="form-control" required>
-												<option value="" disabled selected>Choose...</option>
+											<select id="sectionId" name="section_id" class="form-control selectpicker" title="Choose..." multiple required>
 												@foreach($sections as $section)
 													<option value="{{$section->id}}">{{$section->title}}</option>
 												@endforeach
@@ -72,8 +70,7 @@
 										</div>
 										<div class="form-group">
 											<label for="pgRating">PG Rating<span class="text-primary">*</span></label>
-											<select id="pgRating" name="pgRating" class="form-control" required>
-												<option value="" disabled selected>Choose...</option>
+											<select id="pgRating" name="pg_rating" class="form-control selectpicker" title="Choose..." required>
 												<option value="G">G - General audience</option>
 												<option value="PG">PG - Parental Guidance advised</option>
 												<option value="PG-13">PG-13 - Parental Guidance required (not appropriate for under 13)</option>
@@ -83,8 +80,7 @@
 										</div>
 										<div class="form-group">
 											<label for="subscriptionType">Subscription type<span class="text-primary">*</span></label>
-											<select id="subscriptionType" name="subscriptionType" class="form-control" required onchange="subscriptionTypeChanged(this.value);">
-												<option value="" disabled selected>Choose...</option>
+											<select id="subscriptionType" name="subscription_type" class="form-control selectpicker" title="Choose..." required onchange="subscriptionTypeChanged(this.value);">
 												<option value="free">Free</option>
 												<option value="paid">Paid</option>
 												<option value="subscription">Subscription</option>
@@ -94,38 +90,10 @@
 											<label for="price">Price<span class="text-primary">*</span></label>
 											<input id="price" type="number" name="price" class="form-control" required placeholder="Type price for this movie/video" min="0.01" max="10000.00" step="0.01" readonly/>
 										</div>
-										<div class="form-group">
-											<label>Push notify customers?</label>
-											<div>
-												<div class="custom-control custom-checkbox">
-													<input type="checkbox" class="custom-control-input" id="customCheck">
-													<label class="custom-control-label" for="customCheck">Notify</label>
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label>Show on homepage?</label>
-											<div>
-												<div class="custom-control custom-checkbox">
-													<input type="checkbox" class="custom-control-input" id="customCheck2" name="showOnHome">
-													<label class="custom-control-label stretched-link" for="customCheck2">Yes</label>
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label>Mark as trending?</label>
-											<div>
-												<div class="custom-control custom-checkbox">
-													<input type="checkbox" class="custom-control-input" id="trending" name="trending">
-													<label class="custom-control-label" for="trending">Yes</label>
-												</div>
-											</div>
-										</div>
 										<div class="form-group mb-0">
 											<label for="rank">Trending rank</label>
-											<select id="rank" name="rank" class="form-control">
-												<option value="" disabled selected>Choose...</option>
-												@for ($i = 1; $i <= 10; $i++)
+											<select id="rank" name="rank" class="form-control selectpicker" title="Choose...">
+												@for ($i = 0; $i <= 10; $i++)
 													<option value="{{$i}}">{{$i}}</option>
 												@endfor
 											</select>

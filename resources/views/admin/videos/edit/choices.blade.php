@@ -7,23 +7,23 @@
 					@include('admin.extras.header', ['title'=>'Choose edit action'])
 				</div>
 				<div class="card-body animatable">
-					<div class="jumbotron bg-white animated zoomIn" style="background-image: url({{\Illuminate\Support\Facades\Storage::disk('secured')->url($payload->getBackdrop())}});">
+					<div class="jumbotron bg-white animated zoomIn" style="background-image: url({{$payload->backdrop}});">
 						<div style="background-color: rgba(0,0,0,0.75); border-radius: 8px;" class="row shadow w-100">
-							@if(\App\Library\Utils\Uploads::access()->exists($payload->getPoster()))
+							@if($payload->poster!=null)
 								<div class="col-auto my-auto">
-									<img src="{{\App\Library\Utils\Uploads::access()->url($payload->getPoster())}}" alt="" class="img-fluid" style="max-height: 200px;"/>
+									<img src="{{$payload->poster}}" alt="" class="img-fluid" style="max-height: 200px;"/>
 								</div>
 								<div class="col-10">
 									<div>
-										<h1 class="display-4 text-white">{{$payload->getTitle()}}</h1>
-										<p class="lead text-white">{{$payload->getDescription()}}</p>
+										<h1 class="display-4 text-white">{{$payload->title}}</h1>
+										<p class="lead text-white">{{$payload->description}}</p>
 									</div>
 								</div>
 							@else
 								<div class="col-12">
 									<div>
-										<h1 class="display-4 text-white">{{$payload->getTitle()}}</h1>
-										<p class="lead text-white">{{$payload->getDescription()}}</p>
+										<h1 class="display-4 text-white">{{$payload->title}}</h1>
+										<p class="lead text-white">{{$payload->description}}</p>
 									</div>
 								</div>
 							@endif

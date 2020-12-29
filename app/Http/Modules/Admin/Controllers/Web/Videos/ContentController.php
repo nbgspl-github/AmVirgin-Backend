@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use stdClass;
 use Throwable;
 
-class ContentController extends VideosBase
+class ContentController extends VideoController
 {
 	public function __construct ()
 	{
@@ -134,7 +134,7 @@ class ContentController extends VideosBase
 		}
 	}
 
-	public function delete ($id, $subId = null)
+	public function delete ($id)
 	{
 		$response = responseApp();
 		try {

@@ -1698,10 +1698,10 @@ label {
 }
 
 .form-control:focus {
-    border-color: rgba(207, 63, 67, 0.45);
-    box-shadow: 0 5px 8px rgba(207, 63, 67, 0.35);
-    -webkit-box-shadow: 0 5px 8px rgba(207, 63, 67, 0.35);
-    transform: translateY(-2px);
+    border-color: #fd6e77;
+    box-shadow: unset !important;
+    /*-webkit-box-shadow: 0 5px 8px rgba(207, 63, 67, 0.35);*/
+    /*transform: translateY(-2px);*/
     transition: .3s;
 }
 

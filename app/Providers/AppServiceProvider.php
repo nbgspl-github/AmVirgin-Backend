@@ -39,7 +39,13 @@ class AppServiceProvider extends ServiceProvider
 			return $this;
 		});
 
+		Builder::macro('active', function (bool $yes = true) {
+			return $this->where('active', $yes);
+		});
+
 		Paginator::useBootstrap();
 		Paginator::defaultView('pagination::bootstrap-4');
+
+		\Illuminate\Support\Facades\View::share('appGenres', \App\Models\Video\Genre::query()->active()->get());
 	}
 }

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Video extends \App\Library\Database\Eloquent\Model
 {
+	use \App\Traits\MediaLinks;
+
 	use \Illuminate\Database\Eloquent\SoftDeletes;
 
 	protected $table = 'videos';

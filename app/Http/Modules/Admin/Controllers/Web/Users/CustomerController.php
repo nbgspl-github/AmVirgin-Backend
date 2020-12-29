@@ -2,26 +2,28 @@
 
 namespace App\Http\Modules\Admin\Controllers\Web\Users;
 
-use App\Http\Modules\Admin\Repository\User\Customer\Contracts\CustomerRepository;
 use App\Http\Modules\Admin\Requests\Users\Customer\StoreRequest;
 use App\Http\Modules\Admin\Requests\Users\Customer\UpdateRequest;
 use App\Models\Auth\Customer;
 
 class CustomerController extends \App\Http\Modules\Admin\Controllers\Web\WebController
 {
-	protected CustomerRepository $repository;
+	/**
+	 * @var Customer
+	 */
+	protected $model;
 
-	public function __construct (CustomerRepository $repository)
+	public function __construct ()
 	{
 		parent::__construct();
 		$this->middleware(AUTH_ADMIN);
-		$this->repository = $repository;
+		$this->model = app(Customer::class);
 	}
 
 	public function index ()
 	{
 		return view('admin.customers.index')->with(
-			'users', $this->repository->recentPaginated($this->paginationChunk())
+			'users', $this->model->newQuery()->latest()->paginate($this->paginationChunk())
 		);
 	}
 
@@ -37,7 +39,7 @@ class CustomerController extends \App\Http\Modules\Admin\Controllers\Web\WebCont
 
 	public function store (StoreRequest $request) : \Illuminate\Http\RedirectResponse
 	{
-		$this->repository->create($request->validated());
+		$this->model->newQuery()->create($request->validated());
 		return redirect()->route(
 			'admin.customers.index'
 		);
@@ -52,7 +54,7 @@ class CustomerController extends \App\Http\Modules\Admin\Controllers\Web\WebCont
 
 	public function update (UpdateRequest $request, Customer $customer) : \Illuminate\Http\RedirectResponse
 	{
-		$this->repository->update($customer, $request->validated());
+		$customer->update($request->validated());
 		return redirect()->route(
 			'admin.customers.index'
 		)->with('success', 'Customer details updated successfully.');
@@ -65,7 +67,7 @@ class CustomerController extends \App\Http\Modules\Admin\Controllers\Web\WebCont
 	 */
 	public function destroy (Customer $customer) : \Illuminate\Http\JsonResponse
 	{
-		$this->repository->delete($customer);
+		$customer->delete();
 		return response()->json(
 			[]
 		);

@@ -2,26 +2,28 @@
 
 namespace App\Http\Modules\Admin\Controllers\Web\Users;
 
-use App\Http\Modules\Admin\Repository\User\Seller\Contracts\SellerRepository;
 use App\Http\Modules\Admin\Requests\Users\Seller\StoreRequest;
 use App\Http\Modules\Admin\Requests\Users\Seller\UpdateRequest;
 use App\Models\Auth\Seller;
 
 class SellerController extends \App\Http\Modules\Admin\Controllers\Web\WebController
 {
-	protected SellerRepository $repository;
+	/**
+	 * @var Seller
+	 */
+	protected $model;
 
-	public function __construct (SellerRepository $repository)
+	public function __construct ()
 	{
 		parent::__construct();
 		$this->middleware(AUTH_ADMIN);
-		$this->repository = $repository;
+		$this->model = app(Seller::class);
 	}
 
 	public function index ()
 	{
 		return view('admin.sellers.index')->with('users',
-			$this->repository->recentPaginated($this->paginationChunk())
+			$this->model->newQuery()->paginate($this->paginationChunk())
 		);
 	}
 
@@ -45,7 +47,7 @@ class SellerController extends \App\Http\Modules\Admin\Controllers\Web\WebContro
 
 	public function store (StoreRequest $request) : \Illuminate\Http\RedirectResponse
 	{
-		$this->repository->create($request->validated());
+		$this->model->create($request->validated());
 		return redirect()->route(
 			'admin.sellers.index'
 		);
@@ -53,15 +55,20 @@ class SellerController extends \App\Http\Modules\Admin\Controllers\Web\WebContro
 
 	public function update (UpdateRequest $request, Seller $seller) : \Illuminate\Http\RedirectResponse
 	{
-		$this->repository->update($seller, $request->validated());
+		$seller->update($request->validated());
 		return redirect()->route(
 			'admin.sellers.index'
 		)->with('success', 'Seller details updated successfully.');
 	}
 
+	/**
+	 * @param Seller $seller
+	 * @return \Illuminate\Http\JsonResponse
+	 * @throws \Exception
+	 */
 	public function destroy (Seller $seller) : \Illuminate\Http\JsonResponse
 	{
-		$this->repository->delete($seller);
+		$seller->delete();
 		return response()->json(
 			[]
 		);
