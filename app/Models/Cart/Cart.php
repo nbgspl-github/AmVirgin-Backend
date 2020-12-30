@@ -234,7 +234,6 @@ class Cart extends \App\Library\Database\Eloquent\Model
 				]);
 			});
 		});
-		$this->status = Status::Submitted;
 		$this->save();
 		return $order;
 	}

@@ -9,7 +9,7 @@ use App\Library\Enums\Videos\Types;
 use App\Library\Http\WebResponse;
 use App\Models\Section;
 use App\Models\Video\Genre;
-use App\Models\Video\MediaLanguage;
+use App\Models\Video\Language;
 use App\Models\Video\MediaQuality;
 use App\Models\Video\MediaServer;
 use App\Models\Video\Meta;
@@ -68,7 +68,7 @@ class TvSeriesBase extends BaseController
 	public function create ()
 	{
 		$genrePayload = Genre::all();
-		$languagePayload = MediaLanguage::all()->sortBy('name')->all();
+		$languagePayload = Language::all()->sortBy('name')->all();
 		$serverPayload = MediaServer::all();
 		$qualityPayload = MediaQuality::all();
 		$sections = Section::where('type', PageSectionType::Entertainment)->get();

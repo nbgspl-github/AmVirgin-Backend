@@ -3,7 +3,7 @@
 namespace App\Listeners\Admin\Series;
 
 use App\Events\Admin\TvSeries\TvSeriesUpdated;
-use App\Models\Video\MediaLanguage;
+use App\Models\Video\Language;
 use App\Models\Video\MediaQuality;
 use App\Models\Video\Source;
 use App\Models\Video\Video;
@@ -20,7 +20,7 @@ class UpdateVideoSlugs
 		if (!is_null($series)) {
 			$languages = $series->sources()->get()->unique('mediaLanguageId');
 			$languages->transform(function (Source $source) {
-				return MediaLanguage::find($source->mediaLanguageId);
+				return Language::find($source->mediaLanguageId);
 			});
 			$qualities = $series->sources()->get()->unique('mediaQualityId');
 			$qualities->transform(function (Source $source) {

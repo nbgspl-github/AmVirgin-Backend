@@ -12,6 +12,8 @@
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <link href="{{asset("assets/admin/plugins/dropify/dist/css/dropify.min.css")}}" rel="stylesheet">
 <link href="{{asset("assets/admin/plugins/bootstrap-select/css/bootstrap-select.min.css")}}" rel="stylesheet">
+<link href="{{asset("assets/admin/plugins/uploader/css/jquery.dm-uploader.min.css")}}" rel="stylesheet">
+<link href="https://releases.transloadit.com/uppy/v1.24.0/uppy.min.css" rel="stylesheet">
 <style>
     .progress-bar-animated {
         -webkit-animation: progress-bar-stripes 0.25s linear infinite;

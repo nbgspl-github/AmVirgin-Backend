@@ -6,7 +6,7 @@ use App\Events\Admin\TvSeries\TvSeriesUpdated;
 use App\Library\Enums\Common\Directories;
 use App\Library\Http\WebResponse;
 use App\Library\Utils\Uploads;
-use App\Models\Video\MediaLanguage;
+use App\Models\Video\Language;
 use App\Models\Video\MediaQuality;
 use App\Models\Video\Source;
 use App\Models\Video\Video;
@@ -27,7 +27,7 @@ class ContentController extends TvSeriesBase
 		$response = responseWeb();
 		try {
 			$video = Video::findOrFail($id);
-			$languages = MediaLanguage::all()->sortBy('name')->all();
+			$languages = Language::all()->sortBy('name')->all();
 			$qualities = MediaQuality::all();
 			$contentPayload = [];
 			$sources = $video->sources()->get();

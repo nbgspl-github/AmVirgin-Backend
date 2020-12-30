@@ -60,6 +60,7 @@
 
 <script src="{{asset("assets/admin/plugins/dropify/dist/js/dropify.min.js")}}"></script>
 <script src="{{asset("assets/admin/plugins/bootstrap-select/js/bootstrap-select.min.js")}}"></script>
+<script src="https://releases.transloadit.com/uppy/v1.24.0/uppy.min.js"></script>
 {{--<!-- App js -->--}}
 <script src="{{asset("assets/admin/js/app.js")}}"></script>
 <script src="{{asset("js/app.js")}}"></script>

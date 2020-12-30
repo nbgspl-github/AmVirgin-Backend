@@ -16,7 +16,7 @@
 							<div class="col-8 mx-auto">
 								<div class="card shadow-none" style="border: 1px solid rgba(180,185,191,0.4);">
 									<div class="card-header text-white bg-secondary">
-										Editing sources for - {{$payload->getTitle()}}
+										Editing sources for - {{$payload->title}}
 									</div>
 									<div class="card-body pb-0">
 										<div class="form-row" id="container">

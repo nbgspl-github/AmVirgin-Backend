@@ -168,6 +168,7 @@ return [
 		App\Providers\RouteServiceProvider::class,
 
 		\App\Providers\RepositoryServiceProvider::class,
+		\App\Providers\ObserverServiceProvider::class,
 
 		Yoeunes\Notify\NotifyServiceProvider::class,
 		niklasravnsborg\LaravelPdf\PdfServiceProvider::class,

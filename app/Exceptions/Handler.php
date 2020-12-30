@@ -56,17 +56,15 @@ class Handler extends ExceptionHandler
 			} else if ($e instanceof \Illuminate\Validation\ValidationException) {
 				return response()->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => $e->validator->errors()->first(), 'payload' => null], Response::HTTP_OK);
 			} else {
-				return response()->json(['status' => Response::HTTP_INTERNAL_SERVER_ERROR, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_INTERNAL_SERVER_ERROR);
+				return response()->json(['status' => Response::HTTP_INTERNAL_SERVER_ERROR, 'message' => $e->getMessage(), 'payload' => null, 'exception' => $e->getTrace()], Response::HTTP_INTERNAL_SERVER_ERROR);
 			}
 		} else {
 			if ($e instanceof \Illuminate\Validation\ValidationException) {
 				return redirect()->back()->with('error', $e->validator->errors()->all());
 			} elseif ($e instanceof ModelNotFoundException) {
-				if ($request->ajax()) {
-					echo "AJAX";
-					return redirect()->with('error', 'The resource you\'re trying to access does not exist.');
-				} else
-					return redirect()->back()->with('error', 'The resource you\'re trying to access does not exist.');
+				return redirect()->back()->with('error', 'The resource you\'re trying to access does not exist.')->setStatusCode(Response::HTTP_NOT_FOUND);
+			} elseif ($e instanceof \ErrorException) {
+				return redirect()->back()->with('error', $e->getMessage())->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
 			} else {
 				return parent::render($request, $e);
 			}
@@ -97,8 +95,7 @@ class Handler extends ExceptionHandler
 
 	protected function respondWithJson (\Illuminate\Http\Request $request) : bool
 	{
-		return ($request->expectsJson() || $request->wantsJson())
-			|| $this->hasApiMiddleware($request);
+		return $this->hasApiMiddleware($request);
 	}
 
 	protected function hasApiMiddleware (\Illuminate\Http\Request $request) : bool

@@ -3,9 +3,7 @@
 namespace App\Http\Modules\Admin\Controllers\Web\Videos;
 
 use App\Http\Modules\Admin\Requests\Users\Videos\StoreRequest;
-use App\Library\Enums\Common\PageSectionType;
 use App\Library\Enums\Videos\Types;
-use App\Models\Section;
 use App\Models\Video\Video;
 
 class VideoController extends \App\Http\Modules\Admin\Controllers\Web\WebController
@@ -35,9 +33,7 @@ class VideoController extends \App\Http\Modules\Admin\Controllers\Web\WebControl
 
 	public function create ()
 	{
-		return view('admin.videos.create')->with('sections',
-			Section::query()->where('type', PageSectionType::Entertainment)->get()
-		);
+		return view('admin.videos.create');
 	}
 
 	public function store (StoreRequest $request) : \Illuminate\Http\JsonResponse
@@ -55,23 +51,12 @@ class VideoController extends \App\Http\Modules\Admin\Controllers\Web\WebControl
 	 */
 	public function destroy (Video $video) : \Illuminate\Http\JsonResponse
 	{
-		dd(request()->ajax() ? "Yes ajax" : 'No ajax');
-//		$video->snaps()->delete();
-//		$video->sources()->delete();
-//		$video->delete();
+		$video->snaps()->delete();
+		$video->sources()->delete();
+		$video->delete();
 		return responseApp()->prepare(
 			[],
 			\Illuminate\Http\Response::HTTP_NO_CONTENT,
 		);
-	}
-
-	protected function replaceTrending ($chosenRank)
-	{
-		$ranked = Video::where('rank', $chosenRank)->first();
-		if (!is_null($ranked)) {
-			$ranked->rank = 0;
-			$ranked->trending = false;
-			$ranked->save();
-		}
 	}
 }

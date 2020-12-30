@@ -42,7 +42,7 @@
 										<div class="form-group">
 											<label for="genre">@required (Genre)</label>
 											<select id="genre" name="genre_id" class="form-control selectpicker" title="Choose..." required>
-												@foreach($genres as $genre)
+												@foreach($appGenres as $genre)
 													@if(old('genre_id',$payload->genre_id)==$genre->getKey())
 														<option value="{{$genre->getKey()}}" selected>{{$genre->name}}</option>
 													@else
@@ -53,9 +53,9 @@
 										</div>
 										<div class="form-group">
 											<label for="section">Choose containing section<span class="text-primary">*</span></label>
-											<select id="section" name="section_id" class="form-control selectpicker" title="Choose..." multiple required>
-												@foreach($sections as $section)
-													@if(old('sectionId',$payload->sectionId)==$section->getKey())
+											<select id="section" name="sections[]" class="form-control selectpicker" title="Choose..." multiple required>
+												@foreach($appVideoSections as $section)
+													@if(in_array($section->id,$payload->sections))
 														<option value="{{$section->id}}" selected>{{$section->title}}</option>
 													@else
 														<option value="{{$section->id}}">{{$section->title}}</option>
@@ -135,28 +135,10 @@
 											<label for="price">@required (Price)</label>
 											<input id="price" type="number" name="price" class="form-control" required placeholder="Type price for this movie/video" min="0" max="10000" step="1" @if(old('subscription_type',$payload->subscription_type)!='paid') readonly @endif value="{{old('price',$payload->price)}}"/>
 										</div>
-										<div class="form-group">
-											<label>Show on homepage?</label>
-											<div>
-												<div class="custom-control custom-checkbox">
-													<input type="checkbox" class="custom-control-input" id="customCheck2" name="showOnHome" @if(old('showOnHome',$payload->showOnHome)==true) checked @endif>
-													<label class="custom-control-label stretched-link" for="customCheck2">Yes</label>
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label>Mark as trending?</label>
-											<div>
-												<div class="custom-control custom-checkbox">
-													<input type="checkbox" class="custom-control-input" id="trending" name="trending" @if(old('trending',$payload->trending)==true) checked @endif>
-													<label class="custom-control-label" for="trending">Yes</label>
-												</div>
-											</div>
-										</div>
 										<div class="form-group mb-0">
 											<label for="rank">Trending rank</label>
 											<select id="rank" name="rank" class="form-control selectpicker" title="Choose...">
-												@for ($i = 1; $i <= 10; $i++)
+												@for ($i = 0; $i <= 10; $i++)
 													@if (old('rank',$payload->rank)==$i)
 														<option value="{{$i}}" selected>{{$i}}</option>
 													@else

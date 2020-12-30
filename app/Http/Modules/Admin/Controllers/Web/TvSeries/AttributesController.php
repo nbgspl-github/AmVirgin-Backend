@@ -6,7 +6,7 @@ use App\Exceptions\ValidationException;
 use App\Library\Enums\Common\Directories;
 use App\Library\Http\WebResponse;
 use App\Models\Video\Genre;
-use App\Models\Video\MediaLanguage;
+use App\Models\Video\Language;
 use App\Models\Video\MediaQuality;
 use App\Models\Video\MediaServer;
 use App\Models\Video\Video;
@@ -27,7 +27,7 @@ class AttributesController extends TvSeriesBase
 		$response = responseWeb();
 		try {
 			$genrePayload = Genre::all();
-			$languagePayload = MediaLanguage::all()->sortBy('name')->all();
+			$languagePayload = Language::all()->sortBy('name')->all();
 			$serverPayload = MediaServer::all();
 			$qualityPayload = MediaQuality::all();
 			$payload = Video::findOrFail($id);

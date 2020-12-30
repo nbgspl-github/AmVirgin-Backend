@@ -201,7 +201,7 @@ class Source extends \App\Library\Database\Eloquent\Model
 	 */
 	public function language ()
 	{
-		return $this->belongsTo(\App\Models\Video\MediaLanguage::class, 'mediaLanguageId');
+		return $this->belongsTo(\App\Models\Video\Language::class, 'mediaLanguageId');
 	}
 
 	/**

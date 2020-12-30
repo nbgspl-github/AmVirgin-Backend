@@ -5,10 +5,10 @@ namespace App\Http\Modules\Admin\Controllers\Web\Videos;
 use App\Events\Admin\TvSeries\TvSeriesUpdated;
 use App\Events\Admin\Videos\VideoUpdated;
 use App\Exceptions\ValidationException;
+use App\Http\Modules\Admin\Requests\Users\Videos\Sources\UpdateRequest;
 use App\Library\Enums\Common\Directories;
-use App\Library\Http\WebResponse;
 use App\Library\Utils\Uploads;
-use App\Models\Video\MediaLanguage;
+use App\Models\Video\Language;
 use App\Models\Video\MediaQuality;
 use App\Models\Video\Source;
 use App\Models\Video\Video;
@@ -21,55 +21,40 @@ class ContentController extends VideoController
 	public function __construct ()
 	{
 		parent::__construct();
-		$this->ruleSet->load('rules.admin.videos.content');
 	}
 
-	public function edit ($id)
+	public function edit (Video $video)
 	{
-		$response = responseWeb();
-		try {
-			$video = Video::findOrFail($id);
-			$languages = MediaLanguage::all()->sortBy('name')->all();
-			$qualities = MediaQuality::all();
-			$contentPayload = [];
-			$sources = $video->sources()->get();
-			$sources->transform(function (Source $videoSource) use ($qualities, $languages) {
-				$payload = new stdClass();
-				$payload->title = $videoSource->getTitle();
-				$payload->description = $videoSource->getDescription();
-				$payload->languageId = $videoSource->language()->first()->getKey();
-				$payload->qualityId = $videoSource->mediaQuality()->first()->getKey();
-				$payload->duration = $videoSource->getDuration();
-				$payload->video = $videoSource->getFile();
-				$payload->sourceId = $videoSource->getKey();
-				return $payload;
-			});
-			$row = view('admin.videos.content.videoBox')->with('qualities', $qualities)->with('languages', $languages)->render();
-			$response = view('admin.videos.content.edit')->
-			with('videos', $sources->all())->
-			with('payload', $video)->
-			with('qualities', $qualities)->
-			with('languages', $languages)->
-			with('template', $row)->
-			with('key', $id);
-		} catch (ModelNotFoundException $exception) {
-			$response->route('admin.videos.index')->error('Could not find video for that key.');
-		} catch (Throwable $exception) {
-			$response->route('admin.videos.index')->error($exception->getMessage());
-		} finally {
-			if ($response instanceof WebResponse)
-				return $response->send();
-			else
-				return $response;
-		}
+		$languages = Language::all()->sortBy('name')->all();
+		$qualities = MediaQuality::all();
+		$contentPayload = [];
+		$sources = $video->sources()->get();
+		$sources->transform(function (Source $videoSource) use ($qualities, $languages) {
+			$payload = new stdClass();
+			$payload->title = $videoSource->getTitle();
+			$payload->description = $videoSource->getDescription();
+			$payload->languageId = $videoSource->language()->first()->getKey();
+			$payload->qualityId = $videoSource->mediaQuality()->first()->getKey();
+			$payload->duration = $videoSource->getDuration();
+			$payload->video = $videoSource->getFile();
+			$payload->sourceId = $videoSource->getKey();
+			return $payload;
+		});
+		$row = view('admin.videos.content.videoBox')->with('qualities', $qualities)->with('languages', $languages)->render();
+		return view('admin.videos.content.edit')->
+		with('videos', $sources->all())->
+		with('payload', $video)->
+		with('qualities', $qualities)->
+		with('languages', $languages)->
+		with('template', $row)->
+		with('key', $video->id);
 	}
 
-	public function update ($id)
+	public function update (UpdateRequest $request, Video $video) : \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		try {
-			$video = Video::findOrFail($id);
-			$payload = $this->requestValid(request(), $this->rules('update'));
+			$payload = $request->validated();
 			$sources = $payload['source'];
 			$videos = isset($payload['video']) ? $payload['video'] : [];
 			$qualities = $payload['quality'];
@@ -84,7 +69,7 @@ class ContentController extends VideoController
 					$source = Source::findOrFail($sources[$i]);
 				} catch (ModelNotFoundException $exception) {
 					$source = new Source();
-					$source->setVideoId($id);
+					$source->setVideoId($video->id);
 				} finally {
 					if (isset($titles[$i]))
 						$source->setTitle($titles[$i]);
@@ -129,7 +114,7 @@ class ContentController extends VideoController
 		} catch (Throwable $exception) {
 			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
-			event(new TvSeriesUpdated($id));
+			event(new TvSeriesUpdated($video->id));
 			return $response->send();
 		}
 	}

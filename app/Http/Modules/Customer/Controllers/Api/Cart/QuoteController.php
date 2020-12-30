@@ -218,9 +218,13 @@ class QuoteController extends \App\Http\Modules\Customer\Controllers\Api\ApiCont
 			$cart->billingAddressId = $validated->billingAddressId ?? $validated->addressId;
 			$cart->paymentMode = $validated->paymentMode;
 			$transaction = $cart->transaction()->firstOrFail();
+			$transaction = $transaction->refresh();
 			$order = $cart->submit($transaction);
-			$verified = $this->verify($order, $transaction);
+			$verified = $this->verify($order, $transaction, $validated);
 			if ($verified) {
+				$cart->update([
+					'status' => \App\Library\Enums\Cart\Status::Submitted
+				]);
 				$order->update([
 					'status' => \App\Library\Enums\Orders\Status::Placed
 				]);
@@ -251,7 +255,7 @@ class QuoteController extends \App\Http\Modules\Customer\Controllers\Api\ApiCont
 		return $response->send();
 	}
 
-	protected function verify (Order $order, Transaction $transaction) : bool
+	protected function verify (Order $order, Transaction $transaction, $validated) : bool
 	{
 		if ($transaction->isComplete()) {
 			return true;
@@ -262,11 +266,16 @@ class QuoteController extends \App\Http\Modules\Customer\Controllers\Api\ApiCont
 			if ($order->paymentMode == Methods::CashOnDelivery) {
 				return true;
 			} else {
-				return $this->client->utility->verifyPaymentSignature([
-					'razorpay_signature' => $transaction->signature,
-					'razorpay_payment_id' => $transaction->paymentId,
-					'order_id' => $transaction->rzpOrderId
-				]);
+				try {
+					$this->client->utility->verifyPaymentSignature([
+						'razorpay_signature' => $validated->signature,
+						'razorpay_payment_id' => $validated->paymentId,
+						'razorpay_order_id' => $transaction->rzpOrderId
+					]);
+					return true;
+				} catch (\Razorpay\Api\Errors\SignatureVerificationError $e) {
+					return false;
+				}
 			}
 		}
 	}

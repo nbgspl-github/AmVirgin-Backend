@@ -6,13 +6,17 @@ use App\Queries\VideoQuery;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Video extends \App\Library\Database\Eloquent\Model
+class Video extends \Illuminate\Database\Eloquent\Model
 {
 	use \App\Traits\MediaLinks;
 
 	use \Illuminate\Database\Eloquent\SoftDeletes;
 
 	protected $table = 'videos';
+
+	protected $casts = [
+		'sections' => 'array'
+	];
 
 	public function getPosterAttribute () : ?string
 	{
@@ -21,22 +25,52 @@ class Video extends \App\Library\Database\Eloquent\Model
 
 	public function setPosterAttribute ($value)
 	{
-		$this->attributes['poster'] = $this->storeWhenUploadedCorrectly('posters', $value);
+		$this->attributes['poster'] = $this->storeWhenUploadedCorrectly('videos/posters', $value);
+	}
+
+	public function getBackdropAttribute () : ?string
+	{
+		return $this->retrieveMedia($this->attributes['backdrop']);
+	}
+
+	public function setBackdropAttribute ($value)
+	{
+		$this->attributes['poster'] = $this->storeWhenUploadedCorrectly('videos/backdrops', $value);
+	}
+
+	public function getTrailerAttribute () : ?string
+	{
+		return $this->retrieveMedia($this->attributes['trailer']);
+	}
+
+	public function setTrailerAttribute ($value)
+	{
+		$this->attributes['poster'] = $this->storeWhenUploadedCorrectly('videos/trailers', $value);
 	}
 
 	public function genre () : BelongsTo
 	{
-		return $this->belongsTo(\App\Models\Video\Genre::class, 'genreId');
+		return $this->belongsTo(\App\Models\Video\Genre::class, 'genre_id');
 	}
 
 	public function sources () : HasMany
 	{
-		return $this->hasMany(\App\Models\Video\Source::class, 'videoId');
+		return $this->hasMany(\App\Models\Video\Source::class, 'video_id');
 	}
 
 	public function snaps () : HasMany
 	{
-		return $this->hasMany(\App\Models\Video\Snap::class, 'videoId');
+		return $this->hasMany(\App\Models\Video\Snap::class, 'video_id');
+	}
+
+	public function audios () : HasMany
+	{
+		return $this->hasMany(\App\Models\Models\Video\Audio::class, 'video_id');
+	}
+
+	public function subtitles () : HasMany
+	{
+		return $this->hasMany(\App\Models\Models\Video\Subtitle::class, 'video_id');
 	}
 
 	public static function startQuery () : VideoQuery

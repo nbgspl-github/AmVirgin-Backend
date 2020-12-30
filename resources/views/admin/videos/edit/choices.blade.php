@@ -70,6 +70,26 @@
 								</div>
 							</div>
 						</div>
+						<div class="row mt-3">
+							<div class="col-sm-6 pr-0">
+								<div class="card shadow-none border animated slideInLeft">
+									<div class="card-body">
+										<h5 class="card-title">Audio</h5>
+										<p class="card-text">Choose this to update audio sources for this video.</p>
+										<a href="{{route('admin.videos.edit.audio',$payload->getKey())}}" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 mr-0">
+								<div class="card shadow-none border animated slideInLeft">
+									<div class="card-body">
+										<h5 class="card-title">Subtitles</h5>
+										<p class="card-text">Choose this to update subtitle sources for this video.</p>
+										<a href="{{route('admin.videos.edit.subtitle',$payload->getKey())}}" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

@@ -4,7 +4,7 @@ namespace App\Queries;
 
 use App\Library\Utils\Extensions\Str;
 use App\Library\Utils\Extensions\Time;
-use App\Models\Video\MediaLanguage;
+use App\Models\Video\Language;
 use App\Models\Video\Video;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -67,7 +67,7 @@ class VideoQuery extends AbstractQuery
 
 	public function language ($languageId = null) : self
 	{
-		$language = MediaLanguage::find($languageId);
+		$language = Language::find($languageId);
 		if ($language != null) {
 			$language = $language->name;
 			$this->query->where('languageSlug', 'LIKE', "%{$language}%");

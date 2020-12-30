@@ -95,22 +95,24 @@ Route::prefix('admin')->group(function () {
 			Route::get('actions/{video}', [VideoController::class, 'choose'])->name('admin.videos.edit.action');
 			Route::get('create', [VideoController::class, 'create'])->name('admin.videos.create');
 			Route::prefix('edit/{video}')->group(function () {
-				Route::get('attributes', [\App\Http\Modules\Admin\Controllers\Web\Videos\AttributesController::class, 'edit'])->name('admin.videos.edit.attributes');
+				Route::get('attributes', [\App\Http\Modules\Admin\Controllers\Web\Videos\AttributeController::class, 'edit'])->name('admin.videos.edit.attributes');
 				Route::get('content', [\App\Http\Modules\Admin\Controllers\Web\Videos\ContentController::class, 'edit'])->name('admin.videos.edit.content');
 				Route::get('media', [\App\Http\Modules\Admin\Controllers\Web\Videos\MediaController::class, 'edit'])->name('admin.videos.edit.media');
-				Route::get('snaps', [\App\Http\Modules\Admin\Controllers\Web\Videos\SnapsController::class, 'edit'])->name('admin.videos.edit.snaps');
+				Route::get('snaps', [\App\Http\Modules\Admin\Controllers\Web\Videos\SnapController::class, 'edit'])->name('admin.videos.edit.snaps');
+				Route::get('audio', [\App\Http\Modules\Admin\Controllers\Web\Videos\AudioController::class, 'index'])->name('admin.videos.edit.audio');
+				Route::get('subtitle', [\App\Http\Modules\Admin\Controllers\Web\Videos\SubtitleController::class, 'index'])->name('admin.videos.edit.subtitle');
 			});
-			Route::prefix('{id}/update')->group(function () {
-				Route::post('attributes', [\App\Http\Modules\Admin\Controllers\Web\Videos\AttributesController::class, 'update'])->name('admin.videos.update.attributes');
+			Route::prefix('{video}/update')->group(function () {
+				Route::post('attributes', [\App\Http\Modules\Admin\Controllers\Web\Videos\AttributeController::class, 'update'])->name('admin.videos.update.attributes');
 				Route::post('content', [\App\Http\Modules\Admin\Controllers\Web\Videos\ContentController::class, 'update'])->name('admin.videos.update.content');
 				Route::post('media', [\App\Http\Modules\Admin\Controllers\Web\Videos\MediaController::class, 'update'])->name('admin.videos.update.media');
-				Route::post('snaps', [\App\Http\Modules\Admin\Controllers\Web\Videos\SnapsController::class, 'update'])->name('admin.videos.update.snaps');
+				Route::post('snaps', [\App\Http\Modules\Admin\Controllers\Web\Videos\SnapController::class, 'update'])->name('admin.videos.update.snaps');
 			});
 			Route::post('store', [VideoController::class, Methods::Store])->name('admin.videos.store');
 			Route::prefix('{video}')->group(function () {
 				Route::delete('', [VideoController::class, 'destroy'])->name('admin.videos.delete');
 				Route::delete('content/{contentId}', [\App\Http\Modules\Admin\Controllers\Web\Videos\ContentController::class, 'delete'])->name('admin.videos.delete.content');
-				Route::delete('snaps/{snapId}', [\App\Http\Modules\Admin\Controllers\Web\Videos\SnapsController::class, 'delete'])->name('admin.videos.delete.snaps');
+				Route::delete('snaps/{snap}', [\App\Http\Modules\Admin\Controllers\Web\Videos\SnapController::class, 'delete'])->name('admin.videos.delete.snaps');
 			});
 		});
 

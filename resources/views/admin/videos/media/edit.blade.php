@@ -15,7 +15,7 @@
 							<div class="col-8 mx-auto">
 								<div class="card shadow-none" style="border: 1px solid rgba(180,185,191,0.4);">
 									<div class="card-header text-white bg-secondary">
-										Editing media for - {{$payload->getTitle()}}
+										Editing media for - {{$payload->title}}
 									</div>
 									<div class="card-body">
 										<div class="row" id="container">
@@ -27,8 +27,8 @@
 																<div class="row">
 																	<div class="col-12 text-center">
 																		<span class="text-center my-auto" id="blankPoster"><i class="ion ion-image text-muted" style="font-size: 80px"></i></span>
-																		@if(\App\Library\Utils\Uploads::access()->exists($payload->getPoster()))
-																			<img id="previewPoster" class="img-fluid" style="max-height: 660px!important; min-height: 660px; object-fit: contain" src="{{\App\Library\Utils\Uploads::access()->url($payload->getPoster())}}"/>
+																		@if($payload->poster!=null)
+																			<img id="previewPoster" class="img-fluid" style="max-height: 660px!important; min-height: 660px; object-fit: contain" src="{{$payload->poster}}"/>
 																		@else
 																			<img id="previewPoster" class="img-fluid" style="max-height: 660px!important; min-height: 660px; object-fit: contain"/>
 																		@endif
@@ -48,8 +48,8 @@
 																		<div class="row">
 																			<div class="col-12 text-center">
 																				<span class="text-center my-auto" id="blankBackdrop"><i class="ion ion-image text-muted" style="font-size: 80px"></i></span>
-																				@if(\App\Library\Utils\Uploads::access()->exists($payload->getBackdrop()))
-																					<img id="previewBackdrop" class="img-fluid" style="max-height: 325px!important; min-height: 325px; object-fit: scale-down" src="{{\App\Library\Utils\Uploads::access()->url($payload->getBackdrop())}}"/>
+																				@if($payload->backdrop!=null)
+																					<img id="previewBackdrop" class="img-fluid" style="max-height: 325px!important; min-height: 325px; object-fit: scale-down" src="{{$payload->backdrop}}"/>
 																				@else
 																					<img id="previewBackdrop" class="img-fluid" style="max-height: 325px!important; min-height: 325px; object-fit: scale-down"/>
 																				@endif
@@ -70,8 +70,8 @@
 																			<div class="col-12 text-center">
 																				<input type="file" class="d-none" onchange="handleTrailer(event)" id="trailerInput" name="trailer" accept=".mp4, .avi"/>
 																				<div class="embed-responsive embed-responsive-16by9 rounded-lg border" style=" max-height: 325px!important; min-height: 325px;">
-																					@if(\App\Library\Utils\Uploads::access()->exists($payload->getTrailer()))
-																						<iframe class="embed-responsive-item" src="{{\App\Library\Utils\Uploads::access()->url($payload->getTrailer())}}" id="trailer" style=" max-height: 325px!important; min-height: 325px;">
+																					@if($payload->trailer!=null)
+																						<iframe class="embed-responsive-item" src="{{$payload->trailer}}" id="trailer" style=" max-height: 325px!important; min-height: 325px;">
 																							<span class="text-center my-auto" id="blankVideo"><i class="ion ion-videocamera text-muted" style="font-size: 80px;"></i></span>
 																						</iframe>
 																					@else

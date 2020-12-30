@@ -62,7 +62,6 @@
 			alertify.confirm("Are you sure? This action is irreversible!",
 				yes => {
 					axios.delete(`/admin/videos/${key}`).then(response => {
-						console.log(response.data);
 						location.reload();
 					}).catch(e => {
 						alertify.confirm('Something went wrong. Retry?', yes => {

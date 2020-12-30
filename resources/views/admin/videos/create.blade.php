@@ -55,7 +55,7 @@
 										<div class="form-group">
 											<label for="sectionId">Choose containing section<span class="text-primary">*</span></label>
 											<select id="sectionId" name="section_id" class="form-control selectpicker" title="Choose..." multiple required>
-												@foreach($sections as $section)
+												@foreach($appVideoSections as $section)
 													<option value="{{$section->id}}">{{$section->title}}</option>
 												@endforeach
 											</select>
