@@ -7,12 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class VideoResource extends JsonResource
 {
-	public static function withoutWrapping ()
-	{
-		return true;
-	}
-
-	public function toArray ($request)
+	public function toArray ($request) : array
 	{
 		return [
 			'slug' => $this->slug,
@@ -23,14 +18,14 @@ class VideoResource extends JsonResource
 			'cast' => $this->cast,
 			'director' => $this->director,
 			'trailer' => Uploads::existsUrl($this->trailer),
-			'poster' => Uploads::existsUrl($this->getPoster()),
-			'backdrop' => Uploads::existsUrl($this->getBackdrop()),
-			'genre' => $this->genre->getName(),
+			'poster' => Uploads::existsUrl($this->poster),
+			'backdrop' => Uploads::existsUrl($this->backdrop),
+			'genre' => $this->genre->name,
 			'rating' => $this->rating,
-			'pgRating' => $this->pgRating,
+			'pgRating' => $this->pg_rating,
 			'type' => $this->type,
-			'subscriptionType' => $this->subscriptionType,
-			'hasSeasons' => boolval($this->hasSeasons),
+			'subscriptionType' => $this->subscription_type,
+			'hasSeasons' => $this->seasons > 0,
 			'price' => $this->price,
 		];
 	}

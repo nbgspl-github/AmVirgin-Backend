@@ -29,20 +29,20 @@ class VideoQuery extends AbstractQuery
 
 	public function trending (bool $yes = true) : self
 	{
-		$this->query->where('trending', $yes);
+		$this->query->orderByDesc('hits');
 		return $this;
 	}
 
 	public function genre ($genreId = null) : self
 	{
 		if ($genreId != null)
-			$this->query->where('genreId', $genreId);
+			$this->query->where('genre_id', $genreId);
 		return $this;
 	}
 
 	public function section (int $sectionId) : self
 	{
-		$this->query->where('sectionId', $sectionId);
+		$this->query->whereJsonContains('sections', $sectionId);
 		return $this;
 	}
 
@@ -78,9 +78,9 @@ class VideoQuery extends AbstractQuery
 	public function includeExplicit ($include = false) : self
 	{
 		if ($include == true) {
-			$this->query->whereIn('pgRating', ['G', 'PG', 'PG-13', 'R', 'NC-17']);
+			$this->query->whereIn('pg_rating', ['G', 'PG', 'PG-13', 'R', 'NC-17']);
 		} else {
-			$this->query->whereIn('pgRating', ['G', 'PG', 'PG-13', 'R']);
+			$this->query->whereIn('pg_rating', ['G', 'PG', 'PG-13', 'R']);
 		}
 		return $this;
 	}
@@ -88,7 +88,7 @@ class VideoQuery extends AbstractQuery
 	public function subscriptionType ($subscriptionType = null) : self
 	{
 		if ($subscriptionType != null) {
-			$this->query->where('subscriptionType', $subscriptionType);
+			$this->query->where('subscription_type', $subscriptionType);
 		}
 		return $this;
 	}
@@ -98,22 +98,22 @@ class VideoQuery extends AbstractQuery
 		if ($apply) {
 			$languages = Str::split(',', request('language'), true);
 			if (count($languages) > 0) {
-				$this->query->whereHas('sources', function (Builder $q) use ($languages) {
-					$q->whereIn('mediaLanguageId', $languages);
+				$this->query->whereHas('audios', function (Builder $q) use ($languages) {
+					$q->whereIn('video_language_id', $languages);
 				});
 			}
 			$genres = Str::split(',', request('genre'), true);
 			if (count($genres) > 0) {
-				$this->query->whereIn('genreId', $genres);
+				$this->query->whereIn('genre_id', $genres);
 			}
 
 			$subscription = Str::split(',', request('type'), true);
 			if (count($subscription) > 0) {
-				$this->query->whereIn('subscriptionType', $subscription);
+				$this->query->whereIn('subscription_type', $subscription);
 			}
 
 			$rating = (request('explicit', 0) == 1) ? ['G', 'PG', 'PG-13', 'R', 'NC-17'] : ['G', 'PG', 'PG-13', 'R'];
-			$this->query->whereIn('pgRating', $rating);
+			$this->query->whereIn('pg_rating', $rating);
 		}
 		return $this;
 	}

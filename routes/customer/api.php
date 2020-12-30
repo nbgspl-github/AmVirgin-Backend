@@ -4,7 +4,7 @@ use App\Http\Modules\Customer\Controllers\Api\Auth\AuthController;
 use App\Http\Modules\Customer\Controllers\Api\Auth\TwoFactorAuthController;
 use App\Http\Modules\Customer\Controllers\Api\Cart\QuoteController;
 use App\Http\Modules\Customer\Controllers\Api\Cart\WishlistController;
-use App\Http\Modules\Customer\Controllers\Api\Entertainment\HomePageController as EntertainmentHomeController;
+use App\Http\Modules\Customer\Controllers\Api\Entertainment\HomeController as EntertainmentHomeController;
 use App\Http\Modules\Customer\Controllers\Api\Entertainment\SubscriptionController;
 use App\Http\Modules\Customer\Controllers\Api\Orders\CitiesController;
 use App\Http\Modules\Customer\Controllers\Api\Orders\CountriesController;
@@ -33,7 +33,7 @@ Route::prefix(Str::Empty)->group(function () {
 });
 
 Route::prefix('videos')->group(function () {
-	Route::get('/{id}', [\App\Http\Modules\Customer\Controllers\Api\Entertainment\VideosController::class, 'show']);
+	Route::get('{video}', [\App\Http\Modules\Customer\Controllers\Api\Entertainment\VideoController::class, 'show']);
 });
 
 Route::prefix('categories')->group(function () {
@@ -143,11 +143,9 @@ Route::prefix('brands')->group(function () {
 });
 
 Route::prefix('watch-later')->group(function () {
-	Route::post(Str::Empty, [\App\Http\Modules\Customer\Controllers\Api\Entertainment\VideosController::class, 'addInWatchLater'])->name('customer.addInWatchLater')->middleware('auth:customer-api');
-
-	Route::delete('/remove/{id}', [\App\Http\Modules\Customer\Controllers\Api\Entertainment\VideosController::class, 'removeWatchLater'])->name('customer.removeWatchLater')->middleware('auth:customer-api');
-
-	Route::get(Str::Empty, [\App\Http\Modules\Customer\Controllers\Api\Entertainment\VideosController::class, 'getWatchLaterVideo'])->name('customer.getWatchLaterVideo')->middleware('auth:customer-api');
+	Route::get(Str::Empty, [\App\Http\Modules\Customer\Controllers\Api\Entertainment\WatchLaterController::class, 'index']);
+	Route::get('{video}', [\App\Http\Modules\Customer\Controllers\Api\Entertainment\WatchLaterController::class, 'store']);
+	Route::delete('{video}', [\App\Http\Modules\Customer\Controllers\Api\Entertainment\WatchLaterController::class, 'delete']);
 });
 
 Route::prefix('languages')->group(static function () {

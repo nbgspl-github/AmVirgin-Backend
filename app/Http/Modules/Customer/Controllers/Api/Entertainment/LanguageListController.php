@@ -8,7 +8,7 @@ class LanguageListController extends \App\Http\Modules\Customer\Controllers\Api\
 {
 	public function index () : \Illuminate\Http\JsonResponse
 	{
-		$availableLanguages = Source::query()->select('mediaLanguageId')->distinct()->get();
+		$availableLanguages = Source::query()->select('video_language_id')->distinct()->get();
 		$availableLanguages->transform(function (Source $videoSource) {
 			$language = $videoSource->language;
 			if ($language != null) {

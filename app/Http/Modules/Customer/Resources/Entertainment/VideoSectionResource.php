@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Resources\Shop\Customer\HomePage;
+namespace App\Http\Modules\Customer\Resources\Entertainment;
 
-use Illuminate\Http\Resources\Json\JsonResource;
-
-class TopPickResource extends JsonResource
+class VideoSectionResource extends \Illuminate\Http\Resources\Json\JsonResource
 {
 	public function toArray ($request) : array
 	{
@@ -15,10 +13,5 @@ class TopPickResource extends JsonResource
 			'poster' => $this->poster,
 			'type' => $this->type,
 		];
-	}
-
-	public static function withoutWrapping () : bool
-	{
-		return true;
 	}
 }

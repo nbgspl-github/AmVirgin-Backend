@@ -2,8 +2,6 @@
 
 namespace App\Http\Modules\Seller\Controllers\Api\Orders;
 
-use App\Library\Enums\Orders\Status;
-use App\Library\Utils\Extensions\Rule;
 use App\Library\Utils\Extensions\Str;
 use App\Models\Order\SubOrder;
 use App\Resources\Orders\Seller\ListResource;
@@ -17,19 +15,16 @@ class OrderController extends \App\Http\Modules\Seller\Controllers\Api\ApiContro
 	{
 		parent::__construct();
 		$this->middleware(AUTH_SELLER);
-		$this->rules = [
-			'index' => [
-				'status' => ['bail', 'sometimes', Rule::in(Status::getValues())],
-				'key' => ['bail', 'sometimes', 'exists']
-			]
-		];
 	}
 
-	public function index () : JsonResponse
+	public function index (\App\Http\Modules\Seller\Requests\Orders\IndexRequest $request) : JsonResponse
 	{
-		$validated = $this->validate($this->rules['index']);
 		return responseApp()->prepare(
-			ListResource::collection($this->seller()->orders()->whereLike('status', $validated['status'] ?? Str::Empty)->paginate($this->paginationChunk()))->response()->getData()
+			ListResource::collection(
+				!empty($request->key)
+					? $this->seller()->orders()->whereKey($request->key)->whereLike('status', $request->status ?? Str::Empty)->paginate($this->paginationChunk())
+					: $this->seller()->orders()->whereLike('status', $request->status ?? Str::Empty)->paginate($this->paginationChunk())
+			)->response()->getData()
 		);
 	}
 

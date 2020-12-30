@@ -13,9 +13,7 @@ class ArticleController extends \App\Http\Modules\Customer\Controllers\Api\ApiCo
 
 	public function show (\App\Models\News\Article $article)
 	{
-		$article->update([
-			'views' => $article->views++
-		]);
+		$article->increment('views');
 		if ($article->type->is(\App\Library\Enums\News\Article\Types::Video)) {
 			return responseApp()->prepare(
 				new \App\Resources\News\Articles\VideoResource($article)

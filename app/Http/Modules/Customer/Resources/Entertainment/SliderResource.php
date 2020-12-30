@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Resources\Shop\Customer\HomePage;
+namespace App\Http\Modules\Customer\Resources\Entertainment;
 
-use Illuminate\Http\Resources\Json\JsonResource;
-
-class EntertainmentSliderResource extends JsonResource
+class SliderResource extends \Illuminate\Http\Resources\Json\JsonResource
 {
 	public function toArray ($request) : array
 	{

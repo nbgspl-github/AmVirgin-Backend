@@ -2,32 +2,35 @@
 
 namespace App\Queries;
 
-use App\Models\Section;
 use App\Models\Slider;
 
-class SliderQuery extends AbstractQuery{
-	public static function begin(): self{
+class SliderQuery extends AbstractQuery
+{
+	public static function begin () : self
+	{
 		return new self();
 	}
 
-	public function displayable(): self{
+	public function displayable () : self
+	{
 		$this->active();
 		return $this;
 	}
 
-	public function shopSection(): self
+	public function shopSection () : self
 	{
-		$this->query->where('section', Section::Type['Shop']);
+		$this->query->where('section', 'shop');
 		return $this;
 	}
 
-	public function entertainmentSection(): self
+	public function entertainmentSection () : self
 	{
-		$this->query->where('section', Section::Type['Entertainment']);
+		$this->query->where('section', 'entertainment');
 		return $this;
 	}
 
-	protected function model(): string{
+	protected function model () : string
+	{
 		return Slider::class;
 	}
 }

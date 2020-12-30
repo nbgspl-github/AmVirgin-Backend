@@ -64,8 +64,8 @@
 								<div class="card shadow-none border animated slideInLeft">
 									<div class="card-body">
 										<h5 class="card-title">Sources</h5>
-										<p class="card-text">Choose this to add, edit or delete sources for this video.</p>
-										<a href="{{route('admin.videos.edit.content',$payload->getKey())}}" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
+										<p class="card-text">Choose this to update video sources for this video.</p>
+										<a href="{{route('admin.videos.edit.source',$payload->getKey())}}" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
 									</div>
 								</div>
 							</div>

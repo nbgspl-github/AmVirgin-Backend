@@ -5,19 +5,16 @@ namespace App\Http\Modules\Customer\Controllers\Api\Entertainment;
 use App\Library\Enums\Common\PageSectionType;
 use App\Library\Utils\Extensions\Arrays;
 use App\Library\Utils\Extensions\Str;
-use App\Models\Section;
 use App\Models\Product;
 use App\Models\Slider;
 use App\Models\Video\Video;
-use App\Resources\Shop\Customer\HomePage\EntertainmentProductResource;
-use App\Resources\Shop\Customer\HomePage\EntertainmentSliderResource;
 use App\Resources\Shop\Customer\HomePage\TopPickResource;
 use App\Resources\Shop\Customer\HomePage\TrendingNowVideoResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 
-class HomePageController extends \App\Http\Modules\Customer\Controllers\Api\ApiController
+class HomeController extends \App\Http\Modules\Customer\Controllers\Api\ApiController
 {
 	public function __construct ()
 	{
@@ -30,74 +27,64 @@ class HomePageController extends \App\Http\Modules\Customer\Controllers\Api\ApiC
 		 * We need to send the following stuff for the homepage.
 		 * 1.) Sliders
 		 * 2.) Top Picks
-		 * 3.) AmVirgin Originals
-		 * 4.) Shop Products
-		 * 5.) Just Added
-		 * 6.) Web Films
-		 * 7.) Web Series
-		 * 8.) International
-		 * 9.) Regional Shows
-		 * 10.) Music Videos
-		 * 10.) Documentary
-		 * 11.) Trending Now
+		 * 3.) Shop Products
+		 * 5.) Trending Now
 		 */
 
 		/**
 		 * Final data array
 		 */
-		$data = Arrays::Empty;
+		$payload = Arrays::Empty;
+		/**
+		 * Entertainment Sliders
+		 */
+		$sliders = Slider::startQuery()->displayable()->get();
+		$sliders = \App\Http\Modules\Customer\Resources\Entertainment\SliderResource::collection($sliders);
+		$payload['sliders'] = $sliders;
 
-		try {
-			/**
-			 * Entertainment Sliders
-			 */
-			$sliders = Slider::startQuery()->displayable()->get();
-			$sliders = EntertainmentSliderResource::collection($sliders);
-			$data['sliders'] = $sliders;
-
-			/**
-			 * Page Sections
-			 */
-			$sections = Section::entertainment()->get();
-			$sections->transform(function (Section $pageSection) {
-				$contents = Video::startQuery()
-					->displayable()
-					->section($pageSection->id)
-					->take($pageSection->visibleItemCount)
-					->applyFilters(true)
-					->get();
-				$contents = TopPickResource::collection($contents);
-				return [
-					'id' => $pageSection->id,
-					'title' => $pageSection->title,
-					'visibleItemCount' => $pageSection->visibleItemCount,
-					'items' => $contents,
-				];
-			});
-			$data['sections'] = $sections->toArray();
-
-			/**
-			 * Shop Products
-			 */
-			$shopProducts = Product::startQuery()->displayable()->promoted()->get();
-			$shopProducts = EntertainmentProductResource::collection($shopProducts);
-			$data['products'] = $shopProducts;
-
-			/**
-			 * Trending Now
-			 */
-			$trendingNow = Video::startQuery()
+		/**
+		 * Page Sections
+		 */
+		$sections = \App\Models\Video\Section::query()->active()->get();
+		$sections->transform(function (\App\Models\Video\Section $section) {
+			$contents = Video::startQuery()
 				->displayable()
-				->trending()
+				->section($section->id)
+				->take($section->max_items)
 				->applyFilters(true)
 				->get();
-			$trendingNow = TrendingNowVideoResource::collection($trendingNow);
-			$data['trendingNow'] = $trendingNow;
+			$contents = \App\Http\Modules\Customer\Resources\Entertainment\VideoSectionResource::collection($contents);
+			return [
+				'id' => $section->id,
+				'title' => $section->title,
+				'visibleItemCount' => $section->max_items,
+				'items' => $contents,
+			];
+		});
+		$payload['sections'] = $sections->toArray();
 
-			return responseApp()->status(\Illuminate\Http\Response::HTTP_OK)->message('Successfully retrieved entertainment homepage resources.')->setValue('data', $data)->send();
-		} catch (Throwable $throwable) {
-			return responseApp()->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($throwable->getMessage())->setValue('data')->send();
-		}
+		/**
+		 * Shop Products
+		 */
+		$shopProducts = Product::startQuery()->displayable()->promoted()->get();
+		$shopProducts = \App\Http\Modules\Customer\Resources\Entertainment\Product\ProductResource::collection($shopProducts);
+		$payload['products'] = $shopProducts;
+
+		/**
+		 * Trending Now
+		 */
+		$trendingNow = Video::startQuery()
+			->displayable()
+			->trending()
+			->applyFilters(true)
+			->get();
+		$trendingNow = TrendingNowVideoResource::collection($trendingNow);
+		$payload['trendingNow'] = $trendingNow;
+		return responseApp()->prepare(
+			$payload,
+			\Illuminate\Http\Response::HTTP_OK,
+			'Listing homepage resources.'
+		);
 	}
 
 	public function showAllItemsInSection ($id) : JsonResponse

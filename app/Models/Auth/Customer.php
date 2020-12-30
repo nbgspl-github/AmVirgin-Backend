@@ -5,11 +5,9 @@ namespace App\Models\Auth;
 use App\Models\Address\Address;
 use App\Models\CustomerWishlist;
 use App\Models\Order\Order;
-use App\Models\Video\Video;
 use App\Traits\DynamicAttributeNamedMethods;
 use App\Traits\HashPasswords;
 use App\Traits\OtpVerificationSupport;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -61,13 +59,25 @@ class Customer extends \App\Library\Database\Eloquent\AuthEntity
 		return $this->hasMany(CustomerWishlist::class, 'customerId');
 	}
 
-	public function watchList () : ?HasMany
+	public function watchList () : HasMany
 	{
-		return null;
+		return $this->hasMany(\App\Models\Video\WatchList::class, 'customer_id');
 	}
 
-	public function watchLater () : BelongsToMany
+	public function watchLaterList () : HasMany
 	{
-		return $this->belongsToMany(Video::class, 'watch_later_videos');
+		return $this->watchList()->where('watched', false);
+	}
+
+	public function addToWatchList (\App\Models\Video\Video $video, bool $later = false)
+	{
+		$this->watchList()->updateOrCreate(
+			['video_id' => $video->id], ['watched' => !$later]
+		);
+	}
+
+	public function removeFromWatchList (\App\Models\Video\Video $video)
+	{
+		$this->watchList()->where('video_id', $video->id)->delete();
 	}
 }

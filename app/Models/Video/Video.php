@@ -6,16 +6,24 @@ use App\Queries\VideoQuery;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Video extends \Illuminate\Database\Eloquent\Model
+/**
+ * Class Video
+ * @package App\Models\Video
+ * @property \App\Library\Enums\Videos\Types $type
+ */
+class Video extends \App\Library\Database\Eloquent\Model
 {
 	use \App\Traits\MediaLinks;
 
 	use \Illuminate\Database\Eloquent\SoftDeletes;
 
+	use \BenSampo\Enum\Traits\CastsEnums;
+
 	protected $table = 'videos';
 
 	protected $casts = [
-		'sections' => 'array'
+		'sections' => 'array',
+		'type' => \App\Library\Enums\Videos\Types::class
 	];
 
 	public function getPosterAttribute () : ?string

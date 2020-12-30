@@ -2,6 +2,8 @@
 
 namespace App\Http\Modules\Admin\Controllers\Web\Videos;
 
+use App\Http\Modules\Admin\Requests\Users\Videos\Audio\StoreRequest;
+
 class AudioController extends \App\Http\Modules\Admin\Controllers\Web\WebController
 {
 	public function __construct ()
@@ -13,6 +15,32 @@ class AudioController extends \App\Http\Modules\Admin\Controllers\Web\WebControl
 	{
 		return view('admin.videos.audio.index')->with('audios',
 			$video->audios()->latest()->paginate($this->paginationChunk())
+		)->with('languages',
+			\App\Models\Video\Language::query()->get()
+		)->with('video', $video);
+	}
+
+	public function store (StoreRequest $request, \App\Models\Video\Video $video) : \Illuminate\Http\RedirectResponse
+	{
+		$video->audios()->create($request->validated());
+		return response()->redirectTo(
+			route('admin.videos.edit.audio', $video->id)
+		)->with('success',
+			'Created audio source successfully.'
+		);
+	}
+
+	/**
+	 * @param \App\Models\Video\Video $video
+	 * @param \App\Models\Models\Video\Audio $audio
+	 * @return \Illuminate\Http\JsonResponse
+	 * @throws \Exception
+	 */
+	public function delete (\App\Models\Video\Video $video, \App\Models\Models\Video\Audio $audio) : \Illuminate\Http\JsonResponse
+	{
+		$audio->delete();
+		return response()->json(
+			[]
 		);
 	}
 }
