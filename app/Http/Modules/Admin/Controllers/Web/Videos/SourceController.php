@@ -16,21 +16,19 @@ class SourceController extends \App\Http\Modules\Admin\Controllers\Web\WebContro
 		return view('admin.videos.source.edit')->with('video', $video);
 	}
 
-	public function update (UpdateRequest $request, \App\Models\Video\Video $video) : \Illuminate\Http\RedirectResponse
+	public function update (UpdateRequest $request, \App\Models\Video\Video $video) : \Illuminate\Http\JsonResponse
 	{
 		/**
 		 * @var $source \App\Models\Video\Source
 		 */
-		$source = $video->sources->first;
+		$source = $video->sources->first();
 		if ($source != null) {
 			$source->update($request->validated());
 		} else {
 			$video->sources()->create($request->validated());
 		}
-		return response()->redirectTo(
-			route('admin.videos.edit.action', $video->id)
-		)->with('success',
-			'Created video source successfully.'
-		);
+		return response()->json([
+			'message' => 'Created video source successfully.'
+		]);
 	}
 }

@@ -17,10 +17,19 @@ class Time
 			return date('Y-m-d H:i:s', $convert);
 	}
 
-	public static function randomDate(string $start, int $daysToAdd){
+	public static function randomDate (string $start, int $daysToAdd)
+	{
 		$min = strtotime($start);
 		$max = $min + ($daysToAdd * 86400);
 		$val = rand($min, $max);
 		return self::mysqlStamp($val);
+	}
+
+	public static function toDuration ($value, string $format = "%02dh:%02dm:%02ds") : string
+	{
+		$hours = floor($value / 3600);
+		$minutes = floor($value / 60 % 60);
+		$seconds = intval($value % 60);
+		return sprintf($format, $hours, $minutes, $seconds);
 	}
 }

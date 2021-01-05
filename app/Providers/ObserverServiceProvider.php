@@ -14,6 +14,8 @@ class ObserverServiceProvider extends ServiceProvider
 	public function register ()
 	{
 		\App\Models\Video\Video::observe(\App\Http\Modules\Admin\Observers\Videos\VideoObserver::class);
+		\App\Models\Video\Source::observe(\App\Http\Modules\Admin\Observers\Videos\SourceObserver::class);
+		\App\Models\Video\Snap::observe(\App\Http\Modules\Admin\Observers\Videos\SnapObserver::class);
 	}
 
 	/**

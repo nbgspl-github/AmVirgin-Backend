@@ -83,15 +83,45 @@
 
 @section('javascript')
 	<script>
+		let video_id = `{{$video->id}}`;
+		$(document).on('change', '.custom-file-input', function (event) {
+			$(this).next('.custom-file-label').html(event.target.files[0].name);
+		})
 		$(document).ready(() => {
-			$('#videoForm').on('submit', () => {
-				$('#videoModal').modal('hide');
-				setLoading(true);
+			$('#videoForm').submit(function (event) {
+				event.preventDefault();
+				submitSource(this);
 			});
 		});
 
 		handleAdd = () => {
 			$('#videoModal').modal('show');
 		};
+
+		submitSource = (event) => {
+			const config = {
+				onUploadProgress: uploadProgress,
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			};
+			const formData = new FormData(event);
+			showProgressDialog(true, () => {
+				$('#videoModal').modal('hide');
+				axios.post(`/admin/videos/${video_id}/update/source`, formData, config,).then(response => {
+					showProgressDialog(false);
+					alertify.alert(response.data.message);
+				}).catch(error => {
+					showProgressDialog(false);
+					alertify.alert('Something went wrong. Please try again.');
+				});
+			});
+		}
+
+		uploadProgress = (event) => {
+			let percentCompleted = Math.round((event.loaded * 100) / event.total);
+			setProgress(percentCompleted);
+		}
+
 	</script>
 @stop

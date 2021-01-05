@@ -21,14 +21,19 @@ class VideoResource extends \Illuminate\Http\Resources\Json\JsonResource
 			'pgRating' => $this->pg_rating,
 			'type' => $this->type,
 			'subscriptionType' => $this->subscription_type,
-			'hasSeasons' => $this->seasons > 0,
 			'price' => $this->price,
+			'seasons' => 0,
 			'sources' => [
 				'video' => $this->video(),
 				'audio' => $this->audio(),
 				'subtitle' => $this->subtitle()
 			]
 		];
+	}
+
+	public function languages ()
+	{
+
 	}
 
 	public function video () : \Illuminate\Http\Resources\Json\AnonymousResourceCollection

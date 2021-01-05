@@ -55,7 +55,7 @@
 											<label for="section">Choose containing section<span class="text-primary">*</span></label>
 											<select id="section" name="sections[]" class="form-control selectpicker" title="Choose..." multiple required>
 												@foreach($appVideoSections as $section)
-													@if(in_array($section->id,$payload->sections))
+													@if(in_array($section->id,$payload->sections??[]))
 														<option value="{{$section->id}}" selected>{{$section->title}}</option>
 													@else
 														<option value="{{$section->id}}">{{$section->title}}</option>
@@ -115,7 +115,7 @@
 										</div>
 										<div class="form-group">
 											<label for="subscriptionType">@required (Subscription Type)</label>
-											<select id="subscriptionType" name="subscription_type" class="form-control selectpicker" title="Choose..." required onchange="subscriptionTypeChanged(this.value);">
+											<select id="subscriptionType" name="subscription_type" class="form-control selectpicker" required onchange="subscriptionTypeChanged(this.value);">
 												@if(old('subscriptionType',$payload->subscriptionType)=='free')
 													<option value="free" selected>Free</option>
 													<option value="paid">Paid</option>
@@ -137,7 +137,7 @@
 										</div>
 										<div class="form-group mb-0">
 											<label for="rank">Trending rank</label>
-											<select id="rank" name="rank" class="form-control selectpicker" title="Choose...">
+											<select id="rank" name="rank" class="form-control selectpicker">
 												@for ($i = 0; $i <= 10; $i++)
 													@if (old('rank',$payload->rank)==$i)
 														<option value="{{$i}}" selected>{{$i}}</option>

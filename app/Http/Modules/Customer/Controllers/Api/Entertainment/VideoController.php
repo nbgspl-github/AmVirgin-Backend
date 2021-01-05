@@ -15,7 +15,8 @@ class VideoController extends \App\Http\Modules\Customer\Controllers\Api\ApiCont
 
 	public function show (Video $video) : JsonResponse
 	{
-		$this->customer()->addToWatchList($video);
+		if ($this->customer() != null)
+			$this->customer()->addToWatchList($video);
 		$video->increment('hits');
 		return responseApp()->prepare(
 			$video->type->is(Types::Movie)

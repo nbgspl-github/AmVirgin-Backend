@@ -20,7 +20,6 @@ class SeriesResource extends \Illuminate\Http\Resources\Json\JsonResource
 			'pgRating' => $this->pg_rating,
 			'type' => $this->type,
 			'subscriptionType' => $this->subscription_type,
-			'hasSeasons' => $this->seasons > 0,
 			'price' => $this->price,
 			'seasons' => $this->seasons(),
 			'episodes' => $this->episodes()

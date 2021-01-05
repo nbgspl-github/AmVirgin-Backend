@@ -80,7 +80,7 @@
 										</div>
 										<div class="form-group">
 											<label for="subscriptionType">Subscription type<span class="text-primary">*</span></label>
-											<select id="subscriptionType" name="subscription_type" class="form-control selectpicker" title="Choose..." required onchange="subscriptionTypeChanged(this.value);">
+											<select id="subscriptionType" name="subscription_type" class="form-control selectpicker" required onchange="subscriptionTypeChanged(this.value);">
 												<option value="free">Free</option>
 												<option value="paid">Paid</option>
 												<option value="subscription">Subscription</option>
@@ -88,11 +88,11 @@
 										</div>
 										<div class="form-group">
 											<label for="price">Price<span class="text-primary">*</span></label>
-											<input id="price" type="number" name="price" class="form-control" required placeholder="Type price for this movie/video" min="0.01" max="10000.00" step="0.01" readonly/>
+											<input id="price" type="number" name="price" class="form-control" placeholder="Type price for this movie/video" min="0" max="10000" step="1" readonly value="0"/>
 										</div>
 										<div class="form-group mb-0">
 											<label for="rank">Trending rank</label>
-											<select id="rank" name="rank" class="form-control selectpicker" title="Choose...">
+											<select id="rank" name="rank" class="form-control selectpicker">
 												@for ($i = 0; $i <= 10; $i++)
 													<option value="{{$i}}">{{$i}}</option>
 												@endfor
@@ -198,36 +198,6 @@
 				} else {
 					$('#trendingRank').prop("required", false);
 				}
-			});
-		});
-
-		$('#uploadForm').submit(function (event) {
-			disableSubmit(true);
-			event.preventDefault();
-			const validator = $('#uploadForm').parsley();
-			if (!validator.isValid()) {
-				alertify.alert('Fix the errors in the form and retry.');
-				disableSubmit(false);
-				return;
-			}
-			const formData = new FormData(this);
-			axios.post('/admin/videos/store', formData).then(response => {
-				const status = response.data.status;
-				if (status === 200) {
-					route = response.data.route;
-					modal.modal({
-						show: true,
-						keyboard: false,
-						backdrop: 'static'
-					});
-				} else {
-					disableSubmit(false);
-					alertify.alert(response.data.message);
-				}
-			}).catch(error => {
-				disableSubmit(false);
-				console.log(error);
-				toastr.error('Something went wrong. Please try again.');
 			});
 		});
 

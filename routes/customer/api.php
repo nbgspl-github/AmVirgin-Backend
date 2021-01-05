@@ -49,11 +49,11 @@ Route::prefix('sessions')->group(function () {
 Route::prefix('products')->group(function () {
 	Route::get('/', [CatalogController::class, 'index']);
 	Route::get('/sorts', [\App\Http\Modules\Customer\Controllers\Api\Shop\SortController::class, 'sorts']);
-	Route::prefix('{id}')->group(static function () {
+	Route::prefix('{product}')->group(static function () {
 		Route::get(Str::Empty, [CatalogController::class, 'show']);
 		Route::prefix('reviews')->group(static function () {
 			Route::get(Str::Empty, [ProductRatingController::class, 'show']);
-			Route::post(Str::Empty, [ProductRatingController::class, 'store']);
+			Route::post('{orderId}', [ProductRatingController::class, 'store']);
 		});
 	});
 });

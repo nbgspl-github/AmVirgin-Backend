@@ -12,16 +12,21 @@ class ProductRating extends \App\Library\Database\Eloquent\Model
 	use SoftDeletes;
 
 	protected $dates = ['deleted_at'];
-	protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'date', 'status'];
-	protected $guarded = ['id'];
+
+	protected $casts = ['certified' => 'bool'];
 
 	public function customer () : BelongsTo
 	{
-		return $this->belongsTo(Customer::class, 'customerId');
+		return $this->belongsTo(Customer::class, 'customer_id');
 	}
 
 	public function order () : BelongsTo
 	{
-		return $this->belongsTo(Order::class, 'orderId')->with('address');
+		return $this->belongsTo(Order::class, 'order_id')->with('address');
+	}
+
+	public function images () : \Illuminate\Database\Eloquent\Relations\HasMany
+	{
+		return $this->hasMany(\App\Models\Product\Image::class, 'product_rating_id');
 	}
 }

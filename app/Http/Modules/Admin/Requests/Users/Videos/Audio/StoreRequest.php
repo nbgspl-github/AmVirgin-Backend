@@ -8,7 +8,7 @@ class StoreRequest extends \Illuminate\Foundation\Http\FormRequest
 	{
 		return [
 			'video_language_id' => ['bail', 'required', \App\Library\Utils\Extensions\Rule::existsPrimary(\App\Models\Video\Language::tableName())],
-			'file' => ['bail', 'required', 'mimes:mp3,aac', 'max:1000000']
+			'file' => ['bail', 'required', 'mimes:mp3,aac,m4a', 'max:1000000']
 		];
 	}
 }

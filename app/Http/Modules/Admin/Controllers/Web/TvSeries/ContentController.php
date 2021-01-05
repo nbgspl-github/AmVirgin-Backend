@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use stdClass;
 use Throwable;
 
-class ContentController extends TvSeriesBase
+class ContentController extends TvSeriesController
 {
 	public function __construct ()
 	{

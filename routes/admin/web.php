@@ -15,22 +15,16 @@ use App\Http\Modules\Admin\Controllers\Web\Shop\HomePageController;
 use App\Http\Modules\Admin\Controllers\Web\Shop\SliderController as ShopSliderController;
 use App\Http\Modules\Admin\Controllers\Web\SliderController;
 use App\Http\Modules\Admin\Controllers\Web\SubscriptionPlanController;
-use App\Http\Modules\Admin\Controllers\Web\TvSeries\AttributesController;
+use App\Http\Modules\Admin\Controllers\Web\TvSeries\AttributeController;
 use App\Http\Modules\Admin\Controllers\Web\TvSeries\ContentController;
 use App\Http\Modules\Admin\Controllers\Web\TvSeries\MediaController;
-use App\Http\Modules\Admin\Controllers\Web\TvSeries\SnapsController;
-use App\Http\Modules\Admin\Controllers\Web\TvSeries\TvSeriesBase;
+use App\Http\Modules\Admin\Controllers\Web\TvSeries\SnapController;
+use App\Http\Modules\Admin\Controllers\Web\TvSeries\TvSeriesController;
 use App\Http\Modules\Admin\Controllers\Web\Users\CustomerController;
 use App\Http\Modules\Admin\Controllers\Web\Users\SellerController;
 use App\Http\Modules\Admin\Controllers\Web\Videos\VideoController;
 use App\Library\Utils\Extensions\Str;
-use App\Models\Category;
-use App\Models\Slider;
-use App\Models\Video\Genre;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
-
-const SubDomainPrefix = 'admin';
 
 Route::prefix('admin')->group(function () {
 	Route::get('/', [HomeController::class, Methods::Index])->middleware('auth:admin')->name('admin.home');
@@ -124,27 +118,32 @@ Route::prefix('admin')->group(function () {
 
 		// TV Series Route(s)
 		Route::prefix('tv-series')->middleware('auth:admin')->group(function () {
-			Route::get('', [TvSeriesBase::class, 'index'])->name('admin.tv-series.index');
-			Route::get('actions/{id}', [TvSeriesBase::class, 'choose'])->name('admin.tv-series.edit.action');
-			Route::get('create', [TvSeriesBase::class, 'create'])->name('admin.tv-series.create');
-			Route::get('/{slug}', [TvSeriesBase::class, 'show'])->name('admin.tv-series.show');
-			Route::prefix('edit/{id}')->group(function () {
-				Route::get('attributes', [AttributesController::class, 'edit'])->name('admin.tv-series.edit.attributes');
+			Route::get('', [TvSeriesController::class, 'index'])->name('admin.tv-series.index');
+			Route::get('actions/{video}', [TvSeriesController::class, 'choose'])->name('admin.tv-series.edit.action');
+			Route::get('create', [TvSeriesController::class, 'create'])->name('admin.tv-series.create');
+			Route::prefix('edit/{video}')->group(function () {
+				Route::get('attributes', [AttributeController::class, 'edit'])->name('admin.tv-series.edit.attributes');
 				Route::get('content', [ContentController::class, 'edit'])->name('admin.tv-series.edit.content');
 				Route::get('media', [MediaController::class, 'edit'])->name('admin.tv-series.edit.media');
-				Route::get('snaps', [SnapsController::class, 'edit'])->name('admin.tv-series.edit.snaps');
+				Route::get('snaps', [SnapController::class, 'edit'])->name('admin.tv-series.edit.snaps');
+				Route::get('source', [\App\Http\Modules\Admin\Controllers\Web\TvSeries\SourceController::class, 'index'])->name('admin.tv-series.edit.source');
+				Route::get('sources/{source}/audio', [\App\Http\Modules\Admin\Controllers\Web\TvSeries\AudioController::class, 'index'])->name('admin.tv-series.edit.audio');
+				Route::get('sources/{source}/subtitle', [\App\Http\Modules\Admin\Controllers\Web\TvSeries\SubtitleController::class, 'index'])->name('admin.tv-series.edit.subtitle');
 			});
-			Route::prefix('{id}/update')->group(function () {
-				Route::post('attributes', [AttributesController::class, 'update'])->name('admin.tv-series.update.attributes');
+			Route::prefix('{video}/update')->group(function () {
+				Route::post('attributes', [AttributeController::class, 'update'])->name('admin.tv-series.update.attributes');
 				Route::post('content', [ContentController::class, 'update'])->name('admin.tv-series.update.content');
 				Route::post('media', [MediaController::class, 'update'])->name('admin.tv-series.update.media');
-				Route::post('snaps', [SnapsController::class, 'update'])->name('admin.tv-series.update.snaps');
+				Route::post('snaps', [SnapController::class, 'update'])->name('admin.tv-series.update.snaps');
+				Route::post('{source}/audio', [\App\Http\Modules\Admin\Controllers\Web\TvSeries\AudioController::class, 'store'])->name('admin.tv-series.update.audio');
+				Route::post('{source}/subtitle', [\App\Http\Modules\Admin\Controllers\Web\TvSeries\SubtitleController::class, 'store'])->name('admin.tv-series.update.subtitle');
+				Route::post('source', [\App\Http\Modules\Admin\Controllers\Web\TvSeries\SourceController::class, 'store'])->name('admin.tv-series.update.source');
 			});
-			Route::post('store', [TvSeriesBase::class, 'store'])->name('admin.tv-series.store');
-			Route::prefix('{id}')->group(function () {
-				Route::delete('', [TvSeriesBase::class, 'delete'])->name('admin.tv-series.delete');
+			Route::post('store', [TvSeriesController::class, 'store'])->name('admin.tv-series.store');
+			Route::prefix('{video}')->group(function () {
+				Route::delete('', [TvSeriesController::class, 'delete'])->name('admin.tv-series.delete');
 				Route::delete('content/{contentId}', [ContentController::class, 'delete'])->name('admin.tv-series.delete.content');
-				Route::delete('snaps/{snapId}', [SnapsController::class, 'delete'])->name('admin.tv-series.delete.snaps');
+				Route::delete('snaps/{snapId}', [SnapController::class, 'delete'])->name('admin.tv-series.delete.snaps');
 			});
 		});
 
@@ -222,40 +221,6 @@ Route::prefix('admin')->group(function () {
 			});
 		});
 
-		// Images Route(s)
-		Route::prefix('images')->group(function () {
-
-			// Genre Poster
-			Route::get('genre/poster/{id}', function ($id) {
-				$genre = Genre::find($id);
-				if ($genre != null) {
-					return Storage::download($genre->getPoster());
-				} else {
-					return null;
-				}
-			})->name('images.genre.poster');
-
-			// Category Poster
-			Route::get('category/poster/{id}', function ($id) {
-				$category = Category::find($id);
-				if ($category != null) {
-					return Storage::download($category->getPoster());
-				} else {
-					return null;
-				}
-			})->name('images.category.poster');
-
-			// Slider Poster
-			Route::get('slider/{id}/poster', function ($id) {
-				$slide = Slider::find($id);
-				if ($slide != null) {
-					return Storage::download($slide->getPoster());
-				} else {
-					return null;
-				}
-			})->name('images.slider.poster');
-		});
-
 		// Servers' Route(s)
 		Route::prefix('servers')->middleware('auth:admin')->group(function () {
 			Route::get('', [ServersController::class, Methods::Index])->name('admin.servers.index');
@@ -330,4 +295,5 @@ Route::prefix('admin')->group(function () {
 			});
 		});
 	});
+	Route::get('/playback', [\App\Http\Modules\Admin\Controllers\Web\PlaybackController::class, 'index']);
 });

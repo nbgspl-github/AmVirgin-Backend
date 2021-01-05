@@ -34,33 +34,18 @@
 <!-- jQuery Peity -->
 <script src="{{asset('assets/admin/js/circle-progress.js')}}"></script>
 
-{{--Anime JS--}}
-<script src="{{asset('assets/admin/js/anime.js')}}"></script>
-
-<!-- Dropzone js -->
-<script src="{{asset('assets/admin/plugins/dropzone/dist/dropzone.js')}}"></script>
-
-<script src="https://vjs.zencdn.net/7.6.6/video.js"></script>
-
-<!--Bootstrap Duration Picker-->
-<script src="{{asset('assets/admin/js/bootstrap-duration-picker.js')}}"></script>
-
-<script src="{{asset('assets/admin/js/jquery.caret.min.js')}}"></script>
-<script src="{{asset('assets/admin/js/jquery.tag-editor.min.js')}}"></script>
-
 <!--Mustache Js-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.1.0/mustache.js"></script>
 
 <script src="{{asset('assets/admin/js/duration-picker.js')}}"></script>
 <script src="{{asset('assets/admin/js/Selectize.js')}}"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
 
-<script src="{{asset("assets/admin/plugins/dropify/dist/js/dropify.min.js")}}"></script>
 <script src="{{asset("assets/admin/plugins/bootstrap-select/js/bootstrap-select.min.js")}}"></script>
-<script src="https://releases.transloadit.com/uppy/v1.24.0/uppy.min.js"></script>
+<script src="{{asset("assets/admin/plugins/filepond/filepond.min.js")}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
 {{--<!-- App js -->--}}
 <script src="{{asset("assets/admin/js/app.js")}}"></script>
 <script src="{{asset("js/app.js")}}"></script>
@@ -82,6 +67,22 @@
 	dialog.find('.modal-header').addClass('mx-auto');
 	dialog.find('.modal-content').addClass('shadow-lg');
 
+	dialogProgress = bootbox.dialog({
+		size: 'small',
+		title: '<span id="my_custom_progress_bar_label" class="text-center mb-0 font-weight-bolder">Please wait!</span>',
+		message: (
+			`<div id="my_custom_progress_bar_xyz" class="rounded progress-bar progress-bar-striped progress-bar-animated shadow-primary" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0; height: 8px;"></div>`
+		),
+		closeButton: false,
+		show: false,
+		// animate: false,
+		centerVertical: true,
+		className: 'zoomIn animated'
+	});
+	dialogProgress.find('.modal-dialog').css({'max-width': '250px'});
+	dialogProgress.find('.modal-header').addClass('mx-auto');
+	dialogProgress.find('.modal-content').addClass('shadow-lg');
+
 	setLoading = (loading, ready = null) => {
 		dialog.modal(loading ? 'show' : 'hide');
 		if (ready !== null && typeof ready === "function") {
@@ -93,12 +94,42 @@
 		dialog.shown = loading;
 	};
 
+	setProgress = (value) => {
+		if (value > 100) {
+			$('#my_custom_progress_bar_label').html('Done');
+			return;
+		}
+		$('#my_custom_progress_bar_xyz').css('width', (value) + '%');
+		$('#my_custom_progress_bar_label').html('Uploaded ' + (value) + '%');
+	}
+
+	showProgressDialog = (show, callback = null) => {
+		dialogProgress.modal(show ? 'show' : 'hide');
+		if (show)
+			setProgress(0);
+		if (callback !== null && typeof callback === "function") {
+			dialogProgress.one('shown.bs.modal', (e) => {
+				console.log('OnShown called');
+				callback();
+			});
+		}
+		dialogProgress.shown = show;
+	};
+
 	isLoading = () => {
 		return dialog.shown;
 	};
 
 	window.onload = () => {
-		// window.onInitialize();
+		axios.interceptors.response.use(function (response) {
+			// Any status code that lie within the range of 2xx cause this function to trigger
+			// Do something with response data
+			return response;
+		}, function (error) {
+			// Any status codes that falls outside the range of 2xx cause this function to trigger
+			// Do something with response error
+			return Promise.reject(error);
+		});
 	};
 	@if($message=Session::get('success'))
 	alertify.alert("{{$message}}");

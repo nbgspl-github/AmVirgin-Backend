@@ -7,6 +7,7 @@ class WatchLaterController extends \App\Http\Modules\Customer\Controllers\Api\Ap
 	public function __construct ()
 	{
 		parent::__construct();
+		$this->middleware(AUTH_CUSTOMER);
 	}
 
 	public function index () : \Illuminate\Http\JsonResponse

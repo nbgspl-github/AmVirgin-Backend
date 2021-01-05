@@ -7,10 +7,10 @@ class WatchListResource extends \Illuminate\Http\Resources\Json\JsonResource
 	public function toArray ($request) : array
 	{
 		return [
-			'key' => $this->id,
-			'title' => $this->title,
-			'type' => $this->type,
-			'poster' => $this->poster,
+			'key' => $this->video->id,
+			'title' => $this->video->title,
+			'type' => $this->video->type,
+			'poster' => $this->video->poster,
 		];
 	}
 }

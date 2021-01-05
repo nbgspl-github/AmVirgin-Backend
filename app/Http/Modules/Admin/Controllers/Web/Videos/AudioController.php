@@ -20,14 +20,12 @@ class AudioController extends \App\Http\Modules\Admin\Controllers\Web\WebControl
 		)->with('video', $video);
 	}
 
-	public function store (StoreRequest $request, \App\Models\Video\Video $video) : \Illuminate\Http\RedirectResponse
+	public function store (StoreRequest $request, \App\Models\Video\Video $video) : \Illuminate\Http\JsonResponse
 	{
 		$video->audios()->create($request->validated());
-		return response()->redirectTo(
-			route('admin.videos.edit.audio', $video->id)
-		)->with('success',
-			'Created audio source successfully.'
-		);
+		return response()->json([
+			'message' => 'Created audio source successfully.'
+		]);
 	}
 
 	/**

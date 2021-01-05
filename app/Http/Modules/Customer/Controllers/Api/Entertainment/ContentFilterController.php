@@ -16,17 +16,9 @@ class ContentFilterController extends \App\Http\Modules\Customer\Controllers\Api
 
 	public function index () : JsonResponse
 	{
-		$response = responseApp();
-		try {
-			$payload = [
-				'filters' => (new ContentFilterResource(null))->toArray(null),
-				'watchLater' => (ListResource::collection($this->guard()->user()->watchLater)->toArray(null))
-			];
-			$response->status(\Illuminate\Http\Response::HTTP_OK)->payload($payload);
-		} catch (\Throwable $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->payload()->message($exception->getMessage());
-		} finally {
-			return $response->send();
-		}
+		return responseApp()->prepare([
+			'filters' => (new ContentFilterResource(null))->toArray(null),
+			'watchLater' => (ListResource::collection($this->customer()->watchLaterList)->toArray(null))
+		]);
 	}
 }

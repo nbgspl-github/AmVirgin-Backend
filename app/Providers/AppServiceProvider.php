@@ -47,6 +47,6 @@ class AppServiceProvider extends ServiceProvider
 		Paginator::defaultView('pagination::bootstrap-4');
 
 		\Illuminate\Support\Facades\View::share('appGenres', \App\Models\Video\Genre::query()->active()->get());
-		\Illuminate\Support\Facades\View::share('appVideoSections', \App\Models\Video\Section::query()->get());
+		\Illuminate\Support\Facades\View::share('appVideoSections', \App\Models\Video\Section::query()->where('type', 'entertainment')->get());
 	}
 }

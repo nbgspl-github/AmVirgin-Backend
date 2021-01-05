@@ -4,7 +4,6 @@ namespace App\Resources\Filters\Customer\Entertainment;
 
 use App\Models\Country;
 use App\Models\Video\Genre;
-use App\Models\Video\Source;
 use App\Resources\Filters\Customer\Entertainment\Country\ListResource as CountryList;
 use App\Resources\Filters\Customer\Entertainment\Genre\ListResource as GenreList;
 use App\Resources\Filters\Customer\Entertainment\Language\ListResource as LanguageList;
@@ -24,7 +23,7 @@ class ContentFilterResource extends JsonResource
 		];
 	}
 
-	protected function age (): array
+	protected function age () : array
 	{
 		return [
 			[
@@ -38,7 +37,7 @@ class ContentFilterResource extends JsonResource
 		];
 	}
 
-	protected function type (): array
+	protected function type () : array
 	{
 		return [
 			[
@@ -56,21 +55,21 @@ class ContentFilterResource extends JsonResource
 		];
 	}
 
-	protected function genres (): AnonymousResourceCollection
+	protected function genres () : AnonymousResourceCollection
 	{
 		return GenreList::collection(Genre::all());
 	}
 
-	protected function countries (): AnonymousResourceCollection
+	protected function countries () : AnonymousResourceCollection
 	{
 		return CountryList::collection(Country::all());
 	}
 
-	protected function languages (): AnonymousResourceCollection
+	protected function languages () : AnonymousResourceCollection
 	{
-		$availableLanguages = Source::query()->select('mediaLanguageId')->distinct()->get();
-		$availableLanguages->transform(function (Source $videoSource) {
-			return $videoSource->language;
+		$availableLanguages = \App\Models\Models\Video\Audio::query()->select('video_language_id')->distinct()->get();
+		$availableLanguages->transform(function (\App\Models\Models\Video\Audio $audio) {
+			return $audio->language;
 		});
 		$availableLanguages = $availableLanguages->filter()->values();
 		return LanguageList::collection($availableLanguages);

@@ -36,12 +36,12 @@ class VideoController extends \App\Http\Modules\Admin\Controllers\Web\WebControl
 		return view('admin.videos.create');
 	}
 
-	public function store (StoreRequest $request) : \Illuminate\Http\JsonResponse
+	public function store (StoreRequest $request) : \Illuminate\Http\RedirectResponse
 	{
 		$video = $this->model->newQuery()->create($request->validated());
-		return responseApp()->setValue(
-			'route', route('admin.videos.edit.action', $video->getKey())
-		)->send();
+		return response()->redirectTo(route('admin.videos.edit.action', $video->id))->with(
+			'success', 'Video details were successfully saved. Please proceed to next step.'
+		);
 	}
 
 	/**
@@ -51,12 +51,11 @@ class VideoController extends \App\Http\Modules\Admin\Controllers\Web\WebControl
 	 */
 	public function destroy (Video $video) : \Illuminate\Http\JsonResponse
 	{
-		$video->snaps()->delete();
+		$video->snaps()->each(fn (\App\Models\Video\Snap $snap) => $snap->delete());
 		$video->sources()->delete();
 		$video->delete();
 		return responseApp()->prepare(
-			[],
-			\Illuminate\Http\Response::HTTP_NO_CONTENT,
+			[], \Illuminate\Http\Response::HTTP_NO_CONTENT,
 		);
 	}
 }

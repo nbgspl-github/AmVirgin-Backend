@@ -140,7 +140,17 @@ class Product extends \App\Library\Database\Eloquent\Model
 
 	public function ratings () : HasMany
 	{
-		return $this->hasMany(ProductRating::class);
+		return $this->hasMany(ProductRating::class, 'product_id');
+	}
+
+	public function ratingsBy (\App\Models\Auth\Customer $customer) : HasMany
+	{
+		return $this->ratings()->where('customer_id', $customer->id);
+	}
+
+	public function addRatingBy (\App\Models\Auth\Customer $customer, array $attributes) : \Illuminate\Database\Eloquent\Model
+	{
+		return $this->ratings()->create(array_merge(['customer_id' => $customer->id], $attributes));
 	}
 
 	public function hotDeal (?bool $yes = null) : bool

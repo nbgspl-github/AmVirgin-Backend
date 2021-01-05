@@ -52,9 +52,9 @@ class Handler extends ExceptionHandler
 			} else if ($e instanceof \ErrorException) {
 				return response()->json(['status' => Response::HTTP_INTERNAL_SERVER_ERROR, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_OK);
 			} else if ($e instanceof ValidationException) {
-				return response()->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => $e->getError(), 'payload' => null], Response::HTTP_OK);
+				return response()->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => $e->getError(), 'payload' => null], Response::HTTP_BAD_REQUEST);
 			} else if ($e instanceof \Illuminate\Validation\ValidationException) {
-				return response()->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => $e->validator->errors()->first(), 'payload' => null], Response::HTTP_OK);
+				return response()->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => $e->validator->errors()->first(), 'payload' => null], Response::HTTP_BAD_REQUEST);
 			} else {
 				return response()->json(['status' => Response::HTTP_INTERNAL_SERVER_ERROR, 'message' => $e->getMessage(), 'payload' => null, 'exception' => $e->getTrace()], Response::HTTP_INTERNAL_SERVER_ERROR);
 			}
@@ -95,7 +95,7 @@ class Handler extends ExceptionHandler
 
 	protected function respondWithJson (\Illuminate\Http\Request $request) : bool
 	{
-		return $this->hasApiMiddleware($request);
+		return $this->hasApiMiddleware($request) || $request->ajax();
 	}
 
 	protected function hasApiMiddleware (\Illuminate\Http\Request $request) : bool

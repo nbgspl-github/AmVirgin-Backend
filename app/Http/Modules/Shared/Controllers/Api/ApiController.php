@@ -38,18 +38,18 @@ abstract class ApiController extends BaseController
 
 	/**
 	 * Gets the seller who issued this request.
-	 * @return Seller
+	 * @return ?Seller
 	 */
-	protected function seller () : Seller
+	protected function seller () : ?Seller
 	{
 		return $this->guard()->user();
 	}
 
 	/**
 	 * Gets the customer who issued this request.
-	 * @return Customer
+	 * @return ?Customer
 	 */
-	protected function customer () : Customer
+	protected function customer () : ?Customer
 	{
 		return $this->guard()->user();
 	}

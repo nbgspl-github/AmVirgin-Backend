@@ -46,7 +46,7 @@
 				<div class="modal-header">
 					<h5 class="modal-title" id="exampleModalLabel">Create new audio source</h5>
 				</div>
-				<form action="{{route('admin.videos.update.audio',$video->id)}}" enctype="multipart/form-data" method="post">
+				<form action="{{route('admin.videos.update.audio',$video->id)}}" enctype="multipart/form-data" method="post" id="audioForm">
 					@csrf
 					<div class="modal-body">
 						<div class="form-group">
@@ -60,7 +60,7 @@
 						<div class="form-group mb-0">
 							<label>Audio</label>
 							<div class="custom-file">
-								<input name="file" type="file" class="custom-file-input" id="audioFile" accept=".mp3, .aac" required>
+								<input name="file" type="file" class="custom-file-input" id="audioFile" accept=".mp3, .aac, .m4a" required>
 								<label class="custom-file-label" for="audioFile">Choose audio file...</label>
 							</div>
 						</div>
@@ -77,13 +77,45 @@
 
 @section('javascript')
 	<script type="application/javascript">
+		let video_id = `{{$video->id}}`;
+		$(document).on('change', '.custom-file-input', function (event) {
+			$(this).next('.custom-file-label').html(event.target.files[0].name);
+		})
 		$(document).ready(() => {
-
+			$('#audioForm').submit(function (event) {
+				event.preventDefault();
+				submitSource(this);
+			});
 		});
 
 		handleAdd = () => {
 			$('#audioModal').modal('show');
 		};
+
+		submitSource = (event) => {
+			const config = {
+				onUploadProgress: uploadProgress,
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			};
+			const formData = new FormData(event);
+			showProgressDialog(true, () => {
+				$('#audioModal').modal('hide');
+				axios.post(`/admin/videos/${video_id}/update/audio`, formData, config,).then(response => {
+					showProgressDialog(false);
+					alertify.alert(response.data.message);
+				}).catch(error => {
+					showProgressDialog(false);
+					alertify.alert('Something went wrong. Please try again.');
+				});
+			});
+		}
+
+		uploadProgress = (event) => {
+			let percentCompleted = Math.round((event.loaded * 100) / event.total);
+			setProgress(percentCompleted);
+		}
 
 		deleteAudio = key => {
 			alertify.confirm("Are you sure? This action is irreversible!",

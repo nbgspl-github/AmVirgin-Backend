@@ -15,13 +15,13 @@ class StoreRequest extends \Illuminate\Foundation\Http\FormRequest
 			'released' => ['bail', 'required', 'date'],
 			'cast' => ['bail', 'required', 'string', 'min:1', 'max:500'],
 			'director' => ['bail', 'required', 'string', 'min:1', 'max:256'],
-			'genre_id' => ['bail', 'required', 'exists:genres,id'],
-			'section_id' => ['bail', 'required', 'exists:page-sections,id'],
+			'genre_id' => ['bail', 'required', Rule::existsPrimary(\App\Models\Video\Genre::tableName())],
+			'sections.*' => ['bail', 'required', Rule::existsPrimary(\App\Models\Video\Section::tableName())],
 			'rating' => ['bail', 'required', 'numeric', 'min:0.00', 'max:5.00'],
 			'pg_rating' => ['bail', 'required', Rule::in(['G', 'PG', 'PG-13', 'R', 'NC-17'])],
 			'subscription_type' => ['bail', 'required', Rule::in(['free', 'paid', 'subscription'])],
-			'price' => ['bail', 'nullable', 'required_unless:subscriptionType,free,subscription', 'numeric', 'min:0.01', 'max:10000.00'],
-			'rank' => ['bail', 'nullable', 'gte:1', 'lt:11'],
+			'price' => ['bail', 'sometimes', 'required_if:subscription_type,paid', 'numeric', 'min:0', 'max:10000'],
+			'rank' => ['bail', 'nullable', 'gte:0', 'lt:11'],
 		];
 	}
 
@@ -30,7 +30,8 @@ class StoreRequest extends \Illuminate\Foundation\Http\FormRequest
 		$validated = parent::validated();
 		return array_merge($validated, [
 			'type' => \App\Library\Enums\Videos\Types::Movie,
-			'rank' => $validated['rank'] ?? 0
+			'rank' => $validated['rank'] ?? 0,
+			'sections' => $validated['sections'] ?? []
 		]);
 	}
 }

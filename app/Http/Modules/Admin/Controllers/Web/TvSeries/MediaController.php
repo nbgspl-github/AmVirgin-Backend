@@ -9,7 +9,7 @@ use App\Models\Video\Video;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class MediaController extends TvSeriesBase
+class MediaController extends TvSeriesController
 {
 	public function __construct ()
 	{

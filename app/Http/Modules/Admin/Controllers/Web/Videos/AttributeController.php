@@ -27,7 +27,7 @@ class AttributeController extends \App\Http\Modules\Admin\Controllers\Web\WebCon
 	{
 		$video->update($request->validated());
 		return response()->redirectTo(
-			route('admin.videos.index')
+			route('admin.videos.edit.action', $video->id)
 		)->with('success', 'Attributes updated successfully.');
 	}
 }

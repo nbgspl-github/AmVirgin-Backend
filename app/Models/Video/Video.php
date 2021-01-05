@@ -43,7 +43,7 @@ class Video extends \App\Library\Database\Eloquent\Model
 
 	public function setBackdropAttribute ($value)
 	{
-		$this->attributes['poster'] = $this->storeWhenUploadedCorrectly('videos/backdrops', $value);
+		$this->attributes['backdrop'] = $this->storeWhenUploadedCorrectly('videos/backdrops', $value);
 	}
 
 	public function getTrailerAttribute () : ?string
@@ -53,7 +53,7 @@ class Video extends \App\Library\Database\Eloquent\Model
 
 	public function setTrailerAttribute ($value)
 	{
-		$this->attributes['poster'] = $this->storeWhenUploadedCorrectly('videos/trailers', $value);
+		$this->attributes['trailer'] = $this->storeWhenUploadedCorrectly('videos/trailers', $value);
 	}
 
 	public function genre () : BelongsTo

@@ -20,8 +20,8 @@ class UpdateRequest extends \Illuminate\Foundation\Http\FormRequest
 			'rating' => ['bail', 'required', 'numeric', 'min:0.00', 'max:5.00'],
 			'pg_rating' => ['bail', 'required', Rule::in(['G', 'PG', 'PG-13', 'R', 'NC-17'])],
 			'subscription_type' => ['bail', 'required', Rule::in(['free', 'paid', 'subscription'])],
-			'price' => ['bail', 'nullable', 'required_unless:subscription_type,free,subscription', 'numeric', 'min:0', 'max:10000'],
-			'rank' => ['bail', 'nullable', 'gte:1', 'lt:11'],
+			'price' => ['bail', 'sometimes', 'required_if:subscription_type,paid', 'numeric', 'min:0', 'max:10000'],
+			'rank' => ['bail', 'nullable', 'gte:0', 'lt:11'],
 		];
 	}
 }
