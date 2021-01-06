@@ -33,16 +33,10 @@ class TranscoderTask implements ShouldQueue
 			\App\Library\Enums\Videos\Quality::SD => (new \FFMpeg\Format\Video\X264())->setKiloBitrate(1200),
 			\App\Library\Enums\Videos\Quality::HD => (new \FFMpeg\Format\Video\X264())->setKiloBitrate(2500),
 			\App\Library\Enums\Videos\Quality::FHD => (new \FFMpeg\Format\Video\X264())->setKiloBitrate(5000),
-			\App\Library\Enums\Videos\Quality::UHD => (new \FFMpeg\Format\Video\X264())->setKiloBitrate(10000),
 		];
 	}
 
-	/**
-	 * Execute the job.
-	 *
-	 * @return void
-	 */
-	public function handle ()
+	public function handle () : void
 	{
 		$transcoder = \ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::fromDisk('secured')->open($this->path)->exportForHLS();
 		\App\Library\Utils\Extensions\Arrays::eachAssociative($this->formats,
@@ -51,6 +45,7 @@ class TranscoderTask implements ShouldQueue
 			}
 		);
 		$transcoder->save($this->exportPath());
+		$this->source->update(['file' => $this->exportPath()]);
 	}
 
 	protected function exportPath () : string

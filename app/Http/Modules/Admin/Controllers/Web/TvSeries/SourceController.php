@@ -27,11 +27,7 @@ class SourceController extends \App\Http\Modules\Admin\Controllers\Web\WebContro
 	public function store (UpdateRequest $request, \App\Models\Video\Video $video) : \Illuminate\Http\JsonResponse
 	{
 		$source = $video->sources()->create($request->validated());
-		$media = \ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::fromDisk('secured')->open($source->getRawOriginal('file'));
-		$seconds = $media->getDurationInSeconds();
-		$source->update([
-			'duration' => \App\Library\Utils\Extensions\Time::toDuration($seconds, "%02d:%02d:%02d")
-		]);
+		\App\Jobs\FillVideoMetadata::dispatchNow($source);
 		\App\Jobs\TranscoderTask::dispatch($source)->delay(now()->addMinutes(5));
 		return response()->json([
 			'message' => 'Created episode successfully.'

@@ -107,7 +107,7 @@ class WishlistController extends \App\Http\Modules\Customer\Controllers\Api\ApiC
 				['productId', $productId],
 			])->firstOrFail();
 			try {
-				$cart = Cart::findOrFail($validated->sessionId);
+				$cart = Cart::retrieveThrows($validated->sessionId);
 				$cartItem = new CartItem($cart, $productId);
 				if (!$cart->contains($cartItem)) {
 					$wishlistItem->delete();
@@ -122,7 +122,7 @@ class WishlistController extends \App\Http\Modules\Customer\Controllers\Api\ApiC
 					'sessionId' => $validated->sessionId,
 					'status' => Status::Pending,
 				]);
-				$cart = Cart::findOrFail($validated->sessionId);
+				$cart = Cart::retrieveThrows($validated->sessionId);
 				$cartItem = new CartItem($cart, $productId);
 				$wishlistItem->delete();
 				$cart->addItem($cartItem);
