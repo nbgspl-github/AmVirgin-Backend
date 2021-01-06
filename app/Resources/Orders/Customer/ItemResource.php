@@ -29,6 +29,7 @@ class ItemResource extends JsonResource
 				'period' => $this->returnPeriod,
 				'type' => $this->returnType,
 			],
+			'review' => $this->review()
 		];
 	}
 
@@ -40,5 +41,10 @@ class ItemResource extends JsonResource
 			$this->subOrder->status->is(\App\Library\Enums\Orders\Status::Delivered) &&
 			!$pending && $this->returnable
 		);
+	}
+
+	protected function review () : \App\Http\Modules\Customer\Resources\Entertainment\Product\Review\ReviewResource
+	{
+		return new \App\Http\Modules\Customer\Resources\Entertainment\Product\Review\ReviewResource($this->rating);
 	}
 }

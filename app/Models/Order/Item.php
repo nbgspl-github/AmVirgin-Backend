@@ -39,4 +39,9 @@ class Item extends \App\Library\Database\Eloquent\Model
 	{
 		return $this->belongsTo(\App\Models\Order\SubOrder::class, 'subOrderId');
 	}
+
+	public function rating () : \Illuminate\Database\Eloquent\Relations\HasOne
+	{
+		return $this->hasOne(\App\Models\ProductRating::class, 'order_id');
+	}
 }

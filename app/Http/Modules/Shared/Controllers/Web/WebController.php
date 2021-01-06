@@ -6,5 +6,7 @@ abstract class WebController extends \App\Http\Modules\Shared\Controllers\BaseCo
 {
 	protected const ADMIN = 'admin';
 
+	protected const CUSTOMER = 'customer-api';
+
 	protected abstract function guard ();
 }
