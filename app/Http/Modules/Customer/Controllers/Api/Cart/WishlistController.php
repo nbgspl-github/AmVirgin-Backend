@@ -24,6 +24,7 @@ class WishlistController extends \App\Http\Modules\Customer\Controllers\Api\ApiC
 	public function __construct ()
 	{
 		parent::__construct();
+		$this->middleware(AUTH_CUSTOMER);
 		$this->rules = [
 			'store' => [
 				'productId' => ['bail', 'required', Rule::exists(Tables::Products, 'id')],

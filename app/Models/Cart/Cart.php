@@ -19,7 +19,7 @@ class Cart extends \App\Library\Database\Eloquent\Model
 {
 	const TaxRate = 0.25;
 	protected $guarded = ['id'];
-	protected CartItemCollection $itemCollection;
+	protected ?CartItemCollection $itemCollection;
 
 	public function __construct (array $attributes = [])
 	{

@@ -70,7 +70,7 @@ Route::prefix('cart')->middleware([])->group(function () {
 	Route::post('{order}/verify', [QuoteController::class, 'verify'])->middleware('auth:customer-api');
 });
 
-Route::prefix('wishlist')->middleware('auth:customer-api')->group(function () {
+Route::prefix('wishlist')->group(function () {
 	Route::get(Str::Empty, [WishlistController::class, 'index']);
 	Route::put('{productId}', [WishlistController::class, 'store']);
 	Route::delete('{product}', [WishlistController::class, 'delete']);

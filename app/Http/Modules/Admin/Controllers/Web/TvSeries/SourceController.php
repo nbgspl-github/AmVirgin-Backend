@@ -32,6 +32,7 @@ class SourceController extends \App\Http\Modules\Admin\Controllers\Web\WebContro
 		$source->update([
 			'duration' => \App\Library\Utils\Extensions\Time::toDuration($seconds, "%02d:%02d:%02d")
 		]);
+		\App\Jobs\TranscoderTask::dispatch($source)->delay(now()->addMinutes(5));
 		return response()->json([
 			'message' => 'Created episode successfully.'
 		]);
