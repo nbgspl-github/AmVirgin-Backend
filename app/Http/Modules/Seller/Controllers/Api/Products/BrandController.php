@@ -65,9 +65,7 @@ class BrandController extends \App\Http\Modules\Seller\Controllers\Api\ApiContro
 		try {
 			$validated = $this->requestValid(request(), $this->rules['index']);
 			if (isset($validated['type']) && $validated['type'] == 'all') {
-				// Skip category inclusion until fools approve it.
-				$brands = Brand::startQuery()->search($validated['name'])->category($validated['category'])->get();
-//                $brands = Brand::startQuery()->search($validated['name'])->get();
+				$brands = Brand::startQuery()->search($validated['name'])->category($validated['category'])->orderByDescending('updated_at')->get();
 				$resource = AvailableListResource::collection($brands);
 				$response->status($resource->count() > 0 ? \Illuminate\Http\Response::HTTP_OK : \Illuminate\Http\Response::HTTP_NO_CONTENT)->message('Listing brands matching your search query.')->setValue('data', $resource);
 			}
@@ -85,9 +83,7 @@ class BrandController extends \App\Http\Modules\Seller\Controllers\Api\ApiContro
 		$response = responseApp();
 		try {
 			$payload = $this->requestValid(request(), $this->rules['show']);
-			// Skip category inclusion until fools approve it.
-			$ownedBrands = Brand::startQuery()->seller($this->guard()->id())->category($payload['category'])->get();
-//			$ownedBrands = Brand::startQuery()->seller($this->guard()->id())->get();
+			$ownedBrands = Brand::startQuery()->seller($this->guard()->id())->category($payload['category'])->orderByDescending('updated_at')->get();
 			$resource = OwnedBrandResource::collection($ownedBrands);
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Listing all brands approved for you.')->setValue('data', $resource)->send();
 		} catch (Throwable $exception) {
@@ -102,9 +98,7 @@ class BrandController extends \App\Http\Modules\Seller\Controllers\Api\ApiContro
 		$response = responseApp();
 		try {
 			$payload = $this->requestValid(request(), $this->rules['store']);
-			// Skip category inclusion until fools approve it.
 			$brand = Brand::startQuery()->name($payload['name'])->category($payload['categoryId'])->first();
-//			$brand = Brand::startQuery()->name($payload['name'])->first();
 			if ($brand != null) {
 				// Verify if any other seller owns this brand or it exclusively belongs to this seller.
 				if ($brand->createdBy() == $this->guard()->id()) {

@@ -24,6 +24,7 @@ class SellerBankDetail extends \App\Library\Database\Eloquent\Model
 		'DrivingLicense' => 'driving-license',
 		'ElectricityBill' => 'electricity-bill',
 		'PhoneBill' => 'phone-bill',
+		'BankPassbook' => 'bank-passbook'
 	];
 
 	public function setAddressProofDocumentAttribute ($value)

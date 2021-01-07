@@ -4,6 +4,8 @@ namespace App\Library\Utils\Extensions;
 
 class Time
 {
+	const MYSQL_FORMAT = "Y-m-d H:i:s";
+
 	public static function toSeconds ($timeOnly)
 	{
 		return strtotime(sprintf('1970-01-01 %s UTC', $timeOnly));

@@ -176,6 +176,7 @@ class QuoteController extends \App\Http\Modules\Customer\Controllers\Api\ApiCont
 		} else {
 			$response->status(\Illuminate\Http\Response::HTTP_CONFLICT)->message('Item already exists in wishlist.');
 		}
+		return $response->send();
 	}
 
 	public function checkout (\App\Http\Modules\Customer\Requests\Cart\CheckoutRequest $request) : \Illuminate\Http\JsonResponse
