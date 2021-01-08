@@ -108,7 +108,7 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController
 				$token = $this->generateToken($user);
 				$response->message($this->loginSuccess())->setValue('data', $this->loginPayload($user, $token))->status(\Illuminate\Http\Response::HTTP_OK);
 			} else {
-				if ($this->shouldAllowOnlyActiveUsers() && !$user->isActive()) {
+				if ($this->shouldAllowOnlyActiveUsers() && !$user->active) {
 					$response->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message($this->deniedAccess());
 				}
 				$token = $this->guard()->attempt($this->credentials($request));
@@ -169,9 +169,9 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController
 		}
 	}
 
-	protected abstract function rulesSocialLogin (): array;
+	protected abstract function rulesSocialLogin () : array;
 
-	protected function socialLogin ()
+	protected function socialLogin () : \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		try {

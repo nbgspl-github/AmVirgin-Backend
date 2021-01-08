@@ -10,9 +10,7 @@ use App\Models\Slider;
 use App\Models\Video\Video;
 use App\Resources\Shop\Customer\HomePage\TopPickResource;
 use App\Resources\Shop\Customer\HomePage\TrendingNowVideoResource;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Throwable;
 
 class HomeController extends \App\Http\Modules\Customer\Controllers\Api\ApiController
 {
@@ -81,66 +79,38 @@ class HomeController extends \App\Http\Modules\Customer\Controllers\Api\ApiContr
 		$trendingNow = TrendingNowVideoResource::collection($trendingNow);
 		$payload['trendingNow'] = $trendingNow;
 		return responseApp()->prepare(
-			$payload,
-			\Illuminate\Http\Response::HTTP_OK,
-			'Listing homepage resources.'
+			$payload, \Illuminate\Http\Response::HTTP_OK, 'Listing homepage resources.'
 		);
 	}
 
-	public function showAllItemsInSection ($id) : JsonResponse
+	public function showAllItemsInSection (\App\Models\Video\Section $section) : JsonResponse
 	{
-		$response = responseApp();
-		try {
-			$pageSection = Section::find($id);
-			if (Str::equals($pageSection->type, PageSectionType::Entertainment)) {
-				$contents = Video::startQuery()->displayable()->section($pageSection->id)->take($pageSection->visibleItemCount)->get();
-			} else {
-				$contents = Product::startQuery()->displayable()->promoted()->take($pageSection->visibleItemCount)->get();
-			}
-			$contents = TopPickResource::collection($contents);
-			$response->status(\Illuminate\Http\Response::HTTP_OK)->message(sprintf('Found %d items under %s.', $contents->count(), $pageSection->title))->setValue('data', $contents);
-		} catch (ModelNotFoundException $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find section for that key.');
-		} catch (Throwable $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
-		} finally {
-			return $response->send();
+		if (Str::equals($section->type, PageSectionType::Entertainment)) {
+			$contents = Video::startQuery()->displayable()->section($section->id)->take($section->max_items)->get();
+		} else {
+			$contents = Product::startQuery()->displayable()->promoted()->take($section->max_items)->get();
 		}
+		$contents = TopPickResource::collection($contents);
+		return responseApp()->prepare(
+			$contents, \Illuminate\Http\Response::HTTP_OK, 'Listing all items under section.'
+		);
 	}
 
 	public function trendingNow () : JsonResponse
 	{
-		$data = [];
-		try {
-			$trendingNow = Video::startQuery()->displayable()->trending()->get();
-			$trendingNow = TrendingNowVideoResource::collection($trendingNow);
-			$msg = 'No record found';
-			if (!empty($trendingNow)) {
-				$msg = 'Successfully retrieved entertainment trending now.';
-			}
-			$data['trendingNow'] = $trendingNow;
-
-			return responseApp()->status(\Illuminate\Http\Response::HTTP_OK)->message($msg)->setValue('data', $data)->send();
-
-		} catch (Throwable $e) {
-			return responseApp()->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($e)->setValue('data')->send();
-
-		}
+		$payload = Video::startQuery()->displayable()->trending()->get();
+		$payload = TrendingNowVideoResource::collection($payload);
+		return responseApp()->prepare(
+			$payload
+		);
 	}
 
 	public function recommendedVideo () : JsonResponse
 	{
-		try {
-			$trendingNow = Video::startQuery()->displayable()->orderByDescending('rating')->limit(15)->get();
-			$trendingNow = TrendingNowVideoResource::collection($trendingNow);
-			$msg = 'No record found';
-			if (!empty($trendingNow)) {
-				$msg = 'Successfully retrieved entertainment recommended video.';
-			}
-			$data['recommended'] = $trendingNow;
-			return responseApp()->status(\Illuminate\Http\Response::HTTP_OK)->message($msg)->setValue('data', $data)->send();
-		} catch (Throwable $e) {
-			return responseApp()->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($e)->setValue('data')->send();
-		}
+		$payload = Video::startQuery()->displayable()->orderByDescending('rating')->limit(15)->get();
+		$payload = TrendingNowVideoResource::collection($payload);
+		return responseApp()->prepare(
+			$payload
+		);
 	}
 }

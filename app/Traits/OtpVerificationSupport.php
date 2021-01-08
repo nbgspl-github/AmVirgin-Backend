@@ -2,13 +2,10 @@
 
 namespace App\Traits;
 
-use App\Exceptions\OtpPushException;
-use App\Models\Settings;
-
-trait OtpVerificationSupport{
-	public function generateOtp($length){
-		// TODO: remove static value
-		return 1234;
+trait OtpVerificationSupport
+{
+	public function generateOtp ($length) : int
+	{
 		switch ($length) {
 			case 5:
 				return mt_rand(11111, 99999);
@@ -29,23 +26,39 @@ trait OtpVerificationSupport{
 
 	/**
 	 * @return int
-	 * @throws OtpPushException
 	 */
-	public function sendVerificationOtp(): int{
-		$length = Settings::getInt('otpLength', 4);
-		$otp = $this->generateOtp($length);
-		$mobile = $this->getMobile();
-		return $otp;
+	public function sendVerificationOtp () : int
+	{
+		$otp = $this->generateOtp(4);
+		$client = new \GuzzleHttp\Client();
+		try {
+			$response = $client->post('https://www.bulksmsplans.com/api/send_sms', [
+				'form_params' => [
+					'api_id' => env("SMS_API_ID"),
+					'api_password' => env("SMS_API_PASSWORD"),
+					'sms_type' => 'OTP',
+					'number' => $this->mobile,
+					'message' => "Your one time password for authentication is {$otp}.",
+					'sms_encoding' => 1,
+					'sender' => env("SMS_API_SENDER"),
+				]
+			]);
+			return $otp;
+		} catch (\Throwable $e) {
+			return $otp;
+		}
 	}
 
 	/**
 	 * @return mixed
 	 */
-	public function getOtp(){
+	public function getOtp ()
+	{
 		return $this->otp;
 	}
 
-	public function setOtp($otp){
+	public function setOtp ($otp)
+	{
 		$this->otp = $otp;
 		return $this;
 	}

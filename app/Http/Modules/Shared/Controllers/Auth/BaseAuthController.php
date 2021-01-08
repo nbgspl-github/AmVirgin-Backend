@@ -194,7 +194,7 @@ abstract class BaseAuthController extends BaseController
 			$this->requestValid($request, $this->rulesLogin());
 			$conditions = $this->conditionsLogin($request);
 			$seller = $this->throwIfNotFound($conditions);
-			if ($this->shouldAllowOnlyActiveUsers() && !$seller->isActive()) {
+			if ($this->shouldAllowOnlyActiveUsers() && !$seller->active) {
 				return $this->failed()->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message($this->deniedAccess())->send();
 			}
 			$token = $this->guard()->attempt($this->credentials($request));

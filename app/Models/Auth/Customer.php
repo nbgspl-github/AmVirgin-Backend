@@ -21,6 +21,8 @@ class Customer extends \App\Library\Database\Eloquent\AuthEntity
 {
 	use \Illuminate\Database\Eloquent\SoftDeletes;
 	use \App\Traits\NotifiableViaSms;
+	use \App\Traits\OtpVerificationSupport;
+	use \App\Traits\DynamicAttributeNamedMethods;
 
 	protected $table = 'customers';
 

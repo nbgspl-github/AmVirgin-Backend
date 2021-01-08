@@ -55,7 +55,7 @@ Route::prefix('products')->group(function () {
 		Route::get(Str::Empty, [CatalogController::class, 'show']);
 		Route::prefix('reviews')->group(static function () {
 			Route::get(Str::Empty, [ProductRatingController::class, 'show']);
-			Route::post('{orderId}', [ProductRatingController::class, 'store']);
+			Route::post('{order}', [ProductRatingController::class, 'store']);
 		});
 	});
 });
@@ -91,7 +91,7 @@ Route::prefix('shop')->group(function () {
 Route::prefix('entertainment')->group(function () {
 	Route::get('homepage', [EntertainmentHomeController::class, 'index']);
 	Route::prefix('section')->group(function () {
-		Route::get('{id}', [EntertainmentHomeController::class, 'showAllItemsInSection']);
+		Route::get('{section}', [EntertainmentHomeController::class, 'showAllItemsInSection']);
 	});
 
 	Route::prefix('trending')->group(function () {

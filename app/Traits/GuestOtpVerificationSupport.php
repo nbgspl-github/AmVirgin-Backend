@@ -2,11 +2,12 @@
 
 namespace App\Traits;
 
-use App\Exceptions\OtpPushException;
 use App\Models\Settings;
 
-trait GuestOtpVerificationSupport{
-	public function generateOtp($length){
+trait GuestOtpVerificationSupport
+{
+	public function generateOtp ($length) : int
+	{
 		switch ($length) {
 			case 5:
 				return mt_rand(11111, 99999);
@@ -28,7 +29,8 @@ trait GuestOtpVerificationSupport{
 	/**
 	 * @return int
 	 */
-	public function sendGuestOtp(string $mobile): int{
+	public function sendGuestOtp (string $mobile) : int
+	{
 		$length = Settings::getInt('otpLength', 4);
 		$otp = $this->generateOtp($length);
 		return $otp;

@@ -9,7 +9,7 @@ class AuthProfileResource extends JsonResource
 {
 	protected ?string $token = null;
 
-	public function toArray ($request)
+	public function toArray ($request) : array
 	{
 		return [
 			'key' => $this->id,
@@ -50,7 +50,7 @@ class AuthProfileResource extends JsonResource
 		];
 	}
 
-	public function token (?string $token)
+	public function token (?string $token) : AuthProfileResource
 	{
 		$this->token = $token;
 		return $this;

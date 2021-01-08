@@ -23,7 +23,10 @@ class ProductRatingController extends \App\Http\Modules\Customer\Controllers\Api
 	{
 		$count = $product->ratings()->count();
 		$sum = $product->ratings()->sum('stars');
-		$stars = ($sum / (float)$count);
+		$stars = 0;
+		if ($count > 0) {
+			$stars = ($sum / (float)$count);
+		}
 		return responseApp()->prepare([
 			'title' => [
 				'text' => $this->text($stars),
@@ -40,6 +43,7 @@ class ProductRatingController extends \App\Http\Modules\Customer\Controllers\Api
 		if (!$product->ratingsBy($this->customer())->exists()) {
 			$validated = $request->validated();
 			$validated = array_merge($validated, [
+				'order_id' => $order->id,
 				'seller_id' => $product->sellerId,
 				'certified' => $order->items()->where('productId', $product->id)->exists()
 			]);
@@ -47,7 +51,7 @@ class ProductRatingController extends \App\Http\Modules\Customer\Controllers\Api
 			 * @var $review \App\Models\ProductRating
 			 */
 			$review = $product->addRatingBy($this->customer(), $validated);
-			\App\Library\Utils\Extensions\Arrays::each($validated['image'], function (\Illuminate\Http\UploadedFile $file) use (&$review) {
+			\App\Library\Utils\Extensions\Arrays::each($validated['image'] ?? [], function (\Illuminate\Http\UploadedFile $file) use (&$review) {
 				$review->images()->create([
 					'file' => $file
 				]);
