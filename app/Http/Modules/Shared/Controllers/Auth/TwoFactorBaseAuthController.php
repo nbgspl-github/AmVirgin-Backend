@@ -7,13 +7,10 @@ use App\Exceptions\OtpNotFoundException;
 use App\Exceptions\OtpPushException;
 use App\Exceptions\ResourceConflictException;
 use App\Exceptions\ValidationException;
-use App\Models\Settings;
 use App\Traits\FluentResponse;
 use App\Traits\GuestOtpVerificationSupport;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
-use Laravel\Socialite\Facades\Socialite;
 use Throwable;
 
 /**
@@ -31,19 +28,19 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController
 		'2Factor' => 3,
 	];
 
-	protected abstract function otpTarget (): string;
+	protected abstract function otpTarget () : string;
 
-	protected function shouldVerifyOtpBeforeRegister (): bool
+	protected function shouldVerifyOtpBeforeRegister () : bool
 	{
 		return true;
 	}
 
-	protected function shouldVerifyOtpBeforeLogin (): bool
+	protected function shouldVerifyOtpBeforeLogin () : bool
 	{
 		return true;
 	}
 
-	protected function exists ()
+	protected function exists () : \Illuminate\Http\JsonResponse
 	{
 		$request = request();
 		$type = $request->type;
@@ -90,7 +87,7 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController
 		}
 	}
 
-	protected function login ()
+	protected function login () : \Illuminate\Http\JsonResponse
 	{
 		$request = request();
 		$type = $request->type;
@@ -132,7 +129,7 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController
 		}
 	}
 
-	protected function register ()
+	protected function register () : \Illuminate\Http\JsonResponse
 	{
 		$request = request();
 		$type = $request->type;
@@ -169,8 +166,6 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController
 		}
 	}
 
-	protected abstract function rulesSocialLogin () : array;
-
 	protected function socialLogin () : \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
@@ -192,33 +187,5 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController
 		}
 	}
 
-	public function handleGoogleCallback ()
-	{
-		try {
-			$user = Socialite::driver('google')->user();
-			$exists = \App\Http\Controllers\User::where('email', $user->getEmail())->first();
-			if ($exists) {
-				auth()->login($exists);
-				return redirect()->route('home');
-			} else {
-				$contents = file_get_contents($user->user['picture']);
-				$avatarUrl = 'avatars' . '/' . $user->id . '.jpg';
-				Storage::disk('public')->put($avatarUrl, $contents);
-				$newUser = \App\Http\Controllers\User::create([
-					'first_name' => $user->user['given_name'],
-					'last_name' => $user->user['family_name'],
-					'email' => $user->email,
-					'google_id' => $user->id,
-					'avatar' => $avatarUrl,
-					'color' => Settings::color(),
-					'font' => Settings::font()
-				]);
-				auth()->login($newUser, true);
-				return redirect()->route('home');
-			}
-		} catch (\Throwable $e) {
-			toastError(trans("strings.google_login_failed"));
-			return redirect()->route('login');
-		}
-	}
+	protected abstract function rulesSocialLogin () : array;
 }
