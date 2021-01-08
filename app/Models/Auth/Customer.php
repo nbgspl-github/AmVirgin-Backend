@@ -5,10 +5,8 @@ namespace App\Models\Auth;
 use App\Models\Address\Address;
 use App\Models\CustomerWishlist;
 use App\Models\Order\Order;
-use App\Traits\DynamicAttributeNamedMethods;
-use App\Traits\HashPasswords;
-use App\Traits\OtpVerificationSupport;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Mail;
 
 /**
  * Class Customer
@@ -21,9 +19,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Customer extends \App\Library\Database\Eloquent\AuthEntity
 {
-	use HashPasswords;
-	use OtpVerificationSupport, DynamicAttributeNamedMethods;
 	use \Illuminate\Database\Eloquent\SoftDeletes;
+	use \App\Traits\NotifiableViaSms;
 
 	protected $table = 'customers';
 
@@ -79,5 +76,18 @@ class Customer extends \App\Library\Database\Eloquent\AuthEntity
 	public function removeFromWatchList (\App\Models\Video\Video $video)
 	{
 		$this->watchList()->where('video_id', $video->id)->delete();
+	}
+
+	public function sendPasswordResetAcknowledgement ($token, $type) : string
+	{
+		$url = null;
+		if ($type == 'email') {
+			$url = qs_url(route('customer.password.reset'), ['email' => $this->email, 'token' => $token]);
+			Mail::to($this)->send(new \App\Mail\PasswordResetMail($url));
+		} else {
+			$url = qs_url(route('customer.password.reset'), ['mobile' => $this->mobile, 'token' => $token]);
+			$this->sendTextMessage("We've received a password reset request for your account. Please visit {$url} to initiate recovery. Ignore if not initiated by you.");
+		}
+		return $url;
 	}
 }

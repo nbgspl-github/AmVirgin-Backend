@@ -2,19 +2,20 @@
 
 namespace App\Resources\Auth\Customer;
 
-use App\Library\Utils\Uploads;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AuthProfileResource extends JsonResource{
+class AuthProfileResource extends JsonResource
+{
 	protected ?string $token = null;
 
-	public function toArray($request){
+	public function toArray ($request) : array
+	{
 		return [
-			'key' => $this->id(),
-			'name' => $this->name(),
-			'email' => $this->email(),
-			'mobile' => $this->mobile(),
-			'avatar' => Uploads::existsUrl($this->avatar()),
+			'key' => $this->id,
+			'name' => $this->name,
+			'email' => $this->email,
+			'mobile' => $this->mobile,
+			'avatar' => $this->avatar,
 			'subscription' => [
 				'active' => true,
 				'plan' => [
@@ -30,7 +31,8 @@ class AuthProfileResource extends JsonResource{
 		];
 	}
 
-	public function token(string $token){
+	public function token (string $token) : AuthProfileResource
+	{
 		$this->token = $token;
 		return $this;
 	}

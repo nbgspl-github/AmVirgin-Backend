@@ -31,7 +31,7 @@ Route::prefix(Str::Empty)->group(function () {
 	});
 	Route::post('contact-us', [\App\Http\Modules\Customer\Controllers\Api\Shared\ContactUsController::class, 'store']);
 
-	Route::get('password/reset', [\App\Http\Modules\Customer\Controllers\Api\Auth\PasswordResetController::class, 'sendPasswordResetEmail']);
+	Route::get('password/reset', [\App\Http\Modules\Customer\Controllers\Api\Auth\PasswordResetController::class, 'initiate']);
 });
 
 Route::prefix('videos')->group(function () {
