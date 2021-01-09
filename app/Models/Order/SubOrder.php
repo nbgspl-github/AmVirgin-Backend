@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property ?Order $order
  * @property ?Seller $seller
  * @property Status $status
- * @property Arrayable|Item[] $items
+ * @property Arrayable|Item[] $items|Illuminate\Support\Collection
  */
 class SubOrder extends \App\Library\Database\Eloquent\Model
 {

@@ -40,7 +40,7 @@ class DashboardController extends \App\Http\Modules\Seller\Controllers\Api\ApiCo
 	protected function revenue ($sales) : float
 	{
 		$commission = $this->commission($sales);
-		return $sales - $commission;
+		return round($sales - $commission, 2);
 	}
 
 	protected function commission ($sales) : float

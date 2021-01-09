@@ -40,31 +40,30 @@ class ProductRatingController extends \App\Http\Modules\Customer\Controllers\Api
 
 	public function store (StoreRequest $request, Product $product, \App\Models\Order\Order $order) : JsonResponse
 	{
-		if (!$product->ratingsBy($this->customer())->exists()) {
+//		if (!$product->ratingsBy($this->customer())->exists()) {
 			$validated = $request->validated();
 			$validated = array_merge($validated, [
-				'order_id' => $order->id,
 				'seller_id' => $product->sellerId,
 				'certified' => $order->items()->where('productId', $product->id)->exists()
 			]);
 			/**
 			 * @var $review \App\Models\ProductRating
 			 */
-			$review = $product->addRatingBy($this->customer(), $validated);
-			\App\Library\Utils\Extensions\Arrays::each($validated['image'] ?? [], function (\Illuminate\Http\UploadedFile $file) use (&$review) {
-				$review->images()->create([
-					'file' => $file
-				]);
-			});
-			return responseApp()->prepare(
-				new \App\Http\Modules\Customer\Resources\Entertainment\Product\Review\ReviewResource($review),
-				\Illuminate\Http\Response::HTTP_OK, 'Product ratings updated successfully.'
-			);
-		} else {
-			return responseApp()->prepare(
-				null, \Illuminate\Http\Response::HTTP_CONFLICT, 'Customer has already rated/reviewed the product.'
-			);
-		}
+		$review = $product->addRatingBy($this->customer(), $validated);
+		\App\Library\Utils\Extensions\Arrays::each($validated['image'] ?? [], function (\Illuminate\Http\UploadedFile $file) use (&$review) {
+			$review->images()->create([
+				'file' => $file
+			]);
+		});
+		return responseApp()->prepare(
+			new \App\Http\Modules\Customer\Resources\Entertainment\Product\Review\ReviewResource($review),
+			\Illuminate\Http\Response::HTTP_OK, 'Product ratings updated successfully.'
+		);
+//		} else {
+//			return responseApp()->prepare(
+//				null, \Illuminate\Http\Response::HTTP_CONFLICT, 'Customer has already rated/reviewed the product.'
+//			);
+//		}
 	}
 
 	protected function text (float $stars) : string

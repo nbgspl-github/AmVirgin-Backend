@@ -3,7 +3,6 @@
 namespace App\Http\Modules\Seller\Controllers\Api\Payments;
 
 use App\Library\Enums\Orders\Status;
-use App\Models\Order\Item;
 use App\Models\Order\SubOrder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
@@ -21,16 +20,22 @@ class PaymentController extends \App\Http\Modules\Seller\Controllers\Api\ApiCont
 
 	public function index () : JsonResponse
 	{
-		$payload = $this->makePayload();
-
-		$this->query()->each(function (SubOrder $order) use (&$payload) {
-			$payload->total->prepaid += $order->total;
-			$payload->total->postpaid += $order->total;
-			$payload->total->total += $order->total;
+		$orders = $this->query()->get();
+		$orders->transform(function (SubOrder $order) {
+			return (object)[
+				'key' => $order->id,
+				'date' => $order->created_at->format(\App\Library\Utils\Extensions\Time::MYSQL_FORMAT),
+				'description' => null,
+				'quantity' => $order->quantity,
+				'sales' => $order->total,
+				'sellingFee' => $this->sellingFee($order->total),
+				'courierCharges' => $this->courierChargeOverall($order),
+				'total' => $this->grossTotal($order)
+			];
 		});
 
 		return responseApp()->prepare(
-			$payload
+			$orders
 		);
 	}
 
@@ -45,7 +50,7 @@ class PaymentController extends \App\Http\Modules\Seller\Controllers\Api\ApiCont
 	 * @param $amount
 	 * @return float
 	 */
-	protected function taxes ($amount) : float
+	protected function sellingFee ($amount) : float
 	{
 		return (0.2 * $amount);
 	}
@@ -60,7 +65,7 @@ class PaymentController extends \App\Http\Modules\Seller\Controllers\Api\ApiCont
 		return $this->shippingCost($order->items);
 	}
 
-	protected function shippingCost (Item ...$items) : float
+	protected function shippingCost (\Illuminate\Support\Collection $items) : float
 	{
 		$cost = 0.0;
 		foreach ($items as $item) {
@@ -69,53 +74,13 @@ class PaymentController extends \App\Http\Modules\Seller\Controllers\Api\ApiCont
 		return $cost;
 	}
 
-	protected function makePayload () : \stdClass
+	protected function grossTotal (SubOrder $order) : float
 	{
-		return (object)[
-			'next' => [
-				'date' => Carbon::now()->format('Y-m-d'),
-				'prepaid' => 0,
-				'postpaid' => 0,
-				'total' => 0
-			],
-			'previous' => [
-				'date' => Carbon::now()->subDays(45)->format('Y-m-d'),
-				'prepaid' => 0,
-				'postpaid' => 0,
-				'total' => 0
-			],
-			'total' => [
-				'prepaid' => 0,
-				'postpaid' => 0,
-				'total' => 0
-			]
-		];
-	}
-
-	protected function previousMonth ($includeEnd = true) : \stdClass
-	{
-		/**
-		 * If it's 10th (inclusive) of month, the effective duration is 26th of last to last month until 25th of last month.
-		 */
-		$today = Carbon::now()->day;
-		if ($today <= self::PIVOT_DAY) {
-			return (object)[
-				'from' => Carbon::now()->setDay(26)->subMonths(2),
-				'to' => null,
-				'pivot' => null
-			];
-		} else {
-			return (object)[
-				'from' => null,
-				'to' => null,
-				'pivot' => null
-			];
-		}
-	}
-
-	protected function nextMonth ($includeEnd = true) : \stdClass
-	{
-
+		$sellingFee = $this->sellingFee($order->total);
+		$shippingCost = $this->courierChargeOverall($order);
+		return (
+			$order->total - ($sellingFee + $shippingCost)
+		);
 	}
 
 	protected function lastPaymentDate () : Carbon
