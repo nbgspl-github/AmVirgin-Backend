@@ -45,7 +45,11 @@ class CodeTester extends Command
 	public function handle ()
 	{
 		$source = \App\Models\Video\Source::query()->find(1);
-		$task = new \App\Jobs\TranscoderTask($source);
-		$task->handle();
+		try {
+			$task = new \App\Jobs\TranscoderTask($source);
+			$task->handle();
+		} catch (\Throwable $exception) {
+			dd($exception);
+		}
 	}
 }
