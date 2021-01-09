@@ -44,10 +44,7 @@ class CodeTester extends Command
 
 	public function handle ()
 	{
-		/**
-		 * @var $customer \App\Models\Auth\Customer
-		 */
-		$customer = \App\Models\Auth\Customer::query()->find(18);
-		$customer->sendPasswordResetAcknowledgement(\App\Library\Utils\Extensions\Str::random(80), 'email');
+		$sub = \App\Models\Order\SubOrder::query()->find(1);
+		dd($sub->products->pluck('name')->toArray());
 	}
 }

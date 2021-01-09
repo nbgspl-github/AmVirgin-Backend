@@ -53,4 +53,9 @@ class SubOrder extends \App\Library\Database\Eloquent\Model
 	{
 		return $this->belongsTo(Order::class, 'orderId');
 	}
+
+	public function products () : \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	{
+		return $this->belongsToMany(\App\Models\Product::class, 'order_items', 'subOrderId', 'productId')->withPivot('quantity');
+	}
 }

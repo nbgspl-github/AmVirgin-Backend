@@ -2,30 +2,28 @@
 
 namespace App\Http\Modules\Seller\Controllers\Api\Payments;
 
+use App\Http\Modules\Seller\Requests\Payment\IndexRequest;
 use App\Library\Enums\Orders\Status;
 use App\Models\Order\SubOrder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Carbon;
 
 class PaymentController extends \App\Http\Modules\Seller\Controllers\Api\ApiController
 {
-	const PIVOT_DAY = 26;
-
 	public function __construct ()
 	{
 		parent::__construct();
 		$this->middleware(AUTH_SELLER);
 	}
 
-	public function index () : JsonResponse
+	public function index (IndexRequest $request) : JsonResponse
 	{
-		$orders = $this->query()->get();
+		$orders = $this->query($request)->get();
 		$orders->transform(function (SubOrder $order) {
 			return (object)[
 				'key' => $order->id,
 				'date' => $order->created_at->format(\App\Library\Utils\Extensions\Time::MYSQL_FORMAT),
-				'description' => null,
+				'description' => $this->description($order),
 				'quantity' => $order->quantity,
 				'sales' => $order->total,
 				'sellingFee' => $this->sellingFee($order->total),
@@ -39,10 +37,24 @@ class PaymentController extends \App\Http\Modules\Seller\Controllers\Api\ApiCont
 		);
 	}
 
-	protected function query () : HasMany
+	protected function query (IndexRequest $request) : HasMany
 	{
-		return $this->user()->orders()
-			->whereIn('status', [Status::Delivered]);
+		$query = $this->user()->orders()
+			->whereIn('status', [Status::Delivered])
+			->latest('created_at');
+		if ($request->has('key'))
+			$query = $query->whereKey($request->key);
+		if ($request->has(['start', 'end']))
+			$query = $query->whereBetween('created_at', [$request->start, $request->end]);
+		return $query;
+	}
+
+	protected function description (SubOrder $order) : string
+	{
+		$products = $order->products->transform(function (\App\Models\Product $product) {
+			return "{$product->pivot->quantity} x {$product->name}";
+		});
+		return \App\Library\Utils\Extensions\Str::join(' | ', $products->toArray());
 	}
 
 	/**
@@ -81,15 +93,5 @@ class PaymentController extends \App\Http\Modules\Seller\Controllers\Api\ApiCont
 		return (
 			$order->total - ($sellingFee + $shippingCost)
 		);
-	}
-
-	protected function lastPaymentDate () : Carbon
-	{
-		/**
-		 * Unless there's a last payment date available,
-		 * we consider the starting period on the day seller
-		 * registered on our portal
-		 */
-		return $this->seller()->created_at;
 	}
 }
