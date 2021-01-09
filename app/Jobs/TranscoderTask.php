@@ -8,9 +8,9 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class TranscoderTask implements ShouldQueue
+class TranscoderTask
 {
-	use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+//	use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
 	protected ?\App\Models\Video\Source $source;
 
