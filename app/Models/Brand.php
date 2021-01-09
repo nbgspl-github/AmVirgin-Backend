@@ -12,22 +12,7 @@ class Brand extends \App\Library\Database\Eloquent\Model
 	use DynamicAttributeNamedMethods, GenerateSlugs;
 
 	protected $table = 'brands';
-	protected $fillable = [
-		'name',
-		'slug',
-		'logo',
-		'website',
-		'productSaleMarketPlace',
-		'sampleMRPTagImage',
-		'isBrandOwner',
-		'documentProof',
-		'categoryId',
-		'createdBy',
-		'status',
-		'active',
-		'documentExtras',
-		'requestId'
-	];
+
 	protected $casts = [
 		'active' => 'bool',
 		'isBrandOwner' => 'bool',

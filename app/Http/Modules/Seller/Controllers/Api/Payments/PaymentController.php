@@ -54,7 +54,7 @@ class PaymentController extends \App\Http\Modules\Seller\Controllers\Api\ApiCont
 		$products = $order->products->transform(function (\App\Models\Product $product) {
 			return "{$product->pivot->quantity} x {$product->name}";
 		});
-		return \App\Library\Utils\Extensions\Str::join(' | ', $products->toArray());
+		return \App\Library\Utils\Extensions\Str::join(',', $products->toArray());
 	}
 
 	/**

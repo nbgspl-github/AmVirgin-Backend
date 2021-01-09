@@ -43,4 +43,14 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
 	{
 		return parent::decrement($column, $amount, $extra);
 	}
+
+	/**
+	 * Returns an instance of database existence validation constraint Rule.
+	 * @param string $column
+	 * @return \Illuminate\Validation\Rules\Exists
+	 */
+	public static function exists ($column = 'id') : \Illuminate\Validation\Rules\Exists
+	{
+		return \App\Library\Utils\Extensions\Rule::exists(static::tableName(), $column);
+	}
 }
