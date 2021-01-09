@@ -44,7 +44,7 @@ class CodeTester extends Command
 
 	public function handle ()
 	{
-		$sub = \App\Models\Order\SubOrder::query()->find(1);
-		dd($sub->products->pluck('name')->toArray());
+		$source = \App\Models\Video\Source::query()->find(1);
+		\App\Jobs\TranscoderTask::dispatch($source)->onQueue('default');
 	}
 }
