@@ -77,7 +77,7 @@ class HomeController extends \App\Http\Modules\Customer\Controllers\Api\ApiContr
 			->applyFilters(true)
 			->get();
 		$trendingNow = TrendingNowVideoResource::collection($trendingNow);
-		$payload['trendingNow'] = $trendingNow;
+		$payload['payload'] = $trendingNow;
 		return responseApp()->prepare(
 			$payload, \Illuminate\Http\Response::HTTP_OK, 'Listing homepage resources.'
 		);

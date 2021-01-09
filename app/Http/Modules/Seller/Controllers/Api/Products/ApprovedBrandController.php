@@ -22,15 +22,10 @@ class ApprovedBrandController extends \App\Http\Modules\Seller\Controllers\Api\A
 
 	public function index () : JsonResponse
 	{
-		$response = responseApp();
-		try {
-			$brands = Brand::startQuery()->seller($this->userId())->get();
-			$brandCollection = ListResource::collection($brands);
-			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Listing all brands by you.')->setValue('payload', $brandCollection);
-		} catch (\Throwable $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
-		} finally {
-			return $response->send();
-		}
+		$brands = Brand::startQuery()->seller($this->userId())->latest()->get();
+		$brandCollection = ListResource::collection($brands);
+		return responseApp()->prepare(
+			$brandCollection, \Illuminate\Http\Response::HTTP_OK, 'Listing all brands by you.'
+		);
 	}
 }

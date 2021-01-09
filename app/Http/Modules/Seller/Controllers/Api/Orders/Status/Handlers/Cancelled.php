@@ -34,7 +34,9 @@ class Cancelled implements Action
 	{
 		$order->update([
 			'status' => Status::Cancelled,
-			'cancelled_at' => Time::mysqlStamp()
+			'cancelled_at' => Time::mysqlStamp(),
+			'cancelled_by' => 'Seller',
+			'cancellation_reason' => 'Seller cancelled the order.'
 		]);
 		$main = $order->order;
 		if ($main != null && ($main->subOrders()->where('status', Status::Cancelled)->count() == $main->subOrders()->count())) {
