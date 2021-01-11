@@ -33,23 +33,9 @@ class CodeTester extends Command
 		parent::__construct();
 	}
 
-	public function handleX () : void
-	{
-		$source = 'public/videos/video.mp4';
-		$destination = 'public/videos/video_converted.mp4';
-		$lowBitrate = (new X264('aac'))->setKiloBitrate(250);
-		$midBitrate = (new X264('aac'))->setKiloBitrate(500);
-		$highBitrate = (new X264('aac'))->setKiloBitrate(1000);
-	}
-
 	public function handle ()
 	{
 		$source = \App\Models\Video\Source::query()->find(1);
-		try {
-			$task = new \App\Jobs\TranscoderTask($source);
-			$task->handle();
-		} catch (\Throwable $exception) {
-			dd($exception);
-		}
+		\App\Jobs\TranscoderTask::dispatch($source)->onQueue('default');
 	}
 }
