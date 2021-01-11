@@ -4,6 +4,14 @@ namespace App\Http\Modules\Customer\Resources\Entertainment\Series;
 
 class SeriesResource extends \Illuminate\Http\Resources\Json\JsonResource
 {
+	protected $marked = false;
+
+	public function __construct ($resource, bool $marked = false)
+	{
+		parent::__construct($resource);
+		$this->marked = $marked;
+	}
+
 	public function toArray ($request) : array
 	{
 		return [
@@ -21,6 +29,7 @@ class SeriesResource extends \Illuminate\Http\Resources\Json\JsonResource
 			'type' => $this->type,
 			'subscriptionType' => $this->subscription_type,
 			'price' => $this->price,
+			'marked' => $this->marked,
 			'seasons' => $this->seasons(),
 			'episodes' => $this->episodes()
 		];

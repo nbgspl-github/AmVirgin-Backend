@@ -15,13 +15,14 @@ class VideoController extends \App\Http\Modules\Customer\Controllers\Api\ApiCont
 
 	public function show (Video $video) : JsonResponse
 	{
-		if ($this->customer() != null)
-			$this->customer()->addToWatchList($video);
+		$markedForWatchLater = (
+			$this->customer() != null && $this->customer()->hasOnWatchLaterList($video)
+		);
 		$video->increment('hits');
 		return responseApp()->prepare(
 			$video->type->is(Types::Movie)
-				? new \App\Http\Modules\Customer\Resources\Entertainment\Video\VideoResource($video)
-				: new \App\Http\Modules\Customer\Resources\Entertainment\Series\SeriesResource($video)
+				? (new \App\Http\Modules\Customer\Resources\Entertainment\Video\VideoResource($video, $markedForWatchLater))
+				: (new \App\Http\Modules\Customer\Resources\Entertainment\Series\SeriesResource($video, $markedForWatchLater))
 		);
 	}
 }

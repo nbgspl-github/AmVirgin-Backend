@@ -4,6 +4,14 @@ namespace App\Http\Modules\Customer\Resources\Entertainment\Video;
 
 class VideoResource extends \Illuminate\Http\Resources\Json\JsonResource
 {
+	protected $marked = false;
+
+	public function __construct ($resource, bool $marked = false)
+	{
+		parent::__construct($resource);
+		$this->marked = $marked;
+	}
+
 	public function toArray ($request) : array
 	{
 		return [
@@ -23,6 +31,7 @@ class VideoResource extends \Illuminate\Http\Resources\Json\JsonResource
 			'subscriptionType' => $this->subscription_type,
 			'price' => $this->price,
 			'seasons' => 0,
+			'marked' => $this->marked,
 			'sources' => [
 				'video' => $this->video(),
 				'audio' => $this->audio(),

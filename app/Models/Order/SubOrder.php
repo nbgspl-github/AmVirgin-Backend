@@ -68,9 +68,19 @@ class SubOrder extends \App\Library\Database\Eloquent\Model
 
 	/*<--Instance Methods-->*/
 
+	public function description () : string
+	{
+		$products = $this->products->transform(function (\App\Models\Product $product) {
+			return "{$product->pivot->quantity} x {$product->name}";
+		});
+		return \App\Library\Utils\Extensions\Str::join(',', $products->toArray());
+	}
+
 	public function courierCharge () : float
 	{
-		return $this->items->sum(fn (Item $item) => $item->product->shippingCost() ?? 0.0);
+		return $this->items->sum(fn (
+			Item $item) => $item->product != null ? $item->product->shippingCost() : 0.0
+		);
 	}
 
 	public function sellingFee () : float

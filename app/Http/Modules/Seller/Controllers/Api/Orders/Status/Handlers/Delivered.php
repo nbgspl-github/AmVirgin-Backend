@@ -27,13 +27,14 @@ class Delivered implements Action
 	{
 		$order->update(array_merge(['status' => $next->value], $extra));
 		$order->payments()->create([
+			'description' => $order->description(),
 			'order_id' => $order->order->id,
-			'seller_id' => $order->seller_id,
+			'seller_id' => $order->sellerId,
 			'quantity' => $order->quantity,
 			'sales' => $order->total,
-			'sellingFee' => $order->sellingFee(),
+			'selling_fee' => $order->sellingFee(),
 			'courierCharges' => $order->courierCharge(),
-			'total' => $this->grossTotal($order)
+			'total' => $order->grossTotal()
 		]);
 		return responseApp()->status(Response::HTTP_OK)->message('Action performed successfully!');
 	}

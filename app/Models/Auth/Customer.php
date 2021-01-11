@@ -68,6 +68,11 @@ class Customer extends \App\Library\Database\Eloquent\AuthEntity
 		return $this->watchList()->where('watched', false);
 	}
 
+	public function hasOnWatchLaterList (\App\Models\Video\Video $video) : bool
+	{
+		return $this->watchLaterList()->where('video_id', $video->id)->exists();
+	}
+
 	public function addToWatchList (\App\Models\Video\Video $video, bool $later = false)
 	{
 		$this->watchList()->updateOrCreate(
