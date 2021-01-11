@@ -43,7 +43,7 @@ class TranscoderTask
 				$transcoder->addFormat($format);
 			}
 		);
-		$transcoder->toDisk('secured')->save('videos/hls_streams/' . $this->exportPath());
+		$transcoder->toDisk('secured')->save($this->exportPath());
 		$this->source->update(['file' => $this->exportPath()]);
 	}
 
@@ -53,6 +53,6 @@ class TranscoderTask
 		if (is_array($filename)) {
 			return "{$filename[0]}.{$this->hlsExtension}";
 		}
-		return "{$filename}.{$this->hlsExtension}";
+		return "videos/hls_streams/{$filename}.{$this->hlsExtension}";
 	}
 }
