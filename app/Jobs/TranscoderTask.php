@@ -43,7 +43,7 @@ class TranscoderTask
 				$transcoder->addFormat($format);
 			}
 		);
-		$transcoder->toDisk('secured')->save('video/hls_streams/' . $this->exportPath());
+		$transcoder->toDisk('secured')->save('videos/hls_streams/' . $this->exportPath());
 		$this->source->update(['file' => $this->exportPath()]);
 	}
 
