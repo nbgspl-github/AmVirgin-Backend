@@ -24,6 +24,8 @@ class SubOrder extends \App\Library\Database\Eloquent\Model
 
 	protected $casts = ['status' => Status::class];
 
+	/*<--Relationships & Query builders-->*/
+
 	public function items () : HasMany
 	{
 		return $this->hasMany(Item::class, 'subOrderId');
@@ -57,5 +59,31 @@ class SubOrder extends \App\Library\Database\Eloquent\Model
 	public function products () : \Illuminate\Database\Eloquent\Relations\BelongsToMany
 	{
 		return $this->belongsToMany(\App\Models\Product::class, 'order_items', 'subOrderId', 'productId')->withPivot('quantity');
+	}
+
+	public function payments () : HasMany
+	{
+		return $this->hasMany(\App\Models\SellerPayment::class, 'sub_order_id');
+	}
+
+	/*<--Instance Methods-->*/
+
+	public function courierCharge () : float
+	{
+		return $this->items->sum(fn (Item $item) => $item->product->shippingCost() ?? 0.0);
+	}
+
+	public function sellingFee () : float
+	{
+		return (0.2 * $this->total);
+	}
+
+	public function grossTotal () : float
+	{
+		$sellingFee = $this->sellingFee();
+		$shippingCost = $this->courierCharge();
+		return (
+			$this->total - ($sellingFee + $shippingCost)
+		);
 	}
 }

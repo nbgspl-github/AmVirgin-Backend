@@ -26,9 +26,9 @@ class PaymentController extends \App\Http\Modules\Seller\Controllers\Api\ApiCont
 				'description' => $this->description($order),
 				'quantity' => $order->quantity,
 				'sales' => $order->total,
-				'sellingFee' => $this->sellingFee($order->total),
-				'courierCharges' => $this->courierChargeOverall($order),
-				'total' => $this->grossTotal($order)
+				'sellingFee' => $order->sellingFee(),
+				'courierCharges' => $order->courierCharge(),
+				'total' => $order->grossTotal()
 			];
 		});
 
@@ -55,43 +55,5 @@ class PaymentController extends \App\Http\Modules\Seller\Controllers\Api\ApiCont
 			return "{$product->pivot->quantity} x {$product->name}";
 		});
 		return \App\Library\Utils\Extensions\Str::join(',', $products->toArray());
-	}
-
-	/**
-	 * Calculate and return sum of all applicable taxes.
-	 * @param $amount
-	 * @return float
-	 */
-	protected function sellingFee ($amount) : float
-	{
-		return (0.2 * $amount);
-	}
-
-	/**
-	 * Calculate and return courier charges on this order.
-	 * @param SubOrder $order
-	 * @return float
-	 */
-	protected function courierChargeOverall (SubOrder $order) : float
-	{
-		return $this->shippingCost($order->items);
-	}
-
-	protected function shippingCost (\Illuminate\Support\Collection $items) : float
-	{
-		$cost = 0.0;
-		foreach ($items as $item) {
-			$cost += $item->product->shippingCost() ?? 0.0;
-		}
-		return $cost;
-	}
-
-	protected function grossTotal (SubOrder $order) : float
-	{
-		$sellingFee = $this->sellingFee($order->total);
-		$shippingCost = $this->courierChargeOverall($order);
-		return (
-			$order->total - ($sellingFee + $shippingCost)
-		);
 	}
 }

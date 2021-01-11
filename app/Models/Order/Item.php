@@ -20,10 +20,8 @@ class Item extends \App\Library\Database\Eloquent\Model
 	use DynamicAttributeNamedMethods;
 
 	protected $table = 'order_items';
-
 	protected $casts = ['options' => 'array', 'returnable' => 'bool'];
 	protected $dates = ['returnValidUntil'];
-
 
 	public function product () : \Illuminate\Database\Eloquent\Relations\HasOne
 	{
@@ -43,5 +41,10 @@ class Item extends \App\Library\Database\Eloquent\Model
 	public function rating () : \Illuminate\Database\Eloquent\Relations\HasOne
 	{
 		return $this->hasOne(\App\Models\ProductRating::class, 'order_id');
+	}
+
+	public function shippingCost () : float
+	{
+		return $this->product->shippingCost() ?? 0.0;
 	}
 }
