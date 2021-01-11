@@ -27,7 +27,7 @@ class SourceController extends \App\Http\Modules\Admin\Controllers\Web\WebContro
 		} else {
 			$source = $video->sources()->create($request->validated());
 		}
-		\App\Jobs\TranscoderTask::dispatch($source)->delay(now()->addMinutes(5));
+		\App\Jobs\TranscoderTask::dispatch($source)->onQueue('default')->delay(now()->addMinutes(5));
 		return response()->json([
 			'message' => 'Created video source successfully.'
 		]);
