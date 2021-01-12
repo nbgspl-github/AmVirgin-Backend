@@ -33,6 +33,7 @@ class ProductRatingController extends \App\Http\Modules\Customer\Controllers\Api
 		if (!$product->ratingsBy($this->customer())->exists()) {
 			$validated = $request->validated();
 			$validated = array_merge($validated, [
+				'order_id' => $order->id,
 				'seller_id' => $product->sellerId,
 				'certified' => $order->items()->where('productId', $product->id)->exists()
 			]);

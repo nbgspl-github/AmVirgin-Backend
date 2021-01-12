@@ -34,8 +34,8 @@ class Order extends \App\Library\Database\Eloquent\Model
 			$prefix = 'AVG';
 			$major = date('Ymd');
 			$minor = date('His');
-			$suffix = mt_rand(100, 999);
-			$order->orderNumber = ("{$prefix}-{$major}-{$minor}-{$suffix}");
+			$suffix = mt_rand(499, 999);
+			$order->orderNumber = ("{$major}-{$minor}-{$suffix}");
 		});
 	}
 

@@ -24,6 +24,17 @@ class SubOrder extends \App\Library\Database\Eloquent\Model
 
 	protected $casts = ['status' => Status::class];
 
+	protected static function boot ()
+	{
+		parent::boot();
+		self::creating(function (SubOrder $order) {
+			$major = date('Ymd');
+			$minor = date('His');
+			$suffix = 100 + Order::query()->whereKey($order->orderId)->count('id');
+			$order->orderNumber = ("{$major}-{$minor}-{$suffix}");
+		});
+	}
+
 	/*<--Relationships & Query builders-->*/
 
 	public function items () : HasMany

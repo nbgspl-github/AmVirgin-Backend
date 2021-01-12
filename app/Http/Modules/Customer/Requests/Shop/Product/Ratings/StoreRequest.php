@@ -7,7 +7,7 @@ class StoreRequest extends \Illuminate\Foundation\Http\FormRequest
 	public function rules () : array
 	{
 		return [
-			'review' => 'bail|nullable|string|max:255',
+			'review' => 'bail|nullable|string|max:2048',
 			'stars' => 'bail|required|numeric|min:0.11|max:5.00',
 			'image.*' => ['bail', 'nullable', 'image', 'max:2048']
 		];
