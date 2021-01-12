@@ -2,10 +2,12 @@
 
 namespace App\Models\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
-class SellerTransaction extends Model
+class SellerTransaction extends \App\Library\Database\Eloquent\Model
 {
-	use HasFactory;
+	protected $dates = ['paid_at'];
+
+	public function payments () : \Illuminate\Database\Eloquent\Relations\HasMany
+	{
+		return $this->hasMany(\App\Models\SellerPayment::class, 'transaction_id');
+	}
 }

@@ -2,8 +2,7 @@
 
 namespace App\Http\Modules\Seller\Controllers\Api\Payments;
 
-use App\Library\Utils\Extensions\Str;
-use App\Resources\Payments\Transactions\Seller\ListResource;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
 
 class TransactionController extends \App\Http\Modules\Seller\Controllers\Api\ApiController
@@ -12,24 +11,25 @@ class TransactionController extends \App\Http\Modules\Seller\Controllers\Api\Api
 	{
 		parent::__construct();
 		$this->middleware(AUTH_SELLER);
-		$this->rules = [
-			'index' => [
-				'transactionId' => ['bail', 'sometimes', 'string', 'min:2', 'max:25']
-			]
-		];
 	}
 
-	public function index () : JsonResponse
+	public function index (\App\Http\Modules\Seller\Requests\Transaction\IndexRequest $request) : JsonResponse
 	{
-		$validated = $this->validate($this->rules['index']);
 		return responseApp()->prepare(
-			ListResource::collection(
-				$this->seller()->orders()->distinct()
-					->join('transactions', 'sub_orders.orderId', '=', 'transactions.orderId')
-					->whereLike('transactions.rzpOrderId', $validated['transactionId'] ?? Str::Empty)
-					->select(['sub_orders.orderId as orderId', 'rzpOrderId', 'transactions.verified as verified', 'amountRequested', 'amountReceived', 'transactions.created_at as created_at'])
-					->paginate($this->paginationChunk())
+			\App\Http\Modules\Seller\Resources\Transaction\TransactionResource::collection(
+				$this->query($request)->paginate()
 			)->response()->getData()
 		);
+	}
+
+	protected function query (\App\Http\Modules\Seller\Requests\Transaction\IndexRequest $request) : HasMany
+	{
+		$query = $this->seller()->transactions()
+			->latest('created_at');
+		if ($request->has('referenceId'))
+			$query = $query->where('reference_id', $request->referenceId);
+		if ($request->has(['start', 'end']))
+			$query = $query->whereBetween('paid_at', [$request->start, $request->end]);
+		return $query;
 	}
 }

@@ -18,8 +18,8 @@ class PaymentController extends \App\Http\Modules\Seller\Controllers\Api\ApiCont
 	{
 		return responseApp()->prepare(
 			\App\Http\Modules\Seller\Resources\Payment\PaymentResource::collection(
-				$this->query($request)->get()
-			)
+				$this->query($request)->paginate()
+			)->response()->getData()
 		);
 	}
 

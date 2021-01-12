@@ -80,4 +80,9 @@ class Seller extends \App\Library\Database\Eloquent\AuthEntity
 	{
 		return $this->hasMany(SellerPayment::class);
 	}
+
+	public function transactions () : HasMany
+	{
+		return $this->hasMany(\App\Models\Models\SellerTransaction::class);
+	}
 }
