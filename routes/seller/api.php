@@ -60,8 +60,8 @@ Route::post('change-email-token', [AuthController::class, 'getChangeEmailToken']
 Route::post('reset-password-token', [AuthController::class, 'getResetPasswordToken']);
 
 Route::prefix('categories')->group(function () {
-	Route::get('/', [CategoryController::class, 'index'])->name('seller.categories.index');
-	Route::get('/{id}/attributes', [ListController::class, 'show'])->name('seller.categories.attributes.index');
+	Route::get(Str::Empty, [CategoryController::class, 'index'])->name('seller.categories.index');
+	Route::get('{category}/attributes', [ListController::class, 'show'])->name('seller.categories.attributes.index');
 });
 
 Route::prefix('attributes')->group(function () {

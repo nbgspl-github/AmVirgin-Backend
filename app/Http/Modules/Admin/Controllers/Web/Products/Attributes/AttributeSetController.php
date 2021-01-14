@@ -4,12 +4,9 @@ namespace App\Http\Modules\Admin\Controllers\Web\Products\Attributes;
 
 use App\Exceptions\ValidationException;
 use App\Http\Modules\Shared\Controllers\BaseController;
-use App\Library\Enums\Common\Tables;
 use App\Library\Utils\Extensions\Arrays;
-use App\Library\Utils\Extensions\Rule;
 use App\Models\Attribute;
 use App\Models\AttributeSet;
-use App\Models\AttributeSetItem;
 use App\Models\Category;
 use App\Traits\ValidatesRequest;
 use Throwable;
@@ -25,10 +22,8 @@ class AttributeSetController extends BaseController
 		parent::__construct();
 		$this->rules = [
 			'store' => [
-				'name' => ['bail', 'required', 'string', 'min:1', 'max:255'],
-				'categoryId' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)],
+				'categoryId' => ['bail', 'required', Category::exists()],
 				'selected' => ['bail', 'required'],
-				'groups' => ['bail', 'required'],
 			],
 		];
 	}
@@ -51,15 +46,15 @@ class AttributeSetController extends BaseController
 					$vertical = $subCategory->children()->orderBy('name')->get();
 					$vertical->transform(function (Category $vertical) {
 						return [
-							'key' => $vertical->id(),
-							'name' => $vertical->name(),
-							'type' => $vertical->type(),
+							'key' => $vertical->id,
+							'name' => $vertical->name,
+							'type' => $vertical->type,
 						];
 					});
 					return [
-						'key' => $subCategory->id(),
-						'name' => $subCategory->name(),
-						'type' => $subCategory->type(),
+						'key' => $subCategory->id,
+						'name' => $subCategory->name,
+						'type' => $subCategory->type,
 						'children' => [
 							'available' => $vertical->count() > 0,
 							'count' => $vertical->count(),
@@ -68,9 +63,9 @@ class AttributeSetController extends BaseController
 					];
 				});
 				return [
-					'key' => $category->id(),
-					'name' => $category->name(),
-					'type' => $category->type(),
+					'key' => $category->id,
+					'name' => $category->name,
+					'type' => $category->type,
 					'children' => [
 						'available' => $subCategory->count() > 0,
 						'count' => $subCategory->count(),
@@ -79,9 +74,9 @@ class AttributeSetController extends BaseController
 				];
 			});
 			return [
-				'key' => $root->id(),
-				'name' => $root->name(),
-				'type' => $root->type(),
+				'key' => $root->id,
+				'name' => $root->name,
+				'type' => $root->type,
 				'children' => [
 					'available' => $category->count() > 0,
 					'count' => $category->count(),
@@ -97,21 +92,15 @@ class AttributeSetController extends BaseController
 		$response = responseWeb();
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['store']);
-			$attributeSet = AttributeSet::create([
-				'name' => $validated->name,
-				'categoryId' => $validated->categoryId,
-			]);
-			$index = 0;
-			Arrays::each($validated->selected, function ($attributeId) use ($attributeSet, $validated, &$index) {
-				AttributeSetItem::updateOrCreate(
+			Arrays::each($validated->selected, function ($attributeId) use ($validated) {
+				AttributeSet::query()->updateOrCreate(
 					[
-						'attributeSetId' => $attributeSet->id(),
-						'attributeId' => $attributeId,
+						'category_id' => $validated->categoryId,
+						'attribute_id' => $attributeId,
 					],
 					[
-						'attributeSetId' => $attributeSet->id(),
-						'attributeId' => $attributeId,
-						'group' => $validated->groups[$index++],
+						'category_id' => $validated->categoryId,
+						'attribute_id' => $attributeId,
 					]
 				);
 			});

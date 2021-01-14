@@ -12,7 +12,6 @@ use App\Traits\GenerateSlugs;
 use App\Traits\HasSpecialAttributes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Spatie\Sluggable\SlugOptions;
@@ -39,14 +38,14 @@ class Category extends \App\Library\Database\Eloquent\Model
 		'Inactive' => 'in-active',
 	];
 
-	public function attributes () : HasMany
+	public function attributes () : \Illuminate\Database\Eloquent\Relations\BelongsToMany
 	{
-		return $this->hasMany(Attribute::class, 'categoryId');
+		return $this->belongsToMany(Attribute::class, AttributeSet::tableName());
 	}
 
-	public function attributeSet () : HasOne
+	public function attributeSet () : \Illuminate\Database\Eloquent\Relations\BelongsToMany
 	{
-		return $this->hasOne(AttributeSet::class, 'categoryId');
+		return $this->belongsToMany(Attribute::class, AttributeSet::tableName());
 	}
 
 	public function children () : HasMany
@@ -131,10 +130,5 @@ class Category extends \App\Library\Database\Eloquent\Model
 	public function getSlugOptions () : SlugOptions
 	{
 		return SlugOptions::create()->saveSlugsTo('slug')->generateSlugsFrom('name');
-	}
-
-	public function getParentKeyName ()
-	{
-		return 'parentId';
 	}
 }

@@ -2,9 +2,22 @@
 @section('content')
 	<div class="row">
 		<div class="col-12">
-			<div class="card shadow-sm custom-card">
+			<div class="card shadow-sm">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Customers','action'=>null])
+					<div class="row">
+						<div class="col-8">
+							<h5 class="page-title animatable">Customers</h5>
+						</div>
+						<div class="col-4 my-auto">
+							<form action="{{route('admin.customers.index')}}">
+								<div class="form-row float-right">
+									<div class="col-auto my-1">
+										<input type="text" name="query" class="form-control" id="inlineFormCustomSelect" value="{{request('query')}}" placeholder="Type & hit enter">
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
 				</div>
 				<div class="card-body animatable">
 					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -48,10 +61,6 @@
 
 @section('javascript')
 	<script type="application/javascript">
-		$(document).ready(() => {
-
-		});
-
 		showDetails = key => {
 			setLoading(true, () => {
 				axios.get(`/admin/customers/${key}`)

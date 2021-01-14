@@ -42,32 +42,38 @@ class Handler extends ExceptionHandler
 
 	public function render ($request, Throwable $e)
 	{
-		if ($this->respondWithJson($request)) {
-			if ($e instanceof ModelNotFoundException || $e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
-				return response()->json(['status' => Response::HTTP_NOT_FOUND, 'payload' => null], Response::HTTP_NOT_FOUND);
-			} elseif ($e instanceof ActionNotAllowedException) {
-				return response()->json(['status' => Response::HTTP_FORBIDDEN, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_OK);
-			} elseif ($e instanceof ActionInvalidException) {
-				return response()->json(['status' => Response::HTTP_NOT_MODIFIED, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_OK);
-			} else if ($e instanceof \ErrorException) {
-				return response()->json(['status' => Response::HTTP_INTERNAL_SERVER_ERROR, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_OK);
-			} else if ($e instanceof ValidationException) {
-				return response()->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => $e->getError(), 'payload' => null], Response::HTTP_BAD_REQUEST);
-			} else if ($e instanceof \Illuminate\Validation\ValidationException) {
-				return response()->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => $e->validator->errors()->first(), 'payload' => null], Response::HTTP_BAD_REQUEST);
+		dd($e);
+		try {
+			if ($this->respondWithJson($request)) {
+				if ($e instanceof ModelNotFoundException || $e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+					return response()->json(['status' => Response::HTTP_NOT_FOUND, 'payload' => null], Response::HTTP_NOT_FOUND);
+				} elseif ($e instanceof ActionNotAllowedException) {
+					return response()->json(['status' => Response::HTTP_FORBIDDEN, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_OK);
+				} elseif ($e instanceof ActionInvalidException) {
+					return response()->json(['status' => Response::HTTP_NOT_MODIFIED, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_OK);
+				} else if ($e instanceof \ErrorException) {
+					return response()->json(['status' => Response::HTTP_INTERNAL_SERVER_ERROR, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_OK);
+				} else if ($e instanceof ValidationException) {
+					return response()->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => $e->getError(), 'payload' => null], Response::HTTP_BAD_REQUEST);
+				} else if ($e instanceof \Illuminate\Validation\ValidationException) {
+					return response()->json(['status' => Response::HTTP_BAD_REQUEST, 'message' => $e->validator->errors()->first(), 'payload' => null], Response::HTTP_BAD_REQUEST);
+				} else {
+					return response()->json(['status' => Response::HTTP_INTERNAL_SERVER_ERROR, 'message' => $e->getMessage(), 'payload' => null, 'exception' => $e->getTrace()], Response::HTTP_INTERNAL_SERVER_ERROR);
+				}
 			} else {
-				return response()->json(['status' => Response::HTTP_INTERNAL_SERVER_ERROR, 'message' => $e->getMessage(), 'payload' => null, 'exception' => $e->getTrace()], Response::HTTP_INTERNAL_SERVER_ERROR);
+				if ($e instanceof \Illuminate\Validation\ValidationException) {
+					return redirect()->back()->with('error', $e->validator->errors()->first());
+				} elseif ($e instanceof ModelNotFoundException) {
+					return redirect()->back()->with('error', 'The resource you\'re trying to access does not exist.')->setStatusCode(Response::HTTP_NOT_FOUND);
+				} elseif ($e instanceof \ErrorException) {
+					return redirect()->back()->with('error', $e->getMessage())->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
+				} else {
+					return parent::render($request, $e);
+				}
 			}
-		} else {
-			if ($e instanceof \Illuminate\Validation\ValidationException) {
-				return redirect()->back()->with('error', $e->validator->errors()->first());
-			} elseif ($e instanceof ModelNotFoundException) {
-				return redirect()->back()->with('error', 'The resource you\'re trying to access does not exist.')->setStatusCode(Response::HTTP_NOT_FOUND);
-			} elseif ($e instanceof \ErrorException) {
-				return redirect()->back()->with('error', $e->getMessage())->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
-			} else {
-				return parent::render($request, $e);
-			}
+		} catch (Throwable $exception) {
+
+			return $exception->getMessage();
 		}
 	}
 

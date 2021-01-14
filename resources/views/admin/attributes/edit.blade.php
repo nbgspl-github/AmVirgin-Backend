@@ -25,16 +25,6 @@
 												<i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Attribute description as will appear to seller'])></i></label>
 											<textarea id="description" name="description" class="form-control" required placeholder="Type attribute description here">{{old('description')}}</textarea>
 										</div>
-										<div class="form-group">
-											<label for="group">@required (Group)
-												<i class="mdi mdi-help-circle-outline"></i></label>
-											<select name="group" id="group" class="form-control selectpicker" title="Choose..." required>
-												<option value="Main">Main</option>
-												<option value="Material & Care">Material & Care</option>
-												<option value="Size & Fit">Size & Fit</option>
-												<option value="Specifications">Specifications</option>
-											</select>
-										</div>
 										<div class="card custom-card p-3 shadow-none mb-3">
 											<div class="form-group">
 												<label>Allow entering multiple values?

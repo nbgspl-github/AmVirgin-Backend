@@ -22,8 +22,9 @@ class CustomerController extends \App\Http\Modules\Admin\Controllers\Web\WebCont
 
 	public function index ()
 	{
-		return view('admin.customers.index')->with(
-			'users', $this->model->newQuery()->latest()->paginate($this->paginationChunk())
+		return view('admin.customers.index')->with('users',
+			$this->paginateWithQuery(
+				$this->model->newQuery()->latest()->whereLike('name', $this->queryParameter()))
 		);
 	}
 
@@ -55,9 +56,7 @@ class CustomerController extends \App\Http\Modules\Admin\Controllers\Web\WebCont
 	public function update (UpdateRequest $request, Customer $customer) : \Illuminate\Http\RedirectResponse
 	{
 		$customer->update($request->validated());
-		return redirect()->route(
-			'admin.customers.index'
-		)->with('success', 'Customer details updated successfully.');
+		return redirect()->route('admin.customers.index')->with('success', 'Customer details updated successfully.');
 	}
 
 	/**
@@ -65,7 +64,7 @@ class CustomerController extends \App\Http\Modules\Admin\Controllers\Web\WebCont
 	 * @return \Illuminate\Http\JsonResponse
 	 * @throws \Exception
 	 */
-	public function destroy (Customer $customer) : \Illuminate\Http\JsonResponse
+	public function delete (Customer $customer) : \Illuminate\Http\JsonResponse
 	{
 		$customer->delete();
 		return response()->json(

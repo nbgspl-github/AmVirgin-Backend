@@ -13,10 +13,12 @@
 						<div class="row">
 							<div class="col-sm-12 col-md-8 mx-auto">
 								<div class="card shadow-none" style="border: 1px solid rgba(180,185,191,0.4);">
-									<div class="card-header text-white bg-secondary">
+									<div class="card-header bg-secondary">
 										<div class="row">
 											<div class="col-8 my-auto">Attributes sets define characteristic for a particular type of product.</div>
-											<div class="col-4"><input type="text" class="form-control" name="" id="" placeholder="Search for an attribute" onkeyup="handleSearch(this.value);"></div>
+											<div class="col-4">
+												<input type="text" class="form-control" name="" id="" placeholder="Search for an attribute" onkeyup="handleSearch(this.value);">
+											</div>
 										</div>
 									</div>
 									<div class="card-body">
@@ -51,13 +53,8 @@
 											</ul>
 										</div>
 										<div class="form-group">
-											<label for="name">@required (Name) <i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Attribute label or name as will appear to admin, seller and customer'])></i></label>
-											<input id="name" type="text" name="name" class="form-control" required placeholder="Type a name" value="{{old('name')}}"/>
-										</div>
-										<div class="form-group">
 											<label>@required(Category)</label>
-											<select name="categoryId" class="form-control" id="categoryId" required>
-												<option value="" disabled selected>Choose</option>
+											<select name="categoryId" class="form-control selectpicker" id="categoryId" title="Choose..." required>
 												@foreach($roots as $root)
 													@foreach($root['children']['items'] as $category)
 														<option value="{{ $category['key'] }}" data-type="{{$category['type']}}" id="option-item-{{$category['key']}}">{{$root['name']}} ► {{$category['name']}}</option>
@@ -81,7 +78,6 @@
 														<th scope="col">Label</th>
 														<th scope="col">Code</th>
 														<th scope="col">Values</th>
-														<th scope="col">Group</th>
 													</tr>
 													</thead>
 													<tbody>
@@ -99,13 +95,6 @@
 															<td>{{$attribute->code()}}</td>
 															<td>
 																<span class="badge badge-secondary font-14">{{\App\Library\Utils\Extensions\Str::join(', ',$attribute->values())}}</span>
-															</td>
-															<td>
-																<select name="groups[]" id="{{$attribute->id()}}" class="form-control" disabled>
-																	@foreach(\App\Models\AttributeSet::Groups as $group)
-																		<option value="{{$group}}">{{$group}}</option>
-																	@endforeach
-																</select>
 															</td>
 														</tr>
 													@endforeach

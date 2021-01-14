@@ -1,13 +1,14 @@
-/*@import url(https://fonts.googleapis.com/css?family="Nunito":400,600,700);*/
-/*@import url('https://fonts.googleapis.com/css?family="Nunito"&display=swap');*/
-/*@import url('https://fonts.googleapis.com/css?family=Nunito+Sans&display=swap');*/
-/*@import url('https://fonts.googleapis.com/css?family=Nunito+Sans:400,600,700&display=swap');*/
+/*@import url(https://fonts.googleapis.com/css?family="Mukta":400,600,700);*/
+/*@import url('https://fonts.googleapis.com/css?family="Mukta"&display=swap');*/
+/*@import url('https://fonts.googleapis.com/css?family=Mukta+Sans&display=swap');*/
+/*@import url('https://fonts.googleapis.com/css?family=Mukta+Sans:400,600,700&display=swap');*/
 /*@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap');*/
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap');
+/*@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@300;400;600;700&display=swap');*/
+@import url("https://fonts.googleapis.com/css?family=Mukta:400,600,700");
 
 body {
     background: #f2f5f7;
-    font-family: "Nunito", sans-serif;
+    font-family: "Mukta", sans-serif;
     margin: 0;
     font-size: 15px;
     color: #4e4a4a
@@ -23,7 +24,7 @@ html {
 h1, h2, h3, h4, h5, h6 {
     /*margin: 10px 0;*/
     font-weight: 600;
-    font-family: "Nunito", sans-serif
+    font-family: "Mukta", sans-serif
 }
 
 h1 {
@@ -1561,7 +1562,7 @@ body.fixed-left .side-menu.left {
     border: none;
     padding: 8px 16px 8px 46px;
     background: #f3f3f3;
-    font-family: "Nunito", sans-serif
+    font-family: "Mukta", sans-serif
 }
 
 .custom-dd-empty .dd-list .dd3-content:hover {
@@ -1605,7 +1606,7 @@ body.fixed-left .side-menu.left {
 }
 
 .swal2-modal {
-    font-family: "Nunito", sans-serif
+    font-family: "Mukta", sans-serif
 }
 
 .swal2-modal .swal2-title {
@@ -2108,7 +2109,7 @@ table.focus-on tbody tr.focused td {
 }
 
 .morris-charts text {
-    font-family: "Nunito", sans-serif !important
+    font-family: "Mukta", sans-serif !important
 }
 
 .morris-hover.morris-default-style {
@@ -2116,7 +2117,7 @@ table.focus-on tbody tr.focused td {
     padding: 10px 12px;
     background: #fff;
     border: none;
-    font-family: "Nunito", sans-serif;
+    font-family: "Mukta", sans-serif;
     -webkit-box-shadow: 0 5px 25px 5px rgba(0, 0, 0, .14);
     box-shadow: 0 5px 25px 5px rgba(0, 0, 0, .14)
 }
@@ -2255,7 +2256,7 @@ table.focus-on tbody tr.focused td {
 .c3-chart-arcs-title {
     font-size: 18px;
     font-weight: 600;
-    font-family: "Nunito", sans-serif
+    font-family: "Mukta", sans-serif
 }
 
 .c3-tooltip tr {
@@ -2268,7 +2269,7 @@ table.focus-on tbody tr.focused td {
 
 .c3-tooltip .value {
     font-weight: 600;
-    font-family: "Nunito", sans-serif
+    font-family: "Mukta", sans-serif
 }
 
 .c3-line {
@@ -2277,7 +2278,7 @@ table.focus-on tbody tr.focused td {
 
 .c3-legend-item {
     font-size: 13px;
-    font-family: "Nunito", sans-serif
+    font-family: "Mukta", sans-serif
 }
 
 .widget-chart li {
@@ -2981,4 +2982,87 @@ table.focus-on tbody tr.focused td {
 .form-frost {
     transition: .3s;
     filter: grayscale(100%);
+}
+
+.timeline {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.li {
+    transition: all 200ms ease-in;
+}
+
+.timestamp {
+    margin-bottom: 20px;
+    padding: 0px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: 100;
+}
+
+.status {
+    padding: 0px 40px;
+    display: flex;
+    justify-content: center;
+    border-top: 2px solid #D6DCE0;
+    position: relative;
+    transition: all 200ms ease-in;
+}
+
+.status h4 {
+    font-weight: 600;
+}
+
+.status:before {
+    content: '';
+    width: 25px;
+    height: 25px;
+    background-color: white;
+    border-radius: 25px;
+    border: 1px solid #ddd;
+    position: absolute;
+    top: -15px;
+    left: 42%;
+    transition: all 200ms ease-in;
+}
+
+.li.complete .status {
+    border-top: 2px solid #66DC71;
+}
+
+.li.complete .status:before {
+    background-color: #66DC71;
+    border: none;
+    transition: all 200ms ease-in;
+}
+
+.li.complete .status h4 {
+    color: #66DC71;
+}
+
+@media (min-device-width: 320px) and (max-device-width: 700px) {
+    .timeline {
+        list-style-type: none;
+        display: block;
+    }
+
+    .li {
+        transition: all 200ms ease-in;
+        display: flex;
+        width: inherit;
+    }
+
+    .timestamp {
+        width: 100px;
+    }
+
+    .status:before {
+        left: -8%;
+        top: 30%;
+        transition: all 200ms ease-in;
+    }
 }

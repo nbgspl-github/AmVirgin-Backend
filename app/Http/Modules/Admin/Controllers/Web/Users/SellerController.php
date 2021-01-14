@@ -23,7 +23,8 @@ class SellerController extends \App\Http\Modules\Admin\Controllers\Web\WebContro
 	public function index ()
 	{
 		return view('admin.sellers.index')->with('users',
-			$this->model->newQuery()->paginate($this->paginationChunk())
+			$this->paginateWithQuery(
+				$this->model->newQuery()->latest()->whereLike('name', $this->queryParameter()))
 		);
 	}
 
@@ -36,7 +37,6 @@ class SellerController extends \App\Http\Modules\Admin\Controllers\Web\WebContro
 	{
 		return view('admin.sellers.edit')->with('seller', $seller);
 	}
-
 
 	public function show (Seller $seller) : \Illuminate\Http\JsonResponse
 	{
@@ -66,7 +66,7 @@ class SellerController extends \App\Http\Modules\Admin\Controllers\Web\WebContro
 	 * @return \Illuminate\Http\JsonResponse
 	 * @throws \Exception
 	 */
-	public function destroy (Seller $seller) : \Illuminate\Http\JsonResponse
+	public function delete (Seller $seller) : \Illuminate\Http\JsonResponse
 	{
 		$seller->delete();
 		return response()->json(

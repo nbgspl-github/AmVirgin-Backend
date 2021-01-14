@@ -53,4 +53,14 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
 	{
 		return \App\Library\Utils\Extensions\Rule::exists(static::tableName(), $column);
 	}
+
+	/**
+	 * Returns an instance of database unique validation constraint Rule.
+	 * @param string $column
+	 * @return \Illuminate\Validation\Rules\Unique
+	 */
+	public static function unique (string $column) : \Illuminate\Validation\Rules\Unique
+	{
+		return \App\Library\Utils\Extensions\Rule::unique(static::tableName(), $column);
+	}
 }

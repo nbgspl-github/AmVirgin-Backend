@@ -5,6 +5,7 @@ namespace App\Library\Utils\Extensions;
 class Time
 {
 	const MYSQL_FORMAT = "Y-m-d H:i:s";
+	const SIMPLIFIED_FORMAT = "F d g:i a";
 	const BEGIN_OF_DAY = "00:00:00";
 	const END_OF_DAY = "23:59:59";
 

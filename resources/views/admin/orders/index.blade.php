@@ -2,9 +2,22 @@
 @section('content')
 	<div class="row">
 		<div class="col-12">
-			<div class="card shadow-sm custom-card">
+			<div class="card shadow-sm">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Orders'])
+					<div class="row">
+						<div class="col-8">
+							<h5 class="page-title animatable">Orders</h5>
+						</div>
+						<div class="col-4 my-auto">
+							<form action="{{route('admin.orders.index')}}">
+								<div class="form-row float-right">
+									<div class="col-auto my-1">
+										<input type="text" name="query" class="form-control" id="inlineFormCustomSelect" value="{{request('query')}}" placeholder="Type order number">
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
 				</div>
 				<div class="card-body animatable">
 					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -12,6 +25,7 @@
 						<tr>
 							<th>#</th>
 							<th>Number</th>
+							<th>Sub-Orders</th>
 							<th>Customer</th>
 							<th>Seller(s)</th>
 							<th>Quantity</th>
@@ -25,12 +39,13 @@
 						<tbody>
 						@foreach($orders as $order)
 							<tr id="content_row_{{$order->getKey()}}">
-								<td>{{$loop->index+1}}</td>
+								<td>{{($orders->firstItem()+$loop->index)}}</td>
 								<td>{{$order->orderNumber}}</td>
+								<td>{{$order->subOrders->count()}}</td>
 								<td>{{$order->customer->name??\App\Library\Utils\Extensions\Str::NotAvailable}}</td>
 								<td>
 									@foreach($order->subOrders as $subOrder)
-										{{$subOrder->seller->name}},
+										<span class="badge badge-default">{{$subOrder->seller->name}}</span>
 									@endforeach
 								</td>
 								<td>{{$order->quantity}}</td>
@@ -40,9 +55,7 @@
 								<td>
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group" role="group">
-											<a class="btn btn-outline-danger" href="javascript:showDetails('{{$order->id}}')" @include('admin.extras.tooltip.bottom', ['title' => 'View customer details'])><i class="mdi mdi-lightbulb-outline"></i></a>
-											<a class="btn btn-outline-danger" href="{{route('admin.customers.edit',$order->id)}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit customer details'])><i class="mdi mdi-pencil"></i></a>
-											<a class="btn btn-outline-primary" href="javascript:deleteCustomer('{{$order->id}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete customer'])><i class="mdi mdi-minus-circle-outline"></i></a>
+											<a class="btn btn-outline-danger" href="{{route('admin.orders.show',$order->id)}}" @include('admin.extras.tooltip.bottom', ['title' => 'View order details'])><i class="mdi mdi-lightbulb-outline"></i></a>
 										</div>
 									</div>
 								</td>
@@ -50,7 +63,6 @@
 						@endforeach
 						</tbody>
 					</table>
-
 					{{$orders->links()}}
 				</div>
 			</div>
@@ -60,46 +72,6 @@
 
 @section('javascript')
 	<script type="application/javascript">
-		let dataTable = null;
 
-		$(document).ready(() => {
-
-		});
-
-		/**
-		 * Returns route for Resource/Delete route.
-		 * @param id
-		 * @returns {string}
-		 */
-		deleteRoute = (id) => {
-			return 'subscription-plans/' + id;
-		};
-
-		/**
-		 * Callback for delete resource trigger.
-		 * @param id
-		 */
-		deleteResource = (id) => {
-			window.genreId = id;
-			alertify.confirm("Are you sure you want to delete this subscription plan? ",
-				(ev) => {
-					ev.preventDefault();
-					axios.delete(deleteRoute(id))
-						.then(response => {
-							if (response.status === 200) {
-								dataTable.rows('#content_row_' + id).remove().draw();
-								toastr.success(response.data.message);
-							} else {
-								toastr.error(response.data.message);
-							}
-						})
-						.catch(error => {
-							toastr.error('Something went wrong. Please try again in a while.');
-						});
-				},
-				(ev) => {
-					ev.preventDefault();
-				});
-		}
 	</script>
 @stop

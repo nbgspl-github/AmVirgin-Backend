@@ -10,11 +10,7 @@ class AttributeSet extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods;
 
-	protected $table = 'attribute-sets';
-	protected $fillable = [
-		'name',
-		'categoryId',
-	];
+	protected $table = 'attribute_sets';
 	public const Groups = [
 		'Main',
 		'Size & Fit',
@@ -29,6 +25,6 @@ class AttributeSet extends \App\Library\Database\Eloquent\Model
 
 	public function category () : BelongsTo
 	{
-		return $this->belongsTo(Category::class, 'categoryId');
+		return $this->belongsTo(Category::class, 'category_id');
 	}
 }

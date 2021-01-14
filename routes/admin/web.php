@@ -41,19 +41,19 @@ Route::middleware('auth:admin')->group(function () {
 		Route::post(Str::Empty, [CustomerController::class, Methods::Store])->name('admin.customers.store');
 		Route::post('{customer}', [CustomerController::class, Methods::Update])->name('admin.customers.update');
 		Route::put('{customer}/status', [CustomerController::class, Methods::UpdateStatus])->name('admin.customers.update.status');
-		Route::delete('{customer}', [CustomerController::class, 'destroy'])->name('admin.customers.delete');
+		Route::delete('{customer}', [CustomerController::class, Methods::Delete])->name('admin.customers.delete');
 	});
 
 	// Seller's Route(s)
 	Route::prefix('sellers')->group(function () {
-		Route::get('', [SellerController::class, Methods::Index])->name('admin.sellers.index');
+		Route::get(Str::Empty, [SellerController::class, Methods::Index])->name('admin.sellers.index');
 		Route::get('create', [SellerController::class, Methods::Create])->name('admin.sellers.create');
-		Route::get('{id}/edit', [SellerController::class, Methods::Edit])->name('admin.sellers.edit');
-		Route::get('{id}', [SellerController::class, Methods::Show])->name('admin.sellers.show');
+		Route::get('{seller}/edit', [SellerController::class, Methods::Edit])->name('admin.sellers.edit');
+		Route::get('{seller}', [SellerController::class, Methods::Show])->name('admin.sellers.show');
 		Route::post('', [SellerController::class, Methods::Store])->name('admin.sellers.store');
-		Route::post('{id}', [SellerController::class, Methods::Update])->name('admin.sellers.update');
-		Route::put('{id}/status', [SellerController::class, Methods::UpdateStatus])->name('admin.sellers.update.status');
-		Route::delete('{id}', [SellerController::class, Methods::Delete])->name('admin.sellers.delete');
+		Route::post('{seller}', [SellerController::class, Methods::Update])->name('admin.sellers.update');
+		Route::put('{seller}/status', [SellerController::class, Methods::UpdateStatus])->name('admin.sellers.update.status');
+		Route::delete('{seller}', [SellerController::class, Methods::Delete])->name('admin.sellers.delete');
 	});
 
 	//Categories Banner Route(s)
@@ -80,6 +80,7 @@ Route::middleware('auth:admin')->group(function () {
 	// Orders Route(s)
 	Route::prefix('orders')->group(function () {
 		Route::get(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\Orders\OrderController::class, 'index'])->name('admin.orders.index');
+		Route::get('{order}', [\App\Http\Modules\Admin\Controllers\Web\Orders\OrderController::class, 'show'])->name('admin.orders.show');
 	});
 
 	// Videos Route(s)

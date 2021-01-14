@@ -40,4 +40,17 @@ abstract class BaseController extends Controller
 	{
 		return request('per_page', $default);
 	}
+
+	protected function queryParameter (string $parameterName = 'query') : string
+	{
+		return request()->has($parameterName) && request($parameterName) != null ? request($parameterName) : \App\Library\Utils\Extensions\Str::Empty;
+	}
+
+	protected function paginateWithQuery (\Illuminate\Database\Eloquent\Builder $builder) : \Illuminate\Contracts\Pagination\LengthAwarePaginator
+	{
+		if (\App\Library\Utils\Extensions\Str::length($this->queryParameter()) > 0)
+			return $builder->paginate($this->paginationChunk())->appends('query', $this->queryParameter());
+		else
+			return $builder->paginate($this->paginationChunk());
+	}
 }

@@ -30,3 +30,7 @@
 .modal {
     padding-right: 0 !important;
 }
+
+.card-header {
+    background-color: unset !important;
+}
