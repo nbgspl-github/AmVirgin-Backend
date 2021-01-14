@@ -30,7 +30,10 @@ class PaymentController extends \App\Http\Modules\Seller\Controllers\Api\ApiCont
 		if ($request->has('key'))
 			$query = $query->where('sub_order_id', $request->key);
 		if ($request->has(['start', 'end']))
-			$query = $query->whereBetween('created_at', [$request->start, $request->end]);
+			$query = $query->whereBetween('created_at', [
+				$request->start . " " . \App\Library\Utils\Extensions\Time::BEGIN_OF_DAY,
+				$request->end . " " . \App\Library\Utils\Extensions\Time::END_OF_DAY,
+			]);
 		return $query;
 	}
 }

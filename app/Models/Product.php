@@ -103,6 +103,16 @@ class Product extends \App\Library\Database\Eloquent\Model
 		return $this->hasMany(ProductAttribute::class, 'productId');
 	}
 
+	public function originalAttributes () : \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	{
+		return $this->belongsToMany(Attribute::class, ProductAttribute::tableName(), 'productId', 'attributeId');
+	}
+
+	public function colors ()
+	{
+
+	}
+
 	public function options () : HasMany
 	{
 		return $this->hasMany(ProductAttribute::class, 'productId')->where('variantAttribute', true);

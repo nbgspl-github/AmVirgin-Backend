@@ -33,10 +33,11 @@ abstract class BaseController extends Controller
 
 	/**
 	 * Returns the number of items to be displayed for the current pagination request.
+	 * @param int $default
 	 * @return int
 	 */
-	protected function paginationChunk () : int
+	protected function paginationChunk ($default = self::PAGINATION_CHUNK) : int
 	{
-		return request('per_page', self::PAGINATION_CHUNK);
+		return request('per_page', $default);
 	}
 }

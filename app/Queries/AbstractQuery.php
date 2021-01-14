@@ -21,64 +21,64 @@ abstract class AbstractQuery
 		$this->query = $this->model()::query();
 	}
 
-	protected abstract function model (): string;
+	protected abstract function model () : string;
 
-	public static abstract function begin (): self;
+	public static abstract function begin () : self;
 
-	public abstract function displayable (): self;
+	public abstract function displayable () : self;
 
-	public function active ($state = true): self
+	public function active ($state = true) : self
 	{
 		$this->query->where('active', $state);
 		return $this;
 	}
 
-	public function take (int $limit): self
+	public function take (int $limit) : self
 	{
 		$this->query->take($limit);
 		return $this;
 	}
 
-	public function limit (int $limit): self
+	public function limit (int $limit) : self
 	{
 		$this->query->limit($limit);
 		return $this;
 	}
 
-	public function orderByAscending (string $column): self
+	public function orderByAscending (string $column) : self
 	{
 		$this->query->orderBy($column, 'asc');
 		return $this;
 	}
 
-	public function orderByDescending (string $column): self
+	public function orderByDescending (string $column) : self
 	{
 		$this->query->orderBy($column, 'desc');
 		return $this;
 	}
 
-	public function orderBy (string $column, string $direction = 'asc'): self
+	public function orderBy (string $column, string $direction = 'asc') : self
 	{
 		$this->query->orderBy($column, $direction);
 		return $this;
 	}
 
-	public function count (string $column = 'id'): int
+	public function count (string $column = 'id') : int
 	{
 		return $this->query->count($column);
 	}
 
-	public function paginate (int $page = null): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+	public function paginate (int $page = null) : \Illuminate\Contracts\Pagination\LengthAwarePaginator
 	{
 		return $this->query->paginate($page);
 	}
 
-	public function min (string $column): int
+	public function min (string $column) : int
 	{
 		return $this->query->min($column);
 	}
 
-	public function max (string $column): int
+	public function max (string $column) : int
 	{
 		return $this->query->max($column);
 	}
@@ -113,48 +113,48 @@ abstract class AbstractQuery
 		return $this->query->get($columns);
 	}
 
-	public function custom (AbstractQuery $query): self
+	public function custom (AbstractQuery $query) : self
 	{
 		return $this;
 	}
 
-	public function latest ($column = 'created_at'): self
+	public function latest ($column = 'created_at') : self
 	{
 		$this->query->latest($column);
 		return $this;
 	}
 
-	public function withRelations (string ...$relation): self
+	public function withRelations ($relation) : self
 	{
 		$this->query->with($relation);
 		return $this;
 	}
 
-	public function search (string $keywords, string $column = 'name'): self
+	public function search (string $keywords, string $column = 'name') : self
 	{
 		$this->query->where($column, 'LIKE', "%{$keywords}%");
 		return $this;
 	}
 
-	public function orSearch (string $keywords, string $column = 'name'): self
+	public function orSearch (string $keywords, string $column = 'name') : self
 	{
 		$this->query->orWhere($column, 'LIKE', "%{$keywords}%");
 		return $this;
 	}
 
-	public function withWhere (string $column = '', string $keywords = ''): self
+	public function withWhere (string $column = '', string $keywords = '') : self
 	{
 		$this->query->where($column, $keywords);
 		return $this;
 	}
 
-	public function withWhereBetween (string $column = '', $fromDate = '', $toDate = ''): self
+	public function withWhereBetween (string $column = '', $fromDate = '', $toDate = '') : self
 	{
 		$this->query->whereBetween($column, [$fromDate . " 00:00:00", $toDate . " 23:59:59"]);
 		return $this;
 	}
 
-	public function withinCurrentMonth ($inclusive = true, $timestamp = 'created_at'): self
+	public function withinCurrentMonth ($inclusive = true, $timestamp = 'created_at') : self
 	{
 		if ($inclusive) {
 			$monthBegin = Carbon::now()->firstOfMonth()->format('Y-m-d H:i:s');
@@ -167,7 +167,7 @@ abstract class AbstractQuery
 		return $this;
 	}
 
-	public function withinPreviousMonth ($inclusive = true, $timestamp = 'created_at'): self
+	public function withinPreviousMonth ($inclusive = true, $timestamp = 'created_at') : self
 	{
 		if ($inclusive) {
 			$monthBegin = Carbon::now()->subMonth()->firstOfMonth()->format('Y-m-d H:i:s');
@@ -180,7 +180,7 @@ abstract class AbstractQuery
 		return $this;
 	}
 
-	public function whereIn (string $column, array $items): self
+	public function whereIn (string $column, array $items) : self
 	{
 		$this->query->whereIn($column, $items);
 		return $this;
@@ -189,5 +189,11 @@ abstract class AbstractQuery
 	public function dump ()
 	{
 		$this->query->dd();
+	}
+
+	public function select ($columns) : self
+	{
+		$this->query->select($columns);
+		return $this;
 	}
 }

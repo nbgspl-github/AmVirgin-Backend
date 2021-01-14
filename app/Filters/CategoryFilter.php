@@ -7,7 +7,7 @@ use App\Resources\Shop\Customer\Catalog\Filters\CategoryResource;
 
 trait CategoryFilter{
 	public function category(int ...$categoryId): self{
-		$column = defined(CategoryResource::RequiredColumn) ? CategoryResource::RequiredColumn : 'categoryId';
+		$column = defined(CategoryResource::COLUMN) ? CategoryResource::COLUMN : 'categoryId';
 		$this->query->whereIn($column, $categoryId);
 		return $this;
 	}

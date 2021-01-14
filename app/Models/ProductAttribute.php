@@ -13,20 +13,7 @@ class ProductAttribute extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods;
 
-	protected $table = 'product-attributes';
-	protected $attributes = [
-
-	];
-	protected $fillable = [
-		'productId',
-		'attributeId',
-		'label',
-		'group',
-		'variantAttribute',
-		'showInCatalogListing',
-		'visibleToCustomers',
-		'value',
-	];
+	protected $table = 'product_attributes';
 	protected $casts = [
 		'multiValue' => 'bool',
 		'variantAttribute' => 'bool',

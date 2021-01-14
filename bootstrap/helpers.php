@@ -158,3 +158,8 @@ function qs_url ($path = null, $qs = array(), $secure = null) : string
 	}
 	return $url;
 }
+
+function is_even ($number) : bool
+{
+	return $number % 2 == 0;
+}

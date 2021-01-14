@@ -6,18 +6,30 @@ use App\Library\Utils\Extensions\Arrays;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
 
-abstract class AbstractBuiltInResource extends JsonResource{
+abstract class AbstractBuiltInResource
+{
 	protected ?array $values;
-	public const RequiredColumn = null;
+	const COLUMN = 'column';
+	protected const KEY = 'filter_key';
+	protected const TYPE = 'filter_type';
+	protected const MODE = 'filter_mode';
+	protected const LABEL = 'filter_label';
 
-	public function __construct($resource){
-		parent::__construct($resource);
+	public function __construct ()
+	{
 		$this->values = Arrays::Empty;
 	}
 
-	protected function mode(){
-		return $this->allowMultiValue() ? 'multiple' : 'single';
-	}
+	public abstract function withValues (Collection $values) : self;
 
-	public abstract function withValues(Collection $values): self;
+	public function toArray ($request) : array
+	{
+		return [
+			'key' => static::KEY,
+			'label' => static::LABEL,
+			'type' => static::TYPE,
+			'mode' => static::MODE,
+			'options' => $this->values,
+		];
+	}
 }

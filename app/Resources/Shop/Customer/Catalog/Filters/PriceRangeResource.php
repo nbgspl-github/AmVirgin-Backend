@@ -5,10 +5,16 @@ namespace App\Resources\Shop\Customer\Catalog\Filters;
 use App\Library\Utils\Extensions\Arrays;
 use Illuminate\Support\Collection;
 
-class PriceRangeResource extends AbstractBuiltInResource{
-	public const RequiredColumn = 'originalPrice';
+class PriceRangeResource extends AbstractBuiltInResource
+{
+	const COLUMN = 'originalPrice';
+	const KEY = 'filter_price';
+	const TYPE = 'price';
+	const MODE = 'single';
+	const LABEL = 'Price';
 
-	public function withValues(Collection $values): self{
+	public function withValues (Collection $values) : self
+	{
 		// We get a Collection of values for the column we want to access.
 		// What we need to do is, if this specific filter lists out its operable set of values,
 		// we transform those values as need, otherwise we leave the options as blank array.
@@ -16,7 +22,8 @@ class PriceRangeResource extends AbstractBuiltInResource{
 		return $this;
 	}
 
-	private function priceDivisions(Collection $values): array{
+	private function priceDivisions (Collection $values) : array
+	{
 		$priceCollection = $values;
 		$minimumPrice = $priceCollection->min();
 		$maximumPrice = $priceCollection->max();
@@ -48,7 +55,6 @@ class PriceRangeResource extends AbstractBuiltInResource{
 
 		// Now we can calculate a median value, upon which we'll create price segments.
 		// We must also ensure to divide even by even only. If that's not the case, we'll add 1 to all ranges.
-		$neutralizer = 0;
 		$diff = $maximumPrice - $minimumPrice;
 		self::even($diff) && self::even($divisions) ? $neutralizer = 0 : $neutralizer = 1;
 		$median = (int)($diff / $divisions);
@@ -69,17 +75,8 @@ class PriceRangeResource extends AbstractBuiltInResource{
 		return $sections;
 	}
 
-	protected static function even(int $number){
+	protected static function even (int $number) : bool
+	{
 		return $number % 2 == 0;
-	}
-
-	public function toArray($request){
-		return [
-			'key' => $this->id(),
-			'label' => $this->label(),
-			'type' => $this->builtInType(),
-			'mode' => $this->mode(),
-			'options' => $this->values,
-		];
 	}
 }

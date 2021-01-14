@@ -102,16 +102,6 @@
 					<a href="{{route("admin.genres.index")}}" class="waves-effect animatableX"><i class="mdi mdi-disk mt-1"></i>
 						<span>Genres </span></a>
 				</li>
-
-				<li>
-					<a href="{{route("admin.notifications.create")}}" class="waves-effect animatableX"><i class="mdi mdi-near-me mt-1"></i>
-						<span>Notifications </span></a>
-				</li>
-
-				<li>
-					<a href="{{route("admin.settings.index")}}" class="waves-effect animatableX"><i class="mdi mdi-settings mt-1"></i>
-						<span>Settings </span></a>
-				</li>
 			</ul>
 		</div>
 		<div class="clearfix"></div>

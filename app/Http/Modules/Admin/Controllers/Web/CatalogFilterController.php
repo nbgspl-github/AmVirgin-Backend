@@ -4,7 +4,6 @@ namespace App\Http\Modules\Admin\Controllers\Web;
 
 use App\Exceptions\ValidationException;
 use App\Http\Modules\Shared\Controllers\BaseController;
-use App\Http\Requests\StoreCategoryFilter;
 use App\Library\Enums\Common\Tables;
 use App\Library\Utils\Extensions\Arrays;
 use App\Library\Utils\Extensions\Rule;
@@ -52,15 +51,15 @@ class CatalogFilterController extends BaseController
 					$vertical = $subCategory->children()->orderBy('name')->get();
 					$vertical->transform(function (Category $vertical) {
 						return [
-							'key' => $vertical->id(),
-							'name' => $vertical->name(),
-							'type' => $vertical->type(),
+							'key' => $vertical->id,
+							'name' => $vertical->name,
+							'type' => $vertical->type,
 						];
 					});
 					return [
-						'key' => $subCategory->id(),
-						'name' => $subCategory->name(),
-						'type' => $subCategory->type(),
+						'key' => $subCategory->id,
+						'name' => $subCategory->name,
+						'type' => $subCategory->type,
 						'children' => [
 							'available' => $vertical->count() > 0,
 							'count' => $vertical->count(),
@@ -69,9 +68,9 @@ class CatalogFilterController extends BaseController
 					];
 				});
 				return [
-					'key' => $category->id(),
-					'name' => $category->name(),
-					'type' => $category->type(),
+					'key' => $category->id,
+					'name' => $category->name,
+					'type' => $category->type,
 					'children' => [
 						'available' => $subCategory->count() > 0,
 						'count' => $subCategory->count(),
@@ -80,9 +79,9 @@ class CatalogFilterController extends BaseController
 				];
 			});
 			return [
-				'key' => $root->id(),
-				'name' => $root->name(),
-				'type' => $root->type(),
+				'key' => $root->id,
+				'name' => $root->name,
+				'type' => $root->type,
 				'children' => [
 					'available' => $category->count() > 0,
 					'count' => $category->count(),
@@ -116,7 +115,7 @@ class CatalogFilterController extends BaseController
 		}
 	}
 
-	public function attributes ($id): JsonResponse
+	public function attributes ($id) : JsonResponse
 	{
 		$response = responseApp();
 		try {

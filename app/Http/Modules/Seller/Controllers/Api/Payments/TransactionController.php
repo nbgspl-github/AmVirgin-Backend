@@ -25,11 +25,14 @@ class TransactionController extends \App\Http\Modules\Seller\Controllers\Api\Api
 	protected function query (\App\Http\Modules\Seller\Requests\Transaction\IndexRequest $request) : HasMany
 	{
 		$query = $this->seller()->transactions()
-			->latest('created_at');
+			->latest('paid_at');
 		if ($request->has('referenceId'))
 			$query = $query->where('reference_id', $request->referenceId);
 		if ($request->has(['start', 'end']))
-			$query = $query->whereBetween('paid_at', [$request->start, $request->end]);
+			$query = $query->whereBetween('paid_at', [
+				$request->start . " " . \App\Library\Utils\Extensions\Time::BEGIN_OF_DAY,
+				$request->end . " " . \App\Library\Utils\Extensions\Time::END_OF_DAY,
+			]);
 		return $query;
 	}
 }

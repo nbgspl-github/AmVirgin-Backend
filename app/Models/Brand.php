@@ -18,9 +18,6 @@ class Brand extends \App\Library\Database\Eloquent\Model
 		'isBrandOwner' => 'bool',
 		'documentExtras' => 'array',
 	];
-	protected $hidden = [
-		'created_at', 'updated_at', 'id',
-	];
 	public const Status = [
 		'Approved' => 'approved',
 		'Rejected' => 'rejected',

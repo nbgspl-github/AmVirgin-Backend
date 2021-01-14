@@ -40,7 +40,7 @@ Route::prefix('videos')->group(function () {
 
 Route::prefix('categories')->group(function () {
 	Route::get('/', [\App\Http\Modules\Customer\Controllers\Api\Shop\CategoryController::class, 'index']);
-	Route::get('filters', [\App\Http\Modules\Customer\Controllers\Api\Shop\FilterController::class, 'show']);
+	Route::get('{category}/filters', [\App\Http\Modules\Customer\Controllers\Api\Shop\FilterController::class, 'show']);
 });
 
 Route::prefix('sessions')->group(function () {
@@ -49,8 +49,8 @@ Route::prefix('sessions')->group(function () {
 });
 
 Route::prefix('products')->group(function () {
-	Route::get('/', [CatalogController::class, 'index']);
 	Route::get('/sorts', [\App\Http\Modules\Customer\Controllers\Api\Shop\SortController::class, 'sorts']);
+	Route::get('{category}', [CatalogController::class, 'index']);
 	Route::prefix('{product}')->group(static function () {
 		Route::get(Str::Empty, [CatalogController::class, 'show']);
 		Route::prefix('reviews')->group(static function () {

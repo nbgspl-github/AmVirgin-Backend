@@ -15,21 +15,7 @@ class CatalogFilter extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods;
 
-	protected $table = 'catalog-filters';
-	protected $fillable = [
-		'label',
-		'builtIn',
-		'builtInType',
-		'attributeId',
-		'categoryId',
-		'allowMultiValue',
-		'active',
-	];
-	protected $hidden = [
-		'id',
-		'created_at',
-		'updated_at',
-	];
+	protected $table = 'catalog_filters';
 	protected $casts = [
 		'active' => 'bool',
 		'builtIn' => 'bool',

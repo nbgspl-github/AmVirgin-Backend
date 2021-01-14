@@ -42,9 +42,8 @@ class Handler extends ExceptionHandler
 
 	public function render ($request, Throwable $e)
 	{
-//		dd(($e));
 		if ($this->respondWithJson($request)) {
-			if ($e instanceof ModelNotFoundException) {
+			if ($e instanceof ModelNotFoundException || $e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
 				return response()->json(['status' => Response::HTTP_NOT_FOUND, 'payload' => null], Response::HTTP_NOT_FOUND);
 			} elseif ($e instanceof ActionNotAllowedException) {
 				return response()->json(['status' => Response::HTTP_FORBIDDEN, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_OK);
@@ -101,6 +100,8 @@ class Handler extends ExceptionHandler
 
 	protected function hasApiMiddleware (\Illuminate\Http\Request $request) : bool
 	{
-		return \App\Library\Utils\Extensions\Arrays::contains($request->route()->middleware(), 'api');
+		return \App\Library\Utils\Extensions\Str::equals(
+			$request->segment(1) ?? \App\Library\Utils\Extensions\Str::Empty, 'api'
+		);
 	}
 }
