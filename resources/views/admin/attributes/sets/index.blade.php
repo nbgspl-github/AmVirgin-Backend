@@ -26,8 +26,7 @@
 								<td class="text-center">
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group mx-auto" role="group">
-											<a class="btn btn-outline-danger shadow-sm" href="" @include('admin.extras.tooltip.left', ['title' => 'Edit attribute set details'])><i class="mdi mdi-pencil"></i></a>
-											<a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);" onclick="deleteMovie('');" @include('admin.extras.tooltip.right', ['title' => 'Delete this attribute set'])><i class="mdi mdi-delete"></i></a>
+											<a class="btn btn-outline-primary shadow-sm" href="javascript:deleteAttributeSet('{{$set->category->id}}');" @include('admin.extras.tooltip.right', ['title' => 'Delete attribute set'])><i class="mdi mdi-delete"></i></a>
 										</div>
 									</div>
 								</td>
@@ -43,5 +42,20 @@
 
 @section('javascript')
 	<script type="application/javascript">
+		deleteAttributeSet = key => {
+			alertify.confirm("Are you sure? This action is irreversible!",
+				yes => {
+					axios.delete(`/admin/attributes/sets/${key}`).then(response => {
+						alertify.alert(response.data.message, () => {
+							location.reload();
+						});
+					}).catch(e => {
+						alertify.confirm('Something went wrong. Retry?', yes => {
+							deleteAttributeSet(key);
+						});
+					});
+				}
+			)
+		}
 	</script>
 @stop

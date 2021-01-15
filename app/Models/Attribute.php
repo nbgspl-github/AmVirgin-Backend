@@ -12,12 +12,9 @@ use App\Traits\DynamicAttributeNamedMethods;
 class Attribute extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods;
+	use \Illuminate\Database\Eloquent\SoftDeletes;
 
 	protected $table = 'attributes';
-	protected $hidden = [
-		'created_at',
-		'updated_at',
-	];
 	protected $casts = [
 		'required' => 'boolean',
 		'predefined' => 'boolean',

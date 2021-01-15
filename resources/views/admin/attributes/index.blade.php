@@ -7,7 +7,7 @@
 					@include('admin.extras.header', ['title'=>'Attributes','action'=>['link'=>route('admin.products.attributes.create'),'text'=>'Create an attribute']])
 				</div>
 				<div class="card-body animatable">
-					<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 						<thead>
 						<tr>
 							<th class="text-center">No.</th>
@@ -36,8 +36,7 @@
 								<td class="text-center">
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group mx-auto" role="group">
-											<a class="btn btn-outline-danger shadow-sm" href="" @include('admin.extras.tooltip.left', ['title' => 'Edit attribute details'])><i class="mdi mdi-pencil"></i></a>
-											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.products.attributes.values.edit',$attribute->id())}}" @include('admin.extras.tooltip.left', ['title' => 'Edit attribute values'])><i class="mdi mdi-pencil"></i></a>
+											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.products.attributes.edit',$attribute->id)}}" @include('admin.extras.tooltip.left', ['title' => 'Edit attribute details'])><i class="mdi mdi-pencil"></i></a>
 										</div>
 									</div>
 								</td>

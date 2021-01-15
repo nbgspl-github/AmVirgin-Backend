@@ -4,6 +4,7 @@ namespace App\Http\Modules\Admin\Controllers\Web\Products\Attributes;
 
 use App\Exceptions\AttributeNameConflictException;
 use App\Exceptions\ValidationException;
+use App\Http\Modules\Admin\Requests\Attributes\UpdateRequest;
 use App\Library\Utils\Extensions\Arrays;
 use App\Library\Utils\Extensions\Str;
 use App\Models\Attribute;
@@ -47,6 +48,11 @@ class AttributeController extends \App\Http\Modules\Admin\Controllers\Web\WebCon
 		return view('admin.attributes.index')->with('attributes',
 			$this->paginateWithQuery(Attribute::query())
 		);
+	}
+
+	public function edit (Attribute $attribute)
+	{
+		return view('admin.attributes.edit')->with('attribute', $attribute);
 	}
 
 	public function create ()
@@ -122,5 +128,17 @@ class AttributeController extends \App\Http\Modules\Admin\Controllers\Web\WebCon
 		} finally {
 			return $response->send();
 		}
+	}
+
+	public function update (UpdateRequest $request, Attribute $attribute) : \Illuminate\Http\RedirectResponse
+	{
+		$validated = $request->validated();
+		$validated['values'] = $request->has('predefined') ? Str::split('|', $validated['']) : [];
+		$attribute->update(
+			$request->validated()
+		);
+		return response()->redirectTo(
+			route('admin.products.attributes.index')
+		)->with('success', 'Attribute details updated successfully.');
 	}
 }

@@ -30,7 +30,7 @@ class AttributeSetController extends BaseController
 
 	public function index ()
 	{
-		$attributeSets = AttributeSet::all();
+		$attributeSets = AttributeSet::query()->groupBy('category_id')->get();
 		return view('admin.attributes.sets.index')->with('sets', $attributeSets);
 	}
 
@@ -92,13 +92,16 @@ class AttributeSetController extends BaseController
 		$response = responseWeb();
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['store']);
-			Arrays::each($validated->selected, function ($attributeId) use ($validated) {
+			$category = Category::query()->find($validated->categoryId);
+			Arrays::each($validated->selected, function ($attributeId) use ($validated, $category) {
 				AttributeSet::query()->updateOrCreate(
 					[
+						'name' => $category->name,
 						'category_id' => $validated->categoryId,
 						'attribute_id' => $attributeId,
 					],
 					[
+						'name' => $category->name,
 						'category_id' => $validated->categoryId,
 						'attribute_id' => $attributeId,
 					]
@@ -112,5 +115,13 @@ class AttributeSetController extends BaseController
 		} finally {
 			return $response->send();
 		}
+	}
+
+	public function delete (Category $category) : \Illuminate\Http\JsonResponse
+	{
+		AttributeSet::query()->where('category_id', $category->id)->delete();
+		return responseApp()->prepare(
+			null, \Illuminate\Http\Response::HTTP_OK, 'Attribute set deleted successfully.'
+		);
 	}
 }

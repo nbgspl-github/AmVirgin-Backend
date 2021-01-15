@@ -27,7 +27,7 @@
 										</div>
 										<div class="form-group">
 											<label for="group">@required (Group)
-												<i class="mdi mdi-help-circle-outline"></i></label>
+												<i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Groups help collect attributes belonging to same logical category'])></i></label>
 											<select name="group" id="group" class="form-control selectpicker" title="Choose..." required>
 												<option value="Main">Main</option>
 												<option value="Material & Care">Material & Care</option>

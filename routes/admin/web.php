@@ -255,13 +255,16 @@ Route::middleware('auth:admin')->group(function () {
 	// Attributes Route(s)
 	Route::prefix('attributes')->group(function () {
 		Route::get(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\Products\Attributes\AttributeController::class, 'index'])->name('admin.products.attributes.index');
+		Route::get('{attribute}/edit', [\App\Http\Modules\Admin\Controllers\Web\Products\Attributes\AttributeController::class, 'edit'])->name('admin.products.attributes.edit');
 		Route::get('create', [\App\Http\Modules\Admin\Controllers\Web\Products\Attributes\AttributeController::class, 'create'])->name('admin.products.attributes.create');
 		Route::post(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\Products\Attributes\AttributeController::class, 'store'])->name('admin.products.attributes.store');
+		Route::post('{attribute}', [\App\Http\Modules\Admin\Controllers\Web\Products\Attributes\AttributeController::class, 'update'])->name('admin.products.attributes.update');
 
 		Route::prefix('sets')->group(function () {
 			Route::get(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\Products\Attributes\AttributeSetController::class, 'index'])->name('admin.attributes.sets.index');
 			Route::get('create', [\App\Http\Modules\Admin\Controllers\Web\Products\Attributes\AttributeSetController::class, 'create'])->name('admin.attributes.sets.create');
-			Route::post(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\Products\Attributes\AttributeSetController::class, 'store'])->name('admin.attributes.sets.store');
+			Route::post('store', [\App\Http\Modules\Admin\Controllers\Web\Products\Attributes\AttributeSetController::class, 'store'])->name('admin.attributes.sets.store');
+			Route::delete('{category}', [\App\Http\Modules\Admin\Controllers\Web\Products\Attributes\AttributeSetController::class, 'delete'])->name('admin.attributes.sets.store');
 		});
 
 		Route::prefix('values')->group(function () {

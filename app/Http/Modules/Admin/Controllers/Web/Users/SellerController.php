@@ -69,8 +69,8 @@ class SellerController extends \App\Http\Modules\Admin\Controllers\Web\WebContro
 	public function delete (Seller $seller) : \Illuminate\Http\JsonResponse
 	{
 		$seller->delete();
-		return response()->json(
-			[]
+		return responseApp()->prepare(
+			null, \Illuminate\Http\Response::HTTP_OK, 'Seller deleted successfully.'
 		);
 	}
 }

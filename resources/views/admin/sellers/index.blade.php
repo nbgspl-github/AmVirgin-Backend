@@ -89,11 +89,12 @@
 			alertify.confirm("Are you sure? This action is irreversible!",
 				yes => {
 					axios.delete(`/admin/sellers/${key}`).then(response => {
-						console.log(response.data);
-						location.reload();
+						alertify.alert(response.data.message, () => {
+							location.reload();
+						});
 					}).catch(e => {
 						alertify.confirm('Something went wrong. Retry?', yes => {
-							showDetails(key);
+							deleteSeller(key);
 						});
 					});
 				}
