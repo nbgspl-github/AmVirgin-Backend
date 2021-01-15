@@ -35,7 +35,7 @@ class CodeTester extends Command
 
 	public function handle ()
 	{
-		$source = \App\Models\Video\Source::query()->find(1);
+		$source = \App\Models\Video\Source::query()->find(3);
 		try {
 			\App\Jobs\TranscoderTask::dispatch($source)->onQueue('default');
 		} catch (\Throwable $exception) {
