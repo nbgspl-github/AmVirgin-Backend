@@ -7,7 +7,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class TranscoderTask
+class TranscoderTask implements \Illuminate\Contracts\Queue\ShouldQueue
 {
 	use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -30,13 +30,15 @@ class TranscoderTask
 		$this->path = $this->source->getRawOriginal('file');
 		$this->formats = [
 			\App\Library\Enums\Videos\Quality::SD => (new \FFMpeg\Format\Video\X264('aac'))->setKiloBitrate(1200),
-			\App\Library\Enums\Videos\Quality::HD => (new \FFMpeg\Format\Video\X264('aac'))->setKiloBitrate(2500),
-			\App\Library\Enums\Videos\Quality::FHD => (new \FFMpeg\Format\Video\X264('aac'))->setKiloBitrate(5000),
+//			\App\Library\Enums\Videos\Quality::HD => (new \FFMpeg\Format\Video\X264('aac'))->setKiloBitrate(2500),
+//			\App\Library\Enums\Videos\Quality::FHD => (new \FFMpeg\Format\Video\X264('aac'))->setKiloBitrate(5000),
 		];
+		\Illuminate\Support\Facades\Log::info("Task Constructed -> {$source->id}");
 	}
 
 	public function handle () : void
 	{
+		\Illuminate\Support\Facades\Log::info("Task Started -> {$this->source->id}");
 		$transcoder = \ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::fromDisk('secured')->open($this->path)->exportForHLS();
 		\App\Library\Utils\Extensions\Arrays::eachAssociative($this->formats,
 			function ($bitrate, \FFMpeg\Format\Video\DefaultVideo $format) use (&$transcoder) {
@@ -45,6 +47,7 @@ class TranscoderTask
 		);
 		$transcoder->toDisk('secured')->save($this->exportPath());
 		$this->source->update(['file' => $this->exportPath()]);
+		\Illuminate\Support\Facades\Log::info("Task Completed -> {$this->source->id}");
 	}
 
 	protected function exportPath () : string

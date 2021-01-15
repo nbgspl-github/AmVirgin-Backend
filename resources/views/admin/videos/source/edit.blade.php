@@ -110,7 +110,9 @@
 				$('#videoModal').modal('hide');
 				axios.post(`/admin/videos/${video_id}/update/source`, formData, config,).then(response => {
 					showProgressDialog(false);
-					alertify.alert(response.data.message);
+					alertify.alert(response.data.message, () => {
+						location.reload();
+					});
 				}).catch(error => {
 					showProgressDialog(false);
 					alertify.alert('Something went wrong. Please try again.');

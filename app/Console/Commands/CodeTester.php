@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use FFMpeg\Format\Video\X264;
 use Illuminate\Console\Command;
 
 class CodeTester extends Command
@@ -14,7 +13,7 @@ class CodeTester extends Command
 	 *
 	 * @var string
 	 */
-	protected $signature = 'code:test';
+	protected $signature = 'c:t';
 
 	/**
 	 * The console command description.
@@ -35,11 +34,6 @@ class CodeTester extends Command
 
 	public function handle ()
 	{
-		$source = \App\Models\Video\Source::query()->find(3);
-		try {
-			\App\Jobs\TranscoderTask::dispatch($source)->onQueue('default');
-		} catch (\Throwable $exception) {
-			dd($exception);
-		}
+
 	}
 }

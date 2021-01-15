@@ -22,7 +22,7 @@ class Kernel extends HttpKernel
 	protected $middleware = [
 		Modules\Shared\Middleware\TrustProxies::class,
 		Modules\Shared\Middleware\CheckForMaintenanceMode::class,
-		ValidatePostSize::class,
+//		ValidatePostSize::class,
 		Modules\Shared\Middleware\TrimStrings::class,
 		\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
 	];
