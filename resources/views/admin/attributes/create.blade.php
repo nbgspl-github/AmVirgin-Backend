@@ -35,7 +35,7 @@
 												<option value="Specifications">Specifications</option>
 											</select>
 										</div>
-										<div class="card custom-card p-3 shadow-none mb-3">
+										<div class="card p-3 shadow-none mb-3">
 											<div class="form-group">
 												<label>Allow entering multiple values?
 													<i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Allow the seller to enter more than one value for this attribute for example - color for color-blocked t shirts.'])></i></label>
@@ -113,7 +113,7 @@
 												</div>
 											</div>
 										</div>
-										<div class="card custom-card p-3 shadow-none mb-0">
+										<div class="card p-3 shadow-none mb-0">
 											<div class="form-group">
 												<label>Attribute has predefined values?
 													<i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Predefine a set of values that the seller must choose from such as size (L, M, S) etc.'])></i></label>

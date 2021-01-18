@@ -4,7 +4,7 @@
 	@include('admin.modals.singleActionBox')
 	<div class="row">
 		<div class="col-12">
-			<div class="card shadow-sm custom-card">
+			<div class="card shadow-sm">
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Edit video'])
 				</div>

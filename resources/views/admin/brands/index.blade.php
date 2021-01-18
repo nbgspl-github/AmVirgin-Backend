@@ -1,10 +1,10 @@
 @extends('admin.app.app')
 @section('content')
     <div class="row">
-        <div class="col-12">
-            <div class="card shadow-sm custom-card">
-                <div class="card-header py-0">
-                    @include('admin.extras.header', ['title'=>'Brands','action'=>['link'=>route('admin.brands.create'),'text'=>'Add a Brand']])
+	    <div class="col-12">
+		    <div class="card shadow-sm">
+			    <div class="card-header py-0">
+				    @include('admin.extras.header', ['title'=>'Brands','action'=>['link'=>route('admin.brands.create'),'text'=>'Add a Brand']])
                 </div>
                 <div class="card-body animatable">
                     <table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0 "
