@@ -34,6 +34,6 @@ class CodeTester extends Command
 
 	public function handle ()
 	{
-
+		event(new \App\Events\SocketIOEvent());
 	}
 }
