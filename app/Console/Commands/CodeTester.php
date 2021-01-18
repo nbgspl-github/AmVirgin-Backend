@@ -34,6 +34,11 @@ class CodeTester extends Command
 
 	public function handle ()
 	{
-		event(new \App\Events\SocketIOEvent());
+		try {
+			$source = \App\Models\Video\Source::query()->find(14);
+			\App\Jobs\TranscoderTask::dispatchNow($source);
+		} catch (\Throwable $exception) {
+			dd($exception);
+		}
 	}
 }

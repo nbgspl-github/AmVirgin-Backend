@@ -19,6 +19,8 @@ class TranscoderTask implements \Illuminate\Contracts\Queue\ShouldQueue
 
 	protected string $hlsExtension = 'm3u8';
 
+	public $timeout = 3000;
+
 	/**
 	 * Create a new job instance.
 	 *
@@ -33,12 +35,12 @@ class TranscoderTask implements \Illuminate\Contracts\Queue\ShouldQueue
 //			\App\Library\Enums\Videos\Quality::HD => (new \FFMpeg\Format\Video\X264('aac'))->setKiloBitrate(2500),
 //			\App\Library\Enums\Videos\Quality::FHD => (new \FFMpeg\Format\Video\X264('aac'))->setKiloBitrate(5000),
 		];
-		\Illuminate\Support\Facades\Log::info("Task Constructed -> {$source->id}");
+		\Illuminate\Support\Facades\Log::channel('slack')->info("Task Constructed -> {$source->id}");
 	}
 
 	public function handle () : void
 	{
-		\Illuminate\Support\Facades\Log::info("Task Started -> {$this->source->id}");
+		\Illuminate\Support\Facades\Log::channel('slack')->info("Task Started -> {$this->source->id}");
 		$transcoder = \ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::fromDisk('secured')->open($this->path)->exportForHLS();
 		\App\Library\Utils\Extensions\Arrays::eachAssociative($this->formats,
 			function ($bitrate, \FFMpeg\Format\Video\DefaultVideo $format) use (&$transcoder) {
@@ -47,7 +49,7 @@ class TranscoderTask implements \Illuminate\Contracts\Queue\ShouldQueue
 		);
 		$transcoder->toDisk('secured')->save($this->exportPath());
 		$this->source->update(['file' => $this->exportPath()]);
-		\Illuminate\Support\Facades\Log::info("Task Completed -> {$this->source->id}");
+		\Illuminate\Support\Facades\Log::channel('slack')->info("Task Completed -> {$this->source->id}");
 	}
 
 	protected function exportPath () : string
