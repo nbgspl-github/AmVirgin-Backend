@@ -13,7 +13,16 @@ class SourceController extends \App\Http\Modules\Admin\Controllers\Web\WebContro
 
 	public function edit (\App\Models\Video\Video $video)
 	{
+		if ($video->isTranscoding()) {
+			return redirect()->route('admin.videos.edit.action', $video->id)
+				->with('error', 'Cannot access source when transcoding is in progress.');
+		}
 		return view('admin.videos.source.edit')->with('video', $video);
+	}
+
+	public function runningQueues ()
+	{
+
 	}
 
 	public function update (UpdateRequest $request, \App\Models\Video\Video $video) : \Illuminate\Http\JsonResponse
@@ -29,7 +38,8 @@ class SourceController extends \App\Http\Modules\Admin\Controllers\Web\WebContro
 		}
 		\App\Jobs\TranscoderTask::dispatch($source)->onQueue('default');
 		return response()->json([
-			'message' => 'Created video source successfully.'
+			'message' => 'Created video source successfully.',
+			'route' => route('admin.videos.edit.action', $video->id)
 		]);
 	}
 }

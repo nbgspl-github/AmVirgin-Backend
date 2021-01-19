@@ -34,3 +34,7 @@
 .card-header {
     background-color: unset !important;
 }
+
+p.msg {
+    word-wrap: break-word !important;
+}

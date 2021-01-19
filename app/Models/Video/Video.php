@@ -81,6 +81,16 @@ class Video extends \App\Library\Database\Eloquent\Model
 		return $this->hasMany(\App\Models\Models\Video\Subtitle::class, 'video_id');
 	}
 
+	public function queues () : HasMany
+	{
+		return $this->hasMany(Queue::class, 'video_id');
+	}
+
+	public function isTranscoding () : bool
+	{
+		return $this->queues()->whereIn('status', ['Encoding', 'Queued'])->whereNull('completed_at')->exists();
+	}
+
 	public static function startQuery () : VideoQuery
 	{
 		return VideoQuery::begin();

@@ -3,6 +3,7 @@
 namespace App\Models\Video;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Source extends \App\Library\Database\Eloquent\Model
 {
@@ -41,5 +42,10 @@ class Source extends \App\Library\Database\Eloquent\Model
 	public function subtitleLanguages () : \Illuminate\Database\Eloquent\Relations\BelongsToMany
 	{
 		return $this->belongsToMany(Language::class, 'video_subtitles', 'video_source_id', 'video_language_id');
+	}
+
+	public function queues () : HasMany
+	{
+		return $this->hasMany(Queue::class, 'video_source_id');
 	}
 }

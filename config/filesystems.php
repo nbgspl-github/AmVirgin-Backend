@@ -83,13 +83,52 @@ return [
 
 		'videos' => [
 			'uploaded' => [
-
+				'driver' => 'local',
+				'root' => storage_path('app/public'),
+				'url' => env('APP_URL') . '/storage',
+				'visibility' => 'public',
+				'permissions' => [
+					'file' => [
+						'public' => 0664,
+						'private' => 0664,
+					],
+					'dir' => [
+						'public' => 0775,
+						'private' => 0775,
+					],
+				],
 			],
 			'downloadable' => [
-
+				'driver' => 'local',
+				'root' => storage_path('app/public'),
+				'url' => env('APP_URL') . '/storage',
+				'visibility' => 'public',
+				'permissions' => [
+					'file' => [
+						'public' => 0664,
+						'private' => 0664,
+					],
+					'dir' => [
+						'public' => 0775,
+						'private' => 0775,
+					],
+				],
 			],
 			'streamable' => [
-
+				'driver' => 'local',
+				'root' => storage_path('app/public/streams'),
+				'url' => env('APP_URL') . '/storage',
+				'visibility' => 'public',
+				'permissions' => [
+					'file' => [
+						'public' => 0664,
+						'private' => 0664,
+					],
+					'dir' => [
+						'public' => 0775,
+						'private' => 0775,
+					],
+				],
 			],
 		]
 	],

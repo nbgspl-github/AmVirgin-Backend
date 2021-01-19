@@ -4,7 +4,7 @@
 		<div class="col-12">
 			<div class="card shadow-sm">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Choose edit action'])
+					@include('admin.extras.header', ['title'=>"$payload->title"])
 				</div>
 				<div class="card-body animatable">
 					<div class="jumbotron bg-white animated zoomIn" style="background-image: url({{$payload->backdrop}});">
@@ -36,56 +36,88 @@
 									<div class="card-body">
 										<h5 class="card-title">Attributes</h5>
 										<p class="card-text">Choose this to update attributes such as title, description, duration etc.</p>
-										<a href="{{route('admin.videos.edit.attributes',$payload->getKey())}}" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
+										<a href="{{route('admin.videos.edit.attributes',$payload->getKey())}}" class="btn btn-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
 									</div>
 								</div>
 							</div>
-							<div class="col-sm-6 mr-0">
+							<div class="col-sm-6">
 								<div class="card shadow-none border animated slideInLeft">
 									<div class="card-body">
 										<h5 class="card-title">Media</h5>
 										<p class="card-text">Choose this to update media such as poster, backdrop, and trailer.</p>
-										<a href="{{route('admin.videos.edit.media',$payload->getKey())}}" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
+										<a href="{{route('admin.videos.edit.media',$payload->getKey())}}" class="btn btn-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="row mt-3">
-							<div class="col-sm-6 pr-0">
+							<div class="col-sm-4 pr-0">
 								<div class="card shadow-none border animated slideInLeft">
 									<div class="card-body">
-										<h5 class="card-title">Snapshots</h5>
-										<p class="card-text">Choose this to update or delete video snapshots.</p>
-										<a href="{{route('admin.videos.edit.snaps',$payload->getKey())}}" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
+										<h5 class="card-title">Source</h5>
+										<p class="card-text">Choose this to update video source for this video.</p>
+										<a href="{{route('admin.videos.edit.source',$payload->getKey())}}" class="btn btn-primary @if($payload->isTranscoding()) disabled @endif">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
 									</div>
 								</div>
 							</div>
-							<div class="col-sm-6 mr-0">
-								<div class="card shadow-none border animated slideInLeft">
-									<div class="card-body">
-										<h5 class="card-title">Sources</h5>
-										<p class="card-text">Choose this to update video sources for this video.</p>
-										<a href="{{route('admin.videos.edit.source',$payload->getKey())}}" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="row mt-3">
-							<div class="col-sm-6 pr-0">
+							<div class="col-sm-4 pr-0">
 								<div class="card shadow-none border animated slideInLeft">
 									<div class="card-body">
 										<h5 class="card-title">Audio</h5>
 										<p class="card-text">Choose this to update audio sources for this video.</p>
-										<a href="{{route('admin.videos.edit.audio',$payload->getKey())}}" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
+										<a href="{{route('admin.videos.edit.audio',$payload->getKey())}}" class="btn btn-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
 									</div>
 								</div>
 							</div>
-							<div class="col-sm-6 mr-0">
+							<div class="col-sm-4 mr-0">
 								<div class="card shadow-none border animated slideInLeft">
 									<div class="card-body">
 										<h5 class="card-title">Subtitles</h5>
 										<p class="card-text">Choose this to update subtitle sources for this video.</p>
-										<a href="{{route('admin.videos.edit.subtitle',$payload->getKey())}}" class="btn btn-primary shadow-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
+										<a href="{{route('admin.videos.edit.subtitle',$payload->getKey())}}" class="btn btn-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="w-100 mt-3">
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="card shadow-none border animated slideInLeft">
+										<div class="card-body">
+											<h5 class="card-title">Running Queues</h5>
+											<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+												<thead>
+												<tr>
+													<th>#</th>
+													<th>Started At</th>
+													<th>Ended At</th>
+													<th>Progress</th>
+													<th>Value</th>
+													<th>Status</th>
+												</tr>
+												</thead>
+												<tbody>
+												@foreach ($queues as $queue)
+													<tr>
+														<td>{{($loop->index+1)}}</td>
+														<td>{{$queue->started_at??\App\Library\Utils\Extensions\Str::NotAvailable}}</td>
+														<td>{{$queue->completed_at??\App\Library\Utils\Extensions\Str::NotAvailable}}</td>
+														@if(empty($queue->completed_at))
+															<td>
+																<div class="rounded progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: {{$queue->progress}}%; height: 16px;"></div>
+															</td>
+														@else
+															<td>
+																<div class="rounded progress-bar progress-bar-striped bg-danger" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: {{$queue->progress}}%; height: 16px;"></div>
+															</td>
+														@endif
+														<td>{{$queue->progress}}%</td>
+														<td>{{$queue->status}}</td>
+													</tr>
+												@endforeach
+												</tbody>
+											</table>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -94,5 +126,4 @@
 				</div>
 			</div>
 		</div>
-	</div>
 @stop

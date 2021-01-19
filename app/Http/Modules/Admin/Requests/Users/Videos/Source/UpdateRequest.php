@@ -7,7 +7,7 @@ class UpdateRequest extends \Illuminate\Foundation\Http\FormRequest
 	public function rules () : array
 	{
 		return [
-			'file' => ['bail', 'required', 'mimes:mp4', 'max:10000000']
+			'file' => ['bail', 'required', 'mimes:mp4,mkv', 'max:10000000']
 		];
 	}
 }

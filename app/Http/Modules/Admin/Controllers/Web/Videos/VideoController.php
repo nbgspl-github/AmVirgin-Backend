@@ -28,7 +28,7 @@ class VideoController extends \App\Http\Modules\Admin\Controllers\Web\WebControl
 
 	public function choose (Video $video)
 	{
-		return view('admin.videos.edit.choices')->with('payload', $video);
+		return view('admin.videos.edit.choices')->with('payload', $video)->with('queues', $video->queues()->latest()->get());
 	}
 
 	public function create ()

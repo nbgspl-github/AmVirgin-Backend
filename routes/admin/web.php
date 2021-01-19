@@ -299,3 +299,6 @@ Route::middleware('auth:admin')->group(function () {
 	});
 });
 Route::get('/playback', [\App\Http\Modules\Admin\Controllers\Web\PlaybackController::class, 'index']);
+Route::get('test', function () {
+	\Illuminate\Support\Facades\Storage::disk('videos.streamable')->makeDirectory('gshhgd');
+});

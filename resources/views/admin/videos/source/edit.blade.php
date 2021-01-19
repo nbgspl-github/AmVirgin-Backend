@@ -19,13 +19,11 @@
 									</div>
 									<div class="card-body">
 										<div class="form-row" id="container">
-											<div class="embed-responsive embed-responsive-16by9">
-												@if($video->sources->first()!=null)
-													<iframe class="embed-responsive-item" src="{{$video->sources->first()->file}}" allowfullscreen></iframe>
-												@else
-													<p class="text-center">No video available</p>
-												@endif
-											</div>
+											@if($video->sources->first()!=null)
+												<video src="{{$video->sources->first()->file}}" id="video" controls crossorigin playsinline></video>
+											@else
+												<p class="text-center">No video available</p>
+											@endif
 										</div>
 									</div>
 								</div>
@@ -66,7 +64,7 @@
 						<div class="form-group mb-0">
 							<label>Video</label>
 							<div class="custom-file">
-								<input name="file" type="file" class="custom-file-input" id="videoFile" accept=".mp4" required>
+								<input name="file" type="file" class="custom-file-input" id="videoFile" accept=".mp4, .mkv" required>
 								<label class="custom-file-label" for="videoFile">Choose video file...</label>
 							</div>
 						</div>
@@ -83,6 +81,42 @@
 
 @section('javascript')
 	<script>
+		@if($video->sources->first()!=null)
+		document.addEventListener('DOMContentLoaded', () => {
+			const source = '{{$video->sources->first()->file}}';
+			const video = document.querySelector('video');
+			var playerOptions = {
+				settings: ['quality', 'loop'],
+			};
+			var player = null;
+			if (!Hls.isSupported()) {
+				video.src = source;
+			} else {
+				const hls = new Hls();
+				hls.loadSource(source);
+				hls.attachMedia(video);
+				hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
+					console.log(data);
+					playerOptions.quality = {
+						default: hls.levels[0].height,
+						options: hls.levels.map((level) => level.height),
+						forced: true,
+						// Manage quality changes
+						onChange: (quality) => {
+							hls.levels.forEach((level, levelIndex) => {
+								if (level.height === quality) {
+									hls.currentLevel = levelIndex;
+								}
+							});
+						}
+					}
+					player = new Plyr(video, playerOptions);
+				});
+				window.hls = hls;
+			}
+			window.player = player;
+		});
+		@endif
 		let video_id = `{{$video->id}}`;
 		$(document).on('change', '.custom-file-input', function (event) {
 			$(this).next('.custom-file-label').html(event.target.files[0].name);
@@ -111,7 +145,7 @@
 				axios.post(`/admin/videos/${video_id}/update/source`, formData, config,).then(response => {
 					showProgressDialog(false);
 					alertify.alert(response.data.message, () => {
-						location.reload();
+						location.href = response.data.route;
 					});
 				}).catch(error => {
 					showProgressDialog(false);

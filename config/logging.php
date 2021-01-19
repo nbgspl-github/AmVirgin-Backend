@@ -59,7 +59,7 @@ return [
 			'url' => env('SLACK_WEBHOOK_URL'),
 			'username' => 'Laravel Log',
 			'emoji' => ':boom:',
-			'level' => 'info',
+			'level' => 'critical',
 		],
 
 		'papertrail' => [

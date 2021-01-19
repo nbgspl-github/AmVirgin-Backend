@@ -41,6 +41,7 @@ Route::prefix('videos')->group(function () {
 Route::prefix('categories')->group(function () {
 	Route::get('/', [\App\Http\Modules\Customer\Controllers\Api\Shop\CategoryController::class, 'index']);
 	Route::get('{category}/filters', [\App\Http\Modules\Customer\Controllers\Api\Shop\FilterController::class, 'show']);
+	Route::get('{category}/products', [CatalogController::class, 'index']);
 });
 
 Route::prefix('sessions')->group(function () {

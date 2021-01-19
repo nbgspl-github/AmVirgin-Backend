@@ -31,7 +31,7 @@ class CatalogController extends \App\Http\Modules\Customer\Controllers\Api\ApiCo
 		$products = Product::startQuery()->displayable()->categoryOrDescendant($category->id)->singleVariantMode();
 
 		// Preload all relations that we'll need in this call.
-		$products->withRelations('options', 'brand');
+		$products->withRelations(['options', 'brand']);
 
 		// Apply any incoming sort request, or just go with the default one.
 		$sort::sort($products);
@@ -40,9 +40,8 @@ class CatalogController extends \App\Http\Modules\Customer\Controllers\Api\ApiCo
 		$filters = $products->applyFilters($request, true);
 
 		return responseApp()->prepare(
-			CatalogListResource::collection(
-				$products->paginate($this->paginationChunk(self::PER_PAGE))
-			)->additional(['filters' => $filters])->response()->getData()
+			CatalogListResource::collection($products->paginate($this->paginationChunk(self::PER_PAGE)))
+				->additional(['filters' => $filters])->response()->getData()
 		);
 	}
 
