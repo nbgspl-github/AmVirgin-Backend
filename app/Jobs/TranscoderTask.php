@@ -43,7 +43,7 @@ class TranscoderTask implements \Illuminate\Contracts\Queue\ShouldQueue
 	{
 		$this->encodingQueue->update(['started_at' => now()->format(\App\Library\Utils\Extensions\Time::MYSQL_FORMAT), 'status' => 'Encoding']);
 		$transcoder = \ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::fromDisk('secured')->open($this->path)->exportForHLS();
-		$transcoder = $transcoder->addFilter('-an')->inFormat(new \ProtoneMedia\LaravelFFMpeg\FFMpeg\CopyFormat());
+		$transcoder = $transcoder->inFormat(new \ProtoneMedia\LaravelFFMpeg\FFMpeg\CopyFormat());
 		$transcoder->onProgress(fn ($progress) => $this->updateProgress($progress));
 		$transcoder = $this->addFormats($transcoder);
 		$directory = $this->makeHlsContainerDirectory();
@@ -78,17 +78,20 @@ class TranscoderTask implements \Illuminate\Contracts\Queue\ShouldQueue
 		return "{$directory}/{$this->source->video_id}_{$this->source->id}.{$this->hlsExtension}";
 	}
 
-	protected function addFormats ($transcoder)
+	protected function addFormats (\ProtoneMedia\LaravelFFMpeg\Exporters\HLSExporter $transcoder) : \ProtoneMedia\LaravelFFMpeg\Exporters\HLSExporter
 	{
 		$transcoder->addFormat($this->low, function ($media) {
 			$media->scale(640, 480);
+			$media->addFilter('-an');
 		});
-		$transcoder->addFormat($this->mid, function ($media) {
-			$media->scale(1280, 720);
-		});
-		$transcoder->addFormat($this->high, function ($media) {
-			$media->scale(1920, 1080);
-		});
+//		$transcoder->addFormat($this->mid, function ($media) {
+//			$media->scale(1280, 720);
+//			$media->addFilter('-an');
+//		});
+//		$transcoder->addFormat($this->high, function ($media) {
+//			$media->scale(1920, 1080);
+//			$media->addFilter('-an');
+//		});
 //		$transcoder->addFormat($this->ultra, function ($media) {
 //			$media->addLegacyFilter(function ($filters) {
 //				$filters->resize(new \FFMpeg\Coordinate\Dimension(3840, 2160));
