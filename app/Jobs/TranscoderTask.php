@@ -86,12 +86,12 @@ class TranscoderTask implements \Illuminate\Contracts\Queue\ShouldQueue
 		$transcoder->addFormat($this->mid, function ($media) {
 			$media->scale(1280, 720);
 		});
-//		$transcoder->addFormat($this->high, function ($media) {
-//			$media->scale(1920, 1080);
-//		});
-//		$transcoder->addFormat($this->high, function ($media) {
-//			$media->scale(3840, 2160);
-//		});
+		$transcoder->addFormat($this->high, function ($media) {
+			$media->scale(1920, 1080);
+		});
+		$transcoder->addFormat($this->high, function ($media) {
+			$media->scale(3840, 2160);
+		});
 		return $transcoder;
 	}
 }
