@@ -32,8 +32,7 @@ class TranscoderTask implements \Illuminate\Contracts\Queue\ShouldQueue
 	{
 		$this->source = $source;
 		$this->path = $this->source->getRawOriginal('file');
-//		$this->low = (new \FFMpeg\Format\Video\X264('aac', 'libx264'))->setKiloBitrate(250);
-		$this->low = (new \ProtoneMedia\LaravelFFMpeg\FFMpeg\CopyFormat());
+		$this->low = (new \FFMpeg\Format\Video\X264('aac', 'libx264'))->setKiloBitrate(250);
 		$this->mid = (new \FFMpeg\Format\Video\X264('aac', 'libx264'))->setKiloBitrate(500);
 		$this->high = (new \FFMpeg\Format\Video\X264('aac', 'libx264'))->setKiloBitrate(1000);
 		$this->ultra = (new \FFMpeg\Format\Video\X264('aac', 'libx264'))->setKiloBitrate(1500);
@@ -83,20 +82,15 @@ class TranscoderTask implements \Illuminate\Contracts\Queue\ShouldQueue
 	{
 		$transcoder->addFormat($this->low, function ($media) {
 			$media->scale(640, 480);
-			$media->addFilter('-an');
 		});
-//		$transcoder->addFormat($this->mid, function ($media) {
-//			$media->scale(1280, 720);
-//			$media->addFilter('-an');
-//		});
+		$transcoder->addFormat($this->mid, function ($media) {
+			$media->scale(1280, 720);
+		});
 //		$transcoder->addFormat($this->high, function ($media) {
 //			$media->scale(1920, 1080);
-//			$media->addFilter('-an');
 //		});
-//		$transcoder->addFormat($this->ultra, function ($media) {
-//			$media->addLegacyFilter(function ($filters) {
-//				$filters->resize(new \FFMpeg\Coordinate\Dimension(3840, 2160));
-//			});
+//		$transcoder->addFormat($this->high, function ($media) {
+//			$media->scale(3840, 2160);
 //		});
 		return $transcoder;
 	}

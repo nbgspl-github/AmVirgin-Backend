@@ -38,9 +38,7 @@ class CodeTester extends Command
 
 	public function handle ()
 	{
-		$file = "battle.mp4";
-		\ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::fromDisk('secured')->open('battle.mp4')->export()->addFilter('-an')->toDisk('secured')->inFormat(new \ProtoneMedia\LaravelFFMpeg\FFMpeg\CopyFormat())->onProgress(function ($progress) {
-			echo $progress . "\n";
-		})->save("battle_muted.mp4");
+		$s = \App\Models\Video\Source::find(13);
+		\App\Jobs\TranscoderTask::dispatchNow($s);
 	}
 }
