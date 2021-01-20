@@ -105,6 +105,7 @@ Route::middleware('auth:admin')->group(function () {
 			Route::post('audio', [\App\Http\Modules\Admin\Controllers\Web\Videos\AudioController::class, 'store'])->name('admin.videos.update.audio');
 			Route::post('subtitle', [\App\Http\Modules\Admin\Controllers\Web\Videos\SubtitleController::class, 'store'])->name('admin.videos.update.subtitle');
 			Route::post('source', [\App\Http\Modules\Admin\Controllers\Web\Videos\SourceController::class, 'update'])->name('admin.videos.update.source');
+			Route::match(['get', 'post'], 'source/chunk', [\App\Http\Modules\Admin\Controllers\Web\Videos\SourceController::class, 'chunk'])->name('admin.videos.update.source.chunk');
 		});
 		Route::post('store', [VideoController::class, Methods::Store])->name('admin.videos.store');
 		Route::prefix('{video}')->group(function () {
@@ -278,6 +279,7 @@ Route::middleware('auth:admin')->group(function () {
 		Route::get(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'index'])->name('admin.brands.index');
 		Route::get('create', [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'create'])->name('admin.brands.create');
 		Route::get('{id}/edit', [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'edit'])->name('admin.brands.edit');
+		Route::get('{brand}/show', [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'show'])->name('admin.brands.show');
 		Route::get('{id}/approve', [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'approve'])->name('admin.brands.approve');
 		Route::post(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'store'])->name('admin.brands.store');
 		Route::post('{id}', [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'update'])->name('admin.brands.update');

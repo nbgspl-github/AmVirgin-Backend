@@ -51,7 +51,6 @@ Route::prefix('sessions')->group(function () {
 
 Route::prefix('products')->group(function () {
 	Route::get('/sorts', [\App\Http\Modules\Customer\Controllers\Api\Shop\SortController::class, 'sorts']);
-	Route::get('{category}', [CatalogController::class, 'index']);
 	Route::prefix('{product}')->group(static function () {
 		Route::get(Str::Empty, [CatalogController::class, 'show']);
 		Route::prefix('reviews')->group(static function () {

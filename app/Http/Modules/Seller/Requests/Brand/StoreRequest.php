@@ -12,12 +12,11 @@ class StoreRequest extends \Illuminate\Foundation\Http\FormRequest
 	{
 		return [
 			'name' => ['bail', 'required', 'string', 'min:2', 'max:255'],
-			'logo' => ['bail', 'nullable', 'image', 'min:1', 'max:5124'],
+			'logo' => ['bail', 'nullable', 'image', 'max:1024'],
 			'website' => ['bail', 'nullable', 'url'],
 			'productSaleMarketPlace' => ['bail', 'nullable', 'string', 'min:2', 'max:255'],
 			'sampleMRPTagImage' => ['bail', 'nullable', 'image', 'min:1', 'max:5120'],
 			'isBrandOwner' => ['bail', 'nullable', 'boolean'],
-			'categoryId' => ['bail', 'required', \App\Models\Category::exists()],
 			'documentProof' => ['bail', 'nullable', 'mimes:pdf', 'max:5120'],
 			'documentType' => ['bail', 'nullable', Rule::in(Arrays::values(Brand::DocumentType))],
 			'trademarkNumber' => ['bail', 'required_if:documentType,trademark-certificate', 'string', 'min:2', 'max:255'],

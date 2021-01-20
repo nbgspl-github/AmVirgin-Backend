@@ -21,9 +21,16 @@ class BrandController extends BaseController
 
 	protected array $rules;
 
+	/**
+	 * @var Brand
+	 */
+	protected $model;
+
 	public function __construct ()
 	{
 		parent::__construct();
+		$this->middleware(AUTH_ADMIN);
+		$this->model = app(Brand::class);
 		$this->rules = [
 			'store' => [
 				'name' => ['bail', 'required', 'string', 'min:1', 'max:255', Rule::unique(Tables::Brands, 'name')],
@@ -38,8 +45,10 @@ class BrandController extends BaseController
 
 	public function index ()
 	{
-		$brands = Brand::all();
-		return view('admin.brands.index')->with('brands', $brands);
+		return view('admin.brands.index')->with('brands',
+			$this->paginateWithQuery(
+				$this->model->newQuery()->latest()->whereLike('name', $this->queryParameter()))
+		);
 	}
 
 	public function create ()
@@ -63,6 +72,11 @@ class BrandController extends BaseController
 			else
 				return $response;
 		}
+	}
+
+	public function show (Brand $brand)
+	{
+		return view('admin.brands.show')->with('brand', $brand);
 	}
 
 	public function approve ($id)

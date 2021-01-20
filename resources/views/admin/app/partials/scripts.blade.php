@@ -47,6 +47,7 @@
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
 <script src="https://cdn.plyr.io/3.6.3/plyr.js"></script>
+<script src="{{asset("assets/admin/plugins/dropify/dist/js/dropify.min.js")}}"></script>
 {{--<!-- App js -->--}}
 <script src="{{asset("assets/admin/js/app.js")}}"></script>
 <script src="{{asset("js/app.js")}}"></script>

@@ -6,6 +6,8 @@ use Illuminate\Console\Command;
 
 class CodeTester extends Command
 {
+	use \App\Traits\NotifiableViaSms;
+
 	const TwoHours = 7200;
 
 	/**
@@ -14,6 +16,8 @@ class CodeTester extends Command
 	 * @var string
 	 */
 	protected $signature = 'c:t';
+
+	protected $mobile = "8375976617";
 
 	/**
 	 * The console command description.
@@ -34,11 +38,23 @@ class CodeTester extends Command
 
 	public function handle ()
 	{
-		try {
-			$source = \App\Models\Video\Source::query()->find(14);
-			\App\Jobs\TranscoderTask::dispatchNow($source);
-		} catch (\Throwable $exception) {
-			dd($exception);
+		$directory = "app/public/uploads/0WNjses4ICBQerxef0wKw9wv";
+		$directoryPlain = "uploads/0WNjses4ICBQerxef0wKw9wv";
+		$base = fopen(storage_path("{$directory}/empty.ext"), 'ab');
+		$target = "{$directory}/video.mp4";
+		for ($i = 1; ; $i++) {
+			$file = "{$directory}/{$i}.ext";
+			if (!file_exists(storage_path($file))) {
+				echo "File {$file} not found\n";
+				break;
+			}
+//			echo "Appending {$file} to {$base}\n";
+			$resource = fopen(storage_path($file), 'rb');
+			$buffer = fread($resource, filesize(storage_path($file)));
+			fwrite($base, $buffer);
 		}
+		fclose($base);
+		copy(storage_path("{$directory}/empty.ext"), storage_path("{$directory}/video.mp4"));
+//		\App\Library\Utils\Uploads::access()->copy($base, $target);
 	}
 }

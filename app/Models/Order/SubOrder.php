@@ -31,7 +31,7 @@ class SubOrder extends \App\Library\Database\Eloquent\Model
 			$major = date('Ymd');
 			$minor = date('His');
 			$suffix = 100 + Order::query()->whereKey($order->orderId)->count('id');
-			$order->orderNumber = ("{$major}-{$minor}-{$suffix}");
+			$order->number = ("{$major}-{$minor}-{$suffix}");
 		});
 	}
 

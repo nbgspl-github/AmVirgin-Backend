@@ -63,10 +63,11 @@
 					<div class="modal-body">
 						<div class="form-group mb-0">
 							<label>Video</label>
-							<div class="custom-file">
-								<input name="file" type="file" class="custom-file-input" id="videoFile" accept=".mp4, .mkv" required>
-								<label class="custom-file-label" for="videoFile">Choose video file...</label>
-							</div>
+							{{--							<div class="custom-file">--}}
+							{{--								<input name="file" type="file" class="custom-file-input" id="videoFile" accept=".mp4, .mkv" required>--}}
+							{{--								<label class="custom-file-label" for="videoFile">Choose video file...</label>--}}
+							{{--							</div>--}}
+							<span id="videoFile" class="btn btn-primary">Browse</span>
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -80,84 +81,75 @@
 @endsection
 
 @section('javascript')
+	<script src="{{asset("assets/admin/js/Resumable.js")}}"></script>
 	<script>
-		@if($video->sources->first()!=null)
-		document.addEventListener('DOMContentLoaded', () => {
-			const source = '{{$video->sources->first()->file}}';
-			const video = document.querySelector('video');
-			var playerOptions = {
-				settings: ['quality', 'loop'],
-			};
-			var player = null;
-			if (!Hls.isSupported()) {
-				video.src = source;
-			} else {
-				const hls = new Hls();
-				hls.loadSource(source);
-				hls.attachMedia(video);
-				hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
-					console.log(data);
-					playerOptions.quality = {
-						default: hls.levels[0].height,
-						options: hls.levels.map((level) => level.height),
-						forced: true,
-						// Manage quality changes
-						onChange: (quality) => {
-							hls.levels.forEach((level, levelIndex) => {
-								if (level.height === quality) {
-									hls.currentLevel = levelIndex;
-								}
-							});
-						}
-					}
-					player = new Plyr(video, playerOptions);
-				});
-				window.hls = hls;
-			}
-			window.player = player;
-		});
-		@endif
-		let video_id = `{{$video->id}}`;
-		$(document).on('change', '.custom-file-input', function (event) {
-			$(this).next('.custom-file-label').html(event.target.files[0].name);
-		})
+		const url = `{{route('admin.videos.update.source.chunk',$video->id)}}`;
+		const token = `{{\App\Library\Utils\Extensions\Str::random(24)}}`;
+		let resumable = null;
+		handleAdd = () => {
+			$('#videoModal').modal('show');
+		};
+
+		// $(document).on('change', '.custom-file-input', function (event) {
+		// 	// $(this).next('.custom-file-label').html(event.target.files[0].name);
+		// })
+
 		$(document).ready(() => {
 			$('#videoForm').submit(function (event) {
 				event.preventDefault();
 				submitSource(this);
 			});
-		});
-
-		handleAdd = () => {
-			$('#videoModal').modal('show');
-		};
-
-		submitSource = (event) => {
-			const config = {
-				onUploadProgress: uploadProgress,
-				headers: {
-					'Content-Type': 'multipart/form-data'
-				}
-			};
-			const formData = new FormData(event);
-			showProgressDialog(true, () => {
-				$('#videoModal').modal('hide');
-				axios.post(`/admin/videos/${video_id}/update/source`, formData, config,).then(response => {
+			resumable = new Resumable({
+				target: url,
+				simultaneousUploads: 8,
+				maxFiles: 1,
+				query: {
+					'_token': `{{csrf_token()}}`,
+					token: token
+				},
+				maxChunkRetries: 0,
+				testChunks: true,
+				chunkSize: 10 * 1024 * 1024,
+			});
+			resumable.assignBrowse(document.getElementById('videoFile'));
+			resumable.on('fileAdded', function (file, event) {
+				$('.custom-file-label').html(file.name);
+			});
+			resumable.on('fileProgress', function (file, message) {
+				setProgress(Number(resumable.progress() * 100).toFixed(0));
+			});
+			resumable.on('error', function (message, file) {
+				alertify.confirm('An error occurred when uploading your file. Retry?', yes => {
+					showProgressDialog(true, () => {
+						resumable.upload();
+					});
+				}, no => {
 					showProgressDialog(false);
-					alertify.alert(response.data.message, () => {
-						location.href = response.data.route;
+				});
+			});
+			resumable.on('complete', function () {
+				axios.post(url, {
+					'is_last': '1',
+					token: token
+				}).then(response => {
+					showProgressDialog(false);
+					alertify.alert('Video source has been uploaded successfully.', function () {
+						location.reload();
 					});
 				}).catch(error => {
 					showProgressDialog(false);
-					alertify.alert('Something went wrong. Please try again.');
-				});
+					alertify.alert('Video uploading failed prematurely. Please try again.', function () {
+						location.reload();
+					});
+				})
+			})
+		});
+
+		submitSource = (event) => {
+			showProgressDialog(true, () => {
+				$('#videoModal').modal('hide');
+				resumable.upload();
 			});
 		}
-
-		uploadProgress = (event) => {
-			let percentCompleted = Math.round((event.loaded * 100) / event.total);
-			setProgress(percentCompleted);
-		}
-
 	</script>
 @stop

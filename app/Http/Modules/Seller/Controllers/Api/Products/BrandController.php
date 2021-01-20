@@ -4,11 +4,9 @@ namespace App\Http\Modules\Seller\Controllers\Api\Products;
 
 use App\Exceptions\ValidationException;
 use App\Http\Modules\Seller\Requests\Brand\StoreRequest;
-use App\Library\Enums\Common\Directories;
 use App\Library\Enums\Common\Tables;
 use App\Library\Utils\Extensions\Arrays;
 use App\Library\Utils\Extensions\Rule;
-use App\Library\Utils\Uploads;
 use App\Models\Brand;
 use App\Resources\Brands\Seller\AvailableListResource;
 use App\Resources\Brands\Seller\OwnedBrandResource;
@@ -78,13 +76,15 @@ class BrandController extends \App\Http\Modules\Seller\Controllers\Api\ApiContro
 	{
 		$response = responseApp();
 		$payload = $request->validated();
-		$brand = Brand::startQuery()->name($payload['name'])->category($payload['categoryId'])->first();
+		/**
+		 * @var Brand $brand
+		 */
+		$brand = Brand::startQuery()->name($payload['name'])->first();
 		if ($brand != null) {
-			// Verify if any other seller owns this brand or it exclusively belongs to this seller.
 			if ($brand->createdBy == $this->guard()->id()) {
-				if ($brand->status == Brand::Status['Approved']) {
+				if ($brand->status->is(\App\Library\Enums\Brands\Status::Approved)) {
 					$response->status(\Illuminate\Http\Response::HTTP_OK)->message('You are already approved to sell under this brand.')->setValue('payload', ['status' => $brand->status]);
-				} else if ($brand->status == Brand::Status['Rejected']) {
+				} else if ($brand->status->is(\App\Library\Enums\Brands\Status::Rejected)) {
 					$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Your approval request was rejected, so you\'re not allowed to sell under this brand name.')->setValue('payload', ['status' => $brand->status]);
 				} else {
 					$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Your approval request is pending. Please check back shortly to get an update.')->setValue('payload', ['status' => $brand->status]);
@@ -119,9 +119,8 @@ class BrandController extends \App\Http\Modules\Seller\Controllers\Api\ApiContro
 			}
 			Arrays::replaceValues($payload, [
 				'createdBy' => $this->guard()->id(),
-				'status' => Brand::Status['Pending'],
 				'documentExtras' => $extras,
-				'logo' => isset($payload['logo']) ? Uploads::access()->putFile(Directories::Brands, $payload['logo']) : null,
+				'logo' => $payload['logo'],
 			]);
 			$brand = Brand::query()->create($payload);
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Your request has been queued. Please check back shortly to get an update.')->setValue('payload', ['status' => $brand->status]);

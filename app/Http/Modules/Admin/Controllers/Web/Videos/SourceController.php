@@ -20,9 +20,52 @@ class SourceController extends \App\Http\Modules\Admin\Controllers\Web\WebContro
 		return view('admin.videos.source.edit')->with('video', $video);
 	}
 
-	public function runningQueues ()
+	public function chunk (\Illuminate\Http\Request $request) : \Illuminate\Http\JsonResponse
 	{
+		if ($request->isMethod('POST')) {
+			if (!$request->has('is_last')) {
+				$directory = 'uploads/' . $request->token;
+				if (!\App\Library\Utils\Uploads::access()->exists($directory)) {
+					\App\Library\Utils\Uploads::access()->makeDirectory($directory);
+					\App\Library\Utils\Uploads::access()->put("{$directory}/empty", \App\Library\Utils\Extensions\Str::Empty);
+				}
+				\App\Library\Utils\Uploads::access()->putFileAs($directory, $request->file('file'), "{$request->resumableChunkNumber}");
+				return response()->json(['message' => 'Chunk uploaded successfully.'], 200);
+			} else {
+				$this->combine($request->token);
+				return response()->json(['message' => 'Chunks assembled successfully.'], 200);
+			}
+		} else {
+			$directory = 'uploads/' . $request->token;
+			if (\App\Library\Utils\Uploads::access()->exists("{$directory}/{$request->resumableChunkNumber}")) {
+				return response()->json([
+					'message' => 'Chunk found!'
+				], 200);
+			} else {
+				return response()->json([
+					'message' => 'Chunk not found!'
+				], 204);
+			}
+		}
+	}
 
+	protected function combine (string $token)
+	{
+		$directory = "app/public/uploads/{$token}";
+		$base = fopen(storage_path("{$directory}/empty"), 'ab');
+		for ($i = 1; ; $i++) {
+			$file = "{$directory}/{$i}";
+			if (!file_exists(storage_path($file))) {
+				break;
+			}
+			$resource = fopen(storage_path($file), 'rb');
+			$buffer = fread($resource, filesize(storage_path($file)));
+			fwrite($base, $buffer);
+			fclose($resource);
+			unlink(storage_path($file));
+		}
+		fclose($base);
+		copy(storage_path("{$directory}/empty"), storage_path("app/public/videos/video_tracks/{$token}.mp4"));
 	}
 
 	public function update (UpdateRequest $request, \App\Models\Video\Video $video) : \Illuminate\Http\JsonResponse

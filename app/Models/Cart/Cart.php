@@ -6,6 +6,7 @@ use App\Classes\Cart\CartItem;
 use App\Classes\Cart\CartItemCollection;
 use App\Exceptions\CartAlreadySubmittedException;
 use App\Exceptions\CartItemNotFoundException;
+use App\Library\Database\Eloquent\Model;
 use App\Library\Enums\Cart\Status;
 use App\Library\Utils\Extensions\Str;
 use App\Models\Auth\Customer;

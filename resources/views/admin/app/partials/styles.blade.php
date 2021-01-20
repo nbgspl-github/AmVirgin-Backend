@@ -12,6 +12,7 @@
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <link href="{{asset("assets/admin/plugins/bootstrap-select/css/bootstrap-select.min.css")}}" rel="stylesheet">
 <link href="{{asset("assets/admin/plugins/filepond/filepond.min.css")}}" rel="stylesheet">
+<link href="{{asset("assets/admin/plugins/dropify/dist/css/dropify.min.css")}}" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.plyr.io/3.6.3/plyr.css"/>
 <link
 		href="https://unpkg.com/video.js@7/dist/video-js.min.css"

@@ -4,14 +4,16 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBrandsTable extends Migration{
+class CreateBrandsTable extends Migration
+{
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
-	public function up(){
-		Schema::create('brands', function (Blueprint $table){
+	public function up ()
+	{
+		Schema::create('brands', function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->string('name');
 			$table->string('slug', 500);
@@ -25,7 +27,7 @@ class CreateBrandsTable extends Migration{
 			$table->json('documentExtras');
 			$table->unsignedBigInteger('categoryId')->comment('Category to which this brand belongs.');
 			$table->unsignedBigInteger('createdBy')->nullable()->comment('ID of seller who created or proposed this brand. Null if created by admin.');
-			$table->enum('status', [\App\Models\Brand::Status]);
+			$table->enum('status', \App\Library\Enums\Brands\Status::getValues());
 			$table->boolean('active')->default(false);
 			$table->timestamps();
 
@@ -41,7 +43,8 @@ class CreateBrandsTable extends Migration{
 	 *
 	 * @return void
 	 */
-	public function down(){
+	public function down ()
+	{
 		Schema::disableForeignKeyConstraints();
 		Schema::dropIfExists('brands');
 		Schema::enableForeignKeyConstraints();
