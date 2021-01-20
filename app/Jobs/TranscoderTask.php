@@ -32,10 +32,10 @@ class TranscoderTask implements \Illuminate\Contracts\Queue\ShouldQueue
 	{
 		$this->source = $source;
 		$this->path = $this->source->getRawOriginal('file');
-		$this->low = (new \FFMpeg\Format\Video\X264('aac'))->setKiloBitrate(250);
-		$this->mid = (new \FFMpeg\Format\Video\X264('aac'))->setKiloBitrate(500);
-		$this->high = (new \FFMpeg\Format\Video\X264('aac'))->setKiloBitrate(1000);
-		$this->ultra = (new \FFMpeg\Format\Video\X264('aac'))->setKiloBitrate(1500);
+		$this->low = (new \FFMpeg\Format\Video\X264('aac', 'libx264'))->setKiloBitrate(250);
+		$this->mid = (new \FFMpeg\Format\Video\X264('aac', 'libx264'))->setKiloBitrate(500);
+		$this->high = (new \FFMpeg\Format\Video\X264('aac', 'libx264'))->setKiloBitrate(1000);
+		$this->ultra = (new \FFMpeg\Format\Video\X264('aac', 'libx264'))->setKiloBitrate(1500);
 		$this->encodingQueue = $source->queues()->create(['video_id' => $source->video_id, 'status' => 'Queued']);
 	}
 
@@ -43,6 +43,7 @@ class TranscoderTask implements \Illuminate\Contracts\Queue\ShouldQueue
 	{
 		$this->encodingQueue->update(['started_at' => now()->format(\App\Library\Utils\Extensions\Time::MYSQL_FORMAT), 'status' => 'Encoding']);
 		$transcoder = \ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::fromDisk('secured')->open($this->path)->exportForHLS();
+		$transcoder = $transcoder->addFilter('-an')->inFormat(new \ProtoneMedia\LaravelFFMpeg\FFMpeg\CopyFormat());
 		$transcoder->onProgress(fn ($progress) => $this->updateProgress($progress));
 		$transcoder = $this->addFormats($transcoder);
 		$directory = $this->makeHlsContainerDirectory();
@@ -80,15 +81,13 @@ class TranscoderTask implements \Illuminate\Contracts\Queue\ShouldQueue
 	protected function addFormats ($transcoder)
 	{
 		$transcoder->addFormat($this->low, function ($media) {
-			$media->addFilter('scale=640:480');
+			$media->scale(640, 480);
 		});
 		$transcoder->addFormat($this->mid, function ($media) {
 			$media->scale(1280, 720);
 		});
 		$transcoder->addFormat($this->high, function ($media) {
-			$media->addFilter(function ($filters, $in, $out) {
-				$filters->custom($in, 'scale=1920:1080', $out);
-			});
+			$media->scale(1920, 1080);
 		});
 //		$transcoder->addFormat($this->ultra, function ($media) {
 //			$media->addLegacyFilter(function ($filters) {

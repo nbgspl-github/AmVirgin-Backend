@@ -14,10 +14,12 @@
 							<th>Poster</th>
 							<th>Title</th>
 							<th>Description</th>
+							<th>Audio</th>
+							<th>Subtitles</th>
 							<th>Rating</th>
 							<th>Seasons</th>
 							<th>Episodes</th>
-							<th>Pending</th>
+							<th>Processing</th>
 							<th>Action(s)</th>
 						</tr>
 						</thead>
@@ -34,11 +36,31 @@
 									@endif
 								</td>
 								<td>{{$s->title}}</td>
-								<td>{{\App\Library\Utils\Extensions\Str::ellipsis($s->description,100)}}</td>
+								<td>{{\App\Library\Utils\Extensions\Str::ellipsis($s->description,255)}}</td>
+								<td>
+									@foreach($video->audios as $audio)
+										<span class="badge badge-secondary">
+											{{$audio->language->name}}
+										</span>
+									@endforeach
+								</td>
+								<td>
+									@foreach($video->subtitles as $subtitle)
+										<span class="badge badge-secondary">
+											{{$subtitle->language->name}}
+										</span>
+									@endforeach
+								</td>
 								<td>{{$s->rating}}</td>
 								<td>{{$s->seasons}}</td>
 								<td>{{$s->sources->count()}}</td>
-								<td>{{\App\Library\Utils\Extensions\Str::stringifyBoolean($s->pending)}}</td>
+								<td>
+									@if($video->isTranscoding())
+										Yes
+									@else
+										No
+									@endif
+								</td>
 								<td>
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group" role="group">

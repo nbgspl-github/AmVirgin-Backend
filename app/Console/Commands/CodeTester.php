@@ -38,23 +38,9 @@ class CodeTester extends Command
 
 	public function handle ()
 	{
-		$directory = "app/public/uploads/0WNjses4ICBQerxef0wKw9wv";
-		$directoryPlain = "uploads/0WNjses4ICBQerxef0wKw9wv";
-		$base = fopen(storage_path("{$directory}/empty.ext"), 'ab');
-		$target = "{$directory}/video.mp4";
-		for ($i = 1; ; $i++) {
-			$file = "{$directory}/{$i}.ext";
-			if (!file_exists(storage_path($file))) {
-				echo "File {$file} not found\n";
-				break;
-			}
-//			echo "Appending {$file} to {$base}\n";
-			$resource = fopen(storage_path($file), 'rb');
-			$buffer = fread($resource, filesize(storage_path($file)));
-			fwrite($base, $buffer);
-		}
-		fclose($base);
-		copy(storage_path("{$directory}/empty.ext"), storage_path("{$directory}/video.mp4"));
-//		\App\Library\Utils\Uploads::access()->copy($base, $target);
+		$file = "battle.mp4";
+		\ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::fromDisk('secured')->open('battle.mp4')->export()->addFilter('-an')->toDisk('secured')->inFormat(new \ProtoneMedia\LaravelFFMpeg\FFMpeg\CopyFormat())->onProgress(function ($progress) {
+			echo $progress . "\n";
+		})->save("battle_muted.mp4");
 	}
 }

@@ -14,7 +14,7 @@ class SubtitleController extends \App\Http\Modules\Admin\Controllers\Web\WebCont
 	public function index (\App\Models\Video\Video $video, \App\Models\Video\Source $source)
 	{
 		return view('admin.tv-series.subtitle.index')->with('video', $video)->with('source', $source)->with('subtitles', $source->subtitles()->paginate($this->paginationChunk()))->with('languages',
-			\App\Models\Video\Language::query()->get()
+			\App\Models\Video\Language::query()->whereNotIn('id', $source->subtitles->pluck('video_language_id')->toArray())->get()
 		);
 	}
 

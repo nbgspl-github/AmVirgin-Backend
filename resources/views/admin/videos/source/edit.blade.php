@@ -90,9 +90,42 @@
 			$('#videoModal').modal('show');
 		};
 
-		// $(document).on('change', '.custom-file-input', function (event) {
-		// 	// $(this).next('.custom-file-label').html(event.target.files[0].name);
-		// })
+		@if($video->sources->first()!=null)
+		document.addEventListener('DOMContentLoaded', () => {
+			const source = '{{$video->sources->first()->file}}';
+			const video = document.querySelector('video');
+			var playerOptions = {
+				settings: ['quality', 'loop'],
+			};
+			var player = null;
+			if (!Hls.isSupported()) {
+				video.src = source;
+			} else {
+				const hls = new Hls();
+				hls.loadSource(source);
+				hls.attachMedia(video);
+				hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
+					console.log(data);
+					playerOptions.quality = {
+						default: hls.levels[0].height,
+						options: hls.levels.map((level) => level.height),
+						forced: true,
+						// Manage quality changes
+						onChange: (quality) => {
+							hls.levels.forEach((level, levelIndex) => {
+								if (level.height === quality) {
+									hls.currentLevel = levelIndex;
+								}
+							});
+						}
+					}
+					player = new Plyr(video, playerOptions);
+				});
+				window.hls = hls;
+			}
+			window.player = player;
+		});
+		@endif
 
 		$(document).ready(() => {
 			$('#videoForm').submit(function (event) {
@@ -101,7 +134,7 @@
 			});
 			resumable = new Resumable({
 				target: url,
-				simultaneousUploads: 8,
+				simultaneousUploads: 16,
 				maxFiles: 1,
 				query: {
 					'_token': `{{csrf_token()}}`,

@@ -16,7 +16,7 @@ class AudioController extends \App\Http\Modules\Admin\Controllers\Web\WebControl
 		return view('admin.videos.audio.index')->with('audios',
 			$video->audios()->latest()->paginate($this->paginationChunk())
 		)->with('languages',
-			\App\Models\Video\Language::query()->get()
+			\App\Models\Video\Language::query()->whereNotIn('id', $video->audios->pluck('video_language_id')->toArray())->get()
 		)->with('video', $video);
 	}
 

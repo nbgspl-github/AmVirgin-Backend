@@ -47,6 +47,7 @@ class HomeController extends \App\Http\Modules\Customer\Controllers\Api\ApiContr
 		$sections->transform(function (\App\Models\Video\Section $section) {
 			$contents = Video::startQuery()
 				->displayable()
+				->isNotTranscoding()
 				->section($section->id)
 				->take($section->max_items)
 				->applyFilters(true)
@@ -73,6 +74,7 @@ class HomeController extends \App\Http\Modules\Customer\Controllers\Api\ApiContr
 		 */
 		$trendingNow = Video::startQuery()
 			->displayable()
+			->isNotTranscoding()
 			->trending()
 			->applyFilters(true)
 			->get();
@@ -86,7 +88,7 @@ class HomeController extends \App\Http\Modules\Customer\Controllers\Api\ApiContr
 	public function showAllItemsInSection (\App\Models\Video\Section $section) : JsonResponse
 	{
 		if (Str::equals($section->type, PageSectionType::Entertainment)) {
-			$contents = Video::startQuery()->displayable()->section($section->id)->take($section->max_items)->get();
+			$contents = Video::startQuery()->displayable()->isNotTranscoding()->section($section->id)->take($section->max_items)->get();
 		} else {
 			$contents = Product::startQuery()->displayable()->promoted()->take($section->max_items)->get();
 		}
@@ -98,7 +100,7 @@ class HomeController extends \App\Http\Modules\Customer\Controllers\Api\ApiContr
 
 	public function trendingNow () : JsonResponse
 	{
-		$payload = Video::startQuery()->displayable()->trending()->get();
+		$payload = Video::startQuery()->displayable()->isNotTranscoding()->trending()->get();
 		$payload = TrendingNowVideoResource::collection($payload);
 		return responseApp()->prepare(
 			$payload
@@ -107,7 +109,7 @@ class HomeController extends \App\Http\Modules\Customer\Controllers\Api\ApiContr
 
 	public function recommendedVideo () : JsonResponse
 	{
-		$payload = Video::startQuery()->displayable()->orderByDescending('rating')->limit(15)->get();
+		$payload = Video::startQuery()->displayable()->isNotTranscoding()->orderByDescending('rating')->limit(15)->get();
 		$payload = TrendingNowVideoResource::collection($payload);
 		return responseApp()->prepare(
 			$payload
