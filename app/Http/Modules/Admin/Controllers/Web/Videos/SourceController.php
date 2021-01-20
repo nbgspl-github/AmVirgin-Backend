@@ -20,7 +20,7 @@ class SourceController extends \App\Http\Modules\Admin\Controllers\Web\WebContro
 		return view('admin.videos.source.edit')->with('video', $video);
 	}
 
-	public function chunk (\Illuminate\Http\Request $request) : \Illuminate\Http\JsonResponse
+	public function chunk (\Illuminate\Http\Request $request, \App\Models\Video\Video $video) : \Illuminate\Http\JsonResponse
 	{
 		if ($request->isMethod('POST')) {
 			if (!$request->has('is_last')) {
@@ -32,8 +32,18 @@ class SourceController extends \App\Http\Modules\Admin\Controllers\Web\WebContro
 				\App\Library\Utils\Uploads::access()->putFileAs($directory, $request->file('file'), "{$request->resumableChunkNumber}");
 				return response()->json(['message' => 'Chunk uploaded successfully.'], 200);
 			} else {
-				$this->combine($request->token);
-				return response()->json(['message' => 'Chunks assembled successfully.'], 200);
+				$path = $this->combine($request->token);
+				/**
+				 * @var $source \App\Models\Video\Source
+				 */
+				$source = $video->sources->first();
+				if ($source != null) {
+					$source->update(['file' => $path]);
+				} else {
+					$source = $video->sources()->create(['file' => $path]);
+				}
+				\App\Jobs\TranscoderTask::dispatch($source)->onQueue('default');
+				return response()->json(['message' => 'Chunks assembled successfully.', 'route' => route('admin.videos.edit.action', $video->id)], 200);
 			}
 		} else {
 			$directory = 'uploads/' . $request->token;
@@ -49,7 +59,7 @@ class SourceController extends \App\Http\Modules\Admin\Controllers\Web\WebContro
 		}
 	}
 
-	protected function combine (string $token)
+	protected function combine (string $token) : string
 	{
 		$directory = "app/public/uploads/{$token}";
 		$base = fopen(storage_path("{$directory}/empty"), 'ab');
@@ -65,7 +75,9 @@ class SourceController extends \App\Http\Modules\Admin\Controllers\Web\WebContro
 			unlink(storage_path($file));
 		}
 		fclose($base);
-		copy(storage_path("{$directory}/empty"), storage_path("app/public/videos/video_tracks/{$token}.mp4"));
+		$path = "videos/video_tracks/{$token}.mp4";
+		copy(storage_path("{$directory}/empty"), storage_path("app/public/{$path}"));
+		return $path;
 	}
 
 	public function update (UpdateRequest $request, \App\Models\Video\Video $video) : \Illuminate\Http\JsonResponse

@@ -134,7 +134,7 @@
 				}).then(response => {
 					showProgressDialog(false);
 					alertify.alert('Video source has been uploaded successfully.', function () {
-						location.reload();
+						location.href = response.data.route;
 					});
 				}).catch(error => {
 					showProgressDialog(false);
