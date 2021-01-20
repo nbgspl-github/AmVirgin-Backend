@@ -32,7 +32,8 @@ class TranscoderTask implements \Illuminate\Contracts\Queue\ShouldQueue
 	{
 		$this->source = $source;
 		$this->path = $this->source->getRawOriginal('file');
-		$this->low = (new \FFMpeg\Format\Video\X264('aac', 'libx264'))->setKiloBitrate(250);
+//		$this->low = (new \FFMpeg\Format\Video\X264('aac', 'libx264'))->setKiloBitrate(250);
+		$this->low = (new \ProtoneMedia\LaravelFFMpeg\FFMpeg\CopyFormat());
 		$this->mid = (new \FFMpeg\Format\Video\X264('aac', 'libx264'))->setKiloBitrate(500);
 		$this->high = (new \FFMpeg\Format\Video\X264('aac', 'libx264'))->setKiloBitrate(1000);
 		$this->ultra = (new \FFMpeg\Format\Video\X264('aac', 'libx264'))->setKiloBitrate(1500);
