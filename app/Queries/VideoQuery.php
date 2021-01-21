@@ -30,7 +30,7 @@ class VideoQuery extends AbstractQuery
 	public function isNotTranscoding () : self
 	{
 		$this->query->whereHas('queues', function (Builder $builder) {
-			$builder->whereNotIn('status', ['Encoding', 'Queued'])->whereNull('completed_at');
+			$builder->whereNotIn('status', ['Encoding', 'Queued']);
 		});
 		return $this;
 	}
