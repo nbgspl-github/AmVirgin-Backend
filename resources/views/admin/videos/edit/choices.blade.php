@@ -55,7 +55,7 @@
 								<div class="card shadow-none border animated slideInLeft">
 									<div class="card-body">
 										<h5 class="card-title">Source</h5>
-										<p class="card-text">Choose this to update video source for this video.</p>
+										<p class="card-text">Choose this to update video track.</p>
 										<a href="{{route('admin.videos.edit.source',$payload->getKey())}}" class="btn btn-primary @if($payload->isTranscoding()) disabled @endif">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
 									</div>
 								</div>
@@ -64,7 +64,7 @@
 								<div class="card shadow-none border animated slideInLeft">
 									<div class="card-body">
 										<h5 class="card-title">Audio</h5>
-										<p class="card-text">Choose this to update audio sources for this video.</p>
+										<p class="card-text">Choose this to update audio tracks.</p>
 										<a href="{{route('admin.videos.edit.audio',$payload->getKey())}}" class="btn btn-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
 									</div>
 								</div>
@@ -73,7 +73,7 @@
 								<div class="card shadow-none border animated slideInLeft">
 									<div class="card-body">
 										<h5 class="card-title">Subtitles</h5>
-										<p class="card-text">Choose this to update subtitle sources for this video.</p>
+										<p class="card-text">Choose this to update subtitle tracks.</p>
 										<a href="{{route('admin.videos.edit.subtitle',$payload->getKey())}}" class="btn btn-primary">Edit&nbsp;&nbsp;<i class="mdi mdi-arrow-right"></i></a>
 									</div>
 								</div>
