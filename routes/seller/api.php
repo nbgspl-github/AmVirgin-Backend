@@ -52,7 +52,7 @@ Route::prefix('categories')->group(function () {
 });
 
 Route::prefix('attributes')->group(function () {
-	Route::get('/{attributeId}/values', [ValueController::class, 'show']);
+	Route::get('{attributeId}/values', [ValueController::class, 'show']);
 });
 
 Route::middleware(AUTH_SELLER)->prefix('products')->group(function () {

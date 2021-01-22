@@ -38,6 +38,16 @@ class Seller extends \App\Library\Database\Eloquent\AuthEntity
 		'active' => 'bool',
 	];
 
+	public function setAvatarAttribute ($value) : void
+	{
+		$this->avatar = $this->storeWhenUploadedCorrectly('avatars', $value);
+	}
+
+	public function getAvatarAttribute ($value) : ?string
+	{
+		return $this->retrieveMedia($value);
+	}
+
 	public function approvedBrands () : HasMany
 	{
 		return $this->hasMany(Brand::class, 'createdBy', 'id');

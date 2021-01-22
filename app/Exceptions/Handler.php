@@ -72,7 +72,7 @@ class Handler extends ExceptionHandler
 				}
 			}
 		} catch (Throwable $exception) {
-			return $exception->getMessage();
+			return parent::render($request, $e);
 		}
 	}
 

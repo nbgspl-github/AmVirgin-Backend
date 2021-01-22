@@ -2,11 +2,6 @@
 
 namespace App\Queries;
 
-use App\Filters\BrandFilter;
-use App\Filters\CategoryFilter;
-use App\Filters\DiscountFilter;
-use App\Filters\GenderFilter;
-use App\Filters\PriceRangeFilter;
 use App\Http\Modules\Customer\Requests\Shop\Catalog\IndexRequest;
 use App\Library\Utils\Extensions\Time;
 use App\Models\CatalogFilter;
@@ -16,7 +11,6 @@ use App\Queries\Traits\SellerAuthentication;
 
 class ProductQuery extends AbstractQuery
 {
-	use PriceRangeFilter, BrandFilter, GenderFilter, CategoryFilter, DiscountFilter;
 	use SellerAuthentication;
 
 	protected function __construct ()

@@ -24,6 +24,12 @@ use Throwable;
 
 class ProductController extends AbstractProductController
 {
+	public function __construct ()
+	{
+		parent::__construct();
+		$this->middleware(AUTH_SELLER);
+	}
+
 	public function index () : JsonResponse
 	{
 		$per_page = request()->get('per_page') ?? '';
@@ -77,7 +83,7 @@ class ProductController extends AbstractProductController
 	{
 		$response = responseApp();
 		try {
-			$product = Product::startQuery()->seller($this->guard()->id())->key($id)->firstOrFail();
+			$product = Product::startQuery()->seller($this->seller()->id)->key($id)->firstOrFail();
 			$resource = new ProductResource($product);
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Listing product details.')->setValue('payload', $resource);
 		} catch (ModelNotFoundException $exception) {
@@ -116,10 +122,6 @@ class ProductController extends AbstractProductController
 			if ($this->isInvalidCategory($category)) {
 				throw new InvalidCategoryException();
 			}
-//            if (!$this->isBrandApprovedForSeller($brand)) {
-//                throw new BrandNotApprovedForSellerException();
-//            }
-
 			$productsPayloadCollection = new Collection();
 			$product = $this->validateProductPayload($outer['payload']);
 			Arrays::replaceValues($product, [

@@ -3,7 +3,6 @@
 namespace App\Http\Modules\Seller\Controllers\Api\Auth;
 
 use App\Http\Modules\Seller\Requests\Auth\LoginRequest;
-use App\Models\Auth\Customer;
 use App\Models\Auth\Seller;
 
 class LoginController extends \App\Http\Modules\Shared\Controllers\Api\AuthController
@@ -79,7 +78,7 @@ class LoginController extends \App\Http\Modules\Shared\Controllers\Api\AuthContr
 				$query = ['mobile' => $request->mobile];
 				break;
 		}
-		return Customer::findBy($query);
+		return Seller::findBy($query);
 	}
 
 	protected function canLogin (Seller $seller) : bool
@@ -135,6 +134,6 @@ class LoginController extends \App\Http\Modules\Shared\Controllers\Api\AuthContr
 
 	protected function guard ()
 	{
-		return auth(self::CUSTOMER_API);
+		return auth(self::SELLER_API);
 	}
 }

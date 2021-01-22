@@ -62,7 +62,7 @@ class BrandController extends \App\Http\Modules\Seller\Controllers\Api\ApiContro
 		$response = responseApp();
 		try {
 			$payload = $this->requestValid(request(), $this->rules['show']);
-			$ownedBrands = Brand::startQuery()->seller($this->guard()->id())->category($payload['category'])->orderByDescending('updated_at')->get();
+			$ownedBrands = Brand::startQuery()->seller($this->guard()->id())->orderByDescending('updated_at')->get();
 			$resource = OwnedBrandResource::collection($ownedBrands);
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Listing all brands approved for you.')->setValue('data', $resource)->send();
 		} catch (Throwable $exception) {
@@ -120,7 +120,7 @@ class BrandController extends \App\Http\Modules\Seller\Controllers\Api\ApiContro
 			Arrays::replaceValues($payload, [
 				'createdBy' => $this->guard()->id(),
 				'documentExtras' => $extras,
-				'logo' => $payload['logo'],
+				'logo' => $payload['logo'] ?? null,
 			]);
 			$brand = Brand::query()->create($payload);
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Your request has been queued. Please check back shortly to get an update.')->setValue('payload', ['status' => $brand->status]);
