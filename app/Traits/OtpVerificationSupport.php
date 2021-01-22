@@ -62,4 +62,9 @@ trait OtpVerificationSupport
 		$this->otp = $otp;
 		return $this;
 	}
+
+	public function verify (string $otp) : bool
+	{
+		return $this->otp == $otp;
+	}
 }

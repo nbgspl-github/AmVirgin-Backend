@@ -33,7 +33,7 @@ abstract class BaseAuthController extends BaseController
 		parent::__construct();
 	}
 
-	protected abstract function authTarget (): string;
+	protected abstract function authTarget () : string;
 
 	protected abstract function rulesExists ();
 
@@ -45,7 +45,7 @@ abstract class BaseAuthController extends BaseController
 
 	protected abstract function rulesUpdateAvatar ();
 
-	protected abstract function rulesUpdatePassword (): array;
+	protected abstract function rulesUpdatePassword () : array;
 
 	protected function checkSuccess ()
 	{
@@ -97,12 +97,12 @@ abstract class BaseAuthController extends BaseController
 		return __('strings.auth.denied');
 	}
 
-	protected function shouldAllowOnlyActiveUsers (): bool
+	protected function shouldAllowOnlyActiveUsers () : bool
 	{
 		return false;
 	}
 
-	protected function conditionsExists (Request $request)
+	protected function conditionsExists (Request $request) : \Closure
 	{
 		$hasMobile = ($request->has('mobile') && !empty($request->mobile));
 		$hasEmail = ($request->has('email') && !empty($request->email));
@@ -121,12 +121,12 @@ abstract class BaseAuthController extends BaseController
 		}
 	}
 
-	protected function conditionsLogin (Request $request)
+	protected function conditionsLogin (Request $request) : \Closure
 	{
 		return $this->conditionsExists($request);
 	}
 
-	protected function conditionsRegister (Request $request)
+	protected function conditionsRegister (Request $request) : \Closure
 	{
 		return $this->conditionsExists($request);
 	}
@@ -159,7 +159,7 @@ abstract class BaseAuthController extends BaseController
 		return $user->account_verified;
 	}
 
-	protected function generateAuthToken (Request $request, \App\Library\Database\Eloquent\AuthEntity $user)
+	protected function generateAuthToken (Request $request, \App\Library\Database\Eloquent\AuthEntity $user) : bool
 	{
 		return auth()->guard('api')->attempt(['email' => $user->email, 'password' => $request->password]);
 	}
@@ -169,7 +169,7 @@ abstract class BaseAuthController extends BaseController
 		return JWTAuth::fromUser($user);
 	}
 
-	protected function exists ()
+	protected function exists () : \Illuminate\Http\JsonResponse
 	{
 		try {
 			$this->requestValid(request(), $this->rulesExists());
@@ -187,7 +187,7 @@ abstract class BaseAuthController extends BaseController
 		}
 	}
 
-	protected function login ()
+	protected function login () : \Illuminate\Http\JsonResponse
 	{
 		$request = request();
 		try {
@@ -211,7 +211,7 @@ abstract class BaseAuthController extends BaseController
 		}
 	}
 
-	protected function logout ()
+	protected function logout () : \Illuminate\Http\JsonResponse
 	{
 		$request = request();
 		try {
@@ -222,7 +222,7 @@ abstract class BaseAuthController extends BaseController
 		}
 	}
 
-	protected function loginPayload (\App\Library\Database\Eloquent\AuthEntity $user, string $token)
+	protected function loginPayload (\App\Library\Database\Eloquent\AuthEntity $user, string $token) : array
 	{
 		return [
 			'name' => $user->name,
@@ -232,7 +232,7 @@ abstract class BaseAuthController extends BaseController
 		];
 	}
 
-	protected function registerPayload (\App\Library\Database\Eloquent\AuthEntity $user, string $token)
+	protected function registerPayload (\App\Library\Database\Eloquent\AuthEntity $user, string $token) : array
 	{
 		return [
 			'name' => $user->name,
@@ -242,7 +242,7 @@ abstract class BaseAuthController extends BaseController
 		];
 	}
 
-	protected function register ()
+	protected function register () : \Illuminate\Http\JsonResponse
 	{
 		$request = request();
 		try {
@@ -265,20 +265,24 @@ abstract class BaseAuthController extends BaseController
 
 	protected function create ($request)
 	{
-		return $this->authTarget()::create([
-			'name' => $request->name,
-			'email' => $request->email,
-			'mobile' => $request->mobile,
-			'password' => Hash::make($request->password),
-		]);
+		try {
+			return $this->authTarget()::create([
+				'name' => $request->name,
+				'email' => $request->email,
+				'mobile' => $request->mobile,
+				'password' => Hash::make($request->password),
+			]);
+		} catch (Throwable $exception) {
+			dd('XXX', $exception);
+		}
 	}
 
-	protected function profile ()
+	protected function profile () : AuthProfileResource
 	{
 		return new AuthProfileResource($this->guard()->user());
 	}
 
-	protected function credentials (Request $request)
+	protected function credentials (Request $request) : array
 	{
 		if ($request->exists('mobile')) {
 			return [
@@ -293,7 +297,7 @@ abstract class BaseAuthController extends BaseController
 		}
 	}
 
-	public function updateProfile ()
+	public function updateProfile () : \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -310,7 +314,7 @@ abstract class BaseAuthController extends BaseController
 		}
 	}
 
-	protected function updateAvatar ()
+	protected function updateAvatar () : \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -330,7 +334,7 @@ abstract class BaseAuthController extends BaseController
 		}
 	}
 
-	protected function updatePassword ()
+	protected function updatePassword () : \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		try {

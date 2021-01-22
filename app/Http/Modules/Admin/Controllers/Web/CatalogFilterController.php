@@ -27,7 +27,7 @@ class CatalogFilterController extends BaseController
 		$this->rules = [
 			'store' => [
 				'label' => ['bail', 'nullable', 'string', 'min:1', 'max:255'],
-				'categoryId' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)->whereNot('type', Category::Types['Root'])],
+				'categoryId' => ['bail', 'required', Rule::existsPrimary(Tables::Categories)->whereNot('type', \App\Library\Enums\Categories\Types::Root)],
 				'builtInType' => ['bail', 'required_with:builtIn', Rule::in(Arrays::values(CatalogFilter::BuiltInFilters))],
 				'attributeId' => ['bail', 'required_without:builtIn', Rule::existsPrimary(Tables::Attributes)],
 			],

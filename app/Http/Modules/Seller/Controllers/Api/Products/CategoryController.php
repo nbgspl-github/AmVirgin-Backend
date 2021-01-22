@@ -22,10 +22,10 @@ class CategoryController extends \App\Http\Modules\Seller\Controllers\Api\ApiCon
 				$vertical = $subCategory->children()->get();
 				$vertical = $vertical->transform(function (Category $vertical) {
 					return [
-						'key' => $vertical->id(),
-						'slug' => $vertical->slug(),
-						'name' => $vertical->name(),
-						'type' => $vertical->type(),
+						'key' => $vertical->id,
+						'slug' => null,
+						'name' => $vertical->name,
+						'type' => $vertical->type,
 						'icon' => [
 							'exists' => false,
 							'url' => Str::Empty,
@@ -33,10 +33,10 @@ class CategoryController extends \App\Http\Modules\Seller\Controllers\Api\ApiCon
 					];
 				});
 				return [
-					'key' => $subCategory->id(),
-					'slug' => $subCategory->slug(),
-					'name' => $subCategory->name(),
-					'type' => $subCategory->type(),
+					'key' => $subCategory->id,
+					'slug' => $subCategory->slug,
+					'name' => $subCategory->name,
+					'type' => $subCategory->type,
 					'icon' => [
 						'exists' => false,
 						'url' => Str::Empty,
@@ -49,10 +49,10 @@ class CategoryController extends \App\Http\Modules\Seller\Controllers\Api\ApiCon
 				];
 			});
 			return [
-				'key' => $category->id(),
-				'slug' => $category->slug(),
-				'name' => $category->name(),
-				'type' => $category->type(),
+				'key' => $category->id,
+				'slug' => $category->slug,
+				'name' => $category->name,
+				'type' => $category->type,
 				'icon' => [
 					'exists' => false,
 					'url' => Str::Empty,

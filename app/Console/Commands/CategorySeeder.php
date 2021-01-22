@@ -109,15 +109,15 @@ class CategorySeeder extends Command
 			'name' => 'Main',
 			'parentId' => null,
 			'description' => 'This is the super-parent category.',
-			'type' => Category::Types['Root'],
+			'type' => \App\Library\Enums\Categories\Types::Root,
 			'specials' => [],
 		]);
 		foreach ($this->categories as $key => $value) {
 			$category = new Category();
 			$category->name = $key;
 			$category->description = sprintf('%s is a really cool trend. There\'s a whole lot more inside so be sure to follow.', $key);
-			$category->parentId = $root->id();
-			$category->type = Category::Types['Category'];
+			$category->parentId = $root->id;
+			$category->type = \App\Library\Enums\Categories\Types::Category;
 			$category->specials = ['brandInFocus' => false, 'popularCategory' => false, 'trendingNow' => false];
 			$category->inheritParentAttributes = false;
 			$category->save();
@@ -126,8 +126,8 @@ class CategorySeeder extends Command
 					$inner = new Category();
 					$inner->name = $innerCategory;
 					$inner->description = sprintf('%s is a really cool trend. There\'s a whole lot more inside so be sure to follow.', $innerCategory);
-					$inner->parentId = $category->id();
-					$inner->type = Category::Types['SubCategory'];
+					$inner->parentId = $category->id;
+					$inner->type = \App\Library\Enums\Categories\Types::SubCategory;
 					$inner->specials = ['brandInFocus' => false, 'popularCategory' => false, 'trendingNow' => false];
 					$inner->inheritParentAttributes = true;
 					$inner->save();
@@ -136,8 +136,8 @@ class CategorySeeder extends Command
 							$subInner = new Category();
 							$subInner->name = $subInnerValue;
 							$subInner->description = sprintf('%s is a really cool trend. There\'s a whole lot more inside so be sure to follow.', $subInnerValue);
-							$subInner->parentId = $inner->id();
-							$subInner->type = Category::Types['Vertical'];
+							$subInner->parentId = $inner->id;
+							$subInner->type = \App\Library\Enums\Categories\Types::Vertical;
 							$subInner->specials = ['brandInFocus' => false, 'popularCategory' => false, 'trendingNow' => false];
 							$subInner->inheritParentAttributes = true;
 							$subInner->save();

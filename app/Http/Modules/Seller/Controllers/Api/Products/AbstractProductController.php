@@ -178,7 +178,7 @@ class AbstractProductController extends \App\Http\Modules\Seller\Controllers\Api
 
 	protected function isInvalidCategory (Category $category) : bool
 	{
-		return !Str::equals($category->type(), Category::Types['Vertical']);
+		return !Str::equals($category->type(), \App\Library\Enums\Categories\Types::Vertical);
 	}
 
 	protected function isBrandApprovedForSeller (Brand $brand)

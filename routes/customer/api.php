@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Modules\Customer\Controllers\Api\Auth\AuthController;
+use App\Http\Modules\Customer\Controllers\Api\Auth\ExistenceController;
 use App\Http\Modules\Customer\Controllers\Api\Auth\TwoFactorAuthController;
 use App\Http\Modules\Customer\Controllers\Api\Cart\QuoteController;
 use App\Http\Modules\Customer\Controllers\Api\Cart\WishlistController;
@@ -18,16 +18,16 @@ use App\Library\Utils\Extensions\Str;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix(Str::Empty)->group(function () {
-	Route::get(Str::Empty, [TwoFactorAuthController::class, 'exists']);
-	Route::post('login', [TwoFactorAuthController::class, 'login']);
-	Route::post('login/social', [TwoFactorAuthController::class, 'socialLogin']);
-	Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:customer-api');
+	Route::get(Str::Empty, [ExistenceController::class, 'exists']);
+	Route::post('login', [\App\Http\Modules\Customer\Controllers\Api\Auth\LoginController::class, 'login']);
+	Route::post('login/social', [\App\Http\Modules\Customer\Controllers\Api\Auth\SocialLoginController::class, 'login']);
+	Route::post('logout', [\App\Http\Modules\Customer\Controllers\Api\Auth\LoginController::class, 'logout']);
 	Route::post('register', [TwoFactorAuthController::class, 'register']);
 	Route::prefix('profile')->middleware('auth:customer-api')->group(function () {
-		Route::get(Str::Empty, [AuthController::class, 'profile']);
-		Route::post('avatar', [AuthController::class, 'updateAvatar']);
-		Route::put(Str::Empty, [AuthController::class, 'updateProfile']);
-		Route::put('password', [AuthController::class, 'updatePassword']);
+		Route::get(Str::Empty, [\App\Http\Modules\Customer\Controllers\Api\Auth\ProfileController::class, 'show']);
+		Route::put(Str::Empty, [\App\Http\Modules\Customer\Controllers\Api\Auth\ProfileController::class, 'update']);
+		Route::post('avatar', [\App\Http\Modules\Customer\Controllers\Api\Auth\AvatarController::class, 'update']);
+		Route::put('password', [\App\Http\Modules\Customer\Controllers\Api\Auth\PasswordController::class, 'update']);
 	});
 	Route::post('contact-us', [\App\Http\Modules\Customer\Controllers\Api\Shared\ContactUsController::class, 'store']);
 

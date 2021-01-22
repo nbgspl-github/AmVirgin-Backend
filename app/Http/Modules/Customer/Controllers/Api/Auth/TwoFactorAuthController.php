@@ -5,7 +5,6 @@ namespace App\Http\Modules\Customer\Controllers\Api\Auth;
 use App\Http\Modules\Shared\Controllers\Auth\TwoFactorBaseAuthController;
 use App\Models\Auth\Customer;
 use App\Models\CustomerOtp;
-use App\Resources\Auth\Customer\AuthProfileResource;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -64,27 +63,27 @@ class TwoFactorAuthController extends TwoFactorBaseAuthController
 
 	protected function rulesUpdateProfile ()
 	{
-		// TODO: Implement rulesUpdateProfile() method.
+
 	}
 
 	protected function rulesUpdateAvatar ()
 	{
-		// TODO: Implement rulesUpdateAvatar() method.
+
 	}
 
-	protected function loginPayload (\App\Library\Database\Eloquent\Model $user, string $token)
+	protected function loginPayload (\App\Library\Database\Eloquent\Model $user, string $token) : array
 	{
-		return (new AuthProfileResource($user))->token($token);
+		return (new \App\Resources\Auth\Customer\AuthProfileResource($user))->token($token)->toArray(null);
 	}
 
-	protected function registerPayload (\App\Library\Database\Eloquent\Model $user, string $token)
+	protected function registerPayload (\App\Library\Database\Eloquent\Model $user, string $token) : array
 	{
-		return (new \App\Resources\Auth\Customer\AuthProfileResource($user))->token($token);
+		return (new \App\Resources\Auth\Customer\AuthProfileResource($user))->token($token)->toArray(null);
 	}
 
 	protected function rulesUpdatePassword () : array
 	{
-		// TODO: Implement rulesUpdatePassword() method.
+
 	}
 
 	protected function rulesSocialLogin () : array

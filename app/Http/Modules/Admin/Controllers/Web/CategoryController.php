@@ -4,12 +4,13 @@ namespace App\Http\Modules\Admin\Controllers\Web;
 
 use App\Classes\ColumnNavigator;
 use App\Exceptions\ValidationException;
+use App\Http\Modules\Admin\Requests\Category\UpdateRequest;
 use App\Http\Modules\Shared\Controllers\BaseController;
+use App\Library\Enums\Categories\Types;
 use App\Library\Enums\Common\Directories;
 use App\Library\Enums\Common\Tables;
 use App\Library\Http\WebResponse;
 use App\Library\Utils\Extensions\Rule;
-use App\Library\Utils\Extensions\Str;
 use App\Library\Utils\Uploads;
 use App\Models\AttributeSetItem;
 use App\Models\Category;
@@ -42,19 +43,8 @@ class CategoryController extends BaseController
 				'name' => ['bail', 'required', 'string', 'min:1', 'max:255'],
 				'description' => ['bail', 'nullable', 'string', 'min:1', 'max:1000'],
 				'parentId' => ['bail', 'required', 'numeric', Rule::existsPrimary(Tables::Categories)],
-				'listingStatus' => ['bail', 'required', Rule::in([Category::ListingStatus['Active'], Category::ListingStatus['Inactive']])],
-				'type' => ['bail', 'required', Rule::in(Category::Types['Category'], Category::Types['SubCategory'], Category::Types['Vertical'])],
-				'icon' => ['bail', 'nullable', 'image'],
-				'order' => ['bail', 'required', Rule::minimum(0), Rule::maximum(255)],
-				'summary' => ['bail', 'nullable', 'string'],
-				'catalog' => ['bail', 'nullable', 'mimes:xls,xlsx', 'max:10240']
-			],
-			'update' => [
-				'name' => ['bail', 'required', 'string', 'min:1', 'max:255'],
-				'description' => ['bail', 'nullable', 'string', 'min:1', 'max:1000'],
-				'parentId' => ['bail', 'required', 'numeric', Rule::existsPrimary(Tables::Categories)],
-				'listingStatus' => ['bail', 'required', Rule::in([Category::ListingStatus['Active'], Category::ListingStatus['Inactive']])],
-				'type' => ['bail', 'required', Rule::in(Category::Types['Category'], Category::Types['SubCategory'], Category::Types['Vertical'])],
+				'listingStatus' => ['bail', 'required', Rule::in([Category::LISTING_ACTIVE, Category::LISTING_INACTIVE])],
+				'type' => ['bail', 'required', Rule::in(Types::Category, Types::SubCategory, Types::Vertical)],
 				'icon' => ['bail', 'nullable', 'image'],
 				'order' => ['bail', 'required', Rule::minimum(0), Rule::maximum(255)],
 				'summary' => ['bail', 'nullable', 'string'],
@@ -143,8 +133,11 @@ class CategoryController extends BaseController
 
 	public function index ()
 	{
-		$categories = Category::startQuery()->isRoot(false)->orderByAscending('parentId')->get();
-		return view('admin.categories.index')->with('categories', $categories);
+		return view('admin.categories.index')->with('categories',
+			$this->paginateWithQuery(
+				Category::startQuery()->isRoot(false)->orderByAscending('parent_id')->builder()
+			)
+		);
 	}
 
 	public function create ()
@@ -158,15 +151,15 @@ class CategoryController extends BaseController
 					$vertical = $subCategory->children()->get();
 					$vertical->transform(function (Category $vertical) {
 						return [
-							'key' => $vertical->id(),
-							'name' => $vertical->name(),
-							'type' => $vertical->type(),
+							'key' => $vertical->id,
+							'name' => $vertical->name,
+							'type' => $vertical->type,
 						];
 					});
 					return [
-						'key' => $subCategory->id(),
-						'name' => $subCategory->name(),
-						'type' => $subCategory->type(),
+						'key' => $subCategory->id,
+						'name' => $subCategory->name,
+						'type' => $subCategory->type,
 						'children' => [
 							'available' => $vertical->count() > 0,
 							'count' => $vertical->count(),
@@ -175,9 +168,9 @@ class CategoryController extends BaseController
 					];
 				});
 				return [
-					'key' => $category->id(),
-					'name' => $category->name(),
-					'type' => $category->type(),
+					'key' => $category->id,
+					'name' => $category->name,
+					'type' => $category->type,
 					'children' => [
 						'available' => $subCategory->count() > 0,
 						'count' => $subCategory->count(),
@@ -186,9 +179,9 @@ class CategoryController extends BaseController
 				];
 			});
 			return [
-				'key' => $root->id(),
-				'name' => $root->name(),
-				'type' => $root->type(),
+				'key' => $root->id,
+				'name' => $root->name,
+				'type' => $root->type,
 				'children' => [
 					'available' => $category->count() > 0,
 					'count' => $category->count(),
@@ -199,9 +192,8 @@ class CategoryController extends BaseController
 		return view('admin.categories.create')->with('roots', $roots);
 	}
 
-	public function edit ($id)
+	public function edit (Category $category)
 	{
-		$category = Category::find($id);
 		$roots = Category::startQuery()->isRoot()->get();
 		$roots->transform(function (Category $root) {
 			$category = $root->children()->get();
@@ -211,15 +203,15 @@ class CategoryController extends BaseController
 					$vertical = $subCategory->children()->get();
 					$vertical->transform(function (Category $vertical) {
 						return [
-							'key' => $vertical->id(),
-							'name' => $vertical->name(),
-							'type' => $vertical->type(),
+							'key' => $vertical->id,
+							'name' => $vertical->name,
+							'type' => $vertical->type,
 						];
 					});
 					return [
-						'key' => $subCategory->id(),
-						'name' => $subCategory->name(),
-						'type' => $subCategory->type(),
+						'key' => $subCategory->id,
+						'name' => $subCategory->name,
+						'type' => $subCategory->type,
 						'children' => [
 							'available' => $vertical->count() > 0,
 							'count' => $vertical->count(),
@@ -228,9 +220,9 @@ class CategoryController extends BaseController
 					];
 				});
 				return [
-					'key' => $category->id(),
-					'name' => $category->name(),
-					'type' => $category->type(),
+					'key' => $category->id,
+					'name' => $category->name,
+					'type' => $category->type,
 					'children' => [
 						'available' => $subCategory->count() > 0,
 						'count' => $subCategory->count(),
@@ -239,9 +231,9 @@ class CategoryController extends BaseController
 				];
 			});
 			return [
-				'key' => $root->id(),
-				'name' => $root->name(),
-				'type' => $root->type(),
+				'key' => $root->id,
+				'name' => $root->name,
+				'type' => $root->type,
 				'children' => [
 					'available' => $category->count() > 0,
 					'count' => $category->count(),
@@ -274,82 +266,21 @@ class CategoryController extends BaseController
 		}
 	}
 
-	public function update ($id = null)
+	public function update (UpdateRequest $request, Category $category) : \Illuminate\Http\RedirectResponse
 	{
-		$response = responseWeb();
-		try {
-			$category = Category::findOrFail($id);
-			$payload = $this->requestValid(\request(), $this->rules['update']);
-			if (\request()->hasFile('icon')) {
-				$payload['icon'] = Uploads::access()->putFile(Directories::Categories, \request()->file('icon'));
-			}
-			$category->update($payload);
-			$response->route('admin.categories.index')->success('Updated category successfully.');
-		} catch (ModelNotFoundException $exception) {
-			$response->route('admin.categories.index')->error($exception->getMessage());
-		} catch (ValidationException $exception) {
-			$response->back()->data(\request()->all())->error($exception->getMessage());
-		} catch (Throwable $exception) {
-			$response->back()->data(\request()->all())->error($exception->getMessage());
-		} finally {
-			return $response->send();
-		}
+		$category->update($request->validated());
+		return redirect()->route('admin.categories.index')->with('success',
+			'Category details updated successfully.'
+		);
 	}
 
-	public function delete ($id)
+	public function delete (Category $category) : \Illuminate\Http\JsonResponse
 	{
-		$response = responseApp();
-		try {
-			$category = Category::findOrFail($id);
-			$category->delete();
-			$response->message('Category deleted successfully.')->status(\Illuminate\Http\Response::HTTP_OK)->send();
-		} catch (ModelNotFoundException $exception) {
-			$response->message($exception->getMessage())->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->send();
-		} catch (Throwable $exception) {
-			$response->message($exception->getMessage())->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->send();
-		} finally {
-			return $response->send();
-		}
-	}
-
-	protected function processMarkupExcel (?string $markup): ?string
-	{
-		libxml_use_internal_errors(true);
-		$dom = new \domdocument();
-		$dom->loadHtml($markup, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-		$images = $dom->getElementsByTagName('img');
-		foreach ($images as $count => $image) {
-			$src = $image->getAttribute('src');
-			if (preg_match('/data:image/', $src)) {
-				preg_match('/data:image\/(?<mime>.*?)\;/', $src, $groups);
-				$mimeType = $groups['mime'];
-				$path = 'summary-images/' . Str::makeUuid() . '.' . $mimeType;
-				Uploads::access()->put($path, file_get_contents($src));
-				$image->removeAttribute('src');
-				$image->setAttribute('src', storage_path('app/public/' . $path));
-			}
-		}
-		return $dom->saveHTML();
-	}
-
-	protected function processMarkup (?string $markup): ?string
-	{
-		libxml_use_internal_errors(true);
-		$dom = new \domdocument();
-		$dom->loadHtml($markup, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-		$images = $dom->getElementsByTagName('img');
-		foreach ($images as $count => $image) {
-			$src = $image->getAttribute('src');
-			if (preg_match('/data:image/', $src)) {
-				preg_match('/data:image\/(?<mime>.*?)\;/', $src, $groups);
-				$mimeType = $groups['mime'];
-				$path = 'summary-images/' . Str::makeUuid() . '.' . $mimeType;
-				Uploads::access()->put($path, file_get_contents($src));
-				$image->removeAttribute('src');
-				$image->setAttribute('src', Uploads::access()->url($path));
-			}
-		}
-		return $dom->saveHTML();
+		$category->descendants()->each->delete();
+		$category->delete();
+		return responseApp()->prepare(
+			[], \Illuminate\Http\Response::HTTP_OK, 'Category along with its descendants deleted successfully.'
+		);
 	}
 
 	public function downloadTemplate ($id)
@@ -360,7 +291,7 @@ class CategoryController extends BaseController
 			 * @var Category $category
 			 * @var Collection $attributes
 			 */
-			$category = Category::query()->whereKey($id)->where('type', Category::Types['Vertical'])->first();
+			$category = Category::query()->whereKey($id)->where('type', Types::Vertical)->first();
 			$spreadsheet = new Spreadsheet();
 			$spreadsheet->removeSheetByIndex(0);
 			$worksheetIndex = $spreadsheet->createSheet();

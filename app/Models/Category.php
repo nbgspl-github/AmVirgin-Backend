@@ -2,19 +2,13 @@
 
 namespace App\Models;
 
-use App\Library\Enums\Common\Directories;
+use App\Library\Enums\Categories\Types;
 use App\Library\Utils\Extensions\Arrays;
 use App\Library\Utils\Extensions\Str;
-use App\Library\Utils\Uploads;
 use App\Queries\CategoryQuery;
-use App\Traits\DynamicAttributeNamedMethods;
-use App\Traits\GenerateSlugs;
-use App\Traits\HasSpecialAttributes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
-use Spatie\Sluggable\SlugOptions;
 
 /**
  * Category defines a logical grouping of products which share similar traits.
@@ -22,21 +16,17 @@ use Spatie\Sluggable\SlugOptions;
  */
 class Category extends \App\Library\Database\Eloquent\Model
 {
-	use HasSpecialAttributes, DynamicAttributeNamedMethods, GenerateSlugs;
+	use \App\Traits\HasSpecialAttributes;
+	use \App\Traits\DynamicAttributeNamedMethods;
+	use \BenSampo\Enum\Traits\CastsEnums;
 
 	protected $table = 'categories';
-	protected $casts = ['specials' => 'array', 'order' => 'int'];
-	protected $hidden = ['created_at', 'updated_at'];
-	public const Types = [
-		'Root' => 'root',
-		'Category' => 'category',
-		'SubCategory' => 'sub-category',
-		'Vertical' => 'vertical',
+	protected $casts = [
+		'specials' => 'array',
+		'type' => Types::class
 	];
-	public const ListingStatus = [
-		'Active' => 'active',
-		'Inactive' => 'in-active',
-	];
+	const LISTING_ACTIVE = 'active';
+	const LISTING_INACTIVE = 'inactive';
 
 	public function attributes () : \Illuminate\Database\Eloquent\Relations\BelongsToMany
 	{
@@ -50,12 +40,12 @@ class Category extends \App\Library\Database\Eloquent\Model
 
 	public function children () : HasMany
 	{
-		return $this->hasMany(Category::class, 'parentId');
+		return $this->hasMany(Category::class, 'parent_id');
 	}
 
 	public function parent () : BelongsTo
 	{
-		return $this->belongsTo(Category::class, 'parentId');
+		return $this->belongsTo(Category::class, 'parent_id');
 	}
 
 	public function brandInFocus (?bool $yes = null) : bool
@@ -91,7 +81,7 @@ class Category extends \App\Library\Database\Eloquent\Model
 	{
 		$parents = Arrays::Empty;
 		$parent = $category;
-		while (($parent = $parent->parent()->where('type', '!=', Category::Types['Root'])->first()) != null) {
+		while (($parent = $parent->parent()->where('type', '!=', Types::Root)->first()) != null) {
 			$parents[] = $parent->name;
 		}
 		$parents[] = 'Main';
@@ -115,20 +105,21 @@ class Category extends \App\Library\Database\Eloquent\Model
 
 	public function setCatalogAttribute ($value) : void
 	{
-		if ($value instanceof UploadedFile) {
-			$this->attributes['catalog'] = Uploads::access()->putFile(Directories::Catalogs, $value);
-		} else {
-			$this->attributes['catalog'] = $value;
-		}
+		$this->attributes['catalog'] = $this->storeWhenUploadedCorrectly('categories/catalogs', $value);
 	}
 
 	public function getCatalogAttribute ($value) : ?string
 	{
-		return Uploads::existsUrl($this->attributes['catalog']);
+		return $this->retrieveMedia('catalog');
 	}
 
-	public function getSlugOptions () : SlugOptions
+	public function setLogoAttribute ($value) : void
 	{
-		return SlugOptions::create()->saveSlugsTo('slug')->generateSlugsFrom('name');
+		$this->attributes['icon'] = $this->storeWhenUploadedCorrectly('categories/icons', $value);
+	}
+
+	public function getLogoAttribute ($value) : ?string
+	{
+		return $this->retrieveMedia('icon');
 	}
 }

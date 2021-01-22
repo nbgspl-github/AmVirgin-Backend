@@ -196,4 +196,9 @@ abstract class AbstractQuery
 		$this->query->select($columns);
 		return $this;
 	}
+
+	public function builder () : ?Builder
+	{
+		return $this->query;
+	}
 }

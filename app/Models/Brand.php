@@ -23,7 +23,8 @@ class Brand extends \App\Library\Database\Eloquent\Model
 		'active' => 'bool',
 		'isBrandOwner' => 'bool',
 		'documentExtras' => 'array',
-		'status' => \App\Library\Enums\Brands\Status::class
+		'status' => \App\Library\Enums\Brands\Status::class,
+		'documentType' => \App\Library\Enums\Brands\DocumentType::class
 	];
 
 	public const DocumentType = [
@@ -51,9 +52,24 @@ class Brand extends \App\Library\Database\Eloquent\Model
 		return $this->retrieveMedia($this->attributes['logo']);
 	}
 
+	public function setDocumentProofAttribute ($value)
+	{
+		$this->attributes['documentProof'] = $this->storeWhenUploadedCorrectly('brands/documents', $value);
+	}
+
+	public function getDocumentProofAttribute () : ?string
+	{
+		return $this->retrieveMedia($this->attributes['documentProof']);
+	}
+
 	public function category () : BelongsTo
 	{
 		return $this->belongsTo(Category::class, 'categoryId');
+	}
+
+	public function seller () : BelongsTo
+	{
+		return $this->belongsTo(\App\Models\Auth\Seller::class, 'createdBy');
 	}
 
 	public static function startQuery () : BrandQuery

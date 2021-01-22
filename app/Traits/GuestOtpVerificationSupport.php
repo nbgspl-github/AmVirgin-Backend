@@ -2,8 +2,6 @@
 
 namespace App\Traits;
 
-use App\Models\Settings;
-
 trait GuestOtpVerificationSupport
 {
 	public function generateOtp ($length) : int
@@ -27,12 +25,28 @@ trait GuestOtpVerificationSupport
 	}
 
 	/**
+	 * @param string $mobile
 	 * @return int
 	 */
 	public function sendGuestOtp (string $mobile) : int
 	{
-		$length = Settings::getInt('otpLength', 4);
-		$otp = $this->generateOtp($length);
-		return $otp;
+		$otp = mt_rand(1111, 9999);
+		$client = new \GuzzleHttp\Client();
+		try {
+			$response = $client->post('https://www.bulksmsplans.com/api/send_sms', [
+				'form_params' => [
+					'api_id' => env("SMS_API_ID"),
+					'api_password' => env("SMS_API_PASSWORD"),
+					'sms_type' => 'Transactional',
+					'number' => $mobile,
+					'message' => "Your one time password for authentication is {$otp}.",
+					'sms_encoding' => 1,
+					'sender' => env("SMS_API_SENDER"),
+				]
+			]);
+			return $otp;
+		} catch (\Throwable $e) {
+			return -1;
+		}
 	}
 }

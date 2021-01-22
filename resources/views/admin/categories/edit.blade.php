@@ -57,15 +57,15 @@
 								</div>
 								<div class="form-group">
 									<label>@required(Parent)</label>
-									<select name="parentId" class="form-control" id="parentId" required onchange="handleTypeChanged(this.value,document.getElementById('option-item-'+this.value).getAttribute('data-type'));">
+									<select name="parent_id" class="form-control" id="parentId" required onchange="handleTypeChanged(this.value,document.getElementById('option-item-'+this.value).getAttribute('data-type'));">
 										<option value="" disabled selected>Choose</option>
 										@foreach($roots as $root)
-											<option value="{{$root['key']}}" @if($root['key']==$main->parentId) selected @endif data-type="{{$root['type']}}" id="option-item-{{$root['key']}}">{{$root['name']}}</option>
+											<option value="{{$root['key']}}" @if($root['key']==$main->parent_id) selected @endif data-type="{{$root['type']}}" id="option-item-{{$root['key']}}">{{$root['name']}}</option>
 											@foreach($root['children']['items'] as $category)
-												<option value="{{ $category['key'] }}" @if($category['key']==$main->parentId) selected @endif  data-type="{{$category['type']}}" id="option-item-{{$category['key']}}">{{$root['name']}}
+												<option value="{{ $category['key'] }}" @if($category['key']==$main->parent_id) selected @endif  data-type="{{$category['type']}}" id="option-item-{{$category['key']}}">{{$root['name']}}
 													► {{$category['name']}}</option>
 												@foreach($category['children']['items'] as $subCategory)
-													<option value="{{ $subCategory['key'] }}" @if($subCategory['key']==$main->parentId) selected @endif data-type="{{$subCategory['type']}}" id="option-item-{{$subCategory['key'] }}">{{$root['name']}}
+													<option value="{{ $subCategory['key'] }}" @if($subCategory['key']==$main->parent_id) selected @endif data-type="{{$subCategory['type']}}" id="option-item-{{$subCategory['key'] }}">{{$root['name']}}
 														► {{$category['name']}} ► {{$subCategory['name']}}</option>
 												@endforeach
 											@endforeach
@@ -76,35 +76,31 @@
 									<label for="">@required(Type)</label>
 									<select name="type" id="type" class="form-control">
 										<option value="" disabled selected>Choose</option>
-										<option value="{{\App\Models\Category::Types['Category']}}" @if($main->type==\App\Models\Category::Types['Category']) selected @endif>
+										<option value="{{\App\Library\Enums\Categories\Types::Category}}" @if($main->type==\App\Library\Enums\Categories\Types::Category) selected @endif>
 											Category
 										</option>
-										<option value="{{\App\Models\Category::Types['SubCategory']}}" @if($main->type==\App\Models\Category::Types['SubCategory']) selected @endif>
+										<option value="{{\App\Library\Enums\Categories\Types::SubCategory}}" @if($main->type==\App\Library\Enums\Categories\Types::SubCategory) selected @endif>
 											Sub-Category
 										</option>
-										<option value="{{\App\Models\Category::Types['Vertical']}}" @if($main->type==\App\Models\Category::Types['Vertical']) selected @endif>
+										<option value="{{\App\Library\Enums\Categories\Types::Vertical}}" @if($main->type==\App\Library\Enums\Categories\Types::Vertical) selected @endif>
 											Vertical
 										</option>
 									</select>
 								</div>
 								<div class="form-group">
-									<label>@required(Description)</label>
-									<textarea type="text" name="description" class="form-control" required placeholder="Describe your category">{{old('description',$main->description)}}</textarea>
-								</div>
-								<div class="form-group">
-									<label>Listing Status</label>
-									<select name="listingStatus" class="form-control">
-										@if($main->listingStatus==\App\Models\Category::ListingStatus['Active'])
-											<option value="{{\App\Models\Category::ListingStatus['Active']}}" selected>
+									<label>Listing</label>
+									<select name="listing" class="form-control">
+										@if($main->listingStatus==\App\Models\Category::LISTING_ACTIVE)
+											<option value="{{\App\Models\Category::LISTING_ACTIVE}}" selected>
 												Active
 											</option>
-											<option value="{{\App\Models\Category::ListingStatus['Inactive']}}">Inactive
+											<option value="{{\App\Models\Category::LISTING_INACTIVE}}">Inactive
 											</option>
 										@else
-											<option value="{{\App\Models\Category::ListingStatus['Active']}}">
+											<option value="{{\App\Models\Category::LISTING_ACTIVE}}">
 												Active
 											</option>
-											<option value="{{\App\Models\Category::ListingStatus['Inactive']}}" selected>
+											<option value="{{\App\Models\Category::LISTING_INACTIVE}}" selected>
 												Inactive
 											</option>
 
@@ -131,30 +127,7 @@
 								</div>
 								<div class="form-group">
 									<label>Icon</label>
-									<div class="card" style="border: 1px solid #ced4da;">
-										<div class="card-header">
-											<div class="row">
-												<div class="d-none">
-													<input id="pickImage1" type="file" name="icon" onclick="this.value=null;" onchange="previewImage1(event);" class="form-control" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp, .svg" value="{{old('icon')}}">
-												</div>
-												<div class="col-6">
-													<h3 class="my-0 header-title">Preview</h3>
-												</div>
-												<div class="col-6">
-													<button type="button" class="btn btn-outline-primary rounded shadow-sm float-right" onclick="openImagePicker1();">
-														Choose Image
-													</button>
-												</div>
-											</div>
-										</div>
-										<div class="card-body p-0 rounded">
-											<div class="row">
-												<div class="col-12 text-center">
-													<img id="posterPreview1" class="img-fluid" style="max-height: 400px!important;"/>
-												</div>
-											</div>
-										</div>
-									</div>
+									<input type="file" data-max-file-size="1M" name="icon" id="icon" data-allowed-file-extensions="jpg png jpeg" data-default-file="{{$main->icon}}">
 								</div>
 								<div class="form-group">
 									<label>Catalog Template</label>
@@ -185,77 +158,30 @@
 
 @section('javascript')
 	<script>
-        var lastFile = null;
-        window.onload = () => {
+		$(document).ready(() => {
+			$('#icon').dropify();
+		});
 
-        };
+		handleTypeChanged = (value, type) => {
+			console.log(type);
+			if (type === 'root') {
+				$("select option[value=category]").prop('disabled', false);
+				$("#type").val('category');
+				$("select option[value=sub-category]").prop('disabled', true);
+				$("select option[value=vertical]").prop('disabled', true);
+			} else if (type === 'category') {
+				$("select option[value=category]").prop('disabled', true);
+				$("select option[value=sub-category]").prop('disabled', false);
+				$("#type").val('sub-category');
+				$("select option[value=vertical]").prop('disabled', true);
+			} else if (type === 'sub-category') {
+				$("select option[value=category]").prop('disabled', true);
+				$("select option[value=sub-category]").prop('disabled', true);
+				$("select option[value=vertical]").prop('disabled', false);
+				$("#type").val('vertical');
+			} else {
 
-        previewImage = (event) => {
-            const reader = new FileReader();
-            reader.onload = function () {
-                const output = document.getElementById('posterPreview');
-                output.src = reader.result;
-            };
-            lastFile = event.target.files[0];
-            reader.readAsDataURL(lastFile);
-        };
-
-        openImagePicker = () => {
-            $('#pickImage').trigger('click');
-        }
-
-        var lastFile1 = null;
-        previewImage1 = (event) => {
-            const reader = new FileReader();
-            reader.onload = function () {
-                const output = document.getElementById('posterPreview1');
-                output.src = reader.result;
-            };
-            lastFile1 = event.target.files[0];
-            reader.readAsDataURL(lastFile1);
-        };
-
-        openImagePicker1 = () => {
-            $('#pickImage1').trigger('click');
-        };
-
-        handleTypeChanged = (value, type) => {
-            console.log(type);
-            if (type === 'root') {
-                $("select option[value=category]").prop('disabled', false);
-                $("#type").val('category');
-                $("select option[value=sub-category]").prop('disabled', true);
-                $("select option[value=vertical]").prop('disabled', true);
-            } else if (type === 'category') {
-                $("select option[value=category]").prop('disabled', true);
-                $("select option[value=sub-category]").prop('disabled', false);
-                $("#type").val('sub-category');
-                $("select option[value=vertical]").prop('disabled', true);
-            } else if (type === 'sub-category') {
-                $("select option[value=category]").prop('disabled', true);
-                $("select option[value=sub-category]").prop('disabled', true);
-                $("select option[value=vertical]").prop('disabled', false);
-                $("#type").val('vertical');
-            } else {
-
-            }
-        };
-
-        $(document).ready(function () {
-            $('#summernote').summernote(
-                {
-                    placeholder: 'Write your formatted summary here...',
-                    tabsize: 2,
-                    height: 250,
-                    toolbar: [
-                        ['style', ['style']],
-                        ['font', ['bold', 'underline', 'clear']],
-                        ['color', ['color']],
-                        ['insert', ['picture']],
-                        ['view', ['fullscreen', 'codeview', 'help']],
-                    ]
-                }
-            )
-        });
+			}
+		};
 	</script>
 @stop

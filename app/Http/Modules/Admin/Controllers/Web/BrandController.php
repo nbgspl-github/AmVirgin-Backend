@@ -2,18 +2,12 @@
 
 namespace App\Http\Modules\Admin\Controllers\Web;
 
-use App\Exceptions\ValidationException;
+use App\Http\Modules\Customer\Requests\Brand\UpdateRequest;
 use App\Http\Modules\Shared\Controllers\BaseController;
-use App\Library\Enums\Common\Directories;
 use App\Library\Enums\Common\Tables;
-use App\Library\Http\WebResponse;
 use App\Library\Utils\Extensions\Rule;
-use App\Library\Utils\Uploads;
 use App\Models\Brand;
-use App\Models\Category;
 use App\Traits\ValidatesRequest;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Throwable;
 
 class BrandController extends BaseController
 {
@@ -56,103 +50,27 @@ class BrandController extends BaseController
 		return view('admin.brands.create');
 	}
 
-	public function edit ($id)
-	{
-		$response = responseWeb();
-		try {
-			$brand = Brand::findOrFail($id);
-			$response = view('admin.brands.edit')->with('payload', $brand);
-		} catch (ModelNotFoundException $exception) {
-			$response->error($exception->getMessage())->data(request()->all())->back();
-		} catch (Throwable $exception) {
-			$response->error($exception->getMessage())->data(request()->all())->back();
-		} finally {
-			if ($response instanceof WebResponse)
-				return $response->send();
-			else
-				return $response;
-		}
-	}
-
 	public function show (Brand $brand)
 	{
 		return view('admin.brands.show')->with('brand', $brand);
 	}
 
-	public function approve ($id)
+	public function update (UpdateRequest $request, Brand $brand) : \Illuminate\Http\RedirectResponse
 	{
-		$response = responseWeb();
-		try {
-			$brand = Brand::findOrFail($id);
-			/**
-			 * @var Category $category
-			 */
-			$category = $brand->category;
-			$categories = $category->descendants(false);
-			$categories->each(function (Category $category) use ($brand) {
-				$cloned = $brand->replicate();
-				$cloned->categoryId = $category->getKey();
-				$cloned->status = 'approved';
-				$cloned->active = 1;
-				$cloned->save();
-			});
-			$brand->status = 'approved';
-			$brand->active = 1;
-			$brand->save();
-			$response->back()->success('Brand approved successfully for related categories.');
-		} catch (ModelNotFoundException $exception) {
-			$response->error($exception->getMessage())->data(request()->all())->back();
-		} catch (Throwable $exception) {
-			$response->error($exception->getMessage())->data(request()->all())->back();
-		} finally {
-			if ($response instanceof WebResponse)
-				return $response->send();
-			else
-				return $response;
-		}
+		$brand->update($request->validated());
+		return redirect()->route('admin.brands.index')->with('success', 'Brand details updated successfully.');
 	}
 
-	public function store ()
+	/**
+	 * @param Brand $brand
+	 * @return \Illuminate\Http\JsonResponse
+	 * @throws \Exception
+	 */
+	public function delete (Brand $brand) : \Illuminate\Http\JsonResponse
 	{
-		$response = responseWeb();
-		try {
-			$validated = $this->requestValid(request(), $this->rules['store']);
-			$validated['logo'] = Uploads::access()->putFile(Directories::Brands, request()->file('logo'));
-			$validated['active'] = request()->has('active');
-			Brand::query()->create($validated);
-			$response->success('Added brand successfully.')->route('admin.brands.index');
-		} catch (ValidationException $e) {
-			$response->error($e->getMessage())->data(request()->all())->back();
-		} catch (Throwable $e) {
-			$response->error($e->getMessage())->data(request()->all())->back();
-		} finally {
-			return $response->send();
-		}
-	}
-
-	public function update ($id)
-	{
-		$response = responseWeb();
-		try {
-			$validated = $this->requestValid(request(), $this->rules['update']);
-			$brand = Brand::query()->where([
-				['name', $validated['name']],
-				['id', '!=', $id],
-			])->first();
-			if (!empty($brand)) throw new \Exception('Your given brand name is already taken. Try again with a different one.');
-			$brand = Brand::findOrFail($id);
-			if (request()->hasFile('logo')) $validated['logo'] = Uploads::access()->putFile(Directories::Brands, request()->file('logo'));
-			$validated['active'] = request()->has('active');
-			$brand->update($validated);
-			$response->success('Updated brand details successfully.')->route('admin.brands.index');
-		} catch (ModelNotFoundException $e) {
-			$response->error($e->getMessage())->data(request()->all())->route('admin.brands.index');
-		} catch (ValidationException $e) {
-			$response->error($e->getMessage())->data(request()->all())->back();
-		} catch (Throwable $e) {
-			$response->error($e->getMessage())->data(request()->all())->back();
-		} finally {
-			return $response->send();
-		}
+		$brand->delete();
+		return responseApp()->prepare(
+			[], \Illuminate\Http\Response::HTTP_OK, 'Brand deleted successfully.'
+		);
 	}
 }

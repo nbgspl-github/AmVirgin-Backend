@@ -34,6 +34,18 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
 		return with(new static)->getTable();
 	}
 
+	/**
+	 * @param array $conditions
+	 * @return Model|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|static
+	 */
+	public static function findBy (array $conditions)
+	{
+		$query = static::query();
+		foreach ($conditions as $key => $value)
+			$query->where($key, $value);
+		return $query->first();
+	}
+
 	public function increment ($column, $amount = 1, array $extra = [])
 	{
 		return parent::increment($column, $amount, $extra);

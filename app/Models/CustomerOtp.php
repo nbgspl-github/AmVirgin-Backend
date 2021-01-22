@@ -5,9 +5,8 @@ namespace App\Models;
 class CustomerOtp extends \App\Library\Database\Eloquent\Model
 {
 	public $incrementing = false;
-	protected $table = 'otp-customers';
+	protected $table = 'otp_customers';
 	protected $primaryKey = 'mobile';
-	protected $fillable = ['mobile', 'otp'];
 
 	/**
 	 * @return string

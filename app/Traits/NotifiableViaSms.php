@@ -28,7 +28,7 @@ trait NotifiableViaSms
 	/**
 	 * @return int
 	 */
-	public function sendOtpMessage () : bool
+	public function sendOtpMessage () : int
 	{
 		$otp = mt_rand(1111, 9999);
 		$client = new \GuzzleHttp\Client();
@@ -44,7 +44,33 @@ trait NotifiableViaSms
 					'sender' => env("SMS_API_SENDER"),
 				]
 			]);
-			return true;
+			return $otp;
+		} catch (\Throwable $e) {
+			return -1;
+		}
+	}
+
+	/**
+	 * @param string $mobile
+	 * @return int|bool
+	 */
+	public static function sendGuestOtpMessage (string $mobile) : bool
+	{
+		$otp = mt_rand(1111, 9999);
+		$client = new \GuzzleHttp\Client();
+		try {
+			$response = $client->post('https://www.bulksmsplans.com/api/send_sms', [
+				'form_params' => [
+					'api_id' => env("SMS_API_ID"),
+					'api_password' => env("SMS_API_PASSWORD"),
+					'sms_type' => 'Transactional',
+					'number' => $mobile,
+					'message' => "Your one time password for authentication is {$otp}.",
+					'sms_encoding' => 1,
+					'sender' => env("SMS_API_SENDER"),
+				]
+			]);
+			return $otp;
 		} catch (\Throwable $e) {
 			return false;
 		}

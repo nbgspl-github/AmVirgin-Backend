@@ -20,7 +20,7 @@
 					</div>
 				</div>
 				<div class="card-body animatable">
-					<table id="datatable" class="table table-hover dt-responsive pr-0 pl-0 "
+					<table id="datatable" class="table table-hover pr-0 pl-0 "
 							style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 						<thead>
 						<tr>
@@ -49,7 +49,7 @@
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group" role="group">
 											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.brands.show',$brand->id)}}" @include('admin.extras.tooltip.left', ['title' => 'View brand details'])><i class="mdi mdi-lightbulb-outline"></i></a>
-											<a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);" onclick="deleteMovie('');" @include('admin.extras.tooltip.right', ['title' => 'Delete this brand'])><i class="mdi mdi-delete"></i></a>
+											<a class="btn btn-outline-primary shadow-sm" href="javascript:deleteBrand('{{$brand->id}}')" @include('admin.extras.tooltip.right', ['title' => 'Delete this brand'])><i class="mdi mdi-delete"></i></a>
 										</div>
 									</div>
 								</td>
@@ -66,6 +66,18 @@
 
 @section('javascript')
 	<script type="application/javascript">
-
+		deleteBrand = (key) => {
+			alertify.confirm('This action is irreversible. Proceed?', yes => {
+				axios.delete(`admin/brands/${key}`).then(response => {
+					alertify.alert(response.data.message, () => {
+						location.reload();
+					})
+				}).catch(error => {
+					alertify.confirm('Something went wrong. Retry?', yes => {
+						deleteBrand(key);
+					})
+				})
+			})
+		}
 	</script>
 @stop

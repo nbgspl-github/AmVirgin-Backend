@@ -6,6 +6,7 @@ use App\Models\Address\Address;
 use App\Models\CustomerWishlist;
 use App\Models\Order\Order;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Mail;
 
 /**
@@ -26,21 +27,20 @@ class Customer extends \App\Library\Database\Eloquent\AuthEntity
 
 	protected $table = 'customers';
 
+	protected $guarded = ['id'];
+
 	protected $casts = [
 		'active' => 'bool',
 	];
 
 	public function setAvatarAttribute ($value) : void
 	{
-		if ($value instanceof \Illuminate\Http\UploadedFile) {
-			$this->attributes['avatar'] = $this->storeMedia('avatars', $value);
-		} else
-			$this->attributes['avatar'] = $value;
+		$this->avatar = $this->storeWhenUploadedCorrectly('avatars', $value);
 	}
 
 	public function getAvatarAttribute ($value) : ?string
 	{
-		return $this->retrieveMedia($this->attributes['avatar']);
+		return $this->retrieveMedia($value);
 	}
 
 	public function addresses () : HasMany

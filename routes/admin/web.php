@@ -68,12 +68,12 @@ Route::middleware('auth:admin')->group(function () {
 
 	// Categories Route(s)
 	Route::prefix('categories')->middleware('auth:admin')->group(function () {
-		Route::get('', [CategoryController::class, Methods::Index])->name('admin.categories.index');
+		Route::get(Str::Empty, [CategoryController::class, Methods::Index])->name('admin.categories.index');
 		Route::get('create', [CategoryController::class, Methods::Create])->name('admin.categories.create');
-		Route::get('{id}/edit', [CategoryController::class, Methods::Edit])->name('admin.categories.edit');
+		Route::get('{category}/edit', [CategoryController::class, 'edit'])->name('admin.categories.edit');
 		Route::post('store', [CategoryController::class, Methods::Store])->name('admin.categories.store');
-		Route::post('{id}', [CategoryController::class, Methods::Update])->name('admin.categories.update');
-		Route::delete('{id}', [CategoryController::class, Methods::Delete])->name('admin.categories.delete');
+		Route::post('{category}', [CategoryController::class, Methods::Update])->name('admin.categories.update');
+		Route::delete('{category}', [CategoryController::class, Methods::Delete])->name('admin.categories.delete');
 		Route::get('{id}/download', [CategoryController::class, 'downloadTemplate'])->name('admin.categories.download');
 	});
 
@@ -278,11 +278,10 @@ Route::middleware('auth:admin')->group(function () {
 	Route::prefix('brands')->middleware('auth:admin')->group(function () {
 		Route::get(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'index'])->name('admin.brands.index');
 		Route::get('create', [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'create'])->name('admin.brands.create');
-		Route::get('{id}/edit', [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'edit'])->name('admin.brands.edit');
 		Route::get('{brand}/show', [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'show'])->name('admin.brands.show');
 		Route::get('{id}/approve', [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'approve'])->name('admin.brands.approve');
-		Route::post(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'store'])->name('admin.brands.store');
-		Route::post('{id}', [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'update'])->name('admin.brands.update');
+		Route::post('{brand}', [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'update'])->name('admin.brands.update');
+		Route::delete('{brand}', [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'delete'])->name('admin.brands.delete');
 	});
 
 	// Settings Route(s)

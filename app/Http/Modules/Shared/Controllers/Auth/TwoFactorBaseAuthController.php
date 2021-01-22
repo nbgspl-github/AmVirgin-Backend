@@ -22,6 +22,10 @@ abstract class TwoFactorBaseAuthController extends BaseAuthController
 	use FluentResponse;
 	use GuestOtpVerificationSupport;
 
+	const EMAIL = 1;
+	const MOBILE = 2;
+	const OTP = 3;
+
 	const Type = [
 		'Email' => 1,
 		'Mobile' => 2,

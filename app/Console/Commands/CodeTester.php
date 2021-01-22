@@ -38,7 +38,15 @@ class CodeTester extends Command
 
 	public function handle ()
 	{
-		$s = \App\Models\Video\Source::find(13);
-		\App\Jobs\TranscoderTask::dispatchNow($s);
+		$value = 4;
+		switch ($value) {
+			case 1:
+				echo "One";
+				break;
+
+			case 2 || 3:
+				echo "Two or Three";
+				break;
+		}
 	}
 }

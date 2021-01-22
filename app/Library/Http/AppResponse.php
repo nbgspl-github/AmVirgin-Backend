@@ -126,11 +126,12 @@ class AppResponse
 	/**
 	 * Adds a payload array/object/Collection under payload key.
 	 * @param null $payload
+	 * @param string $key
 	 * @return $this
 	 */
-	public function payload ($payload = null)
+	public function payload ($payload = null, $key = 'payload') : AppResponse
 	{
-		$this->items['payload'] = $payload;
+		$this->items[$key] = $payload;
 		return $this;
 	}
 
@@ -193,11 +194,11 @@ class AppResponse
 		return $response;
 	}
 
-	public function prepare ($payload, $status = Response::HTTP_OK, $message = null) : JsonResponse
+	public function prepare ($payload, $status = Response::HTTP_OK, $message = null, $key = 'payload') : JsonResponse
 	{
 		if (empty($message))
-			return self::payload($payload)->status($status)->send();
+			return self::payload($payload, $key)->status($status)->send();
 		else
-			return self::payload($payload)->status($status)->message($message)->send();
+			return self::payload($payload, $key)->status($status)->message($message)->send();
 	}
 }

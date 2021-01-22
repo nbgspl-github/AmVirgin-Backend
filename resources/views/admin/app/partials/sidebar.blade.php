@@ -49,9 +49,7 @@
 				<li>
 					<a href="{{route('admin.categories.index')}}" class="waves-effect animatableX"><i class="mdi mdi-view-dashboard"></i><span> Categories </span></a>
 				</li>
-				<li>
-					<a href="{{route('admin.categories-banner.index')}}" class="waves-effect animatableX"><i class="mdi mdi-cards"></i>
-						<span> Category Banners </span></a></li>
+
 				<li>
 					<a href="{{route('admin.filters.catalog.index')}}" class="waves-effect animatableX d-none"><i class="mdi mdi-cards"></i>
 						<span> Filters </span></a></li>

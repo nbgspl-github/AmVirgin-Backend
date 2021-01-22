@@ -22,11 +22,11 @@ class CategoryController extends \App\Http\Modules\Customer\Controllers\Api\ApiC
 				$vertical = $subCategory->children()->get();
 				$vertical = $vertical->transform(function (Category $vertical) {
 					return [
-						'key' => $vertical->id(),
-						'slug' => $vertical->slug(),
-						'name' => $vertical->name(),
-						'type' => $vertical->type(),
-						'products' => $vertical->productCount(),
+						'key' => $vertical->id,
+						'slug' => null,
+						'name' => $vertical->name,
+						'type' => $vertical->type,
+						'products' => 0,
 						'icon' => [
 							'exists' => false,
 							'url' => Str::Empty,
@@ -34,11 +34,11 @@ class CategoryController extends \App\Http\Modules\Customer\Controllers\Api\ApiC
 					];
 				});
 				return [
-					'key' => $subCategory->id(),
-					'slug' => $subCategory->slug(),
-					'name' => $subCategory->name(),
-					'type' => $subCategory->type(),
-					'products' => $subCategory->productCount(),
+					'key' => $subCategory->id,
+					'slug' => null,
+					'name' => $subCategory->name,
+					'type' => $subCategory->type,
+					'products' => 0,
 					'icon' => [
 						'exists' => false,
 						'url' => Str::Empty,
@@ -51,11 +51,11 @@ class CategoryController extends \App\Http\Modules\Customer\Controllers\Api\ApiC
 				];
 			});
 			return [
-				'key' => $category->id(),
-				'slug' => $category->slug(),
-				'name' => $category->name(),
-				'type' => $category->type(),
-				'products' => $category->productCount(),
+				'key' => $category->id,
+				'slug' => null,
+				'name' => $category->name,
+				'type' => $category->type,
+				'products' => 0,
 				'icon' => [
 					'exists' => false,
 					'url' => Str::Empty,

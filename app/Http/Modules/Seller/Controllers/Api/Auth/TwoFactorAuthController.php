@@ -71,14 +71,14 @@ class TwoFactorAuthController extends TwoFactorBaseAuthController
 		return $this->ruleSet['update']['profile'];
 	}
 
-	protected function loginPayload (\App\Library\Database\Eloquent\AuthEntity $user, string $token)
+	protected function loginPayload (\App\Library\Database\Eloquent\AuthEntity $user, string $token) : array
 	{
-		return (new \App\Resources\Auth\Seller\AuthProfileResource($user))->token($token);
+		return (new \App\Resources\Auth\Seller\AuthProfileResource($user))->token($token)->toArray(null);
 	}
 
-	protected function registerPayload (\App\Library\Database\Eloquent\AuthEntity $user, string $token)
+	protected function registerPayload (\App\Library\Database\Eloquent\AuthEntity $user, string $token) : array
 	{
-		return (new \App\Resources\Auth\Seller\AuthProfileResource($user))->token($token);
+		return (new \App\Resources\Auth\Seller\AuthProfileResource($user))->token($token)->toArray(null);
 	}
 
 	protected function rulesUpdatePassword () : array

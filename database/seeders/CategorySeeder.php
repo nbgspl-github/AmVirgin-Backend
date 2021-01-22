@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Library\Enums\Categories\Types;
 use App\Models\Category;
 use Illuminate\Database\Seeder;
 
@@ -125,7 +126,7 @@ class CategorySeeder extends Seeder
 			'name' => 'Main',
 			'parentId' => null,
 			'description' => 'This is the super-parent category.',
-			'type' => Category::Types['Root'],
+			'type' => Types::Root,
 			'specials' => [],
 		]);
 		foreach ($this->categories as $key => $value) {
@@ -133,7 +134,7 @@ class CategorySeeder extends Seeder
 			$category->name = $key;
 			$category->description = sprintf('%s is a really cool trend. There\'s a whole lot more inside so be sure to follow.', $key);
 			$category->parentId = $root->id();
-			$category->type = Category::Types['Category'];
+			$category->type = Types::Category;
 			$category->specials = ['brandInFocus' => false, 'popularCategory' => false, 'trendingNow' => false];
 			$category->inheritParentAttributes = false;
 			$category->save();
@@ -143,7 +144,7 @@ class CategorySeeder extends Seeder
 					$inner->name = $innerCategory;
 					$inner->description = sprintf('%s is a really cool trend. There\'s a whole lot more inside so be sure to follow.', $innerCategory);
 					$inner->parentId = $category->id();
-					$inner->type = Category::Types['SubCategory'];
+					$inner->type = Types::SubCategory;
 					$inner->specials = ['brandInFocus' => false, 'popularCategory' => false, 'trendingNow' => false];
 					$inner->inheritParentAttributes = true;
 					$inner->save();
@@ -153,7 +154,7 @@ class CategorySeeder extends Seeder
 							$subInner->name = $subInnerValue;
 							$subInner->description = sprintf('%s is a really cool trend. There\'s a whole lot more inside so be sure to follow.', $subInnerValue);
 							$subInner->parentId = $inner->id();
-							$subInner->type = Category::Types['Vertical'];
+							$subInner->type = Types::Vertical;
 							$subInner->specials = ['brandInFocus' => false, 'popularCategory' => false, 'trendingNow' => false];
 							$subInner->inheritParentAttributes = true;
 							$subInner->save();

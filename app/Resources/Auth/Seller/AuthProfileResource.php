@@ -2,7 +2,6 @@
 
 namespace App\Resources\Auth\Seller;
 
-use App\Library\Utils\Uploads;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AuthProfileResource extends JsonResource
@@ -27,7 +26,7 @@ class AuthProfileResource extends JsonResource
 				'firstLine' => $this->addressFirstLine,
 				'secondLine' => $this->addressSecondLine,
 			],
-			'avatar' => Uploads::existsUrl($this->avatar),
+			'avatar' => $this->avatar,
 			'statistics' => [
 				'brands' => [
 					'approved' => 1,
