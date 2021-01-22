@@ -16,7 +16,7 @@ return [
 	'failed' => 'These credentials do not match our records.',
 	'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 	'otp' => [
-		'guest' => "We\'ve send a one time password to complete registration.",
+		'guest' => "We've send a one time password to complete registration.",
 		'login' => "Otp has been sent to your registered mobile number.",
 		"failed_verification" => "Your given one time password is invalid."
 	],
@@ -41,5 +41,9 @@ return [
 	'password' => [
 		'success' => 'Your password was updated successfully.',
 		'failed' => 'Your given current password does not match with the one in you account.'
+	],
+	'register' => [
+		'success' => 'Welcome onboard! Your account was created successfully.',
+		'taken' => 'It seems you are already registered with us. Please use login instead.'
 	]
 ];

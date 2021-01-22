@@ -37,7 +37,7 @@ class ExistenceController extends \App\Http\Modules\Shared\Controllers\Api\AuthC
 	protected function sendRegisterOtp (\Illuminate\Http\Request $request) : \Illuminate\Http\JsonResponse
 	{
 		$otp = Customer::sendGuestOtpMessage($request->mobile);
-		\App\Models\CustomerOtp::query()->updateOrCreate(['mobile', $request->mobile], [
+		\App\Models\CustomerOtp::query()->updateOrCreate(['mobile' => $request->mobile], [
 			'otp' => $otp
 		]);
 		return responseApp()->prepare(

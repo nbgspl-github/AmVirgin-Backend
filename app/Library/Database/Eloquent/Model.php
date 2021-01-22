@@ -46,6 +46,18 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
 		return $query->first();
 	}
 
+	/**
+	 * @param array $conditions
+	 * @return Model|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|static
+	 */
+	public static function findByAny (array $conditions)
+	{
+		$query = static::query();
+		foreach ($conditions as $key => $value)
+			$query->orWhere($key, $value);
+		return $query->first();
+	}
+
 	public function increment ($column, $amount = 1, array $extra = [])
 	{
 		return parent::increment($column, $amount, $extra);

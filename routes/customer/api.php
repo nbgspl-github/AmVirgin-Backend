@@ -22,7 +22,7 @@ Route::prefix(Str::Empty)->group(function () {
 	Route::post('login', [\App\Http\Modules\Customer\Controllers\Api\Auth\LoginController::class, 'login']);
 	Route::post('login/social', [\App\Http\Modules\Customer\Controllers\Api\Auth\SocialLoginController::class, 'login']);
 	Route::post('logout', [\App\Http\Modules\Customer\Controllers\Api\Auth\LoginController::class, 'logout']);
-	Route::post('register', [TwoFactorAuthController::class, 'register']);
+	Route::post('register', [\App\Http\Modules\Customer\Controllers\Api\Auth\RegisterController::class, 'register']);
 	Route::prefix('profile')->middleware('auth:customer-api')->group(function () {
 		Route::get(Str::Empty, [\App\Http\Modules\Customer\Controllers\Api\Auth\ProfileController::class, 'show']);
 		Route::put(Str::Empty, [\App\Http\Modules\Customer\Controllers\Api\Auth\ProfileController::class, 'update']);
@@ -30,7 +30,6 @@ Route::prefix(Str::Empty)->group(function () {
 		Route::put('password', [\App\Http\Modules\Customer\Controllers\Api\Auth\PasswordController::class, 'update']);
 	});
 	Route::post('contact-us', [\App\Http\Modules\Customer\Controllers\Api\Shared\ContactUsController::class, 'store']);
-
 	Route::get('password/reset', [\App\Http\Modules\Customer\Controllers\Api\Auth\PasswordResetController::class, 'initiate']);
 });
 

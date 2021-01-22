@@ -52,9 +52,9 @@ trait NotifiableViaSms
 
 	/**
 	 * @param string $mobile
-	 * @return int|bool
+	 * @return int
 	 */
-	public static function sendGuestOtpMessage (string $mobile) : bool
+	public static function sendGuestOtpMessage (string $mobile) : int
 	{
 		$otp = mt_rand(1111, 9999);
 		$client = new \GuzzleHttp\Client();
@@ -72,7 +72,7 @@ trait NotifiableViaSms
 			]);
 			return $otp;
 		} catch (\Throwable $e) {
-			return false;
+			return -1;
 		}
 	}
 }
