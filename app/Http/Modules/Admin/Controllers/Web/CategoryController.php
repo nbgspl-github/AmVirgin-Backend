@@ -3,19 +3,12 @@
 namespace App\Http\Modules\Admin\Controllers\Web;
 
 use App\Classes\ColumnNavigator;
-use App\Exceptions\ValidationException;
+use App\Http\Modules\Admin\Requests\Category\StoreRequest;
 use App\Http\Modules\Admin\Requests\Category\UpdateRequest;
-use App\Http\Modules\Shared\Controllers\BaseController;
 use App\Library\Enums\Categories\Types;
-use App\Library\Enums\Common\Directories;
-use App\Library\Enums\Common\Tables;
 use App\Library\Http\WebResponse;
-use App\Library\Utils\Extensions\Rule;
-use App\Library\Utils\Uploads;
 use App\Models\AttributeSetItem;
 use App\Models\Category;
-use App\Traits\FluentResponse;
-use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -25,32 +18,14 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Throwable;
 
-class CategoryController extends BaseController
+class CategoryController extends WebController
 {
-	use ValidatesRequest;
-	use FluentResponse;
-
-	protected array $rules;
 	protected array $keyColumns;
 
 	public function __construct ()
 	{
 		parent::__construct();
-		$this->rules = [
-			'store' => [
-				'name' => ['bail', 'required', 'string', 'min:1', 'max:255'],
-				'description' => ['bail', 'nullable', 'string', 'min:1', 'max:1000'],
-				'parentId' => ['bail', 'required', 'numeric', Rule::existsPrimary(Tables::Categories)],
-				'listingStatus' => ['bail', 'required', Rule::in([Category::LISTING_ACTIVE, Category::LISTING_INACTIVE])],
-				'type' => ['bail', 'required', Rule::in(Types::Category, Types::SubCategory, Types::Vertical)],
-				'icon' => ['bail', 'nullable', 'image'],
-				'order' => ['bail', 'required', Rule::minimum(0), Rule::maximum(255)],
-				'summary' => ['bail', 'nullable', 'string'],
-				'catalog' => ['bail', 'nullable', 'mimes:xls,xlsx', 'max:10240']
-			],
-		];
 		$this->keyColumns = [
 			[
 				'key' => 'name',
@@ -248,22 +223,12 @@ class CategoryController extends BaseController
 		}
 	}
 
-	public function store ()
+	public function store (StoreRequest $request) : \Illuminate\Http\RedirectResponse
 	{
-		$response = responseWeb();
-		try {
-			$payload = $this->requestValid(request(), $this->rules['store']);
-			$payload['icon'] = \request()->hasFile('icon') ? Uploads::access()->putFile(Directories::Categories, \request()->file('icon')) : null;
-			$payload['specials'] = [];
-			Category::query()->create($payload);
-			$response->route('admin.categories.index')->success('Created category successfully.');
-		} catch (ValidationException $exception) {
-			$response->back()->data(\request()->all())->error($exception->getMessage());
-		} catch (Throwable $exception) {
-			$response->back()->data(\request()->all())->error($exception->getMessage());
-		} finally {
-			return $response->send();
-		}
+		Category::query()->create($request->validated());
+		return redirect()->route('admin.categories.index')->with('success',
+			'Category created successfully.'
+		);
 	}
 
 	public function update (UpdateRequest $request, Category $category) : \Illuminate\Http\RedirectResponse

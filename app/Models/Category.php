@@ -113,13 +113,13 @@ class Category extends \App\Library\Database\Eloquent\Model
 		return $this->retrieveMedia('catalog');
 	}
 
-	public function setLogoAttribute ($value) : void
+	public function setIconAttribute ($value) : void
 	{
 		$this->attributes['icon'] = $this->storeWhenUploadedCorrectly('categories/icons', $value);
 	}
 
-	public function getLogoAttribute ($value) : ?string
+	public function getIconAttribute ($value) : ?string
 	{
-		return $this->retrieveMedia('icon');
+		return $this->retrieveMedia($value);
 	}
 }

@@ -2,17 +2,22 @@
 
 namespace App\Http\Modules\Admin\Requests\Category;
 
+use App\Library\Enums\Categories\Types;
+use App\Library\Utils\Extensions\Rule;
+use App\Models\Category;
+
 class StoreRequest extends \Illuminate\Foundation\Http\FormRequest
 {
 	public function rules () : array
 	{
 		return [
 			'name' => ['bail', 'required', 'string', 'min:1', 'max:255'],
-			'parent_id' => ['bail', 'required', 'numeric', \App\Models\Category::exists()],
-			'listing' => ['bail', 'required', Rule::in([Category::ListingStatus['Active'], Category::ListingStatus['Inactive']])],
-			'type' => ['bail', 'required', Rule::in(Category::Types['Category'], Category::Types['SubCategory'], Category::Types['Vertical'])],
-			'icon' => ['bail', 'nullable', 'image', 'max:1024'],
-			'order' => ['bail', 'required'],
+			'description' => ['bail', 'nullable', 'string', 'min:1', 'max:1000'],
+			'parentId' => ['bail', 'required', 'numeric', Category::exists()],
+			'listingStatus' => ['bail', 'required', Rule::in([Category::LISTING_ACTIVE, Category::LISTING_INACTIVE])],
+			'type' => ['bail', 'required', Rule::in(Types::Category, Types::SubCategory, Types::Vertical)],
+			'icon' => ['bail', 'nullable', 'image'],
+			'order' => ['bail', 'required', Rule::minimum(0), Rule::maximum(255)],
 			'summary' => ['bail', 'nullable', 'string'],
 			'catalog' => ['bail', 'nullable', 'mimes:xls,xlsx', 'max:10240']
 		];

@@ -90,7 +90,7 @@
 								<div class="form-group">
 									<label>Listing</label>
 									<select name="listing" class="form-control">
-										@if($main->listingStatus==\App\Models\Category::LISTING_ACTIVE)
+										@if($main->listing==\App\Models\Category::LISTING_ACTIVE)
 											<option value="{{\App\Models\Category::LISTING_ACTIVE}}" selected>
 												Active
 											</option>

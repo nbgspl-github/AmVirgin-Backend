@@ -3,7 +3,6 @@
 namespace App\Http\Modules\Seller\Controllers\Api\Auth;
 
 use App\Http\Modules\Shared\Requests\Auth\ExistsRequest;
-use App\Models\Auth\Customer;
 use App\Models\Auth\Seller;
 
 /**
@@ -70,5 +69,10 @@ class ExistenceController extends \App\Http\Modules\Shared\Controllers\Api\AuthC
 		return responseApp()->prepare(
 			null, \Illuminate\Http\Response::HTTP_CONFLICT, __('auth.user.not_found'), 'data'
 		);
+	}
+
+	protected function guard ()
+	{
+		return auth(self::SELLER_API);
 	}
 }

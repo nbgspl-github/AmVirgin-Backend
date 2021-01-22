@@ -163,3 +163,11 @@ function is_even ($number) : bool
 {
 	return $number % 2 == 0;
 }
+
+function __active (string $route) : string
+{
+	if (request()->routeIs($route))
+		return 'class="active"';
+	else
+		return "";
+}

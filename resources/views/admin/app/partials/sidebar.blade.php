@@ -57,8 +57,12 @@
 					<a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-cube animatableX"></i><span> Products </span>
 						<span class="menu-arrow float-right"><i class="mdi mdi-chevron-right"></i></span></a>
 					<ul class="list-unstyled">
-						<li><a href="{{route('admin.products.index')}}">List all</a></li>
-						<li><a href="{{route('admin.products.deleted.index')}}">Deleted by sellers</a></li>
+						<li {!! __active('admin.products.pending') !!}>
+							<a href="{{route('admin.products.pending')}}">Pending</a>
+						</li>
+						<li><a href="{{route('admin.products.approved')}}">Approved</a></li>
+						<li><a href="{{route('admin.products.rejected')}}">Rejected</a></li>
+						<li><a href="{{route('admin.products.deleted')}}">Deleted</a></li>
 					</ul>
 				</li>
 				<li class="has_sub animatableX">

@@ -7,7 +7,6 @@ use App\Http\Modules\Admin\Controllers\Web\CategoryController;
 use App\Http\Modules\Admin\Controllers\Web\GenresController;
 use App\Http\Modules\Admin\Controllers\Web\HomeController;
 use App\Http\Modules\Admin\Controllers\Web\NotificationsController;
-use App\Http\Modules\Admin\Controllers\Web\Products\DeletedProductController;
 use App\Http\Modules\Admin\Controllers\Web\Products\ProductController;
 use App\Http\Modules\Admin\Controllers\Web\ServersController;
 use App\Http\Modules\Admin\Controllers\Web\SettingsController;
@@ -247,10 +246,11 @@ Route::middleware('auth:admin')->group(function () {
 	});
 
 	// Products Route(s)
-	Route::prefix('products')->middleware('auth:admin')->group(function () {
-		Route::get(Str::Empty, [ProductController::class, Methods::Index])->name('admin.products.index');
-		Route::get('/deleted', [DeletedProductController::class, Methods::Index])->name('admin.products.deleted.index');
-		Route::get('{id}/approve', [ProductController::class, 'approve'])->name('admin.products.approve');
+	Route::prefix('products')->group(function () {
+		Route::get('approved', [ProductController::class, 'approved'])->name('admin.products.approved');
+		Route::get('deleted', [ProductController::class, 'deleted'])->name('admin.products.deleted');
+		Route::get('rejected', [ProductController::class, 'rejected'])->name('admin.products.rejected');
+		Route::get('pending', [ProductController::class, 'pending'])->name('admin.products.pending');
 	});
 
 	// Attributes Route(s)

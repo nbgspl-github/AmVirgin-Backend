@@ -3,18 +3,10 @@
 namespace App\Http\Modules\Admin\Controllers\Web;
 
 use App\Http\Modules\Customer\Requests\Brand\UpdateRequest;
-use App\Http\Modules\Shared\Controllers\BaseController;
-use App\Library\Enums\Common\Tables;
-use App\Library\Utils\Extensions\Rule;
 use App\Models\Brand;
-use App\Traits\ValidatesRequest;
 
-class BrandController extends BaseController
+class BrandController extends WebController
 {
-	use ValidatesRequest;
-
-	protected array $rules;
-
 	/**
 	 * @var Brand
 	 */
@@ -25,16 +17,6 @@ class BrandController extends BaseController
 		parent::__construct();
 		$this->middleware(AUTH_ADMIN);
 		$this->model = app(Brand::class);
-		$this->rules = [
-			'store' => [
-				'name' => ['bail', 'required', 'string', 'min:1', 'max:255', Rule::unique(Tables::Brands, 'name')],
-				'logo' => ['bail', 'required', 'image', 'min:1', 'max:5120'],
-			],
-			'update' => [
-				'name' => ['bail', 'required', 'string', 'min:1', 'max:255'],
-				'logo' => ['bail', 'nullable', 'image', 'min:1', 'max:5120'],
-			],
-		];
 	}
 
 	public function index ()

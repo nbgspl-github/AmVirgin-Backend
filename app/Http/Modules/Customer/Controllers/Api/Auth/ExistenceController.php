@@ -70,4 +70,9 @@ class ExistenceController extends \App\Http\Modules\Shared\Controllers\Api\AuthC
 			null, \Illuminate\Http\Response::HTTP_CONFLICT, __('auth.user.not_found'), 'data'
 		);
 	}
+
+	protected function guard ()
+	{
+		return auth(self::CUSTOMER_API);
+	}
 }

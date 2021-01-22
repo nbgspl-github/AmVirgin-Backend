@@ -57,7 +57,7 @@ class AttributeController extends \App\Http\Modules\Admin\Controllers\Web\WebCon
 
 	public function create ()
 	{
-		$categories = Category::query()->where('parentId', 0)->get();
+		$categories = Category::query()->where('parent_id', 0)->get();
 		$categories->transform(function (Category $topLevel) {
 			$children = $topLevel->children()->get();
 			$children = $children->transform(function (Category $child) {

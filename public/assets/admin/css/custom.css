@@ -38,3 +38,7 @@
 p.msg {
     word-wrap: break-word !important;
 }
+
+.badge {
+    font-weight: normal !important;
+}

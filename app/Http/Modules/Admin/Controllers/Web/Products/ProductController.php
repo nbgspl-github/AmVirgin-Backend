@@ -2,50 +2,47 @@
 
 namespace App\Http\Modules\Admin\Controllers\Web\Products;
 
-use App\Http\Modules\Admin\Repository\Products\Contracts\ProductRepository;
-use App\Library\Http\WebResponse;
 use App\Models\Product;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Throwable;
 
 class ProductController extends \App\Http\Modules\Admin\Controllers\Web\WebController
 {
 	/**
-	 * @var ProductRepository
+	 * @var Product
 	 */
-	protected $repository;
+	protected $model;
 
-	public function __construct (ProductRepository $repository)
+	public function __construct ()
 	{
 		parent::__construct();
-		$this->repository = $repository;
+		$this->middleware(AUTH_ADMIN);
+		$this->model = app(Product::class);
 	}
 
-	public function index ()
+	public function approved ()
 	{
-		return view('admin.products.index')->with('products', $this->repository->allProductsPaginated($this->paginationChunk()));
+		return view('admin.products.approved')->with('products',
+			$this->paginateWithQuery($this->model->newQuery()->where('approved', true)->latest())
+		);
 	}
 
-	public function approve ($id)
+	public function pending ()
 	{
-		$response = responseWeb();
-		try {
-			$product = Product::findOrFail($id);
-			$product->update([
-				'approved' => true,
-				'approvedBy' => auth('admin')->id(),
-				'approvedAt' => date('Y-m-d H:i:s')
-			]);
-			$response->back()->success('Product approved successfully.');
-		} catch (ModelNotFoundException $exception) {
-			$response->error($exception->getMessage())->data(request()->all())->back();
-		} catch (Throwable $exception) {
-			$response->error($exception->getMessage())->data(request()->all())->back();
-		} finally {
-			if ($response instanceof WebResponse)
-				return $response->send();
-			else
-				return $response;
-		}
+		return view('admin.products.pending')->with('products',
+			$this->paginateWithQuery($this->model->newQuery()->whereLike('name', $this->queryParameter())->latest()->groupBy('group')->where('approved', false))
+		);
+	}
+
+	public function rejected ()
+	{
+		return view('admin.products.rejected')->with('products',
+			$this->paginateWithQuery($this->model->newQuery()->where('approved', true))
+		);
+	}
+
+	public function deleted ()
+	{
+		return view('admin.products.deleted')->with('products',
+			$this->paginateWithQuery($this->model->newQuery()->whereNotNull('deleted_at'))
+		);
 	}
 }

@@ -11,10 +11,8 @@ use App\Models\Category;
 use App\Traits\ValidatesRequest;
 use Throwable;
 
-class AttributeSetController extends BaseController
+class AttributeSetController extends \App\Http\Modules\Admin\Controllers\Web\WebController
 {
-	use ValidatesRequest;
-
 	protected array $rules;
 
 	public function __construct ()
