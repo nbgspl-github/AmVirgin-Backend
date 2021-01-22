@@ -50,9 +50,8 @@ class RegisterController extends \App\Http\Modules\Customer\Controllers\Api\ApiC
 	protected function sendRegisterSuccessResponse (Seller $seller) : \Illuminate\Http\JsonResponse
 	{
 		$token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($seller);
-		return responseApp()->prepare([
-			(new AuthProfileResource($seller))->token($token)
-		], \Illuminate\Http\Response::HTTP_OK, __('auth.register.success'), 'data');
+		return responseApp()->prepare(
+			(new AuthProfileResource($seller))->token($token), \Illuminate\Http\Response::HTTP_OK, __('auth.register.success'), 'data');
 	}
 
 	protected function verifyOneTimePassword (string $otp, string $mobile) : bool

@@ -41,9 +41,8 @@ class LoginController extends \App\Http\Modules\Shared\Controllers\Api\AuthContr
 	protected function sendLoginSuccessResponse (Seller $seller) : \Illuminate\Http\JsonResponse
 	{
 		$token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($seller);
-		return responseApp()->prepare([
-			(new \App\Resources\Auth\Seller\AuthProfileResource($seller))->token($token)
-		], \Illuminate\Http\Response::HTTP_OK, __('auth.login.success'), 'data');
+		return responseApp()->prepare(
+			(new \App\Resources\Auth\Seller\AuthProfileResource($seller))->token($token), \Illuminate\Http\Response::HTTP_OK, __('auth.login.success'), 'data');
 	}
 
 	protected function sendLoginFailedResponse ($type) : \Illuminate\Http\JsonResponse
