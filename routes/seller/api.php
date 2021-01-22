@@ -16,41 +16,29 @@ use App\Http\Modules\Seller\Controllers\Api\Shared\StateController;
 use App\Library\Utils\Extensions\Str;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix(Str::Empty)->group(static function () {
-	Route::get(Str::Empty, [TwoFactorAuthController::class, 'exists']);
-	Route::post('login', [TwoFactorAuthController::class, 'login']);
-	Route::post('register', [TwoFactorAuthController::class, 'register']);
-	Route::post('logout', [AuthController::class, 'logout'])->middleware(AUTH_SELLER);
+Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\ExistenceController::class, 'exists']);
+Route::post('login', [TwoFactorAuthController::class, 'login']);
+Route::post('register', [TwoFactorAuthController::class, 'register']);
+Route::post('logout', [AuthController::class, 'logout'])->middleware(AUTH_SELLER);
 
-	Route::prefix('profile')->group(static function () {
-		Route::get(Str::Empty, [AuthController::class, 'profile'])->middleware(AUTH_SELLER);
-		Route::put(Str::Empty, [AuthController::class, 'updateProfile'])->middleware(AUTH_SELLER);
-		Route::post('avatar', [AuthController::class, 'updateAvatar'])->middleware(AUTH_SELLER);
-		Route::put('password', [AuthController::class, 'updatePassword'])->middleware(AUTH_SELLER);
+Route::prefix('profile')->group(static function () {
+	Route::get(Str::Empty, [AuthController::class, 'profile'])->middleware(AUTH_SELLER);
+	Route::put(Str::Empty, [AuthController::class, 'updateProfile'])->middleware(AUTH_SELLER);
+	Route::post('avatar', [AuthController::class, 'updateAvatar'])->middleware(AUTH_SELLER);
+	Route::put('password', [AuthController::class, 'updatePassword'])->middleware(AUTH_SELLER);
 
-		Route::prefix('business-details')->middleware(AUTH_SELLER)->group(static function () {
-			Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\Profile\BusinessDetailController::class, 'show']);
-			Route::post(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\Profile\BusinessDetailController::class, 'update']);
-		});
-
-		Route::prefix('bank-details')->middleware(AUTH_SELLER)->group(static function () {
-			Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\Profile\BankDetailController::class, 'show']);
-			Route::post(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\Profile\BankDetailController::class, 'update']);
-		});
-
-		Route::prefix('contact-details')->group(static function () {
-
-		});
-
-		Route::prefix('pickup-details')->group(static function () {
-
-		});
-
-		Route::prefix('mou')->group(static function () {
-			Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Agreements\AgreementController::class, 'show']);
-			Route::get('status', [\App\Http\Modules\Seller\Controllers\Api\Agreements\AgreementController::class, 'index'])->middleware(AUTH_SELLER);
-			Route::put(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Agreements\AgreementController::class, 'update'])->middleware(AUTH_SELLER);
-		});
+	Route::prefix('business-details')->middleware(AUTH_SELLER)->group(static function () {
+		Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\Profile\BusinessDetailController::class, 'show']);
+		Route::post(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\Profile\BusinessDetailController::class, 'update']);
+	});
+	Route::prefix('bank-details')->middleware(AUTH_SELLER)->group(static function () {
+		Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\Profile\BankDetailController::class, 'show']);
+		Route::post(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\Profile\BankDetailController::class, 'update']);
+	});
+	Route::prefix('mou')->group(static function () {
+		Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Agreements\AgreementController::class, 'show']);
+		Route::get('status', [\App\Http\Modules\Seller\Controllers\Api\Agreements\AgreementController::class, 'index'])->middleware(AUTH_SELLER);
+		Route::put(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Agreements\AgreementController::class, 'update'])->middleware(AUTH_SELLER);
 	});
 });
 Route::post('change-password', [AuthController::class, 'changePassword'])->middleware(AUTH_SELLER);

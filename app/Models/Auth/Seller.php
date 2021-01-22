@@ -12,23 +12,30 @@ use App\Models\ProductRating;
 use App\Models\SellerBusinessDetail;
 use App\Models\SellerPayment;
 use App\Models\State;
-use App\Traits\ActiveStatus;
-use App\Traits\DynamicAttributeNamedMethods;
-use App\Traits\OtpVerificationSupport;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * Class Seller
+ * @package App\Models\Auth
+ * @property ?string $name
+ * @property ?string $email
+ * @property ?string $mobile
+ * @property ?string $password
+ */
 class Seller extends \App\Library\Database\Eloquent\AuthEntity
 {
-	use ActiveStatus, OtpVerificationSupport, DynamicAttributeNamedMethods;
+	use \Illuminate\Database\Eloquent\SoftDeletes;
+	use \App\Traits\NotifiableViaSms;
+	use \App\Traits\OtpVerificationSupport;
+	use \App\Traits\DynamicAttributeNamedMethods;
+
+	protected $table = 'sellers';
 
 	protected $casts = [
-		'id' => 'integer',
-		'name' => 'string',
-		'email' => 'string',
-		'email_verified_at' => 'datetime',
 		'mouAgreed' => 'bool',
+		'active' => 'bool',
 	];
 
 	public function approvedBrands () : HasMany

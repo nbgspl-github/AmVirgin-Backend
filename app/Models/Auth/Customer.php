@@ -27,8 +27,6 @@ class Customer extends \App\Library\Database\Eloquent\AuthEntity
 
 	protected $table = 'customers';
 
-	protected $guarded = ['id'];
-
 	protected $casts = [
 		'active' => 'bool',
 	];

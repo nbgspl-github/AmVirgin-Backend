@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Modules\Customer\Controllers\Api\Auth\ExistenceController;
-use App\Http\Modules\Customer\Controllers\Api\Auth\TwoFactorAuthController;
 use App\Http\Modules\Customer\Controllers\Api\Cart\QuoteController;
 use App\Http\Modules\Customer\Controllers\Api\Cart\WishlistController;
 use App\Http\Modules\Customer\Controllers\Api\Entertainment\HomeController as EntertainmentHomeController;
@@ -23,7 +22,7 @@ Route::prefix(Str::Empty)->group(function () {
 	Route::post('login/social', [\App\Http\Modules\Customer\Controllers\Api\Auth\SocialLoginController::class, 'login']);
 	Route::post('logout', [\App\Http\Modules\Customer\Controllers\Api\Auth\LoginController::class, 'logout']);
 	Route::post('register', [\App\Http\Modules\Customer\Controllers\Api\Auth\RegisterController::class, 'register']);
-	Route::prefix('profile')->middleware('auth:customer-api')->group(function () {
+	Route::prefix('profile')->group(function () {
 		Route::get(Str::Empty, [\App\Http\Modules\Customer\Controllers\Api\Auth\ProfileController::class, 'show']);
 		Route::put(Str::Empty, [\App\Http\Modules\Customer\Controllers\Api\Auth\ProfileController::class, 'update']);
 		Route::post('avatar', [\App\Http\Modules\Customer\Controllers\Api\Auth\AvatarController::class, 'update']);

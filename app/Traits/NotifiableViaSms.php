@@ -39,7 +39,7 @@ trait NotifiableViaSms
 					'api_password' => env("SMS_API_PASSWORD"),
 					'sms_type' => 'Transactional',
 					'number' => $this->mobile,
-					'message' => "Your one time password for authentication is {$otp}.",
+					'message' => __('auth.otp.message', ['otp' => $otp]),
 					'sms_encoding' => 1,
 					'sender' => env("SMS_API_SENDER"),
 				]
@@ -65,7 +65,7 @@ trait NotifiableViaSms
 					'api_password' => env("SMS_API_PASSWORD"),
 					'sms_type' => 'Transactional',
 					'number' => $mobile,
-					'message' => "Your one time password for authentication is {$otp}.",
+					'message' => __('auth.otp.message', ['otp' => $otp]),
 					'sms_encoding' => 1,
 					'sender' => env("SMS_API_SENDER"),
 				]

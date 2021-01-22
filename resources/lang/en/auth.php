@@ -16,6 +16,7 @@ return [
 	'failed' => 'These credentials do not match our records.',
 	'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 	'otp' => [
+		'message' => "Your one time password for authentication is :otp.",
 		'guest' => "We've send a one time password to complete registration.",
 		'login' => "Otp has been sent to your registered mobile number.",
 		"failed_verification" => "Your given one time password is invalid."

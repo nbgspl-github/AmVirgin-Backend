@@ -38,15 +38,7 @@ class CodeTester extends Command
 
 	public function handle ()
 	{
-		$value = 4;
-		switch ($value) {
-			case 1:
-				echo "One";
-				break;
-
-			case 2 || 3:
-				echo "Two or Three";
-				break;
-		}
+		$otp = 5678;
+		echo __('auth.otp.message', ['otp' => $otp]);
 	}
 }

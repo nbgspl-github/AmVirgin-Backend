@@ -4,10 +4,9 @@ namespace App\Models;
 
 class SellerOtp extends \App\Library\Database\Eloquent\Model
 {
-	protected $table = 'otp-sellers';
+	protected $table = 'otp_sellers';
 	protected $fillable = ['mobile', 'otp'];
 	protected $primaryKey = 'mobile';
-	protected $hidden = ['created_at', 'updated_at'];
 
 	/**
 	 * @return string
@@ -19,7 +18,7 @@ class SellerOtp extends \App\Library\Database\Eloquent\Model
 
 	/**
 	 * @param string $mobile
-	 * @return CustomerOtp
+	 * @return SellerOtp
 	 */
 	public function setMobile (string $mobile) : SellerOtp
 	{
@@ -37,7 +36,7 @@ class SellerOtp extends \App\Library\Database\Eloquent\Model
 
 	/**
 	 * @param string $otp
-	 * @return CustomerOtp
+	 * @return SellerOtp
 	 */
 	public function setOtp (string $otp) : SellerOtp
 	{
