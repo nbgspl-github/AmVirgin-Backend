@@ -22,6 +22,7 @@ class OverviewController extends \App\Http\Modules\Seller\Controllers\Api\ApiCon
 	public function __construct ()
 	{
 		parent::__construct();
+		$this->middleware(AUTH_SELLER);
 		$this->rules = [
 			'show' => [
 				'days' => ['bail', 'sometimes', 'numeric', 'gte:1']

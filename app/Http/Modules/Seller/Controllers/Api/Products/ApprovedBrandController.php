@@ -11,6 +11,7 @@ class ApprovedBrandController extends \App\Http\Modules\Seller\Controllers\Api\A
 	public function __construct ()
 	{
 		parent::__construct();
+		$this->middleware(AUTH_SELLER);
 	}
 
 	public function index () : JsonResponse

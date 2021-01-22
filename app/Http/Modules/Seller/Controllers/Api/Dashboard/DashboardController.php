@@ -7,6 +7,12 @@ use Illuminate\Http\JsonResponse;
 
 class DashboardController extends \App\Http\Modules\Seller\Controllers\Api\ApiController
 {
+	public function __construct ()
+	{
+		parent::__construct();
+		$this->middleware(AUTH_SELLER);
+	}
+
 	/**
 	 * Number of days to go back when filtering records.
 	 */

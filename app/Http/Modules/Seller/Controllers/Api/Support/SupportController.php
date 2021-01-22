@@ -18,6 +18,7 @@ class SupportController extends \App\Http\Modules\Seller\Controllers\Api\ApiCont
 	public function __construct ()
 	{
 		parent::__construct();
+		$this->middleware(AUTH_SELLER);
 		$this->rules = [
 			'index' => [
 				'issue' => ['bail', 'nullable', 'string', 'min:2', 'max:255'],

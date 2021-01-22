@@ -23,6 +23,7 @@ class BrandController extends \App\Http\Modules\Seller\Controllers\Api\ApiContro
 	public function __construct ()
 	{
 		parent::__construct();
+		$this->middleware(AUTH_SELLER);
 		$this->rules = [
 			'index' => [
 				'name' => ['bail', 'required', 'string', 'min:2', 'max:25'],

@@ -22,6 +22,7 @@ class BankDetailController extends \App\Http\Modules\Seller\Controllers\Api\ApiC
 	public function __construct ()
 	{
 		parent::__construct();
+		$this->middleware(AUTH_SELLER);
 		$this->rules = [
 			'update' => [
 				'accountHolderName' => ['bail', 'required', 'string', 'min:2', 'max:255'],

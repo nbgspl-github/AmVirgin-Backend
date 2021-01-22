@@ -17,6 +17,7 @@ class AnnouncementController extends \App\Http\Modules\Seller\Controllers\Api\Ap
 	public function __construct ()
 	{
 		parent::__construct();
+		$this->middleware(AUTH_SELLER);
 		$this->rules = [
 			'mark' => [
 				'action' => ['bail', 'required', Rule::in(['read', 'delete', 'unread'])],

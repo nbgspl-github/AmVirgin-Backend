@@ -13,8 +13,14 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Throwable;
 
-class AuthController
+class AuthController extends \App\Http\Modules\Seller\Controllers\Api\ApiController
 {
+	public function __construct ()
+	{
+		parent::__construct();
+		$this->middleware(AUTH_SELLER)->except(['forgotPassword', 'getResetPasswordToken']);
+	}
+
 	public function changePassword (Request $request) : \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();

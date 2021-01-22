@@ -23,6 +23,7 @@ class BusinessDetailController extends \App\Http\Modules\Seller\Controllers\Api\
 	public function __construct ()
 	{
 		parent::__construct();
+		$this->middleware(AUTH_SELLER);
 		$this->rules = [
 			'update' => [
 				'name' => ['bail', 'required', 'string', 'min:2', 'max:255'],

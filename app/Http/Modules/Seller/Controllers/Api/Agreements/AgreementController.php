@@ -13,11 +13,17 @@ class AgreementController extends \App\Http\Modules\Seller\Controllers\Api\ApiCo
 {
 	use ValidatesRequest;
 
+	public function __construct ()
+	{
+		parent::__construct();
+		$this->middleware(AUTH_SELLER)->except('show');
+	}
+
 	public function index () : JsonResponse
 	{
 		$response = responseApp();
 		try {
-			$agreed = $this->guard()->user()->mouAgreed();
+			$agreed = $this->seller()->mouAgreed;
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Retrieved seller agreed status.')->setValue('agreed', $agreed);
 		} catch (Throwable $exception) {
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message($exception->getMessage());
@@ -44,7 +50,7 @@ class AgreementController extends \App\Http\Modules\Seller\Controllers\Api\ApiCo
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), ['agreed' => 'bail|required|boolean']);
-			$this->guard()->user()->update(['mouAgreed' => $validated['agreed']]);
+			$this->seller()->update(['mouAgreed' => $validated['agreed']]);
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Updated agreement status successfully.');
 		} catch (ValidationException $exception) {
 			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());

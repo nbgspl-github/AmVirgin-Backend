@@ -30,6 +30,7 @@ class BulkProductController extends \App\Http\Modules\Seller\Controllers\Api\Api
 	public function __construct ()
 	{
 		parent::__construct();
+		$this->middleware(AUTH_SELLER);
 		$this->keyColumns = [
 			[
 				'key' => 'name',
