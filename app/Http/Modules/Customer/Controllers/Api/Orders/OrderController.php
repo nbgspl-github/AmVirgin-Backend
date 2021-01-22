@@ -18,7 +18,7 @@ class OrderController extends \App\Http\Modules\Customer\Controllers\Api\ApiCont
 	public function index () : JsonResponse
 	{
 		return responseApp()->prepare(
-			ListResource::collection($this->user()->orders()->paginate($this->paginationChunk()))->response()->getData(),
+			ListResource::collection($this->seller()->orders()->paginate($this->paginationChunk()))->response()->getData(),
 		);
 	}
 

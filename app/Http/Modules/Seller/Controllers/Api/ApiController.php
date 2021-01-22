@@ -2,9 +2,15 @@
 
 namespace App\Http\Modules\Seller\Controllers\Api;
 
+use App\Models\Auth\Seller;
+
 class ApiController extends \App\Http\Modules\Shared\Controllers\Api\ApiController
 {
-	protected function user () : ?\App\Models\Auth\Seller
+	/**
+	 * Gets the seller who issued this request.
+	 * @return ?Seller
+	 */
+	protected function seller () : ?\App\Models\Auth\Seller
 	{
 		return $this->guard()->user();
 	}

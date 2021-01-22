@@ -174,7 +174,7 @@ class BulkProductController extends \App\Http\Modules\Seller\Controllers\Api\Api
 						$payload = $data['payload'];
 						$payload = $this->validatePayload($payload);
 						$payload['lowStockThreshold'] = $payload['lowStockThreshold'] ?? 0;
-						$payload['sellerId'] = $this->userId();
+						$payload['sellerId'] = $this->seller()->id;
 						$payload['categoryId'] = $validated['categoryId'];
 						$payload['brandId'] = $validated['brandId'];
 						$images = $data['images'];

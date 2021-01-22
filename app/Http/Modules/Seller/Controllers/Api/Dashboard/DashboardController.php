@@ -14,7 +14,7 @@ class DashboardController extends \App\Http\Modules\Seller\Controllers\Api\ApiCo
 
 	public function index (\App\Http\Modules\Seller\Requests\Dashboard\IndexRequest $request) : JsonResponse
 	{
-		$seller = $this->user();
+		$seller = $this->seller();
 		$now = \Illuminate\Support\Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
 		$past = \Illuminate\Support\Carbon::now()->subDays($request->days ?? self::DAYS_IN_PAST)->startOfDay()->format('Y-m-d H:i:s');
 		$sales = $seller->orders()->whereBetween('created_at', [$past, $now])->sum('total');

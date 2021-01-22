@@ -4,7 +4,6 @@ use App\Http\Modules\Seller\Controllers\Api\Attributes\ListController;
 use App\Http\Modules\Seller\Controllers\Api\Attributes\ProductAttributeController;
 use App\Http\Modules\Seller\Controllers\Api\Attributes\ValueController;
 use App\Http\Modules\Seller\Controllers\Api\Auth\AuthController;
-use App\Http\Modules\Seller\Controllers\Api\Auth\TwoFactorAuthController;
 use App\Http\Modules\Seller\Controllers\Api\Products\CategoryController;
 use App\Http\Modules\Seller\Controllers\Api\Products\HsnCodeController;
 use App\Http\Modules\Seller\Controllers\Api\Products\ProductController;
@@ -16,24 +15,24 @@ use App\Http\Modules\Seller\Controllers\Api\Shared\StateController;
 use App\Library\Utils\Extensions\Str;
 use Illuminate\Support\Facades\Route;
 
-Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\ExistenceController::class, 'exists']);
-Route::post('login', [TwoFactorAuthController::class, 'login']);
-Route::post('register', [TwoFactorAuthController::class, 'register']);
-Route::post('logout', [AuthController::class, 'logout'])->middleware(AUTH_SELLER);
+Route::get('exists', [\App\Http\Modules\Seller\Controllers\Api\Auth\ExistenceController::class, 'exists']);
+Route::post('login', [\App\Http\Modules\Seller\Controllers\Api\Auth\LoginController::class, 'login']);
+Route::post('logout', [\App\Http\Modules\Seller\Controllers\Api\Auth\LoginController::class, 'logout']);
+Route::post('register', [\App\Http\Modules\Seller\Controllers\Api\Auth\RegisterController::class, 'register']);
 
 Route::prefix('profile')->group(static function () {
-	Route::get(Str::Empty, [AuthController::class, 'profile'])->middleware(AUTH_SELLER);
-	Route::put(Str::Empty, [AuthController::class, 'updateProfile'])->middleware(AUTH_SELLER);
-	Route::post('avatar', [AuthController::class, 'updateAvatar'])->middleware(AUTH_SELLER);
-	Route::put('password', [AuthController::class, 'updatePassword'])->middleware(AUTH_SELLER);
+	Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\ProfileController::class, 'show']);
+	Route::put(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\ProfileController::class, 'update']);
+	Route::post('avatar', [\App\Http\Modules\Seller\Controllers\Api\Auth\AvatarController::class, 'update']);
+	Route::put('password', [\App\Http\Modules\Seller\Controllers\Api\Auth\PasswordController::class, 'update']);
 
 	Route::prefix('business-details')->middleware(AUTH_SELLER)->group(static function () {
-		Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\Profile\BusinessDetailController::class, 'show']);
-		Route::post(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\Profile\BusinessDetailController::class, 'update']);
+		Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\BusinessDetailController::class, 'show']);
+		Route::post(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\BusinessDetailController::class, 'update']);
 	});
 	Route::prefix('bank-details')->middleware(AUTH_SELLER)->group(static function () {
-		Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\Profile\BankDetailController::class, 'show']);
-		Route::post(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\Profile\BankDetailController::class, 'update']);
+		Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\BankDetailController::class, 'show']);
+		Route::post(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Auth\BankDetailController::class, 'update']);
 	});
 	Route::prefix('mou')->group(static function () {
 		Route::get(Str::Empty, [\App\Http\Modules\Seller\Controllers\Api\Agreements\AgreementController::class, 'show']);

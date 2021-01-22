@@ -96,7 +96,7 @@ class AdvertisementController extends \App\Http\Modules\Seller\Controllers\Api\A
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules['update']);
-			if ($advertisement->seller->is($this->user()) && $advertisement->status->is(Status::Pending)) {
+			if ($advertisement->seller->is($this->seller()) && $advertisement->status->is(Status::Pending)) {
 				$advertisement->update($validated);
 				$response->status(\Illuminate\Http\Response::HTTP_NO_CONTENT)->message('Advertisement updated successfully!');
 			} else {
@@ -115,7 +115,7 @@ class AdvertisementController extends \App\Http\Modules\Seller\Controllers\Api\A
 	{
 		$response = responseApp();
 		try {
-			if ($advertisement->seller->is($this->user()) && $advertisement->status->is(Status::Pending)) {
+			if ($advertisement->seller->is($this->seller()) && $advertisement->status->is(Status::Pending)) {
 				$advertisement->delete();
 				$response->status(\Illuminate\Http\Response::HTTP_NO_CONTENT)->message('Advertisement deleted successfully!');
 			} else {

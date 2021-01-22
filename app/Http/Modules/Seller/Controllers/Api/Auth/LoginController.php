@@ -1,32 +1,33 @@
 <?php
 
-namespace App\Http\Modules\Customer\Controllers\Api\Auth;
+namespace App\Http\Modules\Seller\Controllers\Api\Auth;
 
-use App\Http\Modules\Customer\Requests\Auth\LoginRequest;
+use App\Http\Modules\Seller\Requests\Auth\LoginRequest;
 use App\Models\Auth\Customer;
+use App\Models\Auth\Seller;
 
 class LoginController extends \App\Http\Modules\Shared\Controllers\Api\AuthController
 {
 	public function __construct ()
 	{
-		parent::__construct(app(Customer::class));
-		$this->middleware(AUTH_CUSTOMER)->only('logout');
+		parent::__construct(app(Seller::class));
+		$this->middleware(AUTH_SELLER)->only('logout');
 	}
 
 	public function login (LoginRequest $request) : \Illuminate\Http\JsonResponse
 	{
 		$exists = parent::exists($request);
 		if ($exists) {
-			$customer = $this->findCustomerByLoginType($request);
-			if ($this->canLogin($customer)) {
-				$verified = $this->verify($customer, $request);
+			$seller = $this->findSellerByLoginType($request);
+			if ($this->canLogin($seller)) {
+				$verified = $this->verify($seller, $request);
 				return ($verified)
-					? $this->sendLoginSuccessResponse($customer)
+					? $this->sendLoginSuccessResponse($seller)
 					: $this->sendLoginFailedResponse($request->type);
 			}
-			return $this->sendCustomerRestrictedResponse();
+			return $this->sendSellerRestrictedResponse();
 		}
-		return $this->sendCustomerNotFoundResponse();
+		return $this->sendSellerNotFoundResponse();
 	}
 
 	public function logout () : \Illuminate\Http\JsonResponse
@@ -37,11 +38,11 @@ class LoginController extends \App\Http\Modules\Shared\Controllers\Api\AuthContr
 		);
 	}
 
-	protected function sendLoginSuccessResponse (Customer $customer) : \Illuminate\Http\JsonResponse
+	protected function sendLoginSuccessResponse (Seller $seller) : \Illuminate\Http\JsonResponse
 	{
-		$token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($customer);
+		$token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($seller);
 		return responseApp()->prepare([
-			(new \App\Resources\Auth\Customer\AuthProfileResource($customer))->token($token)
+			(new \App\Resources\Auth\Seller\AuthProfileResource($seller))->token($token)
 		], \Illuminate\Http\Response::HTTP_OK, __('auth.login.success'), 'data');
 	}
 
@@ -52,21 +53,21 @@ class LoginController extends \App\Http\Modules\Shared\Controllers\Api\AuthContr
 			: $this->sendInvalidCredentialsResponse();
 	}
 
-	protected function sendCustomerNotFoundResponse () : \Illuminate\Http\JsonResponse
+	protected function sendSellerNotFoundResponse () : \Illuminate\Http\JsonResponse
 	{
 		return responseApp()->prepare(
 			null, \Illuminate\Http\Response::HTTP_CONFLICT, __('auth.user.not_found'), 'data'
 		);
 	}
 
-	protected function sendCustomerRestrictedResponse () : \Illuminate\Http\JsonResponse
+	protected function sendSellerRestrictedResponse () : \Illuminate\Http\JsonResponse
 	{
 		return responseApp()->prepare(
 			null, \Illuminate\Http\Response::HTTP_FORBIDDEN, __('auth.user.restricted'), 'data'
 		);
 	}
 
-	protected function findCustomerByLoginType (\Illuminate\Http\Request $request)
+	protected function findSellerByLoginType (\Illuminate\Http\Request $request)
 	{
 		$query = null;
 		switch ($request->type) {
@@ -82,14 +83,14 @@ class LoginController extends \App\Http\Modules\Shared\Controllers\Api\AuthContr
 		return Customer::findBy($query);
 	}
 
-	protected function canLogin (Customer $customer) : bool
+	protected function canLogin (Seller $seller) : bool
 	{
-		return $customer->active;
+		return $seller->active;
 	}
 
-	protected function verifyWithOneTimePassword (Customer $customer, string $otp) : bool
+	protected function verifyWithOneTimePassword (Seller $seller, string $otp) : bool
 	{
-		return $customer->verify($otp);
+		return $seller->verify($otp);
 	}
 
 	protected function credentials (\Illuminate\Http\Request $request) : array
@@ -107,14 +108,14 @@ class LoginController extends \App\Http\Modules\Shared\Controllers\Api\AuthContr
 		}
 	}
 
-	protected function verify (Customer $customer, \Illuminate\Http\Request $request) : bool
+	protected function verify (Seller $seller, \Illuminate\Http\Request $request) : bool
 	{
 		return ($request->type == self::TYPE_OTP)
-			? $this->verifyWithOneTimePassword($customer, $request->otp)
-			: $this->verifyWithCredentials($customer, $this->credentials($request));
+			? $this->verifyWithOneTimePassword($seller, $request->otp)
+			: $this->verifyWithCredentials($seller, $this->credentials($request));
 	}
 
-	protected function verifyWithCredentials (Customer $customer, array $credentials) : bool
+	protected function verifyWithCredentials (Seller $seller, array $credentials) : bool
 	{
 		return $this->guard()->attempt($credentials);
 	}

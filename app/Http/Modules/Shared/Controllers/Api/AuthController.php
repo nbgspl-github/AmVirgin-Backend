@@ -5,7 +5,7 @@ namespace App\Http\Modules\Shared\Controllers\Api;
 use App\Http\Modules\Shared\Requests\Auth\ExistsRequest;
 use App\Library\Database\Eloquent\Model;
 
-class AuthController extends ApiController
+abstract class AuthController extends ApiController
 {
 	/**
 	 * @var Model
@@ -55,10 +55,5 @@ class AuthController extends ApiController
 			default:
 				return false;
 		}
-	}
-
-	protected function guard ()
-	{
-		return auth(self::CUSTOMER_API);
 	}
 }

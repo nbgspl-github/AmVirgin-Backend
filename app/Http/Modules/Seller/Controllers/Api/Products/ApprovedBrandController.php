@@ -22,7 +22,7 @@ class ApprovedBrandController extends \App\Http\Modules\Seller\Controllers\Api\A
 
 	public function index () : JsonResponse
 	{
-		$brands = Brand::startQuery()->seller($this->userId())->latest()->get();
+		$brands = Brand::startQuery()->seller($this->customer())->latest()->get();
 		$brandCollection = ListResource::collection($brands);
 		return responseApp()->prepare(
 			$brandCollection, \Illuminate\Http\Response::HTTP_OK, 'Listing all brands by you.'
