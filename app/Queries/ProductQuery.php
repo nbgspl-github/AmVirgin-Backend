@@ -7,12 +7,9 @@ use App\Library\Utils\Extensions\Time;
 use App\Models\CatalogFilter;
 use App\Models\Category;
 use App\Models\Product;
-use App\Queries\Traits\SellerAuthentication;
 
 class ProductQuery extends AbstractQuery
 {
-	use SellerAuthentication;
-
 	protected function __construct ()
 	{
 		parent::__construct();
@@ -30,6 +27,12 @@ class ProductQuery extends AbstractQuery
 	public static function begin () : self
 	{
 		return new self();
+	}
+
+	public function useAuth () : self
+	{
+		$this->query->where('sellerId', auth('seller-api')->id());
+		return $this;
 	}
 
 	public function displayable () : self

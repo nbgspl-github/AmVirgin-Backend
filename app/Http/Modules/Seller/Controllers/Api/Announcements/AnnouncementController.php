@@ -42,31 +42,28 @@ class AnnouncementController extends \App\Http\Modules\Seller\Controllers\Api\Ap
 		$announcement = Announcement::startQuery()->key($id)->excludeDeleted()->firstOrFail();
 		switch ($validated['action']) {
 			case 'read':
-				$readBy = $announcement->readBy();
-				if (!Arrays::contains($readBy, $this->guard()->id())) {
-					Arrays::push($readBy, $this->guard()->id());
+				$readBy = $announcement->readBy;
+				if (!Arrays::contains($readBy, $this->seller()->id)) {
+					Arrays::push($readBy, $this->seller()->id);
 				}
-				$announcement->readBy($readBy);
-				$announcement->save();
+				$announcement->update(['readBy' => $readBy]);
 				break;
 
 			case 'unread':
-				$readBy = $announcement->readBy();
-				$id = $this->guard()->id();
+				$readBy = $announcement->readBy;
+				$id = $this->seller()->id;
 				$readBy = collect($readBy)->filter(function ($value, $key) use ($id) {
 					return $value != $id;
 				})->toArray();
-				$announcement->readBy($readBy);
-				$announcement->save();
+				$announcement->update(['readBy' => $readBy]);
 				break;
 
 			case 'delete':
-				$deletedBy = $announcement->deletedBy();
-				if (!Arrays::contains($deletedBy, $this->guard()->id())) {
-					Arrays::push($deletedBy, $this->guard()->id());
+				$deletedBy = $announcement->deletedBy;
+				if (!Arrays::contains($deletedBy, $this->seller()->id)) {
+					Arrays::push($deletedBy, $this->seller()->id);
 				}
-				$announcement->deletedBy($deletedBy);
-				$announcement->save();
+				$announcement->update(['deletedBy' => $deletedBy]);
 				break;
 		}
 		return responseApp()->prepare(

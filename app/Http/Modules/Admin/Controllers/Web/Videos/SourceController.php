@@ -24,13 +24,17 @@ class SourceController extends \App\Http\Modules\Admin\Controllers\Web\WebContro
 	{
 		if ($request->isMethod('POST')) {
 			if (!$request->has('is_last')) {
-				$directory = 'uploads/' . $request->token;
-				if (!\App\Library\Utils\Uploads::access()->exists($directory)) {
-					\App\Library\Utils\Uploads::access()->makeDirectory($directory);
-					\App\Library\Utils\Uploads::access()->put("{$directory}/empty", \App\Library\Utils\Extensions\Str::Empty);
+				try {
+					$directory = 'uploads/' . $request->token;
+					if (!\App\Library\Utils\Uploads::access()->exists($directory)) {
+						\App\Library\Utils\Uploads::access()->makeDirectory($directory);
+						\App\Library\Utils\Uploads::access()->put("{$directory}/empty", \App\Library\Utils\Extensions\Str::Empty);
+					}
+					\App\Library\Utils\Uploads::access()->putFileAs($directory, $request->file('file'), "{$request->resumableChunkNumber}");
+					return response()->json(['message' => 'Chunk uploaded successfully.', 'files' => $request->allFiles()], 200);
+				} catch (\Throwable $exception) {
+					return response()->json(['message' => $exception->getTraceAsString(), 'files' => $request->allFiles()], 500);
 				}
-				\App\Library\Utils\Uploads::access()->putFileAs($directory, $request->file('file'), "{$request->resumableChunkNumber}");
-				return response()->json(['message' => 'Chunk uploaded successfully.'], 200);
 			} else {
 				$path = $this->combine($request->token);
 				/**
@@ -62,7 +66,8 @@ class SourceController extends \App\Http\Modules\Admin\Controllers\Web\WebContro
 	protected function combine (string $token) : string
 	{
 		$directory = "app/public/uploads/{$token}";
-		$base = fopen(storage_path("{$directory}/empty"), 'ab');
+		$baseFile = storage_path("{$directory}/empty");
+		$base = fopen($baseFile, 'ab');
 		for ($i = 1; ; $i++) {
 			$file = "{$directory}/{$i}";
 			if (!file_exists(storage_path($file))) {
@@ -77,6 +82,8 @@ class SourceController extends \App\Http\Modules\Admin\Controllers\Web\WebContro
 		fclose($base);
 		$path = "videos/video_tracks/{$token}.mp4";
 		copy(storage_path("{$directory}/empty"), storage_path("app/public/{$path}"));
+		unlink($baseFile);
+		rmdir(storage_path($directory));
 		return $path;
 	}
 

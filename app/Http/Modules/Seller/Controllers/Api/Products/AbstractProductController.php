@@ -178,12 +178,12 @@ class AbstractProductController extends \App\Http\Modules\Seller\Controllers\Api
 
 	protected function isInvalidCategory (Category $category) : bool
 	{
-		return !Str::equals($category->type(), \App\Library\Enums\Categories\Types::Vertical);
+		return !Str::equals($category->type, \App\Library\Enums\Categories\Types::Vertical);
 	}
 
-	protected function isBrandApprovedForSeller (Brand $brand)
+	protected function isBrandApprovedForSeller (Brand $brand) : bool
 	{
-		return Brand::startQuery()->seller($this->guard()->id())->displayable()->key($brand->id())->first() !== null;
+		return Brand::startQuery()->seller($this->seller()->id)->displayable()->key($brand->id)->first() !== null;
 	}
 
 	protected function storeTrailer (UploadedFile $file) : ?string
@@ -231,16 +231,15 @@ class AbstractProductController extends \App\Http\Modules\Seller\Controllers\Api
 		return Str::makeUuid();
 	}
 
-	protected function convertAllSimpleToVariants (string $token)
+	protected function convertAllSimpleToVariants (string $token) : bool
 	{
-		$products = Product::startQuery()->seller($this->guard()->id())->simple()->group($token)->get();
+		$products = Product::startQuery()->seller($this->seller()->id)->simple()->group($token)->get();
 		// If there are more than one products under the same group,
 		// it means they should be treated as variants of the same kind.
 		// Otherwise let the be the type they are.
 		if ($products->count() > 1) {
 			$products->each(function (Product $product) {
-				$product->type(Product::Type['Variant']);
-				$product->save();
+				$product->update(['type' => Product::Type['Variant']]);
 			});
 			return true;
 		} else {
@@ -252,7 +251,7 @@ class AbstractProductController extends \App\Http\Modules\Seller\Controllers\Api
 	{
 		$productToken = ProductToken::where([
 			['token', request()->header('X-PRODUCT-TOKEN')],
-			['sellerId', $this->guard()->id()],
+			['sellerId', $this->seller()->id],
 			['createdFor', request()->ip()],
 			['validUntil', '>', Time::mysqlStamp()],
 		])->first();

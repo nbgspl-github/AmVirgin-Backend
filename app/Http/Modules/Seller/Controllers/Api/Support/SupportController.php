@@ -32,7 +32,7 @@ class SupportController extends \App\Http\Modules\Seller\Controllers\Api\ApiCont
 				'subject' => ['bail', 'required', 'string', 'min:4', 'max:500'],
 				'description' => ['bail', 'required', 'string', 'min:2', 'max:5000'],
 				'orderId' => ['bail'],
-				'orderId.*' => ['bail', 'exists:seller-orders,id'],
+				'orderId.*' => ['bail', \App\Models\Order\SubOrder::exists()],
 				'callbackNumber' => ['bail', 'required', 'string', 'min:10', 'max:14'],
 				'attachments' => ['bail', 'required'],
 				'attachments.*' => ['bail', 'required', 'mimes:jpeg,jpg,png,doc,docx,xls,xslx,pdf'],
@@ -45,7 +45,7 @@ class SupportController extends \App\Http\Modules\Seller\Controllers\Api\ApiCont
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules['index']);
-			$query = SupportTicket::query()->where('sellerId', $this->guard()->id());
+			$query = SupportTicket::query()->where('sellerId', $this->seller()->id);
 			if (isset($validated['status']))
 				$query->where('status', $validated['status']);
 			if (isset($validated['issue']))
@@ -67,7 +67,7 @@ class SupportController extends \App\Http\Modules\Seller\Controllers\Api\ApiCont
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules['store']);
-			$validated['sellerId'] = $this->guard()->id();
+			$validated['sellerId'] = $this->seller()->id;
 			$validated['status'] = 'open';
 			$ticket = SupportTicket::create($validated);
 			$resource = new TicketResource($ticket);

@@ -63,7 +63,7 @@ class BrandController extends \App\Http\Modules\Seller\Controllers\Api\ApiContro
 		$response = responseApp();
 		try {
 			$payload = $this->requestValid(request(), $this->rules['show']);
-			$ownedBrands = Brand::startQuery()->seller($this->guard()->id())->orderByDescending('updated_at')->get();
+			$ownedBrands = Brand::startQuery()->seller($this->seller()->id)->orderByDescending('updated_at')->get();
 			$resource = OwnedBrandResource::collection($ownedBrands);
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Listing all brands approved for you.')->setValue('data', $resource)->send();
 		} catch (Throwable $exception) {
@@ -82,7 +82,7 @@ class BrandController extends \App\Http\Modules\Seller\Controllers\Api\ApiContro
 		 */
 		$brand = Brand::startQuery()->name($payload['name'])->first();
 		if ($brand != null) {
-			if ($brand->createdBy == $this->guard()->id()) {
+			if ($brand->createdBy == $this->seller()->id) {
 				if ($brand->status->is(\App\Library\Enums\Brands\Status::Approved)) {
 					$response->status(\Illuminate\Http\Response::HTTP_OK)->message('You are already approved to sell under this brand.')->setValue('payload', ['status' => $brand->status]);
 				} else if ($brand->status->is(\App\Library\Enums\Brands\Status::Rejected)) {
@@ -119,7 +119,7 @@ class BrandController extends \App\Http\Modules\Seller\Controllers\Api\ApiContro
 				$extras = Arrays::Empty;
 			}
 			Arrays::replaceValues($payload, [
-				'createdBy' => $this->guard()->id(),
+				'createdBy' => $this->seller()->id,
 				'documentExtras' => $extras,
 				'logo' => $payload['logo'] ?? null,
 			]);

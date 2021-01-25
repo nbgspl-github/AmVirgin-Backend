@@ -66,9 +66,9 @@ class BusinessDetailController extends \App\Http\Modules\Seller\Controllers\Api\
 		$response = responseApp();
 		try {
 			$validated = $this->requestValid(request(), $this->rules['update']);
-			Arrays::set($validated, 'sellerId', $this->guard()->id());
+			Arrays::set($validated, 'sellerId', $this->seller()->id);
 			$payload = SellerBusinessDetail::query()->updateOrCreate([
-				'sellerId' => $this->guard()->id(),
+				'sellerId' => $this->seller()->id,
 			], $validated);
 			$resource = new BusinessDetailResource($payload);
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Business details updated successfully.')->setValue('payload', $resource);

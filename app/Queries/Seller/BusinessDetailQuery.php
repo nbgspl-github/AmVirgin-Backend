@@ -2,25 +2,31 @@
 
 namespace App\Queries\Seller;
 
-use App\Models\SellerBankDetail;
 use App\Models\SellerBusinessDetail;
 use App\Queries\AbstractQuery;
-use App\Queries\Traits\SellerAuthentication;
 
-class BusinessDetailQuery extends AbstractQuery{
-	use SellerAuthentication;
-
+class BusinessDetailQuery extends AbstractQuery
+{
 	protected $modelUserString = 'seller business details';
 
-	protected function model(): string{
+	protected function model () : string
+	{
 		return SellerBusinessDetail::class;
 	}
 
-	public static function begin(): self{
+	public static function begin () : self
+	{
 		return new static();
 	}
 
-	public function displayable(): self{
+	public function displayable () : self
+	{
+		return $this;
+	}
+
+	public function useAuth () : self
+	{
+		$this->query->where('sellerId', auth('seller-api')->id());
 		return $this;
 	}
 }

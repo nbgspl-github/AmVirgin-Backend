@@ -2,7 +2,6 @@
 
 namespace App\Http\Modules\Seller\Controllers\Api\Products;
 
-use App\Exceptions\BrandNotApprovedForSellerException;
 use App\Exceptions\InvalidCategoryException;
 use App\Exceptions\TokenInvalidException;
 use App\Exceptions\ValidationException;
@@ -38,7 +37,7 @@ class ProductController extends AbstractProductController
 			$per_page = 10;
 		}
 
-		$productRecord = Product::startQuery()->singleVariantMode()->seller($this->guard()->id());
+		$productRecord = Product::startQuery()->singleVariantMode()->seller($this->seller()->id);
 		if (!empty(request()->get('status'))) {
 			if (request('status') == 'active' || request('status') == 'inactive') {
 				$productRecord->withWhere('listingStatus', request()->get('status'));
@@ -99,7 +98,7 @@ class ProductController extends AbstractProductController
 	{
 		$response = responseApp();
 		try {
-			$product = Product::startQuery()->seller($this->guard()->id())->key($id)->firstOrFail();
+			$product = Product::startQuery()->seller($this->seller()->id)->key($id)->firstOrFail();
 			$resource = new ProductResource($product);
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Listing product details.')->setValue('payload', $resource);
 		} catch (ModelNotFoundException $exception) {
@@ -125,13 +124,13 @@ class ProductController extends AbstractProductController
 			$productsPayloadCollection = new Collection();
 			$product = $this->validateProductPayload($outer['payload']);
 			Arrays::replaceValues($product, [
-				'categoryId' => $category->id(),
-				'brandId' => $brand->id(),
-				'sellerId' => $this->guard()->id(),
+				'categoryId' => $category->id,
+				'brandId' => $brand->id,
+				'sellerId' => $this->seller()->id,
 				'type' => Product::Type['Simple'],
 				'currency' => $outer['currency'],
 				'description' => $outer['description'] ?? Str::Null,
-				'taxRate' => HsnCode::find($product['hsn'])->taxRate(),
+				'taxRate' => HsnCode::query()->find($product['hsn'])->taxRate,
 				'group' => $token,
 				'discount' => $this->calculateDiscount($product['originalPrice'], $product['sellingPrice']),
 				'maxQuantityPerOrder' => $product['maxQuantityPerOrder'] ?? 10,
@@ -162,14 +161,8 @@ class ProductController extends AbstractProductController
 				$response->status(\Illuminate\Http\Response::HTTP_CREATED)->message('Product details were saved successfully.');
 			else
 				$response->status(\Illuminate\Http\Response::HTTP_CREATED)->message('Product variant was saved successfully.');
-		} catch (TokenInvalidException $exception) {
+		} catch (TokenInvalidException | ValidationException | InvalidCategoryException $exception) {
 			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
-		} catch (ValidationException $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
-		} catch (InvalidCategoryException $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
-		} catch (BrandNotApprovedForSellerException $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_FORBIDDEN)->message($exception->getMessage());
 		} catch (Throwable $exception) {
 			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
 		} finally {
@@ -210,7 +203,7 @@ class ProductController extends AbstractProductController
 	{
 		$response = responseApp();
 		try {
-			$product = Product::startQuery()->seller($this->guard()->id())->key($id)->firstOrFail();
+			$product = Product::startQuery()->seller($this->seller()->id)->key($id)->firstOrFail();
 			$product->delete();
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Product deleted successfully.');
 		} catch (ModelNotFoundException $exception) {
@@ -222,24 +215,24 @@ class ProductController extends AbstractProductController
 		}
 	}
 
-	public function token ()
+	public function token () : JsonResponse
 	{
 		$token = $this->sessionUuid();
-		$productToken = ProductToken::updateOrCreate(
+		$productToken = ProductToken::query()->updateOrCreate(
 			[
 				'token' => $token,
-				'sellerId' => $this->guard()->id(),
+				'sellerId' => $this->seller()->id,
 			],
 			[
 				'token' => $token,
-				'sellerId' => $this->guard()->id(),
+				'sellerId' => $this->seller()->id,
 				'createdFor' => request()->ip(),
 				'validUntil' => Carbon::now()->addHours(2)->toDateTimeString(),
 			]
 		);
 		return responseApp()->setValue('payload', [
-			'token' => $productToken->token(),
-			'validUntil' => $productToken->validUntil(),
+			'token' => $productToken->token,
+			'validUntil' => $productToken->validUntil,
 		])->status(\Illuminate\Http\Response::HTTP_OK)->message('Token generated successfully.')->send();
 	}
 
@@ -247,7 +240,7 @@ class ProductController extends AbstractProductController
 	{
 		$response = responseApp();
 		try {
-			$product = Product::where(['id' => $id, 'sellerId' => auth('seller-api')->id()])->first();
+			$product = Product::query()->where(['id' => $id, 'sellerId' => auth('seller-api')->id()])->first();
 			if (!empty($product) || !empty(request('status'))) {
 				$product->listingStatus = request('status');
 				$product->update();

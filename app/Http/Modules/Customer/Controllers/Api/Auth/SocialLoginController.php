@@ -31,4 +31,9 @@ class SocialLoginController extends \App\Http\Modules\Shared\Controllers\Api\Aut
 			(new \App\Resources\Auth\Customer\AuthProfileResource($customer))->token($token), \Illuminate\Http\Response::HTTP_OK, __('auth.login.success'), 'data'
 		]);
 	}
+
+	protected function guard ()
+	{
+		return auth(self::CUSTOMER_API);
+	}
 }

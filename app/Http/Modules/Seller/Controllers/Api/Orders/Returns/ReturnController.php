@@ -19,7 +19,7 @@ class ReturnController extends \App\Http\Modules\Seller\Controllers\Api\ApiContr
 	{
 		return responseApp()->prepare(
 			ListResource::collection(
-				Returns::query()->whereNotIn('status', [Status::Completed])->where('seller_id', $this->guard()->id())->orderBy('updated_at', 'desc')->paginate($this->paginationChunk())
+				Returns::query()->whereNotIn('status', [Status::Completed])->where('seller_id', $this->seller()->id)->orderBy('updated_at', 'desc')->paginate($this->paginationChunk())
 			)
 		);
 	}

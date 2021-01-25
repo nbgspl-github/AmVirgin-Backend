@@ -141,8 +141,8 @@
 					token: token
 				},
 				maxChunkRetries: 0,
-				testChunks: true,
-				chunkSize: 10 * 1024 * 1024,
+				testChunks: false,
+				chunkSize: 5 * 1024 * 1024,
 			});
 			resumable.assignBrowse(document.getElementById('videoFile'));
 			resumable.on('fileAdded', function (file, event) {
@@ -151,16 +151,15 @@
 			resumable.on('fileProgress', function (file, message) {
 				setProgress(Number(resumable.progress() * 100).toFixed(0));
 			});
-			resumable.on('error', function (message, file) {
+			resumable.on('fileError', function (file, message) {
+				showProgressDialog(false);
 				alertify.confirm('An error occurred when uploading your file. Retry?', yes => {
 					showProgressDialog(true, () => {
-						resumable.upload();
+						resumable.retry();
 					});
-				}, no => {
-					showProgressDialog(false);
 				});
 			});
-			resumable.on('complete', function () {
+			resumable.on('fileSuccess', function (file, message) {
 				axios.post(url, {
 					'is_last': '1',
 					token: token

@@ -39,7 +39,7 @@ class AuthController extends \App\Http\Modules\Seller\Controllers\Api\ApiControl
 		} else {
 			try {
 
-				$seller = Seller::findOrFail($this->guard()->id());
+				$seller = Seller::findOrFail($this->seller()->id);
 
 				if ((Hash::check(request('old_password'), $seller->password)) == false) {
 
