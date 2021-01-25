@@ -46,7 +46,7 @@ class Handler extends ExceptionHandler
 		try {
 			if ($this->respondWithJson($request)) {
 				if ($e instanceof ModelNotFoundException || $e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
-					return response()->json(['status' => Response::HTTP_NOT_FOUND, 'payload' => null], Response::HTTP_NOT_FOUND);
+					return response()->json(['status' => Response::HTTP_NOT_FOUND, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_NOT_FOUND);
 				} elseif ($e instanceof ActionNotAllowedException) {
 					return response()->json(['status' => Response::HTTP_FORBIDDEN, 'message' => $e->getMessage(), 'payload' => null], Response::HTTP_OK);
 				} elseif ($e instanceof ActionInvalidException) {

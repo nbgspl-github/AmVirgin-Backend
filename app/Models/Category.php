@@ -27,6 +27,7 @@ class Category extends \App\Library\Database\Eloquent\Model
 	];
 	const LISTING_ACTIVE = 'active';
 	const LISTING_INACTIVE = 'inactive';
+	const ROUTE_TRENDING_DEALS = 'trending';
 
 	public function attributes () : \Illuminate\Database\Eloquent\Relations\BelongsToMany
 	{

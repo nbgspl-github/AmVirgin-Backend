@@ -53,7 +53,7 @@
 				<li>
 					<a href="{{route('admin.filters.catalog.index')}}" class="waves-effect animatableX d-none"><i class="mdi mdi-cards"></i>
 						<span> Filters </span></a></li>
-				<li class="has_sub animatableX">
+				<li class="has_sub animatableX {{request()->routeIs('admin.products.*')?'active nav-active':""}}">
 					<a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-cube animatableX"></i><span> Products </span>
 						<span class="menu-arrow float-right"><i class="mdi mdi-chevron-right"></i></span></a>
 					<ul class="list-unstyled">
