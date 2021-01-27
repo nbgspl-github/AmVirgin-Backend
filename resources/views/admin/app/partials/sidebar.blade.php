@@ -57,7 +57,7 @@
 					<a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-cube animatableX"></i><span> Products </span>
 						<span class="menu-arrow float-right"><i class="mdi mdi-chevron-right"></i></span></a>
 					<ul class="list-unstyled">
-						<li {!! __active('admin.products.pending') !!}>
+						<li {!! __active('admin.products.pending.*') !!}>
 							<a href="{{route('admin.products.pending')}}">Pending</a>
 						</li>
 						<li><a href="{{route('admin.products.approved')}}">Approved</a></li>

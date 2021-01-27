@@ -55,8 +55,7 @@
 								<td>
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group" role="group">
-											<a class="btn btn-outline-danger" href="" @include('admin.extras.tooltip.bottom', ['title' => 'View product details'])><i class="mdi mdi-pencil"></i></a>
-											<a class="btn btn-outline-primary" href="" @include('admin.extras.tooltip.bottom', ['title' => 'Delete product'])><i class="mdi mdi-minus-circle-outline"></i></a>
+											<a class="btn btn-outline-danger" href="{{route('admin.products.pending.details',$product->id)}}" @include('admin.extras.tooltip.bottom', ['title' => 'View product details'])><i class="mdi mdi-pencil"></i></a>
 										</div>
 									</div>
 								</td>

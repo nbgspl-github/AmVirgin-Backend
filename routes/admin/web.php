@@ -7,6 +7,7 @@ use App\Http\Modules\Admin\Controllers\Web\CategoryController;
 use App\Http\Modules\Admin\Controllers\Web\GenresController;
 use App\Http\Modules\Admin\Controllers\Web\HomeController;
 use App\Http\Modules\Admin\Controllers\Web\NotificationsController;
+use App\Http\Modules\Admin\Controllers\Web\Products\Attributes\DetailController;
 use App\Http\Modules\Admin\Controllers\Web\Products\ProductController;
 use App\Http\Modules\Admin\Controllers\Web\ServersController;
 use App\Http\Modules\Admin\Controllers\Web\SettingsController;
@@ -251,6 +252,9 @@ Route::middleware('auth:admin')->group(function () {
 		Route::get('deleted', [ProductController::class, 'deleted'])->name('admin.products.deleted');
 		Route::get('rejected', [ProductController::class, 'rejected'])->name('admin.products.rejected');
 		Route::get('pending', [ProductController::class, 'pending'])->name('admin.products.pending');
+		Route::prefix('pending')->group(function () {
+			Route::get('{product}', [DetailController::class, 'pending'])->name('admin.products.pending.details');
+		});
 	});
 
 	// Attributes Route(s)

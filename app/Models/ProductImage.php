@@ -14,16 +14,11 @@ class ProductImage extends \App\Library\Database\Eloquent\Model
 	use DynamicAttributeNamedMethods;
 
 	protected $table = 'product-images';
-	protected $fillable = [
-		'productId',
-		'path',
-	];
-	protected $hidden = [
-		'id',
-		'productId',
-		'created_at',
-		'updated_at',
-	];
+
+	public function getPathAttribute ($value) : ?string
+	{
+		return $this->retrieveMedia($value);
+	}
 
 	public function product () : BelongsTo
 	{
