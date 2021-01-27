@@ -12,6 +12,8 @@ class VideoSectionResource extends \Illuminate\Http\Resources\Json\JsonResource
 			'description' => $this->description,
 			'poster' => $this->poster,
 			'type' => $this->type,
+			'subscriptionType' => $this->subscription_type,
+			'price' => $this->price
 		];
 	}
 }
