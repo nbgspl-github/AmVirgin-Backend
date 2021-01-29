@@ -8,6 +8,8 @@ use App\Http\Modules\Admin\Controllers\Web\News\ArticleController;
 use App\Http\Modules\Admin\Controllers\Web\News\Articles\ContentController;
 use App\Http\Modules\Admin\Controllers\Web\News\Articles\VideoController as ArticlesVideoController;
 use App\Http\Modules\Admin\Controllers\Web\News\CategoryController as NewsCategoryController;
+use App\Http\Modules\Admin\Controllers\Web\Payments\PaymentController;
+use App\Http\Modules\Admin\Controllers\Web\Payments\TransactionController;
 use App\Http\Modules\Admin\Controllers\Web\Products\Attributes\DetailController;
 use App\Http\Modules\Admin\Controllers\Web\Products\ProductController;
 use App\Http\Modules\Admin\Controllers\Web\Shop\HomePageController;
@@ -50,6 +52,18 @@ Route::middleware('auth:admin')->group(function () {
 		Route::post('{seller}', [SellerController::class, 'update'])->name('admin.sellers.update');
 		Route::put('{seller}/status', [SellerController::class, 'updateStatus'])->name('admin.sellers.update.status');
 		Route::delete('{seller}', [SellerController::class, 'delete'])->name('admin.sellers.delete');
+	});
+
+	// Payment's Route(s)
+	Route::prefix('payments')->group(function () {
+		Route::get(Str::Empty, [PaymentController::class, 'index'])->name('admin.payments.index');
+		Route::get('{payment}/show', [PaymentController::class, 'show'])->name('admin.payments.show');
+	});
+
+	// Transaction's Route(s)
+	Route::prefix('transactions')->group(function () {
+		Route::get(Str::Empty, [TransactionController::class, 'index'])->name('admin.transactions.index');
+		Route::get('{transaction}/show', [TransactionController::class, 'show'])->name('admin.transactions.show');
 	});
 
 	// News Categories Route(s)

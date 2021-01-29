@@ -8,4 +8,9 @@ class SellerPayment extends \App\Library\Database\Eloquent\Model
 	{
 		return $this->belongsTo(\App\Models\Order\SubOrder::class, 'sub_order_id');
 	}
+
+	public function seller () : \Illuminate\Database\Eloquent\Relations\BelongsTo
+	{
+		return $this->belongsTo(\App\Models\Auth\Seller::class, 'seller_id');
+	}
 }

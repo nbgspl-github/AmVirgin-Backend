@@ -30,6 +30,8 @@
 					<x-sidebar-item url="{{route('admin.products.deleted')}}" icon="" title="Deleted"/>
 				</x-sidebar-expandable-item>
 				<x-sidebar-item url="{{route('admin.shop.choices')}}" icon="ti-panel" title="Homepage"/>
+				<x-sidebar-item url="{{route('admin.payments.index')}}" icon="ti-receipt" title="Payments"/>
+				<x-sidebar-item url="{{route('admin.transactions.index')}}" icon="ti-receipt" title="Transactions"/>
 
 				<!--Catalog Section-->
 				<x-sidebar-header title="Catalog"/>
