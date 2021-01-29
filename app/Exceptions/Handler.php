@@ -42,7 +42,6 @@ class Handler extends ExceptionHandler
 
 	public function render ($request, Throwable $e)
 	{
-		dd($e);
 		try {
 			if ($this->respondWithJson($request)) {
 				if ($e instanceof ModelNotFoundException || $e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
