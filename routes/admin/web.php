@@ -3,7 +3,7 @@
 use App\Http\Modules\Admin\Controllers\Web\Auth\LoginController;
 use App\Http\Modules\Admin\Controllers\Web\CategoryController;
 use App\Http\Modules\Admin\Controllers\Web\GenreController;
-use App\Http\Modules\Admin\Controllers\Web\HomeController;
+use App\Http\Modules\Admin\Controllers\Web\DashboardController;
 use App\Http\Modules\Admin\Controllers\Web\News\ArticleController;
 use App\Http\Modules\Admin\Controllers\Web\News\Articles\ContentController;
 use App\Http\Modules\Admin\Controllers\Web\News\Articles\VideoController as ArticlesVideoController;
@@ -24,7 +24,7 @@ use App\Http\Modules\Admin\Controllers\Web\Videos\VideoController;
 use App\Library\Utils\Extensions\Str;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'index'])->middleware('auth:admin')->name('admin.home');
+Route::get('/', [DashboardController::class, 'index'])->middleware('auth:admin')->name('admin.home');
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/login', [LoginController::class, 'login'])->name('admin.login.submit');
 Route::post('/logout', [LoginController::class, 'logout'])->name('admin.logout');

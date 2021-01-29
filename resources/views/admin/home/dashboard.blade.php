@@ -1,204 +1,173 @@
 @extends('admin.app.app')
 @section('content')
 	<div class="row">
-		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0 pr-md-0">
-			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
-				<div class="card-body">
-					<div class="text-center">
-						<div>
-							<i class="mdi mdi-movie" style="font-size: 35px"></i>
-						</div>
-						<div>
-							<h4 class="mt-4">Videos</h4>
-							<h5 class="">{{$stats->video}}</h5>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0 pr-md-0">
-			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
-				<div class="card-body">
-					<div class="text-center">
-						<div>
-							<i class="mdi mdi-step-forward" style="font-size: 35px"></i>
-						</div>
-						<div>
-							<h4 class="mt-4">Series</h4>
-							<h5 class="">{{$stats->series}}</h5>
+		<x-stats-card title="Orders Today" icon="ti-package" value="{{$ordersToday}}"/>
+		<x-stats-card title="Sales Today" icon="ti-receipt" value="{{$salesToday}}"/>
+		<x-stats-card title="Customers Registered Today" icon="ti-user" value="{{$customersToday}}"/>
+		<x-stats-card title="Sellers Registered Today" icon="ti-user" value="{{$sellersToday}}"/>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<div class="card shadow-sm">
+				<div class="card-header border-0 py-0">
+					<div class="row">
+						<div class="col-12">
+							<h5 class="header-title py-3 mb-0 animatable">Recently Registered Customers</h5>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0">
-			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
-				<div class="card-body">
-					<div class="text-center">
-						<div>
-							<i class="mdi mdi-television" style="font-size: 35px"></i>
-						</div>
-						<div>
-							<h4 class="mt-4">Movies</h4>
-							<h5 class="">{{$stats->movie}}</h5>
-						</div>
-					</div>
+				<div class="card-body animatable pt-0">
+					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+						<thead>
+						<tr>
+							<th>#</th>
+							<th>Name</th>
+							<th>Mobile</th>
+							<th>Email</th>
+							<th>Time</th>
+						</tr>
+						</thead>
+						<tbody>
+						@foreach ($customers as $customer)
+							<tr>
+								<td>{{($loop->index+1)}}</td>
+								<td>{{\App\Library\Utils\Extensions\Str::ellipsis($customer->name,25)}}</td>
+								<td>{{$customer->mobile}}</td>
+								<td>{{\App\Library\Utils\Extensions\Str::ellipsis($customer->email,50)}}</td>
+								<td>{{$customer->created_at->format(\App\Library\Utils\Extensions\Time::SIMPLIFIED_FORMAT)}}</td>
+							</tr>
+						@endforeach
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="row mt-0 mt-md-3">
-		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0 pr-md-0">
-			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
-				<div class="card-body">
-					<div class="text-center">
-						<div>
-							<i class="mdi mdi-movie" style="font-size: 35px"></i>
-						</div>
-						<div>
-							<h4 class="mt-4">New Videos</h4>
-							<h5 class="">{{$stats->newVideo}}</h5>
+	<div class="row mt-4">
+		<div class="col-12">
+			<div class="card shadow-sm">
+				<div class="card-header border-0 py-0">
+					<div class="row">
+						<div class="col-12">
+							<h5 class="header-title py-3 mb-0 animatable">Recently Registered Sellers</h5>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0 pr-md-0">
-			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
-				<div class="card-body">
-					<div class="text-center">
-						<div>
-							<i class="mdi mdi-step-forward" style="font-size: 35px"></i>
-						</div>
-						<div>
-							<h4 class="mt-4">New Series</h4>
-							<h5 class="">{{$stats->newSeries}}</h5>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0">
-			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
-				<div class="card-body">
-					<div class="text-center">
-						<div>
-							<i class="mdi mdi-television" style="font-size: 35px"></i>
-						</div>
-						<div>
-							<h4 class="mt-4">New Movies</h4>
-							<h5 class="">{{$stats->newMovie}}</h5>
-						</div>
-					</div>
+				<div class="card-body animatable pt-0">
+					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+						<thead>
+						<tr>
+							<th>#</th>
+							<th>Name</th>
+							<th>Mobile</th>
+							<th>Email</th>
+							<th>Time</th>
+						</tr>
+						</thead>
+						<tbody>
+						@foreach ($sellers as $seller)
+							<tr>
+								<td>{{($loop->index+1)}}</td>
+								<td>{{\App\Library\Utils\Extensions\Str::ellipsis($seller->name,25)}}</td>
+								<td>{{$seller->mobile}}</td>
+								<td>{{\App\Library\Utils\Extensions\Str::ellipsis($seller->email,50)}}</td>
+								<td>{{$customer->created_at->format(\App\Library\Utils\Extensions\Time::SIMPLIFIED_FORMAT)}}</td>
+							</tr>
+						@endforeach
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="row mt-0 mt-md-3">
-		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0 pr-md-0">
-			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
-				<div class="card-body">
-					<div class="text-center">
-						<div>
-							<i class="mdi mdi-account" style="font-size: 35px"></i>
-						</div>
-						<div>
-							<h4 class="mt-4">Customers</h4>
-							<h5 class="">{{$stats->customers}}</h5>
+	<div class="row mt-4">
+		<div class="col-12">
+			<div class="card shadow-sm">
+				<div class="card-header border-0 py-0">
+					<div class="row">
+						<div class="col-12">
+							<h5 class="header-title py-3 mb-0 animatable">Most Viewed Articles</h5>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0 pr-md-0">
-			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
-				<div class="card-body">
-					<div class="text-center">
-						<div>
-							<i class="mdi mdi-worker" style="font-size: 35px"></i>
-						</div>
-						<div>
-							<h4 class="mt-4">Sellers</h4>
-							<h5 class="">{{$stats->sellers}}</h5>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3 mb-sm-3 mb-md-0">
-			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
-				<div class="card-body">
-					<div class="text-center">
-						<div>
-							<i class="mdi mdi-flask" style="font-size: 35px"></i>
-						</div>
-						<div>
-							<h4 class="mt-4">Products</h4>
-							<h5 class="">{{$stats->products}}</h5>
-						</div>
-					</div>
+				<div class="card-body animatable pt-0">
+					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+						<thead>
+						<tr>
+							<th>#</th>
+							<th>Thumbnail</th>
+							<th>Title</th>
+							<th>Author</th>
+							<th>Type</th>
+							<th>Views</th>
+							<th>Shares</th>
+						</tr>
+						</thead>
+						<tbody>
+						@foreach ($articles as $article)
+							<tr>
+								<td>{{($loop->index+1)}}</td>
+								<td>
+									@if($article->thumbnail!=null)
+										<img src="{{$article->thumbnail}}" style="max-height: 100px" alt="" class="img-thumbnail"/>
+									@else
+										{{\App\Library\Utils\Extensions\Str::NotAvailable}}
+									@endif
+								</td>
+								<td>{{\App\Library\Utils\Extensions\Str::ellipsis($article->title,50)}}</td>
+								<td>{{$article->author}}</td>
+								<td>{{$article->type->description}}</td>
+								<td>{{$article->views}}</td>
+								<td>{{$article->shares}}</td>
+							</tr>
+						@endforeach
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="row mt-0 mt-md-3">
-		<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-3 mb-sm-3 mb-md-0 pr-md-0">
-			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
-				<div class="card-body">
-					<div class="text-center">
-						<div>
-							<i class="mdi mdi-movie" style="font-size: 35px"></i>
-						</div>
-						<div>
-							<h4 class="mt-4">Orders</h4>
-							<h5 class="">{{$stats->orders}}</h5>
+	<div class="row mt-4">
+		<div class="col-12">
+			<div class="card shadow-sm">
+				<div class="card-header border-0 py-0">
+					<div class="row">
+						<div class="col-12">
+							<h5 class="header-title py-3 mb-0 animatable">Most Viewed Videos/Series</h5>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-		<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-3 mb-sm-3 mb-md-0 pr-md-0">
-			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
-				<div class="card-body">
-					<div class="text-center">
-						<div>
-							<i class="mdi mdi-step-forward" style="font-size: 35px"></i>
-						</div>
-						<div>
-							<h4 class="mt-4">Pending</h4>
-							<h5 class="">{{$stats->pendingOrders}}</h5>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-3 mb-sm-3 mb-md-0 pr-md-0">
-			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
-				<div class="card-body">
-					<div class="text-center">
-						<div>
-							<i class="mdi mdi-television" style="font-size: 35px"></i>
-						</div>
-						<div>
-							<h4 class="mt-4">Cancelled</h4>
-							<h5 class="">{{$stats->cancelledOrders}}</h5>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-3 mb-sm-3 mb-md-0">
-			<div class="card bg-primary text-white animatable" style="box-shadow: 0 2px 6px #cf3f43;">
-				<div class="card-body">
-					<div class="text-center">
-						<div>
-							<i class="mdi mdi-television" style="font-size: 35px"></i>
-						</div>
-						<div>
-							<h4 class="mt-4">Delivered</h4>
-							<h5 class="">{{$stats->deliveredOrders}}</h5>
-						</div>
-					</div>
+				<div class="card-body animatable pt-0">
+					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+						<thead>
+						<tr>
+							<th>#</th>
+							<th>Thumbnail</th>
+							<th>Title</th>
+							<th>Type</th>
+							<th>Subscription</th>
+							<th>Views</th>
+						</tr>
+						</thead>
+						<tbody>
+						@foreach ($videos as $video)
+							<tr>
+								<td>{{($loop->index+1)}}</td>
+								<td>
+									@if($video->poster!=null)
+										<img src="{{$video->poster}}" style="max-height: 100px" alt="" class="img-thumbnail"/>
+									@else
+										{{\App\Library\Utils\Extensions\Str::NotAvailable}}
+									@endif
+								</td>
+								<td>{{\App\Library\Utils\Extensions\Str::ellipsis($video->title,50)}}</td>
+								<td>{{$video->type->description}}</td>
+								<td>{{\App\Library\Utils\Extensions\Str::ucfirst($video->subscription_type)}}</td>
+								<td>{{$video->hits}}</td>
+							</tr>
+						@endforeach
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>

@@ -9,7 +9,7 @@
 <div id="wrapper">
 	@include('admin.app.partials.sidebar')
 	<div class="content-page">
-		<div class="content">
+		<div class="content p-3">
 			@include('admin.app.partials.topbar')
 			<div class="page-content-wrapper">
 				<div class="container-fluid" style="padding-top: 16px;padding-bottom: 16px;">
