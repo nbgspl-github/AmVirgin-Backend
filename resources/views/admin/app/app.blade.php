@@ -4,6 +4,7 @@
 	<title>{{config("app.name","AmVirgin Dashboard")}}</title>
 	@include('admin.app.partials.head')
 	@include('admin.app.partials.styles')
+	@yield('styles')
 	@notify_css
 </head>
 

@@ -3,7 +3,6 @@
 namespace App\Http\Modules\Admin\Controllers\Web\Shop;
 
 use App\Exceptions\ValidationException;
-use App\Http\Modules\Shared\Controllers\BaseController;
 use App\Library\Utils\Extensions\Str;
 use App\Models\Category;
 use App\Models\Product;
@@ -12,7 +11,7 @@ use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
-class HomePageController extends BaseController
+class HomePageController extends \App\Http\Modules\Admin\Controllers\Web\WebController
 {
 	use ValidatesRequest;
 
@@ -87,22 +86,22 @@ class HomePageController extends BaseController
 				$innerChildren = $child->children()->get();
 				$innerChildren = $innerChildren->transform(function (Category $inner) {
 					return [
-						'id' => $inner->id(),
-						'name' => $inner->name(),
+						'id' => $inner->id,
+						'name' => $inner->name,
 						'brandInFocus' => $inner->brandInFocus(),
 					];
 				});
 				return [
-					'id' => $child->id(),
-					'name' => $child->name(),
+					'id' => $child->id,
+					'name' => $child->name,
 					'hasInner' => $innerChildren->count() > 0,
 					'inner' => $innerChildren,
 					'brandInFocus' => $child->brandInFocus(),
 				];
 			});
 			return [
-				'id' => $topLevel->id(),
-				'name' => $topLevel->name(),
+				'id' => $topLevel->id,
+				'name' => $topLevel->name,
 				'hasInner' => $children->count() > 0,
 				'inner' => $children,
 				'brandInFocus' => $topLevel->brandInFocus(),
@@ -120,7 +119,7 @@ class HomePageController extends BaseController
 				$response->error('You can select a maximum of 8 categories only.')->back();
 			} else {
 				Category::all()->each(function (Category $category) use ($choices) {
-					if (in_array($category->id(), $choices)) {
+					if (in_array($category->id, $choices)) {
 						$category->brandInFocus(true);
 					} else {
 						$category->brandInFocus(false);
@@ -145,22 +144,22 @@ class HomePageController extends BaseController
 				$innerChildren = $child->children()->get();
 				$innerChildren = $innerChildren->transform(function (Category $inner) {
 					return [
-						'id' => $inner->id(),
-						'name' => $inner->name(),
+						'id' => $inner->id,
+						'name' => $inner->name,
 						'popularCategory' => $inner->popularCategory(),
 					];
 				});
 				return [
-					'id' => $child->id(),
-					'name' => $child->name(),
+					'id' => $child->id,
+					'name' => $child->name,
 					'hasInner' => $innerChildren->count() > 0,
 					'inner' => $innerChildren,
 					'popularCategory' => $child->popularCategory(),
 				];
 			});
 			return [
-				'id' => $topLevel->id(),
-				'name' => $topLevel->name(),
+				'id' => $topLevel->id,
+				'name' => $topLevel->name,
 				'hasInner' => $children->count() > 0,
 				'inner' => $children,
 				'popularCategory' => $topLevel->popularCategory(),
@@ -178,7 +177,7 @@ class HomePageController extends BaseController
 				$response->error('You can select a maximum of 5 categories only.')->back();
 			} else {
 				Category::all()->each(function (Category $category) use ($choices) {
-					if (in_array($category->id(), $choices)) {
+					if (in_array($category->id, $choices)) {
 						$category->popularCategory(true);
 					} else {
 						$category->popularCategory(false);
@@ -203,22 +202,22 @@ class HomePageController extends BaseController
 				$innerChildren = $child->children()->get();
 				$innerChildren = $innerChildren->transform(function (Category $inner) {
 					return [
-						'id' => $inner->id(),
-						'name' => $inner->name(),
+						'id' => $inner->id,
+						'name' => $inner->name,
 						'trendingNow' => $inner->trendingNow(),
 					];
 				});
 				return [
-					'id' => $child->id(),
-					'name' => $child->name(),
+					'id' => $child->id,
+					'name' => $child->name,
 					'hasInner' => $innerChildren->count() > 0,
 					'inner' => $innerChildren,
 					'trendingNow' => $child->trendingNow(),
 				];
 			});
 			return [
-				'id' => $topLevel->id(),
-				'name' => $topLevel->name(),
+				'id' => $topLevel->id,
+				'name' => $topLevel->name,
 				'hasInner' => $children->count() > 0,
 				'inner' => $children,
 				'trendingNow' => $topLevel->trendingNow(),
@@ -236,7 +235,7 @@ class HomePageController extends BaseController
 				$response->error('You can select a maximum of 4 categories only.')->back();
 			} else {
 				Category::all()->each(function (Category $category) use ($choices) {
-					if (in_array($category->id(), $choices)) {
+					if (in_array($category->id, $choices)) {
 						$category->trendingNow(true);
 					} else {
 						$category->trendingNow(false);
@@ -257,8 +256,8 @@ class HomePageController extends BaseController
 		$products = Product::startQuery()->displayable()->get();
 		$products->transform(function (Product $product) {
 			return [
-				'id' => $product->id(),
-				'name' => $product->name(),
+				'id' => $product->id,
+				'name' => $product->name,
 				'hotDeal' => $product->hotDeal(),
 			];
 		});
@@ -274,7 +273,7 @@ class HomePageController extends BaseController
 				$response->error('You can select a maximum of 50 products only.')->back();
 			} else {
 				Product::all()->each(function (Product $product) use ($choices) {
-					$product->hotDeal(in_array($product->id(), $choices));
+					$product->hotDeal(in_array($product->id, $choices));
 					$product->save();
 				});
 				$response->route('admin.shop.choices')->success('Successfully updated products for hot deals.');
@@ -286,7 +285,7 @@ class HomePageController extends BaseController
 		}
 	}
 
-	public function viewProductDetails ($id)
+	public function viewProductDetails ($id) : \Illuminate\Http\JsonResponse
 	{
 		$response = responseApp();
 		try {
@@ -296,20 +295,20 @@ class HomePageController extends BaseController
 			if ($seller == null) {
 				$seller = Str::Empty;
 			} else {
-				$seller = sprintf('%s [%d]', $seller->getName(), $seller->getKey());
+				$seller = sprintf('%s [%d]', $seller->name, $seller->getKey());
 			}
 			if ($category == null) {
 				$category = Str::Empty;
 			} else {
-				$category = sprintf('%s [%d]', $category->getName(), $category->getKey());
+				$category = sprintf('%s [%d]', $category->name, $category->getKey());
 			}
 			$data = [
-				'name' => $product->name(),
+				'name' => $product->name,
 				'category' => $category,
 				'seller' => $seller,
-				'price' => $product->getOriginalPrice() . ' ' . $product->getCurrency(),
-				'stock' => $product->getStock(),
-				'sku' => $product->getSku(),
+				'price' => $product->originalPrice . ' ' . $product->currency,
+				'stock' => $product->stock,
+				'sku' => $product->sku,
 			];
 			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Product details retrieved successfully.')->setValue('data', $data);
 		} catch (ModelNotFoundException $exception) {

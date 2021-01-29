@@ -4,13 +4,13 @@
 		<div class="col-12">
 			<div class="card shadow-sm">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Shop Sliders','action'=>['link'=>route('admin.shop.sliders.create'),'text'=>'Create slider']])
+					@include('admin.extras.header', ['title'=>'Shop Sliders','action'=>['link'=>route('admin.shop.sliders.create'),'text'=>'Add']])
 				</div>
 				<div class="card-body animatable">
-					<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+					<table id="datatable" class="table table-hover dt-responsive pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 						<thead>
 						<tr>
-							<th class="text-center">No.</th>
+							<th class="text-center">#</th>
 							<th class="text-center">Poster</th>
 							<th class="text-center">Title</th>
 							<th class="text-center">Description</th>
@@ -37,7 +37,7 @@
 								<td class="text-center">{{$slide->rating??\App\Library\Utils\Extensions\Str::NotAvailable}}</td>
 								<td class="text-center">
 									<div class="btn-group btn-group-toggle shadow-sm" data-toggle="buttons">
-										@if($slide->isActive()==true)
+										@if($slide->active==true)
 											<label class="btn btn-outline-danger active" @include('admin.extras.tooltip.left', ['title' => 'Set slider active'])>
 												<input type="radio" name="options" id="optionOn_{{$slide->getKey()}}" onchange="toggleStatus('{{$slide->getKey()}}',1);"/> On
 											</label>

@@ -6,7 +6,6 @@ use App\Exceptions\ValidationException;
 use App\Http\Modules\Shared\Controllers\BaseController;
 use App\Library\Enums\Common\Directories;
 use App\Library\Enums\Common\Tables;
-use App\Library\Http\WebResponse;
 use App\Library\Utils\Uploads;
 use App\Models\ShopSlider;
 use App\Traits\ValidatesRequest;
@@ -59,22 +58,9 @@ class SliderController extends BaseController
 		return view('admin.shop.sliders.create');
 	}
 
-	public function edit ($id)
+	public function edit (\App\Models\Slider $slider)
 	{
-		$response = responseWeb();
-		try {
-			$slider = ShopSlider::findOrFail($id);
-			$response = view('admin.shop.sliders.edit')->with('slide', $slider);
-		} catch (ModelNotFoundException $exception) {
-			$response->error('Could not find shop slider for that key.')->route('admin.shop.sliders.index');
-		} catch (Throwable $exception) {
-			$response->error($exception->getMessage())->route('admin.shop.sliders.index');
-		} finally {
-			if ($response instanceof WebResponse)
-				return $response->send();
-			else
-				return $response;
-		}
+		return view('admin.shop.sliders.edit')->with('slide', $slider);
 	}
 
 	public function store ()

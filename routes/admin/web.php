@@ -1,24 +1,19 @@
 <?php
 
-use App\Classes\Methods;
 use App\Http\Modules\Admin\Controllers\Web\Auth\LoginController;
-use App\Http\Modules\Admin\Controllers\Web\CategoriesBanner;
 use App\Http\Modules\Admin\Controllers\Web\CategoryController;
-use App\Http\Modules\Admin\Controllers\Web\GenresController;
+use App\Http\Modules\Admin\Controllers\Web\GenreController;
 use App\Http\Modules\Admin\Controllers\Web\HomeController;
-use App\Http\Modules\Admin\Controllers\Web\NotificationsController;
+use App\Http\Modules\Admin\Controllers\Web\News\ArticleController;
+use App\Http\Modules\Admin\Controllers\Web\News\Articles\ContentController;
+use App\Http\Modules\Admin\Controllers\Web\News\CategoryController as NewsCategoryController;
 use App\Http\Modules\Admin\Controllers\Web\Products\Attributes\DetailController;
 use App\Http\Modules\Admin\Controllers\Web\Products\ProductController;
-use App\Http\Modules\Admin\Controllers\Web\ServersController;
-use App\Http\Modules\Admin\Controllers\Web\SettingsController;
 use App\Http\Modules\Admin\Controllers\Web\Shop\HomePageController;
 use App\Http\Modules\Admin\Controllers\Web\Shop\SliderController as ShopSliderController;
 use App\Http\Modules\Admin\Controllers\Web\SliderController;
 use App\Http\Modules\Admin\Controllers\Web\SubscriptionPlanController;
 use App\Http\Modules\Admin\Controllers\Web\TvSeries\AttributeController;
-use App\Http\Modules\Admin\Controllers\Web\TvSeries\ContentController;
-use App\Http\Modules\Admin\Controllers\Web\TvSeries\MediaController;
-use App\Http\Modules\Admin\Controllers\Web\TvSeries\SnapController;
 use App\Http\Modules\Admin\Controllers\Web\TvSeries\TvSeriesController;
 use App\Http\Modules\Admin\Controllers\Web\Users\CustomerController;
 use App\Http\Modules\Admin\Controllers\Web\Users\SellerController;
@@ -26,54 +21,71 @@ use App\Http\Modules\Admin\Controllers\Web\Videos\VideoController;
 use App\Library\Utils\Extensions\Str;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, Methods::Index])->middleware('auth:admin')->name('admin.home');
-Route::get('/login', [LoginController::class, Methods::auth()::LoginForm])->name('admin.login');
-Route::post('/login', [LoginController::class, Methods::auth()::Login])->name('admin.login.submit');
-Route::post('/logout', [LoginController::class, Methods::auth()::Logout])->name('admin.logout');
+Route::get('/', [HomeController::class, 'index'])->middleware('auth:admin')->name('admin.home');
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('admin.login');
+Route::post('/login', [LoginController::class, 'login'])->name('admin.login.submit');
+Route::post('/logout', [LoginController::class, 'logout'])->name('admin.logout');
 Route::middleware('auth:admin')->group(function () {
 
 	// Customer's Route(s)
 	Route::prefix('customers')->group(function () {
-		Route::get(Str::Empty, [CustomerController::class, Methods::Index])->name('admin.customers.index');
-		Route::get('create', [CustomerController::class, Methods::Create])->name('admin.customers.create');
+		Route::get(Str::Empty, [CustomerController::class, 'index'])->name('admin.customers.index');
+		Route::get('create', [CustomerController::class, 'create'])->name('admin.customers.create');
 		Route::get('{customer}/edit', [CustomerController::class, 'edit'])->name('admin.customers.edit');
-		Route::get('{customer}', [CustomerController::class, Methods::Show])->name('admin.customers.show');
-		Route::post(Str::Empty, [CustomerController::class, Methods::Store])->name('admin.customers.store');
-		Route::post('{customer}', [CustomerController::class, Methods::Update])->name('admin.customers.update');
-		Route::put('{customer}/status', [CustomerController::class, Methods::UpdateStatus])->name('admin.customers.update.status');
-		Route::delete('{customer}', [CustomerController::class, Methods::Delete])->name('admin.customers.delete');
+		Route::get('{customer}', [CustomerController::class, 'show'])->name('admin.customers.show');
+		Route::post(Str::Empty, [CustomerController::class, 'store'])->name('admin.customers.store');
+		Route::post('{customer}', [CustomerController::class, 'update'])->name('admin.customers.update');
+		Route::put('{customer}/status', [CustomerController::class, 'updateStatus'])->name('admin.customers.update.status');
+		Route::delete('{customer}', [CustomerController::class, 'delete'])->name('admin.customers.delete');
 	});
 
 	// Seller's Route(s)
 	Route::prefix('sellers')->group(function () {
-		Route::get(Str::Empty, [SellerController::class, Methods::Index])->name('admin.sellers.index');
-		Route::get('create', [SellerController::class, Methods::Create])->name('admin.sellers.create');
-		Route::get('{seller}/edit', [SellerController::class, Methods::Edit])->name('admin.sellers.edit');
-		Route::get('{seller}', [SellerController::class, Methods::Show])->name('admin.sellers.show');
-		Route::post('', [SellerController::class, Methods::Store])->name('admin.sellers.store');
-		Route::post('{seller}', [SellerController::class, Methods::Update])->name('admin.sellers.update');
-		Route::put('{seller}/status', [SellerController::class, Methods::UpdateStatus])->name('admin.sellers.update.status');
-		Route::delete('{seller}', [SellerController::class, Methods::Delete])->name('admin.sellers.delete');
+		Route::get(Str::Empty, [SellerController::class, 'index'])->name('admin.sellers.index');
+		Route::get('create', [SellerController::class, 'create'])->name('admin.sellers.create');
+		Route::get('{seller}/edit', [SellerController::class, 'edit'])->name('admin.sellers.edit');
+		Route::get('{seller}', [SellerController::class, 'show'])->name('admin.sellers.show');
+		Route::post('', [SellerController::class, 'store'])->name('admin.sellers.store');
+		Route::post('{seller}', [SellerController::class, 'update'])->name('admin.sellers.update');
+		Route::put('{seller}/status', [SellerController::class, 'updateStatus'])->name('admin.sellers.update.status');
+		Route::delete('{seller}', [SellerController::class, 'delete'])->name('admin.sellers.delete');
 	});
 
-	//Categories Banner Route(s)
-	Route::prefix('categories-banner')->middleware('auth:admin')->group(function () {
-		Route::get('', [CategoriesBanner::class, Methods::Index])->name('admin.categories-banner.index');
-		Route::get('create', [CategoriesBanner::class, Methods::Create])->name('admin.categories-banner.create');
-		Route::get('{id}/edit', [CategoriesBanner::class, Methods::Edit])->name('admin.categories-banner.edit');
-		Route::post('store', [CategoriesBanner::class, Methods::Store])->name('admin.categories-banner.store');
-		Route::post('{id}', [CategoriesBanner::class, Methods::Update])->name('admin.categories-banner.update');
-		Route::delete('{id}', [CategoriesBanner::class, Methods::Delete])->name('admin.categories-banner.delete');
+	// News Categories Route(s)
+	Route::prefix('news')->group(function () {
+		Route::prefix('articles')->group(function () {
+			Route::get(Str::Empty, [ArticleController::class, 'index'])->name('admin.news.articles.index');
+			Route::prefix('content')->group(function () {
+				Route::get('create', [ContentController::class, 'create'])->name('admin.news.articles.content.create');
+				Route::post(Str::Empty, [ContentController::class, 'store'])->name('admin.news.articles.content.store');
+			});
+			Route::prefix('video')->group(function () {
+				Route::get('create', [ArticleController::class, 'create'])->name('admin.news.articles.videos.create');
+				Route::post(Str::Empty, [ArticleController::class, 'create'])->name('admin.news.articles.videos.store');
+			});
+			Route::get('{article}/edit', [ArticleController::class, 'edit'])->name('admin.news.articles.edit');
+			Route::post(Str::Empty, [ArticleController::class, 'store'])->name('admin.news.articles.store');
+			Route::post('{article}', [ArticleController::class, 'update'])->name('admin.news.articles.update');
+			Route::delete('{article}', [ArticleController::class, 'delete'])->name('admin.news.articles.delete');
+		});
+		Route::prefix('categories')->group(function () {
+			Route::get(Str::Empty, [NewsCategoryController::class, 'index'])->name('admin.news.categories.index');
+			Route::get('create', [NewsCategoryController::class, 'create'])->name('admin.news.categories.create');
+			Route::get('{category}/edit', [NewsCategoryController::class, 'edit'])->name('admin.news.categories.edit');
+			Route::post(Str::Empty, [NewsCategoryController::class, 'store'])->name('admin.news.categories.store');
+			Route::post('{category}', [NewsCategoryController::class, 'update'])->name('admin.news.categories.update');
+			Route::delete('{category}', [NewsCategoryController::class, 'delete'])->name('admin.news.categories.delete');
+		});
 	});
 
 	// Categories Route(s)
 	Route::prefix('categories')->middleware('auth:admin')->group(function () {
-		Route::get(Str::Empty, [CategoryController::class, Methods::Index])->name('admin.categories.index');
-		Route::get('create', [CategoryController::class, Methods::Create])->name('admin.categories.create');
+		Route::get(Str::Empty, [CategoryController::class, 'index'])->name('admin.categories.index');
+		Route::get('create', [CategoryController::class, 'create'])->name('admin.categories.create');
 		Route::get('{category}/edit', [CategoryController::class, 'edit'])->name('admin.categories.edit');
-		Route::post('store', [CategoryController::class, Methods::Store])->name('admin.categories.store');
-		Route::post('{category}', [CategoryController::class, Methods::Update])->name('admin.categories.update');
-		Route::delete('{category}', [CategoryController::class, Methods::Delete])->name('admin.categories.delete');
+		Route::post('store', [CategoryController::class, 'store'])->name('admin.categories.store');
+		Route::post('{category}', [CategoryController::class, 'update'])->name('admin.categories.update');
+		Route::delete('{category}', [CategoryController::class, 'delete'])->name('admin.categories.delete');
 		Route::get('{id}/download', [CategoryController::class, 'downloadTemplate'])->name('admin.categories.download');
 	});
 
@@ -107,7 +119,7 @@ Route::middleware('auth:admin')->group(function () {
 			Route::post('source', [\App\Http\Modules\Admin\Controllers\Web\Videos\SourceController::class, 'update'])->name('admin.videos.update.source');
 			Route::match(['get', 'post'], 'source/chunk', [\App\Http\Modules\Admin\Controllers\Web\Videos\SourceController::class, 'chunk'])->name('admin.videos.update.source.chunk');
 		});
-		Route::post('store', [VideoController::class, Methods::Store])->name('admin.videos.store');
+		Route::post('store', [VideoController::class, 'store'])->name('admin.videos.store');
 		Route::prefix('{video}')->group(function () {
 			Route::delete('', [VideoController::class, 'destroy'])->name('admin.videos.delete');
 			Route::delete('content/{contentId}', [\App\Http\Modules\Admin\Controllers\Web\Videos\ContentController::class, 'delete'])->name('admin.videos.delete.content');
@@ -124,18 +136,12 @@ Route::middleware('auth:admin')->group(function () {
 		Route::get('create', [TvSeriesController::class, 'create'])->name('admin.tv-series.create');
 		Route::prefix('edit/{video}')->group(function () {
 			Route::get('attributes', [AttributeController::class, 'edit'])->name('admin.tv-series.edit.attributes');
-			Route::get('content', [ContentController::class, 'edit'])->name('admin.tv-series.edit.content');
-			Route::get('media', [MediaController::class, 'edit'])->name('admin.tv-series.edit.media');
-			Route::get('snaps', [SnapController::class, 'edit'])->name('admin.tv-series.edit.snaps');
 			Route::get('source', [\App\Http\Modules\Admin\Controllers\Web\TvSeries\SourceController::class, 'index'])->name('admin.tv-series.edit.source');
 			Route::get('sources/{source}/audio', [\App\Http\Modules\Admin\Controllers\Web\TvSeries\AudioController::class, 'index'])->name('admin.tv-series.edit.audio');
 			Route::get('sources/{source}/subtitle', [\App\Http\Modules\Admin\Controllers\Web\TvSeries\SubtitleController::class, 'index'])->name('admin.tv-series.edit.subtitle');
 		});
 		Route::prefix('{video}/update')->group(function () {
 			Route::post('attributes', [AttributeController::class, 'update'])->name('admin.tv-series.update.attributes');
-			Route::post('content', [ContentController::class, 'update'])->name('admin.tv-series.update.content');
-			Route::post('media', [MediaController::class, 'update'])->name('admin.tv-series.update.media');
-			Route::post('snaps', [SnapController::class, 'update'])->name('admin.tv-series.update.snaps');
 			Route::post('{source}/audio', [\App\Http\Modules\Admin\Controllers\Web\TvSeries\AudioController::class, 'store'])->name('admin.tv-series.update.audio');
 			Route::post('{source}/subtitle', [\App\Http\Modules\Admin\Controllers\Web\TvSeries\SubtitleController::class, 'store'])->name('admin.tv-series.update.subtitle');
 			Route::post('source', [\App\Http\Modules\Admin\Controllers\Web\TvSeries\SourceController::class, 'store'])->name('admin.tv-series.update.source');
@@ -143,39 +149,30 @@ Route::middleware('auth:admin')->group(function () {
 		Route::post('store', [TvSeriesController::class, 'store'])->name('admin.tv-series.store');
 		Route::prefix('{video}')->group(function () {
 			Route::delete('', [TvSeriesController::class, 'delete'])->name('admin.tv-series.delete');
-			Route::delete('content/{contentId}', [ContentController::class, 'delete'])->name('admin.tv-series.delete.content');
-			Route::delete('snaps/{snapId}', [SnapController::class, 'delete'])->name('admin.tv-series.delete.snaps');
 		});
 	});
 
 	// Genres Route(s)
 	Route::prefix('genres')->middleware('auth:admin')->group(function () {
-		Route::get('', [GenresController::class, Methods::Index])->name('admin.genres.index');
-		Route::get('create', [GenresController::class, Methods::Create])->name('admin.genres.create');
-		Route::get('{id}/edit', [GenresController::class, Methods::Edit])->name('admin.genres.edit');
-		Route::get('{id}', [GenresController::class, Methods::Show])->name('admin.genres.show');
-		Route::post('', [GenresController::class, Methods::Store])->name('admin.genres.store');
-		Route::post('{id}', [GenresController::class, Methods::Update])->name('admin.genres.update');
-		Route::put('{id}/status', [GenresController::class, Methods::UpdateStatus])->name('admin.genres.update.status');
-		Route::delete('{id}', [GenresController::class, Methods::Delete])->name('admin.genres.delete');
-	});
-
-	// Notifications Route(s)
-	Route::prefix('notifications')->middleware('auth:admin')->group(function () {
-		Route::get('create', [NotificationsController::class, Methods::Create])->name('admin.notifications.create');
-		Route::post('send', [NotificationsController::class, Methods::Send])->name('admin.notifications.send');
+		Route::get(Str::Empty, [GenreController::class, 'index'])->name('admin.genres.index');
+		Route::get('create', [GenreController::class, 'create'])->name('admin.genres.create');
+		Route::get('{genre}/edit', [GenreController::class, 'edit'])->name('admin.genres.edit');
+		Route::get('{genre}', [GenreController::class, 'show'])->name('admin.genres.show');
+		Route::post(Str::Empty, [GenreController::class, 'store'])->name('admin.genres.store');
+		Route::post('{genre}', [GenreController::class, 'update'])->name('admin.genres.update');
+		Route::put('{genre}/status', [GenreController::class, 'status'])->name('admin.genres.update.status');
+		Route::delete('{genre}', [GenreController::class, 'delete'])->name('admin.genres.delete');
 	});
 
 	// Sliders Route(s)
-	Route::prefix('sliders')->middleware('auth:admin')->group(function () {
-		Route::get('', [SliderController::class, Methods::Index])->name('admin.sliders.index');
-		Route::get('create', [SliderController::class, Methods::Create])->name('admin.sliders.create');
-		Route::get('{id}/edit', [SliderController::class, Methods::Edit])->name('admin.sliders.edit');
-		Route::get('{id}', [SliderController::class, Methods::Show])->name('admin.sliders.show');
-		Route::post('', [SliderController::class, Methods::Store])->name('admin.sliders.store');
-		Route::post('{id}', [SliderController::class, Methods::Update])->name('admin.sliders.update');
-		Route::put('{id}/status', [SliderController::class, Methods::UpdateStatus])->name('admin.sliders.update.status');
-		Route::delete('{id}', [SliderController::class, Methods::Delete])->name('admin.sliders.delete');
+	Route::prefix('sliders')->group(function () {
+		Route::get(Str::Empty, [SliderController::class, 'index'])->name('admin.sliders.index');
+		Route::get('create', [SliderController::class, 'create'])->name('admin.sliders.create');
+		Route::get('{slider}/edit', [SliderController::class, 'edit'])->name('admin.sliders.edit');
+		Route::post(Str::Empty, [SliderController::class, 'store'])->name('admin.sliders.store');
+		Route::post('{slider}', [SliderController::class, 'update'])->name('admin.sliders.update');
+		Route::put('{slider}/status', [SliderController::class, 'status'])->name('admin.sliders.update.status');
+		Route::delete('{slider}', [SliderController::class, 'delete'])->name('admin.sliders.delete');
 	});
 
 	// Shop Home-page Route(s)
@@ -186,12 +183,12 @@ Route::middleware('auth:admin')->group(function () {
 
 		// Shop Sliders' Route(s)
 		Route::prefix('sliders')->group(function () {
-			Route::get('', [ShopSliderController::class, 'index'])->name('admin.shop.sliders.index');
+			Route::get(Str::Empty, [ShopSliderController::class, 'index'])->name('admin.shop.sliders.index');
 			Route::get('create', [ShopSliderController::class, 'create'])->name('admin.shop.sliders.create');
-			Route::get('{id}/edit', [ShopSliderController::class, 'edit'])->name('admin.shop.sliders.edit');
+			Route::get('{slider}/edit', [ShopSliderController::class, 'edit'])->name('admin.shop.sliders.edit');
 			Route::get('{id}', [ShopSliderController::class, 'show'])->name('admin.shop.sliders.show');
-			Route::post('', [ShopSliderController::class, 'store'])->name('admin.shop.sliders.store');
-			Route::post('{id}', [ShopSliderController::class, 'update'])->name('admin.shop.sliders.update');
+			Route::post(Str::Empty, [ShopSliderController::class, 'store'])->name('admin.shop.sliders.store');
+			Route::post('{slider}', [ShopSliderController::class, 'update'])->name('admin.shop.sliders.update');
 			Route::put('{id}/status', [ShopSliderController::class, 'updateStatus'])->name('admin.shop.sliders.update.status');
 			Route::delete('{id}', [ShopSliderController::class, 'delete'])->name('admin.shop.sliders.delete');
 		});
@@ -222,38 +219,37 @@ Route::middleware('auth:admin')->group(function () {
 		});
 	});
 
-	// Servers' Route(s)
-	Route::prefix('servers')->middleware('auth:admin')->group(function () {
-		Route::get('', [ServersController::class, Methods::Index])->name('admin.servers.index');
-		Route::get('create', [ServersController::class, Methods::Create])->name('admin.servers.create');
-		Route::get('{id}/edit', [ServersController::class, Methods::Edit])->name('admin.servers.edit');
-		Route::get('{id}', [ServersController::class, Methods::Show])->name('admin.servers.show');
-		Route::post('', [ServersController::class, Methods::Store])->name('admin.servers.store');
-		Route::post('{id}', [ServersController::class, Methods::Update])->name('admin.servers.update');
-		Route::put('{id}/status', [ServersController::class, Methods::UpdateStatus])->name('admin.servers.update.status');
-		Route::delete('{id}', [ServersController::class, Methods::Delete])->name('admin.servers.delete');
-	});
-
 	// Subscription Plan Route(s)
-	Route::prefix('subscription-plans')->middleware('auth:admin')->group(function () {
-		Route::get('', [SubscriptionPlanController::class, Methods::Index])->name('admin.subscription-plans.index');
-		Route::get('create', [SubscriptionPlanController::class, Methods::Create])->name('admin.subscription-plans.create');
-		Route::get('{id}/edit', [SubscriptionPlanController::class, Methods::Edit])->name('admin.subscription-plans.edit');
-		Route::get('{id}', [SubscriptionPlanController::class, Methods::Show])->name('admin.subscription-plans.show');
-		Route::post('', [SubscriptionPlanController::class, Methods::Store])->name('admin.subscription-plans.store');
-		Route::post('{id}', [SubscriptionPlanController::class, Methods::Update])->name('admin.subscription-plans.update');
-		Route::put('{id}/status', [SubscriptionPlanController::class, Methods::UpdateStatus])->name('admin.subscription-plans.update.status');
-		Route::delete('{id}', [SubscriptionPlanController::class, Methods::Delete])->name('admin.subscription-plans.delete');
+	Route::prefix('subscription-plans')->group(function () {
+		Route::get(Str::Empty, [SubscriptionPlanController::class, 'index'])->name('admin.subscription-plans.index');
+		Route::get('create', [SubscriptionPlanController::class, 'create'])->name('admin.subscription-plans.create');
+		Route::get('{plan}/edit', [SubscriptionPlanController::class, 'edit'])->name('admin.subscription-plans.edit');
+		Route::get('{plan}', [SubscriptionPlanController::class, 'show'])->name('admin.subscription-plans.show');
+		Route::post(Str::Empty, [SubscriptionPlanController::class, 'store'])->name('admin.subscription-plans.store');
+		Route::post('{plan}', [SubscriptionPlanController::class, 'update'])->name('admin.subscription-plans.update');
+		Route::put('{plan}/status', [SubscriptionPlanController::class, 'status'])->name('admin.subscription-plans.update.status');
+		Route::delete('{plan}', [SubscriptionPlanController::class, 'delete'])->name('admin.subscription-plans.delete');
 	});
 
 	// Products Route(s)
 	Route::prefix('products')->group(function () {
-		Route::get('approved', [ProductController::class, 'approved'])->name('admin.products.approved');
-		Route::get('deleted', [ProductController::class, 'deleted'])->name('admin.products.deleted');
-		Route::get('rejected', [ProductController::class, 'rejected'])->name('admin.products.rejected');
-		Route::get('pending', [ProductController::class, 'pending'])->name('admin.products.pending');
 		Route::prefix('pending')->group(function () {
+			Route::get(Str::Empty, [ProductController::class, 'pending'])->name('admin.products.pending');
 			Route::get('{product}', [DetailController::class, 'pending'])->name('admin.products.pending.details');
+			Route::get('{product}/approve', [DetailController::class, 'approve'])->name('admin.products.pending.approve');
+			Route::get('{product}/reject', [DetailController::class, 'reject'])->name('admin.products.pending.reject');
+		});
+		Route::prefix('approved')->group(function () {
+			Route::get(Str::Empty, [ProductController::class, 'approved'])->name('admin.products.approved');
+			Route::get('{product}', [DetailController::class, 'approved'])->name('admin.products.approved.details');
+		});
+		Route::prefix('rejected')->group(function () {
+			Route::get(Str::Empty, [ProductController::class, 'rejected'])->name('admin.products.rejected');
+			Route::get('{product}', [DetailController::class, 'rejected'])->name('admin.products.rejected.details');
+		});
+		Route::prefix('deleted')->group(function () {
+			Route::get(Str::Empty, [ProductController::class, 'deleted'])->name('admin.products.deleted');
+			Route::get('{product}', [DetailController::class, 'deleted'])->name('admin.products.deleted.details');
 		});
 	});
 
@@ -279,7 +275,7 @@ Route::middleware('auth:admin')->group(function () {
 	});
 
 	// Brand Route(s)
-	Route::prefix('brands')->middleware('auth:admin')->group(function () {
+	Route::prefix('brands')->group(function () {
 		Route::get(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'index'])->name('admin.brands.index');
 		Route::get('create', [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'create'])->name('admin.brands.create');
 		Route::get('{brand}/show', [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'show'])->name('admin.brands.show');
@@ -287,23 +283,4 @@ Route::middleware('auth:admin')->group(function () {
 		Route::post('{brand}', [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'update'])->name('admin.brands.update');
 		Route::delete('{brand}', [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'delete'])->name('admin.brands.delete');
 	});
-
-	// Settings Route(s)
-	Route::prefix('settings')->middleware('auth:admin')->group(function () {
-		Route::get('', [SettingsController::class, Methods::Index])->name('admin.settings.index');
-	});
-
-	// Filters Route(s)
-	Route::prefix('filters')->middleware('auth:admin')->group(function () {
-		Route::prefix('catalog')->group(function () {
-			Route::get(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\CatalogFilterController::class, 'index'])->name('admin.filters.catalog.index');
-			Route::get('create', [\App\Http\Modules\Admin\Controllers\Web\CatalogFilterController::class, 'create'])->name('admin.filters.catalog.create');
-			Route::get('category/{id}/attributes', [\App\Http\Modules\Admin\Controllers\Web\CatalogFilterController::class, 'attributes'])->name('admin.filters.catalog.category.attributes');
-			Route::post(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\CatalogFilterController::class, 'store'])->name('admin.filters.catalog.store');
-		});
-	});
-});
-Route::get('/playback', [\App\Http\Modules\Admin\Controllers\Web\PlaybackController::class, 'index']);
-Route::get('test', function () {
-	\Illuminate\Support\Facades\Storage::disk('videos.streamable')->makeDirectory('gshhgd');
 });

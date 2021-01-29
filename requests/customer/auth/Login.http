@@ -1,8 +1,0 @@
-POST http://3.6.127.206/api/customer/login
-Content-Type: application/json
-
-{
-	"type" : 1,
-	"email" : "hellraiserz@codecrash.co",
-	"password" : "12345678"
-}

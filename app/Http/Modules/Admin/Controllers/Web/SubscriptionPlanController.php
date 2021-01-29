@@ -2,35 +2,23 @@
 
 namespace App\Http\Modules\Admin\Controllers\Web;
 
-use App\Exceptions\ValidationException;
-use App\Http\Modules\Shared\Controllers\BaseController;
-use App\Library\Enums\Common\Directories;
-use App\Library\Enums\Common\Tables;
-use App\Library\Http\WebResponse;
-use App\Library\Utils\Uploads;
+use App\Http\Modules\Admin\Requests\SubscriptionPlan\StatusRequest;
+use App\Http\Modules\Admin\Requests\SubscriptionPlan\StoreRequest;
+use App\Http\Modules\Admin\Requests\SubscriptionPlan\UpdateRequest;
 use App\Models\SubscriptionPlan;
-use App\Traits\FluentResponse;
-use App\Traits\ValidatesRequest;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
-use Throwable;
 
-class SubscriptionPlanController extends BaseController
+class SubscriptionPlanController extends WebController
 {
-	use ValidatesRequest;
-	use FluentResponse;
-
 	public function __construct ()
 	{
 		parent::__construct();
-		$this->ruleSet->load('rules.admin.subscription-plans');
 	}
 
 	public function index ()
 	{
-		$payload = SubscriptionPlan::all();
-		return view('admin.subscription-plans.index')->with('plans', $payload);
+		return view('admin.subscription-plans.index')->with('plans',
+			SubscriptionPlan::all()
+		);
 	}
 
 	public function create ()
@@ -38,93 +26,41 @@ class SubscriptionPlanController extends BaseController
 		return view('admin.subscription-plans.create');
 	}
 
-	public function edit ($id)
+	public function edit (SubscriptionPlan $plan)
 	{
-		$response = responseWeb();
-		try {
-			$plan = SubscriptionPlan::findOrFail($id);
-			$response = view('admin.subscription-plans.edit')->with('plan', $plan);
-		} catch (ModelNotFoundException $exception) {
-			$response->route('admin.subscription-plans.index')->error('Could not find a subscription plan for that key.');
-		} catch (Throwable $exception) {
-			$response->back()->data(request()->all())->error($exception->getMessage());
-		} finally {
-			if ($response instanceof WebResponse)
-				return $response->send();
-			else
-				return $response;
-		}
+		return view('admin.subscription-plans.edit')->with('plan', $plan);
 	}
 
-	public function show ($id)
+	public function store (StoreRequest $request) : \Illuminate\Http\RedirectResponse
 	{
-
+		SubscriptionPlan::query()->create($request->validated());
+		return redirect()->route('admin.subscription-plans.index')->with('success', 'Plan created successfully.');
 	}
 
-	public function store ()
+	public function update (UpdateRequest $request, SubscriptionPlan $plan) : \Illuminate\Http\RedirectResponse
 	{
-		$response = responseWeb();
-		try {
-			$payload = $this->requestValid(request(), $this->rules('store'));
-			$payload['slug'] = Str::slug($payload['name']);
-			$payload['banner'] = Uploads::access()->putFile(Directories::SubscriptionPlans, request()->file('banner'));
-			SubscriptionPlan::create($payload);
-			$response->route('admin.subscription-plans.index')->success('Subscription plan created successfully.');
-		} catch (ValidationException $exception) {
-			$response->back()->data(request()->all())->error($exception->getError());
-		} catch (Throwable $exception) {
-			$response->back()->data(request()->all())->error($exception->getMessage());
-		} finally {
-			return $response->send();
-		}
+		$plan->update($request->validated());
+		return redirect()->route('admin.subscription-plans.index')->with('success', 'Plan details updated successfully.');
 	}
 
-	public function update ($id)
+	public function status (StatusRequest $request, SubscriptionPlan $plan) : \Illuminate\Http\JsonResponse
 	{
-		$response = responseWeb();
-		try {
-			$plan = SubscriptionPlan::findOrFail($id);
-			$additional = [
-				'name' => [Rule::unique(Tables::SubscriptionPlans, 'name')->ignore($id)],
-			];
-			$payload = $this->requestValid(request(), $this->rules('update'), $additional);
-			$payload['slug'] = Str::slug($payload['name']);
-			$payload = collect($payload)->filter()->toArray();
-			if (request()->hasFile('banner')) {
-				Uploads::deleteIfExists($plan->getBanner());
-				$payload['banner'] = Uploads::access()->putFile(Directories::SubscriptionPlans, request()->file('banner'));
-			}
-			$plan->update($payload);
-			$response->route('admin.subscription-plans.index')->success('Plan details updated successfully.');
-		} catch (ModelNotFoundException $exception) {
-			$response->route('admin.subscription-plans.index')->error('Could not find a subscription plan for that key.');
-		} catch (ValidationException $exception) {
-			$response->back()->data(request()->all())->error($exception->getError());
-		} catch (Throwable $exception) {
-			$response->back()->data(request()->all())->error($exception->getMessage());
-		} finally {
-			return $response->send();
-		}
+		$plan->update($request->validated());
+		return responseApp()->prepare(
+			[], \Illuminate\Http\Response::HTTP_OK, 'Status updated successfully.'
+		);
 	}
 
-	public function updateStatus ($id)
+	/**
+	 * @param SubscriptionPlan $plan
+	 * @return \Illuminate\Http\JsonResponse
+	 * @throws \Exception
+	 */
+	public function delete (SubscriptionPlan $plan) : \Illuminate\Http\JsonResponse
 	{
-
-	}
-
-	public function delete ($id)
-	{
-		$response = responseApp();
-		try {
-			$plan = SubscriptionPlan::findOrFail($id);
-			$plan->delete();
-			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Successfully deleted subscription plan.');
-		} catch (ModelNotFoundException $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find subscription plan for that key.');
-		} catch (Throwable $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
-		} finally {
-			return $response->send();
-		}
+		$plan->delete();
+		return responseApp()->prepare(
+			[], \Illuminate\Http\Response::HTTP_OK, 'Subscription plan deleted successfully.'
+		);
 	}
 }

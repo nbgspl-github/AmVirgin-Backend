@@ -21,7 +21,7 @@ class CancellationController extends \App\Http\Modules\Customer\Controllers\Api\
 	public function cancel (SubOrder $order) : JsonResponse
 	{
 		$response = responseApp();
-		if ($order->customer != null && $order->customer->is($this->seller()) && $this->cancellationAllowed($order)) {
+		if ($order->customer != null && $order->customer->is($this->customer()) && $this->cancellationAllowed($order)) {
 			$this->performCancellation($order);
 			$response->status(Response::HTTP_OK)->message('Your order was cancelled successfully!');
 		} else {

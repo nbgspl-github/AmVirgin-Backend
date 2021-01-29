@@ -2,33 +2,16 @@
 
 namespace App\Models;
 
-use App\Library\Utils\Uploads;
 use App\Models\Video\Video;
 use App\Queries\SliderQuery;
-use App\Traits\ActiveStatus;
 use App\Traits\DynamicAttributeNamedMethods;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Slider extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods;
-	use ActiveStatus;
 
 	protected $table = 'sliders';
-	protected $fillable = [
-		'title',
-		'description',
-		'banner',
-		'type',
-		'target',
-		'rating',
-		'active',
-	];
-	protected $hidden = [
-		'id',
-		'created_at',
-		'updated_at',
-	];
 	protected $casts = [
 		'rating' => 'int',
 		'active' => 'bool',
@@ -39,9 +22,14 @@ class Slider extends \App\Library\Database\Eloquent\Model
 		'ProductKey' => 'product-key',
 	];
 
-	public function getBannerAttribute () : ?string
+	public function setBannerAttribute ($value) : void
 	{
-		return Uploads::existsUrl($this->attributes['banner']);
+		$this->attributes['banner'] = $this->storeWhenUploadedCorrectly('sliders/banners', $value);
+	}
+
+	public function getBannerAttribute ($value) : ?string
+	{
+		return $this->retrieveMedia($value);
 	}
 
 	public function video () : HasOne
