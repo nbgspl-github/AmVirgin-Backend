@@ -1,5 +1,5 @@
 <!-- Left Sidebar Start -->
-<div class="left side-menu">
+<div class="left side-menu" style="box-shadow: 0 0 5px #858585;">
 	<button type="button" class="button-menu-mobile button-menu-mobile-topbar open-left waves-effect">
 		<i class="ion-close"></i>
 	</button>

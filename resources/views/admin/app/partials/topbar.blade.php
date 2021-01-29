@@ -1,4 +1,4 @@
-<div class="topbar">
+<div class="topbar" style="box-shadow: 0 0 5px #858585;">
 
 	<div class="topbar-left d-none d-lg-block bg-dark">
 		<div class="text-center">

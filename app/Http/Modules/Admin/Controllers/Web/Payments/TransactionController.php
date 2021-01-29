@@ -17,8 +17,8 @@ class TransactionController extends \App\Http\Modules\Admin\Controllers\Web\WebC
 		);
 	}
 
-	public function show (\App\Models\SellerPayment $payment)
+	public function show (\App\Models\Models\SellerTransaction $transaction)
 	{
-
+		return view('admin.transactions.show')->with('transaction', $transaction);
 	}
 }
