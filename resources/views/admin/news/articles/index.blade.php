@@ -20,7 +20,7 @@
 												Add
 											</button>
 											<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-												<a class="dropdown-item" href="{{route('admin.news.articles.content.create')}}">Content Article</a>
+												<a class="dropdown-item" href="{{route('admin.news.articles.content.create')}}">Article</a>
 												<a class="dropdown-item" href="{{route('admin.news.articles.videos.create')}}">Video Article</a>
 											</div>
 										</div>
@@ -36,8 +36,10 @@
 						<tr>
 							<th>#</th>
 							<th>Thumbnail</th>
+							<th>Category</th>
 							<th>Title</th>
 							<th>Author</th>
+							<th>Type</th>
 							<th>Published</th>
 							<th>Views</th>
 							<th>Shares</th>
@@ -55,8 +57,12 @@
 										{{\App\Library\Utils\Extensions\Str::NotAvailable}}
 									@endif
 								</td>
+								<td>
+									<span class="badge badge-secondary badge-pill">{{$article->category->name??\App\Library\Utils\Extensions\Str::NotAvailable}}</span>
+								</td>
 								<td>{{\App\Library\Utils\Extensions\Str::ellipsis($article->title,50)}}</td>
 								<td>{{$article->author??\App\Library\Utils\Extensions\Str::NotAvailable}}</td>
+								<td>{{$article->type->description}}</td>
 								<td>{{$article->published?'Yes':'No'}}</td>
 								<td>{{$article->views}}</td>
 								<td>{{$article->shares}}</td>
@@ -84,7 +90,7 @@
 		_delete = key => {
 			alertify.confirm("Are you sure? This action is irreversible!",
 				yes => {
-					axios.delete(`/admin/news/categories/${key}`).then(response => {
+					axios.delete(`/admin/news/articles/${key}`).then(response => {
 						alertify.alert(response.data.message, () => {
 							location.reload();
 						});

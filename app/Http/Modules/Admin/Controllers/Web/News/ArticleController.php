@@ -2,6 +2,8 @@
 
 namespace App\Http\Modules\Admin\Controllers\Web\News;
 
+use App\Library\Enums\News\Article\Types;
+
 class ArticleController extends \App\Http\Modules\Admin\Controllers\Web\WebController
 {
 	public function __construct ()
@@ -16,9 +18,13 @@ class ArticleController extends \App\Http\Modules\Admin\Controllers\Web\WebContr
 		);
 	}
 
-	public function edit () : \Illuminate\Contracts\Support\Renderable
+	public function edit (\App\Models\News\Article $article) : \Illuminate\Http\RedirectResponse
 	{
-
+		if ($article->type->is(Types::Article)) {
+			return redirect()->route('admin.news.articles.content.edit', $article->id);
+		} else {
+			return redirect()->route('admin.news.articles.videos.edit', $article->id);
+		}
 	}
 
 	public function store () : \Illuminate\Http\RedirectResponse
@@ -31,8 +37,11 @@ class ArticleController extends \App\Http\Modules\Admin\Controllers\Web\WebContr
 
 	}
 
-	public function delete (\App\Models\News\Category $category) : \Illuminate\Http\JsonResponse
+	public function delete (\App\Models\News\Article $article) : \Illuminate\Http\JsonResponse
 	{
-
+		$article->delete();
+		return responseApp()->prepare(
+			[], \Illuminate\Http\Response::HTTP_OK, 'News article deleted successfully.'
+		);
 	}
 }

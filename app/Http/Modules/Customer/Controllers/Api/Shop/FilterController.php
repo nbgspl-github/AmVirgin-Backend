@@ -90,11 +90,15 @@ class FilterController extends \App\Http\Modules\Customer\Controllers\Api\ApiCon
 	protected function brand (\Illuminate\Support\Collection $values) : array
 	{
 		$brands = $values->unique('brandId')->transform(function ($item) {
-			return [
-				'key' => $item['brand']['id'],
-				'name' => $item['brand']['name'],
-			];
+			if ($item['brand'] != null) {
+				return [
+					'key' => $item['brand']['id'],
+					'name' => $item['brand']['name'],
+				];
+			}
+			return null;
 		});
+		$brands = $brands->filter();
 		return [
 			'key' => 'filter_brand',
 			'label' => 'Brand',

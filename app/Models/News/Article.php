@@ -40,4 +40,9 @@ class Article extends \App\Library\Database\Eloquent\Model
 	{
 		return $this->retrieveMedia($this->attributes['video']);
 	}
+
+	public function category () : \Illuminate\Database\Eloquent\Relations\BelongsTo
+	{
+		return $this->belongsTo(Category::class, 'category_id');
+	}
 }

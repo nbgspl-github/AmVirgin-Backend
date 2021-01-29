@@ -6,6 +6,7 @@ use App\Http\Modules\Admin\Controllers\Web\GenreController;
 use App\Http\Modules\Admin\Controllers\Web\HomeController;
 use App\Http\Modules\Admin\Controllers\Web\News\ArticleController;
 use App\Http\Modules\Admin\Controllers\Web\News\Articles\ContentController;
+use App\Http\Modules\Admin\Controllers\Web\News\Articles\VideoController as ArticlesVideoController;
 use App\Http\Modules\Admin\Controllers\Web\News\CategoryController as NewsCategoryController;
 use App\Http\Modules\Admin\Controllers\Web\Products\Attributes\DetailController;
 use App\Http\Modules\Admin\Controllers\Web\Products\ProductController;
@@ -55,13 +56,18 @@ Route::middleware('auth:admin')->group(function () {
 	Route::prefix('news')->group(function () {
 		Route::prefix('articles')->group(function () {
 			Route::get(Str::Empty, [ArticleController::class, 'index'])->name('admin.news.articles.index');
+			Route::get('{article/edit}', [ArticleController::class, 'edit'])->name('admin.news.articles.edit');
 			Route::prefix('content')->group(function () {
 				Route::get('create', [ContentController::class, 'create'])->name('admin.news.articles.content.create');
+				Route::get('{article}/edit', [ContentController::class, 'edit'])->name('admin.news.articles.content.edit');
 				Route::post(Str::Empty, [ContentController::class, 'store'])->name('admin.news.articles.content.store');
+				Route::post('{article}', [ContentController::class, 'update'])->name('admin.news.articles.content.update');
 			});
-			Route::prefix('video')->group(function () {
-				Route::get('create', [ArticleController::class, 'create'])->name('admin.news.articles.videos.create');
-				Route::post(Str::Empty, [ArticleController::class, 'create'])->name('admin.news.articles.videos.store');
+			Route::prefix('videos')->group(function () {
+				Route::get('create', [ArticlesVideoController::class, 'create'])->name('admin.news.articles.videos.create');
+				Route::get('{article}/edit', [ArticlesVideoController::class, 'edit'])->name('admin.news.articles.videos.edit');
+				Route::post(Str::Empty, [ArticlesVideoController::class, 'store'])->name('admin.news.articles.videos.store');
+				Route::post('{article}', [ArticlesVideoController::class, 'update'])->name('admin.news.articles.videos.update');
 			});
 			Route::get('{article}/edit', [ArticleController::class, 'edit'])->name('admin.news.articles.edit');
 			Route::post(Str::Empty, [ArticleController::class, 'store'])->name('admin.news.articles.store');
