@@ -23,9 +23,9 @@ class AudioController extends \App\Http\Modules\Admin\Controllers\Web\WebControl
 	public function store (StoreRequest $request, \App\Models\Video\Video $video) : \Illuminate\Http\JsonResponse
 	{
 		$video->audios()->create($request->validated());
-		return response()->json([
-			'message' => 'Created audio source successfully.'
-		]);
+		return responseApp()->prepare(
+			[], \Illuminate\Http\Response::HTTP_OK, 'Audio track created successfully.'
+		);
 	}
 
 	/**
@@ -37,8 +37,8 @@ class AudioController extends \App\Http\Modules\Admin\Controllers\Web\WebControl
 	public function delete (\App\Models\Video\Video $video, \App\Models\Models\Video\Audio $audio) : \Illuminate\Http\JsonResponse
 	{
 		$audio->delete();
-		return response()->json(
-			[]
+		return responseApp()->prepare(
+			[], \Illuminate\Http\Response::HTTP_OK, 'Audio track deleted successfully.'
 		);
 	}
 }

@@ -166,7 +166,7 @@ function is_even ($number) : bool
 
 function __active (string $route) : string
 {
-	if (request()->routeIs($route))
+	if (request()->is($route))
 		return 'class="active"';
 	else
 		return "";

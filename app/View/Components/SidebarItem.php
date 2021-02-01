@@ -6,7 +6,7 @@ use Illuminate\View\Component;
 
 class SidebarItem extends Component
 {
-	public $url, $icon, $title;
+	public $url, $icon, $title, $pattern;
 
 	/**
 	 * Create a new component instance.
@@ -14,12 +14,14 @@ class SidebarItem extends Component
 	 * @param string $url
 	 * @param string $icon
 	 * @param string $title
+	 * @param string $pattern
 	 */
-	public function __construct (string $url, string $icon, string $title)
+	public function __construct (string $url, string $icon, string $title, string $pattern = '')
 	{
 		$this->url = $url;
 		$this->icon = $icon;
 		$this->title = $title;
+		$this->pattern = $pattern;
 	}
 
 	/**

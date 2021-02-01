@@ -159,12 +159,14 @@ Route::middleware('auth:admin')->group(function () {
 		Route::get('create', [TvSeriesController::class, 'create'])->name('admin.tv-series.create');
 		Route::prefix('edit/{video}')->group(function () {
 			Route::get('attributes', [AttributeController::class, 'edit'])->name('admin.tv-series.edit.attributes');
+			Route::get('media', [\App\Http\Modules\Admin\Controllers\Web\TvSeries\MediaController::class, 'edit'])->name('admin.tv-series.edit.media');
 			Route::get('source', [\App\Http\Modules\Admin\Controllers\Web\TvSeries\SourceController::class, 'index'])->name('admin.tv-series.edit.source');
 			Route::get('sources/{source}/audio', [\App\Http\Modules\Admin\Controllers\Web\TvSeries\AudioController::class, 'index'])->name('admin.tv-series.edit.audio');
 			Route::get('sources/{source}/subtitle', [\App\Http\Modules\Admin\Controllers\Web\TvSeries\SubtitleController::class, 'index'])->name('admin.tv-series.edit.subtitle');
 		});
 		Route::prefix('{video}/update')->group(function () {
 			Route::post('attributes', [AttributeController::class, 'update'])->name('admin.tv-series.update.attributes');
+			Route::post('media', [\App\Http\Modules\Admin\Controllers\Web\TvSeries\MediaController::class, 'update'])->name('admin.tv-series.update.media');
 			Route::post('{source}/audio', [\App\Http\Modules\Admin\Controllers\Web\TvSeries\AudioController::class, 'store'])->name('admin.tv-series.update.audio');
 			Route::post('{source}/subtitle', [\App\Http\Modules\Admin\Controllers\Web\TvSeries\SubtitleController::class, 'store'])->name('admin.tv-series.update.subtitle');
 			Route::post('source', [\App\Http\Modules\Admin\Controllers\Web\TvSeries\SourceController::class, 'store'])->name('admin.tv-series.update.source');
@@ -172,6 +174,8 @@ Route::middleware('auth:admin')->group(function () {
 		Route::post('store', [TvSeriesController::class, 'store'])->name('admin.tv-series.store');
 		Route::prefix('{video}')->group(function () {
 			Route::delete('', [TvSeriesController::class, 'delete'])->name('admin.tv-series.delete');
+			Route::delete('audios/{audio}', [\App\Http\Modules\Admin\Controllers\Web\Videos\AudioController::class, 'delete'])->name('admin.videos.delete.audio');
+			Route::delete('subtitles/{subtitle}', [\App\Http\Modules\Admin\Controllers\Web\Videos\SubtitleController::class, 'delete'])->name('admin.videos.delete.subtitle');
 		});
 	});
 

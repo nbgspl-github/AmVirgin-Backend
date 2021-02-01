@@ -107,7 +107,9 @@
 				$('#audioModal').modal('hide');
 				axios.post(`/admin/tv-series/${video_id}/update/${source_id}/audio`, formData, config,).then(response => {
 					showProgressDialog(false);
-					alertify.alert(response.data.message);
+					alertify.alert(response.data.message, () => {
+						location.reload();
+					});
 				}).catch(error => {
 					showProgressDialog(false);
 					alertify.alert('Something went wrong. Please try again.');
@@ -124,8 +126,10 @@
 		deleteAudio = key => {
 			alertify.confirm("Are you sure? This action is irreversible!",
 				yes => {
-					axios.delete(`/admin/videos/${key}`).then(response => {
-						location.reload();
+					axios.delete(`/admin/tv-series/${video_id}//${key}`).then(response => {
+						alertify.alert(response.data.message, () => {
+							location.reload();
+						})
 					}).catch(e => {
 						alertify.confirm('Something went wrong. Retry?', yes => {
 							showDetails(key);

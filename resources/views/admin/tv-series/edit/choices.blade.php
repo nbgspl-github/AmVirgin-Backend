@@ -4,7 +4,7 @@
 		<div class="col-12">
 			<div class="card shadow-sm">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Choose edit action'])
+					@include('admin.extras.header', ['title'=>"$payload->title"])
 				</div>
 				<div class="card-body animatable">
 					<div class="jumbotron bg-white animated zoomIn" style="background-image: url({{$payload->backdrop}});">

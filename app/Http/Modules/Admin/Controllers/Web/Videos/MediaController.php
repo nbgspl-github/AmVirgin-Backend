@@ -2,7 +2,6 @@
 
 namespace App\Http\Modules\Admin\Controllers\Web\Videos;
 
-use App\Http\Modules\Admin\Requests\Users\Videos\Media\UpdateRequest;
 use App\Models\Video\Video;
 
 class MediaController extends \App\Http\Modules\Admin\Controllers\Web\WebController
@@ -14,15 +13,14 @@ class MediaController extends \App\Http\Modules\Admin\Controllers\Web\WebControl
 
 	public function edit (Video $video)
 	{
-		return view('admin.videos.media.edit')->with('payload', $video);
+		return view('admin.videos.media.edit')->with('video', $video);
 	}
 
-	public function update (UpdateRequest $request, Video $video) : \Illuminate\Http\JsonResponse
+	public function update (\App\Http\Modules\Admin\Requests\Videos\Media\UpdateRequest $request, Video $video) : \Illuminate\Http\JsonResponse
 	{
 		$video->update($request->validated());
-		return response()->json([
-			'status' => \Illuminate\Http\Response::HTTP_OK,
-			'message' => 'Successfully uploaded/updated media for video.'
-		]);
+		return responseApp()->prepare(
+			['route' => route('admin.videos.edit.action', $video->id)], \Illuminate\Http\Response::HTTP_OK, 'Video media updated successfully.'
+		);
 	}
 }
