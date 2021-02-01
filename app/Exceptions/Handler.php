@@ -61,7 +61,7 @@ class Handler extends ExceptionHandler
 				}
 			} else {
 				if ($e instanceof \Illuminate\Validation\ValidationException) {
-					return redirect()->back()->with('error', $e->validator->errors()->first());
+					return redirect()->back()->with('error', $e->validator->errors()->first())->withInput();
 				} elseif ($e instanceof ModelNotFoundException) {
 					return redirect()->back()->with('error', 'The resource you\'re trying to access does not exist.')->setStatusCode(Response::HTTP_NOT_FOUND);
 				} elseif ($e instanceof \ErrorException) {

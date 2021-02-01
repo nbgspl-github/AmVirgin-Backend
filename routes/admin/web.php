@@ -2,8 +2,11 @@
 
 use App\Http\Modules\Admin\Controllers\Web\Auth\LoginController;
 use App\Http\Modules\Admin\Controllers\Web\CategoryController;
-use App\Http\Modules\Admin\Controllers\Web\GenreController;
 use App\Http\Modules\Admin\Controllers\Web\DashboardController;
+use App\Http\Modules\Admin\Controllers\Web\Extras\AboutUsController;
+use App\Http\Modules\Admin\Controllers\Web\Extras\PrivacyPolicyController;
+use App\Http\Modules\Admin\Controllers\Web\Extras\TermsConditionsController;
+use App\Http\Modules\Admin\Controllers\Web\GenreController;
 use App\Http\Modules\Admin\Controllers\Web\News\ArticleController;
 use App\Http\Modules\Admin\Controllers\Web\News\Articles\ContentController;
 use App\Http\Modules\Admin\Controllers\Web\News\Articles\VideoController as ArticlesVideoController;
@@ -302,5 +305,20 @@ Route::middleware('auth:admin')->group(function () {
 		Route::get('{id}/approve', [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'approve'])->name('admin.brands.approve');
 		Route::post('{brand}', [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'update'])->name('admin.brands.update');
 		Route::delete('{brand}', [\App\Http\Modules\Admin\Controllers\Web\BrandController::class, 'delete'])->name('admin.brands.delete');
+	});
+
+	Route::prefix('about-us')->group(function () {
+		Route::get(Str::Empty, [AboutUsController::class, 'edit'])->name('admin.extras.about-us.edit');
+		Route::post(Str::Empty, [AboutUsController::class, 'update'])->name('admin.extras.about-us.update');
+	});
+
+	Route::prefix('privacy-policy')->group(function () {
+		Route::get(Str::Empty, [PrivacyPolicyController::class, 'edit'])->name('admin.extras.privacy-policy.edit');
+		Route::post(Str::Empty, [PrivacyPolicyController::class, 'update'])->name('admin.extras.privacy-policy.update');
+	});
+
+	Route::prefix('terms-and-conditions')->group(function () {
+		Route::get(Str::Empty, [TermsConditionsController::class, 'edit'])->name('admin.extras.terms-and-conditions.edit');
+		Route::post(Str::Empty, [TermsConditionsController::class, 'update'])->name('admin.extras.terms-and-conditions.update');
 	});
 });

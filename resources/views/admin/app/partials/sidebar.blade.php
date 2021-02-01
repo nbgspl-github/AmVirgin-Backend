@@ -20,6 +20,11 @@
 				<x-sidebar-item url="{{route('admin.home')}}" icon="ti-dashboard" title="Dashboard"/>
 				<x-sidebar-item url="{{route('admin.customers.index')}}" icon="ti-user" title="Customers"/>
 				<x-sidebar-item url="{{route('admin.sellers.index')}}" icon="ti-user" title="Sellers"/>
+				<x-sidebar-expandable-item icon="ti-archive" title="Miscellaneous">
+					<x-sidebar-item url="{{route('admin.extras.about-us.edit')}}" icon="" title="About Us"/>
+					<x-sidebar-item url="{{route('admin.extras.privacy-policy.edit')}}" icon="" title="Privacy Policy"/>
+					<x-sidebar-item url="{{route('admin.extras.terms-and-conditions.edit')}}" icon="" title="Terms & Conditions"/>
+				</x-sidebar-expandable-item>
 
 				<x-sidebar-header title="Shop"/>
 				<x-sidebar-item url="{{route('admin.orders.index')}}" icon="ti-bag" title="Orders"/>

@@ -18,6 +18,7 @@ class ListResource extends JsonResource
 				'subTotal' => $this->subTotal,
 				'total' => $this->total,
 				'status' => $this->status,
+				'placed' => $this->created_at->format(\App\Library\Utils\Extensions\Time::MYSQL_FORMAT)
 			],
 			'subOrders' => SubListResource::collection($this->subOrders)
 		];

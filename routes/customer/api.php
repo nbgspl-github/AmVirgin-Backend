@@ -4,7 +4,6 @@ use App\Http\Modules\Customer\Controllers\Api\Auth\ExistenceController;
 use App\Http\Modules\Customer\Controllers\Api\Cart\QuoteController;
 use App\Http\Modules\Customer\Controllers\Api\Cart\WishlistController;
 use App\Http\Modules\Customer\Controllers\Api\Entertainment\HomeController as EntertainmentHomeController;
-use App\Http\Modules\Customer\Controllers\Api\Entertainment\SubscriptionController;
 use App\Http\Modules\Customer\Controllers\Api\Orders\CitiesController;
 use App\Http\Modules\Customer\Controllers\Api\Orders\CountriesController;
 use App\Http\Modules\Customer\Controllers\Api\Shared\SearchController;
@@ -13,6 +12,7 @@ use App\Http\Modules\Customer\Controllers\Api\Shop\AddressController;
 use App\Http\Modules\Customer\Controllers\Api\Shop\CatalogController;
 use App\Http\Modules\Customer\Controllers\Api\Shop\HomePageController as ShopHomeController;
 use App\Http\Modules\Customer\Controllers\Api\Shop\ProductRatingController;
+use App\Http\Modules\Customer\Controllers\Api\Subscription\PlansController;
 use App\Library\Utils\Extensions\Str;
 use Illuminate\Support\Facades\Route;
 
@@ -117,7 +117,7 @@ Route::prefix('countries')->group(function () {
 });
 
 Route::prefix('subscriptions')->group(function () {
-	Route::get(Str::Empty, [SubscriptionController::class, 'index']);
+	Route::get(Str::Empty, [PlansController::class, 'index']);
 });
 
 Route::prefix('search')->group(function () {
