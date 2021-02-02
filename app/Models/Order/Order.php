@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Order extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods, \BenSampo\Enum\Traits\CastsEnums;
+	use \Illuminate\Database\Eloquent\SoftDeletes;
 
 	protected $guarded = ['id'];
 	protected $casts = ['status' => Status::class, 'paymentMode' => Methods::class];
@@ -56,12 +57,12 @@ class Order extends \App\Library\Database\Eloquent\Model
 
 	public function address () : BelongsTo
 	{
-		return $this->belongsTo(\App\Models\Address\Address::class, 'addressId')->with('city', 'state');
+		return $this->belongsTo(\App\Models\Address\Address::class, 'addressId')->with('city', 'state')->withTrashed();
 	}
 
 	public function billingAddress () : BelongsTo
 	{
-		return $this->belongsTo(\App\Models\Address\Address::class, 'billingAddressId')->with('city', 'state');
+		return $this->belongsTo(\App\Models\Address\Address::class, 'billingAddressId')->with('city', 'state')->withTrashed();
 	}
 
 	public function sellerOrder () : HasOne
