@@ -14,9 +14,9 @@ class AvatarController extends \App\Http\Modules\Customer\Controllers\Api\ApiCon
 
 	public function update (UpdateRequest $request) : \Illuminate\Http\JsonResponse
 	{
-		$this->customer()->update([
+		$this->customer()->update(
 			$request->only('avatar')
-		]);
+		);
 		return responseApp()->prepare(
 			[], \Illuminate\Http\Response::HTTP_OK, __('auth.avatar.success'), 'data'
 		);

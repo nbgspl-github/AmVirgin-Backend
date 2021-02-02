@@ -108,11 +108,6 @@ class Product extends \App\Library\Database\Eloquent\Model
 		return $this->belongsToMany(Attribute::class, ProductAttribute::tableName(), 'productId', 'attributeId');
 	}
 
-	public function colors ()
-	{
-
-	}
-
 	public function options () : HasMany
 	{
 		return $this->hasMany(ProductAttribute::class, 'productId')->where('variantAttribute', true);
@@ -161,6 +156,11 @@ class Product extends \App\Library\Database\Eloquent\Model
 	public function addRatingBy (\App\Models\Auth\Customer $customer, array $attributes) : \Illuminate\Database\Eloquent\Model
 	{
 		return $this->ratings()->create(array_merge(['customer_id' => $customer->id], $attributes));
+	}
+
+	public function similar () : \Illuminate\Database\Eloquent\Builder
+	{
+		return self::query()->where('id', '!=', $this->id)->where('categoryId', $this->categoryId)->limit(15);
 	}
 
 	public function hotDeal (?bool $yes = null) : bool

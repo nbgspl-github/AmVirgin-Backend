@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Address extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods;
+	use \Illuminate\Database\Eloquent\SoftDeletes;
 
 	protected $table = 'addresses';
 

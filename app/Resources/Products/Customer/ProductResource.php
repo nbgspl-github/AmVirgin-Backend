@@ -59,6 +59,7 @@ class ProductResource extends AbstractProductResource
 			'details' => DetailResource::collection($this->specs),
 			'options' => OptionResource::collection($this->options),
 			'variants' => $this->when($this->type == Product::Type['Variant'], VariantItemResource::collection($this->variants)),
+			'similar' => CatalogListResource::collection($this->similar()->get())
 		];
 	}
 

@@ -8,9 +8,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Resources\Products\Customer\CatalogListResource;
 use App\Resources\Products\Customer\ProductResource;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Throwable;
 
 class CatalogController extends \App\Http\Modules\Customer\Controllers\Api\ApiController
 {
@@ -45,19 +43,10 @@ class CatalogController extends \App\Http\Modules\Customer\Controllers\Api\ApiCo
 		);
 	}
 
-	public function show ($id) : JsonResponse
+	public function show (Product $product) : JsonResponse
 	{
-		$response = responseApp();
-		try {
-			$product = Product::startQuery()->displayable()->key($id)->firstOrFail();
-			$product = new ProductResource($product);
-			$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Listing details of product.')->setValue('payload', $product);
-		} catch (ModelNotFoundException $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find the product for that key.');
-		} catch (Throwable $exception) {
-			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
-		} finally {
-			return $response->send();
-		}
+		return responseApp()->prepare(
+			new ProductResource($product), \Illuminate\Http\Response::HTTP_OK, 'Listing product details.'
+		);
 	}
 }
