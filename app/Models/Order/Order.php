@@ -22,11 +22,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Order extends \App\Library\Database\Eloquent\Model
 {
 	use DynamicAttributeNamedMethods, \BenSampo\Enum\Traits\CastsEnums;
-	use \Illuminate\Database\Eloquent\SoftDeletes;
 
-	protected $guarded = ['id'];
 	protected $casts = ['status' => Status::class, 'paymentMode' => Methods::class];
-	protected $hidden = ['created_at', 'updated_at'];
 
 	protected static function boot ()
 	{
