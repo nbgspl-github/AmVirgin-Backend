@@ -5,7 +5,7 @@ namespace App\Http\Modules\Customer\Controllers\Api\Shop;
 use App\Exceptions\ValidationException;
 use App\Library\Enums\Common\Tables;
 use App\Models\Address\Address;
-use App\Resources\Addresses\Customer\ShippingAddressResource;
+use App\Resources\Addresses\Customer\AddressResource;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\Rule;
@@ -52,8 +52,8 @@ class AddressController extends \App\Http\Modules\Customer\Controllers\Api\ApiCo
 
 	public function index ()
 	{
-		$shippingAddresses = Address::where('customerId', $this->guard()->id())->get();
-		$shippingAddresses = ShippingAddressResource::collection($shippingAddresses);
+		$shippingAddresses = Address::where('customerId', $this->customer()->id)->get();
+		$shippingAddresses = AddressResource::collection($shippingAddresses);
 		return responseApp()->status(\Illuminate\Http\Response::HTTP_OK)->message(function () use ($shippingAddresses) {
 			return sprintf('Found %d addresses for this customer', $shippingAddresses->count());
 		})->setValue('data', $shippingAddresses)->send();
@@ -68,7 +68,7 @@ class AddressController extends \App\Http\Modules\Customer\Controllers\Api\ApiCo
 			try {
 				$address = Address::where([
 					['type', $validated->type],
-					['customerId', $this->guard()->id()],
+					['customerId', $this->customer()->id],
 				])->firstOrFail();
 				$address->update([
 					'name' => $validated->name,
@@ -85,7 +85,7 @@ class AddressController extends \App\Http\Modules\Customer\Controllers\Api\ApiCo
 				$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Shipping address updated successfully.');
 			} catch (ModelNotFoundException $exception) {
 				Address::create([
-					'customerId' => $this->guard()->id(),
+					'customerId' => $this->customer()->id,
 					'name' => $validated->name,
 					'mobile' => $validated->mobile,
 					'alternateMobile' => $validated->alternateMobile,
@@ -115,7 +115,7 @@ class AddressController extends \App\Http\Modules\Customer\Controllers\Api\ApiCo
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['update']);
 			$address = Address::where([
-				['customerId', $this->guard()->id()],
+				['customerId', $this->customer()->id],
 				['id', $id],
 			])->firstOrFail();
 			$address->update([
@@ -147,7 +147,7 @@ class AddressController extends \App\Http\Modules\Customer\Controllers\Api\ApiCo
 		$response = responseApp();
 		try {
 			$address = Address::where([
-				['customerId', $this->guard()->id()],
+				['customerId', $this->customer()->id],
 				['id', $id],
 			])->firstOrFail();
 			$address->delete();

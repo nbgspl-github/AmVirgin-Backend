@@ -8,7 +8,7 @@ use Illuminate\Support\Carbon;
  * Extends the base class provided by Laravel to
  * provide some boilerplate code.
  * @package App\Library\Database\Eloquent
- * @property int|string $id
+ * @property int|string $id Primary key of table
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */

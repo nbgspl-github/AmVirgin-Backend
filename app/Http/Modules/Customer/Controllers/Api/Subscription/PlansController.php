@@ -18,9 +18,4 @@ class PlansController extends \App\Http\Modules\Customer\Controllers\Api\ApiCont
 			)
 		);
 	}
-
-	public function show ()
-	{
-
-	}
 }

@@ -14,7 +14,7 @@ class RecentController extends \App\Http\Modules\Customer\Controllers\Api\ApiCon
 	public function index ()
 	{
 		$recent = CustomerRecent::where([
-			['customerId', $this->guard()->id()],
+			['customerId', $this->customer()->id],
 		])->get();
 
 	}

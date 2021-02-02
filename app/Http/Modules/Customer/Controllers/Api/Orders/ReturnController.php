@@ -48,7 +48,7 @@ class ReturnController extends \App\Http\Modules\Customer\Controllers\Api\ApiCon
 			if ($item->returnable && !$item->returnValidUntil->isPast()) {
 				$item->returns()->create([
 					'order_id' => $item->order->id,
-					'customer_id' => $this->guard()->id(),
+					'customer_id' => $this->customer()->id,
 					'seller_id' => $item->sellerId,
 					'order_segment_id' => $item->segment->id,
 					'return_type' => $item->returnType == 'both' ? $validated['action'] : $item->returnType,

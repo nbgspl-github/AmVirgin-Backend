@@ -150,7 +150,7 @@ class QuoteController extends \App\Http\Modules\Customer\Controllers\Api\ApiCont
 		$cart = null;
 		$validated = (object)$request->validated();
 		$wishlistItem = CustomerWishlist::query()->where([
-			['customerId', $this->guard()->id()],
+			['customerId', $this->customer()->id],
 			['productId', $productId],
 		])->first();
 		if ($wishlistItem == null) {
@@ -159,7 +159,7 @@ class QuoteController extends \App\Http\Modules\Customer\Controllers\Api\ApiCont
 				$cartItem = new CartItem($cart, $productId);
 				if ($cart->contains($cartItem)) {
 					CustomerWishlist::query()->create([
-						'customerId' => $this->guard()->id(),
+						'customerId' => $this->customer()->id,
 						'productId' => $productId,
 					]);
 					$cart->destroyItem($cartItem);
@@ -214,7 +214,7 @@ class QuoteController extends \App\Http\Modules\Customer\Controllers\Api\ApiCont
 			 */
 			$validated = (object)$request->validated();
 			$cart = Cart::retrieveThrows($validated->sessionId);
-			$cart->customerId = $this->guard()->id();
+			$cart->customerId = $this->customer()->id;
 			$cart->addressId = $validated->addressId;
 			$cart->billingAddressId = $validated->billingAddressId ?? $validated->addressId;
 			$cart->paymentMode = $validated->paymentMode;

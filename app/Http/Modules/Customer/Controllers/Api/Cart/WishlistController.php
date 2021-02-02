@@ -5,14 +5,12 @@ namespace App\Http\Modules\Customer\Controllers\Api\Cart;
 use App\Classes\Cart\CartItem;
 use App\Exceptions\ValidationException;
 use App\Library\Enums\Cart\Status;
-use App\Library\Enums\Common\Tables;
 use App\Models\Cart\Cart;
 use App\Models\CustomerWishlist;
 use App\Models\Product;
 use App\Resources\Products\Customer\CatalogListResource;
 use App\Traits\ValidatesRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Validation\Rule;
 use Throwable;
 
 class WishlistController extends \App\Http\Modules\Customer\Controllers\Api\ApiController
@@ -27,23 +25,21 @@ class WishlistController extends \App\Http\Modules\Customer\Controllers\Api\ApiC
 		$this->middleware(AUTH_CUSTOMER);
 		$this->rules = [
 			'store' => [
-				'productId' => ['bail', 'required', Rule::exists(Tables::Products, 'id')],
+				'productId' => ['bail', 'required', Product::exists()],
 			],
 			'moveToCart' => [
-				'sessionId' => ['bail', 'required', Rule::exists(Tables::CartSessions, 'sessionId')],
+				'sessionId' => ['bail', 'required', \App\Models\Cart\Session::exists('sessionId')],
 			],
 		];
 	}
 
 	public function index () : \Illuminate\Http\JsonResponse
 	{
-		$wishList = CustomerWishlist::where('customerId', $this->guard()->id())->get();
-		$wishList->transform(function (CustomerWishlist $item) {
-			return new CatalogListResource(Product::find($item->productId));
-		});
-		return responseApp()->status(\Illuminate\Http\Response::HTTP_OK)->setValue('data', $wishList)->message(function () use ($wishList) {
-			return sprintf('Found %d items in the wishlist.', $wishList->count());
-		})->send();
+		return responseApp()->prepare(
+			CatalogListResource::collection(
+				$this->customer()->wishListProducts
+			), \Illuminate\Http\Response::HTTP_OK, 'Listing wishlist items.', 'data'
+		);
 	}
 
 	public function store ($productId) : \Illuminate\Http\JsonResponse
@@ -51,8 +47,8 @@ class WishlistController extends \App\Http\Modules\Customer\Controllers\Api\ApiC
 		$response = responseApp();
 		$validated = null;
 		try {
-			CustomerWishlist::where([
-				['customerId', $this->guard()->id()],
+			CustomerWishlist::query()->where([
+				['customerId', $this->customer()->id],
 				['productId', $productId],
 			])->firstOrFail();
 			$response->status(\Illuminate\Http\Response::HTTP_CONFLICT)->message('Item already exists in wishlist.');
@@ -60,9 +56,9 @@ class WishlistController extends \App\Http\Modules\Customer\Controllers\Api\ApiC
 			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getError());
 		} catch (ModelNotFoundException $exception) {
 			try {
-				Product::findOrFail($productId);
-				CustomerWishlist::create([
-					'customerId' => $this->guard()->id(),
+				Product::query()->findOrFail($productId);
+				CustomerWishlist::query()->create([
+					'customerId' => $this->customer()->id,
 					'productId' => $productId,
 				]);
 				$response->status(\Illuminate\Http\Response::HTTP_OK)->message('Item added to wishlist.');
@@ -80,8 +76,8 @@ class WishlistController extends \App\Http\Modules\Customer\Controllers\Api\ApiC
 	{
 		$response = responseApp();
 		try {
-			$wishListItem = CustomerWishlist::where([
-				['customerId', $this->guard()->id()],
+			$wishListItem = CustomerWishlist::query()->where([
+				['customerId', $this->customer()->id],
 				['productId', $productId],
 			])->firstOrFail();
 			$wishListItem->delete();
@@ -102,8 +98,8 @@ class WishlistController extends \App\Http\Modules\Customer\Controllers\Api\ApiC
 		$cart = null;
 		try {
 			$validated = (object)$this->requestValid(request(), $this->rules['moveToCart']);
-			$wishlistItem = CustomerWishlist::where([
-				['customerId', $this->guard()->id()],
+			$wishlistItem = CustomerWishlist::query()->where([
+				['customerId', $this->customer()->id],
 				['productId', $productId],
 			])->firstOrFail();
 			try {
@@ -118,7 +114,7 @@ class WishlistController extends \App\Http\Modules\Customer\Controllers\Api\ApiC
 					$response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Cart already contains the item you specified.');
 				}
 			} catch (ModelNotFoundException $exception) {
-				\App\Models\Cart\Cart::create([
+				\App\Models\Cart\Cart::query()->create([
 					'sessionId' => $validated->sessionId,
 					'status' => Status::Pending,
 				]);

@@ -6,7 +6,6 @@ use App\Models\Address\Address;
 use App\Models\CustomerWishlist;
 use App\Models\Order\Order;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Mail;
 
 /**
@@ -54,6 +53,11 @@ class Customer extends \App\Library\Database\Eloquent\AuthEntity
 	public function wishList () : HasMany
 	{
 		return $this->hasMany(CustomerWishlist::class, 'customerId');
+	}
+
+	public function wishListProducts () : \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	{
+		return $this->belongsToMany(\App\Models\Product::class, CustomerWishlist::tableName(), 'customerId', 'productId');
 	}
 
 	public function watchList () : HasMany

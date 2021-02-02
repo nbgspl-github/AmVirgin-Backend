@@ -27,6 +27,7 @@ class AuthProfileResource extends JsonResource
 					],
 				],
 			],
+			'address' => $this->lastUpdatedAddress(),
 			'token' => $this->when(!empty($this->token), $this->token),
 		];
 	}
@@ -35,5 +36,12 @@ class AuthProfileResource extends JsonResource
 	{
 		$this->token = $token;
 		return $this;
+	}
+
+	public function lastUpdatedAddress () : \App\Resources\Addresses\Customer\AddressResource
+	{
+		return new \App\Resources\Addresses\Customer\AddressResource(
+			auth('customer-api')->user()->addresses()->latest('updated_at')->first()
+		);
 	}
 }
