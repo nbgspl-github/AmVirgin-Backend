@@ -99,4 +99,26 @@ class Customer extends \App\Library\Database\Eloquent\AuthEntity
 		}
 		return $url;
 	}
+
+	public function subscriptions () : HasMany
+	{
+		return $this->hasMany(\App\Models\Subscription::class, 'customer_id');
+	}
+
+	/**
+	 * @return \Illuminate\Database\Eloquent\Model|HasMany|object|null|\App\Models\Subscription
+	 */
+	public function activeSubscription ()
+	{
+		return $this->subscriptions()->where('valid_until', '>=', now()->format(\App\Library\Utils\Extensions\Time::MYSQL_FORMAT))->first();
+	}
+
+	public function activateSubscription (\App\Models\Subscription $subscription)
+	{
+		$plan = $subscription->plan;
+		$subscription->update([
+			'valid_from' => now()->format(\App\Library\Utils\Extensions\Time::MYSQL_FORMAT),
+			'valid_until' => now()->addDays($plan->duration)->format(\App\Library\Utils\Extensions\Time::MYSQL_FORMAT)
+		]);
+	}
 }

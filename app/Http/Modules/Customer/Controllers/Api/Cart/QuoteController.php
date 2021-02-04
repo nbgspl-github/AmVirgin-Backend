@@ -301,11 +301,11 @@ class QuoteController extends \App\Http\Modules\Customer\Controllers\Api\ApiCont
 
 	protected function toAtomicAmount ($amount)
 	{
-		return $amount * 100;
+		return toAtomicAmount($amount);
 	}
 
 	protected function fromAtomicAmount ($amount) : float
 	{
-		return $amount / 100.0;
+		return fromAtomicAmount($amount);
 	}
 }

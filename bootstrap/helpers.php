@@ -171,3 +171,13 @@ function __active (string $route) : string
 	else
 		return "";
 }
+
+function toAtomicAmount ($amount)
+{
+	return $amount * 100;
+}
+
+function fromAtomicAmount ($amount) : float
+{
+	return $amount / 100.0;
+}

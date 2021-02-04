@@ -38,7 +38,11 @@ class CodeTester extends Command
 
 	public function handle ()
 	{
-		$otp = 5678;
-		echo __('auth.otp.message', ['otp' => $otp]);
+		$customer = null;
+		if (!$customer) {
+			echo "Perhaps true";
+		} else {
+			echo "Perhaps false";
+		}
 	}
 }

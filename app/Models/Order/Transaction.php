@@ -19,4 +19,9 @@ class Transaction extends \App\Library\Database\Eloquent\Model
 	{
 		return $this->belongsTo(Order::class, 'orderId');
 	}
+
+	public function subscription () : \Illuminate\Database\Eloquent\Relations\HasOne
+	{
+		return $this->hasOne(\App\Models\Subscription::class, 'transaction_id', 'id');
+	}
 }
