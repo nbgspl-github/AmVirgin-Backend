@@ -29,7 +29,6 @@ class RouteServiceProvider extends ServiceProvider
 
 	protected function mapSellerRoutes ()
 	{
-		Route::middleware('web')->namespace($this->namespace)->group(base_path('routes/seller/web.php'));
 		Route::prefix('api/seller')->middleware('api')->namespace($this->namespace)->group(base_path('routes/seller/api.php'));
 	}
 
