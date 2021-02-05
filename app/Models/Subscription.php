@@ -6,6 +6,8 @@ namespace App\Models;
  * Class Subscription
  * @package App\Models\Models
  * @property ?\App\Models\Order\Transaction $transaction
+ * @property \Carbon\Carbon $valid_from
+ * @property \Carbon\Carbon $valid_until
  */
 class Subscription extends \App\Library\Database\Eloquent\Model
 {
