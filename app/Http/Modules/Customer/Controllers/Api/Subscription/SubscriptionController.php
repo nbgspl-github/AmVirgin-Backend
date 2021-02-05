@@ -66,8 +66,9 @@ class SubscriptionController extends \App\Http\Modules\Customer\Controllers\Api\
 	protected function sendSubscriptionCheckoutResponse (\App\Models\Subscription $subscription) : \Illuminate\Http\JsonResponse
 	{
 		return responseApp()->prepare([
-			'rzpOrderId' => $subscription->transaction->rzpOrderId
-		], \Illuminate\Http\Response::HTTP_CONFLICT, 'You already have an active subscription!');
+			'rzpOrderId' => $subscription->transaction->rzpOrderId,
+			'transactionId' => $subscription->transaction->id
+		], \Illuminate\Http\Response::HTTP_CREATED, 'We\'ve prepared your checkout details.');
 	}
 
 	public function submit (SubmitRequest $request) : \Illuminate\Http\JsonResponse

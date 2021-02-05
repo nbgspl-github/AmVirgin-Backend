@@ -47,9 +47,19 @@ class Brand extends \App\Library\Database\Eloquent\Model
 		$this->attributes['logo'] = $this->storeWhenUploadedCorrectly('brands/logos', $value);
 	}
 
-	public function getLogoAttribute () : ?string
+	public function getLogoAttribute ($value) : ?string
 	{
-		return $this->retrieveMedia($this->attributes['logo']);
+		return $this->retrieveMedia($value);
+	}
+
+	public function setSampleMRPTagImageAttribute ($value)
+	{
+		$this->attributes['sampleMRPTagImage'] = $this->storeWhenUploadedCorrectly('brands/logos', $value);
+	}
+
+	public function getSampleMRPTagImageAttribute ($value) : ?string
+	{
+		return $this->retrieveMedia($value);
 	}
 
 	public function setDocumentProofAttribute ($value)
@@ -57,9 +67,9 @@ class Brand extends \App\Library\Database\Eloquent\Model
 		$this->attributes['documentProof'] = $this->storeWhenUploadedCorrectly('brands/documents', $value);
 	}
 
-	public function getDocumentProofAttribute () : ?string
+	public function getDocumentProofAttribute ($value) : ?string
 	{
-		return $this->retrieveMedia($this->attributes['documentProof']);
+		return $this->retrieveMedia($value);
 	}
 
 	public function category () : BelongsTo

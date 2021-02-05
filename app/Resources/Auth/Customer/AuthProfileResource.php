@@ -2,8 +2,12 @@
 
 namespace App\Resources\Auth\Customer;
 
+use App\Models\Subscription;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @method Subscription|null activeSubscription()
+ */
 class AuthProfileResource extends JsonResource
 {
 	protected ?string $token = null;
@@ -17,15 +21,8 @@ class AuthProfileResource extends JsonResource
 			'mobile' => $this->mobile,
 			'avatar' => $this->avatar,
 			'subscription' => [
-				'active' => true,
-				'plan' => [
-					'key' => 2,
-					'name' => 'Binge Watch Pack',
-					'duration' => [
-						'actual' => 90,
-						'remaining' => 42,
-					],
-				],
+				'active' => $this->activeSubscription() != null,
+				'plan' => $this->plan(),
 			],
 			'address' => $this->lastUpdatedAddress(),
 			'token' => $this->when(!empty($this->token), $this->token),
@@ -43,5 +40,20 @@ class AuthProfileResource extends JsonResource
 		return new \App\Resources\Addresses\Customer\AddressResource(
 			auth('customer-api')->user()->addresses()->latest('updated_at')->first()
 		);
+	}
+
+	public function plan () : ?array
+	{
+		$subscription = $this->activeSubscription();
+		if (!$subscription)
+			return null;
+		return [
+			'key' => $subscription->subscription_plan_id,
+			'name' => $subscription->plan->name ?? \App\Library\Utils\Extensions\Str::NotAvailable,
+			'duration' => [
+				'actual' => $subscription->plan->duration,
+				'remaining' => $subscription->valid_from->diffInDays($subscription->valid_until)
+			]
+		];
 	}
 }
