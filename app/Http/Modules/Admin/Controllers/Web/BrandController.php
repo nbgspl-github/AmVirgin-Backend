@@ -23,7 +23,8 @@ class BrandController extends WebController
 	{
 		return view('admin.brands.index')->with('brands',
 			$this->paginateWithQuery(
-				$this->model->newQuery()->latest()->whereLike('name', $this->queryParameter()))
+				$this->model->newQuery()->latest()->whereLike('name', $this->queryParameter())
+			)
 		);
 	}
 

@@ -120,7 +120,7 @@ Route::prefix('subscriptions')->group(function () {
 	Route::get(Str::Empty, [PlansController::class, 'index']);
 	Route::prefix('checkout')->group(function () {
 		Route::get('{plan}', [\App\Http\Modules\Customer\Controllers\Api\Subscription\SubscriptionController::class, 'checkout']);
-		Route::get(Str::Empty, [\App\Http\Modules\Customer\Controllers\Api\Subscription\SubscriptionController::class, 'submit']);
+		Route::post(Str::Empty, [\App\Http\Modules\Customer\Controllers\Api\Subscription\SubscriptionController::class, 'submit']);
 	});
 });
 
