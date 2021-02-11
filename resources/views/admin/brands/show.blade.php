@@ -39,7 +39,7 @@
 										</div>
 										<div class="form-group">
 											<label for="document_type">Document Type</label>
-											<input id="document_type" type="text" name="documentType" class="form-control bg-white" value="{{old('documentType',$brand->documentType->description)}}" readonly/>
+											<input id="document_type" type="text" name="documentType" class="form-control bg-white" value="{{old('documentType',$brand->documentType->description??\App\Library\Utils\Extensions\Str::Empty)}}" readonly/>
 										</div>
 										<div class="form-group">
 											<label for="documentProof">Document Proof</label>
