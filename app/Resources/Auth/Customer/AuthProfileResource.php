@@ -38,7 +38,7 @@ class AuthProfileResource extends JsonResource
 	public function lastUpdatedAddress () : \App\Resources\Addresses\Customer\AddressResource
 	{
 		return new \App\Resources\Addresses\Customer\AddressResource(
-			auth('customer-api')->user()->addresses()->latest('updated_at')->first()
+			$this->addresses()->latest('updated_at')->first()
 		);
 	}
 
