@@ -27,9 +27,9 @@ class SocialLoginController extends \App\Http\Modules\Shared\Controllers\Api\Aut
 	protected function sendLoginSuccessResponse (Customer $customer) : \Illuminate\Http\JsonResponse
 	{
 		$token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($customer);
-		return responseApp()->prepare([
+		return responseApp()->prepare(
 			(new \App\Resources\Auth\Customer\AuthProfileResource($customer))->token($token), \Illuminate\Http\Response::HTTP_OK, __('auth.login.success'), 'data'
-		]);
+		);
 	}
 
 	protected function guard ()
