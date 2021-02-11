@@ -59,7 +59,7 @@ class SubscriptionController extends \App\Http\Modules\Customer\Controllers\Api\
 	protected function sendSubscriptionActiveResponse () : \Illuminate\Http\JsonResponse
 	{
 		return responseApp()->prepare(
-			[], \Illuminate\Http\Response::HTTP_CONFLICT, 'You already have an active subscription!'
+			null, \Illuminate\Http\Response::HTTP_CONFLICT, 'You already have an active subscription!'
 		);
 	}
 
