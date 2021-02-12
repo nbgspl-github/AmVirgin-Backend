@@ -52,7 +52,8 @@ class AuthProfileResource extends JsonResource
 			'name' => $subscription->plan->name ?? \App\Library\Utils\Extensions\Str::NotAvailable,
 			'duration' => [
 				'actual' => $subscription->plan->duration,
-				'remaining' => $subscription->valid_from->diffInDays($subscription->valid_until)
+				'remaining' => $subscription->valid_from->diffInDays($subscription->valid_until),
+				'expires' => $subscription->valid_until
 			]
 		];
 	}
