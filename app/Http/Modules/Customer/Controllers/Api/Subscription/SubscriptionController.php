@@ -19,12 +19,12 @@ class SubscriptionController extends \App\Http\Modules\Customer\Controllers\Api\
 
 	public function checkout (\App\Models\SubscriptionPlan $plan) : \Illuminate\Http\JsonResponse
 	{
-		$activeSubscription = $this->customer()->activeSubscription();
-		if (!$activeSubscription) {
-			$subscription = $this->createPlaceholderSubscription($plan);
-			return $this->sendSubscriptionCheckoutResponse($subscription);
-		}
-		return $this->sendSubscriptionActiveResponse();
+//		$activeSubscription = $this->customer()->activeSubscription();
+//		if (!$activeSubscription) {
+		$subscription = $this->createPlaceholderSubscription($plan);
+		return $this->sendSubscriptionCheckoutResponse($subscription);
+//		}
+//		return $this->sendSubscriptionActiveResponse();
 	}
 
 	/**
