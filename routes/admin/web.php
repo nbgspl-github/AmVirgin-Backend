@@ -292,7 +292,7 @@ Route::middleware('auth:admin')->group(function () {
 			Route::get(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\Products\Attributes\AttributeSetController::class, 'index'])->name('admin.attributes.sets.index');
 			Route::get('create', [\App\Http\Modules\Admin\Controllers\Web\Products\Attributes\AttributeSetController::class, 'create'])->name('admin.attributes.sets.create');
 			Route::post('store', [\App\Http\Modules\Admin\Controllers\Web\Products\Attributes\AttributeSetController::class, 'store'])->name('admin.attributes.sets.store');
-			Route::delete('{category}', [\App\Http\Modules\Admin\Controllers\Web\Products\Attributes\AttributeSetController::class, 'delete'])->name('admin.attributes.sets.store');
+			Route::delete('{category}', [\App\Http\Modules\Admin\Controllers\Web\Products\Attributes\AttributeSetController::class, 'delete'])->name('admin.attributes.sets.delete');
 		});
 
 		Route::prefix('values')->group(function () {
