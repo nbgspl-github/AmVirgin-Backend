@@ -325,4 +325,11 @@ Route::middleware('auth:admin')->group(function () {
 		Route::get(Str::Empty, [TermsConditionsController::class, 'edit'])->name('admin.extras.terms-and-conditions.edit');
 		Route::post(Str::Empty, [TermsConditionsController::class, 'update'])->name('admin.extras.terms-and-conditions.update');
 	});
+
+	Route::prefix('version')->group(function () {
+		Route::get(Str::Empty, function () {
+			$version = PHP_VERSION;
+			return "Your PHP version is {$version}";
+		});
+	});
 });
