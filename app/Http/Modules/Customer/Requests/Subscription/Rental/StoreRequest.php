@@ -7,9 +7,9 @@ class StoreRequest extends \Illuminate\Foundation\Http\FormRequest
 	public function rules () : array
 	{
 		return [
-			'paymentId' => ['bail', 'required_unless:paymentMode,cash-on-delivery', 'string', 'min:16', 'max:50'],
+			'paymentId' => ['bail', 'required', 'string', 'min:16', 'max:50'],
 			'orderId' => ['bail', 'required', 'string', 'min:16', 'max:50'],
-			'signature' => ['bail', 'required_unless:paymentMode,cash-on-delivery', 'string', 'max:128'],
+			'signature' => ['bail', 'required', 'string', 'max:128'],
 			'amount' => ['bail', 'required', 'numeric']
 		];
 	}
