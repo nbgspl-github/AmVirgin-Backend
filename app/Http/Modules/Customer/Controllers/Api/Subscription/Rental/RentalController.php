@@ -16,7 +16,7 @@ class RentalController extends \App\Http\Modules\Customer\Controllers\Api\ApiCon
 	public function index () : \Illuminate\Http\JsonResponse
 	{
 		return responseApp()->prepare(
-			VideoResource::collection($this->customer()->activeRentals())
+			VideoResource::collection($this->customer()->activeRentals()->get())
 		);
 	}
 
