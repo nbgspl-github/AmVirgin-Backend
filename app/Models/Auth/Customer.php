@@ -2,6 +2,7 @@
 
 namespace App\Models\Auth;
 
+use App\Library\Utils\Extensions\Time;
 use App\Models\Address\Address;
 use App\Models\CustomerWishlist;
 use App\Models\Order\Order;
@@ -110,15 +111,51 @@ class Customer extends \App\Library\Database\Eloquent\AuthEntity
 	 */
 	public function activeSubscription ()
 	{
-		return $this->subscriptions()->where('valid_until', '>=', now()->format(\App\Library\Utils\Extensions\Time::MYSQL_FORMAT))->first();
+		return $this->subscriptions()->where('valid_until', '>=', now()->format(Time::MYSQL_FORMAT))->first();
 	}
 
 	public function activateSubscription (\App\Models\Subscription $subscription)
 	{
 		$plan = $subscription->plan;
 		$subscription->update([
-			'valid_from' => now()->format(\App\Library\Utils\Extensions\Time::MYSQL_FORMAT),
-			'valid_until' => now()->addDays($plan->duration)->format(\App\Library\Utils\Extensions\Time::MYSQL_FORMAT)
+			'valid_from' => now()->format(Time::MYSQL_FORMAT),
+			'valid_until' => now()->addDays($plan->duration)->format(Time::MYSQL_FORMAT)
+		]);
+	}
+
+	public function rentals () : HasMany
+	{
+		return $this->hasMany(\App\Models\Video\Rental::class, 'customer_id');
+	}
+
+	public function activeRentals () : HasMany
+	{
+		return $this->rentals()->where('valid_until', '>', now()->format(Time::MYSQL_FORMAT));
+	}
+
+	public function isRented (\App\Models\Video\Video $video) : bool
+	{
+		return $this->rentals()->where('video_id', $video->id)->exists();
+	}
+
+	public function isRentalExpired (\App\Models\Video\Video $video) : bool
+	{
+		return $this->rentals()->where('video_id', $video->id)->where('valid_until', '<=', now()->format(Time::MYSQL_FORMAT))->exists();
+	}
+
+	/**
+	 * @param \App\Models\Video\Video $video
+	 * @param \App\Models\Order\Transaction|\App\Library\Database\Eloquent\Model $transaction
+	 * @return \Illuminate\Database\Eloquent\Model|\App\Models\Video\Rental
+	 */
+	public function addRentalVideo (\App\Models\Video\Video $video, $transaction)
+	{
+		return $this->rentals()->create([
+			'video_id' => $video->id,
+			'transaction_id' => $transaction->id,
+			'amount' => $transaction->amountReceived,
+			'valid_from' => now()->format(Time::MYSQL_FORMAT),
+			'valid_until' => now()->addDays(30)->format(Time::MYSQL_FORMAT),
 		]);
 	}
 }
