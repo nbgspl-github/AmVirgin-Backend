@@ -13,7 +13,7 @@ class CreateRentalsTable extends Migration
 	 */
 	public function up ()
 	{
-		Schema::create('rentals', function (Blueprint $table) {
+		Schema::create('customer_rentals', function (Blueprint $table) {
 			$table->id();
 			$table->unsignedBigInteger('customer_id');
 			$table->unsignedBigInteger('video_id');

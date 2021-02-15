@@ -172,3 +172,8 @@ Route::prefix('news')->group(static function () {
 		Route::get('{article}', [\App\Http\Modules\Customer\Controllers\Api\News\Articles\ArticleController::class, 'show']);
 	});
 });
+
+Route::prefix('rentals')->group(function () {
+	Route::post(Str::Empty, [\App\Http\Modules\Customer\Controllers\Api\Subscription\Rental\RentalController::class, 'index']);
+	Route::post('{video}', [\App\Http\Modules\Customer\Controllers\Api\Subscription\Rental\RentalController::class, 'store']);
+});
