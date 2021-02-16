@@ -164,11 +164,10 @@ class ProductController extends AbstractProductController
 		} catch (TokenInvalidException | ValidationException | InvalidCategoryException $exception) {
 			$response->status(\Illuminate\Http\Response::HTTP_BAD_REQUEST)->message($exception->getMessage());
 		} catch (Throwable $exception) {
-			dd($exception->getTraceAsString());
+			return response()->json($exception->getTrace());
 			$response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
-		} finally {
-			return $response->send();
 		}
+		return $response->send();
 	}
 
 	public function update ($id) : JsonResponse
