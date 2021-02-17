@@ -14,6 +14,7 @@ class RentalController extends \App\Http\Modules\Customer\Controllers\Api\ApiCon
 	{
 		parent::__construct();
 		$this->middleware(AUTH_CUSTOMER);
+		$this->client = \App\Classes\Singletons\RazorpayClient::make();
 	}
 
 	public function index () : \Illuminate\Http\JsonResponse
