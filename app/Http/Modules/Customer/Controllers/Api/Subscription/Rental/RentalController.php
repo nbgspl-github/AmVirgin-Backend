@@ -2,11 +2,14 @@
 
 namespace App\Http\Modules\Customer\Controllers\Api\Subscription\Rental;
 
-use App\Http\Modules\Customer\Requests\Subscription\Rental\StoreRequest;
+use App\Http\Modules\Customer\Requests\Subscription\Rental\SubmitRequest;
 use App\Http\Modules\Customer\Resources\Subscription\Rental\VideoResource;
+use App\Models\Order\Transaction;
 
 class RentalController extends \App\Http\Modules\Customer\Controllers\Api\ApiController
 {
+	protected \Razorpay\Api\Api $client;
+
 	public function __construct ()
 	{
 		parent::__construct();
@@ -20,7 +23,17 @@ class RentalController extends \App\Http\Modules\Customer\Controllers\Api\ApiCon
 		);
 	}
 
-	public function store (StoreRequest $request, \App\Models\Video\Video $video) : \Illuminate\Http\JsonResponse
+	public function checkout (\App\Models\Video\Video $video) : \Illuminate\Http\JsonResponse
+	{
+		if (!$this->customer()->isRented($video) && $this->customer()->isRentalExpired($video)) {
+			$transaction = $this->createPlaceholderTransaction($video->price);
+			return $this->sendCheckoutResponse($transaction);
+		} else {
+			return $this->sendRentalActiveResponse();
+		}
+	}
+
+	public function submit (SubmitRequest $request, \App\Models\Video\Video $video) : \Illuminate\Http\JsonResponse
 	{
 		if (!$this->customer()->isRented($video) && $this->customer()->isRentalExpired($video)) {
 			$transaction = $this->createTransaction($request);
@@ -32,10 +45,10 @@ class RentalController extends \App\Http\Modules\Customer\Controllers\Api\ApiCon
 	}
 
 	/**
-	 * @param StoreRequest $request
+	 * @param SubmitRequest $request
 	 * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|\App\Models\Order\Transaction
 	 */
-	protected function createTransaction (StoreRequest $request)
+	protected function createTransaction (SubmitRequest $request)
 	{
 		return \App\Models\Order\Transaction::query()->create([
 			'rzpOrderId' => $request->orderId,
@@ -61,5 +74,29 @@ class RentalController extends \App\Http\Modules\Customer\Controllers\Api\ApiCon
 		return responseApp()->prepare(
 			null, \Illuminate\Http\Response::HTTP_CREATED, 'You have successfully availed the video for rental viewing.'
 		);
+	}
+
+	protected function sendCheckoutResponse (Transaction $transaction) : \Illuminate\Http\JsonResponse
+	{
+		return responseApp()->prepare([
+			'transactionId' => $transaction->id,
+			'rzpOrderId' => $transaction->rzpOrderId
+		], \Illuminate\Http\Response::HTTP_CREATED, 'We\'ve prepared your checkout experience.');
+	}
+
+	protected function createPlaceholderTransaction ($amount)
+	{
+		$rzpTransaction = (object)$this->client->order->create([
+			'amount' => toAtomicAmount($amount),
+			'currency' => 'INR'
+		]);
+		return Transaction::query()->create([
+			'rzpOrderId' => $rzpTransaction->id,
+			'amountRequested' => fromAtomicAmount($rzpTransaction->amount),
+			'amountReceived' => fromAtomicAmount($rzpTransaction->amount_paid),
+			'currency' => $rzpTransaction->currency,
+			'status' => $rzpTransaction->status,
+			'attempts' => $rzpTransaction->attempts,
+		]);
 	}
 }
