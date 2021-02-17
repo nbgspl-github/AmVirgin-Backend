@@ -17,22 +17,22 @@ class VideoResource extends \Illuminate\Http\Resources\Json\JsonResource
 	protected function video ($video) : array
 	{
 		return [
-			'id' => $this->id,
-			'title' => $this->title,
-			'description' => $this->description,
-			'slug' => $this->slug,
-			'type' => $this->type,
-			'duration' => $this->duration,
-			'released' => $this->released,
-			'director' => $this->director,
-			'trailer' => $this->trailer,
-			'rating' => $this->rating,
-			'poster' => $this->poster,
-			'backdrop' => $this->backdrop,
-			'pgRating' => $this->pg_rating,
-			'subscriptionType' => $this->subscription_type,
-			'hasSeasons' => $this->seasons > 0,
-			'price' => $this->price,
+			'id' => $video->id,
+			'title' => $video->title,
+			'description' => $video->description,
+			'slug' => $video->slug,
+			'type' => $video->type,
+			'duration' => $video->duration,
+			'released' => $video->released,
+			'director' => $video->director,
+			'trailer' => $video->trailer,
+			'rating' => $video->rating,
+			'poster' => $video->poster,
+			'backdrop' => $video->backdrop,
+			'pgRating' => $video->pg_rating,
+			'subscriptionType' => $video->subscription_type,
+			'hasSeasons' => $video->seasons > 0,
+			'price' => $video->price,
 		];
 	}
 }
