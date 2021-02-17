@@ -16,6 +16,8 @@ class VideoResource extends \Illuminate\Http\Resources\Json\JsonResource
 
 	protected function video ($video) : array
 	{
+		if (!$video)
+			return [];
 		return [
 			'id' => $video->id,
 			'title' => $video->title,
