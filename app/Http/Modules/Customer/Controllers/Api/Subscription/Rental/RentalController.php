@@ -25,7 +25,7 @@ class RentalController extends \App\Http\Modules\Customer\Controllers\Api\ApiCon
 
 	public function checkout (\App\Models\Video\Video $video) : \Illuminate\Http\JsonResponse
 	{
-		if (!$this->customer()->isRented($video) && $this->customer()->isRentalExpired($video)) {
+		if (!$this->customer()->isRented($video) || $this->customer()->isRentalExpired($video)) {
 			$transaction = $this->createPlaceholderTransaction($video->price);
 			return $this->sendCheckoutResponse($transaction);
 		} else {
@@ -35,7 +35,7 @@ class RentalController extends \App\Http\Modules\Customer\Controllers\Api\ApiCon
 
 	public function submit (SubmitRequest $request, \App\Models\Video\Video $video) : \Illuminate\Http\JsonResponse
 	{
-		if (!$this->customer()->isRented($video) && $this->customer()->isRentalExpired($video)) {
+		if (!$this->customer()->isRented($video) || $this->customer()->isRentalExpired($video)) {
 			$transaction = $this->createTransaction($request);
 			$this->customer()->addRentalVideo($video, $transaction);
 			return $this->sendRentalActivatedResponse();
