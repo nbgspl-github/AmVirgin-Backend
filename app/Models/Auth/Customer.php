@@ -111,11 +111,12 @@ class Customer extends \App\Library\Database\Eloquent\AuthEntity
 	 */
 	public function activeSubscription ()
 	{
-		return $this->subscriptions()->where('valid_until', '>=', now()->format(Time::MYSQL_FORMAT))->first();
+		return $this->subscriptions()->where('valid_until', '>=', now()->format(Time::MYSQL_FORMAT))->where('expired', false)->latest()->first();
 	}
 
 	public function activateSubscription (\App\Models\Subscription $subscription)
 	{
+		$this->subscriptions()->where('expired', false)->where('id', '!=', $subscription->id)->update(['expired' => true]);
 		$plan = $subscription->plan;
 		$subscription->update([
 			'valid_from' => now()->format(Time::MYSQL_FORMAT),

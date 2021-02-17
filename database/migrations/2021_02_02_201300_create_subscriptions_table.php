@@ -20,6 +20,7 @@ class CreateSubscriptionsTable extends Migration
 			$table->unsignedBigInteger('transaction_id');
 			$table->timestamp('valid_from')->nullable();
 			$table->timestamp('valid_until')->nullable();
+			$table->boolean('expired')->default(false);
 			$table->timestamps();
 		});
 	}

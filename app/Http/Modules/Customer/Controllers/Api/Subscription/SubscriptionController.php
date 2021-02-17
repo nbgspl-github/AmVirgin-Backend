@@ -19,12 +19,8 @@ class SubscriptionController extends \App\Http\Modules\Customer\Controllers\Api\
 
 	public function checkout (\App\Models\SubscriptionPlan $plan) : \Illuminate\Http\JsonResponse
 	{
-//		$activeSubscription = $this->customer()->activeSubscription();
-//		if (!$activeSubscription) {
 		$subscription = $this->createPlaceholderSubscription($plan);
 		return $this->sendSubscriptionCheckoutResponse($subscription);
-//		}
-//		return $this->sendSubscriptionActiveResponse();
 	}
 
 	/**
@@ -54,13 +50,6 @@ class SubscriptionController extends \App\Http\Modules\Customer\Controllers\Api\
 			'status' => $rzpTransaction->status,
 			'attempts' => $rzpTransaction->attempts,
 		]);
-	}
-
-	protected function sendSubscriptionActiveResponse () : \Illuminate\Http\JsonResponse
-	{
-		return responseApp()->prepare(
-			null, \Illuminate\Http\Response::HTTP_CONFLICT, 'You already have an active subscription!'
-		);
 	}
 
 	protected function sendSubscriptionCheckoutResponse (\App\Models\Subscription $subscription) : \Illuminate\Http\JsonResponse
