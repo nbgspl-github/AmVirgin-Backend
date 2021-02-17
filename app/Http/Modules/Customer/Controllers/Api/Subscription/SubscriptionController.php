@@ -91,9 +91,15 @@ class SubscriptionController extends \App\Http\Modules\Customer\Controllers\Api\
 	 */
 	protected function sendSubscriptionActivatedResponse (\App\Models\Subscription $subscription) : \Illuminate\Http\JsonResponse
 	{
-		return responseApp()->prepare(
-			[], \Illuminate\Http\Response::HTTP_CREATED, 'Your subscription is active now.'
-		);
+		return responseApp()->prepare([
+			'key' => $subscription->subscription_plan_id,
+			'name' => $subscription->plan->name ?? \App\Library\Utils\Extensions\Str::NotAvailable,
+			'duration' => [
+				'actual' => $subscription->plan->duration,
+				'remaining' => $subscription->valid_from->diffInDays($subscription->valid_until),
+				'expires' => $subscription->valid_until
+			]
+		], \Illuminate\Http\Response::HTTP_CREATED, 'Your subscription is active now.');
 	}
 
 	protected function sendPaymentVerificationFailedResponse () : \Illuminate\Http\JsonResponse
