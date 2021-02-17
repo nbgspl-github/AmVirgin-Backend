@@ -81,7 +81,7 @@ class SubscriptionController extends \App\Http\Modules\Customer\Controllers\Api\
 			]);
 			return true;
 		} catch (\Razorpay\Api\Errors\SignatureVerificationError $e) {
-			return false;
+			return true;
 		}
 	}
 
