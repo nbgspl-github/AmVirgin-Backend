@@ -2,10 +2,7 @@
 
 namespace App\Models\Video;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
-class Rental extends Model
+class Rental extends \App\Library\Database\Eloquent\Model
 {
-	use HasFactory;
+	protected $table = 'rentals';
 }
