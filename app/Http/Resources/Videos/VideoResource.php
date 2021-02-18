@@ -2,17 +2,13 @@
 
 namespace App\Http\Resources\Videos;
 
-use App\Http\Resources\VideoSource\VideoSourceResource;
-use App\Storage\SecuredDisk;
+use App\Library\Utils\Uploads;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
-class VideoResource extends JsonResource{
-	public static function withoutWrapping(){
-		return true;
-	}
-
-	public function toArray($request){
+class VideoResource extends JsonResource
+{
+	public function toArray ($request) : array
+	{
 		return [
 			'slug' => $this->slug,
 			'title' => $this->title,
@@ -21,15 +17,15 @@ class VideoResource extends JsonResource{
 			'released' => $this->released,
 			'cast' => $this->cast,
 			'director' => $this->director,
-			'trailer' => SecuredDisk::existsUrl($this->trailer),
-			'poster' => SecuredDisk::existsUrl($this->getPoster()),
-			'backdrop' => SecuredDisk::existsUrl($this->getBackdrop()),
-			'genre' => $this->genre->getName(),
+			'trailer' => Uploads::existsUrl($this->trailer),
+			'poster' => Uploads::existsUrl($this->poster),
+			'backdrop' => Uploads::existsUrl($this->backdrop),
+			'genre' => $this->genre->name,
 			'rating' => $this->rating,
-			'pgRating' => $this->pgRating,
+			'pgRating' => $this->pg_rating,
 			'type' => $this->type,
-			'subscriptionType' => $this->subscriptionType,
-			'hasSeasons' => boolval($this->hasSeasons),
+			'subscriptionType' => $this->subscription_type,
+			'hasSeasons' => $this->seasons > 0,
 			'price' => $this->price,
 		];
 	}

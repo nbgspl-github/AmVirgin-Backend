@@ -2,9 +2,9 @@
 @section('content')
 	<div class="row">
 		<div class="col-12">
-			<div class="card shadow-sm custom-card">
+			<div class="card shadow-sm">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Edit a slider'])
+					@include('admin.extras.header', ['title'=>'Edit slider'])
 				</div>
 				<div class="card-body">
 					<div class="row">
@@ -13,20 +13,35 @@
 								@csrf
 								<div class="form-group">
 									<label>Title<span class="text-primary">*</span></label>
-									<input type="text" name="title" class="form-control" required placeholder="Type title here" minlength="1" maxlength="100" value="{{old('title',$slide->getTitle())}}"/>
+									<input type="text" name="title" class="form-control" required placeholder="Type title here" minlength="1" maxlength="100" value="{{old('title',$slide->title)}}"/>
 								</div>
 								<div class="form-group">
 									<label>Description<span class="text-primary">*</span></label>
-									<textarea name="description" class="form-control" placeholder="Type description here">{{old('description',$slide->getDescription())}}</textarea>
+									<textarea name="description" class="form-control" placeholder="Type description here">{{old('description',$slide->description)}}</textarea>
 								</div>
 								<div class="form-group">
-									<label>Target<span class="text-primary">*</span></label>
-									<input type="text" name="target" class="form-control" placeholder="Type target url here" value="{{old('target',$slide->getTarget())}}"/>
+									<label>@required(Type)</label>
+									<select name="type" class="form-control" onchange="handleTypeChanged(this.value);">
+										<option value="{{\App\Models\Slider::TargetType['ExternalLink']}}" @if($slide->type==\App\Models\Slider::TargetType['ExternalLink']) selected @endif>External Link</option>
+										<option value="{{\App\Models\Slider::TargetType['VideoKey']}}" @if($slide->type==\App\Models\Slider::TargetType['VideoKey']) selected @endif>Video</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<label>Target link<span class="text-primary">*</span></label>
+									<input type="text" name="targetLink" id="targetLink" class="form-control" placeholder="Type target url here" value="{{old('target')}}" @if($slide->type==\App\Models\Slider::TargetType['VideoKey']) disabled @endif/>
+								</div>
+								<div class="form-group">
+									<label>Choose video<span class="text-primary">*</span></label>
+									<select name="targetKey" id="targetKey" class="form-control" @if($slide->type==\App\Models\Slider::TargetType['ExternalLink']) disabled @endif>
+										@foreach($videos as $video)
+											<option value="{{$video->id}}" @if($video->id==$slide->target) selected @endif>{{$video->title}}</option>
+										@endforeach
+									</select>
 								</div>
 								<div class="form-group">
 									<label>Rating<span class="text-primary">*</span></label>
-									<select name="stars" class="form-control">
-										@if(old('stars',$slide->getStars())==0)
+									<select name="rating" class="form-control">
+										@if(old('rating',$slide->rating)==0)
 											<option value="0" selected>Not rated</option>
 											<option value="1">1</option>
 											<option value="2">2</option>
@@ -34,7 +49,7 @@
 											<option value="4">4</option>
 											<option value="5">5</option>
 										@endif
-										@if(old('stars',$slide->getStars())==1)
+										@if(old('rating',$slide->rating)==1)
 											<option value="0">Not rated</option>
 											<option value="1" selected>1</option>
 											<option value="2">2</option>
@@ -42,7 +57,7 @@
 											<option value="4">4</option>
 											<option value="5">5</option>
 										@endif
-										@if(old('stars',$slide->getStars())==2)
+										@if(old('rating',$slide->rating)==2)
 											<option value="0">Not rated</option>
 											<option value="1">1</option>
 											<option value="2" selected>2</option>
@@ -50,7 +65,7 @@
 											<option value="4">4</option>
 											<option value="5">5</option>
 										@endif
-										@if(old('stars',$slide->getStars())==3)
+										@if(old('rating',$slide->rating)==3)
 											<option value="0">Not rated</option>
 											<option value="1">1</option>
 											<option value="2">2</option>
@@ -58,7 +73,7 @@
 											<option value="4">4</option>
 											<option value="5">5</option>
 										@endif
-										@if(old('stars',$slide->getStars())==4)
+										@if(old('rating',$slide->rating)==4)
 											<option value="0">Not rated</option>
 											<option value="1">1</option>
 											<option value="2">2</option>
@@ -66,7 +81,7 @@
 											<option value="4" selected>4</option>
 											<option value="5">5</option>
 										@endif
-										@if(old('stars',$slide->getStars())==5)
+										@if(old('rating',$slide->rating)==5)
 											<option value="0">Not rated</option>
 											<option value="1">1</option>
 											<option value="2">2</option>
@@ -79,7 +94,7 @@
 								<div class="form-group">
 									<label>Active<span class="text-primary">*</span></label>
 									<select name="active" class="form-control">
-										@if(old('active',$slide->isActive())==true)
+										@if(old('active',$slide->active)==true)
 											<option value="1" selected>Yes</option>
 											<option value="0">No</option>
 										@else
@@ -89,29 +104,8 @@
 									</select>
 								</div>
 								<div class="form-group">
-									<label>Poster<span class="text-primary">*</span></label>
-									<div class="card" style="border: 1px solid #ced4da;">
-										<div class="card-header">
-											<div class="row">
-												<div class="d-none">
-													<input id="pickImage" type="file" name="poster" onclick="this.value=null;" onchange="previewImage(event);" class="form-control" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('poster')}}">
-												</div>
-												<div class="col-6">
-													<h3 class="my-0 header-title">Preview</h3>
-												</div>
-												<div class="col-6">
-													<button type="button" class="btn btn-outline-primary rounded shadow-sm float-right" onclick="openImagePicker();">Choose Image</button>
-												</div>
-											</div>
-										</div>
-										<div class="card-body p-0 rounded">
-											<div class="row">
-												<div class="col-12 text-center">
-													<img id="posterPreview" class="img-fluid" style="max-height: 400px!important;" src="{{Storage::disk('secured')->url($slide->getPoster())}}"/>
-												</div>
-											</div>
-										</div>
-									</div>
+									<label>Banner<span class="text-primary">*</span></label>
+									<input type="file" name="banner" id="banner" data-default-file="{{$slide->banner}}" data-allowed-file-extensions="jpg png jpeg" data-max-file-size="2M" data-show-remove="false">
 								</div>
 								<div class="form-row">
 									<div class="col-6">
@@ -136,19 +130,40 @@
 
 @section('javascript')
 	<script>
-		var lastFile = null;
-		previewImage = (event) => {
-			const reader = new FileReader();
-			reader.onload = function () {
-				const output = document.getElementById('posterPreview');
-				output.src = reader.result;
-			};
-			lastFile = event.target.files[0];
-			reader.readAsDataURL(lastFile);
+		let lastFile = null;
+		let targetTypes = {
+			ExternalLink: '{{\App\Models\Slider::TargetType['ExternalLink']}}',
+			VideoKey: '{{\App\Models\Slider::TargetType['VideoKey']}}'
+		};
+		let elements = {
+			targetKey: null,
+			targetLink: null
 		};
 
-		openImagePicker = () => {
-			$('#pickImage').trigger('click');
-		}
+		$(document).ready(() => {
+			$('#banner').dropify({});
+			elements = {
+				targetKey: $('#targetKey'),
+				targetLink: $('#targetLink'),
+			};
+		});
+
+		handleTypeChanged = (value) => {
+			if (value === targetTypes.ExternalLink) {
+				disable(elements.targetKey);
+				enable(elements.targetLink);
+			} else {
+				enable(elements.targetKey);
+				disable(elements.targetLink);
+			}
+		};
+
+		enable = (e) => {
+			e.prop('disabled', false);
+		};
+
+		disable = (e) => {
+			e.prop('disabled', true);
+		};
 	</script>
 @stop

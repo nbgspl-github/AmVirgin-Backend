@@ -2,11 +2,12 @@
 
 namespace App\Resources\Shop\Customer\HomePage;
 
-use App\Storage\SecuredDisk;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class EntertainmentSliderResource extends JsonResource{
-	public function toArray($request){
+class EntertainmentSliderResource extends JsonResource
+{
+	public function toArray ($request) : array
+	{
 		return [
 			'title' => $this->title,
 			'description' => $this->description,
@@ -15,9 +16,5 @@ class EntertainmentSliderResource extends JsonResource{
 			'target' => $this->target,
 			'rating' => $this->rating,
 		];
-	}
-
-	public static function withoutWrapping(){
-		return true;
 	}
 }

@@ -2,7 +2,6 @@
 
 namespace App\Queries;
 
-use App\Classes\Time;
 use App\Models\Announcement;
 use Illuminate\Support\Carbon;
 

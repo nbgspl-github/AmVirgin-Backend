@@ -7,9 +7,8 @@
  * |----------------------------------------------------------------------------------------------------
  */
 
-use App\Constants\OfferTypes;
-use App\Constants\ProductStatus;
-use App\Interfaces\Tables;
+use App\Library\Enums\Common\Tables;
+use App\Library\Enums\Products\OfferTypes;
 use Illuminate\Validation\Rule;
 
 define('RuleMaxInt', sprintf('max:%d', PHP_INT_MAX));
@@ -34,8 +33,8 @@ return [
 			],
 			'register' => [
 				'name' => ['bail', 'required', 'string', 'min:2', 'max:256'],
-				'email' => ['bail', 'required', 'email'],
-				'mobile' => ['bail', 'required', 'digits:10'],
+				'email' => ['bail', 'required', 'email', 'unique:sellers,email'],
+				'mobile' => ['bail', 'required', 'digits:10', 'unique:sellers,mobile'],
 				'password' => ['bail', 'required', 'string', 'min:4', 'max:64'],
 				'otp' => ['bail', 'required', 'numeric', 'min:1111', 'max:9999'],
 			],
@@ -117,7 +116,7 @@ return [
 				'cityId' => ['bail', 'required', 'numeric', 'exists:cities,id'],
 				'zipCode' => ['bail', 'required', 'min:1', RuleMaxInt],
 				'address' => ['bail', 'required', 'string', 'min:2', 'max:500'],
-				'status' => ['bail', 'nullable', Rule::in([ProductStatus::DifferentStatus, ProductStatus::SomeOtherStatus, ProductStatus::SomeStatus])],
+				'status' => ['bail', 'nullable'],
 				'promoted' => ['bail', 'boolean'],
 				'promotionStart' => ['bail', 'required_with:promoted', 'date'],
 				'promotionEnd' => ['bail', 'required_with:promoted', 'date', 'after:promotionStart'],
@@ -148,7 +147,7 @@ return [
 				'cityId' => ['bail', 'required', 'numeric', 'min:1', RuleMaxInt],
 				'zipCode' => ['bail', 'required', 'min:1', RuleMaxInt],
 				'address' => ['bail', 'required', 'string', 'min:2', 'max:500'],
-				'status' => ['bail', 'nullable', Rule::in([ProductStatus::DifferentStatus, ProductStatus::SomeOtherStatus, ProductStatus::SomeStatus])],
+				'status' => ['bail', 'nullable'],
 				'promoted' => ['bail', 'boolean'],
 				'promotionStart' => ['bail', 'required_with:promoted', 'date'],
 				'promotionEnd' => ['bail', 'required_with:promoted', 'date', 'after:promotionStart'],

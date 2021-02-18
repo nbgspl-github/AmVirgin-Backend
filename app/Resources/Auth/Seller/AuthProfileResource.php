@@ -2,30 +2,31 @@
 
 namespace App\Resources\Auth\Seller;
 
-use App\Storage\SecuredDisk;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AuthProfileResource extends JsonResource {
+class AuthProfileResource extends JsonResource
+{
 	protected ?string $token = null;
 
-	public function toArray ($request) {
+	public function toArray ($request) : array
+	{
 		return [
-			'key' => $this->id(),
-			'name' => $this->name(),
-			'businessName' => $this->businessName(),
-			'description' => $this->description(),
-			'email' => $this->email(),
-			'mobile' => $this->mobile(),
+			'key' => $this->id,
+			'name' => $this->name,
+			'businessName' => $this->businessName,
+			'description' => $this->description,
+			'email' => $this->email,
+			'mobile' => $this->mobile,
 			'country' => new CountryResource($this->country),
 			'state' => new StateResource($this->state),
 			'city' => new CityResource($this->city),
-			'pinCode' => $this->pinCode(),
-			'rating' => $this->rating(),
+			'pinCode' => $this->pinCode,
+			'rating' => $this->rating,
 			'address' => [
-				'firstLine' => $this->addressFirstLine(),
-				'secondLine' => $this->addressSecondLine(),
+				'firstLine' => $this->addressFirstLine,
+				'secondLine' => $this->addressSecondLine,
 			],
-			'avatar' => SecuredDisk::existsUrl($this->avatar()),
+			'avatar' => $this->avatar,
 			'statistics' => [
 				'brands' => [
 					'approved' => 1,
@@ -33,8 +34,8 @@ class AuthProfileResource extends JsonResource {
 					'rejected' => 2,
 				],
 				'products' => [
-					'total' => $this->productsAdded(),
-					'sold' => $this->productsSold(),
+					'total' => $this->productsAdded,
+					'sold' => $this->productsSold,
 				],
 				'sales' => [
 					'total' => mt_rand(400000, 500000),
@@ -48,7 +49,8 @@ class AuthProfileResource extends JsonResource {
 		];
 	}
 
-	public function token (?string $token) {
+	public function token (?string $token) : AuthProfileResource
+	{
 		$this->token = $token;
 		return $this;
 	}

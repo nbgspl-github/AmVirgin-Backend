@@ -1,5 +1,5 @@
 <!-- Left Sidebar Start -->
-<div class="left side-menu" style="box-shadow: 3px 0 10px rgba(0,0,0,0.25)">
+<div class="left side-menu" style="box-shadow: 0 0 5px #858585;">
 	<button type="button" class="button-menu-mobile button-menu-mobile-topbar open-left waves-effect">
 		<i class="ion-close"></i>
 	</button>
@@ -16,68 +16,48 @@
 		<div id="sidebar-menu">
 			<ul>
 				<!--Main Section-->
-				<li class="menu-title text-primary animatableX">Main</li>
-				<li><a href="{{route('admin.home')}}" class="waves-effect animatableX"><i class="mdi mdi-view-dashboard"></i><span> Dashboard </span></a></li>
-				<li><a href="{{route("admin.customers.index")}}" class="waves-effect animatableX"><i class="mdi mdi-account-circle mt-1"></i> <span>Customers</span></a></li>
-				<li><a href="{{route("admin.sellers.index")}}" class="waves-effect animatableX"><i class="mdi mdi-account-circle mt-1"></i> <span>Sellers</span></a></li>
+				<x-sidebar-header title="Main"/>
+				<x-sidebar-item url="{{route('admin.home')}}" icon="ti-dashboard" title="Dashboard"/>
+				<x-sidebar-item url="{{route('admin.customers.index')}}" icon="ti-user" title="Customers"/>
+				<x-sidebar-item url="{{route('admin.sellers.index')}}" icon="ti-user" title="Sellers"/>
+				<x-sidebar-expandable-item icon="ti-archive" title="Miscellaneous">
+					<x-sidebar-item url="{{route('admin.extras.about-us.edit')}}" icon="" title="About Us"/>
+					<x-sidebar-item url="{{route('admin.extras.privacy-policy.edit')}}" icon="" title="Privacy Policy"/>
+					<x-sidebar-item url="{{route('admin.extras.terms-and-conditions.edit')}}" icon="" title="Terms & Conditions"/>
+				</x-sidebar-expandable-item>
+
+				<x-sidebar-header title="Shop"/>
+				<x-sidebar-item url="{{route('admin.orders.index')}}" icon="ti-bag" title="Orders"/>
+				<x-sidebar-expandable-item icon="ti-package" title="Products">
+					<x-sidebar-item url="{{route('admin.products.pending')}}" icon="" title="Pending"/>
+					<x-sidebar-item url="{{route('admin.products.approved')}}" icon="" title="Approved"/>
+					<x-sidebar-item url="{{route('admin.products.rejected')}}" icon="" title="Rejected"/>
+					<x-sidebar-item url="{{route('admin.products.deleted')}}" icon="" title="Deleted"/>
+				</x-sidebar-expandable-item>
+				<x-sidebar-item url="{{route('admin.shop.choices')}}" icon="ti-panel" title="Homepage"/>
+				<x-sidebar-item url="{{route('admin.payments.index')}}" icon="ti-receipt" title="Payments"/>
+				<x-sidebar-item url="{{route('admin.transactions.index')}}" icon="ti-receipt" title="Transactions"/>
 
 				<!--Catalog Section-->
-				<li class="menu-title text-primary animatableX">Catalog</li>
-				<li><a href="{{route('admin.products.attributes.index')}}" class="waves-effect animatableX"><i class="mdi mdi-view-dashboard"></i><span> Attributes </span></a></li>
-				<li><a href="{{route('admin.attributes.sets.create')}}" class="waves-effect animatableX"><i class="mdi mdi-view-dashboard"></i><span> Attribute Sets </span></a></li>
-				<li><a href="{{route('admin.brands.index')}}" class="waves-effect animatableX"><i class="mdi mdi-tag mt-1"></i> <span>Brands </span></a></li>
-				<li><a href="{{route('admin.categories.index')}}" class="waves-effect animatableX"><i class="mdi mdi-view-dashboard"></i><span> Categories </span></a></li>
-				<li><a href="{{route('admin.categories-banner.index')}}" class="waves-effect animatableX"><i class="mdi mdi-cards mt-1"></i> <span> Category Banners </span></a></li>
-				<li><a href="{{route('admin.filters.catalog.index')}}" class="waves-effect animatableX"><i class="mdi mdi-cards mt-1"></i> <span> Filters </span></a></li>
-				<li class="has_sub animatableX">
-					<a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-cube mt-1 animatableX"></i><span> Products </span> <span class="menu-arrow float-right"><i class="mdi mdi-chevron-right"></i></span></a>
-					<ul class="list-unstyled">
-						<li><a href="{{route('admin.products.index')}}">List all</a></li>
-						<li><a href="{{route('admin.products.deleted.index')}}">Deleted by sellers</a></li>
-					</ul>
-				</li>
-				<li class="has_sub animatableX">
-					<a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-cube mt-1 animatableX"></i><span> Shop </span> <span class="menu-arrow float-right"><i class="mdi mdi-chevron-right"></i></span></a>
-					<ul class="list-unstyled">
-						<li><a href="{{route('admin.shop.choices')}}">Homepage</a></li>
-					</ul>
-				</li>
-				<li class="has_sub animatableX">
-					<a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-cube mt-1 animatableX"></i><span> Entertainment </span> <span class="menu-arrow float-right"><i class="mdi mdi-chevron-right"></i></span></a>
-					<ul class="list-unstyled">
-						<li><a href="{{route('admin.shop.choices')}}">Homepage</a></li>
-					</ul>
-				</li>
+				<x-sidebar-header title="Catalog"/>
+				<x-sidebar-expandable-item icon="ti-files" title="Attributes">
+					<x-sidebar-item url="{{route('admin.products.attributes.index')}}" icon="" title="All"/>
+					<x-sidebar-item url="{{route('admin.attributes.sets.index')}}" icon="" title="Sets"/>
+				</x-sidebar-expandable-item>
+				<x-sidebar-item url="{{route('admin.brands.index')}}" icon="ti-medall-alt" title="Brands"/>
+				<x-sidebar-item url="{{route('admin.categories.index')}}" icon="ti-flag-alt-2" title="Categories"/>
 
-				<li class="menu-title text-primary animatableX">Entertainment</li>
 
-				<li>
-					<a href="{{route("admin.sliders.index")}}" class="waves-effect animatableX"><i class="mdi mdi-skip-next-circle mt-1"></i> <span>Sliders</span></a>
-				</li>
+				<x-sidebar-header title="Entertainment"/>
+				<x-sidebar-item url="{{route('admin.genres.index')}}" icon="ti-flag" title="Genres"/>
+				<x-sidebar-item url="{{route('admin.sliders.index')}}" icon="ti-gallery" title="Sliders"/>
+				<x-sidebar-item url="{{route('admin.videos.index')}}" icon="ti-video-clapper" title="Videos"/>
+				<x-sidebar-item url="{{route('admin.tv-series.index')}}" icon="ti-video-clapper" title="Tv Series"/>
+				<x-sidebar-item url="{{route('admin.subscription-plans.index')}}" icon="ti-receipt" title="Plans"/>
 
-				<li>
-					<a href="{{route('admin.videos.index')}}" class="waves-effect animatableX"><i class="mdi mdi-movie"></i><span> Videos </span></a>
-				</li>
-
-				<li>
-					<a href="{{route('admin.tv-series.index')}}" class="waves-effect animatableX"><i class="mdi mdi-movie"></i><span> TV series </span></a>
-				</li>
-
-				<li>
-					<a href="{{route("admin.subscription-plans.index")}}" class="waves-effect animatableX"><i class="mdi mdi-shopping mt-1"></i> <span>Subscription Plans </span></a>
-				</li>
-
-				<li>
-					<a href="{{route("admin.genres.index")}}" class="waves-effect animatableX"><i class="mdi mdi-disk mt-1"></i> <span>Genres </span></a>
-				</li>
-
-				<li>
-					<a href="{{route("admin.notifications.create")}}" class="waves-effect animatableX"><i class="mdi mdi-near-me mt-1"></i> <span>Notifications </span></a>
-				</li>
-
-				<li>
-					<a href="{{route("admin.settings.index")}}" class="waves-effect animatableX"><i class="mdi mdi-settings mt-1"></i> <span>Settings </span></a>
-				</li>
+				<x-sidebar-header title="News"/>
+				<x-sidebar-item url="{{route('admin.news.articles.index')}}" icon="ti-write" title="Articles"/>
+				<x-sidebar-item url="{{route('admin.news.categories.index')}}" icon="ti-flag-alt" title="Categories"/>
 			</ul>
 		</div>
 		<div class="clearfix"></div>

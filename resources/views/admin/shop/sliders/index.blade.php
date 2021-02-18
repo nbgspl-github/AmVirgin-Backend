@@ -2,15 +2,15 @@
 @section('content')
 	<div class="row">
 		<div class="col-12">
-			<div class="card shadow-sm custom-card">
+			<div class="card shadow-sm">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Shop Sliders','action'=>['link'=>route('admin.shop.sliders.create'),'text'=>'Create slider']])
+					@include('admin.extras.header', ['title'=>'Shop Sliders','action'=>['link'=>route('admin.shop.sliders.create'),'text'=>'Add']])
 				</div>
 				<div class="card-body animatable">
-					<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+					<table id="datatable" class="table table-hover dt-responsive pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 						<thead>
 						<tr>
-							<th class="text-center">No.</th>
+							<th class="text-center">#</th>
 							<th class="text-center">Poster</th>
 							<th class="text-center">Title</th>
 							<th class="text-center">Description</th>
@@ -27,17 +27,17 @@
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">
 									@if($slide->banner!=null)
-										<img src="{{\App\Storage\SecuredDisk::access()->url($slide->banner)}}" style="width: 100px; height: 60px" alt="{{$slide->title}}"/>
+										<img src="{{\App\Library\Utils\Uploads::access()->url($slide->banner)}}" style="width: 100px; height: 60px" alt="{{$slide->title}}"/>
 									@else
 										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 90px"></i>
 									@endif
 								</td>
 								<td class="text-center">{{$slide->title}}</td>
-								<td class="text-center">{{__ellipsis($slide->description,50)}}</td>
-								<td class="text-center">{{__rating($slide->rating)}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::ellipsis($slide->description,50)}}</td>
+								<td class="text-center">{{$slide->rating??\App\Library\Utils\Extensions\Str::NotAvailable}}</td>
 								<td class="text-center">
 									<div class="btn-group btn-group-toggle shadow-sm" data-toggle="buttons">
-										@if($slide->isActive()==true)
+										@if($slide->active==true)
 											<label class="btn btn-outline-danger active" @include('admin.extras.tooltip.left', ['title' => 'Set slider active'])>
 												<input type="radio" name="options" id="optionOn_{{$slide->getKey()}}" onchange="toggleStatus('{{$slide->getKey()}}',1);"/> On
 											</label>
@@ -54,7 +54,9 @@
 										@endif
 									</div>
 								</td>
-								<td class="text-center"><a class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig" target="_blank" href="{{$slide->target}}">{{__ellipsis($slide->target)}}</a></td>
+								<td class="text-center">
+									<a class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig" target="_blank" href="{{$slide->target}}">{{\App\Library\Utils\Extensions\Str::ellipsis($slide->target)}}</a>
+								</td>
 								<td class="text-center">
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group mx-auto" role="group">
@@ -110,7 +112,10 @@
 		 */
 		toggleStatus = (id, state) => {
 			axios.put(updateStatusRoute(id),
-				{id: id, active: state})
+				{
+					id: id,
+					active: state
+				})
 				.then(response => {
 					if (response.data.status === 200) {
 						toastr.success(response.data.message);

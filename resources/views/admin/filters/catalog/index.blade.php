@@ -2,7 +2,7 @@
 @section('content')
 	<div class="row">
 		<div class="col-12">
-			<div class="card shadow-sm custom-card">
+			<div class="card shadow-sm">
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Catalog Filters','action'=>['link'=>route('admin.filters.catalog.create'),'text'=>'Create a catalog filter']])
 				</div>
@@ -27,12 +27,12 @@
 							<tr>
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">{{$filter->label()}}</td>
-								<td class="text-center">{{__boolean($filter->builtIn())}}</td>
-								<td class="text-center">{{\App\Classes\Arrays::search($filter->builtInType(),\App\Models\CatalogFilter::BuiltInFilters,'<N/A>')}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::stringifyBoolean($filter->builtIn())}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Arrays::search($filter->builtInType(),\App\Models\CatalogFilter::BuiltInFilters,'<N/A>')}}</td>
 								<td class="text-center">{{!$filter->builtIn()?$filter->attribute->name:'<N/A>'}}</td>
 								<td class="text-center">{{\App\Models\Category::parents($filter->category)}}</td>
-								<td class="text-center">{{__boolean($filter->allowMultiValue())}}</td>
-								<td class="text-center">{{__boolean($filter->active())}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::stringifyBoolean($filter->allowMultiValue())}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::stringifyBoolean($filter->active())}}</td>
 								<td class="text-center">
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group mx-auto" role="group">

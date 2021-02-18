@@ -2,78 +2,87 @@
 
 namespace App\Models;
 
-use App\Classes\Arrays;
-use App\Classes\Eloquent\ModelExtended;
-use App\Classes\Rule;
-use App\Interfaces\Directories;
-use App\Interfaces\Tables;
-use App\Queries\Seller\BankDetailQuery;
 use App\Queries\Seller\BusinessDetailQuery;
-use App\Storage\SecuredDisk;
 use App\Traits\DynamicAttributeNamedMethods;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class SellerBusinessDetail extends ModelExtended{
+class SellerBusinessDetail extends \App\Library\Database\Eloquent\Model
+{
 	use DynamicAttributeNamedMethods;
 
-	protected $fillable = [
-		'sellerId',
-		'name',
-		'nameVerified',
-		'tan',
-		'gstIN',
-		'gstINVerified',
-		'signature',
-		'signatureVerified',
-		'rbaFirstLine',
-		'rbaSecondLine',
-		'rbaPinCode',
-		'rbaCityId',
-		'rbaStateId',
-		'rbaCountryId',
-		'pan',
-		'panVerified',
-		'panProofDocument',
-		'addressProofType',
-		'addressProofDocument',
-	];
+	protected $table = 'seller_business_details';
 	protected $casts = [
-		'signature' => 'uri',
-		'addressProofDocument' => 'uri',
 		'signatureVerified' => 'bool',
 		'gstINVerified' => 'bool',
 		'panVerified' => 'bool',
-		'panProofDocument' => 'uri',
 		'nameVerified' => 'bool',
 	];
 
-	public function setSignatureAttribute($value){
-		$this->attributes['signature'] = SecuredDisk::access()->putFile(Directories::SellerDocuments, $value);
-		return $this->attributes['signature'];
-	}
-	public function setPanProofDocumentAttribute($value){
-		$this->attributes['panProofDocument'] = SecuredDisk::access()->putFile(Directories::SellerDocuments, $value);
-		return $this->attributes['panProofDocument'];
+	public function setSignatureAttribute ($value)
+	{
+		($value instanceof \Illuminate\Http\UploadedFile)
+			? $this->attributes['signature'] = $this->storeMedia('seller-documents', $value)
+			: $this->attributes['signature'] = $value;
 	}
 
-	public function setAddressProofDocumentAttribute($value){
-		$this->attributes['addressProofDocument'] = SecuredDisk::access()->putFile(Directories::SellerDocuments, $value);
-		return $this->attributes['addressProofDocument'];
+	public function getSignatureAttribute () : ?string
+	{
+		return $this->retrieveMedia($this->attributes['signature']);
 	}
-	public function state(): BelongsTo{
+
+	public function setPanProofDocumentAttribute ($value)
+	{
+		($value instanceof \Illuminate\Http\UploadedFile)
+			? $this->attributes['panProofDocument'] = $this->storeMedia('seller-documents', $value)
+			: $this->attributes['panProofDocument'] = $value;
+	}
+
+	public function getPanProofDocumentAttribute () : ?string
+	{
+		return $this->retrieveMedia($this->attributes['panProofDocument']);
+	}
+
+	public function setAddressProofDocumentAttribute ($value)
+	{
+		($value instanceof \Illuminate\Http\UploadedFile)
+			? $this->attributes['addressProofDocument'] = $this->storeMedia('seller-documents', $value)
+			: $this->attributes['addressProofDocument'] = $value;
+	}
+
+	public function getAddressProofDocumentAttribute () : ?string
+	{
+		return $this->retrieveMedia($this->attributes['addressProofDocument']);
+	}
+
+	public function setGstCertificateAttribute ($value)
+	{
+		($value instanceof \Illuminate\Http\UploadedFile)
+			? $this->attributes['gstCertificate'] = $this->storeMedia('seller-documents', $value)
+			: $this->attributes['gstCertificate'] = $value;
+	}
+
+	public function getGstCertificateAttribute ($value) : ?string
+	{
+		return $this->retrieveMedia($this->attributes['gstCertificate']);
+	}
+
+	public function state () : BelongsTo
+	{
 		return $this->belongsTo(State::class, 'rbaStateId');
 	}
 
-	public function city(): BelongsTo{
+	public function city () : BelongsTo
+	{
 		return $this->belongsTo(City::class, 'rbaCityId');
 	}
 
-	public function country(){
+	public function country ()
+	{
 		return Country::where('initials', 'IN')->first();
 	}
 
-	public static function startQuery(): BusinessDetailQuery{
+	public static function startQuery () : BusinessDetailQuery
+	{
 		return BusinessDetailQuery::begin();
 	}
 }

@@ -4,7 +4,7 @@
 	@include('admin.modals.singleActionBox')
 	<div class="row">
 		<div class="col-12">
-			<div class="card shadow-sm custom-card">
+			<div class="card shadow-sm">
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Edit TV series details'])
 				</div>
@@ -179,7 +179,8 @@
 															<input id="pickPoster" type="file" name="poster" onclick="this.value=null;" onchange="previewPoster(event);" class="form-control" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp" value="{{old('poster')}}">
 														</div>
 														<div class="col-6">
-															<h3 class="my-0 header-title">Poster <span class="text-warning">(Max 5MB)</span></h3>
+															<h3 class="my-0 header-title">Poster
+																<span class="text-warning">(Max 5MB)</span></h3>
 														</div>
 														<div class="col-6">
 															<button type="button" class="btn btn-outline-primary rounded shadow-sm float-right" onclick="$('#pickPoster').trigger('click');">Browse</button>
@@ -189,7 +190,7 @@
 												<div class="card-body p-0 rounded">
 													<div class="row">
 														<div class="col-12 text-center">
-															<img id="posterPreview" class="img-fluid" style="max-height: 800px!important; min-height: 800px;" src="{{\App\Storage\SecuredDisk::access()->url($payload->getPoster())}}"/>
+															<img id="posterPreview" class="img-fluid" style="max-height: 800px!important; min-height: 800px;" src="{{\App\Library\Utils\Uploads::access()->url($payload->getPoster())}}"/>
 														</div>
 													</div>
 												</div>

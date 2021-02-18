@@ -2,7 +2,7 @@
 
 namespace App\Resources\Products\Customer;
 
-use App\Storage\SecuredDisk;
+use App\Library\Utils\Uploads;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SellerResource extends JsonResource{
@@ -11,7 +11,7 @@ class SellerResource extends JsonResource{
 			'name' => $this->businessName(),
 			'description' => $this->description(),
 			'rating' => $this->rating(),
-			'avatar' => SecuredDisk::existsUrl($this->avatar()),
+			'avatar' => Uploads::existsUrl($this->avatar()),
 		];
 	}
 }

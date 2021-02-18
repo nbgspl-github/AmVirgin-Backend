@@ -18,7 +18,7 @@ class CreateCustomersTable extends Migration{
 			$table->string('mobile')->unique()->nullable();
 			$table->timestamp('email_verified_at')->nullable();
 			$table->string('password');
-			$table->string('avatar', \App\Constants\Constants::MaxFilePathLength);
+			$table->string('avatar', \App\Library\Enums\Common\Constants::MaxFilePathLength);
 			$table->boolean('active')->default(true);
 			$table->integer('otp')->nullable();
 			$table->rememberToken();

@@ -2,9 +2,7 @@
 
 namespace App\Resources\Orders\Seller;
 
-use App\Models\Product;
-use App\Resources\Products\Seller\CatalogListOptionResource;
-use App\Storage\SecuredDisk;
+use App\Library\Utils\Uploads;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderProductResource extends JsonResource{
@@ -21,7 +19,7 @@ class OrderProductResource extends JsonResource{
 			'idealFor' => $this->idealFor(),
 			'originalPrice' => $this->originalPrice(),
 			'sellingPrice' => $this->sellingPrice(),
-			'image' => SecuredDisk::existsUrl($this->primaryImage()),
+			'image' => Uploads::existsUrl($this->primaryImage()),
 		];
 	}
 }

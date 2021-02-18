@@ -2,7 +2,7 @@
 @section('content')
 	<div class="row">
 		<div class="col-12">
-			<div class="card shadow-sm custom-card">
+			<div class="card shadow-sm">
 				<div class="card-header py-0">
 					@include('admin.extras.header',['title'=>'Edit genre details'])
 				</div>
@@ -21,40 +21,17 @@
 								</div>
 								<div class="form-group">
 									<label>Poster</label>
-									<div class="card m-b-30" style="border: 1px solid #ced4da">
-										<div class="card-header">
-											<div class="row">
-												<div class="d-none">
-													<input id="pickImage" type="file" name="poster" onclick="this.value=null;" onchange="previewImage(event);" class="form-control" accept=".jpg, .png, .jpeg, .bmp" value="{{old('poster',$genre->getPoster())}}">
-												</div>
-												<div class="col-md-6"><h3 class="my-0 header-title">Preview</h3></div>
-												<div class="col-md-6">
-													<button type="button" class="btn btn-outline-primary rounded shadow-sm float-right" onclick="openImagePicker();">Choose Image</button>
-												</div>
-											</div>
-										</div>
-										<div class="card-body p-0 rounded">
-											<div class="row">
-												<div class="col-12 text-center">
-													@if(old('poster',$genre->getPoster())!=null)
-														<img class="rounded img-fluid" id="posterPreview" src="{{route('images.genre.poster',$genre->getKey())}}" height="399px" alt="">
-													@else
-														<img class="rounded img-fluid" id="posterPreview" src="" height="399px" alt="No poster available">
-													@endif
-												</div>
-											</div>
-										</div>
-									</div>
+									<input type="file" name="poster" id="poster" data-default-file="{{$genre->poster}}" data-allowed-file-extensions="jpg png jpeg" data-max-file-size="2M" data-show-remove="false">
 								</div>
 								<div class="form-group">
 									<label>Status</label>
-									@if ($genre->getStatus()==1)
-										<select class="form-control" name="status">
+									@if ($genre->active==1)
+										<select class="form-control" name="active">
 											<option value="1" selected>Active</option>
 											<option value="0">Inactive</option>
 										</select>
 									@else
-										<select class="form-control" name="status">
+										<select class="form-control" name="active">
 											<option value="1">Active</option>
 											<option value="0" selected>Inactive</option>
 										</select>
@@ -85,24 +62,8 @@
 
 @section('javascript')
 	<script>
-		let lastFile = null;
-		previewImage = (event) => {
-			document.getElementById('pickImage').files[0] = null;
-			const reader = new FileReader();
-			reader.onload = function () {
-				const output = document.getElementById('posterPreview');
-				output.src = reader.result;
-			};
-			lastFile = event.target.files[0];
-			reader.readAsDataURL(lastFile);
-		};
-
-		switchActive = () => {
-
-		};
-
-		openImagePicker = () => {
-			$('#pickImage').trigger('click');
-		}
+		$(document).ready(() => {
+			$('#poster').dropify({});
+		});
 	</script>
 @stop

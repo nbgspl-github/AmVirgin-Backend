@@ -2,90 +2,87 @@
 
 namespace App\Models;
 
-use App\Classes\Arrays;
-use App\Classes\Str;
+use App\Library\Enums\Categories\Types;
+use App\Library\Utils\Extensions\Arrays;
+use App\Library\Utils\Extensions\Str;
 use App\Queries\CategoryQuery;
-use App\Traits\FluentConstructor;
-use App\Traits\GenerateUrls;
-use App\Traits\DynamicAttributeNamedMethods;
-use App\Traits\HasSpecialAttributes;
-use App\Traits\QueryProvider;
-use App\Traits\RetrieveResource;
-use App\Traits\GenerateSlugs;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
-use Spatie\Sluggable\SlugOptions;
-use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 /**
  * Category defines a logical grouping of products which share similar traits.
  * @package App\Models
  */
-class Category extends Model{
-	use RetrieveResource, FluentConstructor, HasSpecialAttributes, DynamicAttributeNamedMethods, GenerateSlugs, QueryProvider;
+class Category extends \App\Library\Database\Eloquent\Model
+{
+	use \App\Traits\HasSpecialAttributes;
+	use \App\Traits\DynamicAttributeNamedMethods;
+	use \BenSampo\Enum\Traits\CastsEnums;
+
 	protected $table = 'categories';
-	protected $fillable = ['name', 'parentId', 'description', 'type', 'order', 'icon', 'listingStatus', 'specials',];
-	protected $casts = ['specials' => 'array', 'order' => 'int'];
-	protected $hidden = ['created_at', 'updated_at'];
-	public const Types = [
-		'Root' => 'root',
-		'Category' => 'category',
-		'SubCategory' => 'sub-category',
-		'Vertical' => 'vertical',
+	protected $casts = [
+		'specials' => 'array',
+		'type' => Types::class
 	];
-	public const ListingStatus = [
-		'Active' => 'active',
-		'Inactive' => 'in-active',
-	];
+	const LISTING_ACTIVE = 'active';
+	const LISTING_INACTIVE = 'inactive';
+	const ROUTE_TRENDING_DEALS = 'trending';
 
-	public function attributes(): HasMany{
-		return $this->hasMany('App\Models\Attribute', 'categoryId');
+	public function attributes () : \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	{
+		return $this->belongsToMany(Attribute::class, AttributeSet::tableName());
 	}
 
-	public function attributeSet(): HasOne{
-		return $this->hasOne(AttributeSet::class, 'categoryId');
+	public function attributeSet () : \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	{
+		return $this->belongsToMany(Attribute::class, AttributeSet::tableName());
 	}
 
-	public function children(): HasMany{
-		return $this->hasMany(Category::class, 'parentId');
+	public function children () : HasMany
+	{
+		return $this->hasMany(Category::class, 'parent_id');
 	}
 
-	public function parent(): BelongsTo{
-		return $this->belongsTo(Category::class, 'parentId');
+	public function parent () : BelongsTo
+	{
+		return $this->belongsTo(Category::class, 'parent_id');
 	}
 
-	public function brandInFocus(?bool $yes = null): bool{
+	public function brandInFocus (?bool $yes = null) : bool
+	{
 		if (!is_null($yes)) {
 			$this->setSpecialAttribute('brandInFocus', $yes);
 		}
 		return $this->getSpecialAttribute('brandInFocus', false);
 	}
 
-	public function popularCategory(?bool $yes = null): bool{
+	public function popularCategory (?bool $yes = null) : bool
+	{
 		if (!is_null($yes)) {
 			$this->setSpecialAttribute('popularCategory', $yes);
 		}
 		return $this->getSpecialAttribute('popularCategory', false);
 	}
 
-	public function trendingNow(?bool $yes = null): bool{
+	public function trendingNow (?bool $yes = null) : bool
+	{
 		if (!is_null($yes)) {
 			$this->setSpecialAttribute('trendingNow', $yes);
 		}
 		return $this->getSpecialAttribute('trendingNow', false);
 	}
 
-	public static function startQuery(): CategoryQuery{
+	public static function startQuery () : CategoryQuery
+	{
 		return CategoryQuery::begin();
 	}
 
-	public static function parents(Category $category): ?string{
+	public static function parents (Category $category) : ?string
+	{
 		$parents = Arrays::Empty;
 		$parent = $category;
-		while (($parent = $parent->parent()->where('type', '!=', Category::Types['Root'])->first()) != null) {
+		while (($parent = $parent->parent()->where('type', '!=', Types::Root)->first()) != null) {
 			$parents[] = $parent->name;
 		}
 		$parents[] = 'Main';
@@ -94,7 +91,8 @@ class Category extends Model{
 		return $parents;
 	}
 
-	public function descendants(bool $includeSelf = false): Collection{
+	public function descendants (bool $includeSelf = false) : Collection
+	{
 		$descendants = new Collection();
 		if ($includeSelf)
 			$descendants->push($this);
@@ -106,11 +104,23 @@ class Category extends Model{
 		return $descendants;
 	}
 
-	public function getSlugOptions(): SlugOptions{
-		return SlugOptions::create()->saveSlugsTo('slug')->generateSlugsFrom('name');
+	public function setCatalogAttribute ($value) : void
+	{
+		$this->attributes['catalog'] = $this->storeWhenUploadedCorrectly('categories/catalogs', $value);
 	}
 
-	public function getParentKeyName(){
-		return 'parentId';
+	public function getCatalogAttribute ($value) : ?string
+	{
+		return $this->retrieveMedia('catalog');
+	}
+
+	public function setIconAttribute ($value) : void
+	{
+		$this->attributes['icon'] = $this->storeWhenUploadedCorrectly('categories/icons', $value);
+	}
+
+	public function getIconAttribute ($value) : ?string
+	{
+		return $this->retrieveMedia($value);
 	}
 }

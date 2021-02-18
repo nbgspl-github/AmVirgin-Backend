@@ -1,14 +1,11 @@
 <?php
 
 namespace App\Models;
-use App\Traits\FluentConstructor;
-use App\Traits\RetrieveCollection;
-use App\Traits\RetrieveResource;
-use Illuminate\Database\Eloquent\Model;
+
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-
-class ProductCart extends Model {
+class ProductCart extends \App\Library\Database\Eloquent\Model
+{
 
 	protected $table = 'cart';
 
@@ -30,9 +27,10 @@ class ProductCart extends Model {
 	/**
 	 * @return HasMany
 	 */
-	public function images() {
-		return $this->hasMany('\App\Models\ProductImage', 'productId');
+	public function images ()
+	{
+		return $this->hasMany(ProductImage::class, 'productId');
 	}
 
-	
+
 }

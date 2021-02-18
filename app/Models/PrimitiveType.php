@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use App\Traits\DynamicAttributeNamedMethods;
-use Illuminate\Database\Eloquent\Model;
 
-class PrimitiveType extends Model{
+class PrimitiveType extends \App\Library\Database\Eloquent\Model
+{
 	use DynamicAttributeNamedMethods;
+
 	protected $table = 'primitive-types';
 	protected $primaryKey = 'typeCode';
 	protected $fillable = ['typeCode', 'primitiveType', 'usableFunction', 'measurable'];

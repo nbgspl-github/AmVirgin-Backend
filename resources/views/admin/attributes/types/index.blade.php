@@ -2,7 +2,7 @@
 @section('content')
 	<div class="row">
 		<div class="col-12">
-			<div class="card shadow-sm custom-card">
+			<div class="card shadow-sm">
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Attribute Types','action'=>['link'=>route('admin.products.attributes.types.create'),'text'=>'Create a attribute type']])
 				</div>
@@ -30,9 +30,9 @@
 								<td class="text-center">{{$attributeType->name()}}</td>
 								<td class="text-center">{{$attributeType->description()}}</td>
 								<td class="text-center">{{$attributeType->primitiveType->name()}}</td>
-								<td class="text-center">{{__boolean($attributeType->multiValue())}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::stringifyBoolean($attributeType->multiValue())}}</td>
 								<td class="text-center">{{$attributeType->maxValues()}}</td>
-								<td class="text-center">{{__boolean($attributeType->bounded())}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::stringifyBoolean($attributeType->bounded())}}</td>
 								<td class="text-center">{{intval($attributeType->minimum())}}</td>
 								<td class="text-center">{{intval($attributeType->maximum())}}</td>
 								<td class="text-center">

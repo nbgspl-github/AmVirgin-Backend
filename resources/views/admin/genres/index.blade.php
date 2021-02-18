@@ -2,60 +2,58 @@
 @section('content')
 	<div class="row">
 		<div class="col-12">
-			<div class="card shadow-sm custom-card">
+			<div class="card shadow-sm">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Genres','action'=>['link'=>route('admin.genres.create'),'text'=>'Add Genre']])
+					@include('admin.extras.header', ['title'=>'Genres','action'=>['link'=>route('admin.genres.create'),'text'=>'Add']])
 				</div>
 				<div class="card-body animatable">
-					<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 						<thead>
 						<tr>
-							<th class="text-center">No.</th>
-							<th class="text-center">Poster</th>
-							<th class="text-center">Name</th>
-							<th class="text-center">Description</th>
-							<th class="text-center">Active</th>
-							<th class="text-center">Action(s)</th>
+							<th>#</th>
+							<th>Poster</th>
+							<th>Name</th>
+							<th>Active</th>
+							<th>Action(s)</th>
 						</tr>
 						</thead>
 
 						<tbody>
 						@foreach($genres as $genre)
 							<tr id="genre_row_{{$genre->getKey()}}">
-								<td class="text-center">{{$loop->index+1}}</td>
-								<td class="text-center">
-									@if($genre->getPoster()!=null)
-										<img src="{{route('images.genre.poster',$genre->getKey())}}" style="width: 100px; height: 100px" alt="{{$genre->getName()}}" @include('admin.extras.tooltip.right', ['title' => $genre->getName()])/>
+								<td>{{$loop->index+1}}</td>
+								<td>
+									@if($genre->poster!=null)
+										<img src="{{$genre->poster}}" style="max-height: 100px" alt="{{$genre->name}}" class="img-thumbnail" @include('admin.extras.tooltip.right', ['title' => $genre->name])/>
 									@else
 										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 25px"></i>
 									@endif
 								</td>
-								<td class="text-center">{{$genre->getName()}}</td>
-								<td class="text-center">{{$genre->getDescription()}}</td>
-								<td class="text-center">
+								<td>{{$genre->name}}</td>
+								<td>
 									<div class="btn-group btn-group-toggle shadow-sm" data-toggle="buttons">
-										@if($genre->getStatus()==true)
+										@if($genre->active==true)
 											<label class="btn btn-outline-danger active" @include('admin.extras.tooltip.left', ['title' => 'Set genre active'])>
-												<input type="radio" name="options" id="optionOn_{{$genre->getKey()}}" onchange="toggleStatus('{{$genre->getKey()}}',1);"/> On
+												<input type="radio" name="options" id="optionOn_{{$genre->getKey()}}" onchange="_status('{{$genre->getKey()}}',1);"/> On
 											</label>
 											<label class="btn btn-outline-primary" @include('admin.extras.tooltip.right', ['title' => 'Set genre inactive'])>
-												<input type="radio" name="options" id="optionOff_{{$genre->getKey()}}" onchange="toggleStatus('{{$genre->getKey()}}',0);"/> Off
+												<input type="radio" name="options" id="optionOff_{{$genre->getKey()}}" onchange="_status('{{$genre->getKey()}}',0);"/> Off
 											</label>
 										@else
 											<label class="btn btn-outline-danger" @include('admin.extras.tooltip.left', ['title' => 'Set genre active'])>
-												<input type="radio" name="options" id="optionOn_{{$genre->getKey()}}" onchange="toggleStatus('{{$genre->getKey()}}',1);"/> On
+												<input type="radio" name="options" id="optionOn_{{$genre->getKey()}}" onchange="_status('{{$genre->getKey()}}',1);"/> On
 											</label>
 											<label class="btn btn-outline-primary active" @include('admin.extras.tooltip.right', ['title' => 'Set genre inactive'])>
-												<input type="radio" name="options" id="optionOff_{{$genre->getKey()}}" onchange="toggleStatus('{{$genre->getKey()}}',0);"/> Off
+												<input type="radio" name="options" id="optionOff_{{$genre->getKey()}}" onchange="_status('{{$genre->getKey()}}',0);"/> Off
 											</label>
 										@endif
 									</div>
 								</td>
-								<td class="text-center">
+								<td>
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group mx-auto" role="group">
 											<a class="btn btn-outline-danger" href="{{route('admin.genres.edit',$genre->getKey())}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
-											<a class="btn btn-outline-primary" href="javascript:void(0);" onclick="deleteGenre('{{$genre->getKey()}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>
+											<a class="btn btn-outline-primary" href="javascript:_delete('{{$genre->getKey()}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i class="mdi mdi-delete"></i></a>
 										</div>
 									</div>
 								</td>
@@ -81,70 +79,35 @@
 			});
 		});
 
-		/**
-		 * Returns route for Genre/Update/Status route.
-		 * @param id
-		 * @returns {string}
-		 */
-		updateStatusRoute = (id) => {
-			return 'genres/' + id + '/status';
-		};
-
-		/**
-		 * Returns route for Genre/Delete route.
-		 * @param id
-		 * @returns {string}
-		 */
-		deleteGenreRoute = (id) => {
-			return 'genres/' + id;
-		};
-
-		/**
-		 * Callback for active status changes.
-		 * @param id
-		 * @param state
-		 */
-		toggleStatus = (id, state) => {
-			axios.put(updateStatusRoute(id),
-				{id: id, status: state})
+		_status = (key, state) => {
+			axios.put(`/admin/genres/${key}/status`, {active: state})
 				.then(response => {
-					if (response.status === 200) {
-						toastr.success(response.data.message);
-					} else {
-						toastr.error(response.data.message);
-					}
+					alertify.alert(response.data.message, () => {
+						location.reload();
+					});
 				})
-				.catch(reason => {
-					console.log(reason);
-					toastr.error('Failed to update status.');
+				.catch(e => {
+					alertify.confirm('Something went wrong. Retry?', yes => {
+						_status(key);
+					});
 				});
-		};
+		}
 
-		/**
-		 * Callback for delete genre trigger.
-		 * @param genreId
-		 */
-		deleteGenre = (genreId) => {
-			window.genreId = genreId;
-			alertify.confirm("Are you sure you want to delete this genre? ",
-				(ev) => {
-					ev.preventDefault();
-					axios.delete(deleteGenreRoute(genreId))
+		_delete = (key) => {
+			alertify.confirm("This action is irreversible. Proceed?",
+				(yes) => {
+					axios.delete(`/admin/genres/${key}}`)
 						.then(response => {
-							if (response.data.code === 200) {
-								$('#genre_row_' + genreId).remove();
-								toastr.success(response.data.message);
-							} else {
-								toastr.error(response.data.message);
-							}
-						})
-						.catch(error => {
-							toastr.error('Something went wrong. Please try again in a while.');
+							alertify.alert(response.data.message, () => {
+								location.reload();
+							});
+						}).catch(e => {
+						alertify.confirm('Something went wrong. Retry?', yes => {
+							_delete(key);
 						});
-				},
-				(ev) => {
-					ev.preventDefault();
-				});
+					});
+				}
+			);
 		}
 	</script>
 @stop

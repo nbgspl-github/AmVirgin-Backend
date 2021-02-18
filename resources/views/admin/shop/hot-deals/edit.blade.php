@@ -3,7 +3,7 @@
 	@include('admin.modals.productDetails')
 	<div class="row">
 		<div class="col-12">
-			<div class="card shadow-sm custom-card">
+			<div class="card shadow-sm">
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Modify Hot Deals Section'])
 				</div>
@@ -16,7 +16,9 @@
 									<div class="card-header">
 										<div class="row">
 											<div class="col-8 my-auto">Choose upto 50 products</div>
-											<div class="col-4"><input type="text" class="form-control" name="" id="" placeholder="Search for a product" onkeyup="handleSearch(this.value);"></div>
+											<div class="col-4">
+												<input type="text" class="form-control" name="" id="" placeholder="Search for a product" onkeyup="handleSearch(this.value);">
+											</div>
 										</div>
 									</div>
 									<div class="card-body pb-2">
@@ -90,17 +92,20 @@
 		};
 
 		handleViewDetails = (key) => {
-			alertify.error('Loading product details. Please wait!');
-			axios.get('hot-deals/' + key).then((response) => {
-				if (response.data.status === 200) {
-					const data = response.data.data;
-					setupModal(data);
-				} else {
-					alertify.alert(response.data.message);
-				}
-			}).catch((error) => {
-				alertify.alert('Something went wrong. Please try again later.');
-			});
+			setLoading(true, () => {
+				axios.get('hot-deals/' + key).then((response) => {
+					if (response.data.status === 200) {
+						const data = response.data.data;
+						setLoading(false);
+						setupModal(data);
+					} else {
+						alertify.alert(response.data.message);
+					}
+				}).catch((error) => {
+					setLoading(false);
+					alertify.alert('Something went wrong. Please try again later.');
+				});
+			})
 		};
 
 		setupModal = (data) => {

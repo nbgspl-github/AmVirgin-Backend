@@ -4,9 +4,9 @@ namespace App\Models;
 
 use App\Queries\AnnouncementQuery;
 use App\Traits\DynamicAttributeNamedMethods;
-use Illuminate\Database\Eloquent\Model;
 
-class Announcement extends Model{
+class Announcement extends \App\Library\Database\Eloquent\Model
+{
 	use DynamicAttributeNamedMethods;
 
 	protected $attributes = [
@@ -29,7 +29,8 @@ class Announcement extends Model{
 		'deletedBy' => 'array',
 	];
 
-	public static function startQuery(): AnnouncementQuery{
+	public static function startQuery () : AnnouncementQuery
+	{
 		return AnnouncementQuery::begin();
 	}
 }

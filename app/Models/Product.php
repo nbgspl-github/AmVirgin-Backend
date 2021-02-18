@@ -2,87 +2,25 @@
 
 namespace App\Models;
 
-use App\Contracts\DisplayableModel;
 use App\Models\Auth\Seller;
 use App\Queries\ProductQuery;
-use App\Traits\FluentConstructor;
 use App\Traits\DynamicAttributeNamedMethods;
+use App\Traits\GenerateSlugs;
 use App\Traits\HasInventoryStocks;
 use App\Traits\HasSpecialAttributes;
-use App\Traits\QueryProvider;
-use App\Traits\RetrieveCollection;
-use App\Traits\RetrieveResource;
-use App\Traits\GenerateSlugs;
 use BinaryCats\Sku\HasSku;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Sluggable\SlugOptions;
 
 /**
  * Product is an entity that can be sold, purchased, created, updated and deleted.
  * @package App\Models
  */
-class Product extends Model{
-	use FluentConstructor, RetrieveResource, RetrieveCollection, DynamicAttributeNamedMethods, HasSpecialAttributes, GenerateSlugs, SoftDeletes, HasSku, QueryProvider, HasInventoryStocks;
+class Product extends \App\Library\Database\Eloquent\Model
+{
+	use DynamicAttributeNamedMethods, HasSpecialAttributes, GenerateSlugs, HasSku, HasInventoryStocks;
+	use \Illuminate\Database\Eloquent\SoftDeletes;
 
-	protected $table = 'products';
-	protected $fillable = [
-		'name',
-		'slug',
-		'categoryId',
-		'sellerId',
-		'brandId',
-		'listingStatus',
-		'type',
-		'originalPrice',
-		'sellingPrice',
-		'fulfillmentBy',
-		'group',
-		'hsn',
-		'currency',
-		'taxRate',
-		'promoted',
-		'promotionStart',
-		'promotionEnd',
-		'rating',
-		'stock',
-		'draft',
-		'parentId',
-		'description',
-		'sku',
-		'styleCode',
-		'trailer',
-		'procurementSla',
-		'localShippingCost',
-		'zonalShippingCost',
-		'internationalShippingCost',
-		'packageWeight',
-		'packageLength',
-		'packageBreadth',
-		'packageHeight',
-		'domesticWarranty',
-		'internationalWarranty',
-		'warrantySummary',
-		'warrantyServiceType',
-		'coveredInWarranty',
-		'notCoveredInWarranty',
-		'maxQuantityPerOrder',
-		'lowStockThreshold',
-		'discount',
-		'primaryImage',
-		'specials',
-		'idealFor',
-	];
-	protected $hidden = [
-		'id',
-		'deletedAt',
-		'createdAt',
-		'updatedAt',
-		'sellerId',
-	];
 	protected $casts = [
 		'draft' => 'bool',
 	];
@@ -154,56 +92,87 @@ class Product extends Model{
 		'Boys' => 'boys',
 		'Girls' => 'girls',
 	];
-	public const PaymentMode = [
-		'PayTM' => 'pay-tm',
-		'UPI' => 'upi',
-		'COD' => 'cash-on-delivery',
-		'NetBanking' => 'net-banking',
-		'CreditCard' => 'credit-card',
-		'DebitCard' => 'debit-card',
-		'PayPal' => 'pay-pal',
-	];
 
-	public function attributes(): HasMany{
+	public function shippingCost () : float
+	{
+		return 3.3;
+	}
+
+	public function attributes () : HasMany
+	{
 		return $this->hasMany(ProductAttribute::class, 'productId');
 	}
 
-	public function options(): HasMany{
+	public function originalAttributes () : \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	{
+		return $this->belongsToMany(Attribute::class, ProductAttribute::tableName(), 'productId', 'attributeId');
+	}
+
+	public function options () : HasMany
+	{
 		return $this->hasMany(ProductAttribute::class, 'productId')->where('variantAttribute', true);
 	}
 
-	public function specs(): HasMany{
+	public function specs () : HasMany
+	{
 		return $this->hasMany(ProductAttribute::class, 'productId')->where('variantAttribute', false);
 	}
 
-	public function brand(): BelongsTo{
+	public function brand () : BelongsTo
+	{
 		return $this->belongsTo(Brand::class, 'brandId');
 	}
 
-	public function category(): BelongsTo{
+	public function category () : BelongsTo
+	{
 		return $this->belongsTo(Category::class, 'categoryId');
 	}
 
-	public function images(): HasMany{
+	public function images () : HasMany
+	{
 		return $this->hasMany(ProductImage::class, 'productId');
 	}
 
-	public function seller(): BelongsTo{
+	public function seller () : BelongsTo
+	{
 		return $this->belongsTo(Seller::class, 'sellerId');
 	}
 
-	public function variants(): HasMany{
-		return $this->hasMany(self::class, 'group', 'group')->where('id', '!=', $this->id());
+	public function variants () : HasMany
+	{
+		return $this->hasMany(self::class, 'group', 'group')->where('id', '!=', $this->id);
 	}
 
-	public function hotDeal(?bool $yes = null): bool{
+	public function ratings () : HasMany
+	{
+		return $this->hasMany(ProductRating::class, 'product_id');
+	}
+
+	public function ratingsBy (\App\Models\Auth\Customer $customer) : HasMany
+	{
+		return $this->ratings()->where('customer_id', $customer->id);
+	}
+
+	public function addRatingBy (\App\Models\Auth\Customer $customer, array $attributes) : \Illuminate\Database\Eloquent\Model
+	{
+		return $this->ratings()->create(array_merge(['customer_id' => $customer->id], $attributes));
+	}
+
+	public function similar () : \Illuminate\Database\Eloquent\Builder
+	{
+		return self::query()->where('id', '!=', $this->id)->where('categoryId', $this->categoryId)->limit(15);
+	}
+
+	public function hotDeal (?bool $yes = null) : bool
+	{
 		if (!is_null($yes)) {
 			$this->setSpecialAttribute('hotDeal', $yes);
 		}
 		return $this->getSpecialAttribute('hotDeal', false);
 	}
 
-	public static function startQuery(): ProductQuery{
+	public static function startQuery () : ProductQuery
+	{
 		return ProductQuery::begin();
 	}
 }

@@ -2,33 +2,26 @@
 
 namespace App\Models;
 
-use App\Classes\Str;
 use App\Traits\DynamicAttributeNamedMethods;
-use App\Traits\RetrieveCollection;
-use App\Traits\RetrieveResource;
-use Illuminate\Database\Eloquent\Model;
-use App\Storage\SecuredDisk;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Refers to one or more images associated with a product.
  * @package App\Models
  */
-class ProductImage extends Model{
-	use RetrieveResource, RetrieveCollection, DynamicAttributeNamedMethods;
-	protected $table = 'product-images';
-	protected $fillable = [
-		'productId',
-		'path',
-	];
-	protected $hidden = [
-		'id',
-		'productId',
-		'created_at',
-		'updated_at',
-	];
+class ProductImage extends \App\Library\Database\Eloquent\Model
+{
+	use DynamicAttributeNamedMethods;
 
-	public function product(): BelongsTo{
+	protected $table = 'product-images';
+
+	public function getPathAttribute ($value) : ?string
+	{
+		return $this->retrieveMedia($value);
+	}
+
+	public function product () : BelongsTo
+	{
 		return $this->belongsTo(Product::class, 'productId');
 	}
 }

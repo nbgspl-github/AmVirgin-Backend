@@ -3,40 +3,18 @@
 namespace App\Models;
 
 use App\Queries\AttributeQuery;
-use App\Traits\FluentConstructor;
 use App\Traits\DynamicAttributeNamedMethods;
-use App\Traits\QueryProvider;
-use App\Traits\RetrieveResource;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * Attribute refers to a particular trait of a product such as size, color etc.
  * @package App\Models
  */
-class Attribute extends Model{
-	use FluentConstructor, RetrieveResource, DynamicAttributeNamedMethods, QueryProvider;
+class Attribute extends \App\Library\Database\Eloquent\Model
+{
+	use DynamicAttributeNamedMethods;
+	use \Illuminate\Database\Eloquent\SoftDeletes;
+
 	protected $table = 'attributes';
-	protected $fillable = [
-		'name',
-		'description',
-		'code',
-		'required',
-		'useToCreateVariants',
-		'showInCatalogListing',
-		'useInLayeredNavigation',
-		'combineMultipleValues',
-		'visibleToCustomers',
-		'predefined',
-		'multiValue',
-		'minValues',
-		'maxValues',
-		'interface',
-		'values',
-	];
-	protected $hidden = [
-		'created_at',
-		'updated_at',
-	];
 	protected $casts = [
 		'required' => 'boolean',
 		'predefined' => 'boolean',
@@ -55,7 +33,8 @@ class Attribute extends Model{
 		'Image' => 'image',
 	];
 
-	public static function startQuery(): AttributeQuery{
+	public static function startQuery () : AttributeQuery
+	{
 		return AttributeQuery::begin();
 	}
 }

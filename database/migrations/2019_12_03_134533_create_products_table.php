@@ -1,15 +1,16 @@
 <?php
 
-use App\Classes\Arrays;
-use App\Constants\Constants;
-use App\Interfaces\Tables;
+use App\Library\Enums\Common\Constants;
+use App\Library\Enums\Common\Tables;
+use App\Library\Utils\Extensions\Arrays;
 use App\Models\Product;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Sujip\Guid\Facades\Guid;
 
-class CreateProductsTable extends Migration{
+class CreateProductsTable extends Migration
+{
 	/**
 	 * Run the migrations.
 	 * @return void

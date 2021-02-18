@@ -2,7 +2,7 @@
 
 namespace App\Resources\Brands\Seller;
 
-use App\Storage\SecuredDisk;
+use App\Library\Utils\Uploads;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OwnedBrandResource extends JsonResource{
@@ -10,7 +10,7 @@ class OwnedBrandResource extends JsonResource{
 		return [
 			'key' => $this->id(),
 			'name' => $this->name(),
-			'logo' => SecuredDisk::existsUrl($this->logo()),
+			'logo' => Uploads::existsUrl($this->logo()),
 			'status' => $this->status(),
 		];
 	}

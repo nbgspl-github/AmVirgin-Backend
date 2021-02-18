@@ -1,6 +1,6 @@
 <?php
 
-use App\Classes\Arrays;
+use App\Library\Utils\Extensions\Arrays;
 use App\Models\CatalogFilter;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -25,8 +25,8 @@ class CreateCatalogFiltersTable extends Migration{
 			$table->timestamps();
 
 			if (appEnvironment(AppEnvironmentProduction)) {
-				$table->foreign('attributeId')->references('id')->on(\App\Interfaces\Tables::Attributes)->onDelete('cascade');
-				$table->foreign('categoryId')->references('id')->on(\App\Interfaces\Tables::Categories)->onDelete('cascade');
+				$table->foreign('attributeId')->references('id')->on(\App\Library\Enums\Common\Tables::Attributes)->onDelete('cascade');
+				$table->foreign('categoryId')->references('id')->on(\App\Library\Enums\Common\Tables::Categories)->onDelete('cascade');
 			}
 		});
 	}

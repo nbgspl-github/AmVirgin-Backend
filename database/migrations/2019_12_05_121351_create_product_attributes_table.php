@@ -24,8 +24,8 @@ class CreateProductAttributesTable extends Migration{
 			$table->timestamps();
 
 			if (appEnvironment(AppEnvironmentProduction)) {
-				$table->foreign('productId')->references('id')->on(\App\Interfaces\Tables::Products)->onDelete('cascade');
-				$table->foreign('attributeId')->references('id')->on(\App\Interfaces\Tables::Attributes)->onDelete('cascade');
+				$table->foreign('productId')->references('id')->on(\App\Library\Enums\Common\Tables::Products)->onDelete('cascade');
+				$table->foreign('attributeId')->references('id')->on(\App\Library\Enums\Common\Tables::Attributes)->onDelete('cascade');
 			}
 		});
 	}

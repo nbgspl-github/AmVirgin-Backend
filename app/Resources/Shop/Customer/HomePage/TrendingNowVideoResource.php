@@ -2,11 +2,12 @@
 
 namespace App\Resources\Shop\Customer\HomePage;
 
-use App\Storage\SecuredDisk;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TrendingNowVideoResource extends JsonResource{
-	public function toArray($request){
+class TrendingNowVideoResource extends JsonResource
+{
+	public function toArray ($request) : array
+	{
 		return [
 			'id' => $this->id,
 			'title' => $this->title,
@@ -16,17 +17,14 @@ class TrendingNowVideoResource extends JsonResource{
 			'duration' => $this->duration,
 			'released' => $this->released,
 			'director' => $this->director,
-			'trailer' => SecuredDisk::existsUrl($this->trailer),
+			'trailer' => $this->trailer,
 			'rating' => $this->rating,
-			'poster' => SecuredDisk::existsUrl($this->poster),
-			'pgRating' => $this->pgRating,
-			'subscriptionType' => $this->subscriptionType,
-			'hasSeasons' => boolval($this->hasSeasons),
+			'poster' => $this->poster,
+			'backdrop' => $this->backdrop,
+			'pgRating' => $this->pg_rating,
+			'subscriptionType' => $this->subscription_type,
+			'hasSeasons' => $this->seasons > 0,
 			'price' => $this->price,
 		];
-	}
-
-	public static function withoutWrapping(){
-		return true;
 	}
 }

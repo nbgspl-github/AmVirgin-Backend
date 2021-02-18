@@ -2,45 +2,31 @@
 
 namespace App\Models;
 
-use App\Classes\Str;
 use App\Queries\BrandQuery;
 use App\Traits\DynamicAttributeNamedMethods;
-use App\Traits\RetrieveResource;
-use App\Traits\GenerateSlugs;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Sluggable\SlugOptions;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Brand extends Model{
-	use DynamicAttributeNamedMethods, RetrieveResource, GenerateSlugs;
+/**
+ * Class Brand
+ * @package App\Models
+ * @property \App\Library\Enums\Brands\Status $status
+ */
+class Brand extends \App\Library\Database\Eloquent\Model
+{
+	use DynamicAttributeNamedMethods;
+	use \BenSampo\Enum\Traits\CastsEnums;
+	use \Illuminate\Database\Eloquent\SoftDeletes;
+
 	protected $table = 'brands';
-	protected $fillable = [
-		'name',
-		'slug',
-		'logo',
-		'website',
-		'productSaleMarketPlace',
-		'sampleMRPTagImage',
-		'isBrandOwner',
-		'documentProof',
-		'categoryId',
-		'createdBy',
-		'status',
-		'active',
-		'documentExtras',
-	];
+
 	protected $casts = [
 		'active' => 'bool',
 		'isBrandOwner' => 'bool',
 		'documentExtras' => 'array',
+		'status' => \App\Library\Enums\Brands\Status::class,
+		'documentType' => \App\Library\Enums\Brands\DocumentType::class
 	];
-	protected $hidden = [
-		'created_at', 'updated_at', 'id',
-	];
-	public const Status = [
-		'Approved' => 'approved',
-		'Rejected' => 'rejected',
-		'Pending' => 'pending',
-	];
+
 	public const DocumentType = [
 		'TrademarkCertificate' => 'trademark-certificate',
 		'BrandAuthorizationLetter' => 'brand-authorization-letter',
@@ -48,7 +34,56 @@ class Brand extends Model{
 		'Other' => 'other',
 	];
 
-	public static function startQuery(): BrandQuery{
+	protected static function boot ()
+	{
+		parent::boot();
+		Brand::saving(function ($brand) {
+			$brand->requestId = random_str(25);
+		});
+	}
+
+	public function setLogoAttribute ($value)
+	{
+		$this->attributes['logo'] = $this->storeWhenUploadedCorrectly('brands/logos', $value);
+	}
+
+	public function getLogoAttribute ($value) : ?string
+	{
+		return $this->retrieveMedia($value);
+	}
+
+	public function setSampleMRPTagImageAttribute ($value)
+	{
+		$this->attributes['sampleMRPTagImage'] = $this->storeWhenUploadedCorrectly('brands/logos', $value);
+	}
+
+	public function getSampleMRPTagImageAttribute ($value) : ?string
+	{
+		return $this->retrieveMedia($value);
+	}
+
+	public function setDocumentProofAttribute ($value)
+	{
+		$this->attributes['documentProof'] = $this->storeWhenUploadedCorrectly('brands/documents', $value);
+	}
+
+	public function getDocumentProofAttribute ($value) : ?string
+	{
+		return $this->retrieveMedia($value);
+	}
+
+	public function category () : BelongsTo
+	{
+		return $this->belongsTo(Category::class, 'categoryId');
+	}
+
+	public function seller () : BelongsTo
+	{
+		return $this->belongsTo(\App\Models\Auth\Seller::class, 'createdBy');
+	}
+
+	public static function startQuery () : BrandQuery
+	{
 		return BrandQuery::begin();
 	}
 }

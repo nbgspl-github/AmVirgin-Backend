@@ -2,20 +2,37 @@
 
 namespace App\Resources\Orders\Seller;
 
-use App\Enums\Seller\OrderStatus;
+use App\Library\Enums\Orders\Payments\Methods;
+use App\Library\Enums\Orders\Status;
+use App\Models\Order\Order;
+use App\Resources\Orders\Customer\AddressResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderResource extends JsonResource {
-	public function toArray ($request) {
-		$status = $this->order;
-		$status = $status != null ? $status->status() : OrderStatus::NotAvailable;
+/**
+ * Class OrderResource
+ * @package App\Resources\Orders\Seller
+ * @property Status $status
+ * @property ?Order $order
+ */
+class OrderResource extends JsonResource
+{
+	public function toArray ($request) : array
+	{
 		return [
-			'key' => $this->id(),
-			'orderId' => $this->orderNumber(),
-			'status' => $this->status(),
-			'customer' => new OrderCustomerResource($this->customer),
+			'key' => $this->id,
+			'status' => $this->status,
+			'number' => $this->order->orderNumber,
+			'placed' => $this->created_at->format('Y-m-d H:i:s'),
+			'prepaid' => $this->isPrepaid(),
+			'customer' => new CustomerResource($this->customer),
+			'address' => new AddressResource($this->order->address),
 			'items' => OrderItemResource::collection($this->items),
-			'transitions' => OrderStatus::transitions(new OrderStatus($status)),
+			'transitions' => Status::transitions($this->status),
 		];
+	}
+
+	protected function isPrepaid () : bool
+	{
+		return $this->order->paymentMode->isNot(Methods::CashOnDelivery);
 	}
 }

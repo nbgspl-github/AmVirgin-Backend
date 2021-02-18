@@ -4,20 +4,17 @@ namespace App\Resources\Shop\Customer\Catalog\Filters;
 
 use Illuminate\Support\Collection;
 
-class BrandResource extends AbstractBuiltInResource{
-	public const RequiredColumn = 'brandId';
+class BrandResource extends AbstractBuiltInResource
+{
+	const COLUMN = 'brandId';
+	const KEY = 'filter_brand';
+	const TYPE = 'brand';
+	const MODE = 'multiple';
+	const LABEL = 'Brand';
 
-	public function toArray($request){
-		return [
-			'label' => $this->label(),
-			'builtIn' => $this->builtIn(),
-			'type' => $this->builtInType(),
-			'mode' => $this->mode(),
-			'options' => $this->values,
-		];
-	}
-
-	public function withValues(Collection $values): self{
+	public function withValues (Collection $values) : self
+	{
+		$this->values = $values->pluck(['brandId'])->toArray();
 		return $this;
 	}
 }

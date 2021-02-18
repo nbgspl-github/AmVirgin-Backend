@@ -2,7 +2,7 @@
 @section('content')
 	<div class="row">
 		<div class="col-12">
-			<div class="card shadow-sm custom-card">
+			<div class="card shadow-sm">
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Servers'])
 				</div>
@@ -29,7 +29,7 @@
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">{{$server->getName()}}</td>
 								<td class="text-center">{{$server->getIpAddress()}}</td>
-								<td class="text-center">{{__boolean($server->getUsesAuth())}}</td>
+								<td class="text-center">{{\App\Library\Utils\Extensions\Str::stringifyBoolean($server->getUsesAuth())}}</td>
 								<td class="text-center">{{$server->getBasePath()}}</td>
 								<td class="text-center">
 									<div class="btn-group">

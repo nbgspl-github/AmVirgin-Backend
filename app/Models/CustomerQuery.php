@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use App\Traits\DynamicAttributeNamedMethods;
-use Illuminate\Database\Eloquent\Model;
 
-class CustomerQuery extends Model{
+class CustomerQuery extends \App\Library\Database\Eloquent\Model
+{
 	use DynamicAttributeNamedMethods;
 
 	protected $table = 'customer-queries';

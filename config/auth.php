@@ -132,19 +132,19 @@ return [
 	'passwords' => [
 		'users' => [
 			'provider' => 'customers',
-			'table' => 'password_resets_customers',
+			'table' => 'password_resets',
 			'expire' => 60,
 			'throttle' => 60,
 		],
 		'admins' => [
 			'provider' => 'admins',
-			'table' => 'password_resets_admins',
+			'table' => 'password_resets',
 			'expire' => 15,
 			'throttle' => 10,
 		],
 		'sellers' => [
 			'provider' => 'sellers',
-			'table' => 'password_resets_sellers',
+			'table' => 'password_resets',
 			'expire' => 25,
 			'throttle' => 10,
 		],

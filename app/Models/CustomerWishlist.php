@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class CustomerWishlist extends Model {
+class CustomerWishlist extends \App\Library\Database\Eloquent\Model
+{
 	protected $table = 'customer-wishlist';
 	protected $fillable = [
 		'customerId',

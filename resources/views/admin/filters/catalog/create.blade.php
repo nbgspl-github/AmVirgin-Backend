@@ -3,7 +3,7 @@
 	@include('admin.modals.multiEntryModal',['key'=>'values'])
 	<div class="row">
 		<div class="col-12">
-			<div class="card shadow-sm custom-card">
+			<div class="card shadow-sm">
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Create a catalog filter'])
 				</div>

@@ -4,10 +4,12 @@ namespace App\Resources\Shop\Customer\Catalog\Filters;
 
 use Illuminate\Support\Collection;
 
-class GenderResource extends AbstractBuiltInResource{
-	public const RequiredColumn = 'idealFor';
+class GenderResource extends AbstractBuiltInResource
+{
+	public const COLUMN = 'idealFor';
 
-	public function toArray($request){
+	public function toArray ($request)
+	{
 		return [
 			'label' => $this->label(),
 			'builtIn' => $this->builtIn(),

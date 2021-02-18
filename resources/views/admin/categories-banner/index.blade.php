@@ -2,9 +2,9 @@
 @section('content')
 	<div class="row">
 		<div class="col-12">
-			<div class="card shadow-sm custom-card">
+			<div class="card shadow-sm">
 				<div class="card-header py-0">
-		@include('admin.extras.header', ['title'=>trans('admin.categories-banner.index'),'action'=>['link'=>route('admin.categories-banner.create'),'text'=>'Add Category Banner']])
+					@include('admin.extras.header', ['title'=>trans('admin.categories-banner.index'),'action'=>['link'=>route('admin.categories-banner.create'),'text'=>'Add Category Banner']])
 				</div>
 				<div class="card-body animatable">
 					<div class="table-responsive">

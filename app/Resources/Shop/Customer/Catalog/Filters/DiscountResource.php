@@ -2,28 +2,25 @@
 
 namespace App\Resources\Shop\Customer\Catalog\Filters;
 
-use App\Classes\Arrays;
+use App\Library\Utils\Extensions\Arrays;
 use Illuminate\Support\Collection;
 
-class DiscountResource extends AbstractBuiltInResource{
-	public const RequiredColumn = 'discount';
+class DiscountResource extends AbstractBuiltInResource
+{
+	const COLUMN = 'discount';
+	const KEY = 'filter_discount';
+	const TYPE = 'discount';
+	const MODE = 'single';
+	const LABEL = 'Discount';
 
-	public function toArray($request){
-		return [
-			'key' => $this->id(),
-			'label' => $this->label(),
-			'type' => $this->builtInType(),
-			'mode' => $this->mode(),
-			'options' => $this->values,
-		];
-	}
-
-	public function withValues(Collection $values): self{
+	public function withValues (Collection $values) : self
+	{
 		$this->values = $this->discountDivisions($values);
 		return $this;
 	}
 
-	private function discountDivisions(Collection $values): array{
+	private function discountDivisions (Collection $values) : array
+	{
 		$discountCollection = $values;
 		$maxDiscount = $values->max();
 		$divisions = Arrays::Empty;

@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use App\Traits\DynamicAttributeNamedMethods;
-use Illuminate\Database\Eloquent\Model;
 
-class State extends Model{
+class State extends \App\Library\Database\Eloquent\Model
+{
 	use DynamicAttributeNamedMethods;
+
 	protected $table = 'states';
 	protected $fillable = ['id', 'name', 'countryId'];
 	protected $hidden = [

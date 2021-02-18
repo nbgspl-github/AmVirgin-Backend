@@ -3,10 +3,8 @@
 namespace App\Providers;
 
 use App\Events\Admin\TvSeries\TvSeriesUpdated;
-use App\Events\Admin\Videos\VideoUpdated;
-use App\Listeners\Admin\TvSeries\UpdateSeasonCount;
-use App\Listeners\Admin\TvSeries\UpdateVideoSlugs;
-use App\Listeners\Admin\Videos\UpdatePendingStatus;
+use App\Listeners\Admin\Series\UpdateSeasonCount;
+use App\Listeners\Admin\Series\UpdateVideoSlugs;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;

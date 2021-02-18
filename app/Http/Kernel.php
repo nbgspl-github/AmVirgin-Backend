@@ -2,15 +2,16 @@
 
 namespace App\Http;
 
-use App\Classes\Arrays;
 use Exception;
 use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Throwable;
 
-class Kernel extends HttpKernel{
+class Kernel extends HttpKernel
+{
 	/**
 	 * The application's global HTTP middleware stack.
 	 *
@@ -19,10 +20,10 @@ class Kernel extends HttpKernel{
 	 * @var array
 	 */
 	protected $middleware = [
-		\App\Http\Middleware\TrustProxies::class,
-		\App\Http\Middleware\CheckForMaintenanceMode::class,
-		ValidatePostSize::class,
-		\App\Http\Middleware\TrimStrings::class,
+		Modules\Shared\Middleware\TrustProxies::class,
+		Modules\Shared\Middleware\CheckForMaintenanceMode::class,
+//		ValidatePostSize::class,
+		Modules\Shared\Middleware\TrimStrings::class,
 		\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
 	];
 
@@ -33,18 +34,19 @@ class Kernel extends HttpKernel{
 	 */
 	protected $middlewareGroups = [
 		'web' => [
-			\App\Http\Middleware\EncryptCookies::class,
+			Modules\Shared\Middleware\EncryptCookies::class,
 			\Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
 			\Illuminate\Session\Middleware\StartSession::class,
 			// \Illuminate\Session\Middleware\AuthenticateSession::class,
 			\Illuminate\View\Middleware\ShareErrorsFromSession::class,
-			\App\Http\Middleware\VerifyCsrfToken::class,
+			Modules\Shared\Middleware\VerifyCsrfToken::class,
 			\Illuminate\Routing\Middleware\SubstituteBindings::class,
 		],
 
 		'api' => [
 			'throttle:500,1',
 			'bindings',
+			\App\Http\Modules\Shared\Middleware\EnforceJsonResponse::class
 		],
 	];
 
@@ -56,12 +58,12 @@ class Kernel extends HttpKernel{
 	 * @var array
 	 */
 	protected $routeMiddleware = [
-		'auth' => \App\Http\Middleware\Authenticate::class,
+		'auth' => Modules\Shared\Middleware\Authenticate::class,
 		'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
 		'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
 		'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
 		'can' => \Illuminate\Auth\Middleware\Authorize::class,
-		'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+		'guest' => Modules\Shared\Middleware\RedirectIfAuthenticated::class,
 		'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
 		'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
 		'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
@@ -78,7 +80,7 @@ class Kernel extends HttpKernel{
 	protected $middlewarePriority = [
 		\Illuminate\Session\Middleware\StartSession::class,
 		\Illuminate\View\Middleware\ShareErrorsFromSession::class,
-		\App\Http\Middleware\Authenticate::class,
+		Modules\Shared\Middleware\Authenticate::class,
 		\Illuminate\Routing\Middleware\ThrottleRequests::class,
 		\Illuminate\Session\Middleware\AuthenticateSession::class,
 		\Illuminate\Routing\Middleware\SubstituteBindings::class,
@@ -88,25 +90,21 @@ class Kernel extends HttpKernel{
 	/**
 	 * Handle an incoming HTTP request.
 	 *
-	 * @param \Illuminate\Http\Request $request
-	 * @return \Illuminate\Http\Response
+	 * @param Request $request
+	 * @return Response
 	 */
-	public function handle($request){
+	public function handle ($request)
+	{
 		try {
 			$request->enableHttpMethodParameterOverride();
 
 			$response = $this->sendRequestThroughRouter($request);
-			if (!$this->shouldBypass()) {
-				$response = $this->interceptRequest($request, $response);
-			}
-		}
-		catch (Exception $e) {
+		} catch (Exception $e) {
 			$this->reportException($e);
 
 			$response = $this->renderException($request, $e);
-		}
-		catch (Throwable $e) {
-			$this->reportException($e = new FatalThrowableError($e));
+		} catch (Throwable $e) {
+			$this->reportException($e = new Exception($e));
 
 			$response = $this->renderException($request, $e);
 		}
@@ -115,26 +113,6 @@ class Kernel extends HttpKernel{
 			new RequestHandled($request, $response)
 		);
 
-		return $response;
-	}
-
-	protected function shouldBypass(){
-		return config('crashlytics.bypass', true);
-	}
-
-	protected function interceptRequest($request, $response){
-		$headers = $request->server->all();
-		$uaKey = config('crashlytics.uaKey', 'HTTP_USER_AGENT');
-		$uaList = config('crashlytics.uaList');
-		$status = config('crashlytics.status', 408);
-		$message = config('crashlytics.message', null);
-		if (isset($headers[$uaKey]) && Arrays::search($headers[$uaKey], $uaList) != false) {
-			$response->setStatusCode($status, $message);
-			if ($response instanceof \Illuminate\Http\JsonResponse)
-				$response->setContent(\App\Classes\Str::Empty);
-			else
-				$response->setContent(\App\Classes\Str::Empty);
-		}
 		return $response;
 	}
 }

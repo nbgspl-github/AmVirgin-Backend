@@ -156,7 +156,7 @@ return [
 		Illuminate\Pipeline\PipelineServiceProvider::class,
 		Illuminate\Queue\QueueServiceProvider::class,
 		Illuminate\Redis\RedisServiceProvider::class,
-		Illuminate\Auth\Passwords\PasswordResetServiceProvider::class,
+		\Illuminate\Auth\Passwords\PasswordResetServiceProvider::class,
 		Illuminate\Session\SessionServiceProvider::class,
 		Illuminate\Translation\TranslationServiceProvider::class,
 		Illuminate\Validation\ValidationServiceProvider::class,
@@ -167,9 +167,14 @@ return [
 		App\Providers\EventServiceProvider::class,
 		App\Providers\RouteServiceProvider::class,
 
+		\App\Providers\RepositoryServiceProvider::class,
+		\App\Providers\ObserverServiceProvider::class,
+
 		Yoeunes\Notify\NotifyServiceProvider::class,
-		Sujip\Guid\GuidServiceProvider::class,
-		Tightenco\Ziggy\ZiggyServiceProvider::class,
+		niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
+		Barryvdh\DomPDF\ServiceProvider::class,
+		ZanySoft\Zip\ZipServiceProvider::class,
+		ProtoneMedia\LaravelFFMpeg\Support\ServiceProvider::class,
 	],
 
 	/*
@@ -219,15 +224,9 @@ return [
 		'URL' => Illuminate\Support\Facades\URL::class,
 		'Validator' => Illuminate\Support\Facades\Validator::class,
 		'View' => Illuminate\Support\Facades\View::class,
-		'Guid' => Sujip\Guid\Guid::class,
+		'PDF' => Barryvdh\DomPDF\Facade::class,
+		'Zip' => ZanySoft\Zip\ZipFacade::class,
+		'FFMpeg' => ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::class
 	],
-
-	'order_status' => [ 
-		'Placed'           => 'placed',
-		'Dispatched'       => 'dispatched',
-		'Delivered'        => 'delivered',
-		'Cancelled'        => 'cancelled',
-		'RefundProcessing' => 'refund-processing',
-		],
 
 ];

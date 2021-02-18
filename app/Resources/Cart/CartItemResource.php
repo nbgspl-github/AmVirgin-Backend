@@ -2,8 +2,8 @@
 
 namespace App\Resources\Cart;
 
+use App\Library\Utils\Uploads;
 use App\Resources\Products\Customer\OptionResource;
-use App\Storage\SecuredDisk;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CartItemResource extends JsonResource{
@@ -19,7 +19,7 @@ class CartItemResource extends JsonResource{
 				'selling' => $this->sellingPrice(),
 			],
 			'maxAllowedQuantity' => $this->maxQuantityPerOrder(),
-			'image' => SecuredDisk::existsUrl($this->primaryImage()),
+			'image' => Uploads::existsUrl($this->primaryImage()),
 			'options' => OptionResource::collection($this->options),
 		];
 	}

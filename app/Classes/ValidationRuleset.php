@@ -17,14 +17,14 @@ class ValidationRuleset{
 	public function load(string $root){
 		$ruleset = config($root);
 		$this->root = $root;
-		if (null($ruleset))
+		if (is_null($ruleset))
 			throw new RulesetRootNotFoundException($root);
 		$this->rules = config($root);
 	}
 
 	public function rules(string $key){
 		$rules = $this->rules[$key];
-		if (null($rules))
+		if (is_null($rules))
 			throw new RulesetKeyNotFoundException($this->root, $key);
 		else
 			return $rules;

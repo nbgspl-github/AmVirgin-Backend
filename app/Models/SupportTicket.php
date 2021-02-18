@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use App\Classes\Arrays;
-use App\Interfaces\Directories;
-use App\Storage\SecuredDisk;
+use App\Library\Enums\Common\Directories;
+use App\Library\Utils\Extensions\Arrays;
+use App\Library\Utils\Uploads;
 use App\Traits\DynamicAttributeNamedMethods;
-use Illuminate\Database\Eloquent\Model;
 
-class SupportTicket extends Model {
+class SupportTicket extends \App\Library\Database\Eloquent\Model
+{
 	use DynamicAttributeNamedMethods;
 
 	protected $table = 'support-tickets';
@@ -25,28 +25,29 @@ class SupportTicket extends Model {
 		'orderId' => 'array', 'attachments' => 'array',
 	];
 
-	public function setAttachmentsAttribute ($value) : void {
+	public function setAttachmentsAttribute ($value) : void
+	{
 		if (is_array($value) && count($value) > 0) {
 			$files = Arrays::Empty;
 			foreach ($value as $file) {
-				Arrays::push($files, SecuredDisk::access()->putFile(Directories::SellerSupportAttachments, $file));
+				Arrays::push($files, Uploads::access()->putFile(Directories::SellerSupportAttachments, $file));
 			}
 			$this->attributes['attachments'] = jsonEncode($files);
 		}
 	}
 
-	public function getAttachmentsAttribute ($value) : array {
+	public function getAttachmentsAttribute ($value) : array
+	{
 		$decoded = jsonDecodeArray($this->attributes['attachments']);
 		if (is_array($decoded) && count($decoded) > 0) {
 			$paths = Arrays::Empty;
 			foreach ($decoded as $file) {
-				$path = SecuredDisk::existsUrl($file);
+				$path = Uploads::existsUrl($file);
 				if ($path != null)
 					Arrays::push($paths, $path);
 			}
 			return $paths;
-		}
-		else {
+		} else {
 			return Arrays::Empty;
 		}
 	}

@@ -3,7 +3,7 @@
 	@include('admin.modals.multiEntryModal',['key'=>'values'])
 	<div class="row">
 		<div class="col-12">
-			<div class="card shadow-sm custom-card">
+			<div class="card shadow-sm">
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Create an attribute'])
 				</div>
@@ -13,19 +13,32 @@
 						<div class="row">
 							<div class="col-sm-12 col-md-8 mx-auto">
 								<div class="card shadow-none" style="border: 1px solid rgba(180,185,191,0.4);">
-									<div class="card-header text-white bg-secondary">Attributes help categorizing variants of the same product.</div>
+									<div class="card-header bg-secondary">Attributes help categorizing variants of the same product.</div>
 									<div class="card-body">
 										<div class="form-group">
-											<label for="name">@required (Label) <i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Attribute label or name as will appear to admin, seller and customer'])></i></label>
+											<label for="name">@required (Label)
+												<i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Attribute label or name as will appear to admin, seller and customer'])></i></label>
 											<input id="name" type="text" name="name" class="form-control" required placeholder="Type a name" value="{{old('name')}}"/>
 										</div>
 										<div class="form-group">
-											<label for="description">@required (Description) <i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Attribute description as will appear to seller'])></i></label>
+											<label for="description">@required (Description)
+												<i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Attribute description as will appear to seller'])></i></label>
 											<textarea id="description" name="description" class="form-control" required placeholder="Type attribute description here">{{old('description')}}</textarea>
 										</div>
-										<div class="card custom-card p-3 shadow-none mb-3">
+										<div class="form-group">
+											<label for="group">@required (Group)
+												<i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Groups help collect attributes belonging to same logical category'])></i></label>
+											<select name="group" id="group" class="form-control selectpicker" title="Choose..." required>
+												<option value="Main">Main</option>
+												<option value="Material & Care">Material & Care</option>
+												<option value="Size & Fit">Size & Fit</option>
+												<option value="Specifications">Specifications</option>
+											</select>
+										</div>
+										<div class="card p-3 shadow-none mb-3">
 											<div class="form-group">
-												<label>Allow entering multiple values? <i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Allow the seller to enter more than one value for this attribute for example - color for color-blocked t shirts.'])></i></label>
+												<label>Allow entering multiple values?
+													<i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Allow the seller to enter more than one value for this attribute for example - color for color-blocked t shirts.'])></i></label>
 												<div>
 													<div class="custom-control custom-checkbox">
 														<input type="checkbox" class="custom-control-input" id="multiValue" name="multiValue" onchange="handleMultiValueChanged();">
@@ -43,7 +56,8 @@
 											</div>
 										</div>
 										<div class="form-group">
-											<label>Attribute is required? <i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Seller must fill or choose a value for this attribute, blank is not allowed.'])></i></label>
+											<label>Attribute is required?
+												<i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Seller must fill or choose a value for this attribute, blank is not allowed.'])></i></label>
 											<div>
 												<div class="custom-control custom-checkbox">
 													<input type="checkbox" class="custom-control-input" id="required" name="required">
@@ -52,7 +66,8 @@
 											</div>
 										</div>
 										<div class="form-group">
-											<label>Use attribute in layered navigation? <i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Enable showing this attribute and corresponding values as a filter in catalog listing.'])></i></label>
+											<label>Use attribute in layered navigation?
+												<i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Enable showing this attribute and corresponding values as a filter in catalog listing.'])></i></label>
 											<div>
 												<div class="custom-control custom-checkbox">
 													<input type="checkbox" class="custom-control-input" id="useInLayeredNavigation" name="useInLayeredNavigation">
@@ -61,7 +76,8 @@
 											</div>
 										</div>
 										<div class="form-group">
-											<label>Use attribute to create product variations? <i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Use this attribute\'s value to create variations of product.'])></i></label>
+											<label>Use attribute to create product variations?
+												<i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Use this attribute\'s value to create variations of product.'])></i></label>
 											<div>
 												<div class="custom-control custom-checkbox">
 													<input type="checkbox" class="custom-control-input" id="useToCreateVariants" name="useToCreateVariants">
@@ -97,9 +113,10 @@
 												</div>
 											</div>
 										</div>
-										<div class="card custom-card p-3 shadow-none mb-0">
+										<div class="card p-3 shadow-none mb-0">
 											<div class="form-group">
-												<label>Attribute has predefined values? <i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Predefine a set of values that the seller must choose from such as size (L, M, S) etc.'])></i></label>
+												<label>Attribute has predefined values?
+													<i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Predefine a set of values that the seller must choose from such as size (L, M, S) etc.'])></i></label>
 												<div>
 													<div class="custom-control custom-checkbox">
 														<input type="checkbox" class="custom-control-input" id="predefined" name="predefined" onchange="handlePredefinedChanged();">

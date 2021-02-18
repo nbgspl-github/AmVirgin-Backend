@@ -8,7 +8,7 @@
 				<div class="col-md-2 mt-md-0 mt-2">
 					<div class="form-group mb-0">
 						<label>Language</label>
-						@if (null($chosen->languageId))
+						@if (is_null($chosen->languageId))
 							<select name="language[]" class="form-control" required>
 								@foreach ($languages as $language)
 									@if($language->getCode()=='hi')

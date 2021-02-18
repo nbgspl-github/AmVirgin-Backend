@@ -1,6 +1,6 @@
 <?php
 
-use App\Classes\Arrays;
+use App\Library\Utils\Extensions\Arrays;
 use App\Models\Attribute;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;

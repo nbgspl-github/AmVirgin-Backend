@@ -2,46 +2,68 @@
 @section('content')
 	<div class="row">
 		<div class="col-12">
-			<div class="card shadow-sm custom-card">
+			<div class="card shadow-sm">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'TV Series','action'=>['link'=>route('admin.tv-series.create'),'text'=>'Add series']])
+					@include('admin.extras.header', ['title'=>'TV Series','action'=>['link'=>route('admin.tv-series.create'),'text'=>'Add']])
 				</div>
 				<div class="card-body animatable">
-					<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 						<thead>
 						<tr>
-							<th class="text-center">No.</th>
-							<th class="text-center">Poster</th>
-							<th class="text-center">Title</th>
-							<th class="text-center">Description</th>
-							<th class="text-center">Rating</th>
-							<th class="text-center">Trending</th>
-							<th class="text-center">Seasons</th>
-							<th class="text-center">Pending</th>
-							<th class="text-center">Action(s)</th>
+							<th>#</th>
+							<th>Poster</th>
+							<th>Title</th>
+							<th>Description</th>
+							<th>Audio</th>
+							<th>Subtitles</th>
+							<th>Rating</th>
+							<th>Seasons</th>
+							<th>Episodes</th>
+							<th>Processing</th>
+							<th>Action(s)</th>
 						</tr>
 						</thead>
 
 						<tbody>
 						@foreach($series as $s)
 							<tr id="content_row_{{$s->getKey()}}">
-								<td class="text-center">{{$loop->index+1}}</td>
-								<td class="text-center">
-									@if($s->getPoster()!=null)
-										<img src="{{\App\Storage\SecuredDisk::access()->url($s->getPoster())}}" style="width: 100px; height: 150px; filter: drop-shadow(2px 2px 8px black)" alt="{{$s->getTitle()}}"/>
+								<td>{{$loop->index+1}}</td>
+								<td>
+									@if($s->poster!=null)
+										<img src="{{$s->poster}}" style="width: 100px; height: 150px; filter: drop-shadow(2px 2px 8px black)" alt="{{$s->title}}"/>
 									@else
 										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 25px"></i>
 									@endif
 								</td>
-								<td class="text-center">{{$s->getTitle()}}</td>
-								<td class="text-center">{{__ellipsis($s->getDescription(),100)}}</td>
-								<td class="text-center">{{$s->getRating()}}</td>
-								<td class="text-center">{{__boolean($s->trending)}}</td>
-								<td class="text-center">{{$s->getSeasons()}}</td>
-								<td class="text-center">{{__boolean($s->pending)}}</td>
-								<td class="text-center">
+								<td>{{$s->title}}</td>
+								<td>{{\App\Library\Utils\Extensions\Str::ellipsis($s->description,255)}}</td>
+								<td>
+									@foreach($video->audios as $audio)
+										<span class="badge badge-secondary">
+											{{$audio->language->name}}
+										</span>
+									@endforeach
+								</td>
+								<td>
+									@foreach($video->subtitles as $subtitle)
+										<span class="badge badge-secondary">
+											{{$subtitle->language->name}}
+										</span>
+									@endforeach
+								</td>
+								<td>{{$s->rating}}</td>
+								<td>{{$s->seasons}}</td>
+								<td>{{$s->sources->count()}}</td>
+								<td>
+									@if($video->isTranscoding())
+										Yes
+									@else
+										No
+									@endif
+								</td>
+								<td>
 									<div class="btn-toolbar" role="toolbar">
-										<div class="btn-group mx-auto" role="group">
+										<div class="btn-group" role="group">
 											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.tv-series.edit.action',$s->getKey())}}" @include('admin.extras.tooltip.left', ['title' => 'Edit this item'])><i class="mdi mdi-pencil"></i></a>
 											<a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);" onclick="deleteMovie('{{$s->getKey()}}');" @include('admin.extras.tooltip.right', ['title' => 'Delete this series'])><i class="mdi mdi-delete"></i></a>
 										</div>
@@ -51,6 +73,7 @@
 						@endforeach
 						</tbody>
 					</table>
+					{{$series->links()}}
 				</div>
 			</div>
 		</div>
@@ -62,11 +85,11 @@
 		let dataTable = null;
 
 		$(document).ready(() => {
-			dataTable = $('#datatable').DataTable({
-				initComplete: function () {
-					$('#datatable_wrapper').addClass('px-0 mx-0');
-				}
-			});
+			// dataTable = $('#datatable').DataTable({
+			// 	initComplete: function () {
+			// 		$('#datatable_wrapper').addClass('px-0 mx-0');
+			// 	}
+			// });
 		});
 
 		/**
@@ -94,7 +117,10 @@
 		 */
 		toggleStatus = (id, state) => {
 			axios.put(updateStatusRoute(id),
-				{id: id, active: state})
+				{
+					id: id,
+					active: state
+				})
 				.then(response => {
 					if (response.status === 200) {
 						toastr.success(response.data.message);

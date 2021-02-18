@@ -5,28 +5,25 @@ namespace App\Resources\Shop\Customer\Catalog\Filters;
 use App\Models\Category;
 use Illuminate\Support\Collection;
 
-class CategoryResource extends AbstractBuiltInResource{
-	public const RequiredColumn = 'categoryId';
+class CategoryResource extends AbstractBuiltInResource
+{
+	const COLUMN = 'categoryId';
+	const KEY = 'filter_category';
+	const TYPE = 'category';
+	const MODE = 'multiple';
+	const LABEL = 'Category';
 
-	public function toArray($request){
-		return [
-			'label' => $this->label(),
-			'builtIn' => $this->builtIn(),
-			'type' => $this->builtInType(),
-			'mode' => 'single',
-			'options' => $this->values,
-		];
-	}
-
-	public function withValues(Collection $values): self{
+	public function withValues (Collection $values) : self
+	{
 		$this->values = $this->descendants(request('category'));
 		return $this;
 	}
 
-	public function descendants(int $categoryId): array{
-		$category = Category::retrieve($categoryId);
+	public function descendants (int $id) : array
+	{
+		$category = Category::query()->find($id);
 		$descendants = $category->descendants()->where('type', 'vertical');
-		return $descendants->transform(function ($item){
+		return $descendants->transform(function ($item) {
 			return [
 				'key' => $item['id'],
 				'name' => $item['name'],

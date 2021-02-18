@@ -2,7 +2,7 @@
 @section('content')
 	<div class="row">
 		<div class="col-12">
-			<div class="card shadow-sm custom-card">
+			<div class="card shadow-sm">
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Create a category'])
 				</div>
@@ -16,7 +16,8 @@
 									<hr class="my-2">
 									<ul class="px-3">
 										<li><p>There are 4 nesting levels or types for categories.</p></li>
-										<li><p>Main<br>Main ► Category<br>Main ► Category ► Sub-Category<br>Main ► Category ► Sub-Category ► Vertical</p></li>
+										<li><p>Main<br>Main ► Category<br>Main ► Category ► Sub-Category<br>Main ►
+												Category ► Sub-Category ► Vertical</p></li>
 										<li>
 											<p>Products can only be added to categories having type as
 												<mark>Vertical</mark>
@@ -31,13 +32,15 @@
 											</p>
 										</li>
 										<li>
-											<p>You may additionally set any category to inherit attributes of its parent. For example - if you are creating verticals named
+											<p>You may additionally set any category to inherit attributes of its
+												parent. For example - if you are creating verticals named
 												<mark>Casual Shoes</mark>
 												, and
 												<mark>Sports Shoes</mark>
 												under
 												<mark>Footwear</mark>
-												, it is only logical to enable attribute inheritance for both of them since they both share attributes such as
+												, it is only logical to enable attribute inheritance for both of them
+												since they both share attributes such as
 												<mark>Color</mark>
 												and
 												<mark>Size</mark>
@@ -54,14 +57,16 @@
 								</div>
 								<div class="form-group">
 									<label>@required(Parent)</label>
-									<select name="parentId" class="form-control" id="parentId" required onchange="handleTypeChanged(this.value,document.getElementById('option-item-'+this.value).getAttribute('data-type'));">
+									<select name="parent_id" class="form-control" id="parentId" required onchange="handleTypeChanged(this.value,document.getElementById('option-item-'+this.value).getAttribute('data-type'));">
 										<option value="" disabled selected>Choose</option>
 										@foreach($roots as $root)
 											<option value="{{$root['key']}}" data-type="{{$root['type']}}" id="option-item-{{$root['key']}}">{{$root['name']}}</option>
 											@foreach($root['children']['items'] as $category)
-												<option value="{{ $category['key'] }}" data-type="{{$category['type']}}" id="option-item-{{$category['key']}}">{{$root['name']}} ► {{$category['name']}}</option>
+												<option value="{{ $category['key'] }}" data-type="{{$category['type']}}" id="option-item-{{$category['key']}}">{{$root['name']}}
+													► {{$category['name']}}</option>
 												@foreach($category['children']['items'] as $subCategory)
-													<option value="{{ $subCategory['key'] }}" data-type="{{$subCategory['type']}}" id="option-item-{{$subCategory['key'] }}">{{$root['name']}} ► {{$category['name']}} ► {{$subCategory['name']}}</option>
+													<option value="{{ $subCategory['key'] }}" data-type="{{$subCategory['type']}}" id="option-item-{{$subCategory['key'] }}">{{$root['name']}}
+														► {{$category['name']}} ► {{$subCategory['name']}}</option>
 												@endforeach
 											@endforeach
 										@endforeach
@@ -71,20 +76,19 @@
 									<label for="">@required(Type)</label>
 									<select name="type" id="type" class="form-control">
 										<option value="" disabled selected>Choose</option>
-										<option value="{{\App\Models\Category::Types['Category']}}">Category</option>
-										<option value="{{\App\Models\Category::Types['SubCategory']}}">Sub-Category</option>
-										<option value="{{\App\Models\Category::Types['Vertical']}}">Vertical</option>
+										<option value="{{\App\Library\Enums\Categories\Types::Category}}">Category</option>
+										<option value="{{\App\Library\Enums\Categories\Types::SubCategory}}">Sub-Category</option>
+										<option value="{{\App\Library\Enums\Categories\Types::Vertical}}">Vertical</option>
 									</select>
 								</div>
 								<div class="form-group">
-									<label>@required(Description)</label>
-									<textarea type="text" name="description" class="form-control" required placeholder="Describe your category">{{old('description')}}</textarea>
-								</div>
-								<div class="form-group">
-									<label>Listing Status</label>
-									<select name="listingStatus" class="form-control">
-										<option value="{{\App\Models\Category::ListingStatus['Active']}}" selected>Active</option>
-										<option value="{{\App\Models\Category::ListingStatus['Inactive']}}">Inactive</option>
+									<label>Listing</label>
+									<select name="listing" class="form-control">
+										<option value="{{\App\Models\Category::LISTING_ACTIVE}}" selected>
+											Active
+										</option>
+										<option value="{{\App\Models\Category::LISTING_INACTIVE}}">Inactive
+										</option>
 									</select>
 								</div>
 								<div class="form-group">
@@ -97,7 +101,7 @@
 									</select>
 								</div>
 								<div class="form-group">
-									<label>Inherit Parent Attributes?</label>
+									<label>Inherit parent attributes?</label>
 									<div>
 										<div class="custom-control custom-checkbox">
 											<input type="checkbox" class="custom-control-input" id="inheritParentAttributes" name="inheritParentAttributes" onchange="handleMultiValueChanged();">
@@ -107,28 +111,11 @@
 								</div>
 								<div class="form-group">
 									<label>Icon</label>
-									<div class="card" style="border: 1px solid #ced4da;">
-										<div class="card-header">
-											<div class="row">
-												<div class="d-none">
-													<input id="pickImage1" type="file" name="icon" onclick="this.value=null;" onchange="previewImage1(event);" class="form-control" style="height: unset; padding-left: 6px" accept=".jpg, .png, .jpeg, .bmp, .svg" value="{{old('icon')}}">
-												</div>
-												<div class="col-6">
-													<h3 class="my-0 header-title">Preview</h3>
-												</div>
-												<div class="col-6">
-													<button type="button" class="btn btn-outline-primary rounded shadow-sm float-right" onclick="openImagePicker1();">Choose Image</button>
-												</div>
-											</div>
-										</div>
-										<div class="card-body p-0 rounded">
-											<div class="row">
-												<div class="col-12 text-center">
-													<img id="posterPreview1" class="img-fluid" style="max-height: 400px!important;"/>
-												</div>
-											</div>
-										</div>
-									</div>
+									<input type="file" data-max-file-size="1M" name="icon" id="icon" data-allowed-file-extensions="jpg png jpeg">
+								</div>
+								<div class="form-group">
+									<label>Catalog Template</label>
+									<input name="catalog" class="form-control" type="file" accept=".xls, .xlsx" style="padding: .290rem .300rem">
 								</div>
 								<div class="form-group mb-0">
 									<div class="row">
@@ -155,39 +142,9 @@
 
 @section('javascript')
 	<script>
-		var lastFile = null;
-		window.onload = () => {
-
-		};
-
-		previewImage = (event) => {
-			const reader = new FileReader();
-			reader.onload = function () {
-				const output = document.getElementById('posterPreview');
-				output.src = reader.result;
-			};
-			lastFile = event.target.files[0];
-			reader.readAsDataURL(lastFile);
-		};
-
-		openImagePicker = () => {
-			$('#pickImage').trigger('click');
-		}
-
-		var lastFile1 = null;
-		previewImage1 = (event) => {
-			const reader = new FileReader();
-			reader.onload = function () {
-				const output = document.getElementById('posterPreview1');
-				output.src = reader.result;
-			};
-			lastFile1 = event.target.files[0];
-			reader.readAsDataURL(lastFile1);
-		};
-
-		openImagePicker1 = () => {
-			$('#pickImage1').trigger('click');
-		};
+		$(document).ready(() => {
+			$('#icon').dropify();
+		});
 
 		handleTypeChanged = (value, type) => {
 			console.log(type);

@@ -2,28 +2,32 @@
 
 namespace App\Resources\Announcements;
 
-use App\Classes\Arrays;
+use App\Library\Utils\Extensions\Arrays;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class Announcement extends \Illuminate\Http\Resources\Json\JsonResource{
-	public function toArray($request){
+class Announcement extends JsonResource
+{
+	public function toArray ($request) : array
+	{
 		return [
-			'key' => $this->id(),
-			'title' => $this->title(),
-			'content' => $this->content(),
+			'key' => $this->id,
+			'title' => $this->title,
+			'content' => $this->content,
 			"banner" => $this->bannerUri(),
 			"extra" => [
-				'read' => Arrays::containsValueIndexed($this->readBy(), $this->sellerId()),
-				'deleted' => Arrays::containsValueIndexed($this->deletedBy(), $this->sellerId()),
+				'read' => Arrays::contains($this->readBy, $this->sellerId()),
+				'deleted' => Arrays::contains($this->deletedBy, $this->sellerId()),
 			],
 		];
 	}
 
-	protected function bannerUri(){
-		return makeUrl($this->banner());
+	protected function bannerUri () : ?string
+	{
+		return makeUrl($this->banner);
 	}
 
-	protected function sellerId(){
-		$user = auth('seller-api')->user();
-		return $user != null ? $user->id() : -1;
+	protected function sellerId () : int
+	{
+		return auth('seller-api')->id();
 	}
 }

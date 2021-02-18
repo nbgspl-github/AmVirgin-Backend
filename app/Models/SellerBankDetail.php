@@ -2,39 +2,16 @@
 
 namespace App\Models;
 
-use App\Classes\Arrays;
-use App\Classes\Eloquent\ModelExtended;
-use App\Classes\Rule;
-use App\Interfaces\Directories;
-use App\Interfaces\Tables;
 use App\Queries\Seller\BankDetailQuery;
-use App\Storage\SecuredDisk;
 use App\Traits\DynamicAttributeNamedMethods;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class SellerBankDetail extends ModelExtended{
+class SellerBankDetail extends \App\Library\Database\Eloquent\Model
+{
 	use DynamicAttributeNamedMethods;
 
-	protected $fillable = [
-		'sellerId',
-		'accountHolderName',
-		'accountNumber',
-		'bankName',
-		'cityId',
-		'stateId',
-		'countryId',
-		'branch',
-		'ifsc',
-		'businessType',
-		'pan',
-		'addressProofType',
-		'addressProofDocument',
-		'cancelledCheque',
-	];
+	protected $table = 'seller_bank_details';
 	protected $casts = [
-		'addressProofDocument' => 'uri',
-		'cancelledCheque' => 'uri',
 		'accountNumberVerified' => 'bool',
 		'panVerified' => 'bool',
 		'addressProofVerified' => 'bool',
@@ -45,33 +22,52 @@ class SellerBankDetail extends ModelExtended{
 		'AadharCard' => 'aadhar-card',
 		'VoterID' => 'voter-id',
 		'DrivingLicense' => 'driving-license',
-		'ElectrycityBill' => 'electrycity-bill',
-		'PhoneBill' => 'pbone-bill',
+		'ElectricityBill' => 'electricity-bill',
+		'PhoneBill' => 'phone-bill',
+		'BankPassbook' => 'bank-passbook'
 	];
 
-	public function setAddressProofDocumentAttribute($value){
-		$this->attributes['addressProofDocument'] = SecuredDisk::access()->putFile(Directories::SellerDocuments, $value);
-		return $this->attributes['addressProofDocument'];
+	public function setAddressProofDocumentAttribute ($value)
+	{
+		($value instanceof \Illuminate\Http\UploadedFile)
+			? $this->attributes['addressProofDocument'] = $this->storeMedia('seller-documents', $value)
+			: $this->attributes['addressProofDocument'] = $value;
 	}
 
-	public function setCancelledChequeAttribute($value){
-		$this->attributes['cancelledCheque'] = SecuredDisk::access()->putFile(Directories::SellerDocuments, $value);
-		return $this->attributes['cancelledCheque'];
+	public function getAddressProofDocumentAttribute () : ?string
+	{
+		return $this->retrieveMedia($this->attributes['addressProofDocument']);
 	}
 
-	public function state(): BelongsTo{
+	public function setCancelledChequeAttribute ($value)
+	{
+		($value instanceof \Illuminate\Http\UploadedFile)
+			? $this->attributes['cancelledCheque'] = $this->storeMedia('seller-documents', $value)
+			: $this->attributes['cancelledCheque'] = $value;
+	}
+
+	public function getCancelledChequeAttribute () : ?string
+	{
+		return $this->retrieveMedia($this->attributes['cancelledCheque']);
+	}
+
+	public function state () : BelongsTo
+	{
 		return $this->belongsTo(State::class, 'stateId');
 	}
 
-	public function city(): BelongsTo{
+	public function city () : BelongsTo
+	{
 		return $this->belongsTo(City::class, 'cityId');
 	}
 
-	public function country(){
+	public function country ()
+	{
 		return Country::where('initials', 'IN')->first();
 	}
 
-	public static function startQuery(): BankDetailQuery{
+	public static function startQuery () : BankDetailQuery
+	{
 		return BankDetailQuery::begin();
 	}
 }

@@ -18,7 +18,7 @@ class CreateCitiesTable extends Migration{
 			$table->timestamps();
 
 			if (appEnvironment(AppEnvironmentProduction)) {
-				$table->foreign('stateId')->references('id')->on(\App\Interfaces\Tables::States)->onDelete('cascade');
+				$table->foreign('stateId')->references('id')->on(\App\Library\Enums\Common\Tables::States)->onDelete('cascade');
 			}
 		});
 	}

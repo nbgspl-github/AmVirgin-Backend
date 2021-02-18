@@ -2,46 +2,72 @@
 @section('content')
 	<div class="row ">
 		<div class="col-12">
-			<div class="card shadow-sm custom-card">
+			<div class="card shadow-sm">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'Videos','action'=>['link'=>route('admin.videos.create'),'text'=>'Add a Video/Movie']])
+					@include('admin.extras.header', ['title'=>'Videos','action'=>['link'=>route('admin.videos.create'),'text'=>'Add']])
 				</div>
 				<div class="card-body animatable">
-					<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 						<thead>
 						<tr>
-							<th class="text-center">No.</th>
-							<th class="text-center">Poster</th>
-							<th class="text-center">Title</th>
-							<th class="text-center">Description</th>
-							<th class="text-center">Rating</th>
-							<th class="text-center">Trending</th>
-							<th class="text-center">Pending</th>
-							<th class="text-center">Action(s)</th>
+							<th class="">#</th>
+							<th class="">Poster</th>
+							<th class="">Title</th>
+							<th class="">Description</th>
+							<th class="">Audio</th>
+							<th class="">Subtitles</th>
+							<th class="">Rating</th>
+							<th class="">Trending</th>
+							<th class="">Processing</th>
+							<th class="">Action(s)</th>
 						</tr>
 						</thead>
 
 						<tbody>
 						@foreach($videos as $video)
-							<tr id="content_row_{{$video->getKey()}}">
-								<td class="text-center">{{$loop->index+1}}</td>
-								<td class="text-center">
-									@if($video->getPoster()!=null)
-										<img src="{{\App\Storage\SecuredDisk::access()->url($video->getPoster())}}" style="width: 100px; height: 150px; filter: drop-shadow(2px 2px 8px black)" alt="{{$video->getTitle()}}"/>
+							<tr id="content_row_{{$video->id}}">
+								<td class="">{{$loop->index+1}}</td>
+								<td class="">
+									@if($video->poster!=null)
+										<img src="{{$video->poster}}" style="width: 100px; height: 150px; filter: drop-shadow(2px 2px 8px black)" alt="{{$video->title}}"/>
 									@else
 										<i class="mdi mdi-close-box-outline text-muted shadow-sm" style="font-size: 25px"></i>
 									@endif
 								</td>
-								<td class="text-center">{{$video->getTitle()}}</td>
-								<td class="text-center">{{__ellipsis($video->getDescription(),100)}}</td>
-								<td class="text-center">{{$video->getRating()}}</td>
-								<td class="text-center">{{__boolean($video->trending)}}</td>
-								<td class="text-center">{{__boolean($video->pending)}}</td>
-								<td class="text-center">
+								<td class="">{{$video->title}}</td>
+								<td class="">{{\App\Library\Utils\Extensions\Str::ellipsis($video->description,255)}}</td>
+								<td>
+									@foreach($video->audios as $audio)
+										<span class="badge badge-secondary">
+											{{$audio->language->name}}
+										</span>
+									@endforeach
+								</td>
+								<td>
+									@foreach($video->subtitles as $subtitle)
+										<span class="badge badge-secondary">
+											{{$subtitle->language->name}}
+										</span>
+									@endforeach
+								</td>
+								<td class="">{{$video->rating}}</td>
+								<td class="">{{\App\Library\Utils\Extensions\Str::stringifyBoolean($video->trending)}}</td>
+								<td class="">
+									@if($video->isTranscoding())
+										Yes
+									@else
+										No
+									@endif
+								</td>
+								<td class="">
 									<div class="btn-toolbar" role="toolbar">
-										<div class="btn-group mx-auto" role="group">
-											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.videos.edit.action',$video->getKey())}}" @include('admin.extras.tooltip.left', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
-											<a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);" onclick="deleteMovie('{{$video->getKey()}}');" @include('admin.extras.tooltip.right', ['title' => 'Delete this video'])><i class="mdi mdi-delete"></i></a>
+										<div class="btn-group" role="group">
+											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.videos.edit.action',$video->id)}}" @include('admin.extras.tooltip.left', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
+											@if($video->isTranscoding())
+												<a class="btn btn-outline-primary shadow-sm disabled" href="javascript:void(0);" onclick="deleteVideo('{{$video->id}}');" @include('admin.extras.tooltip.right', ['title' => 'This action is unavailable at this time.'])><i class="mdi mdi-delete"></i></a>
+											@else
+												<a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);" onclick="deleteVideo('{{$video->id}}');" @include('admin.extras.tooltip.right', ['title' => 'Delete this video'])><i class="mdi mdi-delete"></i></a>
+											@endif
 										</div>
 									</div>
 								</td>
@@ -49,6 +75,7 @@
 						@endforeach
 						</tbody>
 					</table>
+					{{$videos->links()}}
 				</div>
 			</div>
 		</div>
@@ -57,50 +84,18 @@
 
 @section('javascript')
 	<script type="application/javascript">
-		let dataTable = null;
-
-		$(document).ready(() => {
-			dataTable = $('#datatable').DataTable({
-				initComplete: function () {
-					$('#datatable_wrapper').addClass('px-0 mx-0');
-				}
-			});
-		});
-
-		/**
-		 * Returns route for Genre/Delete route.
-		 * @param id
-		 * @returns {string}
-		 */
-		deleteRoute = (id) => {
-			return 'videos/' + id;
-		};
-
-		/**
-		 * Callback for delete slide trigger.
-		 * @param id
-		 */
-		deleteMovie = (id) => {
-			window.genreId = id;
-			alertify.confirm("Are you sure you want to delete this video? ",
-				(ev) => {
-					ev.preventDefault();
-					axios.delete(deleteRoute(id))
-						.then(response => {
-							if (response.status === 200) {
-								$('#content_row_' + id).remove();
-								toastr.success(response.data.message);
-							} else {
-								toastr.error(response.data.message);
-							}
-						})
-						.catch(error => {
-							toastr.error('Something went wrong. Please try again in a while.');
+		deleteVideo = key => {
+			alertify.confirm("Are you sure? This action is irreversible!",
+				yes => {
+					axios.delete(`/admin/videos/${key}`).then(response => {
+						location.reload();
+					}).catch(e => {
+						alertify.confirm('Something went wrong. Retry?', yes => {
+							deleteVideo(key);
 						});
-				},
-				(ev) => {
-					ev.preventDefault();
-				});
+					});
+				}
+			)
 		}
 	</script>
 @stop

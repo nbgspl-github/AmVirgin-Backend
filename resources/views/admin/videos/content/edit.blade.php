@@ -5,7 +5,7 @@
 	@include('admin.modals.durationPicker')
 	<div class="row">
 		<div class="col-12">
-			<div class="card shadow-sm custom-card">
+			<div class="card shadow-sm">
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Video','onClick'=>['link'=>'handleAdd()','text'=>'Add more']])
 				</div>
@@ -16,7 +16,7 @@
 							<div class="col-8 mx-auto">
 								<div class="card shadow-none" style="border: 1px solid rgba(180,185,191,0.4);">
 									<div class="card-header text-white bg-secondary">
-										Editing sources for - {{$payload->getTitle()}}
+										Editing sources for - {{$payload->title}}
 									</div>
 									<div class="card-body pb-0">
 										<div class="form-row" id="container">

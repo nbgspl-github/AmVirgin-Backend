@@ -11,4 +11,4 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.react('resources/js/app.js', 'public/js/app.js').js('resources/classes/Choices.js', 'js/Choices.js');
+mix.js('resources/js/app.js', 'public/js');

@@ -2,23 +2,17 @@
 
 namespace App\Models;
 
-use App\Traits\FluentConstructor;
-use App\Traits\RetrieveResource;
-use Illuminate\Database\Eloquent\Model;
-
-class CustomerOtp extends Model {
-	use RetrieveResource;
-	use FluentConstructor;
-
+class CustomerOtp extends \App\Library\Database\Eloquent\Model
+{
 	public $incrementing = false;
-	protected $table = 'otp-customers';
+	protected $table = 'otp_customers';
 	protected $primaryKey = 'mobile';
-	protected $fillable = ['mobile', 'otp'];
 
 	/**
 	 * @return string
 	 */
-	public function getMobile(): string {
+	public function getMobile () : string
+	{
 		return $this->mobile;
 	}
 
@@ -26,7 +20,8 @@ class CustomerOtp extends Model {
 	 * @param string $mobile
 	 * @return CustomerOtp
 	 */
-	public function setMobile(string $mobile): CustomerOtp{
+	public function setMobile (string $mobile) : CustomerOtp
+	{
 		$this->mobile = $mobile;
 		return $this;
 	}
@@ -34,7 +29,8 @@ class CustomerOtp extends Model {
 	/**
 	 * @return string
 	 */
-	public function getOtp(): string{
+	public function getOtp () : string
+	{
 		return $this->otp;
 	}
 
@@ -42,7 +38,8 @@ class CustomerOtp extends Model {
 	 * @param string $otp
 	 * @return CustomerOtp
 	 */
-	public function setOtp(string $otp): CustomerOtp{
+	public function setOtp (string $otp) : CustomerOtp
+	{
 		$this->otp = $otp;
 		return $this;
 	}
