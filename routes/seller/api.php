@@ -184,5 +184,3 @@ Route::prefix('returns')->group(function () {
 		Route::post('disapprove', [ReturnController::class, 'disapprove']);
 	});
 });
-
-Route::get();
