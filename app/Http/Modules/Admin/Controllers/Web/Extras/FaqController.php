@@ -16,7 +16,7 @@ class FaqController extends \App\Http\Modules\Admin\Controllers\Web\WebControlle
 
 	public function edit()
 	{
-		return view('admin.extras.privacy-policy')->with(self::FAQ, \App\Models\Settings::get(self::FAQ));
+		return view('admin.extras.faq')->with(self::FAQ, \App\Models\Settings::get(self::FAQ));
 	}
 
 	public function update(): \Illuminate\Http\RedirectResponse

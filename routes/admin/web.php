@@ -4,7 +4,11 @@ use App\Http\Modules\Admin\Controllers\Web\Auth\LoginController;
 use App\Http\Modules\Admin\Controllers\Web\CategoryController;
 use App\Http\Modules\Admin\Controllers\Web\DashboardController;
 use App\Http\Modules\Admin\Controllers\Web\Extras\AboutUsController;
+use App\Http\Modules\Admin\Controllers\Web\Extras\CancellationController;
+use App\Http\Modules\Admin\Controllers\Web\Extras\FaqController;
 use App\Http\Modules\Admin\Controllers\Web\Extras\PrivacyPolicyController;
+use App\Http\Modules\Admin\Controllers\Web\Extras\ReturnsController;
+use App\Http\Modules\Admin\Controllers\Web\Extras\ShippingController;
 use App\Http\Modules\Admin\Controllers\Web\Extras\TermsConditionsController;
 use App\Http\Modules\Admin\Controllers\Web\GenreController;
 use App\Http\Modules\Admin\Controllers\Web\News\ArticleController;
@@ -321,9 +325,24 @@ Route::middleware('auth:admin')->group(function () {
 		Route::post(Str::Empty, [PrivacyPolicyController::class, 'update'])->name('admin.extras.privacy-policy.update');
 	});
 
-	Route::prefix('terms-and-conditions')->group(function () {
-		Route::get(Str::Empty, [TermsConditionsController::class, 'edit'])->name('admin.extras.terms-and-conditions.edit');
-		Route::post(Str::Empty, [TermsConditionsController::class, 'update'])->name('admin.extras.terms-and-conditions.update');
+	Route::prefix('faq')->group(function () {
+		Route::get(Str::Empty, [FaqController::class, 'edit'])->name('admin.extras.faq.edit');
+		Route::post(Str::Empty, [FaqController::class, 'update'])->name('admin.extras.faq.update');
+	});
+
+	Route::prefix('shipping-policy')->group(function () {
+		Route::get(Str::Empty, [ShippingController::class, 'edit'])->name('admin.extras.shipping-policy.edit');
+		Route::post(Str::Empty, [ShippingController::class, 'update'])->name('admin.extras.shipping-policy.update');
+	});
+
+	Route::prefix('return-policy')->group(function () {
+		Route::get(Str::Empty, [ReturnsController::class, 'edit'])->name('admin.extras.return-policy.edit');
+		Route::post(Str::Empty, [ReturnsController::class, 'update'])->name('admin.extras.return-policy.update');
+	});
+
+	Route::prefix('cancellation-policy')->group(function () {
+		Route::get(Str::Empty, [CancellationController::class, 'edit'])->name('admin.extras.cancellation-policy.edit');
+		Route::post(Str::Empty, [CancellationController::class, 'update'])->name('admin.extras.cancellation-policy.update');
 	});
 
 	Route::prefix('version')->group(function () {
