@@ -6,6 +6,7 @@ use FFMpeg\Format\Video\X264;
 use Illuminate\Console\Command;
 use ProtoneMedia\LaravelFFMpeg\Exporters\EncodingException;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class EncoderTask extends Command
 {
@@ -16,9 +17,14 @@ class EncoderTask extends Command
 	 */
 	protected $signature = 'v:e';
 
-	protected $path = "app\public\movies\movie.mp4";
+	protected $path = "app\\public\\videos\\movie.mp4";
 
 	protected $low, $mid, $high, $ultra;
+
+	/**
+	 * @var ProgressBar
+	 */
+	protected $progressBar;
 
 	/**
 	 * The console command description.
@@ -35,12 +41,13 @@ class EncoderTask extends Command
 	public function __construct()
 	{
 		parent::__construct();
+		$this->output->createProgressBar(100);
 	}
 
 	/**
 	 * Execute the console command.
 	 *
-	 * @return int
+	 * @return void
 	 */
 	public function handle()
 	{
@@ -49,7 +56,7 @@ class EncoderTask extends Command
 			$this->mid = (new X264('aac', 'libx264'))->setKiloBitrate(500);
 			$this->high = (new X264('aac', 'libx264'))->setKiloBitrate(1000);
 			$this->ultra = (new X264('aac', 'libx264'))->setKiloBitrate(1500);
-			$encoder = FFMpeg::fromDisk('secured')
+			FFMpeg::fromDisk('secured')
 				->open($this->path)
 				->exportForHLS()
 				->addFormat($this->low)
@@ -57,7 +64,8 @@ class EncoderTask extends Command
 				->addFormat($this->high)
 				->addFormat($this->ultra)
 				->onProgress(fn($progress) => $this->updateProgress($progress))
-				->toDisk('secured')->save('app/public/movies/encoded/video_adaptive.m3u8');
+				->toDisk('secured')->save('app/public/videos/encoded/video_adaptive.m3u8');
+			$this->progressBar->start();
 		} catch (\Throwable $e) {
 			dd($e);
 		}
@@ -65,6 +73,6 @@ class EncoderTask extends Command
 
 	public function updateProgress($value)
 	{
-		echo $value;
+		$this->progressBar->advance();
 	}
 }
