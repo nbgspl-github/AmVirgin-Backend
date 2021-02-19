@@ -28,7 +28,7 @@ class AbstractProductController extends \App\Http\Modules\Seller\Controllers\Api
 	protected ?Collection $items = null;
 	protected array $rules;
 
-	public function __construct ()
+	public function __construct()
 	{
 		parent::__construct();
 		$this->rules = [
@@ -112,15 +112,15 @@ class AbstractProductController extends \App\Http\Modules\Seller\Controllers\Api
 		];
 	}
 
-	protected function storeProduct (array $payload) : Product
+	protected function storeProduct(array $payload): Product
 	{
 		return Product::create($payload);
 	}
 
-	protected function storeAttribute (Product $product, array $payload) : Collection
+	protected function storeAttribute(Product $product, array $payload): Collection
 	{
 		if (!$this->items) {
-			$this->items = $product->category->attributeSet->items;
+			$this->items = $product->category->attributes->items;
 		}
 		$attributesCollection = new Collection();
 		collect($payload)->each(function ($payload) use ($product, $attributesCollection) {
@@ -154,7 +154,7 @@ class AbstractProductController extends \App\Http\Modules\Seller\Controllers\Api
 		return $attributesCollection;
 	}
 
-	protected function storeImages (Product $product, array $payload) : Collection
+	protected function storeImages(Product $product, array $payload): Collection
 	{
 		$images = new Collection();
 		foreach ($payload as $image) {
@@ -166,37 +166,37 @@ class AbstractProductController extends \App\Http\Modules\Seller\Controllers\Api
 		return $images;
 	}
 
-	protected function category () : Category
+	protected function category(): Category
 	{
 		return Category::find(request('categoryId'));
 	}
 
-	protected function brand () : Brand
+	protected function brand(): Brand
 	{
 		return Brand::find(request('brandId'));
 	}
 
-	protected function isInvalidCategory (Category $category) : bool
+	protected function isInvalidCategory(Category $category): bool
 	{
 		return !Str::equals($category->type, \App\Library\Enums\Categories\Types::Vertical);
 	}
 
-	protected function isBrandApprovedForSeller (Brand $brand) : bool
+	protected function isBrandApprovedForSeller(Brand $brand): bool
 	{
 		return Brand::startQuery()->seller($this->seller()->id)->displayable()->key($brand->id)->first() !== null;
 	}
 
-	protected function storeTrailer (UploadedFile $file) : ?string
+	protected function storeTrailer(UploadedFile $file): ?string
 	{
 		return Uploads::access()->putFile(Directories::Trailers, $file);
 	}
 
-	protected function isVariantType () : bool
+	protected function isVariantType(): bool
 	{
 		return request('type') == Product::Type['Variant'];
 	}
 
-	protected function calculateDiscount (int $originalPrice, int $sellingPrice) : int
+	protected function calculateDiscount(int $originalPrice, int $sellingPrice): int
 	{
 		$difference = $originalPrice - $sellingPrice;
 		if ($difference == 0)
@@ -206,32 +206,32 @@ class AbstractProductController extends \App\Http\Modules\Seller\Controllers\Api
 		}
 	}
 
-	protected function validateOuter () : array
+	protected function validateOuter(): array
 	{
 		return $this->requestValid(request(), $this->rules['store']['outer']);
 	}
 
-	protected function validateProductPayload (array $payload) : array
+	protected function validateProductPayload(array $payload): array
 	{
 		return $this->arrayValid($payload, $this->rules['store']['product']);
 	}
 
-	protected function validateAttributePayload (array $payload) : array
+	protected function validateAttributePayload(array $payload): array
 	{
 		return $this->arrayValid($payload, $this->rules['store']['attribute']);
 	}
 
-	protected function validateTrailerPayload (array $payload) : array
+	protected function validateTrailerPayload(array $payload): array
 	{
 		return $this->arrayValid($payload, $this->rules['store']['trailer']);
 	}
 
-	protected function sessionUuid () : string
+	protected function sessionUuid(): string
 	{
 		return Str::makeUuid();
 	}
 
-	protected function convertAllSimpleToVariants (string $token) : bool
+	protected function convertAllSimpleToVariants(string $token): bool
 	{
 		$products = Product::startQuery()->seller($this->seller()->id)->simple()->group($token)->get();
 		// If there are more than one products under the same group,
@@ -247,7 +247,7 @@ class AbstractProductController extends \App\Http\Modules\Seller\Controllers\Api
 		}
 	}
 
-	protected function validateToken ()
+	protected function validateToken()
 	{
 		$productToken = ProductToken::where([
 			['token', request()->header('X-PRODUCT-TOKEN')],
@@ -261,7 +261,7 @@ class AbstractProductController extends \App\Http\Modules\Seller\Controllers\Api
 			return $productToken->token();
 	}
 
-	protected function validateUpdate () : array
+	protected function validateUpdate(): array
 	{
 		return $this->requestValid(request(), $this->rules['update']);
 	}

@@ -3,14 +3,14 @@
 return [
 	'ffmpeg' => [
 		'binaries' => env('FFMPEG_BINARIES', 'ffmpeg'),
-		'threads' => 2,
+		'threads' => 8,
 	],
 
 	'ffprobe' => [
 		'binaries' => env('FFPROBE_BINARIES', 'ffprobe'),
 	],
 
-	'timeout' => 3600,
+	'timeout' => 172800,
 
 	'enable_logging' => true,
 
