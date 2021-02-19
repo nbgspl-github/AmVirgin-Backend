@@ -325,6 +325,11 @@ Route::middleware('auth:admin')->group(function () {
 		Route::post(Str::Empty, [PrivacyPolicyController::class, 'update'])->name('admin.extras.privacy-policy.update');
 	});
 
+	Route::prefix('terms-conditions')->group(function () {
+		Route::get(Str::Empty, [TermsConditionsController::class, 'edit'])->name('admin.extras.terms-and-conditions.edit');
+		Route::post(Str::Empty, [TermsConditionsController::class, 'update'])->name('admin.extras.terms-and-conditions.update');
+	});
+
 	Route::prefix('faq')->group(function () {
 		Route::get(Str::Empty, [FaqController::class, 'edit'])->name('admin.extras.faq.edit');
 		Route::post(Str::Empty, [FaqController::class, 'update'])->name('admin.extras.faq.update');
