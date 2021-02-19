@@ -6,7 +6,7 @@ namespace App\Http\Modules\Admin\Controllers\Web\Extras;
 
 class CancellationController extends \App\Http\Modules\Admin\Controllers\Web\WebController
 {
-	protected const CANCELLATION = 'cancellation';
+	protected const CANCELLATION = 'cancellation_policy';
 
 	public function __construct()
 	{
@@ -16,7 +16,7 @@ class CancellationController extends \App\Http\Modules\Admin\Controllers\Web\Web
 
 	public function edit()
 	{
-		return view('admin.extras.privacy-policy')->with(self::CANCELLATION, \App\Models\Settings::get(self::CANCELLATION));
+		return view('admin.extras.cancellation-policy')->with(self::CANCELLATION, \App\Models\Settings::get(self::CANCELLATION));
 	}
 
 	public function update(): \Illuminate\Http\RedirectResponse

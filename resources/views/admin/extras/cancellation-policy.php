@@ -7,15 +7,15 @@
 		<div class="col-12">
 			<div class="card shadow-sm">
 				<div class="card-header py-0">
-					@include('admin.extras.header', ['title'=>'About Us'])
+					@include('admin.extras.header', ['title'=>'Cancellation Policy'])
 				</div>
 				<div class="card-body">
 					<div class="row">
 						<div class="col-12">
-							<form action="{{route('admin.extras.about-us.update')}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
+							<form action="{{route('admin.extras.cancellation-policy.update')}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
 								@csrf
 								<div class="form-group">
-									<textarea name="about_us" id="about_us" cols="30" rows="10">{{old('about_us',$about_us)}}</textarea>
+									<textarea name="cancellation_policy" id="cancellation_policy" cols="30" rows="10">{{old('cancellation_policy',$cancellation_policy)}}</textarea>
 								</div>
 								<div class="form-row">
 									<div class="col-6">
@@ -42,7 +42,7 @@
 	<script src="{{asset("assets/admin/plugins/summernote/summernote-bs4.min.js")}}"></script>
 	<script>
 		$(document).ready(() => {
-			$('#about_us').summernote({
+			$('#cancellation_policy').summernote({
 				height: 600,
 				toolbar: [
 					['style', ['style']],

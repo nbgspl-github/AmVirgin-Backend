@@ -6,7 +6,7 @@ namespace App\Http\Modules\Admin\Controllers\Web\Extras;
 
 class ReturnsController extends \App\Http\Modules\Admin\Controllers\Web\WebController
 {
-	protected const RETURNS = 'returns';
+	protected const RETURNS = 'return_policy';
 
 	public function __construct ()
 	{
@@ -16,7 +16,7 @@ class ReturnsController extends \App\Http\Modules\Admin\Controllers\Web\WebContr
 
 	public function edit ()
 	{
-		return view('admin.extras.privacy-policy')->with(self::RETURNS, \App\Models\Settings::get(self::RETURNS));
+		return view('admin.extras.return-policy')->with(self::RETURNS, \App\Models\Settings::get(self::RETURNS));
 	}
 
 	public function update () : \Illuminate\Http\RedirectResponse
