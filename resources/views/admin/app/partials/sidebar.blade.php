@@ -24,10 +24,10 @@
 					<x-sidebar-item url="{{route('admin.extras.about-us.edit')}}" icon="" title="About Us"/>
 					<x-sidebar-item url="{{route('admin.extras.privacy-policy.edit')}}" icon="" title="Privacy Policy"/>
 					<x-sidebar-item url="{{route('admin.extras.terms-and-conditions.edit')}}" icon="" title="Terms & Conditions"/>
-					<x-sidebar-item url="{{route('admin.extras.terms-and-conditions.edit')}}" icon="" title="Shipping Policy"/>
-					<x-sidebar-item url="{{route('admin.extras.terms-and-conditions.edit')}}" icon="" title="Returns Policy"/>
-					<x-sidebar-item url="{{route('admin.extras.terms-and-conditions.edit')}}" icon="" title="Cancellation Policy"/>
-					<x-sidebar-item url="{{route('admin.extras.terms-and-conditions.edit')}}" icon="" title="FAQ"/>
+					<x-sidebar-item url="{{route('admin.extras.faq.edit')}}" icon="" title="FAQ"/>
+					<x-sidebar-item url="{{route('admin.extras.shipping-policy.edit')}}" icon="" title="Shipping Policy"/>
+					<x-sidebar-item url="{{route('admin.extras.return-policy.edit')}}" icon="" title="Returns Policy"/>
+					<x-sidebar-item url="{{route('admin.extras.cancellation-policy.edit')}}" icon="" title="Cancellation Policy"/>
 				</x-sidebar-expandable-item>
 
 				<x-sidebar-header title="Shop"/>
