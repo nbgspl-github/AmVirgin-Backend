@@ -50,7 +50,7 @@ class HomeController extends \App\Http\Modules\Customer\Controllers\Api\ApiContr
 				->isNotTranscoding()
 				->section($section->id)
 				->take($section->max_items)
-				->applyFilters(true)
+				->applyFilters(false)
 				->get();
 			$contents = \App\Http\Modules\Customer\Resources\Entertainment\VideoSectionResource::collection($contents);
 			return [

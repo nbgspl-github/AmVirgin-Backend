@@ -11,69 +11,69 @@ use Illuminate\Database\Eloquent\Builder;
 class VideoQuery extends AbstractQuery
 {
 
-	protected function model () : string
+	protected function model(): string
 	{
 		return Video::class;
 	}
 
-	public static function begin () : self
+	public static function begin(): self
 	{
 		return new self();
 	}
 
-	public function displayable () : self
+	public function displayable(): self
 	{
 		$this->query->where('pending', false);
 		return $this;
 	}
 
-	public function isNotTranscoding () : self
+	public function isNotTranscoding(): self
 	{
 		$this->query->whereHas('queues', function (Builder $builder) {
 			$builder->whereNotIn('status', ['Encoding', 'Queued']);
-		});
+		})->orWhereDoesntHave('queues');
 		return $this;
 	}
 
-	public function trending (bool $yes = true) : self
+	public function trending(bool $yes = true): self
 	{
 		$this->query->orderByDesc('hits');
 		return $this;
 	}
 
-	public function genre ($genreId = null) : self
+	public function genre($genreId = null): self
 	{
 		if ($genreId != null)
 			$this->query->where('genre_id', $genreId);
 		return $this;
 	}
 
-	public function section (int $sectionId) : self
+	public function section(int $sectionId): self
 	{
 		$this->query->whereJsonContains('sections', $sectionId);
 		return $this;
 	}
 
-	public function movie () : self
+	public function movie(): self
 	{
 		$this->query->where('type', 'movie');
 		return $this;
 	}
 
-	public function series () : self
+	public function series(): self
 	{
 		$this->query->where('type', 'series');
 		return $this;
 	}
 
-	public function isNew () : self
+	public function isNew(): self
 	{
 		$lastWeek = Time::mysqlStamp(time() - 604800);
 		$this->query->where('created_at', '>=', $lastWeek);
 		return $this;
 	}
 
-	public function language ($languageId = null) : self
+	public function language($languageId = null): self
 	{
 		$language = Language::find($languageId);
 		if ($language != null) {
@@ -83,7 +83,7 @@ class VideoQuery extends AbstractQuery
 		return $this;
 	}
 
-	public function includeExplicit ($include = false) : self
+	public function includeExplicit($include = false): self
 	{
 		if ($include == true) {
 			$this->query->whereIn('pg_rating', ['G', 'PG', 'PG-13', 'R', 'NC-17']);
@@ -93,7 +93,7 @@ class VideoQuery extends AbstractQuery
 		return $this;
 	}
 
-	public function subscriptionType ($subscriptionType = null) : self
+	public function subscriptionType($subscriptionType = null): self
 	{
 		if ($subscriptionType != null) {
 			$this->query->where('subscription_type', $subscriptionType);
@@ -101,7 +101,7 @@ class VideoQuery extends AbstractQuery
 		return $this;
 	}
 
-	public function applyFilters (bool $apply = true) : self
+	public function applyFilters(bool $apply = true): self
 	{
 		if ($apply) {
 			$languages = Str::split(',', request('language'), true);
