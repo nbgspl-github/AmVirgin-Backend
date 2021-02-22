@@ -89,9 +89,10 @@
 														</div>
 														<div class="modal-body">
 															@foreach($appVideoSections as $section)
-																<div class="row">
+																<div class="row" mb-1>
 																	<div class="col-6">
-																		<select name="" id="" class="formpicker">
+																		<select name="" id=""
+																				class="form-control formpicker">
 																			@foreach($appVideoSections as $section)
 																				<option
 																					value="{{$section->id}}">{{$section->title}}</option>
@@ -99,7 +100,8 @@
 																		</select>
 																	</div>
 																	<div class="col-6">
-																		<select name="" id="" class="formpicker">
+																		<select name="" id=""
+																				class="form-control formpicker">
 																			@for($i=0;$i<10;$i++)
 																				<option value="{{$i}}">{{$i}}</option>
 																			@endfor

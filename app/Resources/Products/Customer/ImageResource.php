@@ -7,8 +7,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ImageResource extends JsonResource
 {
-	public function toArray ($request)
+	public function toArray ($request): array
 	{
-		return $this->when(Uploads::access()->exists($this->path) == true, Uploads::access()->url($this->path));
+		return $this->path;
 	}
 }
