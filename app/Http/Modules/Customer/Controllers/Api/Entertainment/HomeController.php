@@ -14,12 +14,12 @@ use Illuminate\Http\JsonResponse;
 
 class HomeController extends \App\Http\Modules\Customer\Controllers\Api\ApiController
 {
-	public function __construct ()
+	public function __construct()
 	{
 		parent::__construct();
 	}
 
-	public function index () : JsonResponse
+	public function index(): JsonResponse
 	{
 		/**
 		 * We need to send the following stuff for the homepage.
@@ -85,7 +85,7 @@ class HomeController extends \App\Http\Modules\Customer\Controllers\Api\ApiContr
 		);
 	}
 
-	public function showAllItemsInSection (\App\Models\Video\Section $section) : JsonResponse
+	public function showAllItemsInSection(\App\Models\Video\Section $section): JsonResponse
 	{
 		if (Str::equals($section->type, PageSectionType::Entertainment)) {
 			$contents = Video::startQuery()->displayable()->isNotTranscoding()->section($section->id)->take($section->max_items)->get();
@@ -98,7 +98,7 @@ class HomeController extends \App\Http\Modules\Customer\Controllers\Api\ApiContr
 		);
 	}
 
-	public function trendingNow () : JsonResponse
+	public function trendingNow(): JsonResponse
 	{
 		$payload = Video::startQuery()->displayable()->isNotTranscoding()->trending()->get();
 		$payload = TrendingNowVideoResource::collection($payload);
@@ -107,7 +107,7 @@ class HomeController extends \App\Http\Modules\Customer\Controllers\Api\ApiContr
 		);
 	}
 
-	public function recommendedVideo () : JsonResponse
+	public function recommendedVideo(): JsonResponse
 	{
 		$payload = Video::startQuery()->displayable()->isNotTranscoding()->orderByDescending('rating')->limit(15)->get();
 		$payload = TrendingNowVideoResource::collection($payload);

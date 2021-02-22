@@ -10,7 +10,8 @@
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Add a Video/Movie'])
 				</div>
-				<form id="uploadForm" action="{{route('admin.videos.store')}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
+				<form id="uploadForm" action="{{route('admin.videos.store')}}" data-parsley-validate="true"
+					  method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="card-body">
 						<div class="row">
@@ -22,30 +23,45 @@
 									<div class="card-body">
 										<div class="form-group">
 											<label for="title">Title<span class="text-primary">*</span></label>
-											<input id="title" type="text" name="title" class="form-control" required placeholder="Type here the video/movie title" minlength="1" maxlength="256" value="{{old('title')}}"/>
+											<input id="title" type="text" name="title" class="form-control" required
+												   placeholder="Type here the video/movie title" minlength="1"
+												   maxlength="256" value="{{old('title')}}"/>
 										</div>
 										<div class="form-group">
 											<label for="duration">Duration<span class="text-primary">*</span></label>
-											<input id="duration" type="text" name="duration" class="form-control bg-white" required placeholder="Choose duration" value="{{old('duration')}}" readonly/>
+											<input id="duration" type="text" name="duration"
+												   class="form-control bg-white" required placeholder="Choose duration"
+												   value="{{old('duration')}}" readonly/>
 										</div>
 										<div class="form-group">
 											<label for="cast">Cast<span class="text-primary">*</span></label>
-											<input id="cast" type="text" name="cast" class="form-control" required placeholder="Type here the series' cast(s) name (separate with /)" minlength="1" maxlength="256" value="{{old('cast')}}"/>
+											<input id="cast" type="text" name="cast" class="form-control" required
+												   placeholder="Type here the series' cast(s) name (separate with /)"
+												   minlength="1" maxlength="256" value="{{old('cast')}}"/>
 										</div>
 										<div class="form-group">
 											<label for="director">Director<span class="text-primary">*</span></label>
-											<input id="director" type="text" name="director" class="form-control" required placeholder="Type here the series' director(s) name (separate with /)" minlength="1" maxlength="256" value="{{old('director')}}"/>
+											<input id="director" type="text" name="director" class="form-control"
+												   required
+												   placeholder="Type here the series' director(s) name (separate with /)"
+												   minlength="1" maxlength="256" value="{{old('director')}}"/>
 										</div>
 										<div class="form-group">
-											<label for="description">Overview (Description)<span class="text-primary">*</span></label>
-											<textarea id="description" name="description" class="form-control" required placeholder="Type short summary about the movie or video" minlength="1" rows="5" maxlength="2000">{{old('description')}}</textarea>
+											<label for="description">Overview (Description)<span
+													class="text-primary">*</span></label>
+											<textarea id="description" name="description" class="form-control" required
+													  placeholder="Type short summary about the movie or video"
+													  minlength="1" rows="5"
+													  maxlength="2000">{{old('description')}}</textarea>
 										</div>
 										<div class="form-group">
 											<label for="genre">Choose a genre<span class="text-primary">*</span></label>
-											<select id="genre" name="genre_id" class="form-control selectpicker" title="Choose..." required>
+											<select id="genre" name="genre_id" class="form-control selectpicker"
+													title="Choose..." required>
 												@foreach($appGenres as $genre)
 													@if(old('genreId',-1)==$genre->getKey())
-														<option value="{{$genre->getKey()}}" selected>{{$genre->name}}</option>
+														<option value="{{$genre->getKey()}}"
+																selected>{{$genre->name}}</option>
 													@else
 														<option value="{{$genre->getKey()}}">{{$genre->name}}</option>
 													@endif
@@ -53,34 +69,88 @@
 											</select>
 										</div>
 										<div class="form-group">
-											<label for="sectionId">Choose containing section<span class="text-primary">*</span></label>
-											<select id="sectionId" name="section_id" class="form-control selectpicker" title="Choose..." multiple required>
-												@foreach($appVideoSections as $section)
-													<option value="{{$section->id}}">{{$section->title}}</option>
-												@endforeach
-											</select>
+											<label for="sectionId">Choose containing section<span
+													class="text-primary">*</span></label>
+											<button type="button" class="btn btn-primary" data-toggle="modal"
+													data-target="#exampleModal">
+												Click to choose...
+											</button>
+											<div class="modal fade" id="exampleModal" tabindex="-1"
+												 aria-labelledby="exampleModalLabel" aria-hidden="true">
+												<div class="modal-dialog">
+													<div class="modal-content">
+														<div class="modal-header">
+															<h5 class="modal-title" id="exampleModalLabel">Containing
+																Sections</h5>
+															<button type="button" class="close" data-dismiss="modal"
+																	aria-label="Close">
+																<span aria-hidden="true">&times;</span>
+															</button>
+														</div>
+														<div class="modal-body">
+															@foreach($appVideoSections as $section)
+																<div class="row">
+																	<div class="col-6">
+																		<select name="" id="" class="formpicker">
+																			@foreach($appVideoSections as $section)
+																				<option
+																					value="{{$section->id}}">{{$section->title}}</option>
+																			@endforeach
+																		</select>
+																	</div>
+																	<div class="col-6">
+																		<select name="" id="" class="formpicker">
+																			@for($i=0;$i<10;$i++)
+																				<option value="{{$i}}">{{$i}}</option>
+																			@endfor
+																		</select>
+																	</div>
+																</div>
+															@endforeach
+														</div>
+														<div class="modal-footer">
+															<button type="button" class="btn btn-secondary"
+																	data-dismiss="modal">Close
+															</button>
+															<button type="button" class="btn btn-primary">Save changes
+															</button>
+														</div>
+													</div>
+												</div>
+											</div>
 										</div>
 										<div class="form-group">
-											<label for="released">Release date<span class="text-primary">*</span></label>
-											<input id="released" type="date" name="released" class="form-control" required placeholder="Choose release date" onkeydown="return false;"/>
+											<label for="released">Release date<span
+													class="text-primary">*</span></label>
+											<input id="released" type="date" name="released" class="form-control"
+												   required placeholder="Choose release date"
+												   onkeydown="return false;"/>
 										</div>
 										<div class="form-group">
 											<label for="rating">Rating<span class="text-primary">*</span></label>
-											<input id="rating" type="number" name="rating" class="form-control" required placeholder="Type rating for this movie/video" min="0.0" max="5.0" value="0.0" step="0.1"/>
+											<input id="rating" type="number" name="rating" class="form-control" required
+												   placeholder="Type rating for this movie/video" min="0.0" max="5.0"
+												   value="0.0" step="0.1"/>
 										</div>
 										<div class="form-group">
 											<label for="pgRating">PG Rating<span class="text-primary">*</span></label>
-											<select id="pgRating" name="pg_rating" class="form-control selectpicker" title="Choose..." required>
+											<select id="pgRating" name="pg_rating" class="form-control selectpicker"
+													title="Choose..." required>
 												<option value="G">G - General audience</option>
 												<option value="PG">PG - Parental Guidance advised</option>
-												<option value="PG-13">PG-13 - Parental Guidance required (not appropriate for under 13)</option>
+												<option value="PG-13">PG-13 - Parental Guidance required (not
+													appropriate for under 13)
+												</option>
 												<option value="R">R - Restricted</option>
 												<option value="NC-17">NC-17 - No children 17 and under admitted</option>
 											</select>
 										</div>
 										<div class="form-group">
-											<label for="subscriptionType">Subscription type<span class="text-primary">*</span></label>
-											<select id="subscriptionType" name="subscription_type" class="form-control selectpicker" required onchange="subscriptionTypeChanged(this.value);">
+											<label for="subscriptionType">Subscription type<span
+													class="text-primary">*</span></label>
+											<select id="subscriptionType" name="subscription_type"
+													class="form-control selectpicker" required
+													onchange="subscriptionTypeChanged(this.value);">
 												<option value="free">Free</option>
 												<option value="paid">Paid</option>
 												<option value="subscription">Subscription</option>
@@ -88,7 +158,9 @@
 										</div>
 										<div class="form-group">
 											<label for="price">Price<span class="text-primary">*</span></label>
-											<input id="price" type="number" name="price" class="form-control" placeholder="Type price for this movie/video" min="0" max="10000" step="1" readonly value="0"/>
+											<input id="price" type="number" name="price" class="form-control"
+												   placeholder="Type price for this movie/video" min="0" max="10000"
+												   step="1" readonly value="0"/>
 										</div>
 										<div class="form-group mb-0">
 											<label for="rank">Trending rank</label>
@@ -108,12 +180,15 @@
 							<div class="col-6 mx-auto">
 								<div class="row">
 									<div class="col-6">
-										<button type="submit" class="btn btn-primary waves-effect waves-light btn-block shadow-primary" id="submitButton">
+										<button type="submit"
+												class="btn btn-primary waves-effect waves-light btn-block shadow-primary"
+												id="submitButton">
 											Save & Proceed
 										</button>
 									</div>
 									<div class="col-6">
-										<a href="{{route("admin.videos.index")}}" class="btn btn-secondary waves-effect btn-block shadow-secondary">
+										<a href="{{route("admin.videos.index")}}"
+										   class="btn btn-secondary waves-effect btn-block shadow-secondary">
 											Cancel
 										</a>
 									</div>

@@ -160,7 +160,7 @@ class AbstractProductController extends \App\Http\Modules\Seller\Controllers\Api
 		foreach ($payload as $image) {
 			$images->push($product->images()->create([
 				'path' => $image,
-				'tag' => $product->sku(),
+				'tag' => $product->sku,
 			]));
 		}
 		return $images;
@@ -236,7 +236,7 @@ class AbstractProductController extends \App\Http\Modules\Seller\Controllers\Api
 		$products = Product::startQuery()->seller($this->seller()->id)->simple()->group($token)->get();
 		// If there are more than one products under the same group,
 		// it means they should be treated as variants of the same kind.
-		// Otherwise let the be the type they are.
+		// Otherwise let them be the type they are.
 		if ($products->count() > 1) {
 			$products->each(function (Product $product) {
 				$product->update(['type' => Product::Type['Variant']]);
