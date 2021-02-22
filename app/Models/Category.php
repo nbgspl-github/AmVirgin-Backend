@@ -29,27 +29,27 @@ class Category extends \App\Library\Database\Eloquent\Model
 	const LISTING_INACTIVE = 'inactive';
 	const ROUTE_TRENDING_DEALS = 'trending';
 
-	public function attributes () : \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	public function attributes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
 	{
 		return $this->belongsToMany(Attribute::class, AttributeSet::tableName());
 	}
 
-	public function attributeSet () : \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	public function attributeSet(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
 	{
 		return $this->belongsToMany(Attribute::class, AttributeSet::tableName());
 	}
 
-	public function children () : HasMany
+	public function children(): HasMany
 	{
 		return $this->hasMany(Category::class, 'parent_id');
 	}
 
-	public function parent () : BelongsTo
+	public function parent(): BelongsTo
 	{
 		return $this->belongsTo(Category::class, 'parent_id');
 	}
 
-	public function brandInFocus (?bool $yes = null) : bool
+	public function brandInFocus(?bool $yes = null): bool
 	{
 		if (!is_null($yes)) {
 			$this->setSpecialAttribute('brandInFocus', $yes);
@@ -57,7 +57,7 @@ class Category extends \App\Library\Database\Eloquent\Model
 		return $this->getSpecialAttribute('brandInFocus', false);
 	}
 
-	public function popularCategory (?bool $yes = null) : bool
+	public function popularCategory(?bool $yes = null): bool
 	{
 		if (!is_null($yes)) {
 			$this->setSpecialAttribute('popularCategory', $yes);
@@ -65,7 +65,7 @@ class Category extends \App\Library\Database\Eloquent\Model
 		return $this->getSpecialAttribute('popularCategory', false);
 	}
 
-	public function trendingNow (?bool $yes = null) : bool
+	public function trendingNow(?bool $yes = null): bool
 	{
 		if (!is_null($yes)) {
 			$this->setSpecialAttribute('trendingNow', $yes);
@@ -73,12 +73,12 @@ class Category extends \App\Library\Database\Eloquent\Model
 		return $this->getSpecialAttribute('trendingNow', false);
 	}
 
-	public static function startQuery () : CategoryQuery
+	public static function startQuery(): CategoryQuery
 	{
 		return CategoryQuery::begin();
 	}
 
-	public static function parents (Category $category) : ?string
+	public static function parents(Category $category): ?string
 	{
 		$parents = Arrays::Empty;
 		$parent = $category;
@@ -91,7 +91,7 @@ class Category extends \App\Library\Database\Eloquent\Model
 		return $parents;
 	}
 
-	public function descendants (bool $includeSelf = false) : Collection
+	public function descendants(bool $includeSelf = false): Collection
 	{
 		$descendants = new Collection();
 		if ($includeSelf)
@@ -104,22 +104,22 @@ class Category extends \App\Library\Database\Eloquent\Model
 		return $descendants;
 	}
 
-	public function setCatalogAttribute ($value) : void
+	public function setCatalogAttribute($value): void
 	{
 		$this->attributes['catalog'] = $this->storeWhenUploadedCorrectly('categories/catalogs', $value);
 	}
 
-	public function getCatalogAttribute ($value) : ?string
+	public function getCatalogAttribute($value): ?string
 	{
 		return $this->retrieveMedia('catalog');
 	}
 
-	public function setIconAttribute ($value) : void
+	public function setIconAttribute($value): void
 	{
 		$this->attributes['icon'] = $this->storeWhenUploadedCorrectly('categories/icons', $value);
 	}
 
-	public function getIconAttribute ($value) : ?string
+	public function getIconAttribute($value): ?string
 	{
 		return $this->retrieveMedia($value);
 	}

@@ -120,31 +120,31 @@ class AbstractProductController extends \App\Http\Modules\Seller\Controllers\Api
 	protected function storeAttribute(Product $product, array $payload): Collection
 	{
 		if (!$this->items) {
-			$this->items = $product->category->attributes->items;
+			$this->items = $product->category->attributes;
 		}
 		$attributesCollection = new Collection();
 		collect($payload)->each(function ($payload) use ($product, $attributesCollection) {
 			$attribute = Attribute::find($payload['key']);
-			$group = $this->items->where('attributeId', $attribute->id())->pluck('group')->first();
+			$group = $attribute->group;
 			$value = $payload['value'];
 			$created = null;
 			if (Arrays::isArray($value)) {
 				$created = $product->attributes()->create([
-					'attributeId' => $attribute->id(),
-					'variantAttribute' => $attribute->useToCreateVariants(),
-					'showInCatalogListing' => $attribute->showInCatalogListing(),
-					'visibleToCustomers' => $attribute->visibleToCustomers(),
-					'label' => $attribute->name(),
+					'attributeId' => $attribute->id,
+					'variantAttribute' => $attribute->useToCreateVariants,
+					'showInCatalogListing' => $attribute->showInCatalogListing,
+					'visibleToCustomers' => $attribute->visibleToCustomers,
+					'label' => $attribute->name,
 					'group' => $group,
-					'value' => $attribute->combineMultipleValues() ? Str::join(Str::WhiteSpace, $value) : $value,
+					'value' => $attribute->combineMultipleValues ? Str::join(Str::WhiteSpace, $value) : $value,
 				]);
 			} else {
 				$created = $product->attributes()->create([
-					'attributeId' => $attribute->id(),
-					'variantAttribute' => $attribute->useToCreateVariants(),
-					'showInCatalogListing' => $attribute->showInCatalogListing(),
-					'visibleToCustomers' => $attribute->visibleToCustomers(),
-					'label' => $attribute->name(),
+					'attributeId' => $attribute->id,
+					'variantAttribute' => $attribute->useToCreateVariants,
+					'showInCatalogListing' => $attribute->showInCatalogListing,
+					'visibleToCustomers' => $attribute->visibleToCustomers,
+					'label' => $attribute->name,
 					'group' => $group,
 					'value' => $value,
 				]);
