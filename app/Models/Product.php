@@ -93,77 +93,82 @@ class Product extends \App\Library\Database\Eloquent\Model
 		'Girls' => 'girls',
 	];
 
-	public function shippingCost () : float
+	public function getPrimaryImageAttribute($value): ?string
+	{
+		return $this->retrieveMedia($value);
+	}
+
+	public function shippingCost(): float
 	{
 		return 3.3;
 	}
 
-	public function attributes () : HasMany
+	public function attributes(): HasMany
 	{
 		return $this->hasMany(ProductAttribute::class, 'productId');
 	}
 
-	public function originalAttributes () : \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	public function originalAttributes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
 	{
 		return $this->belongsToMany(Attribute::class, ProductAttribute::tableName(), 'productId', 'attributeId');
 	}
 
-	public function options () : HasMany
+	public function options(): HasMany
 	{
 		return $this->hasMany(ProductAttribute::class, 'productId')->where('variantAttribute', true);
 	}
 
-	public function specs () : HasMany
+	public function specs(): HasMany
 	{
 		return $this->hasMany(ProductAttribute::class, 'productId')->where('variantAttribute', false);
 	}
 
-	public function brand () : BelongsTo
+	public function brand(): BelongsTo
 	{
 		return $this->belongsTo(Brand::class, 'brandId');
 	}
 
-	public function category () : BelongsTo
+	public function category(): BelongsTo
 	{
 		return $this->belongsTo(Category::class, 'categoryId');
 	}
 
-	public function images () : HasMany
+	public function images(): HasMany
 	{
 		return $this->hasMany(ProductImage::class, 'productId');
 	}
 
-	public function seller () : BelongsTo
+	public function seller(): BelongsTo
 	{
 		return $this->belongsTo(Seller::class, 'sellerId');
 	}
 
-	public function variants () : HasMany
+	public function variants(): HasMany
 	{
 		return $this->hasMany(self::class, 'group', 'group')->where('id', '!=', $this->id);
 	}
 
-	public function ratings () : HasMany
+	public function ratings(): HasMany
 	{
 		return $this->hasMany(ProductRating::class, 'product_id');
 	}
 
-	public function ratingsBy (\App\Models\Auth\Customer $customer) : HasMany
+	public function ratingsBy(\App\Models\Auth\Customer $customer): HasMany
 	{
 		return $this->ratings()->where('customer_id', $customer->id);
 	}
 
-	public function addRatingBy (\App\Models\Auth\Customer $customer, array $attributes) : \Illuminate\Database\Eloquent\Model
+	public function addRatingBy(\App\Models\Auth\Customer $customer, array $attributes): \Illuminate\Database\Eloquent\Model
 	{
 		return $this->ratings()->create(array_merge(['customer_id' => $customer->id], $attributes));
 	}
 
-	public function similar () : \Illuminate\Database\Eloquent\Builder
+	public function similar(): \Illuminate\Database\Eloquent\Builder
 	{
 		return self::query()->where('id', '!=', $this->id)->where('categoryId', $this->categoryId)->limit(15);
 	}
 
-	public function hotDeal (?bool $yes = null) : bool
+	public function hotDeal(?bool $yes = null): bool
 	{
 		if (!is_null($yes)) {
 			$this->setSpecialAttribute('hotDeal', $yes);
@@ -171,7 +176,7 @@ class Product extends \App\Library\Database\Eloquent\Model
 		return $this->getSpecialAttribute('hotDeal', false);
 	}
 
-	public static function startQuery () : ProductQuery
+	public static function startQuery(): ProductQuery
 	{
 		return ProductQuery::begin();
 	}

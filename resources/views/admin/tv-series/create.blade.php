@@ -49,12 +49,69 @@
 											</select>
 										</div>
 										<div class="form-group">
-											<label for="sectionId">Choose containing section<span class="text-primary">*</span></label>
-											<select id="sectionId" name="sections[]" class="form-control selectpicker" title="Choose..." multiple required>
-												@foreach($appVideoSections as $section)
-													<option value="{{$section->id}}">{{$section->title}}</option>
-												@endforeach
-											</select>
+											<div class="row">
+												<div class="col-12">
+													<label for="sectionId">Choose containing section(s)<span
+															class="text-primary">*</span></label>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12">
+													<button type="button" class="btn btn-primary btn-block"
+															data-toggle="modal"
+															data-target="#exampleModal">
+														Click to choose...
+													</button>
+												</div>
+											</div>
+											<div class="modal fade" id="exampleModal" tabindex="-1"
+												 aria-labelledby="exampleModalLabel" aria-hidden="true">
+												<div class="modal-dialog">
+													<div class="modal-content">
+														<div class="modal-header">
+															<h5 class="modal-title" id="exampleModalLabel">Containing
+																Sections</h5>
+															<button type="button" class="close" data-dismiss="modal"
+																	aria-label="Close">
+																<span aria-hidden="true">&times;</span>
+															</button>
+														</div>
+														<div class="modal-body">
+															<div class="row mb-2">
+																<div class="col-6">
+																	<span>Section</span>
+																</div>
+																<div class="col-6">
+																	<span>Rank</span>
+																</div>
+															</div>
+															@foreach($appVideoSections as $section)
+																<div class="row mb-1 no-gutters">
+																	<div class="col-6">
+																		<input type="text" class="form-control"
+																			   value="{{$section->title}}" readonly>
+																	</div>
+																	<div class="col-6">
+																		<select name="sections[{{$section->id}}]" id=""
+																				class="form-control">
+																			@for($i=0;$i<10;$i++)
+																				<option value="{{$i}}">{{$i}}</option>
+																			@endfor
+																		</select>
+																	</div>
+																</div>
+															@endforeach
+														</div>
+														<div class="modal-footer">
+															<button type="button" class="btn btn-secondary"
+																	data-dismiss="modal">Close
+															</button>
+															<button type="button" class="btn btn-primary">Save changes
+															</button>
+														</div>
+													</div>
+												</div>
+											</div>
 										</div>
 										<div class="form-group">
 											<label for="released">Release date<span class="text-primary">*</span></label>

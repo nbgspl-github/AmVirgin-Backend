@@ -38,14 +38,14 @@
 								<td>{{$s->title}}</td>
 								<td>{{\App\Library\Utils\Extensions\Str::ellipsis($s->description,255)}}</td>
 								<td>
-									@foreach($video->audios as $audio)
+									@foreach($s->audios as $audio)
 										<span class="badge badge-secondary">
 											{{$audio->language->name}}
 										</span>
 									@endforeach
 								</td>
 								<td>
-									@foreach($video->subtitles as $subtitle)
+									@foreach($s->subtitles as $subtitle)
 										<span class="badge badge-secondary">
 											{{$subtitle->language->name}}
 										</span>
@@ -55,7 +55,7 @@
 								<td>{{$s->seasons}}</td>
 								<td>{{$s->sources->count()}}</td>
 								<td>
-									@if($video->isTranscoding())
+									@if($s->isTranscoding())
 										Yes
 									@else
 										No

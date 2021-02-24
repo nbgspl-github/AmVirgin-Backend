@@ -5,6 +5,8 @@ namespace App\Http\Modules\Seller\Controllers\Api\Auth;
 use App\Http\Modules\Seller\Requests\Auth\RegisterRequest;
 use App\Models\Auth\Seller;
 use App\Resources\Auth\Seller\AuthProfileResource;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends \App\Http\Modules\Customer\Controllers\Api\ApiController
@@ -16,12 +18,12 @@ class RegisterController extends \App\Http\Modules\Customer\Controllers\Api\ApiC
 
 	public function register (RegisterRequest $request) : \Illuminate\Http\JsonResponse
 	{
-		$customer = $this->sellerExists($request->only(['email', 'mobile']));
-		if (!$customer) {
+		$seller = $this->sellerExists($request->only(['email', 'mobile']));
+		if (!$seller) {
 			$verified = $this->verifyOneTimePassword($request->otp, $request->mobile);
 			if ($verified) {
-				$customer = $this->create($request->except('otp'));
-				return $this->sendRegisterSuccessResponse($customer);
+				$seller = $this->create($request->except('otp'));
+				return $this->sendRegisterSuccessResponse($seller);
 			}
 			return $this->sendOtpVerificationFailedResponse();
 		}
@@ -51,7 +53,8 @@ class RegisterController extends \App\Http\Modules\Customer\Controllers\Api\ApiC
 	{
 		$token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($seller);
 		return responseApp()->prepare(
-			(new AuthProfileResource($seller))->token($token), \Illuminate\Http\Response::HTTP_OK, __('auth.register.success'), 'data');
+			(new AuthProfileResource($seller))->token($token), \Illuminate\Http\Response::HTTP_OK, __('auth.register.success'), 'data'
+		);
 	}
 
 	protected function verifyOneTimePassword (string $otp, string $mobile) : bool
@@ -61,7 +64,7 @@ class RegisterController extends \App\Http\Modules\Customer\Controllers\Api\ApiC
 
 	/**
 	 * @param array $payload
-	 * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|Seller
+	 * @return Builder|Model|Seller
 	 */
 	protected function create (array $payload)
 	{

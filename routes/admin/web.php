@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Modules\Admin\Controllers\Web\Announcements\AnnouncementController;
 use App\Http\Modules\Admin\Controllers\Web\Auth\LoginController;
 use App\Http\Modules\Admin\Controllers\Web\CategoryController;
 use App\Http\Modules\Admin\Controllers\Web\DashboardController;
@@ -348,6 +349,21 @@ Route::middleware('auth:admin')->group(function () {
 	Route::prefix('cancellation-policy')->group(function () {
 		Route::get(Str::Empty, [CancellationController::class, 'edit'])->name('admin.extras.cancellation-policy.edit');
 		Route::post(Str::Empty, [CancellationController::class, 'update'])->name('admin.extras.cancellation-policy.update');
+	});
+
+	Route::prefix('announcements')->group(function () {
+		Route::get(Str::Empty, [AnnouncementController::class, 'index'])->name('admin.announcements.index');
+		Route::get('create', [AnnouncementController::class, 'create'])->name('admin.announcements.create');
+		Route::get('{announcement}/edit', [AnnouncementController::class, 'edit'])->name('admin.announcements.edit');
+		Route::post(Str::Empty, [AnnouncementController::class, 'store'])->name('admin.announcements.store');
+		Route::post('{announcement}/edit', [AnnouncementController::class, 'update'])->name('admin.announcements.update');
+		Route::delete('{announcement}', [AnnouncementController::class, 'delete'])->name('admin.announcements.delete');
+	});
+
+	Route::prefix('advertisements')->group(function () {
+		Route::get(Str::Empty, [AnnouncementController::class, 'index'])->name('admin.advertisements.index');
+		Route::get('create', [AnnouncementController::class, 'create'])->name('admin.advertisements.create');
+		Route::get('{announcement}/edit', [AnnouncementController::class, 'edit'])->name('admin.advertisements.edit');
 	});
 
 	Route::prefix('version')->group(function () {

@@ -13,23 +13,22 @@ class Announcement extends \App\Library\Database\Eloquent\Model
 		'readBy' => [],
 		'deletedBy' => [],
 	];
-	protected $fillable = [
-		'title',
-		'content',
-		'banner',
-		'validFrom',
-		'validUntil',
-	];
-	protected $hidden = [
-		'created_at',
-		'updated_at',
-	];
 	protected $casts = [
 		'readBy' => 'array',
 		'deletedBy' => 'array',
 	];
 
-	public static function startQuery () : AnnouncementQuery
+	public function setBannerAttribute($value): void
+	{
+		$this->attributes['banner'] = $this->storeWhenUploadedCorrectly('announcements\banner', $value);
+	}
+
+	public function getBannerAttribute($value): ?string
+	{
+		return $this->retrieveMedia($value);
+	}
+
+	public static function startQuery(): AnnouncementQuery
 	{
 		return AnnouncementQuery::begin();
 	}

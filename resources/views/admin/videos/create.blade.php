@@ -69,12 +69,21 @@
 											</select>
 										</div>
 										<div class="form-group">
-											<label for="sectionId">Choose containing section<span
-													class="text-primary">*</span></label>
-											<button type="button" class="btn btn-primary" data-toggle="modal"
-													data-target="#exampleModal">
-												Click to choose...
-											</button>
+											<div class="row">
+												<div class="col-12">
+													<label for="sectionId">Choose containing section(s)<span
+															class="text-primary">*</span></label>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12">
+													<button type="button" class="btn btn-primary btn-block"
+															data-toggle="modal"
+															data-target="#exampleModal">
+														Click to choose...
+													</button>
+												</div>
+											</div>
 											<div class="modal fade" id="exampleModal" tabindex="-1"
 												 aria-labelledby="exampleModalLabel" aria-hidden="true">
 												<div class="modal-dialog">
@@ -88,20 +97,23 @@
 															</button>
 														</div>
 														<div class="modal-body">
+															<div class="row mb-2">
+																<div class="col-6">
+																	<span>Section</span>
+																</div>
+																<div class="col-6">
+																	<span>Rank</span>
+																</div>
+															</div>
 															@foreach($appVideoSections as $section)
-																<div class="row" mb-1>
+																<div class="row mb-1 no-gutters">
 																	<div class="col-6">
-																		<select name="" id=""
-																				class="form-control formpicker">
-																			@foreach($appVideoSections as $section)
-																				<option
-																					value="{{$section->id}}">{{$section->title}}</option>
-																			@endforeach
-																		</select>
+																		<input type="text" class="form-control"
+																			   value="{{$section->title}}" readonly>
 																	</div>
 																	<div class="col-6">
-																		<select name="" id=""
-																				class="form-control formpicker">
+																		<select name="sections[{{$section->id}}]" id=""
+																				class="form-control">
 																			@for($i=0;$i<10;$i++)
 																				<option value="{{$i}}">{{$i}}</option>
 																			@endfor

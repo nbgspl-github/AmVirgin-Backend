@@ -9,7 +9,8 @@
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Videos'])
 				</div>
-				<form id="uploadForm" action="{{route('admin.videos.update.attributes',$payload->getKey())}}" data-parsley-validate="true" method="POST" enctype="multipart/form-data">
+				<form id="uploadForm" action="{{route('admin.videos.update.attributes',$payload->getKey())}}"
+					  data-parsley-validate="true" method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="card-body">
 						<div class="row">
@@ -21,30 +22,46 @@
 									<div class="card-body">
 										<div class="form-group">
 											<label for="title">@required (Title)</label>
-											<input id="title" type="text" name="title" class="form-control" required placeholder="Type here the video/movie title" minlength="1" maxlength="256" value="{{old('title',$payload->title)}}"/>
+											<input id="title" type="text" name="title" class="form-control" required
+												   placeholder="Type here the video/movie title" minlength="1"
+												   maxlength="256" value="{{old('title',$payload->title)}}"/>
 										</div>
 										<div class="form-group">
 											<label for="duration">@required (Duration)</label>
-											<input id="duration" type="text" name="duration" class="form-control" required placeholder="Choose duration" value="{{old('duration',$payload->duration)}}"/>
+											<input id="duration" type="text" name="duration" class="form-control"
+												   required placeholder="Choose duration"
+												   value="{{old('duration',$payload->duration)}}"/>
 										</div>
 										<div class="form-group">
 											<label for="cast">@required (Cast)</label>
-											<input id="cast" type="text" name="cast" class="form-control" required placeholder="Type here the movie's cast name (separate with ,)" minlength="1" maxlength="256" value="{{old('cast',$payload->cast)}}"/>
+											<input id="cast" type="text" name="cast" class="form-control" required
+												   placeholder="Type here the movie's cast name (separate with ,)"
+												   minlength="1" maxlength="256"
+												   value="{{old('cast',$payload->cast)}}"/>
 										</div>
 										<div class="form-group">
 											<label for="director">@required (Directors)</label>
-											<input id="director" type="text" name="director" class="form-control" required placeholder="Type here the movie's director's name (separate with ,)" minlength="1" maxlength="256" value="{{old('director',$payload->director)}}"/>
+											<input id="director" type="text" name="director" class="form-control"
+												   required
+												   placeholder="Type here the movie's director's name (separate with ,)"
+												   minlength="1" maxlength="256"
+												   value="{{old('director',$payload->director)}}"/>
 										</div>
 										<div class="form-group">
 											<label for="description">@required (Description)</label>
-											<textarea id="description" name="description" class="form-control" required placeholder="Type short summary about the movie or video" rows="10" minlength="1" maxlength="2000">{{old('description',$payload->description)}}</textarea>
+											<textarea id="description" name="description" class="form-control" required
+													  placeholder="Type short summary about the movie or video"
+													  rows="10" minlength="1"
+													  maxlength="2000">{{old('description',$payload->description)}}</textarea>
 										</div>
 										<div class="form-group">
 											<label for="genre">@required (Genre)</label>
-											<select id="genre" name="genre_id" class="form-control selectpicker" title="Choose..." required>
+											<select id="genre" name="genre_id" class="form-control selectpicker"
+													title="Choose..." required>
 												@foreach($appGenres as $genre)
 													@if(old('genre_id',$payload->genre_id)==$genre->getKey())
-														<option value="{{$genre->getKey()}}" selected>{{$genre->name}}</option>
+														<option value="{{$genre->getKey()}}"
+																selected>{{$genre->name}}</option>
 													@else
 														<option value="{{$genre->getKey()}}">{{$genre->name}}</option>
 													@endif
@@ -52,70 +69,151 @@
 											</select>
 										</div>
 										<div class="form-group">
-											<label for="section">Choose containing section<span class="text-primary">*</span></label>
-											<select id="section" name="sections[]" class="form-control selectpicker" title="Choose..." multiple required>
-												@foreach($appVideoSections as $section)
-													@if(in_array($section->id,$payload->sections??[]))
-														<option value="{{$section->id}}" selected>{{$section->title}}</option>
-													@else
-														<option value="{{$section->id}}">{{$section->title}}</option>
-													@endif
-												@endforeach
-											</select>
+											<div class="row">
+												<div class="col-12">
+													<label for="sectionId">Containing section(s)<span
+															class="text-primary">*</span></label>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-12">
+													<button type="button" class="btn btn-primary btn-block"
+															data-toggle="modal"
+															data-target="#exampleModal">
+														Click to choose...
+													</button>
+												</div>
+											</div>
+											<div class="modal fade" id="exampleModal" tabindex="-1"
+												 aria-labelledby="exampleModalLabel" aria-hidden="true">
+												<div class="modal-dialog">
+													<div class="modal-content">
+														<div class="modal-header">
+															<h5 class="modal-title" id="exampleModalLabel">Containing
+																Sections</h5>
+															<button type="button" class="close" data-dismiss="modal"
+																	aria-label="Close">
+																<span aria-hidden="true">&times;</span>
+															</button>
+														</div>
+														<div class="modal-body">
+															<div class="row mb-2">
+																<div class="col-6">
+																	<span>Section</span>
+																</div>
+																<div class="col-6">
+																	<span>Rank</span>
+																</div>
+															</div>
+															@foreach($appVideoSections as $section)
+																<div class="row mb-1 no-gutters">
+																	<div class="col-6">
+																		<input type="text" class="form-control"
+																			   value="{{$section->title}}" readonly>
+																	</div>
+																	<div class="col-6">
+																		<select name="sections[{{$section->id}}]" id=""
+																				class="form-control">
+																			@for($i=0;$i<10;$i++)
+																				<option value="{{$i}}"
+																						@foreach($payload->sections as $key=>$value)
+																						   @if($value==$i&&$key==$section->id) selected @endif
+																					    @endforeach
+																					>{{$i}}</option>
+																			@endfor
+																		</select>
+																	</div>
+																</div>
+															@endforeach
+														</div>
+														<div class="modal-footer">
+															<button type="button" class="btn btn-secondary"
+																	data-dismiss="modal">Close
+															</button>
+															<button type="button" class="btn btn-primary">Save changes
+															</button>
+														</div>
+													</div>
+												</div>
+											</div>
 										</div>
 										<div class="form-group">
 											<label for="released">@required (Release date)</label>
-											<input id="released" type="date" name="released" class="form-control" required placeholder="Choose or type release date" value="{{old('released',$payload->released)}}" onkeydown="return false;"/>
+											<input id="released" type="date" name="released" class="form-control"
+												   required placeholder="Choose or type release date"
+												   value="{{old('released',$payload->released)}}"
+												   onkeydown="return false;"/>
 										</div>
 										<div class="form-group">
 											<label for="rating">@required (Rating)</label>
-											<input id="rating" type="number" name="rating" class="form-control" required placeholder="Type rating for this movie/video" min="0.00" max="5.00" step="0.01" value="{{old('rating',$payload->rating)}}"/>
+											<input id="rating" type="number" name="rating" class="form-control" required
+												   placeholder="Type rating for this movie/video" min="0.00" max="5.00"
+												   step="0.01" value="{{old('rating',$payload->rating)}}"/>
 										</div>
 										<div class="form-group">
 											<label for="pgRating">@required (PG Rating)</label>
-											<select id="pgRating" name="pg_rating" class="form-control selectpicker" title="Choose..." required>
+											<select id="pgRating" name="pg_rating" class="form-control selectpicker"
+													title="Choose..." required>
 												@switch(old('pg_rating',$payload->pg_rating))
 													@case('G')
 													<option value="G" selected>G - General audience</option>
 													<option value="PG">PG - Parental Guidance advised</option>
-													<option value="PG-13">PG-13 - Parental Guidance required (not appropriate for under 13)</option>
+													<option value="PG-13">PG-13 - Parental Guidance required (not
+														appropriate for under 13)
+													</option>
 													<option value="R">R - Restricted</option>
-													<option value="NC-17">NC-17 - No children 17 and under admitted</option>
+													<option value="NC-17">NC-17 - No children 17 and under admitted
+													</option>
 													@break
 													@case('PG')
 													<option value="G">G - General audience</option>
 													<option value="PG" selected>PG - Parental Guidance advised</option>
-													<option value="PG-13">PG-13 - Parental Guidance required (not appropriate for under 13)</option>
+													<option value="PG-13">PG-13 - Parental Guidance required (not
+														appropriate for under 13)
+													</option>
 													<option value="R">R - Restricted</option>
-													<option value="NC-17">NC-17 - No children 17 and under admitted</option>
+													<option value="NC-17">NC-17 - No children 17 and under admitted
+													</option>
 													@break
 													@case('PG-13')
 													<option value="G">G - General audience</option>
 													<option value="PG">PG - Parental Guidance advised</option>
-													<option value="PG-13" selected>PG-13 - Parental Guidance required (not appropriate for under 13)</option>
+													<option value="PG-13" selected>PG-13 - Parental Guidance required
+														(not appropriate for under 13)
+													</option>
 													<option value="R">R - Restricted</option>
-													<option value="NC-17">NC-17 - No children 17 and under admitted</option>
+													<option value="NC-17">NC-17 - No children 17 and under admitted
+													</option>
 													@break
 													@case('R')
 													<option value="G">G - General audience</option>
 													<option value="PG">PG - Parental Guidance advised</option>
-													<option value="PG-13">PG-13 - Parental Guidance required (not appropriate for under 13)</option>
+													<option value="PG-13">PG-13 - Parental Guidance required (not
+														appropriate for under 13)
+													</option>
 													<option value="R" selected>R - Restricted</option>
-													<option value="NC-17">NC-17 - No children 17 and under admitted</option>
+													<option value="NC-17">NC-17 - No children 17 and under admitted
+													</option>
 													@break
 													@case('NC-17')
 													<option value="G">G - General audience</option>
 													<option value="PG">PG - Parental Guidance advised</option>
-													<option value="PG-13">PG-13 - Parental Guidance required (not appropriate for under 13)</option>
+													<option value="PG-13">PG-13 - Parental Guidance required (not
+														appropriate for under 13)
+													</option>
 													<option value="R">R - Restricted</option>
-													<option value="NC-17" selected>NC-17 - No children 17 and under admitted</option>
+													<option value="NC-17" selected>NC-17 - No children 17 and under
+														admitted
+													</option>
 													@break
 												@endswitch
 											</select>
 										</div>
 										<div class="form-group">
 											<label for="subscriptionType">@required (Subscription Type)</label>
-											<select id="subscriptionType" name="subscription_type" class="form-control selectpicker" required onchange="subscriptionTypeChanged(this.value);">
+											<select id="subscriptionType" name="subscription_type"
+													class="form-control selectpicker" required
+													onchange="subscriptionTypeChanged(this.value);">
 												@if(old('subscriptionType',$payload->subscriptionType)=='free')
 													<option value="free" selected>Free</option>
 													<option value="paid">Paid</option>
@@ -133,7 +231,11 @@
 										</div>
 										<div class="form-group">
 											<label for="price">@required (Price)</label>
-											<input id="price" type="number" name="price" class="form-control" required placeholder="Type price for this movie/video" min="0" max="10000" step="1" @if(old('subscription_type',$payload->subscription_type)!='paid') readonly @endif value="{{old('price',$payload->price)}}"/>
+											<input id="price" type="number" name="price" class="form-control" required
+												   placeholder="Type price for this movie/video" min="0" max="10000"
+												   step="1"
+												   @if(old('subscription_type',$payload->subscription_type)!='paid') readonly
+												   @endif value="{{old('price',$payload->price)}}"/>
 										</div>
 										<div class="form-group mb-0">
 											<label for="rank">Trending rank</label>
@@ -157,12 +259,14 @@
 							<div class="col-sm-12 col-md-8 mx-auto">
 								<div class="row">
 									<div class="col-6">
-										<button type="submit" class="btn btn-primary waves-effect waves-light btn-block shadow-primary">
+										<button type="submit"
+												class="btn btn-primary waves-effect waves-light btn-block shadow-primary">
 											Save
 										</button>
 									</div>
 									<div class="col-6">
-										<a href="{{route("admin.videos.edit.action",$payload->getKey())}}" class="btn btn-secondary waves-effect btn-block shadow-secondary">
+										<a href="{{route("admin.videos.edit.action",$payload->getKey())}}"
+										   class="btn btn-secondary waves-effect btn-block shadow-secondary">
 											Cancel
 										</a>
 									</div>

@@ -7,7 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class CartProductResource extends JsonResource
 {
-	public function toArray ($request) : array
+	public function toArray($request): array
 	{
 		return [
 			'key' => $this->id,
@@ -19,7 +19,7 @@ class CartProductResource extends JsonResource
 				'selling' => $this->sellingPrice,
 			],
 			'rating' => $this->rating,
-			'image' => Uploads::existsUrl($this->primaryImage),
+			'image' => $this->primaryImage,
 		];
 	}
 }

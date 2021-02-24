@@ -31,6 +31,8 @@
 				</x-sidebar-expandable-item>
 
 				<x-sidebar-header title="Shop"/>
+				<x-sidebar-item url="{{route('admin.announcements.index')}}" icon="ti-announcement" title="Announcements"/>
+				<x-sidebar-item url="{{route('admin.announcements.index')}}" icon="ti-image" title="Advertisements"/>
 				<x-sidebar-item url="{{route('admin.orders.index')}}" icon="ti-bag" title="Orders"/>
 				<x-sidebar-expandable-item icon="ti-package" title="Products">
 					<x-sidebar-item url="{{route('admin.products.pending')}}" icon="" title="Pending"/>

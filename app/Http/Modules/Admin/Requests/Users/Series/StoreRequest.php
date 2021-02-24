@@ -15,7 +15,7 @@ class StoreRequest extends \Illuminate\Foundation\Http\FormRequest
 			'cast' => ['bail', 'required', 'string', 'min:1', 'max:500'],
 			'director' => ['bail', 'required', 'string', 'min:1', 'max:256'],
 			'genre_id' => ['bail', 'required', Rule::existsPrimary(\App\Models\Video\Genre::tableName())],
-			'sections.*' => ['bail', 'required', Rule::existsPrimary(\App\Models\Video\Section::tableName())],
+			'sections.*' => ['bail', 'required'],
 			'rating' => ['bail', 'required', 'numeric', 'min:0.00', 'max:5.00'],
 			'pg_rating' => ['bail', 'required', Rule::in(['G', 'PG', 'PG-13', 'R', 'NC-17'])],
 			'subscription_type' => ['bail', 'required', Rule::in(['free', 'paid', 'subscription'])],
