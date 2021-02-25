@@ -7,29 +7,25 @@ use App\Traits\DynamicAttributeNamedMethods;
 
 class Announcement extends \App\Library\Database\Eloquent\Model
 {
-	use DynamicAttributeNamedMethods;
+    use DynamicAttributeNamedMethods;
 
-	protected $attributes = [
-		'readBy' => [],
-		'deletedBy' => [],
-	];
-	protected $casts = [
-		'readBy' => 'array',
-		'deletedBy' => 'array',
-	];
+    protected $casts = [
+        'readBy' => 'array',
+        'deletedBy' => 'array',
+    ];
 
-	public function setBannerAttribute($value): void
-	{
-		$this->attributes['banner'] = $this->storeWhenUploadedCorrectly('announcements\banner', $value);
-	}
+    public function setBannerAttribute ($value): void
+    {
+        $this->attributes['banner'] = $this->storeWhenUploadedCorrectly('announcements\banner', $value);
+    }
 
-	public function getBannerAttribute($value): ?string
-	{
-		return $this->retrieveMedia($value);
-	}
+    public function getBannerAttribute ($value): ?string
+    {
+        return $this->retrieveMedia($value);
+    }
 
-	public static function startQuery(): AnnouncementQuery
-	{
-		return AnnouncementQuery::begin();
-	}
+    public static function startQuery (): AnnouncementQuery
+    {
+        return AnnouncementQuery::begin();
+    }
 }
