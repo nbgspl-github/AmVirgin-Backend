@@ -35,8 +35,6 @@
                             <th>Content</th>
                             <th>Valid From</th>
                             <th>Valid Until</th>
-                            <th>Read</th>
-                            <th>Deleted</th>
                             <th>Action(s)</th>
                         </tr>
                         </thead>
@@ -56,8 +54,6 @@
                                 <td>{{\App\Library\Utils\Extensions\Str::ellipsis($announcement->content,255)}}</td>
                                 <td>{{$announcement->validFrom}}</td>
                                 <td>{{$announcement->validUntil}}</td>
-                                <td>{{!empty($announcement->readBy)?count($announcement->readBy):0}} read</td>
-                                <td>{{!empty($announcement->deletedBy)?count($announcement->deletedBy):0}} deleted</td>
                                 <td>
                                     <div class="btn-toolbar" role="toolbar">
                                         <div class="btn-group" role="group">
