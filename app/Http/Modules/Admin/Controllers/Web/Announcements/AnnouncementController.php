@@ -21,7 +21,7 @@ class AnnouncementController extends \App\Http\Modules\Admin\Controllers\Web\Web
     public function index (): Renderable
     {
         return view('admin.announcements.index')->with('announcements',
-            $this->paginateWithQuery(Announcement::query()->latest())
+            $this->paginateWithQuery(Announcement::query()->latest()->whereLike('title', $this->queryParameter()))
         );
     }
 
