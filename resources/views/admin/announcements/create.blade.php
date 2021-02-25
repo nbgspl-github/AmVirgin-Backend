@@ -26,9 +26,9 @@
 										   placeholder="Title" minlength="2" maxlength="255" value="{{old('title')}}"/>
 								</div>
 								<div class="form-group">
-									<label for="description">Content</label>
-									<textarea class="form-control" name="content" id="content" cols="30" rows="10" required>
-										{{old('content')}}
+									<label for="content">Content</label>
+									<textarea class="form-control" name="content" id="content" cols="30" rows="10"
+											  required>
 									</textarea>
 								</div>
 								<div class="form-group">
