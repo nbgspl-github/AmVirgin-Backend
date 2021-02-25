@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Modules\Admin\Requests\Announcement;
-
 
 class StoreRequest extends \Illuminate\Foundation\Http\FormRequest
 {
