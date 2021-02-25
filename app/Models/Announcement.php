@@ -16,7 +16,7 @@ class Announcement extends \App\Library\Database\Eloquent\Model
 
     public function setBannerAttribute ($value): void
     {
-        $this->attributes['banner'] = $this->storeWhenUploadedCorrectly('announcements\banner', $value);
+        $this->attributes['banner'] = $this->storeWhenUploadedCorrectly('announcements/banner', $value);
     }
 
     public function getBannerAttribute ($value): ?string

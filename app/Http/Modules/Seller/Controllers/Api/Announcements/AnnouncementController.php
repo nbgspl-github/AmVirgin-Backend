@@ -27,13 +27,14 @@ class AnnouncementController extends \App\Http\Modules\Seller\Controllers\Api\Ap
 
 	public function index () : JsonResponse
 	{
-		$announcementCollection = Announcement::startQuery()->displayable()->excludeDeleted()->get();
-		$resourceCollection = \App\Resources\Announcements\Announcement::collection($announcementCollection);
-		return responseApp()->status(\Illuminate\Http\Response::HTTP_OK)
-			->message('Listing all announcements.')
-			->setValue('payload', $resourceCollection)
-			->send();
-	}
+        $announcementCollection = Announcement::startQuery()->displayable()->excludeDeleted()->get();
+        dd($announcementCollection);
+        $resourceCollection = \App\Resources\Announcements\Announcement::collection($announcementCollection);
+        return responseApp()->status(\Illuminate\Http\Response::HTTP_OK)
+            ->message('Listing all announcements.')
+            ->setValue('payload', $resourceCollection)
+            ->send();
+    }
 
 	public function mark ($id) : JsonResponse
 	{
