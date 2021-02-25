@@ -18,6 +18,8 @@ class StoreRequest extends \Illuminate\Foundation\Http\FormRequest
     public function validated (): array
     {
         $validated = parent::validated();
+        $validated['readBy'] = '[]';
+        $validated['deletedBy'] = '[]';
         return $validated;
     }
 }
