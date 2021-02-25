@@ -14,7 +14,7 @@
 					<div class="row">
 						<div class="col-md-6 mx-auto">
 							<form action="{{route('admin.announcements.store')}}" method="POST"
-								  data-parsley-validate="true">
+								  data-parsley-validate="true" enctype="multipart/form-data">
 								@csrf
 								<div class="form-group">
 									<label for="banner">Logo</label>
