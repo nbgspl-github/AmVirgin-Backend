@@ -82,7 +82,7 @@
         _delete = key => {
             alertify.confirm("Are you sure? This action is irreversible!",
                 yes => {
-                    axios.delete(`/admin/news/categories/${key}`).then(response => {
+                    axios.delete(`/admin/announcements/${key}`).then(response => {
                         alertify.alert(response.data.message, () => {
                             location.reload();
                         });
