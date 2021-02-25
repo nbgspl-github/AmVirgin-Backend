@@ -3,6 +3,7 @@
 namespace App\Http\Modules\Seller\Controllers\Api\Auth;
 
 use App\Http\Modules\Seller\Requests\Auth\Profile\Avatar\UpdateRequest;
+use Illuminate\Http\Response;
 
 class AvatarController extends \App\Http\Modules\Seller\Controllers\Api\ApiController
 {
@@ -18,7 +19,7 @@ class AvatarController extends \App\Http\Modules\Seller\Controllers\Api\ApiContr
             $request->only('avatar')
         );
         return responseApp()->prepare(
-            [], \Illuminate\Http\Response::HTTP_OK, __('auth.avatar.success'), 'data'
+            [], Response::HTTP_OK, __('auth.avatar.success'), 'data'
         );
     }
 }
