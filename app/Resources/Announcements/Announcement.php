@@ -15,8 +15,8 @@ class Announcement extends JsonResource
             'content' => $this->content,
             "banner" => $this->banner,
             "extra" => [
-                'read' => Arrays::contains($this->readBy, $this->sellerId()),
-                'deleted' => Arrays::contains($this->deletedBy, $this->sellerId()),
+                'read' => $this->readBy,
+                'deleted' => $this->deletedBy,
             ],
         ];
     }
