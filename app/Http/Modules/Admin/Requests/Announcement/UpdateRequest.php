@@ -1,10 +1,8 @@
 <?php
 
-
 namespace App\Http\Modules\Admin\Requests\Announcement;
 
-
-class StoreRequest extends \Illuminate\Foundation\Http\FormRequest
+class UpdateRequest extends \Illuminate\Foundation\Http\FormRequest
 {
     public function rules (): array
     {
