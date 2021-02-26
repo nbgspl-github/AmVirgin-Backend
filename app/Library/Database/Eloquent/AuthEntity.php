@@ -14,7 +14,6 @@ class AuthEntity extends Model implements AuthenticatableContract, AuthorizableC
 	use Authenticatable, Authorizable, CanResetPassword;
 	use \App\Traits\JsonWebTokens;
 	use \Illuminate\Notifications\Notifiable;
-	use \Illuminate\Database\Eloquent\SoftDeletes;
 
 	protected $hidden = [
 		'password', 'remember_token',
