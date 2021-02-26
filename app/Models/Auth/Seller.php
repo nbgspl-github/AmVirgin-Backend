@@ -33,8 +33,8 @@ class Seller extends \App\Library\Database\Eloquent\AuthEntity
     protected $table = 'sellers';
 
     protected $casts = [
-        'mouAgreed' => 'bool',
         'active' => 'bool',
+        'mouAgreed' => 'bool',
     ];
 
     public function setAvatarAttribute ($value): void
