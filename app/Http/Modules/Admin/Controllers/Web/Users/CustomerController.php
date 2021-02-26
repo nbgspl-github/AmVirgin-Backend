@@ -7,6 +7,7 @@ use App\Http\Modules\Admin\Requests\Users\Customer\UpdateRequest;
 use App\Models\Auth\Customer;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class CustomerController extends \App\Http\Modules\Admin\Controllers\Web\WebController
 {
@@ -17,27 +18,27 @@ class CustomerController extends \App\Http\Modules\Admin\Controllers\Web\WebCont
 
     public function __construct ()
     {
-		parent::__construct();
-		$this->middleware(AUTH_ADMIN);
-		$this->model = app(Customer::class);
-	}
+        parent::__construct();
+        $this->middleware(AUTH_ADMIN);
+        $this->model = app(Customer::class);
+    }
 
-	public function index ()
-	{
-		return view('admin.customers.index')->with('users',
-			$this->paginateWithQuery(
-				$this->model->newQuery()->latest()->whereLike('name', $this->queryParameter()))
-		);
-	}
+    public function index ()
+    {
+        return view('admin.customers.index')->with('users',
+            $this->paginateWithQuery(
+                $this->model->newQuery()->latest()->whereLike('name', $this->queryParameter()))
+        );
+    }
 
-	public function create ()
-	{
-		return view('admin.customers.create');
-	}
+    public function create ()
+    {
+        return view('admin.customers.create');
+    }
 
-	public function edit (Customer $customer)
-	{
-		return view('admin.customers.edit')->with('customer', $customer);
+    public function edit (Customer $customer)
+    {
+        return view('admin.customers.edit')->with('customer', $customer);
     }
 
     public function store (StoreRequest $request): \Illuminate\Http\RedirectResponse
@@ -69,8 +70,8 @@ class CustomerController extends \App\Http\Modules\Admin\Controllers\Web\WebCont
     public function delete (Customer $customer): JsonResponse
     {
         $customer->delete();
-        return response()->json(
-            []
+        return responseApp()->prepare(
+            [], Response::HTTP_OK, 'Customer deleted successfully.'
         );
     }
 }
