@@ -26,80 +26,79 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class Seller extends \App\Library\Database\Eloquent\AuthEntity
 {
-	use \Illuminate\Database\Eloquent\SoftDeletes;
-	use \App\Traits\NotifiableViaSms;
-	use \App\Traits\OtpVerificationSupport;
-	use \App\Traits\DynamicAttributeNamedMethods;
+    use \App\Traits\NotifiableViaSms;
+    use \App\Traits\OtpVerificationSupport;
+    use \App\Traits\DynamicAttributeNamedMethods;
 
-	protected $table = 'sellers';
+    protected $table = 'sellers';
 
-	protected $casts = [
-		'mouAgreed' => 'bool',
-		'active' => 'bool',
-	];
+    protected $casts = [
+        'mouAgreed' => 'bool',
+        'active' => 'bool',
+    ];
 
-	public function setAvatarAttribute ($value) : void
-	{
-		$this->avatar = $this->storeWhenUploadedCorrectly('avatars', $value);
-	}
+    public function setAvatarAttribute ($value): void
+    {
+        $this->avatar = $this->storeWhenUploadedCorrectly('avatars', $value);
+    }
 
-	public function getAvatarAttribute ($value) : ?string
-	{
-		return $this->retrieveMedia($value);
-	}
+    public function getAvatarAttribute ($value): ?string
+    {
+        return $this->retrieveMedia($value);
+    }
 
-	public function approvedBrands () : HasMany
-	{
-		return $this->hasMany(Brand::class, 'createdBy', 'id');
-	}
+    public function approvedBrands (): HasMany
+    {
+        return $this->hasMany(Brand::class, 'createdBy', 'id');
+    }
 
-	public function city () : BelongsTo
-	{
-		return $this->belongsTo(City::class, 'cityId');
-	}
+    public function city (): BelongsTo
+    {
+        return $this->belongsTo(City::class, 'cityId');
+    }
 
-	public function products () : HasMany
-	{
-		return $this->hasMany(Product::class, 'sellerId');
-	}
+    public function products (): HasMany
+    {
+        return $this->hasMany(Product::class, 'sellerId');
+    }
 
-	public function productRatings () : HasMany
-	{
-		return $this->hasMany(ProductRating::class);
-	}
+    public function productRatings (): HasMany
+    {
+        return $this->hasMany(ProductRating::class);
+    }
 
-	public function orders () : HasMany
-	{
-		return $this->hasMany(SubOrder::class, 'sellerId');
-	}
+    public function orders (): HasMany
+    {
+        return $this->hasMany(SubOrder::class, 'sellerId');
+    }
 
-	public function state () : BelongsTo
-	{
-		return $this->belongsTo(State::class, 'stateId');
-	}
+    public function state (): BelongsTo
+    {
+        return $this->belongsTo(State::class, 'stateId');
+    }
 
-	public function country () : BelongsTo
-	{
-		return $this->belongsTo(Country::class, 'countryId');
-	}
+    public function country (): BelongsTo
+    {
+        return $this->belongsTo(Country::class, 'countryId');
+    }
 
-	public function businessDetails () : HasOne
-	{
-		return $this->hasOne(SellerBusinessDetail::class, 'sellerId');
-	}
+    public function businessDetails (): HasOne
+    {
+        return $this->hasOne(SellerBusinessDetail::class, 'sellerId');
+    }
 
-	public function returns () : HasMany
-	{
-		return $this->hasMany(Returns::class);
-	}
+    public function returns (): HasMany
+    {
+        return $this->hasMany(Returns::class);
+    }
 
-	public function payments () : HasMany
-	{
-		return $this->hasMany(SellerPayment::class);
-	}
+    public function payments (): HasMany
+    {
+        return $this->hasMany(SellerPayment::class);
+    }
 
-	public function transactions () : HasMany
-	{
-		return $this->hasMany(\App\Models\Models\SellerTransaction::class);
-	}
+    public function transactions (): HasMany
+    {
+        return $this->hasMany(\App\Models\Models\SellerTransaction::class);
+    }
 }
