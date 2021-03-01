@@ -39,7 +39,7 @@ class Seller extends \App\Library\Database\Eloquent\AuthEntity
 
     public function setAvatarAttribute ($value): void
     {
-        $this->avatar = $this->storeWhenUploadedCorrectly('avatars', $value);
+        $this->attributes['avatar'] = $this->storeWhenUploadedCorrectly('avatars', $value);
     }
 
     public function getAvatarAttribute ($value): ?string
