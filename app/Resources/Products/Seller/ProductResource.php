@@ -12,71 +12,71 @@ class ProductResource extends AbstractProductResource
     protected ?BrandResource $brandResource;
     protected array $warranty;
 
-    public function __construct($resource)
+    public function __construct ($resource)
     {
         parent::__construct($resource);
         $this->categoryResource = new CategoryResource($this->category);
         $this->brandResource = new BrandResource($this->brand);
         $this->warranty = [
-            'domestic' => $this->domesticWarranty(),
-            'international' => $this->internationalWarranty(),
+            'domestic' => $this->domesticWarranty,
+            'international' => $this->internationalWarranty,
             'unit' => 'Days',
-            'summary' => $this->warrantySummary(),
-            'serviceType' => $this->serviceType(),
-            'covered' => $this->coveredInWarranty(),
-            'excluded' => $this->notCoveredInWarranty(),
+            'summary' => $this->warrantySummary,
+            'serviceType' => $this->serviceType,
+            'covered' => $this->coveredInWarranty,
+            'excluded' => $this->notCoveredInWarranty,
         ];
     }
 
-    public function toArray($request)
+    public function toArray ($request): array
     {
         return [
-            'key' => $this->id(),
-            'name' => $this->name(),
-            'description' => $this->description(),
+            'key' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
             'category' => $this->categoryResource,
             'brand' => $this->brandResource,
-            'listingStatus' => $this->listingStatus(),
-            'type' => $this->type(),
-	        'idealFor' => $this->idealFor(),
-	        'originalPrice' => $this->originalPrice(),
-	        'sellingPrice' => $this->sellingPrice(),
-	        'fulfillmentBy' => $this->fulfillmentBy(),
-	        'hsn' => $this->hsn(),
-	        'currency' => $this->currency(),
-	        'stock' => $this->stock(),
-	        'lowStockThreshold' => $this->lowStockThreshold(),
-	        'sku' => $this->sku(),
-	        'styleCode' => $this->styleCode(),
-	        'trailer' => Uploads::existsUrl($this->trailer()),
-	        'procurementSla' => $this->procurementSla(),
-	        'localShippingCost' => $this->localShippingCost(),
-	        'zonalShippingCost' => $this->zonalShippingCost(),
-	        'internationalShippingCost' => $this->internationalShippingCost(),
-	        'packageWeight' => $this->packageWeight(),
-	        'packageLength' => $this->packageLength(),
-	        'packageBreadth' => $this->packageBreadth(),
-	        'packageHeight' => $this->packageHeight(),
-	        'domesticWarranty' => $this->domesticWarranty(),
-	        'internationalWarranty' => $this->internationalWarranty(),
-            'warrantySummary' => $this->warrantySummary(),
-            'warrantyServiceType' => $this->serviceType(),
-            'coveredInWarranty' => $this->coveredInWarranty(),
-            'notCoveredInWarranty' => $this->notCoveredInWarranty(),
-            'maxQuantityPerOrder' => $this->maxQuantityPerOrder(),
-            'primaryImageIndex' => $this->primaryImageIndex(),
+            'listingStatus' => $this->listingStatus,
+            'type' => $this->type,
+            'idealFor' => $this->idealFor,
+            'originalPrice' => $this->originalPrice,
+            'sellingPrice' => $this->sellingPrice,
+            'fulfillmentBy' => $this->fulfillmentBy,
+            'hsn' => $this->hsn,
+            'currency' => $this->currency,
+            'stock' => $this->stock,
+            'lowStockThreshold' => $this->lowStockThreshold,
+            'sku' => $this->sku,
+            'styleCode' => $this->styleCode,
+            'trailer' => $this->trailer,
+            'procurementSla' => $this->procurementSla,
+            'localShippingCost' => $this->localShippingCost,
+            'zonalShippingCost' => $this->zonalShippingCost,
+            'internationalShippingCost' => $this->internationalShippingCost,
+            'packageWeight' => $this->packageWeight,
+            'packageLength' => $this->packageLength,
+            'packageBreadth' => $this->packageBreadth,
+            'packageHeight' => $this->packageHeight,
+            'domesticWarranty' => $this->domesticWarranty,
+            'internationalWarranty' => $this->internationalWarranty,
+            'warrantySummary' => $this->warrantySummary,
+            'warrantyServiceType' => $this->serviceType,
+            'coveredInWarranty' => $this->coveredInWarranty,
+            'notCoveredInWarranty' => $this->notCoveredInWarranty,
+            'maxQuantityPerOrder' => $this->maxQuantityPerOrder,
+            'primaryImageIndex' => $this->primaryImageIndex,
             'attributes' => AttributeResource::collection($this->attributes),
             'files' => ImageResource::collection($this->images),
-            'variants' => $this->when($this->type() == Product::Type['Variant'], VariantItemResource::collection($this->variants)),
+            'variants' => $this->when($this->type == Product::Type['Variant'], VariantItemResource::collection($this->variants)),
         ];
     }
 
-    public function serviceType()
+    public function serviceType ()
     {
-        return Arrays::search($this->warrantyServiceType(), Product::WarrantyServiceType);
+        return Arrays::search($this->warrantyServiceType, Product::WarrantyServiceType);
     }
 
-    public function variants()
+    public function variants ()
     {
         $variants = $this->variants;
     }
