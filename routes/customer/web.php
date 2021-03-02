@@ -12,4 +12,3 @@ use App\Http\Modules\Customer\Controllers\Web\WebLinksController;
 \Illuminate\Support\Facades\Route::get('returns', [WebLinksController::class, 'returns']);
 \Illuminate\Support\Facades\Route::get('password/reset', [PasswordResetController::class, 'reset'])->name('customer.password.reset');
 \Illuminate\Support\Facades\Route::post('password/reset', [PasswordResetController::class, 'submit'])->name('customer.password.submit');
-\
