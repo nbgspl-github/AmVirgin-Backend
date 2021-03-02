@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Library\Utils\Extensions\Str;
+use App\Library\Utils\Uploads;
 use App\Models\Auth\Seller;
 use App\Queries\ProductQuery;
 use App\Traits\DynamicAttributeNamedMethods;
@@ -97,7 +99,12 @@ class Product extends \App\Library\Database\Eloquent\Model
 
     public function getPrimaryImageAttribute ($value): ?string
     {
-        return $this->retrieveMedia($value);
+        $path = $this->retrieveMedia($value);
+        if (!$path) {
+            $path = $this->externalPrimaryImage();
+            $path = Uploads::existsUrl($path->path ?? Str::Empty);
+        }
+        return $path;
     }
 
     public function shippingCost (): float
@@ -138,6 +145,11 @@ class Product extends \App\Library\Database\Eloquent\Model
     public function images (): HasMany
     {
         return $this->hasMany(ProductImage::class, 'productId');
+    }
+
+    public function externalPrimaryImage ()
+    {
+        return $this->images()->first();
     }
 
     public function seller (): BelongsTo
