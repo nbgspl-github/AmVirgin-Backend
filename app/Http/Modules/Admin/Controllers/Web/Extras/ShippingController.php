@@ -19,7 +19,7 @@ class ShippingController extends \App\Http\Modules\Admin\Controllers\Web\WebCont
 
     public function update (): \Illuminate\Http\RedirectResponse
     {
-        \App\Models\Settings::set(Settings::SHIPPING_POLICY, Settings::SHIPPING_POLICY);
+        \App\Models\Settings::set(Settings::SHIPPING_POLICY, request(Settings::SHIPPING_POLICY));
         return redirect()->route('admin.home')->with('success', 'Shipping policy content updated successfully.');
     }
 }
