@@ -100,7 +100,7 @@ class Product extends \App\Library\Database\Eloquent\Model
     public function getPrimaryImageAttribute ($value): ?string
     {
         $path = $this->retrieveMedia($value);
-        if (!empty($path)) {
+        if (empty($path)) {
             $path = $this->externalPrimaryImage();
             $path = $path->path ?? Str::Empty;
         }
