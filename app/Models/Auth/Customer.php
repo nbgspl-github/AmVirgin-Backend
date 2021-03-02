@@ -6,6 +6,11 @@ use App\Library\Utils\Extensions\Time;
 use App\Models\Address\Address;
 use App\Models\CustomerWishlist;
 use App\Models\Order\Order;
+use App\Models\Order\Transaction;
+use App\Models\Subscription;
+use App\Models\Video\Rental;
+use App\Models\Video\Video;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Mail;
 
@@ -70,19 +75,19 @@ class Customer extends \App\Library\Database\Eloquent\AuthEntity
         return $this->watchList()->where('watched', false);
     }
 
-    public function hasOnWatchLaterList (\App\Models\Video\Video $video): bool
+    public function hasOnWatchLaterList (Video $video): bool
     {
         return $this->watchLaterList()->where('video_id', $video->id)->exists();
     }
 
-    public function addToWatchList (\App\Models\Video\Video $video, bool $later = false)
+    public function addToWatchList (Video $video, bool $later = false)
     {
         $this->watchList()->updateOrCreate(
             ['video_id' => $video->id], ['watched' => !$later]
         );
     }
 
-    public function removeFromWatchList (\App\Models\Video\Video $video)
+    public function removeFromWatchList (Video $video)
     {
         $this->watchList()->where('video_id', $video->id)->delete();
     }
@@ -102,18 +107,18 @@ class Customer extends \App\Library\Database\Eloquent\AuthEntity
 
     public function subscriptions (): HasMany
     {
-        return $this->hasMany(\App\Models\Subscription::class, 'customer_id');
+        return $this->hasMany(Subscription::class, 'customer_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Model|HasMany|object|null|\App\Models\Subscription
+     * @return Model|HasMany|object|null|Subscription
      */
     public function activeSubscription ()
     {
         return $this->subscriptions()->where('valid_until', '>=', now()->format(Time::MYSQL_FORMAT))->where('expired', false)->latest()->first();
     }
 
-    public function activateSubscription (\App\Models\Subscription $subscription)
+    public function activateSubscription (Subscription $subscription)
     {
         $this->subscriptions()->where('expired', false)->where('id', '!=', $subscription->id)->update(['expired' => true]);
         $plan = $subscription->plan;
@@ -125,7 +130,7 @@ class Customer extends \App\Library\Database\Eloquent\AuthEntity
 
     public function rentals (): HasMany
     {
-        return $this->hasMany(\App\Models\Video\Rental::class, 'customer_id');
+        return $this->hasMany(Rental::class, 'customer_id');
     }
 
     public function activeRentals (): HasMany
@@ -133,22 +138,22 @@ class Customer extends \App\Library\Database\Eloquent\AuthEntity
         return $this->rentals()->where('valid_until', '>', now()->format(Time::MYSQL_FORMAT));
     }
 
-    public function isRented (\App\Models\Video\Video $video): bool
+    public function isRented (Video $video): bool
     {
         return $this->rentals()->where('video_id', $video->id)->exists();
     }
 
-    public function isRentalExpired (\App\Models\Video\Video $video): bool
+    public function isRentalExpired (Video $video): bool
     {
         return $this->rentals()->where('video_id', $video->id)->where('valid_until', '<=', now()->format(Time::MYSQL_FORMAT))->exists();
     }
 
     /**
-     * @param \App\Models\Video\Video $video
-     * @param \App\Models\Order\Transaction|\App\Library\Database\Eloquent\Model $transaction
-     * @return \Illuminate\Database\Eloquent\Model|\App\Models\Video\Rental
+     * @param Video $video
+     * @param Transaction|\App\Library\Database\Eloquent\Model $transaction
+     * @return Model|Rental
      */
-    public function addRentalVideo (\App\Models\Video\Video $video, $transaction)
+    public function addRentalVideo (Video $video, $transaction)
     {
         return $this->rentals()->create([
             'video_id' => $video->id,
