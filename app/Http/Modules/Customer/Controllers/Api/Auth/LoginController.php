@@ -54,8 +54,8 @@ class LoginController extends \App\Http\Modules\Shared\Controllers\Api\AuthContr
 	protected function sendCustomerNotFoundResponse () : \Illuminate\Http\JsonResponse
 	{
 		return responseApp()->prepare(
-			null, \Illuminate\Http\Response::HTTP_CONFLICT, __('auth.user.not_found'), 'data'
-		);
+            null, \Illuminate\Http\Response::HTTP_NOT_FOUND, __('auth.user.not_found'), 'data'
+        );
 	}
 
 	protected function sendCustomerRestrictedResponse () : \Illuminate\Http\JsonResponse
