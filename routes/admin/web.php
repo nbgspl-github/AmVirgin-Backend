@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Modules\Admin\Controllers\Web\Announcements\AdvertisementController;
 use App\Http\Modules\Admin\Controllers\Web\Announcements\AnnouncementController;
 use App\Http\Modules\Admin\Controllers\Web\Auth\LoginController;
 use App\Http\Modules\Admin\Controllers\Web\CategoryController;
@@ -361,10 +362,8 @@ Route::middleware('auth:admin')->group(function () {
 	});
 
 	Route::prefix('advertisements')->group(function () {
-		Route::get(Str::Empty, [AnnouncementController::class, 'index'])->name('admin.advertisements.index');
-		Route::get('create', [AnnouncementController::class, 'create'])->name('admin.advertisements.create');
-		Route::get('{announcement}/edit', [AnnouncementController::class, 'edit'])->name('admin.advertisements.edit');
-	});
+        Route::get(Str::Empty, [AdvertisementController::class, 'index'])->name('admin.advertisements.index');
+    });
 
 	Route::prefix('version')->group(function () {
 		Route::get(Str::Empty, function () {

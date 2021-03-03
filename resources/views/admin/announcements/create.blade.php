@@ -24,22 +24,21 @@
 									<label for="title">Title</label>
 									<input id="title" type="text" name="title" class="form-control" required
 										   placeholder="Title" minlength="2" maxlength="255" value="{{old('title')}}"/>
-								</div>
-								<div class="form-group">
-									<label for="content">Content</label>
-									<textarea class="form-control" name="content" id="content" cols="30" rows="10"
-											  required>
-									</textarea>
-								</div>
-								<div class="form-group">
-									<label for="valid_from">Valid From</label>
-									<input id="valid_from" type="datetime-local" name="validFrom" class="form-control"
-										   required placeholder="Valid From"/>
-								</div>
-								<div class="form-group">
-									<label for="valid_until">Valid Until</label>
-									<input id="valid_until" type="datetime-local" name="validUntil" class="form-control"
-										   required placeholder="Valid Until"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="content">Content</label>
+                                    <textarea class="form-control" name="content" id="content" rows="10"
+                                              required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="valid_from">Valid From</label>
+                                    <input id="valid_from" type="datetime-local" name="validFrom" class="form-control"
+                                           required placeholder="Valid From"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="valid_until">Valid Until</label>
+                                    <input id="valid_until" type="datetime-local" name="validUntil" class="form-control"
+                                           required placeholder="Valid Until"/>
 								</div>
 								<div class="form-group mb-0">
 									<div class="row">
