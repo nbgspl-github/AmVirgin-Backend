@@ -42,7 +42,7 @@ class AuthProfileResource extends JsonResource
     protected function hasActiveSubscription (): bool
     {
         $subscription = $this->activeSubscription();
-        return ($subscription == null || $subscription->plan == null);
+        return ($subscription != null || $subscription->plan != null);
     }
 
     public function plan (): ?array
