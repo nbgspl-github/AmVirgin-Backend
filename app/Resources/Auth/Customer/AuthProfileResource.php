@@ -48,7 +48,7 @@ class AuthProfileResource extends JsonResource
     public function plan (): ?array
     {
         $subscription = $this->activeSubscription();
-        if ($this->hasActiveSubscription())
+        if (!$this->hasActiveSubscription())
             return null;
         return [
             'key' => $subscription->subscription_plan_id,
