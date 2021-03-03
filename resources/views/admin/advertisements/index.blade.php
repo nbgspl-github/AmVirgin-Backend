@@ -74,7 +74,7 @@
                         @endforeach
                         </tbody>
                     </table>
-                    {{$announcements->links()}}
+                    {{$advertisements->links()}}
                 </div>
             </div>
         </div>
