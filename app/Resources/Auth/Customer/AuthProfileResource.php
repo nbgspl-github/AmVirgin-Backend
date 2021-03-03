@@ -18,7 +18,7 @@ class AuthProfileResource extends JsonResource
             'mobile' => $this->mobile,
             'avatar' => $this->avatar,
             'subscription' => [
-                'active' => $this->activeSubscription() != null,
+                'active' => $this->hasActiveSubscription(),
                 'plan' => $this->plan(),
             ],
             'address' => $this->lastUpdatedAddress(),
@@ -39,10 +39,16 @@ class AuthProfileResource extends JsonResource
         );
     }
 
+    protected function hasActiveSubscription (): bool
+    {
+        $subscription = $this->activeSubscription();
+        return ($subscription == null || ($subscription->plan == null));
+    }
+
     public function plan (): ?array
     {
         $subscription = $this->activeSubscription();
-        if ($subscription == null || ($subscription->plan == null))
+        if ($this->hasActiveSubscription())
             return null;
         return [
             'key' => $subscription->subscription_plan_id,
