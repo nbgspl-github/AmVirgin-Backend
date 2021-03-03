@@ -43,8 +43,5 @@ class CodeTester extends Command
 
     public function handle ()
     {
-        Announcement::query()->create([
-            'title' => 'This is it',
-        ]);
     }
 }
