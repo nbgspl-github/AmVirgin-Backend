@@ -23,6 +23,10 @@ class AdvertisementController extends \App\Http\Modules\Admin\Controllers\Web\We
         );
     }
 
+    public function show (Advertisement $advertisement)
+    {
+    }
+
     public function approve (Advertisement $advertisement)
     {
     }

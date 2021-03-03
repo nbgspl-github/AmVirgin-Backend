@@ -62,7 +62,7 @@
                                     <div class="btn-toolbar" role="toolbar">
                                         <div class="btn-group" role="group">
                                             <a class="btn btn-outline-danger"
-                                               href="{{route('admin.news.categories.edit',$advertisement->id)}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i
+                                               href="{{route('admin.advertisements.show',$advertisement->id)}}" @include('admin.extras.tooltip.bottom', ['title' => 'View'])><i
                                                         class="mdi mdi-pencil"></i></a>
                                             <a class="btn btn-outline-primary"
                                                href="javascript:_delete('{{$advertisement->id}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i
