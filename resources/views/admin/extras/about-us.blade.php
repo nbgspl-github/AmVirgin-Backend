@@ -54,9 +54,8 @@
                     ['color', ['color']],
                     ['para', ['ul', 'ol', 'paragraph']],
                     ['table', ['table']],
-                    ['insert', ['link']],
                     ['view', ['fullscreen', 'codeview', 'help']],
-                    ['insert', ['link', 'picture', 'video']],
+                    ['insert', ['link', 'picture']],
                 ]
             });
         })
