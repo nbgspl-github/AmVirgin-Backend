@@ -5,9 +5,6 @@ namespace App\Resources\Auth\Customer;
 use App\Models\Subscription;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/**
- * @method Subscription|null activeSubscription()
- */
 class AuthProfileResource extends JsonResource
 {
     protected ?string $token = null;
@@ -45,7 +42,7 @@ class AuthProfileResource extends JsonResource
     public function plan (): ?array
     {
         $subscription = $this->activeSubscription();
-        if (!$subscription && $subscription->plan == null)
+        if ($subscription == null || ($subscription->plan == null))
             return null;
         return [
             'key' => $subscription->subscription_plan_id,
