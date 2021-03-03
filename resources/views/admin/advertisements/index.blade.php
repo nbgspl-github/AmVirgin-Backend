@@ -57,7 +57,7 @@
                                 <td>{{$advertisement->seller->name??\App\Library\Utils\Extensions\Str::NotAvailable}}</td>
                                 <td>{{$advertisement->date}}</td>
                                 <td>{{$advertisement->active?'Yes':'No'}}</td>
-                                <td>{{$advertisement->status}}</td>
+                                <td>{{ucfirst($advertisement->status)}}</td>
                                 <td>
                                     <div class="btn-toolbar" role="toolbar">
                                         <div class="btn-group" role="group">
