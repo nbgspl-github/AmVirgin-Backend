@@ -18,14 +18,14 @@ class ListResource extends JsonResource
             'duration' => $this->duration,
             'released' => $this->released,
             'director' => $this->director,
-            'trailer' => Uploads::existsUrl($this->trailer),
-			'rating' => $this->rating,
-			'poster' => Uploads::existsUrl($this->poster),
-			'backdrop' => Uploads::existsUrl($this->backdrop),
-			'pgRating' => $this->pgRating,
-			'subscriptionType' => $this->subscriptionType,
-			'hasSeasons' => boolval($this->hasSeasons),
-			'price' => $this->price,
-		];
-	}
+            'trailer' => $this->trailer,
+            'rating' => $this->rating,
+            'poster' => $this->poster,
+            'backdrop' => $this->backdrop,
+            'pgRating' => $this->pgRating,
+            'subscriptionType' => $this->subscriptionType,
+            'hasSeasons' => $this->hasSeasons,
+            'price' => $this->price,
+        ];
+    }
 }
