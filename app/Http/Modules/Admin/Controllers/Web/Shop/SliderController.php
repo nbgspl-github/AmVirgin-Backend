@@ -8,10 +8,12 @@ use App\Library\Enums\Common\Directories;
 use App\Library\Enums\Common\Tables;
 use App\Library\Utils\Uploads;
 use App\Models\ShopSlider;
+use App\Models\Slider;
 use App\Traits\ValidatesRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 use Throwable;
 
@@ -42,7 +44,7 @@ class SliderController extends BaseController
                 'active' => ['bail', 'required', 'boolean'],
             ],
             'updateStatus' => [
-                'id' => ['bail', 'required', Rule::exists(Tables::ShopSliders, 'id')],
+                'id' => ['bail', 'required', ShopSlider::exists()],
                 'active' => ['bail', 'required', 'boolean'],
             ],
         ];
@@ -59,7 +61,7 @@ class SliderController extends BaseController
         return view('admin.shop.sliders.create');
     }
 
-    public function edit (\App\Models\Slider $slider)
+    public function edit (Slider $slider)
     {
         return view('admin.shop.sliders.edit')->with('slide', $slider);
     }
@@ -80,11 +82,11 @@ class SliderController extends BaseController
         try {
             $slider = ShopSlider::query()->findOrFail($id);
             $slider->delete();
-            $response->status(\Illuminate\Http\Response::HTTP_OK)->message('Shop slider deleted successfully.');
+            $response->status(Response::HTTP_OK)->message('Shop slider deleted successfully.');
         } catch (ModelNotFoundException $exception) {
-            $response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find shop slider for that key.');
+            $response->status(Response::HTTP_NOT_FOUND)->message('Could not find shop slider for that key.');
         } catch (Throwable $exception) {
-            $response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
+            $response->status(Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
         } finally {
             return $response->send();
         }
@@ -132,11 +134,11 @@ class SliderController extends BaseController
             $slider->update([
                 'active' => $validated->active
             ]);
-            $response->status(\Illuminate\Http\Response::HTTP_OK)->message('Status updated successfully.');
+            $response->status(Response::HTTP_OK)->message('Status updated successfully.');
         } catch (ModelNotFoundException $exception) {
-            $response->status(\Illuminate\Http\Response::HTTP_NOT_FOUND)->message('Could not find shop slider for that key.');
+            $response->status(Response::HTTP_NOT_FOUND)->message('Could not find shop slider for that key.');
         } catch (Throwable $exception) {
-            $response->status(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
+            $response->status(Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
         } finally {
             return $response->send();
         }
