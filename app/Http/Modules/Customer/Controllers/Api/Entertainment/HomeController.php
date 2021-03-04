@@ -46,11 +46,11 @@ class HomeController extends \App\Http\Modules\Customer\Controllers\Api\ApiContr
 		$sections = \App\Models\Video\Section::query()->active()->get();
 		$sections->transform(function (\App\Models\Video\Section $section) {
 			$contents = Video::startQuery()
-				->displayable()
-				->isNotTranscoding()
-				->section($section->id)
-				->take($section->max_items)
-				->applyFilters(false)
+                ->displayable()
+                ->isNotTranscoding()
+                ->section($section->id)
+                ->take($section->max_items)
+                ->applyFilters(true)
 				->get();
 			$contents = \App\Http\Modules\Customer\Resources\Entertainment\VideoSectionResource::collection($contents);
 			return [
