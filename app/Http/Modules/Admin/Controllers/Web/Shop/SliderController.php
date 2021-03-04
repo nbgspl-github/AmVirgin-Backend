@@ -11,6 +11,7 @@ use App\Models\ShopSlider;
 use App\Traits\ValidatesRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\Rule;
 use Throwable;
 
@@ -68,16 +69,16 @@ class SliderController extends BaseController
         $response = responseWeb();
         $payload = $this->requestValid(request(), $this->rules['store']);
         $payload['banner'] = \request()->hasFile('banner') ? Uploads::access()->putFile(Directories::ShopSliders, request()->file('banner')) : null;
-        ShopSlider::create($payload);
+        ShopSlider::query()->create($payload);
         $response->route('admin.shop.sliders.index')->success('Shop slider created successfully.');
         return $response->send();
     }
 
-    public function delete ($id)
+    public function delete ($id): JsonResponse
     {
         $response = responseApp();
         try {
-            $slider = ShopSlider::findOrFail($id);
+            $slider = ShopSlider::query()->findOrFail($id);
             $slider->delete();
             $response->status(\Illuminate\Http\Response::HTTP_OK)->message('Shop slider deleted successfully.');
         } catch (ModelNotFoundException $exception) {
@@ -95,7 +96,7 @@ class SliderController extends BaseController
         $banner = null;
         try {
             $validated = (object)$this->requestValid(request(), $this->rules['update']);
-            $slide = ShopSlider::findOrFail($id);
+            $slide = ShopSlider::query()->findOrFail($id);
             $slide->update([
                 'title' => $validated->title,
                 'description' => $validated->description,
@@ -122,12 +123,12 @@ class SliderController extends BaseController
         }
     }
 
-    public function updateStatus (): \Illuminate\Http\JsonResponse
+    public function updateStatus (): JsonResponse
     {
         $response = responseApp();
         try {
             $validated = (object)$this->requestValid(\request(), $this->rules['updateStatus']);
-            $slider = ShopSlider::find($validated->id);
+            $slider = ShopSlider::query()->find($validated->id);
             $slider->update([
                 'active' => $validated->active
             ]);
