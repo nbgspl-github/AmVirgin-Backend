@@ -9,6 +9,8 @@ use App\Models\Order\Order;
 use App\Models\Order\Transaction;
 use App\Models\Subscription;
 use App\Models\Video\Rental;
+use App\Models\Video\Source;
+use App\Models\Video\Stats;
 use App\Models\Video\Video;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -162,5 +164,24 @@ class Customer extends \App\Library\Database\Eloquent\AuthEntity
             'valid_from' => now()->format(Time::MYSQL_FORMAT),
             'valid_until' => now()->addDays(30)->format(Time::MYSQL_FORMAT),
         ]);
+    }
+
+    public function videoStats (): HasMany
+    {
+        return $this->hasMany(Stats::class, 'customer_id');
+    }
+
+    /**
+     * @param array $params
+     * @param Video $video
+     * @param Source|null $source
+     * @return Stats|null|Model
+     */
+    public function addVideoStats (array $params, Video $video, ?Source $source = null): ?Stats
+    {
+        return $this->videoStats()->create(array_merge($params, [
+            'video_id' => $video->id,
+            'video_source_id' => $source->id ?? null,
+        ]));
     }
 }
