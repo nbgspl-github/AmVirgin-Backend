@@ -47,7 +47,7 @@ class HomeController extends \App\Http\Modules\Customer\Controllers\Api\ApiContr
 		$sections->transform(function (\App\Models\Video\Section $section) {
 			$contents = Video::startQuery()
                 ->displayable()
-                ->isNotTranscoding()
+//                ->isNotTranscoding()
                 ->section($section->id)
                 ->applyFilters(true)
                 ->take($section->max_items)
