@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Classes\Singletons\RazorpayClient;
 use App\Models\Announcement;
+use App\Models\Settings;
 use Illuminate\Console\Command;
 
 class CodeTester extends Command
