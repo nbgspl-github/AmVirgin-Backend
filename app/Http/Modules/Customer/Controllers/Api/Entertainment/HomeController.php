@@ -51,7 +51,6 @@ class HomeController extends \App\Http\Modules\Customer\Controllers\Api\ApiContr
                 ->section($section->id)
                 ->take($section->max_items)
                 ->applyFilters(true)
-                ->dump()
                 ->get();
             $contents = \App\Http\Modules\Customer\Resources\Entertainment\VideoSectionResource::collection($contents);
             return [
