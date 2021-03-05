@@ -35,7 +35,7 @@ Route::prefix(Str::Empty)->group(function () {
 Route::prefix('videos')->group(function () {
     Route::prefix('{video}')->group(function () {
         Route::get(Str::Empty, [\App\Http\Modules\Customer\Controllers\Api\Entertainment\VideoController::class, 'show']);
-        Route::post('{?source}', [\App\Http\Modules\Customer\Controllers\Api\Entertainment\StatsController::class, 'store']);
+        Route::post('stats/{source?}', [\App\Http\Modules\Customer\Controllers\Api\Entertainment\StatsController::class, 'store']);
     });
 });
 
