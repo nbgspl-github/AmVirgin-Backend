@@ -59,11 +59,15 @@
 
 
                 <x-sidebar-header title="Entertainment"/>
+                <x-sidebar-item url="{{route('admin.genres.index')}}" icon="ti-flag" title="Campaign"/>
                 <x-sidebar-item url="{{route('admin.genres.index')}}" icon="ti-flag" title="Genres"/>
                 <x-sidebar-item url="{{route('admin.sliders.index')}}" icon="ti-gallery" title="Sliders"/>
                 <x-sidebar-item url="{{route('admin.videos.index')}}" icon="ti-video-clapper" title="Videos"/>
                 <x-sidebar-item url="{{route('admin.tv-series.index')}}" icon="ti-video-clapper" title="Tv Series"/>
                 <x-sidebar-item url="{{route('admin.subscription-plans.index')}}" icon="ti-receipt" title="Plans"/>
+
+                <x-sidebar-header title="Analytics"/>
+                <x-sidebar-item url="{{route('admin.genres.index')}}" icon="ti-flag" title="Statistics"/>
 
                 <x-sidebar-header title="News"/>
                 <x-sidebar-item url="{{route('admin.news.articles.index')}}" icon="ti-write" title="Articles"/>
