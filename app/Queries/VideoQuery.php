@@ -35,6 +35,14 @@ class VideoQuery extends AbstractQuery
         return $this;
     }
 
+    public function isTranscoding (): self
+    {
+        $this->query->whereHas('queues', function (Builder $builder) {
+            $builder->where('status', 'Completed');
+        })->orWhereDoesntHave('queues');
+        return $this;
+    }
+
     public function trending (bool $yes = true): self
     {
         $this->query->orderByDesc('hits');

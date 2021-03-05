@@ -47,7 +47,7 @@ class HomeController extends \App\Http\Modules\Customer\Controllers\Api\ApiContr
         $sections->transform(function (\App\Models\Video\Section $section) {
             $contents = Video::startQuery()
                 ->displayable()
-//                ->isNotTranscoding()
+                ->isNotTranscoding()
                 ->section($section->id)
                 ->take($section->max_items)
                 ->applyFilters(true)
@@ -74,7 +74,7 @@ class HomeController extends \App\Http\Modules\Customer\Controllers\Api\ApiContr
          */
         $trendingNow = Video::startQuery()
             ->displayable()
-//            ->isNotTranscoding()
+            ->isNotTranscoding()
             ->trending()
             ->applyFilters(true)
             ->get();
