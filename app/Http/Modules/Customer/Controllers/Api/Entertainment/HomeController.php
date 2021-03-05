@@ -76,7 +76,7 @@ class HomeController extends \App\Http\Modules\Customer\Controllers\Api\ApiContr
             ->displayable()
 //            ->isNotTranscoding()
             ->trending()
-//			->applyFilters(true)
+            ->applyFilters(true)
             ->get();
         $trendingNow = TrendingNowVideoResource::collection($trendingNow);
         $payload['payload'] = $trendingNow;
