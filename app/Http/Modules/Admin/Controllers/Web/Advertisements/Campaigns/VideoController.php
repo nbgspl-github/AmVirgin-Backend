@@ -2,13 +2,11 @@
 
 namespace App\Http\Modules\Admin\Controllers\Web\Advertisements\Campaigns;
 
-use App\Http\Modules\Admin\Controllers\Web\Advertisements\CampaignController;
 use App\Http\Modules\Admin\Requests\Advertisements\Campaign\Video\StoreRequest;
 use App\Http\Modules\Admin\Requests\Advertisements\Campaign\Video\UpdateRequest;
 use App\Models\Campaign;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 
 class VideoController extends \App\Http\Modules\Admin\Controllers\Web\WebController
 {

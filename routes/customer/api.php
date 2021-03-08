@@ -182,3 +182,7 @@ Route::prefix('rentals')->group(function () {
         Route::post('{video}/submit', [\App\Http\Modules\Customer\Controllers\Api\Subscription\Rental\RentalController::class, 'submit']);
     });
 });
+
+Route::prefix('campaign')->group(function () {
+    Route::get(Str::Empty, [\App\Http\Modules\Customer\Controllers\Api\Advertisements\Campaign\CampaignController::class, 'index']);
+});
