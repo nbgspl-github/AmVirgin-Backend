@@ -366,6 +366,10 @@ Route::middleware('auth:admin')->group(function () {
         Route::post('{advertisement}/approve', [AdvertisementController::class, 'approve'])->name('admin.advertisements.approve');
         Route::post('{advertisement}/disapprove', [AdvertisementController::class, 'disapprove'])->name('admin.advertisements.disapprove');
         Route::delete('{advertisement}', [AdvertisementController::class, 'delete'])->name('admin.advertisements.delete');
+
+        Route::prefix('campaigns')->group(function () {
+            Route::get(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\Advertisements\CampaignController::class, 'index'])->name('admin.advertisements.campaigns.index');
+        });
     });
 
     Route::prefix('version')->group(function () {
