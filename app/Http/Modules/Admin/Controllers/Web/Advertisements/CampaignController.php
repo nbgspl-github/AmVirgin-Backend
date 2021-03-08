@@ -13,6 +13,7 @@ class CampaignController extends \App\Http\Modules\Admin\Controllers\Web\WebCont
     public function __construct ()
     {
         parent::__construct();
+        $this->middleware(AUTH_ADMIN);
     }
 
     public function index (): Renderable
@@ -30,7 +31,7 @@ class CampaignController extends \App\Http\Modules\Admin\Controllers\Web\WebCont
     {
         return $campaign->type->is(Types::Article)
             ? redirect()->route('admin.campaigns.article.edit', $campaign->id)
-            : redirect()->route('admin.campaigns.video.edit', $campaign->id);
+            : redirect()->route('admin.campaigns.videos.edit', $campaign->id);
     }
 
     public function delete (Campaign $campaign): \Illuminate\Http\JsonResponse

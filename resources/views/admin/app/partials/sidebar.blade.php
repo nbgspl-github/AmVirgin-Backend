@@ -67,7 +67,8 @@
                 <x-sidebar-item url="{{route('admin.subscription-plans.index')}}" icon="ti-receipt" title="Plans"/>
 
                 <x-sidebar-header title="Analytics"/>
-                <x-sidebar-item url="{{route('admin.genres.index')}}" icon="ti-stats-up" title="Statistics"/>
+                <x-sidebar-item url="{{route('admin.stats.videos.index')}}" icon="ti-stats-up"
+                                title="Videos & Tv-Series"/>
 
                 <x-sidebar-header title="News"/>
                 <x-sidebar-item url="{{route('admin.news.articles.index')}}" icon="ti-write" title="Articles"/>

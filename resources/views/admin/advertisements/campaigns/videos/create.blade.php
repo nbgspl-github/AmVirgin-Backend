@@ -7,18 +7,19 @@
         <div class="col-12">
             <div class="card shadow-sm">
                 <div class="card-header py-0">
-                    @include('admin.extras.header', ['title'=>'Create campaign article'])
+                    @include('admin.extras.header', ['title'=>'Create campaign video'])
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
-                            <form id="videoForm" action="{{route('admin.news.articles.videos.store')}}"
+                            <form id="videoForm" action="{{route('admin.campaigns.videos.store')}}"
                                   data-parsley-validate="true" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
                                     <label>@required(Thumbnail)</label>
                                     <input type="file" name="thumbnail" id="thumbnail" class="form-control"
                                            data-max-file-size="2M" data-allowed-file-extensions="jpg png jpeg"/>
+                                    <small class="text-muted">Max 2 MegaBytes</small>
                                 </div>
                                 <div class="form-group">
                                     <label for="title">Title<span class="text-primary">*</span></label>
@@ -32,12 +33,7 @@
                                         <input type="file" class="custom-file-input" name="video" id="video"
                                                accept=".mp4, .mkv">
                                         <label class="custom-file-label" for="video">No file chosen...</label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="custom-control custom-checkbox mr-sm-2">
-                                        <input type="checkbox" name="publish" class="custom-control-input" id="publish">
-                                        <label class="custom-control-label" for="publish">Publish?</label>
+                                        <small class="text-muted">Max 10 MegaBytes</small>
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -48,7 +44,7 @@
                                         </button>
                                     </div>
                                     <div class="col-6">
-                                        <a href="{{route("admin.news.articles.index")}}"
+                                        <a href="{{route("admin.campaigns.index")}}"
                                            class="btn btn-secondary waves-effect btn-block shadow-sm">
                                             Cancel
                                         </a>
@@ -85,10 +81,10 @@
             };
             const formData = new FormData(event);
             showProgressDialog(true, () => {
-                axios.post(`/admin/news/articles/videos`, formData, config,).then(response => {
+                axios.post(`/admin/campaigns/video`, formData, config,).then(response => {
                     showProgressDialog(false);
                     alertify.alert(response.data.message, () => {
-                        location.href = `/admin/news/articles`;
+                        location.href = `/admin/campaigns`;
                     });
                 }).catch(error => {
                     showProgressDialog(false);

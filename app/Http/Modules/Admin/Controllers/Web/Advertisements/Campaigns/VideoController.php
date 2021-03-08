@@ -7,6 +7,7 @@ use App\Http\Modules\Admin\Requests\Advertisements\Campaign\Video\StoreRequest;
 use App\Http\Modules\Admin\Requests\Advertisements\Campaign\Video\UpdateRequest;
 use App\Models\Campaign;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 
 class VideoController extends \App\Http\Modules\Admin\Controllers\Web\WebController
@@ -21,19 +22,23 @@ class VideoController extends \App\Http\Modules\Admin\Controllers\Web\WebControl
         return view('admin.advertisements.campaigns.videos.edit')->with('campaign', $campaign);
     }
 
-    public function store (StoreRequest $request): RedirectResponse
+    public function store (StoreRequest $request): JsonResponse
     {
         Campaign::query()->create(
             $request->validated()
         );
-        return redirect()->action([CampaignController::class, 'index'])->with('success', 'Campaign video created successfully.');
+        return responseApp()->prepare(
+            [], \Illuminate\Http\Response::HTTP_OK, 'Campaign video created successfully.'
+        );
     }
 
-    public function update (UpdateRequest $request, Campaign $campaign): RedirectResponse
+    public function update (UpdateRequest $request, Campaign $campaign): JsonResponse
     {
         $campaign->update(
             $request->validated()
         );
-        return redirect()->action([CampaignController::class, 'index'])->with('success', 'Campaign video updated successfully.');
+        return responseApp()->prepare(
+            [], \Illuminate\Http\Response::HTTP_OK, 'Campaign video updated successfully.'
+        );
     }
 }

@@ -388,6 +388,12 @@ Route::middleware('auth:admin')->group(function () {
         });
     });
 
+    Route::prefix('statistics')->group(function () {
+        Route::prefix('videos')->group(function () {
+            Route::get(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\Statistics\VideoController::class, 'index'])->name('admin.stats.videos.index');
+        });
+    });
+
     Route::prefix('version')->group(function () {
         Route::get(Str::Empty, function () {
             $version = PHP_VERSION;
