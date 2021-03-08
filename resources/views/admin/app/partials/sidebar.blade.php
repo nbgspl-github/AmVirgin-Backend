@@ -58,7 +58,8 @@
 
 
                 <x-sidebar-header title="Entertainment"/>
-                <x-sidebar-item url="{{route('admin.genres.index')}}" icon="ti-bar-chart" title="Campaign"/>
+                <x-sidebar-item url="{{route('admin.campaigns.index')}}" icon="ti-bar-chart"
+                                title="Campaign"/>
                 <x-sidebar-item url="{{route('admin.genres.index')}}" icon="ti-flag" title="Genres"/>
                 <x-sidebar-item url="{{route('admin.sliders.index')}}" icon="ti-gallery" title="Sliders"/>
                 <x-sidebar-item url="{{route('admin.videos.index')}}" icon="ti-video-clapper" title="Videos"/>

@@ -7,80 +7,41 @@
         <div class="col-12">
             <div class="card shadow-sm">
                 <div class="card-header py-0">
-                    @include('admin.extras.header', ['title'=>'Edit content article'])
+                    @include('admin.extras.header', ['title'=>'Edit campaign article'])
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
-                            <form action="{{route('admin.news.articles.content.update',$article->id)}}"
-                                  data-parsley-validate="true" method="POST" enctype="multipart/form-data">
+                            <form action="{{route('admin.campaigns.article.update',$campaign->id)}}"
+                                  data-parsley-validate="true"
+                                  method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
                                     <label for="title">Title<span class="text-primary">*</span></label>
                                     <input id="title" type="text" name="title" class="form-control" required
                                            placeholder="Type title here" minlength="2" maxlength="100"
-                                           value="{{old('title',$article->title)}}"/>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-4">
-                                            <label for="category_id">Category<span class="text-primary">*</span></label>
-                                            <select name="category_id" id="category_id"
-                                                    class="form-control selectpicker" title="Choose">
-                                                @foreach($categories as $category)
-                                                    <option value="{{$category->id}}"
-                                                            @if($category->id==$article->category_id) selected @endif>{{$category->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-4">
-                                            <label for="author">@required(Author)</label>
-                                            <input id="author" type="text" name="author" class="form-control"
-                                                   minlength="2" maxlength="50"
-                                                   value="{{old('author',$article->author)}}">
-                                        </div>
-                                        <div class="col-4">
-                                            <label for="estimated_read">@required(Estimated read)</label>
-                                            <select name="estimated_read" id="estimated_read"
-                                                    class="form-control selectpicker" title="Choose">
-                                                @for($i=1;$i<=120;$i++)
-                                                    <option value="{{$i}}"
-                                                            @if($i==$article->estimated_read) selected @endif>{{$i}}
-                                                        minutes
-                                                    </option>
-                                                @endfor
-                                            </select>
-                                        </div>
-                                    </div>
-
+                                           value="{{old('title',$campaign->title)}}"/>
                                 </div>
                                 <div class="form-group">
                                     <label>@required(Thumbnail)</label>
-                                    <input type="file" name="thumbnail" id="thumbnail"
-                                           data-default-file="{{$article->thumbnail}}" class="form-control"
-                                           data-max-file-size="2M" data-allowed-file-extensions="jpg png jpeg"/>
+                                    <input type="file" name="thumbnail" id="thumbnail" class="form-control"
+                                           data-max-file-size="2M" data-allowed-file-extensions="jpg png jpeg"
+                                           data-default-file="{{$campaign->thumbnail}}"/>
                                 </div>
                                 <div class="form-group">
-                                    <label for="content">@required(Content)</label>
+                                    <label for="content">Content</label>
                                     <textarea name="content" id="content" cols="30"
-                                              rows="10">{{$article->content}}</textarea>
-                                </div>
-                                <div class="form-group">
-                                    <div class="custom-control custom-checkbox mr-sm-2">
-                                        <input type="checkbox" name="publish" class="custom-control-input" id="publish"
-                                               @if($article->published) checked @endif>
-                                        <label class="custom-control-label" for="publish">Publish?</label>
-                                    </div>
+                                              rows="10">{{$campaign->content}}</textarea>
                                 </div>
                                 <div class="form-row">
                                     <div class="col-6">
                                         <button type="submit"
                                                 class="btn btn-primary waves-effect waves-light btn-block shadow-sm">
-                                            Update
+                                            Save
                                         </button>
                                     </div>
                                     <div class="col-6">
-                                        <a href="{{route("admin.news.articles.index")}}"
+                                        <a href="{{route("admin.campaigns.index")}}"
                                            class="btn btn-secondary waves-effect btn-block shadow-sm">
                                             Cancel
                                         </a>

@@ -366,9 +366,25 @@ Route::middleware('auth:admin')->group(function () {
         Route::post('{advertisement}/approve', [AdvertisementController::class, 'approve'])->name('admin.advertisements.approve');
         Route::post('{advertisement}/disapprove', [AdvertisementController::class, 'disapprove'])->name('admin.advertisements.disapprove');
         Route::delete('{advertisement}', [AdvertisementController::class, 'delete'])->name('admin.advertisements.delete');
+    });
 
-        Route::prefix('campaigns')->group(function () {
-            Route::get(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\Advertisements\CampaignController::class, 'index'])->name('admin.advertisements.campaigns.index');
+    Route::prefix('campaigns')->group(function () {
+        Route::get(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\Advertisements\CampaignController::class, 'index'])->name('admin.campaigns.index');
+        Route::get('{campaign}/edit', [\App\Http\Modules\Admin\Controllers\Web\Advertisements\CampaignController::class, 'edit'])->name('admin.campaigns.edit');
+        Route::delete('{campaign}', [\App\Http\Modules\Admin\Controllers\Web\Advertisements\CampaignController::class, 'delete'])->name('admin.campaigns.delete');
+
+        Route::prefix('article')->group(function () {
+            Route::get('create', [\App\Http\Modules\Admin\Controllers\Web\Advertisements\Campaigns\ArticleController::class, 'create'])->name('admin.campaigns.article.create');
+            Route::get('{campaign}/edit', [\App\Http\Modules\Admin\Controllers\Web\Advertisements\Campaigns\ArticleController::class, 'edit'])->name('admin.campaigns.article.edit');
+            Route::post(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\Advertisements\Campaigns\ArticleController::class, 'store'])->name('admin.campaigns.article.store');
+            Route::post('{campaign}', [\App\Http\Modules\Admin\Controllers\Web\Advertisements\Campaigns\ArticleController::class, 'update'])->name('admin.campaigns.article.update');
+        });
+
+        Route::prefix('video')->group(function () {
+            Route::get('create', [\App\Http\Modules\Admin\Controllers\Web\Advertisements\Campaigns\VideoController::class, 'create'])->name('admin.campaigns.videos.create');
+            Route::get('{campaign}/edit', [\App\Http\Modules\Admin\Controllers\Web\Advertisements\Campaigns\VideoController::class, 'edit'])->name('admin.campaigns.videos.edit');
+            Route::post(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\Advertisements\Campaigns\VideoController::class, 'store'])->name('admin.campaigns.videos.store');
+            Route::post('{campaign}', [\App\Http\Modules\Admin\Controllers\Web\Advertisements\Campaigns\VideoController::class, 'update'])->name('admin.campaigns.videos.update');
         });
     });
 

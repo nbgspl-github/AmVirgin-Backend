@@ -9,7 +9,7 @@
                             <h5 class="page-title animatable">Campaign Advertisements</h5>
                         </div>
                         <div class="col-4 my-auto">
-                            <form action="{{route('admin.advertisements.campaigns.index')}}">
+                            <form action="{{route('admin.campaigns.index')}}">
                                 <div class="form-row float-right">
                                     <div class="col-auto my-1">
                                         <input type="text" name="query" class="form-control" id="inlineFormCustomSelect"
@@ -24,9 +24,9 @@
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                                 <a class="dropdown-item"
-                                                   href="{{route('admin.news.articles.content.create')}}">Article</a>
+                                                   href="{{route('admin.campaigns.article.create')}}">Article</a>
                                                 <a class="dropdown-item"
-                                                   href="{{route('admin.news.articles.videos.create')}}">Video
+                                                   href="{{route('admin.campaigns.videos.create')}}">Video
                                                     Article</a>
                                             </div>
                                         </div>
@@ -62,16 +62,16 @@
                                     @endif
                                 </td>
                                 <td>{{\App\Library\Utils\Extensions\Str::ellipsis($campaign->title,50)}}</td>
-                                <td>{{$article->type}}</td>
-                                <td>{{$article->views}}</td>
+                                <td>{{$campaign->type->description}}</td>
+                                <td>{{$campaign->views}}</td>
                                 <td>
                                     <div class="btn-toolbar" role="toolbar">
                                         <div class="btn-group" role="group">
                                             <a class="btn btn-outline-danger"
-                                               href="{{route('admin.news.articles.edit',$article->id)}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i
+                                               href="{{route('admin.campaigns.edit',$campaign->id)}}" @include('admin.extras.tooltip.bottom', ['title' => 'Edit'])><i
                                                         class="mdi mdi-pencil"></i></a>
                                             <a class="btn btn-outline-primary"
-                                               href="javascript:_delete('{{$article->id}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i
+                                               href="javascript:_delete('{{$campaign->id}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete'])><i
                                                         class="mdi mdi-minus-circle-outline"></i></a>
                                         </div>
                                     </div>
@@ -80,7 +80,7 @@
                         @endforeach
                         </tbody>
                     </table>
-                    {{$articles->links()}}
+                    {{$campaigns->links()}}
                 </div>
             </div>
         </div>
@@ -92,7 +92,7 @@
         _delete = key => {
             alertify.confirm("Are you sure? This action is irreversible!",
                 yes => {
-                    axios.delete(`/admin/news/articles/${key}`).then(response => {
+                    axios.delete(`/admin/campaigns/${key}`).then(response => {
                         alertify.alert(response.data.message, () => {
                             location.reload();
                         });

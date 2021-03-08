@@ -7,7 +7,7 @@
         <div class="col-12">
             <div class="card shadow-sm">
                 <div class="card-header py-0">
-                    @include('admin.extras.header', ['title'=>'Create video article'])
+                    @include('admin.extras.header', ['title'=>'Create campaign article'])
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -25,25 +25,6 @@
                                     <input id="title" type="text" name="title" class="form-control" required
                                            placeholder="Type title here" minlength="2" maxlength="100"
                                            value="{{old('title')}}"/>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <label for="category_id">Category<span class="text-primary">*</span></label>
-                                            <select name="category_id" id="category_id"
-                                                    class="form-control selectpicker" title="Choose">
-                                                @foreach($categories as $category)
-                                                    <option value="{{$category->id}}">{{$category->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-6">
-                                            <label for="author">@required(Author)</label>
-                                            <input id="author" type="text" name="author" class="form-control"
-                                                   minlength="2" maxlength="50" value="{{old('author')}}">
-                                        </div>
-                                    </div>
-
                                 </div>
                                 <div class="form-group">
                                     <label>@required(Video)</label>

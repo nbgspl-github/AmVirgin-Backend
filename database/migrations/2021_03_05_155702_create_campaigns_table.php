@@ -18,6 +18,9 @@ class CreateCampaignsTable extends Migration
             $table->string('title')->nullable();
             $table->longText('content')->nullable();
             $table->enum('type', ['video', 'article']);
+            $table->string('thumbnail', 1024)->nullable();
+            $table->string('video', 1024)->nullable();
+            $table->bigInteger('views')->default(0);
             $table->timestamps();
         });
     }
