@@ -12,17 +12,18 @@
 						<tr>
 							<th class="text-center">#</th>
 							<th class="text-center">Poster</th>
-							<th class="text-center">Title</th>
-							<th class="text-center">Description</th>
-							<th class="text-center">Rating</th>
-							<th class="text-center">Active</th>
-							<th class="text-center">Target Link</th>
-							<th class="text-center">Action(s)</th>
-						</tr>
-						</thead>
+                            <th class="text-center">Title</th>
+                            <th class="text-center">Description</th>
+                            <th class="text-center">Rating</th>
+                            <th class="text-center">Active</th>
+                            <th class="text-center">Target Link</th>
+                            <th class="text-center">Action(s)</th>
+                        </tr>
+                        </thead>
 
-						<tbody>
-						@foreach($slides as $slide)
+                        <tbody>
+                        <x-blank-table-indicator :data="$slides"/>
+                        @foreach($slides as $slide)
 							<tr id="genre_row_{{$slide->getKey()}}">
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">

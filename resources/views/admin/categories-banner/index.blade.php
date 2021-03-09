@@ -19,8 +19,6 @@
                                 <th>Layout Type</th>
                                 <th>ValidFrom</th>
                                 <th>ValidUntil</th>
-                        
-								
 								<th>Action(s)</th>
 							</tr>
 							</thead>

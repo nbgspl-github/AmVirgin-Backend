@@ -8,17 +8,18 @@
 				</div>
 				<div class="card-body animatable">
 					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-						<thead>
-						<tr>
-							<th class="text-center">#</th>
-							<th class="text-center">Name</th>
-							<th class="text-center">Category</th>
-							<th class="text-center">Actions</th>
-						</tr>
-						</thead>
+                        <thead>
+                        <tr>
+                            <th class="text-center">#</th>
+                            <th class="text-center">Name</th>
+                            <th class="text-center">Category</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                        </thead>
 
-						<tbody>
-						@foreach($sets as $set)
+                        <tbody>
+                        <x-blank-table-indicator :data="$sets"/>
+                        @foreach($sets as $set)
 							<tr>
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">{{$set->name}}</td>

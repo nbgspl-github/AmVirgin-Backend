@@ -27,7 +27,7 @@ class Video extends \App\Library\Database\Eloquent\Model
         'type' => Types::class
     ];
 
-    public function getPosterAttribute () : ?string
+    public function getPosterAttribute (): ?string
     {
         return $this->retrieveMedia($this->attributes['poster']);
     }
@@ -37,7 +37,7 @@ class Video extends \App\Library\Database\Eloquent\Model
         $this->attributes['poster'] = $this->storeWhenUploadedCorrectly('videos/posters', $value);
     }
 
-    public function getBackdropAttribute () : ?string
+    public function getBackdropAttribute (): ?string
     {
         return $this->retrieveMedia($this->attributes['backdrop']);
     }
@@ -47,7 +47,7 @@ class Video extends \App\Library\Database\Eloquent\Model
         $this->attributes['backdrop'] = $this->storeWhenUploadedCorrectly('videos/backdrops', $value);
     }
 
-    public function getTrailerAttribute () : ?string
+    public function getTrailerAttribute (): ?string
     {
         return $this->retrieveMedia($this->attributes['trailer']);
     }
@@ -57,42 +57,47 @@ class Video extends \App\Library\Database\Eloquent\Model
         $this->attributes['trailer'] = $this->storeWhenUploadedCorrectly('videos/trailers', $value);
     }
 
-    public function genre () : BelongsTo
+    public function genre (): BelongsTo
     {
         return $this->belongsTo(\App\Models\Video\Genre::class, 'genre_id');
     }
 
-    public function sources () : HasMany
+    public function sources (): HasMany
     {
         return $this->hasMany(\App\Models\Video\Source::class, 'video_id');
     }
 
-    public function snaps () : HasMany
+    public function snaps (): HasMany
     {
         return $this->hasMany(\App\Models\Video\Snap::class, 'video_id');
     }
 
-    public function audios () : HasMany
+    public function audios (): HasMany
     {
         return $this->hasMany(\App\Models\Models\Video\Audio::class, 'video_id');
     }
 
-    public function subtitles () : HasMany
+    public function subtitles (): HasMany
     {
         return $this->hasMany(\App\Models\Models\Video\Subtitle::class, 'video_id');
     }
 
-    public function queues () : HasMany
+    public function queues (): HasMany
     {
         return $this->hasMany(Queue::class, 'video_id');
     }
 
-    public function isTranscoding () : bool
+    public function stats (): HasMany
+    {
+        return $this->hasMany(Stats::class, 'video_id');
+    }
+
+    public function isTranscoding (): bool
     {
         return $this->queues()->whereIn('status', ['Encoding', 'Queued'])->whereNull('completed_at')->exists();
     }
 
-    public static function startQuery () : VideoQuery
+    public static function startQuery (): VideoQuery
     {
         return VideoQuery::begin();
     }

@@ -13,17 +13,18 @@
 							<th>#</th>
 							<th>Banner</th>
 							<th>Name</th>
-							<th>Description</th>
-							<th>Original Price</th>
-							<th>Offer Price</th>
-							<th>Duration</th>
-							<th>Active</th>
-							<th>Action(s)</th>
-						</tr>
-						</thead>
+                            <th>Description</th>
+                            <th>Original Price</th>
+                            <th>Offer Price</th>
+                            <th>Duration</th>
+                            <th>Active</th>
+                            <th>Action(s)</th>
+                        </tr>
+                        </thead>
 
-						<tbody>
-						@foreach($plans as $plan)
+                        <tbody>
+                        <x-blank-table-indicator :data="$plans"/>
+                        @foreach($plans as $plan)
 							<tr id="content_row_{{$plan->getKey()}}">
 								<td>{{$loop->index+1}}</td>
 								<td>

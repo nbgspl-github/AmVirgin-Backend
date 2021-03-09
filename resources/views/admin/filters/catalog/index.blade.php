@@ -13,17 +13,18 @@
 							<th class="text-center">No.</th>
 							<th class="text-center">Label</th>
 							<th class="text-center">Built In</th>
-							<th class="text-center">Built In Type</th>
-							<th class="text-center">Attribute</th>
-							<th class="text-center">Category</th>
-							<th class="text-center">Allow Multi value</th>
-							<th class="text-center">Active</th>
-							<th class="text-center">Actions</th>
-						</tr>
-						</thead>
+                            <th class="text-center">Built In Type</th>
+                            <th class="text-center">Attribute</th>
+                            <th class="text-center">Category</th>
+                            <th class="text-center">Allow Multi value</th>
+                            <th class="text-center">Active</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                        </thead>
 
-						<tbody>
-						@foreach($filters as $filter)
+                        <tbody>
+                        <x-blank-table-indicator :data="$filters"/>
+                        @foreach($filters as $filter)
 							<tr>
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">{{$filter->label()}}</td>

@@ -22,17 +22,18 @@
 				<div class="card-body animatable">
 					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 						<thead>
-						<tr>
-							<th>#</th>
-							<th>Name</th>
-							<th>Mobile</th>
-							<th>Email</th>
-							<th>Status</th>
-							<th>Action(s)</th>
-						</tr>
-						</thead>
-						<tbody>
-						@foreach ($users as $user)
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Mobile</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Action(s)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <x-blank-table-indicator :data="$users"/>
+                        @foreach ($users as $user)
 							<tr>
 								<td>{{($users->firstItem()+$loop->index)}}</td>
 								<td>{{$user->name}}</td>

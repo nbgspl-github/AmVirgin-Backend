@@ -13,17 +13,18 @@
 							<th class="text-center">No.</th>
 							<th class="text-center">Name</th>
 							<th class="text-center">Code</th>
-							<th class="text-center">Required</th>
-							<th class="text-center">Use In Layered Navigation</th>
-							<th class="text-center">Use To Create Variants</th>
-							<th class="text-center">Predefined</th>
-							<th class="text-center">Multi Value</th>
-							<th class="text-center">Actions</th>
-						</tr>
-						</thead>
+                            <th class="text-center">Required</th>
+                            <th class="text-center">Use In Layered Navigation</th>
+                            <th class="text-center">Use To Create Variants</th>
+                            <th class="text-center">Predefined</th>
+                            <th class="text-center">Multi Value</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                        </thead>
 
-						<tbody>
-						@foreach($attributes as $attribute)
+                        <tbody>
+                        <x-blank-table-indicator columns="9" :data="$attributes"/>
+                        @foreach($attributes as $attribute)
 							<tr>
 								<td class="text-center">{{$attributes->firstItem()+$loop->index}}</td>
 								<td class="text-center">{{$attribute->name}}</td>

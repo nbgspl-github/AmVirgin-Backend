@@ -14,17 +14,18 @@
 							<th class="text-center">Name</th>
 							<th class="text-center">Description</th>
 							<th class="text-center">Primitive Type</th>
-							<th class="text-center">Multi-value</th>
-							<th class="text-center">Max values</th>
-							<th class="text-center">Bounded</th>
-							<th class="text-center">Minimum</th>
-							<th class="text-center">Maximum</th>
-							<th class="text-center">Actions</th>
-						</tr>
-						</thead>
+                            <th class="text-center">Multi-value</th>
+                            <th class="text-center">Max values</th>
+                            <th class="text-center">Bounded</th>
+                            <th class="text-center">Minimum</th>
+                            <th class="text-center">Maximum</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                        </thead>
 
-						<tbody>
-						@foreach($attributeTypes as $attributeType)
+                        <tbody>
+                        <x-blank-table-indicator :data="$attributeTypes"/>
+                        @foreach($attributeTypes as $attributeType)
 							<tr>
 								<td class="text-center">{{$loop->index+1}}</td>
 								<td class="text-center">{{$attributeType->name()}}</td>

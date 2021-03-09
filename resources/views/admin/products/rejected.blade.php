@@ -27,17 +27,18 @@
 							<th>Seller</th>
 							<th>Brand</th>
 							<th>Name</th>
-							<th>Original</th>
-							<th>Selling</th>
-							<th>Discount</th>
-							<th>Variants</th>
-							<th>Created</th>
-							<th>Action(s)</th>
-						</tr>
-						</thead>
+                            <th>Original</th>
+                            <th>Selling</th>
+                            <th>Discount</th>
+                            <th>Variants</th>
+                            <th>Created</th>
+                            <th>Action(s)</th>
+                        </tr>
+                        </thead>
 
-						<tbody>
-						@foreach($products as $product)
+                        <tbody>
+                        <x-blank-table-indicator :data="$products"/>
+                        @foreach($products as $product)
 							<tr id="content_row_{{$product->getKey()}}">
 								<td>{{$products->firstItem()+$loop->index}}</td>
 								<td>

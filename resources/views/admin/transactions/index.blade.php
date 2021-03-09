@@ -24,17 +24,18 @@
 						<thead>
 						<tr>
 							<th>#</th>
-							<th>Seller</th>
-							<th>Amount</th>
-							<th>Account</th>
-							<th>Reference Id</th>
-							<th>Status</th>
-							<th>Paid At</th>
-							<th>Action(s)</th>
-						</tr>
-						</thead>
-						<tbody>
-						@foreach ($transactions as $transaction)
+                            <th>Seller</th>
+                            <th>Amount</th>
+                            <th>Account</th>
+                            <th>Reference Id</th>
+                            <th>Status</th>
+                            <th>Paid At</th>
+                            <th>Action(s)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <x-blank-table-indicator :data="$transactions"/>
+                        @foreach ($transactions as $transaction)
 							<tr>
 								<td>{{($transactions->firstItem()+$loop->index)}}</td>
 								<td>

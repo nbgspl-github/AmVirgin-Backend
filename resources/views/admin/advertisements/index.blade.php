@@ -41,6 +41,7 @@
                         </tr>
                         </thead>
                         <tbody>
+                        <x-blank-table-indicator columns="9" :data="$advertisements"/>
                         @foreach ($advertisements as $advertisement)
                             <tr>
                                 <td>{{($advertisements->firstItem()+$loop->index)}}</td>

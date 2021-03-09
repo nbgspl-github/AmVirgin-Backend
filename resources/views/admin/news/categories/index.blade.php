@@ -24,17 +24,18 @@
 				</div>
 				<div class="card-body animatable">
 					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-						<thead>
-						<tr>
-							<th>#</th>
-							<th>Name</th>
-							<th>Description</th>
-							<th>Order</th>
-							<th>Action(s)</th>
-						</tr>
-						</thead>
-						<tbody>
-						@foreach ($categories as $category)
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Order</th>
+                            <th>Action(s)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <x-blank-table-indicator :data="$categories"/>
+                        @foreach ($categories as $category)
 							<tr>
 								<td>{{($categories->firstItem()+$loop->index)}}</td>
 								<td>{{\App\Library\Utils\Extensions\Str::ellipsis($category->name,25)}}</td>

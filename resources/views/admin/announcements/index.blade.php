@@ -39,6 +39,7 @@
                         </tr>
                         </thead>
                         <tbody>
+                        <x-blank-table-indicator columns="7" :data="$announcements"/>
                         @foreach ($announcements as $announcement)
                             <tr>
                                 <td>{{($announcements->firstItem()+$loop->index)}}</td>

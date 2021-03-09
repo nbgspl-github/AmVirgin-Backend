@@ -50,6 +50,7 @@
                         </tr>
                         </thead>
                         <tbody>
+                        <x-blank-table-indicator :data="$campaigns"/>
                         @foreach ($campaigns as $campaign)
                             <tr>
                                 <td>{{($campaigns->firstItem()+$loop->index)}}</td>

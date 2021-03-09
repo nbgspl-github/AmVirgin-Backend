@@ -14,17 +14,18 @@
 							<th class="">Poster</th>
 							<th class="">Title</th>
 							<th class="">Description</th>
-							<th class="">Audio</th>
-							<th class="">Subtitles</th>
-							<th class="">Rating</th>
-							<th class="">Trending</th>
-							<th class="">Processing</th>
-							<th class="">Action(s)</th>
-						</tr>
-						</thead>
+                            <th class="">Audio</th>
+                            <th class="">Subtitles</th>
+                            <th class="">Rating</th>
+                            <th class="">Trending</th>
+                            <th class="">Processing</th>
+                            <th class="">Action(s)</th>
+                        </tr>
+                        </thead>
 
-						<tbody>
-						@foreach($videos as $video)
+                        <tbody>
+                        <x-blank-table-indicator :data="$videos"/>
+                        @foreach($videos as $video)
 							<tr id="content_row_{{$video->id}}">
 								<td class="">{{$loop->index+1}}</td>
 								<td class="">

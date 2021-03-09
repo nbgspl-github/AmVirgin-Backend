@@ -10,17 +10,18 @@
 					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 						<thead>
 						<tr>
-							<th>#</th>
-							<th>Name</th>
-							<th>Parent</th>
-							<th>Type</th>
-							<th>Order</th>
-							<th>Listing</th>
-							<th>Action(s)</th>
-						</tr>
-						</thead>
-						<tbody>
-						@foreach ($categories as $category)
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Parent</th>
+                            <th>Type</th>
+                            <th>Order</th>
+                            <th>Listing</th>
+                            <th>Action(s)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <x-blank-table-indicator columns="7" :data="$categories"/>
+                        @foreach ($categories as $category)
 							<tr id="{{'category_row_'.$category->getKey()}}">
 								<td>{{$categories->firstItem()+$loop->index}}</td>
 								<td>{{$category->name}}</td>

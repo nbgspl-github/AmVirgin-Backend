@@ -6,17 +6,19 @@
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Subtitle Sources','onClick'=>['link'=>'handleAdd()','text'=>'Add more']])
 				</div>
-				<div class="card-body animatable">
-					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-						<thead>
-						<tr>
-							<th>#</th>
-							<th>Language</th>
-							<th>Action(s)</th>
-						</tr>
-						</thead>
-						<tbody>
-						@foreach ($subtitles as $subtitle)
+                <div class="card-body animatable">
+                    <table id="datatable" class="table table-hover pr-0 pl-0 "
+                           style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Language</th>
+                            <th>Action(s)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <x-blank-table-indicator :data="$subtitles"/>
+                        @foreach ($subtitles as $subtitle)
 							<tr>
 								<td>{{($subtitles->firstItem()+$loop->index)}}</td>
 								<td>{{$subtitle->language->name}}</td>

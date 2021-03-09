@@ -27,17 +27,18 @@
 							<th>Seller</th>
 							<th>Order Number</th>
 							<th>Description</th>
-							<th>Quantity</th>
-							<th>Sales</th>
-							<th>Selling Fee</th>
-							<th>Courier Charges</th>
-							<th>Total</th>
-							<th>Status</th>
-							<th>Action(s)</th>
-						</tr>
-						</thead>
-						<tbody>
-						@foreach ($payments as $payment)
+                            <th>Quantity</th>
+                            <th>Sales</th>
+                            <th>Selling Fee</th>
+                            <th>Courier Charges</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Action(s)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <x-blank-table-indicator :data="$payments"/>
+                        @foreach ($payments as $payment)
 							<tr>
 								<td>{{($payments->firstItem()+$loop->index)}}</td>
 								<td>

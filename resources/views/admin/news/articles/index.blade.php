@@ -37,17 +37,18 @@
 							<th>#</th>
 							<th>Thumbnail</th>
 							<th>Category</th>
-							<th>Title</th>
-							<th>Author</th>
-							<th>Type</th>
-							<th>Published</th>
-							<th>Views</th>
-							<th>Shares</th>
-							<th>Action(s)</th>
-						</tr>
-						</thead>
-						<tbody>
-						@foreach ($articles as $article)
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Type</th>
+                            <th>Published</th>
+                            <th>Views</th>
+                            <th>Shares</th>
+                            <th>Action(s)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <x-blank-table-indicator :data="$articles"/>
+                        @foreach ($articles as $article)
 							<tr>
 								<td>{{($articles->firstItem()+$loop->index)}}</td>
 								<td>

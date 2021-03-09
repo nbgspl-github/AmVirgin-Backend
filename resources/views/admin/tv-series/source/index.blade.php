@@ -11,17 +11,18 @@
 						<thead>
 						<tr>
 							<th>#</th>
-							<th>Title</th>
-							<th>Audio</th>
-							<th>Subtitle</th>
-							<th>Duration</th>
-							<th>Season</th>
-							<th>Episode</th>
-							<th>Action(s)</th>
-						</tr>
-						</thead>
-						<tbody>
-						@foreach ($sources as $source)
+                            <th>Title</th>
+                            <th>Audio</th>
+                            <th>Subtitle</th>
+                            <th>Duration</th>
+                            <th>Season</th>
+                            <th>Episode</th>
+                            <th>Action(s)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <x-blank-table-indicator :data="$sources"/>
+                        @foreach ($sources as $source)
 							<tr>
 								<td>{{($sources->firstItem()+$loop->index)}}</td>
 								<td>{{\App\Library\Utils\Extensions\Str::ellipsis($source->title)}}</td>

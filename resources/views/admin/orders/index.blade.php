@@ -26,18 +26,18 @@
 							<th>#</th>
 							<th>Number</th>
 							<th>Sub-Orders</th>
-							<th>Customer</th>
-							<th>Seller(s)</th>
-							<th>Quantity</th>
-							<th>Sub Total</th>
-							<th>Total</th>
-							<th>Status</th>
-							<th>Action(s)</th>
-						</tr>
-						</thead>
-
-						<tbody>
-						@foreach($orders as $order)
+                            <th>Customer</th>
+                            <th>Seller(s)</th>
+                            <th>Quantity</th>
+                            <th>Sub Total</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Action(s)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <x-blank-table-indicator :data="$orders"/>
+                        @foreach($orders as $order)
 							<tr id="content_row_{{$order->getKey()}}">
 								<td>{{($orders->firstItem()+$loop->index)}}</td>
 								<td>{{$order->orderNumber}}</td>

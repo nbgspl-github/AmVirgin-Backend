@@ -15,17 +15,18 @@
 							<th>Title</th>
 							<th>Description</th>
 							<th>Audio</th>
-							<th>Subtitles</th>
-							<th>Rating</th>
-							<th>Seasons</th>
-							<th>Episodes</th>
-							<th>Processing</th>
-							<th>Action(s)</th>
-						</tr>
-						</thead>
+                            <th>Subtitles</th>
+                            <th>Rating</th>
+                            <th>Seasons</th>
+                            <th>Episodes</th>
+                            <th>Processing</th>
+                            <th>Action(s)</th>
+                        </tr>
+                        </thead>
 
-						<tbody>
-						@foreach($series as $s)
+                        <tbody>
+                        <x-blank-table-indicator :data="$series"/>
+                        @foreach($series as $s)
 							<tr id="content_row_{{$s->getKey()}}">
 								<td>{{$loop->index+1}}</td>
 								<td>

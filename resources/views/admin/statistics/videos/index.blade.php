@@ -4,19 +4,60 @@
         <div class="col-12">
             <div class="card shadow-sm">
                 <div class="card-header py-0">
-                    <div class="row">
-                        <div class="col-8 w-100">
+                    <div class="row justify-content-between">
+                        <div class="col-6 my-auto">
                             <h5 class="page-title animatable">Statistics</h5>
                         </div>
-                        <div class="col-4 my-auto">
-                            <form action="{{route('admin.stats.videos.index')}}">
-                                <div class="form-row float-right">
-                                    <div class="col-auto my-1">
-                                        <input type="text" name="query" class="form-control" id="inlineFormCustomSelect"
-                                               value="{{request('query')}}" placeholder="Type & hit enter">
+                        <div class="col-6 my-auto text-right">
+                            <button type="button" class="btn btn-outline-primary" data-toggle="modal"
+                                    data-target="#exampleModal">
+                                Filters
+                            </button>
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <form action="{{route('admin.stats.videos.index')}}" id="filterForm">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Choose from & to...</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body text-left">
+                                                <div class="form-row">
+                                                    <div class="col-12 my-1">
+                                                        <div class="form-group">
+                                                            <label for="from">From</label>
+                                                            <input type="date" name="from" class="form-control"
+                                                                   id="from"
+                                                                   value="{{request('from')}}" placeholder="From"
+                                                                   required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="to">To</label>
+                                                            <input type="date" name="to" class="form-control"
+                                                                   id="to"
+                                                                   value="{{request('to')}}" placeholder="To" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-outline-primary">Filter
+                                                </button>
+                                                <button type="button" onclick="resetFilters();"
+                                                        class="btn btn-outline-secondary">Reset
+                                                </button>
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                    Close
+                                                </button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -28,31 +69,36 @@
                             <th>#</th>
                             <th>Title</th>
                             <th>Type</th>
-                            <th>Customer</th>
-                            <th>Latitude</th>
-                            <th>Longitude</th>
-                            <th>IP</th>
-                            <th>Duration Watched</th>
+                            <th>Views</th>
                             <th>Action(s)</th>
                         </tr>
                         </thead>
                         <tbody>
+                        <x-blank-table-indicator :data="$stats"/>
                         @foreach ($stats as $stat)
                             <tr>
-                                <td>{{($stats->firstItem()+$loop->index)}}</td>
-                                <td>{{\App\Library\Utils\Extensions\Str::ellipsis($stat->video->title??\App\Library\Utils\Extensions\Str::NotAvailable,25)}}</td>
+                                <td>{{($loop->index+1)}}</td>
+                                <td>
+                                    <a href="{{route('admin.stats.videos.show',$stat->video_id)}}"
+                                       class="btn btn-link">{{\App\Library\Utils\Extensions\Str::ellipsis($stat->video->title??\App\Library\Utils\Extensions\Str::NotAvailable,25)}}</a>
+                                </td>
                                 <td>{{$stat->video->type->description}}</td>
-                                <td>{{$stat->customer->name??\App\Library\Utils\Extensions\Str::NotAvailable}}</td>
-                                <td>{{$stat->latitude}}</td>
-                                <td>{{$stat->longitude}}</td>
-                                <td>{{$stat->ip}}</td>
-                                <td>{{$stat->duration}}</td>
-                                <td></td>
+                                <td>{{$stat->views}}</td>
+
+                                <td>
+                                    <div class="btn-toolbar" role="toolbar">
+                                        <div class="btn-group" role="group">
+                                            <a class="btn btn-outline-danger"
+                                               href="{{route('admin.stats.videos.show',$stat->video_id)}}" @include('admin.extras.tooltip.bottom', ['title' => 'View details'])><i
+                                                        class="mdi mdi-lightbulb-outline"></i></a>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                         @endforeach
                         </tbody>
                     </table>
-                    {{$stats->links()}}
+                    {{--                    {{$stats->links()}}--}}
                 </div>
             </div>
         </div>
@@ -75,6 +121,13 @@
                     });
                 }
             )
+        }
+
+        function resetFilters() {
+            window.history.replaceState({}, document.title, '{{route('admin.stats.videos.index')}}');
+            $('#from').val('');
+            $('#to').val('');
+            window.location.reload();
         }
     </script>
 @stop

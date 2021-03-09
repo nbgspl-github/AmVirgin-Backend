@@ -29,6 +29,7 @@
                         </tr>
                         </thead>
                         <tbody>
+                        <x-blank-table-indicator :data="$customers"/>
                         @foreach ($customers as $customer)
                             <tr>
                                 <td>{{($loop->index+1)}}</td>
@@ -67,6 +68,7 @@
                         </tr>
                         </thead>
                         <tbody>
+                        <x-blank-table-indicator :data="$sellers"/>
                         @foreach ($sellers as $seller)
                             <tr>
                                 <td>{{($loop->index+1)}}</td>
@@ -107,6 +109,7 @@
                         </tr>
                         </thead>
                         <tbody>
+                        <x-blank-table-indicator :data="$articles"/>
                         @foreach ($articles as $article)
                             <tr>
                                 <td>{{($loop->index+1)}}</td>
@@ -155,6 +158,7 @@
                         </tr>
                         </thead>
                         <tbody>
+                        <x-blank-table-indicator :data="$videos"/>
                         @foreach ($videos as $video)
                             <tr>
                                 <td>{{($loop->index+1)}}</td>
