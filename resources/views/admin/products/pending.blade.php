@@ -1,15 +1,15 @@
 @extends('admin.app.app')
 @section('content')
 	<div class="row">
-		<div class="col-12">
-			<div class="card shadow-sm">
-				<div class="card-header py-0">
-					<div class="row">
-						<div class="col-8">
-							<h5 class="page-title animatable">Product (Pending Approval)</h5>
-						</div>
-						<div class="col-4 my-auto">
-							<form action="{{route('admin.products.pending')}}">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header py-0">
+                    <div class="row">
+                        <div class="col-8">
+                            <h5 class="page-title animatable">Products (Pending Approval)</h5>
+                        </div>
+                        <div class="col-4 my-auto">
+                            <form action="{{route('admin.products.pending')}}">
 								<div class="form-row float-right">
 									<div class="col-auto my-1">
 										<input type="text" name="query" class="form-control" id="inlineFormCustomSelect" value="{{request('query')}}" placeholder="Type & hit enter">

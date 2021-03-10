@@ -3,7 +3,6 @@
 namespace App\Http\Modules\Admin\Controllers\Web\Statistics;
 
 use App\Http\Modules\Admin\Requests\Statistics\IndexRequest;
-use App\Models\Auth\Customer;
 use App\Models\Video\Stats;
 use App\Models\Video\Video;
 use Illuminate\Contracts\Support\Renderable;
@@ -35,19 +34,20 @@ class VideoController extends \App\Http\Modules\Admin\Controllers\Web\WebControl
 
     public function show (Video $video): Renderable
     {
-        $stats = DB::table(Stats::tableName())
-//            ->where('video_id', $video->id)
-            ->select(['customer_id', 'video_id', 'customers.name', 'title'])
+        $stats = Stats::query()
+            ->with('customer', 'video')
+            ->where('video_id', $video->id)
+            ->select(['customer_id', 'video_id'])
             ->addSelect('video_stats.duration', DB::raw('sum(video_stats.duration) as duration'))
             ->addSelect('video_stats.id', DB::raw('count(*) as views'))
-            ->addSelect('select * as abc', DB::table(Stats::tableName())
-                ->select(['video_stats.duration as m_duration', 'video_stats.ip as m_ip', 'video_stats.latitude as m_lat', 'video_stats.longitude as m_lng', 'video_stats.created_at as m_created'])
-                ->leftJoin(Stats::tableName() . " as xyz", 'xyz.customer_id', '=', 'video_stats.customer_id')
-                ->get())
-            ->join(Customer::tableName(), 'customers.id', '=', 'video_stats.customer_id')
-            ->join(Video::tableName(), 'videos.id', '=', 'video_stats.video_id')
             ->groupBy(['customer_id', 'video_id'])->get();
-//        dd($stats);
+        $stats->transform(function (Stats $stats) {
+            $stats->entries = Stats::query()
+                ->where('customer_id', $stats->customer_id)
+                ->where('video_id', $stats->video_id)
+                ->get();
+            return $stats;
+        });
         return view('admin.statistics.videos.summary')->with('views', $stats)->with('video', $video);
     }
 

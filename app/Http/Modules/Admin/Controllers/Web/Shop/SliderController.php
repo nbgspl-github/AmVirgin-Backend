@@ -2,19 +2,16 @@
 
 namespace App\Http\Modules\Admin\Controllers\Web\Shop;
 
-use App\Exceptions\ValidationException;
 use App\Http\Modules\Shared\Controllers\BaseController;
-use App\Library\Enums\Common\Directories;
-use App\Library\Enums\Common\Tables;
-use App\Library\Utils\Uploads;
 use App\Models\ShopSlider;
 use App\Models\Slider;
 use App\Traits\ValidatesRequest;
 use Exception;
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
-use Illuminate\Validation\Rule;
 use Throwable;
 
 class SliderController extends BaseController
@@ -50,79 +47,47 @@ class SliderController extends BaseController
         ];
     }
 
-    public function index ()
+    public function index (): Renderable
     {
         $slides = ShopSlider::all();
         return view('admin.shop.sliders.index')->with('slides', $slides);
     }
 
-    public function create ()
+    public function create (): Renderable
     {
         return view('admin.shop.sliders.create');
     }
 
-    public function edit (Slider $slider)
+    public function edit (Slider $slider): Renderable
     {
         return view('admin.shop.sliders.edit')->with('slide', $slider);
     }
 
-    public function store ()
+    public function store (): RedirectResponse
     {
-        $response = responseWeb();
         $payload = $this->requestValid(request(), $this->rules['store']);
-        $payload['banner'] = \request()->hasFile('banner') ? Uploads::access()->putFile(Directories::ShopSliders, request()->file('banner')) : null;
         ShopSlider::query()->create($payload);
-        $response->route('admin.shop.sliders.index')->success('Shop slider created successfully.');
-        return $response->send();
+        return redirect()->route('admin.shop.sliders.index')->with('success', 'Shop slider created successfully.');
     }
 
-    public function delete ($id): JsonResponse
+    /**
+     * @param Slider $slider
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function delete (Slider $slider): JsonResponse
     {
-        $response = responseApp();
-        try {
-            $slider = ShopSlider::query()->findOrFail($id);
-            $slider->delete();
-            $response->status(Response::HTTP_OK)->message('Shop slider deleted successfully.');
-        } catch (ModelNotFoundException $exception) {
-            $response->status(Response::HTTP_NOT_FOUND)->message('Could not find shop slider for that key.');
-        } catch (Throwable $exception) {
-            $response->status(Response::HTTP_INTERNAL_SERVER_ERROR)->message($exception->getMessage());
-        } finally {
-            return $response->send();
-        }
+        $slider->delete();
+        return responseApp()->prepare(
+            [], Response::HTTP_OK, 'Slider deleted successfully.'
+        );
     }
 
-    public function update ($id)
+    public function update (Slider $slider): RedirectResponse
     {
-        $response = responseWeb();
-        $banner = null;
-        try {
-            $validated = (object)$this->requestValid(request(), $this->rules['update']);
-            $slide = ShopSlider::query()->findOrFail($id);
-            $slide->update([
-                'title' => $validated->title,
-                'description' => $validated->description,
-                'target' => $validated->target,
-                'rating' => $validated->rating,
-                'active' => $validated->active,
-            ]);
-            if (request()->hasFile('banner')) {
-                Uploads::deleteIfExists($slide->banner);
-                $banner = Uploads::access()->putFile(Directories::Sliders, request()->file('banner'));
-                $slide->update([
-                    'banner' => $banner,
-                ]);
-            }
-            $response->route('admin.shop.sliders.index')->success('Shop slider updated successfully.');
-        } catch (ModelNotFoundException $exception) {
-            $response->route('admin.shop.sliders.index')->error($exception->getMessage());
-        } catch (ValidationException $exception) {
-            $response->back()->error($exception->getMessage())->data(\request()->all());
-        } catch (Throwable $exception) {
-            $response->back()->error($exception->getMessage())->data(\request()->all());
-        } finally {
-            return $response->send();
-        }
+        $validated = $this->requestValid(request(), $this->rules['update']);
+        $slider->update($validated);
+        return redirect()->route('admin.shop.sliders.index')->with('success', 'Shop slider updated successfully.');
     }
 
     public function updateStatus (): JsonResponse

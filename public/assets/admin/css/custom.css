@@ -42,3 +42,11 @@ p.msg {
 .badge {
     font-weight: normal !important;
 }
+
+.dropdown-toggle::after {
+    vertical-align: 0.1em !important;
+}
+
+.form-control-sm {
+    padding: .05rem .5rem !important;
+}

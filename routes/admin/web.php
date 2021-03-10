@@ -222,7 +222,7 @@ Route::middleware('auth:admin')->group(function () {
             Route::post(Str::Empty, [ShopSliderController::class, 'store'])->name('admin.shop.sliders.store');
             Route::post('{slider}', [ShopSliderController::class, 'update'])->name('admin.shop.sliders.update');
             Route::put('{id}/status', [ShopSliderController::class, 'updateStatus'])->name('admin.shop.sliders.update.status');
-            Route::delete('{id}', [ShopSliderController::class, 'delete'])->name('admin.shop.sliders.delete');
+            Route::delete('{slider}', [ShopSliderController::class, 'delete'])->name('admin.shop.sliders.delete');
         });
 
         // Brands in Focus Route(s)

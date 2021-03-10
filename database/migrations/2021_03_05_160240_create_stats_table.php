@@ -21,7 +21,7 @@ class CreateStatsTable extends Migration
             $table->double('latitude', 10, 8)->nullable();
             $table->double('longitude', 10, 8)->nullable();
             $table->ipAddress('ip')->nullable();
-            $table->time('duration')->default('00:00:00');
+            $table->integer('duration')->default(0);
             $table->timestamps();
         });
     }

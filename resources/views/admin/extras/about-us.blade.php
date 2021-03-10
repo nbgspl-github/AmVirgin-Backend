@@ -58,6 +58,7 @@
                     ['insert', ['link', 'picture']],
                 ]
             });
+            $('#sn-checkbox-open-in-new-window').removeClass('custom-control-input');
         })
     </script>
 @stop

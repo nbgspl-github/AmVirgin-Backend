@@ -53,26 +53,36 @@
 								</td>
 								<td class="">{{$video->rating}}</td>
 								<td class="">{{\App\Library\Utils\Extensions\Str::stringifyBoolean($video->trending)}}</td>
-								<td class="">
-									@if($video->isTranscoding())
-										Yes
-									@else
-										No
-									@endif
-								</td>
-								<td class="">
-									<div class="btn-toolbar" role="toolbar">
-										<div class="btn-group" role="group">
-											<a class="btn btn-outline-danger shadow-sm" href="{{route('admin.videos.edit.action',$video->id)}}" @include('admin.extras.tooltip.left', ['title' => 'Edit'])><i class="mdi mdi-pencil"></i></a>
-											@if($video->isTranscoding())
-												<a class="btn btn-outline-primary shadow-sm disabled" href="javascript:void(0);" onclick="deleteVideo('{{$video->id}}');" @include('admin.extras.tooltip.right', ['title' => 'This action is unavailable at this time.'])><i class="mdi mdi-delete"></i></a>
-											@else
-												<a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);" onclick="deleteVideo('{{$video->id}}');" @include('admin.extras.tooltip.right', ['title' => 'Delete this video'])><i class="mdi mdi-delete"></i></a>
-											@endif
-										</div>
-									</div>
-								</td>
-							</tr>
+                                <td class="">
+                                    @if($video->isTranscoding())
+                                        Yes
+                                    @else
+                                        No
+                                    @endif
+                                </td>
+                                <td class="">
+                                    <div class="btn-toolbar" role="toolbar">
+                                        <div class="btn-group" role="group">
+                                            <a class="btn btn-outline-success shadow-sm"
+                                               href="{{route('admin.stats.videos.show',$video->id)}}" @include('admin.extras.tooltip.left', ['title' => 'Statistics'])><i
+                                                        class="mdi mdi-chart-line"></i></a>
+                                            <a class="btn btn-outline-danger shadow-sm"
+                                               href="{{route('admin.videos.edit.action',$video->id)}}" @include('admin.extras.tooltip.left', ['title' => 'Edit'])><i
+                                                        class="mdi mdi-pencil"></i></a>
+                                            @if($video->isTranscoding())
+                                                <a class="btn btn-outline-primary shadow-sm disabled"
+                                                   href="javascript:void(0);"
+                                                   onclick="deleteVideo('{{$video->id}}');" @include('admin.extras.tooltip.right', ['title' => 'This action is unavailable at this time.'])><i
+                                                            class="mdi mdi-delete"></i></a>
+                                            @else
+                                                <a class="btn btn-outline-primary shadow-sm" href="javascript:void(0);"
+                                                   onclick="deleteVideo('{{$video->id}}');" @include('admin.extras.tooltip.right', ['title' => 'Delete this video'])><i
+                                                            class="mdi mdi-delete"></i></a>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
 						@endforeach
 						</tbody>
 					</table>

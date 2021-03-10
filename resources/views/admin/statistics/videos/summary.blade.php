@@ -24,10 +24,11 @@
                         </tr>
                         </thead>
                         <tbody>
+                        <x-blank-table-indicator :data="$views"/>
                         @foreach($views as $view)
                             <tr>
                                 <td>{{$loop->index+1}}</td>
-                                <td>{{$view->name}}</td>
+                                <td>{{$view->customer->name??\App\Library\Utils\Extensions\Str::NotAvailable}}</td>
                                 <td>{{$view->views}}</td>
                                 <td>{{\App\Library\Utils\Extensions\Time::toDuration($view->duration)}}</td>
                                 <td>
@@ -37,23 +38,48 @@
                                     </button>
                                     <div class="modal fade" id="exampleModal_{{$loop->index}}" tabindex="-1"
                                          role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
+                                        <div class="modal-dialog modal-lg" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                                    <h5 class="modal-title" id="exampleModalLabel">Customer Views</h5>
                                                     <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    ...
+                                                    <table class="table table-sm">
+                                                        <thead>
+                                                        <tr>
+                                                            <th scope="col">#</th>
+                                                            <th scope="col">Time</th>
+                                                            <th scope="col">Duration</th>
+                                                            <th scope="col">Latitude</th>
+                                                            <th scope="col">Longitude</th>
+                                                            <th scope="col">IP</th>
+                                                            <th scope="col">Address</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <x-blank-table-indicator :data="$view->entries"/>
+                                                        @foreach($view->entries as $record)
+                                                            <tr>
+                                                                <td>{{$loop->index+1}}</td>
+                                                                <td>{{$record->created_at}}</td>
+                                                                <td>{{$record->duration}}</td>
+                                                                <td>{{$record->latitude??\App\Library\Utils\Extensions\Str::NotAvailable}}</td>
+                                                                <td>{{$record->longitude??\App\Library\Utils\Extensions\Str::NotAvailable}}</td>
+                                                                <td>{{$record->ip??\App\Library\Utils\Extensions\Str::NotAvailable}}</td>
+                                                                <td>{{$record->address??\App\Library\Utils\Extensions\Str::NotAvailable}}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
                                                             data-dismiss="modal">Close
                                                     </button>
-                                                    <button type="button" class="btn btn-primary">Save changes</button>
                                                 </div>
                                             </div>
                                         </div>

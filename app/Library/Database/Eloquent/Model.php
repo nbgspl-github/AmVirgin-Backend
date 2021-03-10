@@ -11,6 +11,7 @@ use Illuminate\Support\Carbon;
  * @property int|string $id Primary key of table
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @method static |self create($params)
  */
 abstract class Model extends \Illuminate\Database\Eloquent\Model
 {

@@ -7,12 +7,22 @@ use App\Traits\DynamicAttributeNamedMethods;
 
 class ShopSlider extends \App\Library\Database\Eloquent\Model
 {
-	use DynamicAttributeNamedMethods;
+    use DynamicAttributeNamedMethods;
 
-	protected $table = 'shop-sliders';
+    protected $table = 'shop-sliders';
 
-	public static function whereQuery () : ShopSliderQuery
-	{
-		return ShopSliderQuery::begin();
-	}
+    public function setBannerAttribute ($value)
+    {
+        $this->attributes['banner'] = $this->storeWhenUploadedCorrectly('shop-sliders', $value);
+    }
+
+    public function getBannerAttribute ($value): ?string
+    {
+        return $this->retrieveMedia($value);
+    }
+
+    public static function whereQuery (): ShopSliderQuery
+    {
+        return ShopSliderQuery::begin();
+    }
 }
