@@ -24,7 +24,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <x-blank-table-indicator columns="6" :data="$tickets"/>
+                        <x-blank-table-indicator :data="$tickets"/>
                         @foreach ($tickets as $ticket)
                             <tr>
                                 <td>{{($tickets->firstItem()+$loop->index)}}</td>
