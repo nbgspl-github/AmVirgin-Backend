@@ -102,21 +102,22 @@
 																</div>
 															@endforeach
 														</div>
-														<div class="modal-footer">
-															<button type="button" class="btn btn-secondary"
-																	data-dismiss="modal">Close
-															</button>
-															<button type="button" class="btn btn-primary">Save changes
-															</button>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label for="released">Release date<span class="text-primary">*</span></label>
-											<input id="released" type="date" name="released" class="form-control" required placeholder="Choose or type release date" onkeydown="return false;"/>
-										</div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-primary"
+                                                                    data-dismiss="modal">Done
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="released">Release date<span
+                                                        class="text-primary">*</span></label>
+                                            <input id="released" type="date" name="released" class="form-control"
+                                                   required placeholder="Choose or type release date"
+                                                   onkeydown="return false;"/>
+                                        </div>
 										<div class="form-group">
 											<label for="rating">Rating<span class="text-primary">*</span></label>
 											<input id="rating" type="number" name="rating" class="form-control" required placeholder="Type rating for this series" min="0.00" max="5.00" value="0.00" step="0.01"/>

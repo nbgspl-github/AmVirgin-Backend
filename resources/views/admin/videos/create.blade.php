@@ -122,21 +122,19 @@
 																</div>
 															@endforeach
 														</div>
-														<div class="modal-footer">
-															<button type="button" class="btn btn-secondary"
-																	data-dismiss="modal">Close
-															</button>
-															<button type="button" class="btn btn-primary">Save changes
-															</button>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label for="released">Release date<span
-													class="text-primary">*</span></label>
-											<input id="released" type="date" name="released" class="form-control"
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-primary"
+                                                                    data-dismiss="modal">Okay
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="released">Release date<span
+                                                        class="text-primary">*</span></label>
+                                            <input id="released" type="date" name="released" class="form-control"
 												   required placeholder="Choose release date"
 												   onkeydown="return false;"/>
 										</div>

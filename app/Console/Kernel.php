@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule (Schedule $schedule)
     {
-        $schedule->call(PaymentCycle::class)->dailyAt('00:00')->withoutOverlapping();
+//        $schedule->call(PaymentCycle::class)->dailyAt('00:00')->withoutOverlapping();
     }
 
     /**

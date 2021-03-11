@@ -66,6 +66,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::prefix('payments')->group(function () {
         Route::get(Str::Empty, [PaymentController::class, 'index'])->name('admin.payments.index');
         Route::get('{payment}/show', [PaymentController::class, 'show'])->name('admin.payments.show');
+        Route::get('ready-to-pay', [PaymentController::class, 'pay'])->name('admin.payments.pay');
     });
 
     // Transaction's Route(s)

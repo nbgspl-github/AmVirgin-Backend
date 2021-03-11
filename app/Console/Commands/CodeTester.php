@@ -3,8 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Classes\Singletons\RazorpayClient;
-use App\Models\Announcement;
-use App\Models\Settings;
 use Illuminate\Console\Command;
 
 class CodeTester extends Command
@@ -44,5 +42,9 @@ class CodeTester extends Command
 
     public function handle ()
     {
+        $order = $this->client->order->create([
+            'amount' => 10000,
+            'currency' => 'INR'
+        ]);
     }
 }
