@@ -19,6 +19,11 @@
                 <x-sidebar-item url="{{route('admin.home')}}" icon="ti-dashboard" title="Dashboard"/>
                 <x-sidebar-item url="{{route('admin.customers.index')}}" icon="ti-user" title="Customers"/>
                 <x-sidebar-item url="{{route('admin.sellers.index')}}" icon="ti-user" title="Sellers"/>
+                <x-sidebar-expandable-item icon="ti-support" title="Support Tickets">
+                    <x-sidebar-item url="{{route('admin.support.tickets.open')}}" icon="" title="Open"/>
+                    <x-sidebar-item url="{{route('admin.support.tickets.closed')}}" icon="" title="Closed"/>
+                    <x-sidebar-item url="{{route('admin.support.tickets.resolved')}}" icon="" title="Resolved"/>
+                </x-sidebar-expandable-item>
                 <x-sidebar-expandable-item icon="ti-archive" title="Miscellaneous">
                     <x-sidebar-item url="{{route('admin.extras.about-us.edit')}}" icon="" title="About Us"/>
                     <x-sidebar-item url="{{route('admin.extras.privacy-policy.edit')}}" icon="" title="Privacy Policy"/>
@@ -44,7 +49,10 @@
                     <x-sidebar-item url="{{route('admin.products.deleted')}}" icon="" title="Deleted"/>
                 </x-sidebar-expandable-item>
                 <x-sidebar-item url="{{route('admin.shop.choices')}}" icon="ti-panel" title="Homepage"/>
-                <x-sidebar-item url="{{route('admin.payments.index')}}" icon="ti-receipt" title="Payments"/>
+                <x-sidebar-expandable-item icon="ti-receipt" title="Payments">
+                    <x-sidebar-item url="{{route('admin.payments.index')}}" icon="" title="All"/>
+                    <x-sidebar-item url="{{route('admin.payments.pay')}}" icon="" title="Ready to Pay"/>
+                </x-sidebar-expandable-item>
                 <x-sidebar-item url="{{route('admin.transactions.index')}}" icon="ti-receipt" title="Transactions"/>
 
                 <!--Catalog Section-->

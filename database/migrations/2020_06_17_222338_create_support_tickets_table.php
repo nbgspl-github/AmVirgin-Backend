@@ -11,17 +11,17 @@ class CreateSupportTicketsTable extends Migration {
 	 * @return void
 	 */
 	public function up () {
-		Schema::create('support-tickets', function (Blueprint $table) {
-			$table->bigIncrements('id');
-			$table->unsignedBigInteger('sellerId');
-			$table->string('issue');
-			$table->string('subIssue');
-			$table->string('email');
-			$table->string('subject', 500);
-			$table->string('description', 5000);
-			$table->json('orderId');
-			$table->string('callbackNumber');
-			$table->json('attachments');
+        Schema::create('support_tickets', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('sellerId');
+            $table->string('issue');
+            $table->string('subIssue');
+            $table->string('email');
+            $table->string('subject', 500);
+            $table->string('description', 5000);
+            $table->json('orderId');
+            $table->string('callbackNumber');
+            $table->json('attachments');
 			$table->string('status')->default('open');
 			$table->timestamps();
 		});
@@ -32,7 +32,8 @@ class CreateSupportTicketsTable extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down () {
-		Schema::dropIfExists('support-tickets');
-	}
+	public function down ()
+    {
+        Schema::dropIfExists('support_tickets');
+    }
 }

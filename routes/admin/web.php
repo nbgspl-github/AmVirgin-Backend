@@ -25,6 +25,7 @@ use App\Http\Modules\Admin\Controllers\Web\Shop\HomePageController;
 use App\Http\Modules\Admin\Controllers\Web\Shop\SliderController as ShopSliderController;
 use App\Http\Modules\Admin\Controllers\Web\SliderController;
 use App\Http\Modules\Admin\Controllers\Web\SubscriptionPlanController;
+use App\Http\Modules\Admin\Controllers\Web\Support\TicketController;
 use App\Http\Modules\Admin\Controllers\Web\TvSeries\AttributeController;
 use App\Http\Modules\Admin\Controllers\Web\TvSeries\TvSeriesController;
 use App\Http\Modules\Admin\Controllers\Web\Users\CustomerController;
@@ -393,6 +394,18 @@ Route::middleware('auth:admin')->group(function () {
         Route::prefix('videos')->group(function () {
             Route::get(Str::Empty, [\App\Http\Modules\Admin\Controllers\Web\Statistics\VideoController::class, 'index'])->name('admin.stats.videos.index');
             Route::get('{video}/show', [\App\Http\Modules\Admin\Controllers\Web\Statistics\VideoController::class, 'show'])->name('admin.stats.videos.show');
+        });
+    });
+
+    Route::prefix('support')->group(function () {
+        Route::prefix('tickets')->group(function () {
+            Route::get('open', [TicketController::class, 'open'])->name('admin.support.tickets.open');
+            Route::get('closed', [TicketController::class, 'closed'])->name('admin.support.tickets.closed');
+            Route::get('resolved', [TicketController::class, 'resolved'])->name('admin.support.tickets.resolved');
+            Route::prefix('mark')->group(function () {
+                Route::get('{ticket}/resolved', [TicketController::class, 'markResolved'])->name('admin.support.tickets.mark.resolved');
+                Route::get('{ticket}/closed', [TicketController::class, 'markClosed'])->name('admin.support.tickets.mark.closed');
+            });
         });
     });
 
