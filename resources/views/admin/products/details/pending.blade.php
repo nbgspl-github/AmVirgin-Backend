@@ -191,8 +191,38 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="row">
-
+                                                <div class="col-4">
+                                                    <label for="domesticWarranty">Domestic Warranty</label>
+                                                    <input id="domesticWarranty" name="domesticWarranty"
+                                                           class="form-control bg-white"
+                                                           readonly value="{{$product->domesticWarranty}}">
+                                                </div>
+                                                <div class="col-4">
+                                                    <label for="internationalWarranty">International Warranty</label>
+                                                    <input id="internationalWarranty" name="internationalWarranty"
+                                                           class="form-control bg-white"
+                                                           readonly value="{{$product->internationalWarranty}}">
+                                                </div>
+                                                <div class="col-4">
+                                                    <label for="serviceType">Service Type</label>
+                                                    <input id="serviceType" type="text" name="serviceType"
+                                                           class="form-control bg-white"
+                                                           value="{{old('serviceType',$product->warrantyServiceType??\App\Library\Utils\Extensions\Str::NotAvailable)}}"
+                                                           readonly/>
+                                                </div>
                                             </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="warrantySummary">Warranty Summary</label>
+                                            <textarea id="warrantySummary" name="warrantySummary"
+                                                      class="form-control bg-white"
+                                                      readonly>{{$product->warrantySummary}}</textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="domesticWarranty">Returnable</label>
+                                            <textarea id="domesticWarranty" name="domesticWarranty"
+                                                      class="form-control bg-white"
+                                                      readonly>{{$product->returnable?'True':'False'}}</textarea>
                                         </div>
                                         <div class="form-group">
                                             <div class="row">
