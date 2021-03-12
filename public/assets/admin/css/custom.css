@@ -52,5 +52,5 @@ p.msg {
 }
 
 .dropify-wrapper input {
-    z-index: 1 !important;
+    z-index: 900 !important;
 }

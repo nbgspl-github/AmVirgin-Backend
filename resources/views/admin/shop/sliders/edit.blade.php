@@ -22,11 +22,12 @@
 								<div class="form-group">
 									<label>Target<span class="text-primary">*</span></label>
 									<input type="text" name="target" class="form-control" placeholder="Type target url here" value="{{old('target',$slide->target)}}"/>
-								</div>
-								<div class="form-group">
-									<label>Rating<span class="text-primary">*</span></label>
-									<select name="rating" class="form-control">
-										@if(old('rating',$slide->rating)==0)
+                                    <small class="text-muted">Example - https://google.co.in</small>
+                                </div>
+                                <div class="form-group">
+                                    <label>Rating<span class="text-primary">*</span></label>
+                                    <select name="rating" class="form-control">
+                                        @if(old('rating',$slide->rating)==0)
 											<option value="0" selected>Not rated</option>
 											<option value="1">1</option>
 											<option value="2">2</option>
@@ -80,27 +81,31 @@
 									<label>Active<span class="text-primary">*</span></label>
 									<select name="active" class="form-control">
 										@if(old('active',$slide->active)==true)
-											<option value="1" selected>Yes</option>
-											<option value="0">No</option>
-										@else
-											<option value="1">Yes</option>
-											<option value="0" selected>No</option>
-										@endif
-									</select>
-								</div>
-								<div class="form-group">
-									<label>Banner<span class="text-primary">*</span></label>
-									<input type="file" name="banner" id="banner" data-default-file="{{$slide->banner}}" data-allowed-formats=".jpg, .png, .jpeg" data-max-file-size="2M" data-show-remove="false">
-								</div>
-								<div class="form-row">
-									<div class="col-6">
-										<button type="submit" class="btn btn-primary waves-effect waves-light btn-block shadow-sm">
-											Update
-										</button>
-									</div>
-									<div class="col-6">
-										<a href="{{route("admin.shop.sliders.index")}}" class="btn btn-secondary waves-effect btn-block shadow-sm">
-											Cancel
+                                            <option value="1" selected>Yes</option>
+                                            <option value="0">No</option>
+                                        @else
+                                            <option value="1">Yes</option>
+                                            <option value="0" selected>No</option>
+                                        @endif
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Banner<span class="text-primary">*</span></label>
+                                    <input type="file" name="banner" id="banner" data-default-file="{{$slide->banner}}"
+                                           data-allowed-file-extensions="jpg png jpeg" data-max-file-size="2M"
+                                           data-show-remove="false">
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <button type="submit"
+                                                class="btn btn-primary waves-effect waves-light btn-block shadow-sm">
+                                            Update
+                                        </button>
+                                    </div>
+                                    <div class="col-6">
+                                        <a href="{{route("admin.shop.sliders.index")}}"
+                                           class="btn btn-secondary waves-effect btn-block shadow-sm">
+                                            Cancel
 										</a>
 									</div>
 								</div>

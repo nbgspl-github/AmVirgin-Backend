@@ -12,22 +12,22 @@
 							<form action="{{route('admin.categories.store')}}" method="POST" data-parsley-validate="true" enctype="multipart/form-data">
 								@csrf
 								<div class="jumbotron py-1 px-3">
-									<h6 class="display-6">Important!</h6>
-									<hr class="my-2">
-									<ul class="px-3">
-										<li><p>There are 4 nesting levels or types for categories.</p></li>
-										<li><p>Main<br>Main ► Category<br>Main ► Category ► Sub-Category<br>Main ►
-												Category ► Sub-Category ► Vertical</p></li>
-										<li>
-											<p>Products can only be added to categories having type as
-												<mark>Vertical</mark>
-												.
-											</p>
-										</li>
-										<li><p>You can add as many categories as you need.</p></li>
-										<li>
-											<p>To make a category eligible for product addition, set its type to
-												<mark>Vertical</mark>
+                                    <h6 class="display-6">Important!</h6>
+                                    <hr class="my-2">
+                                    <ul class="px-3">
+                                        <li><p>There are 4 nesting levels or types for categories.</p></li>
+                                        <li><p>Main<br>Main ᐅ Category<br>Main ᐅ Category ᐅ Sub-Category<br>Main ᐅ
+                                                Category ᐅ Sub-Category ᐅ Vertical</p></li>
+                                        <li>
+                                            <p>Products can only be added to categories having type as
+                                                <mark>Vertical</mark>
+                                                .
+                                            </p>
+                                        </li>
+                                        <li><p>You can add as many categories as you need.</p></li>
+                                        <li>
+                                            <p>To make a category eligible for product addition, set its type to
+                                                <mark>Vertical</mark>
 												.
 											</p>
 										</li>
@@ -53,30 +53,38 @@
 								</div>
 								<div class="form-group">
 									<label>@required(Name)</label>
-									<input type="text" name="name" class="form-control" required placeholder="Type category name" minlength="1" maxlength="255" value="{{old('name')}}"/>
-								</div>
-								<div class="form-group">
-									<label>@required(Parent)</label>
-									<select name="parent_id" class="form-control" id="parentId" required onchange="handleTypeChanged(this.value,document.getElementById('option-item-'+this.value).getAttribute('data-type'));">
-										<option value="" disabled selected>Choose</option>
-										@foreach($roots as $root)
-											<option value="{{$root['key']}}" data-type="{{$root['type']}}" id="option-item-{{$root['key']}}">{{$root['name']}}</option>
-											@foreach($root['children']['items'] as $category)
-												<option value="{{ $category['key'] }}" data-type="{{$category['type']}}" id="option-item-{{$category['key']}}">{{$root['name']}}
-													► {{$category['name']}}</option>
-												@foreach($category['children']['items'] as $subCategory)
-													<option value="{{ $subCategory['key'] }}" data-type="{{$subCategory['type']}}" id="option-item-{{$subCategory['key'] }}">{{$root['name']}}
-														► {{$category['name']}} ► {{$subCategory['name']}}</option>
-												@endforeach
-											@endforeach
-										@endforeach
-									</select>
-								</div>
-								<div class="form-group">
-									<label for="">@required(Type)</label>
-									<select name="type" id="type" class="form-control">
-										<option value="" disabled selected>Choose</option>
-										<option value="{{\App\Library\Enums\Categories\Types::Category}}">Category</option>
+                                    <input type="text" name="name" class="form-control" required
+                                           placeholder="Type category name" minlength="1" maxlength="255"
+                                           value="{{old('name')}}"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>@required(Parent)</label>
+                                    <select name="parent_id" class="form-control" id="parentId" required
+                                            onchange="handleTypeChanged(this.value,document.getElementById('option-item-'+this.value).getAttribute('data-type'));">
+                                        <option value="" disabled selected>Choose</option>
+                                        @foreach($roots as $root)
+                                            <option value="{{$root['key']}}" data-type="{{$root['type']}}"
+                                                    id="option-item-{{$root['key']}}">{{$root['name']}}</option>
+                                            @foreach($root['children']['items'] as $category)
+                                                <option value="{{ $category['key'] }}" data-type="{{$category['type']}}"
+                                                        id="option-item-{{$category['key']}}">{{$root['name']}}
+                                                    ᐅ {{$category['name']}}</option>
+                                                @foreach($category['children']['items'] as $subCategory)
+                                                    <option value="{{ $subCategory['key'] }}"
+                                                            data-type="{{$subCategory['type']}}"
+                                                            id="option-item-{{$subCategory['key'] }}">{{$root['name']}}
+                                                        ᐅ {{$category['name']}} ᐅ {{$subCategory['name']}}</option>
+                                                @endforeach
+                                            @endforeach
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">@required(Type)</label>
+                                    <select name="type" id="type" class="form-control">
+                                        <option value="" disabled selected>Choose</option>
+                                        <option value="{{\App\Library\Enums\Categories\Types::Category}}">Category
+                                        </option>
 										<option value="{{\App\Library\Enums\Categories\Types::SubCategory}}">Sub-Category</option>
 										<option value="{{\App\Library\Enums\Categories\Types::Vertical}}">Vertical</option>
 									</select>

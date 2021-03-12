@@ -4,13 +4,14 @@
         <div class="col-12">
             <div class="card shadow-sm">
                 <div class="card-header py-0">
-                    @include('admin.extras.header', ['title'=>'Create Shop Slider'])
+                    @include('admin.extras.header', ['title'=>'Create a link slider'])
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 col-sm-10 col-md-10 col-lg-8 col-xl-6 mx-auto">
-                            <form action="{{route('admin.shop.sliders.store')}}" data-parsley-validate="true"
-                                  method="POST" enctype="multipart/form-data">
+                            <form action="{{route('admin.sliders.link.store')}}" data-parsley-validate="true"
+                                  method="POST"
+                                  enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
                                     <label>Title<span class="text-primary">*</span></label>
@@ -20,31 +21,35 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Description<span class="text-primary">*</span></label>
-                                    <input type="text" name="description" class="form-control"
-                                           placeholder="Type description here" value="{{old('description')}}"/>
+                                    <textarea name="description" class="form-control"
+                                              placeholder="Type description here">{{old('description')}}</textarea>
                                 </div>
+
                                 <div class="form-group">
-                                    <label>Target<span class="text-primary">*</span></label>
-                                    <input type="text" name="target" class="form-control"
+                                    <label>Target link<span class="text-primary">*</span></label>
+                                    <input type="text" name="targetLink" id="targetLink" class="form-control"
                                            placeholder="Type target url here" value="{{old('target')}}"/>
                                     <small class="text-muted">Example - https://google.co.in</small>
                                 </div>
                                 <div class="form-group">
                                     <label>Rating<span class="text-primary">*</span></label>
                                     <select name="rating" class="form-control">
-                                        <option value="0">Not rated</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
+                                        @for($i=0;$i<=5;$i++)
+                                            <option value="{{$i}}"
+                                                    @if(old('rating')==$i) selected @endif>{{$i}}</option>
+                                        @endfor
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Active<span class="text-primary">*</span></label>
                                     <select name="active" class="form-control">
-                                        <option value="1">Yes</option>
-                                        <option value="0">No</option>
+                                        @if(old('active')==true)
+                                            <option value="1" selected>Yes</option>
+                                            <option value="0">No</option>
+                                        @else
+                                            <option value="1">Yes</option>
+                                            <option value="0" selected>No</option>
+                                        @endif
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -60,7 +65,7 @@
                                         </button>
                                     </div>
                                     <div class="col-6">
-                                        <a href="{{route("admin.shop.sliders.index")}}"
+                                        <a href="{{route("admin.sliders.index")}}"
                                            class="btn btn-secondary waves-effect btn-block shadow-sm">
                                             Cancel
                                         </a>
@@ -77,8 +82,40 @@
 
 @section('javascript')
     <script>
-        $(document).ready(function () {
+        let lastFile = null;
+        let targetTypes = {
+            ExternalLink: '{{\App\Models\Slider::TargetType['ExternalLink']}}',
+            VideoKey: '{{\App\Models\Slider::TargetType['VideoKey']}}'
+        };
+        let elements = {
+            targetKey: null,
+            targetLink: null
+        };
+
+        $(document).ready(() => {
             $('#banner').dropify({});
-        })
+            elements = {
+                targetKey: $('#targetKey'),
+                targetLink: $('#targetLink'),
+            };
+        });
+
+        handleTypeChanged = (value) => {
+            if (value === targetTypes.ExternalLink) {
+                disable(elements.targetKey);
+                enable(elements.targetLink);
+            } else {
+                enable(elements.targetKey);
+                disable(elements.targetLink);
+            }
+        };
+
+        enable = (e) => {
+            e.prop('disabled', false);
+        };
+
+        disable = (e) => {
+            e.prop('disabled', true);
+        };
     </script>
 @stop
