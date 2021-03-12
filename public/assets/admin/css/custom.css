@@ -50,3 +50,7 @@ p.msg {
 .form-control-sm {
     padding: .05rem .5rem !important;
 }
+
+.dropify-wrapper input {
+    z-index: 1 !important;
+}

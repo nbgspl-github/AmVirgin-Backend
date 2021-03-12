@@ -26,33 +26,50 @@
 										</div>
 										<div class="form-group">
 											<label for="seller">Seller</label>
-											<input id="seller" type="text" name="seller" class="form-control bg-white" value="{{old('seller',$product->seller->name??\App\Library\Utils\Extensions\Str::NotAvailable)}}" readonly/>
+											<input id="seller" type="text" name="seller" class="form-control bg-white"
+												   value="{{old('seller',$product->seller->name??\App\Library\Utils\Extensions\Str::NotAvailable)}}"
+												   readonly/>
 										</div>
 										<div class="form-group">
 											<label for="brand">Brand</label>
-											<input id="brand" type="text" name="brand" class="form-control bg-white" value="{{old('brand',$product->brand->name??\App\Library\Utils\Extensions\Str::NotAvailable)}}" readonly/>
+											<input id="brand" type="text" name="brand" class="form-control bg-white"
+												   value="{{old('brand',$product->brand->name??\App\Library\Utils\Extensions\Str::NotAvailable)}}"
+												   readonly/>
 										</div>
 										<div class="form-group">
 											<label for="listing">Listing</label>
-											<input id="listing" type="text" name="listing" class="form-control bg-white" value="{{old('listingStatus',$product->listing??\App\Library\Utils\Extensions\Str::NotAvailable)}}" readonly/>
+											<input id="listing" type="text" name="listing" class="form-control bg-white"
+												   value="{{old('listingStatus',$product->listingStatus??\App\Library\Utils\Extensions\Str::NotAvailable)}}"
+												   readonly/>
 										</div>
 										<div class="form-group">
 											<label for="type">Type</label>
-											<input id="type" type="text" name="type" class="form-control bg-white" value="{{old('type',$product->type??\App\Library\Utils\Extensions\Str::NotAvailable)}}" readonly/>
+											<input id="type" type="text" name="type" class="form-control bg-white"
+												   value="{{old('type',$product->type??\App\Library\Utils\Extensions\Str::NotAvailable)}}"
+												   readonly/>
 										</div>
 										<div class="form-group">
 											<label for="ideal_for">Ideal For</label>
-											<input id="ideal_for" type="text" name="idealFor" class="form-control bg-white" value="{{old('idealFor',$product->type??\App\Library\Utils\Extensions\Str::NotAvailable)}}" readonly/>
+											<input id="ideal_for" type="text" name="idealFor"
+												   class="form-control bg-white"
+												   value="{{old('idealFor',$product->idealFor??\App\Library\Utils\Extensions\Str::NotAvailable)}}"
+												   readonly/>
 										</div>
 										<div class="form-group">
 											<div class="row">
 												<div class="col-4">
 													<label for="originalPrice">Original Price</label>
-													<input id="originalPrice" type="text" name="originalPrice" class="form-control bg-white" value="{{old('originalPrice',$product->originalPrice??\App\Library\Utils\Extensions\Str::NotAvailable)}}" readonly/>
+													<input id="originalPrice" type="text" name="originalPrice"
+														   class="form-control bg-white"
+														   value="{{old('originalPrice',$product->originalPrice??\App\Library\Utils\Extensions\Str::NotAvailable)}}"
+														   readonly/>
 												</div>
 												<div class="col-4">
 													<label for="sellingPrice">Selling Price</label>
-													<input id="sellingPrice" type="text" name="sellingPrice" class="form-control bg-white" value="{{old('sellingPrice',$product->sellingPrice??\App\Library\Utils\Extensions\Str::NotAvailable)}}" readonly/>
+													<input id="sellingPrice" type="text" name="sellingPrice"
+														   class="form-control bg-white"
+														   value="{{old('sellingPrice',$product->sellingPrice??\App\Library\Utils\Extensions\Str::NotAvailable)}}"
+														   readonly/>
 												</div>
 												<div class="col-4">
 													<label for="discount">Discount %</label>
