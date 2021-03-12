@@ -209,6 +209,20 @@ Route::middleware('auth:admin')->group(function () {
         Route::post('{slider}', [SliderController::class, 'update'])->name('admin.sliders.update');
         Route::put('{slider}/status', [SliderController::class, 'status'])->name('admin.sliders.update.status');
         Route::delete('{slider}', [SliderController::class, 'delete'])->name('admin.sliders.delete');
+
+        Route::prefix('link')->group(function () {
+            Route::get('create', [LinkSliderController::class, 'create'])->name('admin.sliders.link.create');
+            Route::get('{slider}/edit', [LinkSliderController::class, 'edit'])->name('admin.sliders.link.edit');
+            Route::post(Str::Empty, [LinkSliderController::class, 'store'])->name('admin.sliders.link.store');
+            Route::post('{slider}', [LinkSliderController::class, 'update'])->name('admin.sliders.link.update');
+        });
+
+        Route::prefix('video')->group(function () {
+            Route::get('create', [VideoSliderController::class, 'create'])->name('admin.sliders.video.create');
+            Route::get('{slider}/edit', [VideoSliderController::class, 'edit'])->name('admin.sliders.video.edit');
+            Route::post(Str::Empty, [VideoSliderController::class, 'store'])->name('admin.sliders.video.store');
+            Route::post('{slider}', [VideoSliderController::class, 'update'])->name('admin.sliders.video.update');
+        });
     });
 
     // Shop Home-page Route(s)
@@ -227,20 +241,6 @@ Route::middleware('auth:admin')->group(function () {
             Route::post('{slider}', [ShopSliderController::class, 'update'])->name('admin.shop.sliders.update');
             Route::put('{id}/status', [ShopSliderController::class, 'updateStatus'])->name('admin.shop.sliders.update.status');
             Route::delete('{slider}', [ShopSliderController::class, 'delete'])->name('admin.shop.sliders.delete');
-
-            Route::prefix('link')->group(function () {
-                Route::get('create', [LinkSliderController::class, 'create'])->name('admin.sliders.link.create');
-                Route::get('{slider}/edit', [LinkSliderController::class, 'edit'])->name('admin.sliders.link.edit');
-                Route::post(Str::Empty, [LinkSliderController::class, 'store'])->name('admin.sliders.link.store');
-                Route::post('{slider}', [LinkSliderController::class, 'update'])->name('admin.sliders.link.update');
-            });
-
-            Route::prefix('video')->group(function () {
-                Route::get('create', [VideoSliderController::class, 'create'])->name('admin.sliders.video.create');
-                Route::get('{slider}/edit', [VideoSliderController::class, 'edit'])->name('admin.sliders.video.edit');
-                Route::post(Str::Empty, [VideoSliderController::class, 'store'])->name('admin.sliders.video.store');
-                Route::post('{slider}', [VideoSliderController::class, 'update'])->name('admin.sliders.video.update');
-            });
         });
 
         // Brands in Focus Route(s)
