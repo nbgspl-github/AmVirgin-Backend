@@ -92,7 +92,11 @@
                                         @endif
                                     </div>
                                 </td>
-                                <td class="text-center">{{$slide->type()}}</td>
+                                @if($slide->type=='external-link')
+                                    <td class="text-center">External Link</td>
+                                @else
+                                    <td class="text-center">Video Link</td>
+                                @endif
                                 @if($slide->type==\App\Models\Slider::TargetType['ExternalLink'])
                                     <td class="text-center">
                                         <a class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig"
@@ -104,7 +108,22 @@
                                         @php
                                             $video=\App\Models\Video\Video::find($slide->target);
                                         @endphp
-                                        <button class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig">{{$video->title??\App\Library\Utils\Extensions\Str::NotAvailable}}</button>
+                                        @if($video!=null)
+                                            @if($video->type=='movie')
+                                                <a class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig"
+                                                   target="_blank"
+                                                   href="{{route('admin.videos.edit.action',$video->id)}}">{{\App\Library\Utils\Extensions\Str::ellipsis($video->title)}}</a>
+                                            @else
+                                                <a class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig"
+                                                   target="_blank"
+                                                   href="{{route('admin.tv-series.edit.action',$video->id)}}">{{\App\Library\Utils\Extensions\Str::ellipsis($video->title)}}</a>
+                                            @endif
+                                        @else
+                                            <a disabled
+                                               class="btn btn-outline-secondary waves-effect waves-light shadow-sm fadeInRightBig"
+                                               target="_blank"
+                                               href="javascript:void(0);">{{\App\Library\Utils\Extensions\Str::NotAvailable}}</a>
+                                        @endif
                                     </td>
                                 @endif
                                 <td class="text-center">

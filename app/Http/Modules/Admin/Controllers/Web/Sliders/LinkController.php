@@ -23,7 +23,7 @@ class LinkController extends \App\Http\Modules\Admin\Controllers\Web\WebControll
 
     public function edit (Slider $slider): Renderable
     {
-        return view('admin.sliders.link.edit')->with('slider', $slider);
+        return view('admin.sliders.link.edit')->with('slide', $slider);
     }
 
     public function store (StoreRequest $request): RedirectResponse

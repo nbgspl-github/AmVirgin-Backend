@@ -18,8 +18,9 @@ class UpdateRequest extends \Illuminate\Foundation\Http\FormRequest
 
     public function validated (): array
     {
-        return array_merge(parent::validated(), [
-
-        ]);
+        $validated = parent::validated();
+        $validated['target'] = $validated['targetKey'];
+        unset($validated['targetKey']);
+        return $validated;
     }
 }

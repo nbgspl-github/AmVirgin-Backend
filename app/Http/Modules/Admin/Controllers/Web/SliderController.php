@@ -3,6 +3,7 @@
 namespace App\Http\Modules\Admin\Controllers\Web;
 
 use App\Http\Modules\Admin\Requests\Slider\StatusRequest;
+use App\Library\Enums\Common\PageSectionType;
 use App\Models\Slider;
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
@@ -20,7 +21,7 @@ class SliderController extends WebController
     public function index (): Renderable
     {
         return view('admin.sliders.index')->with('slides',
-            Slider::query()->latest()->get()
+            Slider::query()->where('section', PageSectionType::Entertainment)->latest()->get()
         );
     }
 

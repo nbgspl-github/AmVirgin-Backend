@@ -25,7 +25,7 @@ class VideoController extends \App\Http\Modules\Admin\Controllers\Web\WebControl
 
     public function edit (Slider $slider): Renderable
     {
-        return view('admin.sliders.video.edit')->with('slider', $slider)->with('videos', $this->videos());
+        return view('admin.sliders.video.edit')->with('slide', $slider)->with('videos', $this->videos());
     }
 
     public function store (StoreRequest $request): RedirectResponse

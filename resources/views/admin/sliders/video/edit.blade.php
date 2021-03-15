@@ -9,7 +9,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 col-sm-10 col-md-10 col-lg-8 col-xl-6 mx-auto">
-                            <form action="{{route('admin.sliders.update',$slide->getKey())}}"
+                            <form action="{{route('admin.sliders.video.update',$slide->getKey())}}"
                                   data-parsley-validate="true" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
