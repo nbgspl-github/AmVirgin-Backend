@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Classes\Singletons\RazorpayClient;
+use App\Library\Utils\Extensions\Time;
+use App\Models\News\Article;
 use Illuminate\Console\Command;
 
 class CodeTester extends Command
@@ -42,9 +44,9 @@ class CodeTester extends Command
 
     public function handle ()
     {
-        $order = $this->client->order->create([
-            'amount' => 10000,
-            'currency' => 'INR'
-        ]);
+        dd(\App\Models\News\Article::query()->whereNotNull('published_at')->get()->transform(function (Article $article)
+        {
+            return $article->published_at->format(Time::MYSQL_FORMAT) . "\n";
+        }));
     }
 }

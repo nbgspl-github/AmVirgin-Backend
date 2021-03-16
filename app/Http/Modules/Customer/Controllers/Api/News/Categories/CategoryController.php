@@ -14,7 +14,7 @@ class CategoryController extends \App\Http\Modules\Customer\Controllers\Api\ApiC
                 Category::query()->orderBy('order')->get()
             ),
             'articles' => \App\Resources\News\Articles\ArticleCollection::collection(
-                \App\Models\News\Article::query()->latest()->orderByDesc('views')->paginate($this->paginationChunk())
+                \App\Models\News\Article::query()->whereNotNull('published_at')->latest()->orderByDesc('views')->paginate($this->paginationChunk())
             )->response()->getData()
         ]);
     }
@@ -23,7 +23,7 @@ class CategoryController extends \App\Http\Modules\Customer\Controllers\Api\ApiC
     {
         return responseApp()->prepare(
             \App\Resources\News\Articles\ArticleCollection::collection(
-                $category->items()->latest('published_at')->paginate($this->paginationChunk())
+                $category->items()->whereNotNull('published_at')->latest('published_at')->paginate($this->paginationChunk())
             )->response()->getData()
         );
     }

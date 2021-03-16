@@ -257,11 +257,12 @@
                                                     @foreach($product->images as $image)
                                                         <div class="carousel-item @if($loop->first) active @endif">
                                                             <img src="{{$image->path}}" class="d-block w-100"
-                                                                 style="max-height: 250px!important;" alt="...">
+                                                                 style="" alt="...">
                                                         </div>
                                                     @endforeach
                                                 </div>
-                                                <a class="carousel-control-prev" href="#carouselExampleIndicators"
+                                                <a class="carousel-control-prev bg-muted"
+                                                   href="#carouselExampleIndicators"
                                                    role="button" data-slide="prev">
                                                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                                     <span class="sr-only">Previous</span>

@@ -12,7 +12,9 @@ class SubscriptionController extends \App\Http\Modules\Customer\Controllers\Api\
     public function index (): JsonResponse
     {
         return responseApp()->prepare(
-            SubscriptionResource::collection(SubscriptionPlan::query()->active(true)->get()), Response::HTTP_OK, 'Listing all available subscription plans.', 'data'
+            SubscriptionResource::collection(
+                SubscriptionPlan::query()->where('active', 1)->get()
+            ), Response::HTTP_OK, 'Listing all available subscription plans.', 'data'
         );
     }
 }

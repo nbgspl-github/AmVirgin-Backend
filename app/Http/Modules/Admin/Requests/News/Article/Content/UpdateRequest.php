@@ -19,9 +19,9 @@ class UpdateRequest extends \Illuminate\Foundation\Http\FormRequest
 	{
 		$validated = parent::validated();
 		return array_merge($validated, [
-			'published' => request()->has('publish'),
-			'published_at' => now()->format(\App\Library\Utils\Extensions\Time::MYSQL_FORMAT),
-			'type' => 'article'
-		]);
+            'published' => request()->has('publish'),
+            'published_at' => request()->has('publish') ? now()->format(\App\Library\Utils\Extensions\Time::MYSQL_FORMAT) : null,
+            'type' => 'article'
+        ]);
 	}
 }

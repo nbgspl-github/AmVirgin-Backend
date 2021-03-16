@@ -91,10 +91,6 @@
 														<div class="modal-header">
 															<h5 class="modal-title" id="exampleModalLabel">Containing
 																Sections</h5>
-															<button type="button" class="close" data-dismiss="modal"
-																	aria-label="Close">
-																<span aria-hidden="true">&times;</span>
-															</button>
 														</div>
 														<div class="modal-body">
 															<div class="row mb-2">
@@ -126,21 +122,19 @@
 																</div>
 															@endforeach
 														</div>
-														<div class="modal-footer">
-															<button type="button" class="btn btn-secondary"
-																	data-dismiss="modal">Close
-															</button>
-															<button type="button" class="btn btn-primary">Save changes
-															</button>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<label for="released">@required (Release date)</label>
-											<input id="released" type="date" name="released" class="form-control"
-												   required placeholder="Choose or type release date"
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-primary"
+                                                                    data-dismiss="modal">Save
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="released">@required (Release date)</label>
+                                            <input id="released" type="date" name="released" class="form-control"
+                                                   required placeholder="Choose or type release date"
 												   value="{{old('released',$payload->released)}}"
 												   onkeydown="return false;"/>
 										</div>

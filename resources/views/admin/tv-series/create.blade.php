@@ -16,31 +16,41 @@
 						<div class="row">
 							<div class="col-6 mx-auto">
 								<div class="card shadow-sm" style="border: 1px solid rgba(180,185,191,0.4);">
-									<div class="card-header text-primary font-weight-bold bg-white">
-										Type the following details to proceed to next step...
-									</div>
-									<div class="card-body">
-										<div class="form-group">
-											<label for="title">Title<span class="text-primary">*</span></label>
-											<input id="title" type="text" name="title" class="form-control" required placeholder="Type here the series title" minlength="1" maxlength="256" value="{{old('title')}}"/>
-										</div>
-										<div class="form-group">
-											<label for="cast">Cast<span class="text-primary">*</span></label>
-											<input id="cast" type="text" name="cast" class="form-control" required placeholder="Type here the series' cast(s) name (separate with /)" minlength="1" maxlength="256" value="{{old('cast')}}"/>
-										</div>
-										<div class="form-group">
-											<label for="director">Director<span class="text-primary">*</span></label>
-											<input id="director" type="text" name="director" class="form-control" required placeholder="Type here the series' director(s) name (separate with /)" minlength="1" maxlength="256" value="{{old('director')}}"/>
-										</div>
-										<div class="form-group">
-											<label for="description">Overview (Description)<span class="text-primary">*</span></label>
-											<textarea id="description" name="description" class="form-control" required placeholder="Type short summary about the series" minlength="1" rows="5" maxlength="2000">{{old('description')}}</textarea>
-										</div>
-										<div class="form-group">
-											<label for="genre">Choose a genre<span class="text-primary">*</span></label>
-											<select id="genre" name="genre_id" class="form-control selectpicker" title="Choose..." required>
-												@foreach($appGenres as $genre)
-													@if(old('genre_id',-1)==$genre->getKey())
+                                    <div class="card-header text-primary font-weight-bold bg-white">
+                                        Type the following details to proceed to next step...
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label for="title">Title<span class="text-primary">*</span></label>
+                                            <input id="title" type="text" name="title" class="form-control" required
+                                                   placeholder="Type here the series title" minlength="1"
+                                                   maxlength="256" value="{{old('title')}}"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cast">Cast<span class="text-primary">*</span></label>
+                                            <input id="cast" type="text" name="cast" class="form-control" required
+                                                   placeholder="Type here the series' cast(s) name" minlength="1"
+                                                   maxlength="256" value="{{old('cast')}}"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="director">Director<span class="text-primary">*</span></label>
+                                            <input id="director" type="text" name="director" class="form-control"
+                                                   required placeholder="Type here the series' director(s) name"
+                                                   minlength="1" maxlength="256" value="{{old('director')}}"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="description">Overview (Description)<span
+                                                        class="text-primary">*</span></label>
+                                            <textarea id="description" name="description" class="form-control" required
+                                                      placeholder="Type short summary about the series" minlength="1"
+                                                      rows="5" maxlength="2000">{{old('description')}}</textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="genre">Choose a genre<span class="text-primary">*</span></label>
+                                            <select id="genre" name="genre_id" class="form-control selectpicker"
+                                                    title="Choose..." required>
+                                                @foreach($appGenres as $genre)
+                                                    @if(old('genre_id',-1)==$genre->getKey())
 														<option value="{{$genre->getKey()}}" selected>{{$genre->name}}</option>
 													@else
 														<option value="{{$genre->getKey()}}">{{$genre->name}}</option>
@@ -203,17 +213,17 @@
 				title: 'Cast & Crew',
 				separator: '/',
 				key: 'cast',
-				boundEditBoxId: 'cast',
-				modalId: 'cast_multiEntryModal',
-				inputClass: 'cast_input',
-				listGroupId: 'cast_listGroup',
-				addMoreButtonId: 'cast_addMoreButton',
-				doneButtonId: 'cast_doneButton',
-				deleteButtonClass: 'cast_delete-button',
-				template: `<li class="list-group-item px-0 py-1 border-0 animated slideInDown">
+                boundEditBoxId: 'cast',
+                modalId: 'cast_multiEntryModal',
+                inputClass: 'cast_input',
+                listGroupId: 'cast_listGroup',
+                addMoreButtonId: 'cast_addMoreButton',
+                doneButtonId: 'cast_doneButton',
+                deleteButtonClass: 'cast_delete-button',
+                template: `<li class="list-group-item px-0 py-1 border-0 animated slideInDown">
 								\t\t\t\t\t\t<div class="col-auto px-0">
 								\t\t\t\t\t\t\t<div class="input-group mb-2">
-								\t\t\t\t\t\t\t\t<input type="text" class="form-control cast_input" placeholder="Type here..." value=@{{value}}>
+								\t\t\t\t\t\t\t\t<input type="text" class="form-control cast_input" maxlength="20" onpaste="return false;" onkeydown="return filterCharacters(event);" placeholder="Type here..." value=@{{value}}>
 								\t\t\t\t\t\t\t\t<div class="input-group-append">
 								\t\t\t\t\t\t\t\t\t<div class="input-group-text text-white bg-primary cast_delete-button">&times;</div>
 								\t\t\t\t\t\t\t\t</div>
@@ -221,22 +231,22 @@
 								\t\t\t\t\t\t</div>
 								\t\t\t\t\t
 							</li>`
-			});
-			MultiEntryModal.setupMultiEntryModal({
-				title: 'Director(s)',
+            });
+            MultiEntryModal.setupMultiEntryModal({
+                title: 'Director(s)',
 				separator: '/',
 				key: 'director',
-				boundEditBoxId: 'director',
-				modalId: 'director_multiEntryModal',
-				inputClass: 'director_input',
-				listGroupId: 'director_listGroup',
-				addMoreButtonId: 'director_addMoreButton',
-				doneButtonId: 'director_doneButton',
-				deleteButtonClass: 'director_delete-button',
-				template: `<li class="list-group-item px-0 py-1 border-0 animated slideInDown">
+                boundEditBoxId: 'director',
+                modalId: 'director_multiEntryModal',
+                inputClass: 'director_input',
+                listGroupId: 'director_listGroup',
+                addMoreButtonId: 'director_addMoreButton',
+                doneButtonId: 'director_doneButton',
+                deleteButtonClass: 'director_delete-button',
+                template: `<li class="list-group-item px-0 py-1 border-0 animated slideInDown">
 								\t\t\t\t\t\t<div class="col-auto px-0">
 								\t\t\t\t\t\t\t<div class="input-group mb-2">
-								\t\t\t\t\t\t\t\t<input type="text" class="form-control director_input" placeholder="Type here..." value=@{{value}}>
+								\t\t\t\t\t\t\t\t<input type="text" class="form-control director_input" maxlength="20" onpaste="return false;" onkeydown="return filterCharacters(event);" placeholder="Type here..." value=@{{value}}>
 								\t\t\t\t\t\t\t\t<div class="input-group-append">
 								\t\t\t\t\t\t\t\t\t<div class="input-group-text text-white bg-primary director_delete-button">&times;</div>
 								\t\t\t\t\t\t\t\t</div>
@@ -244,9 +254,9 @@
 								\t\t\t\t\t\t</div>
 								\t\t\t\t\t
 							</li>`
-			});
-			modal = $('#okayBox');
-			submitButton = $('#submitButton');
+            });
+            modal = $('#okayBox');
+            submitButton = $('#submitButton');
 			$('#trending').change(function () {
 				if (this.checked) {
 					$('#trendingRank').prop("required", true);
@@ -260,15 +270,26 @@
 			const elem = $('#price');
 			if (type === 'free' || type === 'subscription') {
 				elem.attr('readonly', true);
-				elem.prop('required', false);
-			} else {
-				elem.attr('readonly', false);
-				elem.prop('required', true);
-			}
-		}
+                elem.prop('required', false);
+            } else {
+                elem.attr('readonly', false);
+                elem.prop('required', true);
+            }
+        }
 
-		disableSubmit = (disable) => {
-			submitButton.prop('disabled', disable);
-		};
-	</script>
+        disableSubmit = (disable) => {
+            submitButton.prop('disabled', disable);
+        };
+
+        function filterCharacters(event) {
+            let contains = true;
+            [191].forEach(key => {
+                console.log(key + " = " + event.keyCode);
+                if (key === event.keyCode) {
+                    contains = false;
+                }
+            });
+            return contains;
+        }
+    </script>
 @stop

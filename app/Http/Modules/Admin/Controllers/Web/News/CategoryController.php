@@ -15,7 +15,7 @@ class CategoryController extends \App\Http\Modules\Admin\Controllers\Web\WebCont
 	public function index () : \Illuminate\Contracts\Support\Renderable
 	{
 		return view('admin.news.categories.index')->with('categories',
-			$this->paginateWithQuery(\App\Models\News\Category::query()->whereLike('name', $this->queryParameter())->latest())
+            $this->paginateWithQuery(\App\Models\News\Category::query()->orderBy('order')->whereLike('name', $this->queryParameter())->latest())
 		);
 	}
 

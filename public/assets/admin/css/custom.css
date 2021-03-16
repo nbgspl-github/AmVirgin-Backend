@@ -54,3 +54,11 @@ p.msg {
 .dropify-wrapper input {
     z-index: 900 !important;
 }
+
+.modal-open {
+
+}
+
+.alertify {
+    z-index: 1000 !important;
+}

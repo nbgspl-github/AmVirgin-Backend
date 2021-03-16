@@ -34,9 +34,15 @@
 								<td>
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group" role="group">
-											<a class="btn btn-outline-danger" href="{{route('admin.tv-series.edit.audio',[$video->id,$source->id])}}" @include('admin.extras.tooltip.bottom', ['title' => 'Audio sources'])><i class="mdi mdi-file-music"></i></a>
-											<a class="btn btn-outline-danger" href="{{route('admin.tv-series.edit.subtitle',[$video->id,$source->id])}}" @include('admin.extras.tooltip.bottom', ['title' => 'Subtitle sources'])><i class="mdi mdi-file-document"></i></a>
-											<a class="btn btn-outline-primary" href="javascript:deleteEpisode('{{$source->id}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete episode'])><i class="mdi mdi-minus-circle-outline"></i></a>
+											<a class="btn btn-outline-danger"
+											   href="{{route('admin.tv-series.edit.audio',[$video->id,$source->id])}}" @include('admin.extras.tooltip.bottom', ['title' => 'Audio sources'])><i
+														class="mdi mdi-file-music"></i></a>
+											<a class="btn btn-outline-danger"
+											   href="{{route('admin.tv-series.edit.subtitle',[$video->id,$source->id])}}" @include('admin.extras.tooltip.bottom', ['title' => 'Subtitle sources'])><i
+														class="mdi mdi-file-document"></i></a>
+											<a class="btn btn-outline-primary"
+											   href="javascript:_delete('{{$source->id}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete episode'])><i
+														class="mdi mdi-minus-circle-outline"></i></a>
 										</div>
 									</div>
 								</td>
@@ -132,7 +138,9 @@
 				$('#episodeModal').modal('hide');
 				axios.post(`/admin/tv-series/${video_id}/update/source`, formData, config,).then(response => {
 					showProgressDialog(false);
-					alertify.alert(response.data.message);
+					alertify.alert(response.data.message, () => {
+						location.reload();
+					});
 				}).catch(error => {
 					showProgressDialog(false);
 					alertify.alert('Something went wrong. Please try again.');
@@ -156,17 +164,19 @@
 			$('#subtitleModal').modal('show');
 		}
 
-		deleteAudio = key => {
+		_delete = key => {
 			alertify.confirm("Are you sure? This action is irreversible!",
-				yes => {
-					axios.delete(`/admin/videos/${key}`).then(response => {
-						location.reload();
-					}).catch(e => {
-						alertify.confirm('Something went wrong. Retry?', yes => {
-							showDetails(key);
+					yes => {
+						axios.delete(`/admin/tv-series/${video_id}/sources/${key}`).then(response => {
+							alertify.alert(response.data.message, () => {
+								location.reload();
+							})
+						}).catch(e => {
+							alertify.confirm('Something went wrong. Retry?', yes => {
+								showDetails(key);
+							});
 						});
-					});
-				}
+					}
 			)
 		}
 	</script>

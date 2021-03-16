@@ -50,6 +50,7 @@
 <script src="{{asset("assets/admin/plugins/dropify/dist/js/dropify.min.js")}}"></script>
 {{--<!-- App js -->--}}
 <script src="{{asset("assets/admin/js/app.js")}}"></script>
+{{--<script src="{{asset("js/vue.js")}}"></script>--}}
 <script src="{{asset("js/app.js")}}"></script>
 
 <script>
