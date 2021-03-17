@@ -6,14 +6,15 @@
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Attribute Types','action'=>['link'=>route('admin.products.attributes.types.create'),'text'=>'Create a attribute type']])
 				</div>
-				<div class="card-body animatable">
-					<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-						<thead>
-						<tr>
-							<th class="text-center">No.</th>
-							<th class="text-center">Name</th>
-							<th class="text-center">Description</th>
-							<th class="text-center">Primitive Type</th>
+                <div class="card-body animatable table-responsive">
+                    <table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0 "
+                           style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                        <tr>
+                            <th class="text-center">No.</th>
+                            <th class="text-center">Name</th>
+                            <th class="text-center">Description</th>
+                            <th class="text-center">Primitive Type</th>
                             <th class="text-center">Multi-value</th>
                             <th class="text-center">Max values</th>
                             <th class="text-center">Bounded</th>

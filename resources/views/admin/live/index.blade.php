@@ -6,7 +6,7 @@
                 <div class="card-header py-0">
                     @include('admin.extras.header', ['title'=>'Live TV'])
                 </div>
-                <div class="card-body animatable">
+                <div class="card-body animatable table-responsive">
                     <div class="row pr-3">
                         <div class="col-6"><h4 class="mt-0 header-title ml-3 mb-4">All live streams</h4></div>
                         <div class="col-6"><a

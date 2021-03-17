@@ -51,10 +51,10 @@
 				<form action="{{route('admin.videos.update.audio',$video->id)}}" enctype="multipart/form-data" method="post" id="audioForm">
 					@csrf
 					<div class="modal-body">
-						<div class="form-group">
-							<label for="video_language_id">Language</label>
-							<select name="video_language_id" id="video_language_id" class="form-control selectpicker">
-								@foreach($languages as $language)
+                        <div class="form-group">
+                            <label for="video_language_id">Language</label>
+                            <select name="video_language_id" id="video_language_id" class="form-control">
+                                @foreach($languages as $language)
 									<option value="{{$language->id}}">{{$language->name}}</option>
 								@endforeach
 							</select>

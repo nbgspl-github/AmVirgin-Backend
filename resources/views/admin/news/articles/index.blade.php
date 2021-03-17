@@ -21,22 +21,24 @@
 											</button>
 											<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
 												<a class="dropdown-item" href="{{route('admin.news.articles.content.create')}}">Article</a>
-												<a class="dropdown-item" href="{{route('admin.news.articles.videos.create')}}">Video Article</a>
-											</div>
-										</div>
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-				<div class="card-body animatable">
-					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-						<thead>
-						<tr>
-							<th>#</th>
-							<th>Thumbnail</th>
-							<th>Category</th>
+												<a class="dropdown-item" href="{{route('admin.news.articles.videos.create')}}">Video
+                                                    Article</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body animatable table-responsive">
+                    <table id="datatable" class="table table-hover pr-0 pl-0 "
+                           style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Thumbnail</th>
+                            <th>Category</th>
                             <th>Title</th>
                             <th>Author</th>
                             <th>Type</th>

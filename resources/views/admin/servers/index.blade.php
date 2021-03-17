@@ -6,10 +6,12 @@
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Servers'])
 				</div>
-				<div class="card-body animatable">
-					<div class="row pr-3">
-						<div class="col-6"><h4 class="mt-0 header-title ml-3 mb-4">All media Servers</h4></div>
-						<div class="col-6"><a class="float-right btn btn-outline-primary waves-effect waves-light shadow-sm fadeInRightBig" href="{{route('admin.servers.create')}}">Add server</a></div>
+                <div class="card-body animatable table-responsive">
+                    <div class="row pr-3">
+                        <div class="col-6"><h4 class="mt-0 header-title ml-3 mb-4">All media Servers</h4></div>
+                        <div class="col-6"><a
+                                    class="float-right btn btn-outline-primary waves-effect waves-light shadow-sm fadeInRightBig"
+                                    href="{{route('admin.servers.create')}}">Add server</a></div>
 					</div>
 					<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 						<thead>

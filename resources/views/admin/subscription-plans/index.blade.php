@@ -6,13 +6,14 @@
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Subscription Plans','action'=>['link'=>route('admin.subscription-plans.create'),'text'=>'Add']])
 				</div>
-				<div class="card-body animatable">
-					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-						<thead>
-						<tr>
-							<th>#</th>
-							<th>Banner</th>
-							<th>Name</th>
+                <div class="card-body animatable table-responsive">
+                    <table id="datatable" class="table table-hover pr-0 pl-0 "
+                           style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Banner</th>
+                            <th>Name</th>
                             <th>Description</th>
                             <th>Original Price</th>
                             <th>Offer Price</th>

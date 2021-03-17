@@ -6,10 +6,11 @@
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>trans('admin.categories.index'),'action'=>['link'=>route('admin.categories.create'),'text'=>'Add']])
 				</div>
-				<div class="card-body">
-					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-						<thead>
-						<tr>
+                <div class="card-body table-responsive">
+                    <table id="datatable" class="table table-hover pr-0 pl-0 "
+                           style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                        <tr>
                             <th>#</th>
                             <th>Name</th>
                             <th>Parent</th>

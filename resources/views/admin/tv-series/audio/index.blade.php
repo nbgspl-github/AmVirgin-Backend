@@ -19,7 +19,7 @@
                         </thead>
                         <tbody>
                         <x-blank-table-indicator :data="$audios"/>
-                        @foreach ($audios as $audio)
+						@foreach ($audios as $audio)
 							<tr>
 								<td>{{($audios->firstItem()+$loop->index)}}</td>
 								<td>{{$audio->language->name}}</td>
@@ -29,7 +29,9 @@
 								<td>
 									<div class="btn-toolbar" role="toolbar">
 										<div class="btn-group" role="group">
-											<a class="btn btn-outline-primary" href="javascript:deleteEpisode('{{$source->id}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete episode'])><i class="mdi mdi-minus-circle-outline"></i></a>
+											<a class="btn btn-outline-primary"
+											   href="javascript:____('{{$audio->id}}');" @include('admin.extras.tooltip.bottom', ['title' => 'Delete episode'])><i
+														class="mdi mdi-minus-circle-outline"></i></a>
 										</div>
 									</div>
 								</td>
@@ -53,7 +55,7 @@
 					<div class="modal-body">
 						<div class="form-group">
 							<label for="video_language_id">Language</label>
-							<select name="video_language_id" id="video_language_id" class="form-control selectpicker">
+							<select name="video_language_id" id="video_language_id" class="form-control">
 								@foreach($languages as $language)
 									<option value="{{$language->id}}">{{$language->name}}</option>
 								@endforeach
@@ -125,19 +127,19 @@
 			setProgress(percentCompleted);
 		}
 
-		deleteAudio = key => {
+		____ = key => {
 			alertify.confirm("Are you sure? This action is irreversible!",
-				yes => {
-					axios.delete(`/admin/tv-series/${video_id}//${key}`).then(response => {
-						alertify.alert(response.data.message, () => {
-							location.reload();
-						})
-					}).catch(e => {
-						alertify.confirm('Something went wrong. Retry?', yes => {
-							showDetails(key);
+					yes => {
+						axios.delete(`/admin/tv-series/${video_id}/audios/${key}`).then(response => {
+							alertify.alert(response.data.message, () => {
+								location.reload();
+							})
+						}).catch(e => {
+							alertify.confirm('Something went wrong. Retry?', yes => {
+								showDetails(key);
+							});
 						});
-					});
-				}
+					}
 			)
 		}
 	</script>

@@ -15,15 +15,17 @@
 										<input type="text" name="query" class="form-control" id="inlineFormCustomSelect" value="{{request('query')}}" placeholder="Type & hit enter">
 									</div>
 									<div class="col my-auto">
-										<a href="{{route('admin.news.categories.create')}}" class="btn btn-outline-primary">Add</a>
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-				<div class="card-body animatable">
-					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+										<a href="{{route('admin.news.categories.create')}}"
+                                           class="btn btn-outline-primary">Add</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body animatable table-responsive">
+                    <table id="datatable" class="table table-hover pr-0 pl-0 "
+                           style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                         <tr>
                             <th>#</th>

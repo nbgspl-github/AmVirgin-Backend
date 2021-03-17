@@ -28,8 +28,9 @@
 										<div class="form-group">
 											<label for="group">@required (Group)
 												<i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Groups help collect attributes belonging to same logical category'])></i></label>
-											<select name="group" id="group" class="form-control selectpicker" title="Choose..." required>
-												<option value="Main" @if($attribute->group=="Main") selected @endif>Main</option>
+                                            <select name="group" id="group" class="form-control" title="Choose..."
+                                                    required>
+                                                <option value="Main" @if($attribute->group=="Main") selected @endif>Main</option>
 												<option value="Material & Care" @if($attribute->group=="Material & Care") selected @endif>Material & Care</option>
 												<option value="Size & Fit" @if($attribute->group=="Size & Fit") selected @endif>Size & Fit</option>
 												<option value="Specifications" @if($attribute->group=="Specifications") selected @endif>Specifications</option>

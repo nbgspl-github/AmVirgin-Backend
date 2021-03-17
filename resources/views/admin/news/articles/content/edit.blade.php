@@ -17,13 +17,14 @@
 								<div class="form-group">
 									<label for="title">Title<span class="text-primary">*</span></label>
 									<input id="title" type="text" name="title" class="form-control" required placeholder="Type title here" minlength="2" maxlength="100" value="{{old('title',$article->title)}}"/>
-								</div>
-								<div class="form-group">
-									<div class="row">
-										<div class="col-4">
-											<label for="category_id">Category<span class="text-primary">*</span></label>
-											<select name="category_id" id="category_id" class="form-control selectpicker" title="Choose">
-												@foreach($categories as $category)
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <label for="category_id">Category<span class="text-primary">*</span></label>
+                                            <select name="category_id" id="category_id" class="form-control"
+                                                    title="Choose">
+                                                @foreach($categories as $category)
 													<option value="{{$category->id}}" @if($category->id==$article->category_id) selected @endif>{{$category->name}}</option>
 												@endforeach
 											</select>
@@ -31,11 +32,12 @@
 										<div class="col-4">
 											<label for="author">@required(Author)</label>
 											<input id="author" type="text" name="author" class="form-control" minlength="2" maxlength="50" value="{{old('author',$article->author)}}">
-										</div>
-										<div class="col-4">
-											<label for="estimated_read">@required(Estimated read)</label>
-											<select name="estimated_read" id="estimated_read" class="form-control selectpicker" title="Choose">
-												@for($i=1;$i<=120;$i++)
+                                        </div>
+                                        <div class="col-4">
+                                            <label for="estimated_read">@required(Estimated read)</label>
+                                            <select name="estimated_read" id="estimated_read" class="form-control"
+                                                    title="Choose">
+                                                @for($i=1;$i<=120;$i++)
 													<option value="{{$i}}" @if($i==$article->estimated_read) selected @endif>{{$i}} minutes</option>
 												@endfor
 											</select>

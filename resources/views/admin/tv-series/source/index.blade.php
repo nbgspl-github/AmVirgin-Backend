@@ -64,26 +64,28 @@
 				<form action="{{route('admin.tv-series.update.source',$video->id)}}" enctype="multipart/form-data" method="post" id="sourceForm">
 					@csrf
 					<div class="modal-body">
-						<div class="form-group">
-							<label for="sourceTitle">Title</label>
-							<input type="text" name="title" class="form-control" id="sourceTitle" minlength="2" maxlength="255" required>
-						</div>
-						<div class="form-group">
-							<label for="sourceDescription">Description</label>
-							<textarea class="form-control" name="description" id="sourceDescription" minlength="2" maxlength="500" required></textarea>
-						</div>
-						<div class="form-group">
-							<label for="sourceSeason">Season</label>
-							<select name="season" id="sourceSeason" class="form-control selectpicker" required>
-								@for($i=1;$i<=10;$i++)
+                        <div class="form-group">
+                            <label for="sourceTitle">Title</label>
+                            <input type="text" name="title" class="form-control" id="sourceTitle" minlength="2"
+                                   maxlength="255" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sourceDescription">Description</label>
+                            <textarea class="form-control" name="description" id="sourceDescription" minlength="2"
+                                      maxlength="500" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="sourceSeason">Season</label>
+                            <select name="season" id="sourceSeason" class="form-control" required>
+                                @for($i=1;$i<=10;$i++)
 									<option value="{{$i}}">{{$i}}</option>
 								@endfor
-							</select>
-						</div>
-						<div class="form-group">
-							<label for="sourceEpisode">Episode</label>
-							<select name="episode" id="sourceEpisode" class="form-control selectpicker" required>
-								@for($i=1;$i<=50;$i++)
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sourceEpisode">Episode</label>
+                            <select name="episode" id="sourceEpisode" class="form-control" required>
+                                @for($i=1;$i<=50;$i++)
 									<option value="{{$i}}">{{$i}}</option>
 								@endfor
 							</select>

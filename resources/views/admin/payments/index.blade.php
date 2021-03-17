@@ -12,21 +12,23 @@
 							<form action="{{route('admin.payments.index')}}">
 								<div class="form-row float-right">
 									<div class="col-auto my-1">
-										<input type="text" name="query" class="form-control" id="inlineFormCustomSelect" value="{{request('query')}}" placeholder="Type number & hit enter">
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-				<div class="card-body animatable">
-					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-						<thead>
-						<tr>
-							<th>#</th>
-							<th>Seller</th>
-							<th>Order Number</th>
-							<th>Description</th>
+										<input type="text" name="query" class="form-control" id="inlineFormCustomSelect" value="{{request('query')}}"
+                                               placeholder="Type number & hit enter">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body animatable table-responsive">
+                    <table id="datatable" class="table table-hover pr-0 pl-0 "
+                           style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Seller</th>
+                            <th>Order Number</th>
+                            <th>Description</th>
                             <th>Quantity</th>
                             <th>Sales</th>
                             <th>Selling Fee</th>

@@ -6,7 +6,7 @@
                 <div class="card-header py-0">
                     <div class="row">
                         <div class="col-8">
-                            <h5 class="page-title animatable">Products (Pending Approval)</h5>
+                            <h5 class="page-title animatable table-responsive">Products (Pending Approval)</h5>
                         </div>
                         <div class="col-4 my-auto">
                             <form action="{{route('admin.products.pending')}}">

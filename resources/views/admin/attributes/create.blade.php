@@ -28,17 +28,18 @@
 										<div class="form-group">
 											<label for="group">@required (Group)
 												<i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Groups help collect attributes belonging to same logical category'])></i></label>
-											<select name="group" id="group" class="form-control selectpicker" title="Choose..." required>
-												<option value="Main">Main</option>
-												<option value="Material & Care">Material & Care</option>
-												<option value="Size & Fit">Size & Fit</option>
-												<option value="Specifications">Specifications</option>
-											</select>
-										</div>
-										<div class="card p-3 shadow-none mb-3">
-											<div class="form-group">
-												<label>Allow entering multiple values?
-													<i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Allow the seller to enter more than one value for this attribute for example - color for color-blocked t shirts.'])></i></label>
+                                            <select name="group" id="group" class="form-control" title="Choose..."
+                                                    required>
+                                                <option value="Main">Main</option>
+                                                <option value="Material & Care">Material & Care</option>
+                                                <option value="Size & Fit">Size & Fit</option>
+                                                <option value="Specifications">Specifications</option>
+                                            </select>
+                                        </div>
+                                        <div class="card p-3 shadow-none mb-3">
+                                            <div class="form-group">
+                                                <label>Allow entering multiple values?
+                                                    <i class="mdi mdi-help-circle-outline" @include('admin.extras.tooltip.top', ['title' => 'Allow the seller to enter more than one value for this attribute for example - color for color-blocked t shirts.'])></i></label>
 												<div>
 													<div class="custom-control custom-checkbox">
 														<input type="checkbox" class="custom-control-input" id="multiValue" name="multiValue" onchange="handleMultiValueChanged();">

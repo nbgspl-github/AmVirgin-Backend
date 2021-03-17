@@ -56,7 +56,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="genre">Choose a genre<span class="text-primary">*</span></label>
-                                            <select id="genre" name="genre_id" class="form-control selectpicker"
+                                            <select id="genre" name="genre_id" class="form-control"
                                                     title="Choose..." required>
                                                 @foreach($appGenres as $genre)
                                                     @if(old('genreId',-1)==$genre->getKey())
@@ -142,7 +142,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="pgRating">PG Rating<span class="text-primary">*</span></label>
-                                            <select id="pgRating" name="pg_rating" class="form-control selectpicker"
+                                            <select id="pgRating" name="pg_rating" class="form-control"
                                                     title="Choose..." required>
                                                 <option value="G">G - General audience</option>
                                                 <option value="PG">PG - Parental Guidance advised</option>
@@ -157,7 +157,7 @@
                                             <label for="subscriptionType">Subscription type<span
                                                         class="text-primary">*</span></label>
                                             <select id="subscriptionType" name="subscription_type"
-                                                    class="form-control selectpicker" required
+                                                    class="form-control" required
                                                     onchange="subscriptionTypeChanged(this.value);">
                                                 <option value="free">Free</option>
                                                 <option value="paid">Paid</option>
@@ -172,7 +172,7 @@
                                         </div>
                                         <div class="form-group mb-0">
                                             <label for="rank">Trending rank</label>
-                                            <select id="rank" name="rank" class="form-control selectpicker">
+                                            <select id="rank" name="rank" class="form-control">
                                                 @for ($i = 0; $i <= 10; $i++)
                                                     <option value="{{$i}}">{{$i}}</option>
                                                 @endfor

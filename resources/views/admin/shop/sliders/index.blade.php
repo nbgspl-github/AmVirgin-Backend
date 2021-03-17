@@ -6,7 +6,7 @@
                 <div class="card-header py-0">
                     @include('admin.extras.header', ['title'=>'Shop Sliders','action'=>['link'=>route('admin.shop.sliders.create'),'text'=>'Add']])
                 </div>
-                <div class="card-body animatable">
+                <div class="card-body animatable table-responsive">
                     <table id="datatable" class="table table-hover dt-responsive pr-0 pl-0 "
                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>

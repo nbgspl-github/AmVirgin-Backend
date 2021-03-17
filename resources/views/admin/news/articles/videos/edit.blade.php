@@ -21,13 +21,14 @@
 								<div class="form-group">
 									<label for="title">Title<span class="text-primary">*</span></label>
 									<input id="title" type="text" name="title" class="form-control" required placeholder="Type title here" minlength="2" maxlength="100" value="{{old('title',$article->title)}}"/>
-								</div>
-								<div class="form-group">
-									<div class="row">
-										<div class="col-6">
-											<label for="category_id">Category<span class="text-primary">*</span></label>
-											<select name="category_id" id="category_id" class="form-control selectpicker" title="Choose">
-												@foreach($categories as $category)
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label for="category_id">Category<span class="text-primary">*</span></label>
+                                            <select name="category_id" id="category_id" class="form-control"
+                                                    title="Choose">
+                                                @foreach($categories as $category)
 													<option value="{{$category->id}}" @if($category->id==$article->category_id) selected @endif>{{$category->name}}</option>
 												@endforeach
 											</select>

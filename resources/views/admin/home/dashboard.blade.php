@@ -16,7 +16,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body animatable pt-0">
+                <div class="card-body animatable pt-0 table-responsive">
                     <table id="datatable" class="table table-hover pr-0 pl-0 "
                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
@@ -55,7 +55,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body animatable pt-0">
+                <div class="card-body animatable pt-0 table-responsive">
                     <table id="datatable" class="table table-hover pr-0 pl-0 "
                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
@@ -94,7 +94,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body animatable pt-0">
+                <div class="card-body animatable pt- table-responsive0">
                     <table id="datatable" class="table table-hover pr-0 pl-0 "
                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
@@ -144,7 +144,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body animatable pt-0">
+                <div class="card-body animatable pt-0 table-responsive">
                     <table id="datatable" class="table table-hover pr-0 pl-0 "
                            style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>

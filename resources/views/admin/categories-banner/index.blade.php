@@ -6,24 +6,25 @@
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>trans('admin.categories-banner.index'),'action'=>['link'=>route('admin.categories-banner.create'),'text'=>'Add Category Banner']])
 				</div>
-				<div class="card-body animatable">
-					<div class="table-responsive">
-						<table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-							<thead>
-							<tr>
-								<th>No.</th>
-								<th>Banner</th>
-								<th>Title</th>
+                <div class="card-body animatable table-responsive">
+                    <div class="table-responsive">
+                        <table id="datatable" class="table table-bordered dt-responsive pr-0 pl-0 "
+                               style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Banner</th>
+                                <th>Title</th>
                                 <th>Order</th>
                                 <th>Section Title</th>
                                 <th>Layout Type</th>
                                 <th>ValidFrom</th>
                                 <th>ValidUntil</th>
-								<th>Action(s)</th>
-							</tr>
-							</thead>
-							<tbody>
-							@foreach ($categoriesBanner as $category)
+                                <th>Action(s)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach ($categoriesBanner as $category)
 								<tr id="{{'category_row_'.$category->getKey()}}">
 									<td>{{$loop->index+1}}</td>
 									<td class="text-center">

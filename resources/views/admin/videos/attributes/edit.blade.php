@@ -53,12 +53,12 @@
 													  placeholder="Type short summary about the movie or video"
 													  rows="10" minlength="1"
 													  maxlength="2000">{{old('description',$payload->description)}}</textarea>
-										</div>
-										<div class="form-group">
-											<label for="genre">@required (Genre)</label>
-											<select id="genre" name="genre_id" class="form-control selectpicker"
-													title="Choose..." required>
-												@foreach($appGenres as $genre)
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="genre">@required (Genre)</label>
+                                            <select id="genre" name="genre_id" class="form-control"
+                                                    title="Choose..." required>
+                                                @foreach($appGenres as $genre)
 													@if(old('genre_id',$payload->genre_id)==$genre->getKey())
 														<option value="{{$genre->getKey()}}"
 																selected>{{$genre->name}}</option>
@@ -143,12 +143,12 @@
 											<input id="rating" type="number" name="rating" class="form-control" required
 												   placeholder="Type rating for this movie/video" min="0.00" max="5.00"
 												   step="0.01" value="{{old('rating',$payload->rating)}}"/>
-										</div>
-										<div class="form-group">
-											<label for="pgRating">@required (PG Rating)</label>
-											<select id="pgRating" name="pg_rating" class="form-control selectpicker"
-													title="Choose..." required>
-												@switch(old('pg_rating',$payload->pg_rating))
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="pgRating">@required (PG Rating)</label>
+                                            <select id="pgRating" name="pg_rating" class="form-control"
+                                                    title="Choose..." required>
+                                                @switch(old('pg_rating',$payload->pg_rating))
 													@case('G')
 													<option value="G" selected>G - General audience</option>
 													<option value="PG">PG - Parental Guidance advised</option>
@@ -201,14 +201,14 @@
 													</option>
 													@break
 												@endswitch
-											</select>
-										</div>
-										<div class="form-group">
-											<label for="subscriptionType">@required (Subscription Type)</label>
-											<select id="subscriptionType" name="subscription_type"
-													class="form-control selectpicker" required
-													onchange="subscriptionTypeChanged(this.value);">
-												@if(old('subscriptionType',$payload->subscriptionType)=='free')
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="subscriptionType">@required (Subscription Type)</label>
+                                            <select id="subscriptionType" name="subscription_type"
+                                                    class="form-control" required
+                                                    onchange="subscriptionTypeChanged(this.value);">
+                                                @if(old('subscriptionType',$payload->subscriptionType)=='free')
 													<option value="free" selected>Free</option>
 													<option value="paid">Paid</option>
 													<option value="subscription">Subscription</option>
@@ -230,11 +230,11 @@
 												   step="1"
 												   @if(old('subscription_type',$payload->subscription_type)!='paid') readonly
 												   @endif value="{{old('price',$payload->price)}}"/>
-										</div>
-										<div class="form-group mb-0">
-											<label for="rank">Trending rank</label>
-											<select id="rank" name="rank" class="form-control selectpicker">
-												@for ($i = 0; $i <= 10; $i++)
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="rank">Trending rank</label>
+                                            <select id="rank" name="rank" class="form-control">
+                                                @for ($i = 0; $i <= 10; $i++)
 													@if (old('rank',$payload->rank)==$i)
 														<option value="{{$i}}" selected>{{$i}}</option>
 													@else

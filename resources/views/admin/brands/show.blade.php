@@ -43,12 +43,13 @@
 										</div>
 										<div class="form-group">
 											<label for="documentProof">Document Proof</label>
-											<input type="file" name="documentProof" id="documentProof" data-default-file="{{$brand->documentProof}}" data-show-remove="false" disabled="disabled">
-										</div>
-										<div class="form-group">
-											<label for="status_x">Status</label>
-											<select name="status" id="status_x" class="form-control selectpicker">
-												@foreach(\App\Library\Enums\Brands\Status::asArray() as $key=>$value)
+											<input type="file" name="documentProof" id="documentProof" data-default-file="{{$brand->documentProof}}"
+                                                   data-show-remove="false" disabled="disabled">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="status_x">Status</label>
+                                            <select name="status" id="status_x" class="form-control">
+                                                @foreach(\App\Library\Enums\Brands\Status::asArray() as $key=>$value)
 													<option value="{{$value}}" @if($value==$brand->status) selected @endif>{{$key}}</option>
 												@endforeach
 											</select>

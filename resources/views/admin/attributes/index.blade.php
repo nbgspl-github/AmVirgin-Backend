@@ -6,13 +6,14 @@
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Attributes','action'=>['link'=>route('admin.products.attributes.create'),'text'=>'Create an attribute']])
 				</div>
-				<div class="card-body animatable">
-					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-						<thead>
-						<tr>
-							<th class="text-center">No.</th>
-							<th class="text-center">Name</th>
-							<th class="text-center">Code</th>
+                <div class="card-body animatable table-responsive">
+                    <table id="datatable" class="table table-hover pr-0 pl-0 "
+                           style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                        <tr>
+                            <th class="text-center">No.</th>
+                            <th class="text-center">Name</th>
+                            <th class="text-center">Code</th>
                             <th class="text-center">Required</th>
                             <th class="text-center">Use In Layered Navigation</th>
                             <th class="text-center">Use To Create Variants</th>

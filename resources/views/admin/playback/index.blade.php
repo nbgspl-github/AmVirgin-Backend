@@ -6,12 +6,12 @@
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Playback','action'=>null])
 				</div>
-				<div class="card-body animatable">
-					<video id="video"></video>
-				</div>
-			</div>
-		</div>
-	</div>
+                <div class="card-body animatable table-responsive">
+                    <video id="video"></video>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('javascript')

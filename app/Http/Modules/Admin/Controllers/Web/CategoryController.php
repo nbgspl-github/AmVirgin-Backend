@@ -117,16 +117,20 @@ class CategoryController extends WebController
         );
     }
 
-    #[NoReturn] public function create (): Renderable
+    public function create (): Renderable
     {
         $roots = Category::startQuery()->isRoot()->get();
-        $roots->transform(function (Category $root) {
+        $roots->transform(function (Category $root)
+        {
             $category = $root->children()->get();
-            $category = $category->transform(function (Category $category) {
+            $category = $category->transform(function (Category $category)
+            {
                 $subCategory = $category->children()->get();
-                $subCategory = $subCategory->transform(function (Category $subCategory) {
+                $subCategory = $subCategory->transform(function (Category $subCategory)
+                {
                     $vertical = $subCategory->children()->get();
-                    $vertical->transform(function (Category $vertical) {
+                    $vertical->transform(function (Category $vertical)
+                    {
                         return [
                             'key' => $vertical->id,
                             'name' => $vertical->name,
@@ -172,13 +176,17 @@ class CategoryController extends WebController
     public function edit (Category $category): Renderable
     {
         $roots = Category::startQuery()->isRoot()->get();
-        $roots->transform(function (Category $root) {
+        $roots->transform(function (Category $root)
+        {
             $category = $root->children()->get();
-            $category = $category->transform(function (Category $category) {
+            $category = $category->transform(function (Category $category)
+            {
                 $subCategory = $category->children()->get();
-                $subCategory = $subCategory->transform(function (Category $subCategory) {
+                $subCategory = $subCategory->transform(function (Category $subCategory)
+                {
                     $vertical = $subCategory->children()->get();
-                    $vertical->transform(function (Category $vertical) {
+                    $vertical->transform(function (Category $vertical)
+                    {
                         return [
                             'key' => $vertical->id,
                             'name' => $vertical->name,
@@ -250,7 +258,7 @@ class CategoryController extends WebController
         );
     }
 
-    public function downloadTemplate ($id): WebResponse|StreamedResponse|\Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
+    public function downloadTemplate ($id)
     {
         $response = responseWeb();
         try {
@@ -282,7 +290,8 @@ class CategoryController extends WebController
             $navigator = new ColumnNavigator();
             if ($attributeSet != null) {
                 $attributeSetItems = $attributeSet->items;
-                $attributeSetItems->each(function (AttributeSetItem $attributeSetItem) use (&$worksheetIndex, $category, $navigator, $navigatorMain, $worksheetMain) {
+                $attributeSetItems->each(function (AttributeSetItem $attributeSetItem) use (&$worksheetIndex, $category, $navigator, $navigatorMain, $worksheetMain)
+                {
                     $navigator->moveToFirstRow();
                     $attribute = $attributeSetItem->attribute;
                     $richText = new RichText();
@@ -335,7 +344,8 @@ class CategoryController extends WebController
             }
             $writer = new Xls($spreadsheet);
             $response = new StreamedResponse(
-                function () use ($writer) {
+                function () use ($writer)
+                {
                     $writer->save('php://output');
                 }
             );

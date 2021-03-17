@@ -47,7 +47,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="genre">Choose a genre<span class="text-primary">*</span></label>
-                                            <select id="genre" name="genre_id" class="form-control selectpicker"
+                                            <select id="genre" name="genre_id" class="form-control"
                                                     title="Choose..." required>
                                                 @foreach($appGenres as $genre)
                                                     @if(old('genre_id',-1)==$genre->getKey())
@@ -128,36 +128,44 @@
                                                    required placeholder="Choose or type release date"
                                                    onkeydown="return false;"/>
                                         </div>
-										<div class="form-group">
-											<label for="rating">Rating<span class="text-primary">*</span></label>
-											<input id="rating" type="number" name="rating" class="form-control" required placeholder="Type rating for this series" min="0.00" max="5.00" value="0.00" step="0.01"/>
-										</div>
-										<div class="form-group">
-											<label for="pgRating">PG Rating<span class="text-primary">*</span></label>
-											<select id="pgRating" name="pg_rating" class="form-control selectpicker" required>
-												<option value="G">G - General audience</option>
-												<option value="PG">PG - Parental Guidance advised</option>
-												<option value="PG-13">PG-13 - Parental Guidance required (not appropriate for under 13)</option>
-												<option value="R">R - Restricted</option>
-												<option value="NC-17">NC-17 - No children 17 and under admitted</option>
-											</select>
-										</div>
-										<div class="form-group">
-											<label for="subscriptionType">Subscription type<span class="text-primary">*</span></label>
-											<select id="subscriptionType" name="subscription_type" class="form-control selectpicker" required onchange="subscriptionTypeChanged(this.value);">
-												<option value="free">Free</option>
-												<option value="paid">Paid</option>
-												<option value="subscription">Subscription</option>
-											</select>
-										</div>
-										<div class="form-group">
-											<label for="price">Price<span class="text-primary">*</span></label>
-											<input id="price" type="number" name="price" class="form-control" placeholder="Type price for this series" min="0" max="10000" step="1" readonly value="0"/>
-										</div>
-										<div class="form-group mb-0">
-											<label for="rank">Trending rank</label>
-											<select id="rank" name="rank" class="form-control selectpicker">
-												@for ($i = 0; $i <= 10; $i++)
+                                        <div class="form-group">
+                                            <label for="rating">Rating<span class="text-primary">*</span></label>
+                                            <input id="rating" type="number" name="rating" class="form-control" required
+                                                   placeholder="Type rating for this series" min="0.00" max="5.00"
+                                                   value="0.00" step="0.01"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="pgRating">PG Rating<span class="text-primary">*</span></label>
+                                            <select id="pgRating" name="pg_rating" class="form-control" required>
+                                                <option value="G">G - General audience</option>
+                                                <option value="PG">PG - Parental Guidance advised</option>
+                                                <option value="PG-13">PG-13 - Parental Guidance required (not
+                                                    appropriate for under 13)
+                                                </option>
+                                                <option value="R">R - Restricted</option>
+                                                <option value="NC-17">NC-17 - No children 17 and under admitted</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="subscriptionType">Subscription type<span
+                                                        class="text-primary">*</span></label>
+                                            <select id="subscriptionType" name="subscription_type" class="form-control"
+                                                    required onchange="subscriptionTypeChanged(this.value);">
+                                                <option value="free">Free</option>
+                                                <option value="paid">Paid</option>
+                                                <option value="subscription">Subscription</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="price">Price<span class="text-primary">*</span></label>
+                                            <input id="price" type="number" name="price" class="form-control"
+                                                   placeholder="Type price for this series" min="0" max="10000" step="1"
+                                                   readonly value="0"/>
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="rank">Trending rank</label>
+                                            <select id="rank" name="rank" class="form-control">
+                                                @for ($i = 0; $i <= 10; $i++)
 													<option value="{{$i}}">{{$i}}</option>
 												@endfor
 											</select>

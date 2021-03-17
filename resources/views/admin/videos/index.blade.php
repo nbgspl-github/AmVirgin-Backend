@@ -6,14 +6,15 @@
 				<div class="card-header py-0">
 					@include('admin.extras.header', ['title'=>'Videos','action'=>['link'=>route('admin.videos.create'),'text'=>'Add']])
 				</div>
-				<div class="card-body animatable">
-					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-						<thead>
-						<tr>
-							<th class="">#</th>
-							<th class="">Poster</th>
-							<th class="">Title</th>
-							<th class="">Description</th>
+                <div class="card-body animatable table-responsive">
+                    <table id="datatable" class="table table-hover pr-0 pl-0 "
+                           style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                        <tr>
+                            <th class="">#</th>
+                            <th class="">Poster</th>
+                            <th class="">Title</th>
+                            <th class="">Description</th>
                             <th class="">Audio</th>
                             <th class="">Subtitles</th>
                             <th class="">Rating</th>

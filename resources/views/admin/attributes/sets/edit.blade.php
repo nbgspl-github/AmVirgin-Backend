@@ -48,18 +48,23 @@
 												<li>
 													<p>During the process of product creation, the seller will be required to fill or select values for all attributes marked as required.</p>
 												</li>
-												<li>
-													<p>All attributes within a set which are marked to be used to create variants, their values will be used to create all possible combinations of the product.</p>
-												</li>
-												<li>
-													<p>Other attributes which are not marked to be used to create variants will form the product description and specification.</p>
-												</li>
-											</ul>
-										</div>
-										<div class="form-group">
-											<label>@required(Category)</label>
-											<select name="categoryId" class="form-control selectpicker" id="categoryId" title="Choose..." required>
-												@foreach($roots as $root)
+                                                <li>
+                                                    <p>All attributes within a set which are marked to be used to create
+                                                        variants, their values will be used to create all possible
+                                                        combinations of the product.</p>
+                                                </li>
+                                                <li>
+                                                    <p>Other attributes which are not marked to be used to create
+                                                        variants will form the product description and
+                                                        specification.</p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>@required(Category)</label>
+                                            <select name="categoryId" class="form-control" id="categoryId"
+                                                    title="Choose..." required>
+                                                @foreach($roots as $root)
 													@foreach($root['children']['items'] as $category)
 														<option value="{{ $category['key'] }}" data-type="{{$category['type']}}" id="option-item-{{$category['key']}}">{{$root['name']}} ► {{$category['name']}}</option>
 														@foreach($category['children']['items'] as $subCategory)

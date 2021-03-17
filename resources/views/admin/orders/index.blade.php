@@ -12,20 +12,22 @@
 							<form action="{{route('admin.orders.index')}}">
 								<div class="form-row float-right">
 									<div class="col-auto my-1">
-										<input type="text" name="query" class="form-control" id="inlineFormCustomSelect" value="{{request('query')}}" placeholder="Type order number">
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-				<div class="card-body animatable">
-					<table id="datatable" class="table table-hover pr-0 pl-0 " style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-						<thead>
-						<tr>
-							<th>#</th>
-							<th>Number</th>
-							<th>Sub-Orders</th>
+										<input type="text" name="query" class="form-control" id="inlineFormCustomSelect" value="{{request('query')}}"
+                                               placeholder="Type order number">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body animatable table-responsive">
+                    <table id="datatable" class="table table-hover pr-0 pl-0 "
+                           style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Number</th>
+                            <th>Sub-Orders</th>
                             <th>Customer</th>
                             <th>Seller(s)</th>
                             <th>Quantity</th>
