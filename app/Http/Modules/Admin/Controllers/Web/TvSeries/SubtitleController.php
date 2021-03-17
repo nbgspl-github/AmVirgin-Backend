@@ -4,6 +4,7 @@ namespace App\Http\Modules\Admin\Controllers\Web\TvSeries;
 
 use App\Http\Modules\Admin\Requests\Users\Series\Subtitle\StoreRequest;
 use App\Models\Models\Video\Subtitle;
+use App\Models\Video\Source;
 use App\Models\Video\Video;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -15,7 +16,7 @@ class SubtitleController extends \App\Http\Modules\Admin\Controllers\Web\WebCont
         parent::__construct();
     }
 
-    public function index (\App\Models\Video\Video $video, \App\Models\Video\Source $source)
+    public function index (Video $video, Source $source)
     {
         return view('admin.tv-series.subtitle.index')->with('video', $video)->with('source', $source)->with('subtitles', $source->subtitles()
             ->paginate($this->paginationChunk()))->with(
@@ -24,7 +25,7 @@ class SubtitleController extends \App\Http\Modules\Admin\Controllers\Web\WebCont
         );
     }
 
-    public function store (StoreRequest $request, \App\Models\Video\Video $video, \App\Models\Video\Source $source): \Illuminate\Http\JsonResponse
+    public function store (StoreRequest $request, Video $video, Source $source): JsonResponse
     {
         $source->subtitles()->create($request->validated());
         return response()->json([
